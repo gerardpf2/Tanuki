@@ -1,0 +1,9 @@
+namespace Infrastructure.DependencyInjection
+{
+    public interface ICompositionScope
+    {
+        T Resolve<T>() where T : class;
+
+        bool TryResolve<T>(out T service) where T : class;
+    }
+}
