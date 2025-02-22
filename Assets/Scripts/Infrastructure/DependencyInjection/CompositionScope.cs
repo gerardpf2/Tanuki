@@ -17,7 +17,7 @@ namespace Infrastructure.DependencyInjection
             _parentCompositionScope = parentCompositionScope;
         }
 
-        public T Resolve<T>() where T : class
+        public T Resolve<T>()
         {
             if (TryResolve(out T service))
             {
@@ -27,7 +27,7 @@ namespace Infrastructure.DependencyInjection
             throw new InvalidOperationException(); // TODO
         }
 
-        public bool TryResolve<T>(out T service) where T : class
+        public bool TryResolve<T>(out T service)
         {
             if (_serviceResolverContainer.TryGet(out IServiceResolver<T> serviceResolver))
             {
@@ -37,17 +37,18 @@ namespace Infrastructure.DependencyInjection
                 {
                     throw new InvalidOperationException(); // TODO
                 }
+
+                return true;
             }
-            else if (_parentCompositionScope != null)
+
+            if (_parentCompositionScope != null)
             {
                 return _parentCompositionScope.TryResolve(out service);
             }
-            else
-            {
-                service = null;
-            }
 
-            return service != null;
+            service = default;
+
+            return false;
         }
     }
 }
