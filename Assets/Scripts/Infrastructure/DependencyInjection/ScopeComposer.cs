@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
@@ -9,13 +10,16 @@ namespace Infrastructure.DependencyInjection
         {
             scopeBuildingContext.SetAddRules(AddRules);
             scopeBuildingContext.SetInitialize(Initialize);
-            scopeBuildingContext.SetAddChildScopeComposers(AddChildScopeComposers);
+            scopeBuildingContext.SetGetChildScopeComposers(GetChildScopeComposers);
         }
 
         protected virtual void AddRules(IRuleContainer ruleContainer) { }
 
         protected virtual void Initialize(IRuleResolver ruleResolver) { }
 
-        protected virtual void AddChildScopeComposers(ICollection<IScopeComposer> childScopeComposers) { }
+        protected virtual IEnumerable<IScopeComposer> GetChildScopeComposers()
+        {
+            return Enumerable.Empty<IScopeComposer>();
+        }
     }
 }

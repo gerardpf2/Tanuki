@@ -10,7 +10,7 @@ namespace Infrastructure.DependencyInjection
 
         private Action<IRuleContainer> _addRules;
         private Action<IRuleResolver> _initialize;
-        private Action<ICollection<IScopeComposer>> _addChildScopeComposers;
+        private Func<IEnumerable<IScopeComposer>> _getChildScopeComposers;
 
         public ScopeBuilder([NotNull] IScopeConstructor scopeConstructor)
         {
@@ -27,29 +27,26 @@ namespace Infrastructure.DependencyInjection
             _initialize = initialize;
         }
 
-        public void SetAddChildScopeComposers(Action<ICollection<IScopeComposer>> addChildScopeComposers)
+        public void SetGetChildScopeComposers(Func<IEnumerable<IScopeComposer>> getChildScopeComposers)
         {
-            _addChildScopeComposers = addChildScopeComposers;
+            _getChildScopeComposers = getChildScopeComposers;
         }
 
         public Scope Build([NotNull] IScopeComposer scopeComposer, Scope parentScope)
         {
             Clear();
-
-            scopeComposer.Compose(this);
+            Compose(scopeComposer);
 
             Scope scope = _scopeConstructor.Construct(scopeComposer, parentScope);
-            ICollection<IScopeComposer> childScopeComposers = new List<IScopeComposer>();
 
-            _addRules?.Invoke(scope.RuleContainer);
-            _initialize?.Invoke(scope.RuleResolver);
-            _addChildScopeComposers?.Invoke(childScopeComposers);
-
-            foreach (IScopeComposer childScopeComposer in childScopeComposers)
+            if (scope == null)
             {
-                Scope childScope = Build(childScopeComposer, scope);
-                scope.AddChild(childScope);
+                throw new InvalidOperationException(); // TODO
             }
+
+            AddRules(scope.RuleContainer);
+            Initialize(scope.RuleResolver);
+            BuildChildScopeComposers(scope);
 
             return scope;
         }
@@ -58,7 +55,38 @@ namespace Infrastructure.DependencyInjection
         {
             _addRules = null;
             _initialize = null;
-            _addChildScopeComposers = null;
+            _getChildScopeComposers = null;
+        }
+
+        private void Compose([NotNull] IScopeComposer scopeComposer)
+        {
+            scopeComposer.Compose(this);
+        }
+
+        private void AddRules(IRuleContainer ruleContainer)
+        {
+            _addRules?.Invoke(ruleContainer);
+        }
+
+        private void Initialize(IRuleResolver ruleResolver)
+        {
+            _initialize?.Invoke(ruleResolver);
+        }
+
+        private void BuildChildScopeComposers([NotNull] Scope scope)
+        {
+            IEnumerable<IScopeComposer> childScopeComposers = _getChildScopeComposers?.Invoke();
+
+            if (childScopeComposers == null)
+            {
+                return;
+            }
+
+            foreach (IScopeComposer childScopeComposer in childScopeComposers)
+            {
+                Scope childScope = Build(childScopeComposer, scope);
+                scope.AddChild(childScope);
+            }
         }
     }
 }

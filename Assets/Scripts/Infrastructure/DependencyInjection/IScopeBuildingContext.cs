@@ -9,6 +9,6 @@ namespace Infrastructure.DependencyInjection
 
         void SetInitialize(Action<IRuleResolver> initialize);
 
-        void SetAddChildScopeComposers(Action<ICollection<IScopeComposer>> addChildScopeComposers);
+        void SetGetChildScopeComposers(Func<IEnumerable<IScopeComposer>> getChildScopeComposers);
     }
 }
