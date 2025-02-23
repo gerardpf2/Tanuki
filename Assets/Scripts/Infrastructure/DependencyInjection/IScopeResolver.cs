@@ -1,9 +1,9 @@
 namespace Infrastructure.DependencyInjection
 {
-    public interface ICompositionScope
+    public interface IScopeResolver
     {
         T Resolve<T>();
 
-        bool TryResolve<T>(out T service);
+        bool TryResolve<T>(out T result);
     }
 }
