@@ -25,14 +25,14 @@ namespace Infrastructure.DependencyInjection
             _addChildScopeComposers = addChildScopeComposers;
         }
 
-        public Scope Build([NotNull] IScopeComposer scopeComposer, IScopeResolver parentScopeResolver)
+        public Scope Build([NotNull] IScopeComposer scopeComposer, Scope parentScope)
         {
             Clear();
 
             scopeComposer.Compose(this);
 
             IResolverContainer resolverContainer = new ResolverContainer();
-            IScopeResolver scopeResolver = new ScopeResolver(resolverContainer, parentScopeResolver);
+            IScopeResolver scopeResolver = new ScopeResolver(resolverContainer, parentScope?.ScopeResolver);
             ICollection<IScopeComposer> childScopeComposers = new List<IScopeComposer>();
             Scope scope = new(scopeComposer, resolverContainer, scopeResolver);
 
@@ -42,7 +42,7 @@ namespace Infrastructure.DependencyInjection
 
             foreach (IScopeComposer childScopeComposer in childScopeComposers)
             {
-                Scope childScope = Build(childScopeComposer, scopeResolver);
+                Scope childScope = Build(childScopeComposer, scope);
                 scope.AddChild(childScope);
             }
 
