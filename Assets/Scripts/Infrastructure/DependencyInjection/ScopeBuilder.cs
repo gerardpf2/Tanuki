@@ -4,18 +4,18 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
-    public class ScopeBuilder : IScopeBuilderParametersSetter, IScopeBuilder
+    public class ScopeBuilder : IScopeBuildingContext, IScopeBuilder
     {
-        private Action<IResolverContainer> _addResolvers;
-        private Action<IScopeResolver> _initialize;
+        private Action<IRuleContainer> _addRules;
+        private Action<IRuleResolver> _initialize;
         private Action<ICollection<IScopeComposer>> _addChildScopeComposers;
 
-        public void SetAddResolvers(Action<IResolverContainer> addResolvers)
+        public void SetAddRules(Action<IRuleContainer> addRules)
         {
-            _addResolvers = addResolvers;
+            _addRules = addRules;
         }
 
-        public void SetInitialize(Action<IScopeResolver> initialize)
+        public void SetInitialize(Action<IRuleResolver> initialize)
         {
             _initialize = initialize;
         }
@@ -31,13 +31,13 @@ namespace Infrastructure.DependencyInjection
 
             scopeComposer.Compose(this);
 
-            IResolverContainer resolverContainer = new ResolverContainer();
-            IScopeResolver scopeResolver = new ScopeResolver(resolverContainer, parentScope?.ScopeResolver);
+            IRuleContainer ruleContainer = new RuleContainer();
+            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, parentScope?.RuleResolver);
             ICollection<IScopeComposer> childScopeComposers = new List<IScopeComposer>();
-            Scope scope = new(scopeComposer, resolverContainer, scopeResolver);
+            Scope scope = new(scopeComposer, ruleContainer, ruleResolver);
 
-            _addResolvers?.Invoke(resolverContainer);
-            _initialize?.Invoke(scopeResolver);
+            _addRules?.Invoke(ruleContainer);
+            _initialize?.Invoke(ruleResolver);
             _addChildScopeComposers?.Invoke(childScopeComposers);
 
             foreach (IScopeComposer childScopeComposer in childScopeComposers)
@@ -51,7 +51,7 @@ namespace Infrastructure.DependencyInjection
 
         private void Clear()
         {
-            _addResolvers = null;
+            _addRules = null;
             _initialize = null;
             _addChildScopeComposers = null;
         }

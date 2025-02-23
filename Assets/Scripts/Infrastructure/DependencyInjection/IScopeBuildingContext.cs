@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Infrastructure.DependencyInjection
 {
-    public interface IScopeBuilderParametersSetter
+    public interface IScopeBuildingContext
     {
-        void SetAddResolvers(Action<IResolverContainer> addResolvers);
+        void SetAddRules(Action<IRuleContainer> addRules);
 
-        void SetInitialize(Action<IScopeResolver> initialize);
+        void SetInitialize(Action<IRuleResolver> initialize);
 
         void SetAddChildScopeComposers(Action<ICollection<IScopeComposer>> addChildScopeComposers);
     }

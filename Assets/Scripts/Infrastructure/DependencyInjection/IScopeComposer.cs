@@ -2,6 +2,6 @@ namespace Infrastructure.DependencyInjection
 {
     public interface IScopeComposer
     {
-        void Compose(IScopeBuilderParametersSetter scopeBuilderParametersSetter);
+        void Compose(IScopeBuildingContext scopeBuildingContext);
     }
 }

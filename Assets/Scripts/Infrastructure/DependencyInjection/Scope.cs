@@ -7,16 +7,16 @@ namespace Infrastructure.DependencyInjection
         public IReadOnlyCollection<Scope> ChildScopes => _childScopes;
 
         public readonly IScopeComposer ScopeComposer;
-        public readonly IResolverContainer ResolverContainer;
-        public readonly IScopeResolver ScopeResolver;
+        public readonly IRuleContainer RuleContainer;
+        public readonly IRuleResolver RuleResolver;
 
         private readonly List<Scope> _childScopes = new();
 
-        public Scope(IScopeComposer scopeComposer, IResolverContainer resolverContainer, IScopeResolver scopeResolver)
+        public Scope(IScopeComposer scopeComposer, IRuleContainer ruleContainer, IRuleResolver ruleResolver)
         {
             ScopeComposer = scopeComposer;
-            ResolverContainer = resolverContainer;
-            ScopeResolver = scopeResolver;
+            RuleContainer = ruleContainer;
+            RuleResolver = ruleResolver;
         }
 
         public void AddChild(Scope childScope)

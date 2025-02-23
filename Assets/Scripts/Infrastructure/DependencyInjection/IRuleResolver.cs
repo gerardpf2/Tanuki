@@ -1,6 +1,6 @@
 namespace Infrastructure.DependencyInjection
 {
-    public interface IScopeResolver
+    public interface IRuleResolver
     {
         T Resolve<T>();
 

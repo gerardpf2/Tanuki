@@ -1,18 +1,18 @@
 using System;
-using Infrastructure.DependencyInjection.Resolvers;
+using Infrastructure.DependencyInjection.Rules;
 using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
-    public class ScopeResolver : IScopeResolver
+    public class RuleResolver : IRuleResolver
     {
-        private readonly IResolverContainer _resolverContainer;
-        private readonly IScopeResolver _parentScopeResolver;
+        private readonly IRuleContainer _ruleContainer;
+        private readonly IRuleResolver _parentRuleResolver;
 
-        public ScopeResolver([NotNull] IResolverContainer resolverContainer, IScopeResolver parentScopeResolver)
+        public RuleResolver([NotNull] IRuleContainer ruleContainer, IRuleResolver parentRuleResolver)
         {
-            _resolverContainer = resolverContainer;
-            _parentScopeResolver = parentScopeResolver;
+            _ruleContainer = ruleContainer;
+            _parentRuleResolver = parentRuleResolver;
         }
 
         public T Resolve<T>()
@@ -27,9 +27,9 @@ namespace Infrastructure.DependencyInjection
 
         public bool TryResolve<T>(out T result)
         {
-            if (_resolverContainer.TryGet(out IResolver<T> resolver))
+            if (_ruleContainer.TryGet(out IRule<T> rule))
             {
-                result = resolver.Resolve(this);
+                result = rule.Resolve(this);
 
                 if (result == null)
                 {
@@ -39,9 +39,9 @@ namespace Infrastructure.DependencyInjection
                 return true;
             }
 
-            if (_parentScopeResolver != null)
+            if (_parentRuleResolver != null)
             {
-                return _parentScopeResolver.TryResolve(out result);
+                return _parentRuleResolver.TryResolve(out result);
             }
 
             result = default;
