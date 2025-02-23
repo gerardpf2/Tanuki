@@ -6,9 +6,16 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeBuilder : IScopeBuildingContext, IScopeBuilder
     {
+        private readonly IScopeConstructor _scopeConstructor;
+
         private Action<IRuleContainer> _addRules;
         private Action<IRuleResolver> _initialize;
         private Action<ICollection<IScopeComposer>> _addChildScopeComposers;
+
+        public ScopeBuilder([NotNull] IScopeConstructor scopeConstructor)
+        {
+            _scopeConstructor = scopeConstructor;
+        }
 
         public void SetAddRules(Action<IRuleContainer> addRules)
         {
@@ -31,13 +38,11 @@ namespace Infrastructure.DependencyInjection
 
             scopeComposer.Compose(this);
 
-            IRuleContainer ruleContainer = new RuleContainer();
-            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, parentScope?.RuleResolver);
+            Scope scope = _scopeConstructor.Construct(scopeComposer, parentScope);
             ICollection<IScopeComposer> childScopeComposers = new List<IScopeComposer>();
-            Scope scope = new(scopeComposer, ruleContainer, ruleResolver);
 
-            _addRules?.Invoke(ruleContainer);
-            _initialize?.Invoke(ruleResolver);
+            _addRules?.Invoke(scope.RuleContainer);
+            _initialize?.Invoke(scope.RuleResolver);
             _addChildScopeComposers?.Invoke(childScopeComposers);
 
             foreach (IScopeComposer childScopeComposer in childScopeComposers)
