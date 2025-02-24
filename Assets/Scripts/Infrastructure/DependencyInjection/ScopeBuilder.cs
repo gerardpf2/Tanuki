@@ -15,24 +15,24 @@ namespace Infrastructure.DependencyInjection
 
         public Scope Build([NotNull] IScopeComposer scopeComposer, Scope parentScope)
         {
-            return BuildScope(scopeComposer, parentScope);
+            return BuildChildOf(parentScope, scopeComposer);
         }
 
-        private Scope BuildScope([NotNull] IScopeComposer scopeComposer, Scope parentScope)
+        private Scope BuildChildOf(Scope scope, [NotNull] IScopeComposer scopeComposer)
         {
             return
                 Build(
                     scopeComposer,
-                    initialize => ConstructScope(scopeComposer, parentScope, initialize)
+                    initialize => _scopeConstructor.ConstructChildOf(scope, scopeComposer, initialize)
                 );
         }
 
-        private Scope BuildPartialScope([NotNull] IScopeComposer scopeComposer, [NotNull] Scope scope)
+        private Scope BuildPartialOf([NotNull] Scope scope, [NotNull] IScopeComposer scopeComposer)
         {
             return
                 Build(
                     scopeComposer,
-                    initialize => ConstructPartialScope(scopeComposer, scope, initialize)
+                    initialize => _scopeConstructor.ConstructPartialOf(scope, scopeComposer, initialize)
                 );
         }
 
@@ -57,25 +57,6 @@ namespace Infrastructure.DependencyInjection
             return scope;
         }
 
-        private Scope ConstructScope(IScopeComposer scopeComposer, Scope parentScope, Action<IRuleResolver> initialize)
-        {
-            return _scopeConstructor.Construct(scopeComposer, parentScope, initialize);
-        }
-
-        private Scope ConstructPartialScope(
-            IScopeComposer scopeComposer,
-            [NotNull] Scope scope,
-            Action<IRuleResolver> initialize)
-        {
-            return
-                _scopeConstructor.Construct(
-                    scopeComposer,
-                    scope.RuleContainer,
-                    scope.RuleResolver,
-                    initialize
-                );
-        }
-
         private void BuildPartialScopeComposers(
             [NotNull] Scope scope,
             IEnumerable<IScopeComposer> partialScopeComposers)
@@ -87,7 +68,7 @@ namespace Infrastructure.DependencyInjection
 
             foreach (IScopeComposer partialScopeComposer in partialScopeComposers)
             {
-                Scope partialScope = BuildPartialScope(partialScopeComposer, scope);
+                Scope partialScope = BuildPartialOf(scope, partialScopeComposer);
                 scope.AddPartial(partialScope);
             }
         }
@@ -101,7 +82,7 @@ namespace Infrastructure.DependencyInjection
 
             foreach (IScopeComposer childScopeComposer in childScopeComposers)
             {
-                Scope childScope = BuildScope(childScopeComposer, scope);
+                Scope childScope = BuildChildOf(scope, childScopeComposer);
                 scope.AddChild(childScope);
             }
         }

@@ -4,13 +4,8 @@ namespace Infrastructure.DependencyInjection
 {
     public interface IScopeConstructor
     {
-        Scope Construct(IScopeComposer scopeComposer, Scope parentScope, Action<IRuleResolver> initialize);
+        Scope ConstructPartialOf(Scope scope, IScopeComposer scopeComposer, Action<IRuleResolver> initialize);
 
-        Scope Construct(
-            IScopeComposer scopeComposer,
-            IRuleContainer ruleContainer,
-            IRuleResolver ruleResolver,
-            Action<IRuleResolver> initialize
-        );
+        Scope ConstructChildOf(Scope scope, IScopeComposer scopeComposer, Action<IRuleResolver> initialize);
     }
 }

@@ -1,23 +1,23 @@
 using System;
+using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
     public class ScopeConstructor : IScopeConstructor
     {
-        public Scope Construct(IScopeComposer scopeComposer, Scope parentScope, Action<IRuleResolver> initialize)
-        {
-            IRuleContainer ruleContainer = new RuleContainer();
-            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, parentScope?.RuleResolver);
-
-            return Construct(scopeComposer, ruleContainer, ruleResolver, initialize);
-        }
-
-        public Scope Construct(
+        public Scope ConstructPartialOf(
+            [NotNull] Scope scope,
             IScopeComposer scopeComposer,
-            IRuleContainer ruleContainer,
-            IRuleResolver ruleResolver,
             Action<IRuleResolver> initialize)
         {
+            return new Scope(scopeComposer, scope.RuleContainer, scope.RuleResolver, initialize);
+        }
+
+        public Scope ConstructChildOf(Scope scope, IScopeComposer scopeComposer, Action<IRuleResolver> initialize)
+        {
+            IRuleContainer ruleContainer = new RuleContainer();
+            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, scope?.RuleResolver);
+
             return new Scope(scopeComposer, ruleContainer, ruleResolver, initialize);
         }
     }
