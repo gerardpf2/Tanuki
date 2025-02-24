@@ -6,12 +6,12 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeComposer : IScopeComposer
     {
-        public void Compose([NotNull] IScopeBuildingContext scopeBuildingContext)
+        public void Compose([NotNull] ScopeBuildingContext scopeBuildingContext)
         {
-            scopeBuildingContext.SetAddRules(AddRules);
-            scopeBuildingContext.SetGetPartialScopeComposers(GetPartialScopeComposers);
-            scopeBuildingContext.SetGetChildScopeComposers(GetChildScopeComposers);
-            scopeBuildingContext.SetInitialize(Initialize);
+            scopeBuildingContext.AddRules = AddRules;
+            scopeBuildingContext.GetPartialScopeComposers = GetPartialScopeComposers;
+            scopeBuildingContext.GetChildScopeComposers = GetChildScopeComposers;
+            scopeBuildingContext.Initialize = Initialize;
         }
 
         protected virtual void AddRules(IRuleContainer ruleContainer) { }

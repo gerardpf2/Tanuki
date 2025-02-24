@@ -1,0 +1,16 @@
+using System;
+using System.Collections.Generic;
+
+namespace Infrastructure.DependencyInjection
+{
+    public class ScopeBuildingContext
+    {
+        public Action<IRuleContainer> AddRules { get; set; }
+
+        public Func<IEnumerable<IScopeComposer>> GetPartialScopeComposers { get; set; }
+
+        public Func<IEnumerable<IScopeComposer>> GetChildScopeComposers { get; set; }
+
+        public Action<IRuleResolver> Initialize { get; set; }
+    }
+}

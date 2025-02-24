@@ -4,38 +4,13 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
-    public class ScopeBuilder : IScopeBuildingContext, IScopeBuilder
+    public class ScopeBuilder : IScopeBuilder
     {
         private readonly IScopeConstructor _scopeConstructor;
-
-        private Action<IRuleContainer> _addRules;
-        private Func<IEnumerable<IScopeComposer>> _getPartialScopeComposers;
-        private Func<IEnumerable<IScopeComposer>> _getChildScopeComposers;
-        private Action<IRuleResolver> _initialize;
 
         public ScopeBuilder([NotNull] IScopeConstructor scopeConstructor)
         {
             _scopeConstructor = scopeConstructor;
-        }
-
-        public void SetAddRules(Action<IRuleContainer> addRules)
-        {
-            _addRules = addRules;
-        }
-
-        public void SetGetPartialScopeComposers(Func<IEnumerable<IScopeComposer>> getPartialScopeComposers)
-        {
-            _getPartialScopeComposers = getPartialScopeComposers;
-        }
-
-        public void SetGetChildScopeComposers(Func<IEnumerable<IScopeComposer>> getChildScopeComposers)
-        {
-            _getChildScopeComposers = getChildScopeComposers;
-        }
-
-        public void SetInitialize(Action<IRuleResolver> initialize)
-        {
-            _initialize = initialize;
         }
 
         public Scope Build([NotNull] IScopeComposer scopeComposer, Scope parentScope)
@@ -63,26 +38,21 @@ namespace Infrastructure.DependencyInjection
 
         private Scope Build([NotNull] IScopeComposer scopeComposer, [NotNull] Func<Action<IRuleResolver>, Scope> ctor)
         {
-            Clear();
+            ScopeBuildingContext scopeBuildingContext = new();
 
-            scopeComposer.Compose(this);
+            scopeComposer.Compose(scopeBuildingContext);
 
-            Action<IRuleContainer> addRules = _addRules;
-            Func<IEnumerable<IScopeComposer>> getPartialScopeComposers = _getPartialScopeComposers;
-            Func<IEnumerable<IScopeComposer>> getChildScopeComposers = _getChildScopeComposers;
-            Action<IRuleResolver> initialize = _initialize;
-
-            Scope scope = ctor(initialize);
+            Scope scope = ctor(scopeBuildingContext.Initialize);
 
             if (scope == null)
             {
                 throw new InvalidOperationException(); // TODO
             }
 
-            addRules?.Invoke(scope.RuleContainer);
+            scopeBuildingContext.AddRules?.Invoke(scope.RuleContainer);
 
-            BuildPartialScopeComposers(scope, getPartialScopeComposers?.Invoke());
-            BuildChildScopeComposers(scope, getChildScopeComposers?.Invoke());
+            BuildPartialScopeComposers(scope, scopeBuildingContext.GetPartialScopeComposers?.Invoke());
+            BuildChildScopeComposers(scope, scopeBuildingContext.GetChildScopeComposers?.Invoke());
 
             return scope;
         }
@@ -104,14 +74,6 @@ namespace Infrastructure.DependencyInjection
                     scope.RuleResolver,
                     initialize
                 );
-        }
-
-        private void Clear()
-        {
-            _addRules = null;
-            _getPartialScopeComposers = null;
-            _getChildScopeComposers = null;
-            _initialize = null;
         }
 
         private void BuildPartialScopeComposers(
