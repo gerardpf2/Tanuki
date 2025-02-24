@@ -9,17 +9,23 @@ namespace Infrastructure.DependencyInjection
         public void Compose([NotNull] IScopeBuildingContext scopeBuildingContext)
         {
             scopeBuildingContext.SetAddRules(AddRules);
-            scopeBuildingContext.SetInitialize(Initialize);
+            scopeBuildingContext.SetGetPartialScopeComposers(GetPartialScopeComposers);
             scopeBuildingContext.SetGetChildScopeComposers(GetChildScopeComposers);
+            scopeBuildingContext.SetInitialize(Initialize);
         }
 
         protected virtual void AddRules(IRuleContainer ruleContainer) { }
 
-        protected virtual void Initialize(IRuleResolver ruleResolver) { }
+        protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers()
+        {
+            return Enumerable.Empty<IScopeComposer>();
+        }
 
         protected virtual IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
             return Enumerable.Empty<IScopeComposer>();
         }
+
+        protected virtual void Initialize(IRuleResolver ruleResolver) { }
     }
 }

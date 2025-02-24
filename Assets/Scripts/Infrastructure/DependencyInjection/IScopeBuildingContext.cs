@@ -7,8 +7,10 @@ namespace Infrastructure.DependencyInjection
     {
         void SetAddRules(Action<IRuleContainer> addRules);
 
-        void SetInitialize(Action<IRuleResolver> initialize);
+        void SetGetPartialScopeComposers(Func<IEnumerable<IScopeComposer>> getPartialScopeComposers);
 
         void SetGetChildScopeComposers(Func<IEnumerable<IScopeComposer>> getChildScopeComposers);
+
+        void SetInitialize(Action<IRuleResolver> initialize);
     }
 }
