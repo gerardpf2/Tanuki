@@ -27,7 +27,7 @@ namespace Infrastructure.DependencyInjection
                 );
         }
 
-        private Scope BuildPartialOf([NotNull] Scope scope, [NotNull] IScopeComposer scopeComposer)
+        private Scope BuildPartialOf(Scope scope, [NotNull] IScopeComposer scopeComposer)
         {
             return
                 Build(

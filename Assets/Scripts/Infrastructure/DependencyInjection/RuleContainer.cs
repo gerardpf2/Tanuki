@@ -6,11 +6,11 @@ namespace Infrastructure.DependencyInjection
 {
     public class RuleContainer : IRuleContainer
     {
-        private readonly IDictionary<Type, IRule<object>> _rules = new Dictionary<Type, IRule<object>>();
+        private readonly IDictionary<(Type, object), IRule<object>> _rules = new Dictionary<(Type, object), IRule<object>>();
 
-        public void Add<T>(IRule<T> rule)
+        public void Add<T>(IRule<T> rule, object key = null)
         {
-            if (rule is IRule<object> ruleO && _rules.TryAdd(typeof(T), ruleO))
+            if (rule is IRule<object> ruleO && _rules.TryAdd((typeof(T), key), ruleO))
             {
                 return;
             }
@@ -18,9 +18,9 @@ namespace Infrastructure.DependencyInjection
             throw new InvalidOperationException(); // TODO
         }
 
-        public bool TryGet<T>(out IRule<T> rule)
+        public bool TryGet<T>(out IRule<T> rule, object key = null)
         {
-            if (_rules.TryGetValue(typeof(T), out IRule<object> ruleO) && ruleO is IRule<T> ruleT)
+            if (_rules.TryGetValue((typeof(T), key), out IRule<object> ruleO) && ruleO is IRule<T> ruleT)
             {
                 rule = ruleT;
 

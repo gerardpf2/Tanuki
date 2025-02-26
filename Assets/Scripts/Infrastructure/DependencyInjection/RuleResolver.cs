@@ -15,9 +15,9 @@ namespace Infrastructure.DependencyInjection
             _parentRuleResolver = parentRuleResolver;
         }
 
-        public T Resolve<T>()
+        public T Resolve<T>(object key = null)
         {
-            if (TryResolve(out T result))
+            if (TryResolve(out T result, key))
             {
                 return result;
             }
@@ -25,9 +25,9 @@ namespace Infrastructure.DependencyInjection
             throw new InvalidOperationException(); // TODO
         }
 
-        public bool TryResolve<T>(out T result)
+        public bool TryResolve<T>(out T result, object key = null)
         {
-            if (_ruleContainer.TryGet(out IRule<T> rule))
+            if (_ruleContainer.TryGet(out IRule<T> rule, key))
             {
                 result = rule.Resolve(this);
 
@@ -41,7 +41,7 @@ namespace Infrastructure.DependencyInjection
 
             if (_parentRuleResolver != null)
             {
-                return _parentRuleResolver.TryResolve(out result);
+                return _parentRuleResolver.TryResolve(out result, key);
             }
 
             result = default;
