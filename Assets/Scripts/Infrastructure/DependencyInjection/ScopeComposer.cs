@@ -8,10 +8,16 @@ namespace Infrastructure.DependencyInjection
     {
         public void Compose([NotNull] ScopeBuildingContext scopeBuildingContext)
         {
+            scopeBuildingContext.GetGateKey = GetGateKey;
             scopeBuildingContext.AddRules = AddRules;
             scopeBuildingContext.GetPartialScopeComposers = GetPartialScopeComposers;
             scopeBuildingContext.GetChildScopeComposers = GetChildScopeComposers;
             scopeBuildingContext.Initialize = Initialize;
+        }
+
+        protected virtual object GetGateKey()
+        {
+            return null;
         }
 
         protected virtual void AddRules(IRuleContainer ruleContainer) { }

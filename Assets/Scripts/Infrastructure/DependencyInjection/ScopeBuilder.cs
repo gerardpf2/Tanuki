@@ -6,10 +6,14 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeBuilder : IScopeBuilder
     {
+        private readonly IEnabledGateKeyContainer _enabledGateKeyContainer;
         private readonly IScopeConstructor _scopeConstructor;
 
-        public ScopeBuilder([NotNull] IScopeConstructor scopeConstructor)
+        public ScopeBuilder(
+            [NotNull] IEnabledGateKeyContainer enabledGateKeyContainer,
+            [NotNull] IScopeConstructor scopeConstructor)
         {
+            _enabledGateKeyContainer = enabledGateKeyContainer;
             _scopeConstructor = scopeConstructor;
         }
 
@@ -42,6 +46,11 @@ namespace Infrastructure.DependencyInjection
 
             scopeComposer.Compose(scopeBuildingContext);
 
+            if (!_enabledGateKeyContainer.Contains(scopeBuildingContext.GetGateKey?.Invoke()))
+            {
+                return null;
+            }
+
             Scope scope = ctor(scopeBuildingContext.Initialize);
 
             if (scope == null)
@@ -69,6 +78,12 @@ namespace Infrastructure.DependencyInjection
             foreach (IScopeComposer partialScopeComposer in partialScopeComposers)
             {
                 Scope partialScope = BuildPartialOf(scope, partialScopeComposer);
+
+                if (partialScope == null)
+                {
+                    continue;
+                }
+
                 scope.AddPartial(partialScope);
             }
         }
@@ -83,6 +98,12 @@ namespace Infrastructure.DependencyInjection
             foreach (IScopeComposer childScopeComposer in childScopeComposers)
             {
                 Scope childScope = BuildChildOf(scope, childScopeComposer);
+
+                if (childScope == null)
+                {
+                    continue;
+                }
+
                 scope.AddChild(childScope);
             }
         }

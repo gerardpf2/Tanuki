@@ -5,6 +5,8 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeBuildingContext
     {
+        public Func<object> GetGateKey { get; set; }
+
         public Action<IRuleContainer> AddRules { get; set; }
 
         public Func<IEnumerable<IScopeComposer>> GetPartialScopeComposers { get; set; }

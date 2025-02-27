@@ -9,7 +9,7 @@ namespace Infrastructure.DependencyInjection
 
         public IReadOnlyCollection<Scope> ChildScopes => _childScopes;
 
-        public readonly IScopeComposer ScopeComposer;
+        public readonly IScopeComposer ScopeComposer; // TODO: Check if needed
         public readonly IRuleContainer RuleContainer;
         public readonly IRuleResolver RuleResolver;
         public readonly Action<IRuleResolver> Initialize;
