@@ -4,7 +4,7 @@ using Infrastructure.DependencyInjection.Rules;
 
 namespace Infrastructure.DependencyInjection
 {
-    public class RuleContainer : IRuleContainer
+    public class RuleContainer : IRuleAdder, IRuleGetter
     {
         private readonly IDictionary<(Type, object), IRule<object>> _rules = new Dictionary<(Type, object), IRule<object>>();
 

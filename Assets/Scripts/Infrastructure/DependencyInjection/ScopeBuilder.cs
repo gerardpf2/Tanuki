@@ -58,7 +58,7 @@ namespace Infrastructure.DependencyInjection
                 throw new InvalidOperationException(); // TODO
             }
 
-            scopeBuildingContext.AddRules?.Invoke(scope.RuleContainer);
+            scopeBuildingContext.AddRules?.Invoke(scope.RuleAdder);
 
             BuildPartialScopeComposers(scope, scopeBuildingContext.GetPartialScopeComposers?.Invoke());
             BuildChildScopeComposers(scope, scopeBuildingContext.GetChildScopeComposers?.Invoke());

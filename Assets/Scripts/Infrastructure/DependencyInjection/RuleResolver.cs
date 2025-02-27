@@ -6,12 +6,12 @@ namespace Infrastructure.DependencyInjection
 {
     public class RuleResolver : IRuleResolver
     {
-        private readonly IRuleContainer _ruleContainer;
+        private readonly IRuleGetter _ruleGetter;
         private readonly IRuleResolver _parentRuleResolver;
 
-        public RuleResolver([NotNull] IRuleContainer ruleContainer, IRuleResolver parentRuleResolver)
+        public RuleResolver([NotNull] IRuleGetter ruleGetter, IRuleResolver parentRuleResolver)
         {
-            _ruleContainer = ruleContainer;
+            _ruleGetter = ruleGetter;
             _parentRuleResolver = parentRuleResolver;
         }
 
@@ -27,7 +27,7 @@ namespace Infrastructure.DependencyInjection
 
         public bool TryResolve<T>(out T result, object key = null)
         {
-            if (_ruleContainer.TryGet(out IRule<T> rule, key))
+            if (_ruleGetter.TryGet(out IRule<T> rule, key))
             {
                 result = rule.Resolve(this);
 

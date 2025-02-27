@@ -10,7 +10,7 @@ namespace Infrastructure.DependencyInjection
         public IReadOnlyCollection<Scope> ChildScopes => _childScopes;
 
         public readonly IScopeComposer ScopeComposer; // TODO: Check if needed
-        public readonly IRuleContainer RuleContainer;
+        public readonly IRuleAdder RuleAdder;
         public readonly IRuleResolver RuleResolver;
         public readonly Action<IRuleResolver> Initialize;
 
@@ -19,12 +19,12 @@ namespace Infrastructure.DependencyInjection
 
         public Scope(
             IScopeComposer scopeComposer,
-            IRuleContainer ruleContainer,
+            IRuleAdder ruleAdder,
             IRuleResolver ruleResolver,
             Action<IRuleResolver> initialize)
         {
             ScopeComposer = scopeComposer;
-            RuleContainer = ruleContainer;
+            RuleAdder = ruleAdder;
             RuleResolver = ruleResolver;
             Initialize = initialize;
         }

@@ -20,7 +20,7 @@ namespace Infrastructure.DependencyInjection
             return null;
         }
 
-        protected virtual void AddRules(IRuleContainer ruleContainer) { }
+        protected virtual void AddRules(IRuleAdder ruleAdder) { }
 
         protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
