@@ -6,6 +6,13 @@ namespace Infrastructure.DependencyInjection
 {
     public class RuleFactory : IRuleFactory
     {
+        private readonly IEnabledGateKeyGetter _enabledGateKeyGetter;
+
+        public RuleFactory([NotNull] IEnabledGateKeyGetter enabledGateKeyGetter)
+        {
+            _enabledGateKeyGetter = enabledGateKeyGetter;
+        }
+
         public InstanceRule<T> GetInstance<T>(T instance)
         {
             return new InstanceRule<T>(instance);
@@ -24,6 +31,11 @@ namespace Infrastructure.DependencyInjection
         public ToRule<TInput, TOutput> GetTo<TInput, TOutput>(object keyResolve = null) where TOutput : TInput
         {
             return new ToRule<TInput, TOutput>(keyResolve);
+        }
+
+        public GateKeyRule<T> GetGateKey<T>([NotNull] IRule<T> rule, object gateKey) where T : class
+        {
+            return new GateKeyRule<T>(_enabledGateKeyGetter, rule, gateKey);
         }
     }
 }

@@ -31,12 +31,7 @@ namespace Infrastructure.DependencyInjection
             {
                 result = rule.Resolve(this);
 
-                if (result == null)
-                {
-                    throw new InvalidOperationException(); // TODO
-                }
-
-                return true;
+                return result != null;
             }
 
             if (_parentRuleResolver != null)
