@@ -8,13 +8,16 @@ namespace Infrastructure.DependencyInjection
     {
         private readonly IEnabledGateKeyGetter _enabledGateKeyGetter;
         private readonly IScopeConstructor _scopeConstructor;
+        private readonly IRuleFactory _ruleFactory;
 
         public ScopeBuilder(
             [NotNull] IEnabledGateKeyGetter enabledGateKeyGetter,
-            [NotNull] IScopeConstructor scopeConstructor)
+            [NotNull] IScopeConstructor scopeConstructor,
+            IRuleFactory ruleFactory)
         {
             _enabledGateKeyGetter = enabledGateKeyGetter;
             _scopeConstructor = scopeConstructor;
+            _ruleFactory = ruleFactory;
         }
 
         public Scope Build([NotNull] IScopeComposer scopeComposer, Scope parentScope)
@@ -58,7 +61,7 @@ namespace Infrastructure.DependencyInjection
                 throw new InvalidOperationException(); // TODO
             }
 
-            scopeBuildingContext.AddRules?.Invoke(scope.RuleAdder);
+            scopeBuildingContext.AddRules?.Invoke(scope.RuleAdder, _ruleFactory);
 
             BuildPartialScopeComposers(scope, scopeBuildingContext.GetPartialScopeComposers?.Invoke());
             BuildChildScopeComposers(scope, scopeBuildingContext.GetChildScopeComposers?.Invoke());
