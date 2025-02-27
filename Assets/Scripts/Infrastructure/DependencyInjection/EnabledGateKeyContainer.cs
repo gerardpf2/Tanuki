@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Infrastructure.DependencyInjection
 {
-    public class EnabledGateKeyContainer : IEnabledGateKeyContainer
+    public class EnabledGateKeyContainer : IEnabledGateKeyAdder, IEnabledGateKeyGetter
     {
         private readonly ICollection<object> _gateKeys = new HashSet<object> { null };
 

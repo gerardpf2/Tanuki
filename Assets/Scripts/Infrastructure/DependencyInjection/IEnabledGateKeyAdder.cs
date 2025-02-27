@@ -1,9 +1,7 @@
 namespace Infrastructure.DependencyInjection
 {
-    public interface IEnabledGateKeyContainer
+    public interface IEnabledGateKeyAdder
     {
         void Add(object gateKey);
-
-        bool Contains(object gateKey);
     }
 }

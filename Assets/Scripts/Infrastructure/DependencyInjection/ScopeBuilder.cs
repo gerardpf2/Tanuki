@@ -6,14 +6,14 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeBuilder : IScopeBuilder
     {
-        private readonly IEnabledGateKeyContainer _enabledGateKeyContainer;
+        private readonly IEnabledGateKeyGetter _enabledGateKeyGetter;
         private readonly IScopeConstructor _scopeConstructor;
 
         public ScopeBuilder(
-            [NotNull] IEnabledGateKeyContainer enabledGateKeyContainer,
+            [NotNull] IEnabledGateKeyGetter enabledGateKeyGetter,
             [NotNull] IScopeConstructor scopeConstructor)
         {
-            _enabledGateKeyContainer = enabledGateKeyContainer;
+            _enabledGateKeyGetter = enabledGateKeyGetter;
             _scopeConstructor = scopeConstructor;
         }
 
@@ -46,7 +46,7 @@ namespace Infrastructure.DependencyInjection
 
             scopeComposer.Compose(scopeBuildingContext);
 
-            if (!_enabledGateKeyContainer.Contains(scopeBuildingContext.GetGateKey?.Invoke()))
+            if (!_enabledGateKeyGetter.Contains(scopeBuildingContext.GetGateKey?.Invoke()))
             {
                 return null;
             }
