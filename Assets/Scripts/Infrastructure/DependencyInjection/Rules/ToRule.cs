@@ -4,16 +4,16 @@ namespace Infrastructure.DependencyInjection.Rules
 {
     public class ToRule<TInput, TOutput> : IRule<TInput> where TOutput : TInput
     {
-        private readonly object _keyResolve;
+        private readonly object _keyToResolve;
 
-        public ToRule(object keyResolve = null)
+        public ToRule(object keyToResolve = null)
         {
-            _keyResolve = keyResolve;
+            _keyToResolve = keyToResolve;
         }
 
         public TInput Resolve([NotNull] IRuleResolver ruleResolver)
         {
-            return ruleResolver.Resolve<TOutput>(_keyResolve);
+            return ruleResolver.Resolve<TOutput>(_keyToResolve);
         }
     }
 }

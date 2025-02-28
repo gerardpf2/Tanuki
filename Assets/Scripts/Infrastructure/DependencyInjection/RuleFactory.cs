@@ -28,9 +28,9 @@ namespace Infrastructure.DependencyInjection
             return new SingletonRule<T>(ctor);
         }
 
-        public ToRule<TInput, TOutput> GetTo<TInput, TOutput>(object keyResolve = null) where TOutput : TInput
+        public ToRule<TInput, TOutput> GetTo<TInput, TOutput>(object keyToResolve = null) where TOutput : TInput
         {
-            return new ToRule<TInput, TOutput>(keyResolve);
+            return new ToRule<TInput, TOutput>(keyToResolve);
         }
 
         public GateKeyRule<T> GetGateKey<T>([NotNull] IRule<T> rule, object gateKey) where T : class

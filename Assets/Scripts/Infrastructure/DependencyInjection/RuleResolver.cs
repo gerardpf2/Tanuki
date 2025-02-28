@@ -22,7 +22,7 @@ namespace Infrastructure.DependencyInjection
                 return result;
             }
 
-            throw new InvalidOperationException(); // TODO
+            throw new InvalidOperationException($"Cannot resolve rule with Type: {typeof(T)} and Key: {key}");
         }
 
         public bool TryResolve<T>(out T result, object key = null)

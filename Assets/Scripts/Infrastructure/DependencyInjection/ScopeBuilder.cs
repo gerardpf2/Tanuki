@@ -30,7 +30,7 @@ namespace Infrastructure.DependencyInjection
             return
                 Build(
                     scopeComposer,
-                    initialize => _scopeConstructor.ConstructChildOf(scope, scopeComposer, initialize)
+                    initialize => _scopeConstructor.ConstructChildOf(scope, initialize)
                 );
         }
 
@@ -39,7 +39,7 @@ namespace Infrastructure.DependencyInjection
             return
                 Build(
                     scopeComposer,
-                    initialize => _scopeConstructor.ConstructPartialOf(scope, scopeComposer, initialize)
+                    initialize => _scopeConstructor.ConstructPartialOf(scope, initialize)
                 );
         }
 
@@ -58,7 +58,7 @@ namespace Infrastructure.DependencyInjection
 
             if (scope == null)
             {
-                throw new InvalidOperationException(); // TODO
+                return null;
             }
 
             scopeBuildingContext.AddRules?.Invoke(scope.RuleAdder, _ruleFactory);

@@ -15,7 +15,7 @@ namespace Infrastructure.DependencyInjection
                 return;
             }
 
-            throw new InvalidOperationException(); // TODO
+            throw new InvalidOperationException($"Cannot add rule with Type: {typeof(T)} and Key: {key}");
         }
 
         public bool TryGet<T>(out IRule<T> rule, object key = null)
