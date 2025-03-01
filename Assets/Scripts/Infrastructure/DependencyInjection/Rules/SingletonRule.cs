@@ -7,6 +7,7 @@ namespace Infrastructure.DependencyInjection.Rules
     {
         private readonly Func<IRuleResolver, T> _ctor;
 
+        private bool _resolved;
         private T _instance;
 
         public SingletonRule([NotNull] Func<IRuleResolver, T> ctor)
@@ -16,7 +17,15 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public T Resolve(IRuleResolver ruleResolver)
         {
-            return _instance ??= _ctor(ruleResolver);
+            if (_resolved)
+            {
+                return _instance;
+            }
+
+            _instance = _ctor(ruleResolver);
+            _resolved = true;
+
+            return _instance;
         }
     }
 }
