@@ -31,7 +31,10 @@ namespace Infrastructure.DependencyInjection
             {
                 result = rule.Resolve(this);
 
-                return result != null;
+                if (result != null)
+                {
+                    return true;
+                }
             }
 
             if (_parentRuleResolver != null)
