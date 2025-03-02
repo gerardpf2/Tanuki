@@ -34,11 +34,11 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
             Assert.AreSame(_ctorInvokeResult, result);
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        public void Resolve_ResolveCalledMultipleTimes_CtorInvokedOneTime(int resolveCalledTimes)
+        [Test]
+        public void Resolve_ResolveCalledMultipleTimes_CtorInvokedOneTime()
         {
+            const int resolveCalledTimes = 5;
+
             for (int i = 0; i < resolveCalledTimes; ++i)
             {
                 _singletonRule.Resolve(_ruleResolver);
