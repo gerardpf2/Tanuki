@@ -13,8 +13,8 @@ namespace Infrastructure.DependencyInjection
         public readonly IRuleResolver RuleResolver;
         public readonly Action<IRuleResolver> Initialize;
 
-        private readonly List<Scope> _partialScopes = new();
-        private readonly List<Scope> _childScopes = new();
+        private readonly HashSet<Scope> _partialScopes = new();
+        private readonly HashSet<Scope> _childScopes = new();
 
         public Scope(IRuleAdder ruleAdder, IRuleResolver ruleResolver, Action<IRuleResolver> initialize)
         {
