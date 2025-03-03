@@ -8,9 +8,9 @@ namespace Infrastructure.DependencyInjection
     {
         private readonly IDictionary<(Type, object), IRule<object>> _rules = new Dictionary<(Type, object), IRule<object>>();
 
-        public void Add<T>(IRule<T> rule, object key = null)
+        public void Add<T>(IRule<T> rule, object key = null) where T : class
         {
-            if (rule is IRule<object> ruleO && _rules.TryAdd((typeof(T), key), ruleO))
+            if (_rules.TryAdd((typeof(T), key), rule))
             {
                 return;
             }

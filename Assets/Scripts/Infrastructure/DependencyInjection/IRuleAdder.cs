@@ -4,6 +4,6 @@ namespace Infrastructure.DependencyInjection
 {
     public interface IRuleAdder
     {
-        void Add<T>(IRule<T> rule, object key = null);
+        void Add<T>(IRule<T> rule, object key = null) where T : class;
     }
 }
