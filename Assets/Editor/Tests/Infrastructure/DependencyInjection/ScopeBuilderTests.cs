@@ -164,7 +164,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.AreSame(childScope, scope);
             Assert.IsTrue(parentScope.ChildScopes.Count == 1);
-            Assert.AreSame(childScope, parentScope.ChildScopes.First());
+            Assert.IsTrue(parentScope.ChildScopes.Contains(childScope));
         }
 
         #endregion
@@ -209,7 +209,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.AreSame(partialScope, scope);
             Assert.IsTrue(partialOfScope.PartialScopes.Count == 1);
-            Assert.AreSame(partialScope, partialOfScope.PartialScopes.First());
+            Assert.IsTrue(partialOfScope.PartialScopes.Contains(partialScope));
         }
 
         #endregion
