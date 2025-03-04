@@ -33,5 +33,63 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
 
             Assert.AreSame(_ctorInvokeResult, result);
         }
+
+        [Test]
+        public void Equals_OtherNull_ReturnsFalse()
+        {
+            const TransientRule<object> other = null;
+
+            Assert.IsFalse(_transientRule.Equals(other)); // Assert.AreNotEqual cannot be used in here
+        }
+
+        [Test]
+        public void Equals_SameRef_ReturnsTrue()
+        {
+            TransientRule<object> other = _transientRule;
+
+            Assert.IsTrue(_transientRule.Equals(other)); // Assert.AreNotEqual cannot be used in here
+        }
+
+        [Test]
+        public void Equals_OtherWrongType_ReturnsFalse()
+        {
+            object other = new();
+
+            Assert.AreNotEqual(_transientRule, other);
+        }
+
+        [Test]
+        public void Equals_OtherSameParams_ReturnsTrue()
+        {
+            TransientRule<object> other = new(_ctor);
+
+            Assert.AreEqual(_transientRule, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams_ReturnsFalse()
+        {
+            Func<IRuleResolver, object> otherCtor = Substitute.For<Func<IRuleResolver, object>>();
+            TransientRule<object> other = new(otherCtor);
+
+            Assert.AreNotEqual(_transientRule, other);
+        }
+
+        [Test]
+        public void GetHashCode_SameParams_SameReturnedValue()
+        {
+            TransientRule<object> other = new(_ctor);
+
+            Assert.AreEqual(_transientRule.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_DifferentParams_DifferentReturnedValue()
+        {
+            Func<IRuleResolver, object> otherCtor = Substitute.For<Func<IRuleResolver, object>>();
+            TransientRule<object> other = new(otherCtor);
+
+            Assert.AreNotEqual(_transientRule.GetHashCode(), other.GetHashCode());
+        }
     }
 }

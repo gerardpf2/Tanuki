@@ -46,5 +46,63 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
 
             _ctor.Received(1).Invoke(_ruleResolver);
         }
+
+        [Test]
+        public void Equals_OtherNull_ReturnsFalse()
+        {
+            const SingletonRule<object> other = null;
+
+            Assert.IsFalse(_singletonRule.Equals(other)); // Assert.AreNotEqual cannot be used in here
+        }
+
+        [Test]
+        public void Equals_SameRef_ReturnsTrue()
+        {
+            SingletonRule<object> other = _singletonRule;
+
+            Assert.IsTrue(_singletonRule.Equals(other)); // Assert.AreNotEqual cannot be used in here
+        }
+
+        [Test]
+        public void Equals_OtherWrongType_ReturnsFalse()
+        {
+            object other = new();
+
+            Assert.AreNotEqual(_singletonRule, other);
+        }
+
+        [Test]
+        public void Equals_OtherSameParams_ReturnsTrue()
+        {
+            SingletonRule<object> other = new(_ctor);
+
+            Assert.AreEqual(_singletonRule, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams_ReturnsFalse()
+        {
+            Func<IRuleResolver, object> otherCtor = Substitute.For<Func<IRuleResolver, object>>();
+            SingletonRule<object> other = new(otherCtor);
+
+            Assert.AreNotEqual(_singletonRule, other);
+        }
+
+        [Test]
+        public void GetHashCode_SameParams_SameReturnedValue()
+        {
+            SingletonRule<object> other = new(_ctor);
+
+            Assert.AreEqual(_singletonRule.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_DifferentParams_DifferentReturnedValue()
+        {
+            Func<IRuleResolver, object> otherCtor = Substitute.For<Func<IRuleResolver, object>>();
+            SingletonRule<object> other = new(otherCtor);
+
+            Assert.AreNotEqual(_singletonRule.GetHashCode(), other.GetHashCode());
+        }
     }
 }
