@@ -5,14 +5,14 @@ namespace Infrastructure.DependencyInjection
 {
     public interface IRuleFactory
     {
-        InstanceRule<T> GetInstance<T>(T instance);
+        IRule<T> GetInstance<T>(T instance);
 
-        TransientRule<T> GetTransient<T>(Func<IRuleResolver, T> ctor);
+        IRule<T> GetTransient<T>(Func<IRuleResolver, T> ctor);
 
-        SingletonRule<T> GetSingleton<T>(Func<IRuleResolver, T> ctor);
+        IRule<T> GetSingleton<T>(Func<IRuleResolver, T> ctor);
 
-        ToRule<TInput, TOutput> GetTo<TInput, TOutput>(object keyToResolve = null) where TOutput : TInput;
+        IRule<TInput> GetTo<TInput, TOutput>(object keyToResolve = null) where TOutput : TInput;
 
-        GateKeyRule<T> GetGateKey<T>(IRule<T> rule, object gateKey) where T : class;
+        IRule<T> GetGateKey<T>(IRule<T> rule, object gateKey) where T : class;
     }
 }
