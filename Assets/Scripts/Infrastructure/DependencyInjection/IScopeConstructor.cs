@@ -6,6 +6,6 @@ namespace Infrastructure.DependencyInjection
     {
         Scope Construct(Scope parentScope, Action<IRuleResolver> initialize);
 
-        Scope ConstructPartial(Scope mainScope, Action<IRuleResolver> initialize);
+        PartialScope ConstructPartial(Scope mainScope, Action<IRuleResolver> initialize);
     }
 }

@@ -37,7 +37,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void AddPartial_One_OneAdded()
         {
-            Scope partialScope = new(null, null, null);
+            PartialScope partialScope = new(_scope, null);
 
             _scope.AddPartial(partialScope);
 
@@ -48,8 +48,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void AddPartial_Multiple_MultipleAdded()
         {
-            Scope partialScope1 = new(null, null, null);
-            Scope partialScope2 = new(null, null, null);
+            PartialScope partialScope1 = new(_scope, null);
+            PartialScope partialScope2 = new(_scope, null);
 
             _scope.AddPartial(partialScope1);
             _scope.AddPartial(partialScope2);
@@ -62,7 +62,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void AddPartial_MultipleDuplicated_OneAdded()
         {
-            Scope partialScope = new(null, null, null);
+            PartialScope partialScope = new(_scope, null);
 
             _scope.AddPartial(partialScope);
             _scope.AddPartial(partialScope);

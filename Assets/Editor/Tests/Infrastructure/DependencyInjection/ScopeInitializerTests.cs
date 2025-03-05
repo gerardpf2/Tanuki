@@ -34,8 +34,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_HasPartial_PartialScopeInitializeCalledWithValidParams()
         {
-            Scope scope = new(null, null, null);
-            Scope partialScope = new(null, _ruleResolver, _initialize);
+            Scope scope = new(null, _ruleResolver, null);
+            PartialScope partialScope = new(scope, _initialize);
             scope.AddPartial(partialScope);
 
             _scopeInitializer.Initialize(scope);

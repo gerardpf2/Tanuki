@@ -31,7 +31,7 @@ namespace Infrastructure.DependencyInjection
         }
 
         // TODO: Test removed AddPartial
-        public Scope BuildPartial([NotNull] Scope mainScope, [NotNull] IScopeComposer scopeComposer)
+        public PartialScope BuildPartial([NotNull] Scope mainScope, [NotNull] IScopeComposer scopeComposer)
         {
             return
                 Build(
@@ -40,7 +40,7 @@ namespace Infrastructure.DependencyInjection
                 );
         }
 
-        private Scope Build([NotNull] IScopeComposer scopeComposer, [NotNull] Func<Action<IRuleResolver>, Scope> ctor)
+        private T Build<T>([NotNull] IScopeComposer scopeComposer, [NotNull] Func<Action<IRuleResolver>, T> ctor) where T : Scope
         {
             ScopeBuildingContext scopeBuildingContext = new();
 
@@ -51,7 +51,7 @@ namespace Infrastructure.DependencyInjection
                 return null;
             }
 
-            Scope scope = ctor(scopeBuildingContext.Initialize);
+            T scope = ctor(scopeBuildingContext.Initialize);
 
             if (scope == null)
             {

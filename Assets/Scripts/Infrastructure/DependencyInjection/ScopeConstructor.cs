@@ -18,9 +18,9 @@ namespace Infrastructure.DependencyInjection
         }
 
         // TODO: Test added AddPartial
-        public Scope ConstructPartial([NotNull] Scope mainScope, Action<IRuleResolver> initialize)
+        public PartialScope ConstructPartial([NotNull] Scope mainScope, Action<IRuleResolver> initialize)
         {
-            Scope partialScope = new(mainScope.RuleAdder, mainScope.RuleResolver, initialize);
+            PartialScope partialScope = new(mainScope, initialize);
 
             mainScope.AddPartial(partialScope);
 

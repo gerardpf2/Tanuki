@@ -4,6 +4,6 @@ namespace Infrastructure.DependencyInjection
     {
         Scope Build(Scope parentScope, IScopeComposer scopeComposer);
 
-        Scope BuildPartial(Scope mainScope, IScopeComposer scopeComposer);
+        PartialScope BuildPartial(Scope mainScope, IScopeComposer scopeComposer);
     }
 }
