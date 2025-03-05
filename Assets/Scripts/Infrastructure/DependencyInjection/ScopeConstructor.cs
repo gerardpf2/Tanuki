@@ -5,17 +5,17 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeConstructor : IScopeConstructor
     {
-        public Scope ConstructPartialOf([NotNull] Scope scope, Action<IRuleResolver> initialize)
-        {
-            return new Scope(scope.RuleAdder, scope.RuleResolver, initialize);
-        }
-
-        public Scope ConstructChildOf(Scope scope, Action<IRuleResolver> initialize)
+        public Scope Construct(Scope parentScope, Action<IRuleResolver> initialize)
         {
             RuleContainer ruleContainer = new();
-            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, scope?.RuleResolver);
+            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, parentScope?.RuleResolver);
 
             return new Scope(ruleContainer, ruleResolver, initialize);
+        }
+
+        public Scope ConstructPartial([NotNull] Scope mainScope, Action<IRuleResolver> initialize)
+        {
+            return new Scope(mainScope.RuleAdder, mainScope.RuleResolver, initialize);
         }
     }
 }

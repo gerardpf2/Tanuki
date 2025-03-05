@@ -6,7 +6,7 @@ namespace Infrastructure.DependencyInjection.Utils
     {
         public static Scope BuildAsRoot([NotNull] this IScopeBuilder scopeBuilder, IScopeComposer scopeComposer)
         {
-            return scopeBuilder.BuildAsChildOf(null, scopeComposer);
+            return scopeBuilder.Build(null, scopeComposer);
         }
     }
 }

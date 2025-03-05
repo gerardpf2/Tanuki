@@ -24,11 +24,11 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void ConstructPartialOf_ScopeHasValidParams()
+        public void ConstructPartial_ScopeHasValidParams()
         {
-            Scope partialOfScope = new(_ruleAdder, _ruleResolver, null);
+            Scope mainScope = new(_ruleAdder, _ruleResolver, null);
 
-            Scope partialScope = _scopeConstructor.ConstructPartialOf(partialOfScope, _initialize);
+            Scope partialScope = _scopeConstructor.ConstructPartial(mainScope, _initialize);
 
             Assert.AreSame(_ruleAdder, partialScope.RuleAdder);
             Assert.AreSame(_ruleResolver, partialScope.RuleResolver);
@@ -38,11 +38,11 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void ConstructChildOf_ScopeHasValidParams()
+        public void Construct_ScopeHasValidParams()
         {
             Scope parentScope = new(_ruleAdder, _ruleResolver, null);
 
-            Scope childScope = _scopeConstructor.ConstructChildOf(parentScope, _initialize);
+            Scope childScope = _scopeConstructor.Construct(parentScope, _initialize);
 
             Assert.AreNotSame(_ruleAdder, childScope.RuleAdder);
             Assert.AreNotSame(_ruleResolver, childScope.RuleResolver);
