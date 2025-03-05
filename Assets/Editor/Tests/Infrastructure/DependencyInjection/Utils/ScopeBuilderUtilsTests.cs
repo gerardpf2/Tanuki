@@ -18,9 +18,9 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Utils
         }
 
         [Test]
-        public void BuildAsRoot_BuildCalledWithValidParams()
+        public void BuildRoot_BuildCalledWithValidParams()
         {
-            _scopeBuilder.BuildAsRoot(_scopeComposer);
+            _scopeBuilder.BuildRoot(_scopeComposer);
 
             _scopeBuilder.Received(1).Build(null, _scopeComposer);
         }

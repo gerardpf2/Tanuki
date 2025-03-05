@@ -4,6 +4,12 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeInitializer : IScopeInitializer
     {
+        // TODO: Test
+        public void Initialize([NotNull] PartialScope partialScope)
+        {
+            InitializeSingle(partialScope);
+        }
+
         public void Initialize([NotNull] Scope scope)
         {
             InitializeSingle(scope);
@@ -17,12 +23,6 @@ namespace Infrastructure.DependencyInjection
             {
                 Initialize(childScope);
             }
-        }
-
-        // TODO: Test
-        public void Initialize([NotNull] PartialScope partialScope)
-        {
-            InitializeSingle(partialScope);
         }
 
         private static void InitializeSingle([NotNull] Scope scope)

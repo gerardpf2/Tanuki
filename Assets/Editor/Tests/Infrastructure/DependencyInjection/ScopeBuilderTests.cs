@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Infrastructure.DependencyInjection;
 using NSubstitute;
 using NUnit.Framework;
@@ -27,7 +26,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _scopeBuilder = new ScopeBuilder(_enabledGateKeyGetter, _scopeConstructor, _ruleFactory);
         }
 
-        #region Build (Code shared between Build and BuildPartial)
+        #region Build base (Code shared between Build and BuildPartial)
 
         [Test]
         public void Build_ComposeCalledWithValidParams()
@@ -67,9 +66,9 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(false);
 
-            Scope scope = _scopeBuilder.Build(null, _scopeComposer);
+            Scope childScope = _scopeBuilder.Build(null, _scopeComposer);
 
-            Assert.IsNull(scope);
+            Assert.IsNull(childScope);
         }
 
         [Test]
@@ -89,23 +88,6 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetChildScopeComposersCalled()
-        {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
-            Scope parentScope = new(null, null, null);
-            Scope childScope = new(null, null, null);
-            _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
-            Func<IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
-            IScopeComposer childScopeComposer = Substitute.For<IScopeComposer>();
-            getChildScopeComposers.Invoke().Returns(new List<IScopeComposer> { childScopeComposer });
-            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.GetChildScopeComposers = getChildScopeComposers));
-
-            _scopeBuilder.Build(parentScope, _scopeComposer);
-
-            getChildScopeComposers.Received(1).Invoke();
-        }
-
-        [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetPartialScopeComposersCalled()
         {
             _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
@@ -122,49 +104,21 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             getPartialScopeComposers.Received(1).Invoke();
         }
 
-        #endregion
-
-        #region Build
-
         [Test]
-        public void Build_GateKeyEnabled_ConstructCalledWithValidParams()
-        {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
-            Scope parentScope = new(null, null, null);
-            Action<IRuleResolver> initialize = Substitute.For<Action<IRuleResolver>>();
-            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.Initialize = initialize));
-
-            _scopeBuilder.Build(parentScope, _scopeComposer);
-
-            _scopeConstructor.Received(1).Construct(parentScope, initialize);
-        }
-
-        [Test]
-        public void Build_GateKeyEnabledAndConstructReturnsNull_ReturnsNullAndChildNotAdded()
-        {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
-            Scope parentScope = new(null, null, null);
-            _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns((Scope)null);
-
-            Scope scope = _scopeBuilder.Build(parentScope, _scopeComposer);
-
-            Assert.IsNull(scope);
-            Assert.IsEmpty(parentScope.ChildScopes);
-        }
-
-        [Test]
-        public void Build_GateKeyEnabledAndConstructReturnsNotNull_ReturnsScopeAndChildAdded()
+        public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetChildScopeComposersCalled()
         {
             _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
             Scope parentScope = new(null, null, null);
             Scope childScope = new(null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
+            Func<IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
+            IScopeComposer childScopeComposer = Substitute.For<IScopeComposer>();
+            getChildScopeComposers.Invoke().Returns(new List<IScopeComposer> { childScopeComposer });
+            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.GetChildScopeComposers = getChildScopeComposers));
 
-            Scope scope = _scopeBuilder.Build(parentScope, _scopeComposer);
+            _scopeBuilder.Build(parentScope, _scopeComposer);
 
-            Assert.AreSame(childScope, scope);
-            Assert.IsTrue(parentScope.ChildScopes.Count == 1);
-            Assert.IsTrue(parentScope.ChildScopes.Contains(childScope));
+            getChildScopeComposers.Received(1).Invoke();
         }
 
         #endregion
@@ -185,31 +139,70 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void BuildPartial_GateKeyEnabledAndConstructReturnsNull_ReturnsNullAndPartialNotAdded()
+        public void BuildPartial_GateKeyEnabledAndConstructReturnsNull_ReturnsNull()
         {
             _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
             Scope mainScope = new(null, null, null);
-            _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns((Scope)null);
+            _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns((PartialScope)null);
 
-            Scope scope = _scopeBuilder.BuildPartial(mainScope, _scopeComposer);
+            PartialScope partialScope = _scopeBuilder.BuildPartial(mainScope, _scopeComposer);
 
-            Assert.IsNull(scope);
-            Assert.IsEmpty(mainScope.PartialScopes);
+            Assert.IsNull(partialScope);
         }
 
         [Test]
-        public void BuildPartial_GateKeyEnabledAndConstructReturnsNotNull_ReturnsScopeAndPartialAdded()
+        public void BuildPartial_GateKeyEnabledAndConstructReturnsNotNull_ReturnsScope()
         {
             _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
             Scope mainScope = new(null, null, null);
-            Scope partialScope = new(null, null, null);
-            _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns(partialScope);
+            PartialScope expectedPartialScope = new(mainScope, null);
+            _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns(expectedPartialScope);
 
-            Scope scope = _scopeBuilder.BuildPartial(mainScope, _scopeComposer);
+            PartialScope partialScope = _scopeBuilder.BuildPartial(mainScope, _scopeComposer);
 
-            Assert.AreSame(partialScope, scope);
-            Assert.IsTrue(mainScope.PartialScopes.Count == 1);
-            Assert.IsTrue(mainScope.PartialScopes.Contains(partialScope));
+            Assert.AreSame(expectedPartialScope, partialScope);
+        }
+
+        #endregion
+
+        #region Build
+
+        [Test]
+        public void Build_GateKeyEnabled_ConstructCalledWithValidParams()
+        {
+            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            Scope parentScope = new(null, null, null);
+            Action<IRuleResolver> initialize = Substitute.For<Action<IRuleResolver>>();
+            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.Initialize = initialize));
+
+            _scopeBuilder.Build(parentScope, _scopeComposer);
+
+            _scopeConstructor.Received(1).Construct(parentScope, initialize);
+        }
+
+        [Test]
+        public void Build_GateKeyEnabledAndConstructReturnsNull_ReturnsNull()
+        {
+            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            Scope parentScope = new(null, null, null);
+            _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns((Scope)null);
+
+            Scope childScope = _scopeBuilder.Build(parentScope, _scopeComposer);
+
+            Assert.IsNull(childScope);
+        }
+
+        [Test]
+        public void Build_GateKeyEnabledAndConstructReturnsNotNull_ReturnsScope()
+        {
+            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            Scope parentScope = new(null, null, null);
+            Scope expectedChildScope = new(null, null, null);
+            _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(expectedChildScope);
+
+            Scope childScope = _scopeBuilder.Build(parentScope, _scopeComposer);
+
+            Assert.AreSame(expectedChildScope, childScope);
         }
 
         #endregion

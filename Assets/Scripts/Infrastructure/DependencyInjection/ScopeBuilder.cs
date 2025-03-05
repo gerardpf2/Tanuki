@@ -20,23 +20,21 @@ namespace Infrastructure.DependencyInjection
             _ruleFactory = ruleFactory;
         }
 
-        // TODO: Test removed AddChild
-        public Scope Build(Scope parentScope, [NotNull] IScopeComposer scopeComposer)
-        {
-            return
-                Build(
-                    scopeComposer,
-                    initialize => _scopeConstructor.Construct(parentScope, initialize)
-                );
-        }
-
-        // TODO: Test removed AddPartial
         public PartialScope BuildPartial([NotNull] Scope mainScope, [NotNull] IScopeComposer scopeComposer)
         {
             return
                 Build(
                     scopeComposer,
                     initialize => _scopeConstructor.ConstructPartial(mainScope, initialize)
+                );
+        }
+
+        public Scope Build(Scope parentScope, [NotNull] IScopeComposer scopeComposer)
+        {
+            return
+                Build(
+                    scopeComposer,
+                    initialize => _scopeConstructor.Construct(parentScope, initialize)
                 );
         }
 
