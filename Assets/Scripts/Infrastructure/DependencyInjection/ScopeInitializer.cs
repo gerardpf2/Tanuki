@@ -4,19 +4,13 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeInitializer : IScopeInitializer
     {
-        // TODO: Test
-        public void Initialize([NotNull] PartialScope partialScope)
-        {
-            InitializeSingle(partialScope);
-        }
-
         public void Initialize([NotNull] Scope scope)
         {
             InitializeSingle(scope);
 
-            foreach (PartialScope partialScope in scope.PartialScopes)
+            foreach (Scope partialScope in scope.PartialScopes)
             {
-                Initialize(partialScope);
+                InitializeSingle(partialScope);
             }
 
             foreach (Scope childScope in scope.ChildScopes)

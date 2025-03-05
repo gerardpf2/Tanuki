@@ -5,7 +5,6 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeConstructor : IScopeConstructor
     {
-        // TODO: Test added AddPartial
         public PartialScope ConstructPartial([NotNull] Scope mainScope, Action<IRuleResolver> initialize)
         {
             PartialScope partialScope = new(mainScope, initialize);
@@ -15,7 +14,6 @@ namespace Infrastructure.DependencyInjection
             return partialScope;
         }
 
-        // TODO: Test added AddChild
         public Scope Construct(Scope parentScope, Action<IRuleResolver> initialize)
         {
             RuleContainer ruleContainer = new();

@@ -1,14 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
-    // TODO: Test
     public class PartialScope : Scope
     {
-        // TODO: Exclude self
-        public override IEnumerable<PartialScope> PartialScopes => _mainScope.PartialScopes;
+        public override IEnumerable<Scope> PartialScopes
+        {
+            get
+            {
+                return _mainScope.PartialScopes.Where(partialScope => partialScope != this).Append(_mainScope);
+            }
+        }
 
         public override IEnumerable<Scope> ChildScopes => _mainScope.ChildScopes;
 

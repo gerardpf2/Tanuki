@@ -5,7 +5,8 @@ namespace Infrastructure.DependencyInjection
 {
     public class Scope
     {
-        public virtual IEnumerable<PartialScope> PartialScopes => _partialScopes;
+        // IEnumerable<Scope> instead of IEnumerable<PartialScope> is not ideal, but allows PartialScope::PartialScopes to return its main scope
+        public virtual IEnumerable<Scope> PartialScopes => _partialScopes;
 
         public virtual IEnumerable<Scope> ChildScopes => _childScopes;
 
