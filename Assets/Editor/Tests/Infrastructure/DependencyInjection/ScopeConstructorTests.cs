@@ -1,3 +1,4 @@
+using System.Linq;
 using Infrastructure.DependencyInjection;
 using NUnit.Framework;
 
@@ -16,13 +17,21 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void ConstructPartial_PartialAdded()
         {
-            // TODO
+            Scope mainScope = new(null, null, null);
+
+            _scopeConstructor.ConstructPartial(mainScope, null);
+
+            Assert.IsTrue(mainScope.PartialScopes.Count() == 1);
         }
 
         [Test]
         public void Construct_ChildAdded()
         {
-            // TODO
+            Scope parentScope = new(null, null, null);
+
+            _scopeConstructor.Construct(parentScope, null);
+
+            Assert.IsTrue(parentScope.ChildScopes.Count() == 1);
         }
     }
 }
