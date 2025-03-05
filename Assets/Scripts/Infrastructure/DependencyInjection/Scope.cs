@@ -5,9 +5,9 @@ namespace Infrastructure.DependencyInjection
 {
     public class Scope
     {
-        public IReadOnlyCollection<PartialScope> PartialScopes => _partialScopes;
+        public virtual IEnumerable<PartialScope> PartialScopes => _partialScopes;
 
-        public IReadOnlyCollection<Scope> ChildScopes => _childScopes;
+        public virtual IEnumerable<Scope> ChildScopes => _childScopes;
 
         public readonly IRuleAdder RuleAdder;
         public readonly IRuleResolver RuleResolver;
