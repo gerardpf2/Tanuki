@@ -7,7 +7,7 @@ namespace Infrastructure.DependencyInjection
     {
         public PartialScope ConstructPartial([NotNull] Scope mainScope, Action<IRuleResolver> initialize)
         {
-            PartialScope partialScope = new(mainScope, initialize);
+            PartialScope partialScope = new(mainScope, mainScope.RuleAdder, mainScope.RuleResolver, initialize);
 
             mainScope.AddPartial(partialScope);
 

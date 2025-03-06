@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Infrastructure.DependencyInjection;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace Editor.Tests.Infrastructure.DependencyInjection
@@ -11,8 +10,6 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
     {
         // Tested behaviours that differ from Scope
 
-        private IRuleResolver _ruleResolver;
-        private IRuleAdder _ruleAdder;
         private Scope _mainScope;
 
         private PartialScope _partialScope;
@@ -20,56 +17,30 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [SetUp]
         public void SetUp()
         {
-            _ruleResolver = Substitute.For<IRuleResolver>();
-            _ruleAdder = Substitute.For<IRuleAdder>();
-            _mainScope = new Scope(_ruleAdder, _ruleResolver, null);
-        }
-
-        [Test]
-        public void PartialScope_PartialScope_HasValidParams()
-        {
-            PartialScope otherPartialScope = new(_mainScope, null);
-
-            _partialScope = new PartialScope(otherPartialScope, null);
-
-            Assert.AreSame(_ruleAdder, _partialScope.RuleAdder);
-            Assert.AreSame(_ruleResolver, _partialScope.RuleResolver);
-            Assert.AreSame(_mainScope, _partialScope.MainScope);
-        }
-
-        [Test]
-        public void PartialScope_Scope_HasValidParams()
-        {
-            _partialScope = new PartialScope(_mainScope, null);
-
-            Assert.AreSame(_ruleAdder, _partialScope.RuleAdder);
-            Assert.AreSame(_ruleResolver, _partialScope.RuleResolver);
-            Assert.AreSame(_mainScope, _partialScope.MainScope);
+            _mainScope = new Scope(null, null, null);
         }
 
         [Test]
         public void PartialScopes_ThrowsException()
         {
-            _partialScope = new PartialScope(_mainScope, null);
+            _partialScope = new PartialScope(_mainScope, null, null, null);
 
-            NotSupportedException invalidOperationException = Assert.Throws<NotSupportedException>(() => { IEnumerable<PartialScope> _ = _partialScope.PartialScopes; });
-            Assert.AreEqual($"Use {nameof(_partialScope.MainScope)}.{nameof(_partialScope.MainScope.PartialScopes)} instead", invalidOperationException.Message);
+            Assert.Throws<NotSupportedException>(() => { IEnumerable<PartialScope> _ = _partialScope.PartialScopes; });
         }
 
         [Test]
         public void ChildScopes_ThrowsException()
         {
-            _partialScope = new PartialScope(_mainScope, null);
+            _partialScope = new PartialScope(_mainScope, null, null, null);
 
-            NotSupportedException invalidOperationException = Assert.Throws<NotSupportedException>(() => { IEnumerable<Scope> _ = _partialScope.ChildScopes; });
-            Assert.AreEqual($"Use {nameof(_partialScope.MainScope)}.{nameof(_partialScope.MainScope.ChildScopes)} instead", invalidOperationException.Message);
+            Assert.Throws<NotSupportedException>(() => { IEnumerable<Scope> _ = _partialScope.ChildScopes; });
         }
 
         [Test]
         public void AddPartial_AddedToMainScope()
         {
-            PartialScope otherPartialScope = new(_mainScope, null);
-            _partialScope = new PartialScope(otherPartialScope, null);
+            PartialScope otherPartialScope = new(_mainScope, null, null, null);
+            _partialScope = new PartialScope(otherPartialScope, null, null, null);
 
             otherPartialScope.AddPartial(_partialScope);
 
@@ -81,7 +52,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void AddChild_AddedToMainScope()
         {
             Scope childScope = new(null, null, null);
-            _partialScope = new PartialScope(_mainScope, null);
+            _partialScope = new PartialScope(_mainScope, null, null, null);
 
             _partialScope.AddChild(childScope);
 

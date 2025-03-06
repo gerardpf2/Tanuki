@@ -1,37 +1,53 @@
+using System;
 using System.Linq;
 using Infrastructure.DependencyInjection;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Editor.Tests.Infrastructure.DependencyInjection
 {
     public class ScopeConstructorTests
     {
+        private Action<IRuleResolver> _initialize;
+        private IRuleResolver _ruleResolver;
+        private IRuleAdder _ruleAdder;
+        private Scope _scope;
+
         private ScopeConstructor _scopeConstructor;
 
         [SetUp]
         public void SetUp()
         {
+            _initialize = Substitute.For<Action<IRuleResolver>>();
+            _ruleResolver = Substitute.For<IRuleResolver>();
+            _ruleAdder = Substitute.For<IRuleAdder>();
+            _scope = new Scope(_ruleAdder, _ruleResolver, _initialize);
+
             _scopeConstructor = new ScopeConstructor();
         }
 
         [Test]
-        public void ConstructPartial_PartialAdded()
+        public void ConstructPartial_ReturnsPartialWithValidParamsAndAddedToPartialScopes()
         {
-            Scope mainScope = new(null, null, null);
+            PartialScope partialScope = _scopeConstructor.ConstructPartial(_scope, _initialize);
 
-            _scopeConstructor.ConstructPartial(mainScope, null);
-
-            Assert.IsTrue(mainScope.PartialScopes.Count() == 1);
+            Assert.AreSame(_ruleAdder, partialScope.RuleAdder);
+            Assert.AreSame(_ruleResolver, partialScope.RuleResolver);
+            Assert.AreSame(_initialize, partialScope.Initialize);
+            Assert.IsTrue(_scope.PartialScopes.Count() == 1);
+            Assert.IsTrue(_scope.PartialScopes.Contains(partialScope));
         }
 
         [Test]
-        public void Construct_ChildAdded()
+        public void Construct_ReturnsChildWithValidParamsAndAddedToChildScopes()
         {
-            Scope parentScope = new(null, null, null);
+            Scope childScope = _scopeConstructor.Construct(_scope, _initialize);
 
-            _scopeConstructor.Construct(parentScope, null);
-
-            Assert.IsTrue(parentScope.ChildScopes.Count() == 1);
+            Assert.AreNotSame(_ruleAdder, childScope.RuleAdder);
+            Assert.AreNotSame(_ruleResolver, childScope.RuleResolver);
+            Assert.AreSame(_initialize, childScope.Initialize);
+            Assert.IsTrue(_scope.ChildScopes.Count() == 1);
+            Assert.IsTrue(_scope.ChildScopes.Contains(childScope));
         }
     }
 }

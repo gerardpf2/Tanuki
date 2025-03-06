@@ -155,7 +155,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
             Scope mainScope = new(null, null, null);
-            PartialScope expectedPartialScope = new(mainScope, null);
+            PartialScope expectedPartialScope = new(mainScope, null, null, null);
             _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns(expectedPartialScope);
 
             PartialScope partialScope = _scopeBuilder.BuildPartial(mainScope, _scopeComposer);

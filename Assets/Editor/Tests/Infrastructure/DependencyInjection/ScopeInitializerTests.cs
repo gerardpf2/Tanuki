@@ -24,8 +24,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_PartialScope_InitializeCalledWithValidParams()
         {
-            Scope mainScope = new(null, _ruleResolver, null);
-            PartialScope partialScope = new(mainScope, _initialize);
+            Scope mainScope = new(null, null, null);
+            PartialScope partialScope = new(mainScope, null, _ruleResolver, _initialize);
 
             _scopeInitializer.Initialize(partialScope);
 
@@ -45,8 +45,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_HasPartial_PartialScopeInitializeCalledWithValidParams()
         {
-            Scope mainScope = new(null, _ruleResolver, null);
-            PartialScope partialScope = new(mainScope, _initialize);
+            Scope mainScope = new(null, null, null);
+            PartialScope partialScope = new(mainScope, null, _ruleResolver, _initialize);
             mainScope.AddPartial(partialScope);
 
             _scopeInitializer.Initialize(mainScope);

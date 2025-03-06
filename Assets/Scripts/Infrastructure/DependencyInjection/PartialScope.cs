@@ -6,27 +6,35 @@ namespace Infrastructure.DependencyInjection
 {
     public class PartialScope : Scope
     {
-        public override IEnumerable<PartialScope> PartialScopes => throw new NotSupportedException($"Use {nameof(MainScope)}.{nameof(MainScope.PartialScopes)} instead");
+        public override IEnumerable<PartialScope> PartialScopes => throw new NotSupportedException();
 
-        public override IEnumerable<Scope> ChildScopes => throw new NotSupportedException($"Use {nameof(MainScope)}.{nameof(MainScope.ChildScopes)} instead");
+        public override IEnumerable<Scope> ChildScopes => throw new NotSupportedException();
 
-        public readonly Scope MainScope;
+        private readonly Scope _mainScope;
 
-        public PartialScope([NotNull] PartialScope partialScope, Action<IRuleResolver> initialize) : this(partialScope.MainScope, initialize) { }
+        public PartialScope(
+            [NotNull] PartialScope partialScope,
+            IRuleAdder ruleAdder,
+            IRuleResolver ruleResolver,
+            Action<IRuleResolver> initialize) : this(partialScope._mainScope, ruleAdder, ruleResolver, initialize) { }
 
-        public PartialScope([NotNull] Scope mainScope, Action<IRuleResolver> initialize) : base(mainScope.RuleAdder, mainScope.RuleResolver, initialize)
+        public PartialScope(
+            [NotNull] Scope mainScope,
+            IRuleAdder ruleAdder,
+            IRuleResolver ruleResolver,
+            Action<IRuleResolver> initialize) : base(ruleAdder, ruleResolver, initialize)
         {
-            MainScope = mainScope;
+            _mainScope = mainScope;
         }
 
         public override void AddPartial(PartialScope partialScope)
         {
-            MainScope.AddPartial(partialScope);
+            _mainScope.AddPartial(partialScope);
         }
 
         public override void AddChild(Scope childScope)
         {
-            MainScope.AddChild(childScope);
+            _mainScope.AddChild(childScope);
         }
     }
 }
