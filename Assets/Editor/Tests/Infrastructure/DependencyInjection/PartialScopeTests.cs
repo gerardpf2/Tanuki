@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Infrastructure.DependencyInjection;
 using NSubstitute;
@@ -32,6 +34,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.AreSame(_ruleAdder, _partialScope.RuleAdder);
             Assert.AreSame(_ruleResolver, _partialScope.RuleResolver);
+            Assert.AreSame(_mainScope, _partialScope.MainScope);
         }
 
         [Test]
@@ -41,59 +44,41 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.AreSame(_ruleAdder, _partialScope.RuleAdder);
             Assert.AreSame(_ruleResolver, _partialScope.RuleResolver);
+            Assert.AreSame(_mainScope, _partialScope.MainScope);
         }
 
         [Test]
-        public void AddPartial_PartialScope_AddedToMainScope()
+        public void PartialScopes_ThrowsException()
+        {
+            _partialScope = new PartialScope(_mainScope, null);
+
+            NotSupportedException invalidOperationException = Assert.Throws<NotSupportedException>(() => { IEnumerable<PartialScope> _ = _partialScope.PartialScopes; });
+            Assert.AreEqual($"Use {nameof(_partialScope.MainScope)}.{nameof(_partialScope.MainScope.PartialScopes)} instead", invalidOperationException.Message);
+        }
+
+        [Test]
+        public void ChildScopes_ThrowsException()
+        {
+            _partialScope = new PartialScope(_mainScope, null);
+
+            NotSupportedException invalidOperationException = Assert.Throws<NotSupportedException>(() => { IEnumerable<Scope> _ = _partialScope.ChildScopes; });
+            Assert.AreEqual($"Use {nameof(_partialScope.MainScope)}.{nameof(_partialScope.MainScope.ChildScopes)} instead", invalidOperationException.Message);
+        }
+
+        [Test]
+        public void AddPartial_AddedToMainScope()
         {
             PartialScope otherPartialScope = new(_mainScope, null);
-            _mainScope.AddPartial(otherPartialScope);
             _partialScope = new PartialScope(otherPartialScope, null);
 
             otherPartialScope.AddPartial(_partialScope);
 
-            Assert.IsTrue(_mainScope.PartialScopes.Count() == 2);
-            Assert.IsTrue(_mainScope.PartialScopes.Contains(otherPartialScope));
-            Assert.IsTrue(_mainScope.PartialScopes.Contains(_partialScope));
-            Assert.IsTrue(otherPartialScope.PartialScopes.Count() == 2);
-            Assert.IsTrue(otherPartialScope.PartialScopes.Contains(_mainScope));
-            Assert.IsTrue(otherPartialScope.PartialScopes.Contains(_partialScope));
-            Assert.IsTrue(_partialScope.PartialScopes.Count() == 2);
-            Assert.IsTrue(_partialScope.PartialScopes.Contains(_mainScope));
-            Assert.IsTrue(_partialScope.PartialScopes.Contains(otherPartialScope));
-        }
-
-        [Test]
-        public void AddPartial_Scope_AddedToMainScope()
-        {
-            _partialScope = new PartialScope(_mainScope, null);
-
-            _mainScope.AddPartial(_partialScope);
-
             Assert.IsTrue(_mainScope.PartialScopes.Count() == 1);
             Assert.IsTrue(_mainScope.PartialScopes.Contains(_partialScope));
-            Assert.IsTrue(_partialScope.PartialScopes.Count() == 1);
-            Assert.IsTrue(_partialScope.PartialScopes.Contains(_mainScope));
         }
 
         [Test]
-        public void AddChild_PartialScope_AddedToMainScope()
-        {
-            Scope childScope = new(null, null, null);
-            PartialScope otherPartialScope = new(_mainScope, null);
-            _mainScope.AddPartial(otherPartialScope);
-            _partialScope = new PartialScope(otherPartialScope, null);
-
-            _partialScope.AddChild(childScope);
-
-            Assert.IsTrue(_mainScope.ChildScopes.Count() == 1);
-            Assert.IsTrue(_mainScope.ChildScopes.Contains(childScope));
-            Assert.AreSame(_mainScope.ChildScopes, otherPartialScope.ChildScopes);
-            Assert.AreSame(_mainScope.ChildScopes, _partialScope.ChildScopes);
-        }
-
-        [Test]
-        public void AddChild_Scope_AddedToMainScope()
+        public void AddChild_AddedToMainScope()
         {
             Scope childScope = new(null, null, null);
             _partialScope = new PartialScope(_mainScope, null);
@@ -102,7 +87,6 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.IsTrue(_mainScope.ChildScopes.Count() == 1);
             Assert.IsTrue(_mainScope.ChildScopes.Contains(childScope));
-            Assert.AreSame(_mainScope.ChildScopes, _partialScope.ChildScopes);
         }
     }
 }

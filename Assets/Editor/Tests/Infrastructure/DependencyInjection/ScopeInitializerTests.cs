@@ -22,7 +22,18 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void Initialize_ScopeInitializeCalledWithValidParams()
+        public void Initialize_PartialScope_InitializeCalledWithValidParams()
+        {
+            Scope mainScope = new(null, _ruleResolver, null);
+            PartialScope partialScope = new(mainScope, _initialize);
+
+            _scopeInitializer.Initialize(partialScope);
+
+            _initialize.Received(1).Invoke(_ruleResolver);
+        }
+
+        [Test]
+        public void Initialize_Scope_InitializeCalledWithValidParams()
         {
             Scope scope = new(null, _ruleResolver, _initialize);
 
