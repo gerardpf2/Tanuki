@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Infrastructure.DependencyInjection;
 using NSubstitute;
 using NUnit.Framework;
@@ -21,7 +20,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _initialize = Substitute.For<Action<IRuleResolver>>();
             _ruleResolver = Substitute.For<IRuleResolver>();
             _ruleAdder = Substitute.For<IRuleAdder>();
-            _scope = new Scope(_ruleAdder, _ruleResolver, _initialize);
+            _scope = Substitute.For<Scope>(_ruleAdder, _ruleResolver, null);
 
             _scopeConstructor = new ScopeConstructor();
         }
@@ -34,8 +33,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             Assert.AreSame(_ruleAdder, partialScope.RuleAdder);
             Assert.AreSame(_ruleResolver, partialScope.RuleResolver);
             Assert.AreSame(_initialize, partialScope.Initialize);
-            Assert.IsTrue(_scope.PartialScopes.Count() == 1);
-            Assert.IsTrue(_scope.PartialScopes.Contains(partialScope));
+            _scope.Received(1).AddPartial(partialScope);
         }
 
         [Test]
@@ -46,8 +44,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             Assert.AreNotSame(_ruleAdder, childScope.RuleAdder);
             Assert.AreNotSame(_ruleResolver, childScope.RuleResolver);
             Assert.AreSame(_initialize, childScope.Initialize);
-            Assert.IsTrue(_scope.ChildScopes.Count() == 1);
-            Assert.IsTrue(_scope.ChildScopes.Contains(childScope));
+            _scope.Received(1).AddChild(childScope);
         }
     }
 }

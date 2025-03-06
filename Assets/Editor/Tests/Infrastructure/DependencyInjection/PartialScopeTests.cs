@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Infrastructure.DependencyInjection;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Editor.Tests.Infrastructure.DependencyInjection
@@ -17,7 +17,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [SetUp]
         public void SetUp()
         {
-            _mainScope = new Scope(null, null, null);
+            _mainScope = Substitute.For<Scope>(null, null, null);
         }
 
         [Test]
@@ -37,27 +37,25 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void AddPartial_AddedToMainScope()
+        public void AddPartial_MainScopeAddPartialCalledWithValidParams()
         {
             PartialScope otherPartialScope = new(_mainScope, null, null, null);
             _partialScope = new PartialScope(otherPartialScope, null, null, null);
 
             otherPartialScope.AddPartial(_partialScope);
 
-            Assert.IsTrue(_mainScope.PartialScopes.Count() == 1);
-            Assert.IsTrue(_mainScope.PartialScopes.Contains(_partialScope));
+            _mainScope.Received(1).AddPartial(_partialScope);
         }
 
         [Test]
-        public void AddChild_AddedToMainScope()
+        public void AddChild_MainScopeAddChildCalledWithValidParams()
         {
             Scope childScope = new(null, null, null);
             _partialScope = new PartialScope(_mainScope, null, null, null);
 
             _partialScope.AddChild(childScope);
 
-            Assert.IsTrue(_mainScope.ChildScopes.Count() == 1);
-            Assert.IsTrue(_mainScope.ChildScopes.Contains(childScope));
+            _mainScope.Received(1).AddChild(childScope);
         }
     }
 }
