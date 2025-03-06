@@ -5,15 +5,15 @@ namespace Infrastructure.DependencyInjection
 {
     public class Scope
     {
-        public IReadOnlyCollection<Scope> PartialScopes => _partialScopes;
+        public virtual IEnumerable<PartialScope> PartialScopes => _partialScopes;
 
-        public IReadOnlyCollection<Scope> ChildScopes => _childScopes;
+        public virtual IEnumerable<Scope> ChildScopes => _childScopes;
 
         public readonly IRuleAdder RuleAdder;
         public readonly IRuleResolver RuleResolver;
         public readonly Action<IRuleResolver> Initialize;
 
-        private readonly HashSet<Scope> _partialScopes = new();
+        private readonly HashSet<PartialScope> _partialScopes = new();
         private readonly HashSet<Scope> _childScopes = new();
 
         public Scope(IRuleAdder ruleAdder, IRuleResolver ruleResolver, Action<IRuleResolver> initialize)
@@ -23,12 +23,12 @@ namespace Infrastructure.DependencyInjection
             Initialize = initialize;
         }
 
-        public void AddPartial(Scope partialScope)
+        public virtual void AddPartial(PartialScope partialScope)
         {
             _partialScopes.Add(partialScope);
         }
 
-        public void AddChild(Scope childScope)
+        public virtual void AddChild(Scope childScope)
         {
             _childScopes.Add(childScope);
         }

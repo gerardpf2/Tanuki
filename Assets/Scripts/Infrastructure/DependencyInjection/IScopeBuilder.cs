@@ -2,8 +2,8 @@ namespace Infrastructure.DependencyInjection
 {
     public interface IScopeBuilder
     {
-        Scope BuildAsChildOf(Scope scope, IScopeComposer scopeComposer);
+        PartialScope BuildPartial(Scope mainScope, IScopeComposer scopeComposer);
 
-        Scope BuildAsPartialOf(Scope scope, IScopeComposer scopeComposer);
+        Scope Build(Scope parentScope, IScopeComposer scopeComposer);
     }
 }

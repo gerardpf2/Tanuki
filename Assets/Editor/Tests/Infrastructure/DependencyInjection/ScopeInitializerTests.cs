@@ -22,7 +22,18 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void Initialize_ScopeInitializeCalledWithValidParams()
+        public void Initialize_PartialScope_InitializeCalledWithValidParams()
+        {
+            Scope mainScope = new(null, null, null);
+            PartialScope partialScope = new(mainScope, null, _ruleResolver, _initialize);
+
+            _scopeInitializer.Initialize(partialScope);
+
+            _initialize.Received(1).Invoke(_ruleResolver);
+        }
+
+        [Test]
+        public void Initialize_Scope_InitializeCalledWithValidParams()
         {
             Scope scope = new(null, _ruleResolver, _initialize);
 
@@ -34,11 +45,11 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_HasPartial_PartialScopeInitializeCalledWithValidParams()
         {
-            Scope scope = new(null, null, null);
-            Scope partialScope = new(null, _ruleResolver, _initialize);
-            scope.AddPartial(partialScope);
+            Scope mainScope = new(null, null, null);
+            PartialScope partialScope = new(mainScope, null, _ruleResolver, _initialize);
+            mainScope.AddPartial(partialScope);
 
-            _scopeInitializer.Initialize(scope);
+            _scopeInitializer.Initialize(mainScope);
 
             _initialize.Received(1).Invoke(_ruleResolver);
         }
@@ -46,11 +57,11 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_HasChild_ChildScopeInitializeCalledWithValidParams()
         {
-            Scope scope = new(null, null, null);
+            Scope parentScope = new(null, null, null);
             Scope childScope = new(null, _ruleResolver, _initialize);
-            scope.AddChild(childScope);
+            parentScope.AddChild(childScope);
 
-            _scopeInitializer.Initialize(scope);
+            _scopeInitializer.Initialize(parentScope);
 
             _initialize.Received(1).Invoke(_ruleResolver);
         }

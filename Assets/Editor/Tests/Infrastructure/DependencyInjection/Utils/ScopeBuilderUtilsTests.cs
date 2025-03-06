@@ -18,11 +18,11 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Utils
         }
 
         [Test]
-        public void BuildAsRoot_BuildAsChildOfCalledWithValidParams()
+        public void BuildRoot_BuildCalledWithValidParams()
         {
-            _scopeBuilder.BuildAsRoot(_scopeComposer);
+            _scopeBuilder.BuildRoot(_scopeComposer);
 
-            _scopeBuilder.Received(1).BuildAsChildOf(null, _scopeComposer);
+            _scopeBuilder.Received(1).Build(null, _scopeComposer);
         }
     }
 }

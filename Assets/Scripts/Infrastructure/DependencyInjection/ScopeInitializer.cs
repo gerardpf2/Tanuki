@@ -4,11 +4,16 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeInitializer : IScopeInitializer
     {
+        public void Initialize([NotNull] PartialScope partialScope)
+        {
+            InitializeSingle(partialScope);
+        }
+
         public void Initialize([NotNull] Scope scope)
         {
-            scope.Initialize?.Invoke(scope.RuleResolver);
+            InitializeSingle(scope);
 
-            foreach (Scope partialScope in scope.PartialScopes)
+            foreach (PartialScope partialScope in scope.PartialScopes)
             {
                 Initialize(partialScope);
             }
@@ -17,6 +22,11 @@ namespace Infrastructure.DependencyInjection
             {
                 Initialize(childScope);
             }
+        }
+
+        private static void InitializeSingle([NotNull] Scope scope)
+        {
+            scope.Initialize?.Invoke(scope.RuleResolver);
         }
     }
 }

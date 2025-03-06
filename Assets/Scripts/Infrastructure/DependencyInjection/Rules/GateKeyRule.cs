@@ -3,6 +3,9 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
+    // Gate key is expected to be managed at scope composer level, but it is also possible to manage it at rule level
+    // using GateKeyRule. GateKeyRule wraps another rule and only resolves it if the gate key is enabled
+
     public class GateKeyRule<T> : IRule<T> where T : class
     {
         private readonly IEnabledGateKeyGetter _enabledGateKeyGetter;

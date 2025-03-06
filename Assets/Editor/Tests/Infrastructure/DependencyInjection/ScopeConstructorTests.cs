@@ -10,6 +10,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         private Action<IRuleResolver> _initialize;
         private IRuleResolver _ruleResolver;
         private IRuleAdder _ruleAdder;
+        private Scope _scope;
 
         private ScopeConstructor _scopeConstructor;
 
@@ -19,36 +20,31 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _initialize = Substitute.For<Action<IRuleResolver>>();
             _ruleResolver = Substitute.For<IRuleResolver>();
             _ruleAdder = Substitute.For<IRuleAdder>();
+            _scope = Substitute.For<Scope>(_ruleAdder, _ruleResolver, null);
 
             _scopeConstructor = new ScopeConstructor();
         }
 
         [Test]
-        public void ConstructPartialOf_ScopeHasValidParams()
+        public void ConstructPartial_ReturnsPartialWithValidParamsAndAddedToPartialScopes()
         {
-            Scope partialOfScope = new(_ruleAdder, _ruleResolver, null);
-
-            Scope partialScope = _scopeConstructor.ConstructPartialOf(partialOfScope, _initialize);
+            PartialScope partialScope = _scopeConstructor.ConstructPartial(_scope, _initialize);
 
             Assert.AreSame(_ruleAdder, partialScope.RuleAdder);
             Assert.AreSame(_ruleResolver, partialScope.RuleResolver);
             Assert.AreSame(_initialize, partialScope.Initialize);
-            Assert.IsEmpty(partialScope.PartialScopes);
-            Assert.IsEmpty(partialScope.ChildScopes);
+            _scope.Received(1).AddPartial(partialScope);
         }
 
         [Test]
-        public void ConstructChildOf_ScopeHasValidParams()
+        public void Construct_ReturnsChildWithValidParamsAndAddedToChildScopes()
         {
-            Scope parentScope = new(_ruleAdder, _ruleResolver, null);
-
-            Scope childScope = _scopeConstructor.ConstructChildOf(parentScope, _initialize);
+            Scope childScope = _scopeConstructor.Construct(_scope, _initialize);
 
             Assert.AreNotSame(_ruleAdder, childScope.RuleAdder);
             Assert.AreNotSame(_ruleResolver, childScope.RuleResolver);
             Assert.AreSame(_initialize, childScope.Initialize);
-            Assert.IsEmpty(childScope.PartialScopes);
-            Assert.IsEmpty(childScope.ChildScopes);
+            _scope.Received(1).AddChild(childScope);
         }
     }
 }

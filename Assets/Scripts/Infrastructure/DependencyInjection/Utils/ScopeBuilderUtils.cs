@@ -4,9 +4,9 @@ namespace Infrastructure.DependencyInjection.Utils
 {
     public static class ScopeBuilderUtils
     {
-        public static Scope BuildAsRoot([NotNull] this IScopeBuilder scopeBuilder, IScopeComposer scopeComposer)
+        public static Scope BuildRoot([NotNull] this IScopeBuilder scopeBuilder, IScopeComposer scopeComposer)
         {
-            return scopeBuilder.BuildAsChildOf(null, scopeComposer);
+            return scopeBuilder.Build(null, scopeComposer);
         }
     }
 }
