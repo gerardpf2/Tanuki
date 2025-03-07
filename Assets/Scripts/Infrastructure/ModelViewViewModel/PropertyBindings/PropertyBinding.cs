@@ -11,12 +11,12 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 
         public abstract void Set(T value);
 
-        private void OnEnable()
+        private void Start()
         {
             _viewModel.Bind(this);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             _viewModel.Unbind(this);
         }
