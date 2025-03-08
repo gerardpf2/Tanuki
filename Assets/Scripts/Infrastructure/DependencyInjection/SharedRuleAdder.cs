@@ -6,21 +6,21 @@ namespace Infrastructure.DependencyInjection
     // TODO: Test
     public class SharedRuleAdder : ISharedRuleAdder
     {
-        private readonly IRuleAdder _sharedRuleAdder;
+        private readonly IRuleAdder _ruleAdder;
         private readonly IRuleFactory _ruleFactory;
 
         private IRuleAdder _targetRuleAdder;
         private IRuleResolver _targetRuleResolver;
 
-        public SharedRuleAdder([NotNull] IRuleAdder sharedRuleAdder, [NotNull] IRuleFactory ruleFactory)
+        public SharedRuleAdder([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            _sharedRuleAdder = sharedRuleAdder;
+            _ruleAdder = ruleAdder;
             _ruleFactory = ruleFactory;
         }
 
         public void Add<T>(IRule<T> rule, object key = null) where T : class
         {
-            _sharedRuleAdder.Add(_ruleFactory.GetTarget<T>(_targetRuleResolver, key), key);
+            _ruleAdder.Add(_ruleFactory.GetTarget<T>(_targetRuleResolver, key), key);
             _targetRuleAdder.Add(rule, key);
         }
 
