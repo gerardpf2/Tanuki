@@ -11,7 +11,7 @@ namespace Infrastructure.DependencyInjection
 
         IRule<T> GetSingleton<T>(Func<IRuleResolver, T> ctor);
 
-        IRule<TInput> GetTo<TInput, TOutput>(object keyToResolve = null) where TOutput : TInput;
+        IRule<TInput> GetTo<TInput, TOutput>(object key = null) where TOutput : TInput;
 
         IRule<T> GetGateKey<T>(IRule<T> rule, object gateKey) where T : class;
 

@@ -5,16 +5,16 @@ namespace Infrastructure.DependencyInjection.Rules
 {
     public class ToRule<TInput, TOutput> : IRule<TInput> where TOutput : TInput
     {
-        private readonly object _keyToResolve;
+        private readonly object _key;
 
-        public ToRule(object keyToResolve = null)
+        public ToRule(object key = null)
         {
-            _keyToResolve = keyToResolve;
+            _key = key;
         }
 
         public TInput Resolve([NotNull] IRuleResolver ruleResolver)
         {
-            return ruleResolver.Resolve<TOutput>(_keyToResolve);
+            return ruleResolver.Resolve<TOutput>(_key);
         }
 
         public override bool Equals(object obj)
@@ -39,12 +39,12 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_keyToResolve);
+            return HashCode.Combine(_key);
         }
 
         protected bool Equals(ToRule<TInput, TOutput> other)
         {
-            return Equals(_keyToResolve, other._keyToResolve);
+            return Equals(_key, other._key);
         }
     }
 }

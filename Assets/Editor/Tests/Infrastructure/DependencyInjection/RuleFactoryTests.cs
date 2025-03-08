@@ -56,10 +56,10 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void GetTo_ReturnsToRuleWithValidParams()
         {
-            object keyToResolve = new();
-            ToRule<object, string> expectedResult = new(keyToResolve);
+            object key = new();
+            ToRule<object, string> expectedResult = new(key);
 
-            IRule<object> result = _ruleFactory.GetTo<object, string>(keyToResolve);
+            IRule<object> result = _ruleFactory.GetTo<object, string>(key);
 
             Assert.AreEqual(expectedResult, result);
         }
