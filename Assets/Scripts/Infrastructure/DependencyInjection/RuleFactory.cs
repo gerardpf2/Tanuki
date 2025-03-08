@@ -37,5 +37,17 @@ namespace Infrastructure.DependencyInjection
         {
             return new GateKeyRule<T>(_enabledGateKeyGetter, rule, gateKey);
         }
+
+        // TODO: Test
+        public IRule<T> GetTarget<T>([NotNull] IRuleResolver ruleResolver, object key = null)
+        {
+            return new TargetRule<T>(ruleResolver, key);
+        }
+
+        // TODO: Test
+        public IRule<Action<T>> GetInject<T>([NotNull] Action<IRuleResolver, T> inject)
+        {
+            return new InjectRule<T>(inject);
+        }
     }
 }
