@@ -8,19 +8,22 @@ namespace Infrastructure.DependencyInjection
     {
         private readonly IEnabledGateKeyGetter _enabledGateKeyGetter;
         private readonly IScopeConstructor _scopeConstructor;
+        private readonly ISharedRuleAdder _sharedRuleAdder;
         private readonly IRuleFactory _ruleFactory;
 
         public ScopeBuilder(
             [NotNull] IEnabledGateKeyGetter enabledGateKeyGetter,
             [NotNull] IScopeConstructor scopeConstructor,
+            [NotNull] ISharedRuleAdder sharedRuleAdder,
             IRuleFactory ruleFactory)
         {
             _enabledGateKeyGetter = enabledGateKeyGetter;
             _scopeConstructor = scopeConstructor;
+            _sharedRuleAdder = sharedRuleAdder;
             _ruleFactory = ruleFactory;
         }
 
-        public PartialScope BuildPartial([NotNull] Scope mainScope, [NotNull] IScopeComposer scopeComposer)
+        public PartialScope BuildPartial(Scope mainScope, [NotNull] IScopeComposer scopeComposer)
         {
             return
                 Build(
@@ -56,18 +59,35 @@ namespace Infrastructure.DependencyInjection
                 return null;
             }
 
-            scopeBuildingContext.AddRules?.Invoke(scope.RuleAdder, _ruleFactory);
-
-            BuildPartialScopeComposers(scope, scopeBuildingContext.GetPartialScopeComposers?.Invoke());
-            BuildChildScopeComposers(scope, scopeBuildingContext.GetChildScopeComposers?.Invoke());
+            AddRules(scope, scopeBuildingContext.AddRules);
+            AddSharedRules(scope, scopeBuildingContext.AddSharedRules);
+            BuildPartialScopeComposers(scope, scopeBuildingContext.GetPartialScopeComposers);
+            BuildChildScopeComposers(scope, scopeBuildingContext.GetChildScopeComposers);
 
             return scope;
         }
 
-        private void BuildPartialScopeComposers(
-            [NotNull] Scope mainScope,
-            IEnumerable<IScopeComposer> partialScopeComposers)
+        private void AddRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addRules)
         {
+            addRules?.Invoke(scope.RuleAdder, _ruleFactory);
+        }
+
+        // TODO: Test
+        private void AddSharedRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addSharedRules)
+        {
+            _sharedRuleAdder.SetTarget(scope.RuleAdder, scope.RuleResolver);
+
+            addSharedRules?.Invoke(_sharedRuleAdder, _ruleFactory);
+
+            _sharedRuleAdder.ClearTarget();
+        }
+
+        private void BuildPartialScopeComposers(
+            Scope mainScope,
+            Func<IEnumerable<IScopeComposer>> getPartialScopeComposers)
+        {
+            IEnumerable<IScopeComposer> partialScopeComposers = getPartialScopeComposers?.Invoke();
+
             if (partialScopeComposers == null)
             {
                 return;
@@ -79,8 +99,12 @@ namespace Infrastructure.DependencyInjection
             }
         }
 
-        private void BuildChildScopeComposers(Scope parentScope, IEnumerable<IScopeComposer> childScopeComposers)
+        private void BuildChildScopeComposers(
+            Scope parentScope,
+            Func<IEnumerable<IScopeComposer>> getChildScopeComposers)
         {
+            IEnumerable<IScopeComposer> childScopeComposers = getChildScopeComposers?.Invoke();
+
             if (childScopeComposers == null)
             {
                 return;
