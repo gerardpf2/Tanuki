@@ -42,6 +42,18 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
+        public void Compose_AddSharedRulesDoesNothing()
+        {
+            IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
+            IRuleFactory ruleFactory = Substitute.For<IRuleFactory>();
+
+            _scopeComposer.Compose(_scopeBuildingContext);
+            _scopeBuildingContext.AddSharedRules(ruleAdder, ruleFactory);
+
+            ruleAdder.DidNotReceive().Add(Arg.Any<IRule<object>>(), Arg.Any<object>());
+        }
+
+        [Test]
         public void Compose_GetPartialScopeComposersReturnsEmpty()
         {
             _scopeComposer.Compose(_scopeBuildingContext);

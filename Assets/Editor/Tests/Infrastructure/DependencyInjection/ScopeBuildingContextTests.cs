@@ -47,6 +47,21 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
+        public void AddSharedRules_NotSet_ReturnsNull()
+        {
+            Assert.IsNull(_scopeBuildingContext.AddSharedRules);
+        }
+
+        [Test]
+        public void AddSharedRules_Set_ReturnsValue()
+        {
+            Action<IRuleAdder, IRuleFactory> addSharedRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeBuildingContext.AddSharedRules = addSharedRules;
+
+            Assert.AreSame(addSharedRules, _scopeBuildingContext.AddSharedRules);
+        }
+
+        [Test]
         public void GetPartialScopeComposers_NotSet_ReturnsNull()
         {
             Assert.IsNull(_scopeBuildingContext.GetPartialScopeComposers);

@@ -23,7 +23,6 @@ namespace Infrastructure.DependencyInjection
 
         protected virtual void AddRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
-        // TODO: Test
         protected virtual void AddSharedRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
         protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers()

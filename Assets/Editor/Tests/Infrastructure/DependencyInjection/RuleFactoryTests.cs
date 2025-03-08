@@ -75,5 +75,28 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.AreEqual(expectedResult, result);
         }
+
+        [Test]
+        public void GetTarget_ReturnsTargetRuleWithValidParams()
+        {
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
+            object key = new();
+            TargetRule<object> expectedResult = new(ruleResolver, key);
+
+            IRule<object> result = _ruleFactory.GetTarget<object>(ruleResolver, key);
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void GetInject_ReturnsInjectRuleWithValidParams()
+        {
+            Action<IRuleResolver, object> inject = Substitute.For<Action<IRuleResolver, object>>();
+            InjectRule<object> expectedResult = new(inject);
+
+            IRule<Action<object>> result = _ruleFactory.GetInject(inject);
+
+            Assert.AreEqual(expectedResult, result);
+        }
     }
 }
