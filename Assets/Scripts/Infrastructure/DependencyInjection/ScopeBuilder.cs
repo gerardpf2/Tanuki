@@ -72,7 +72,6 @@ namespace Infrastructure.DependencyInjection
             addRules?.Invoke(scope.RuleAdder, _ruleFactory);
         }
 
-        // TODO: Test
         private void AddSharedRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addSharedRules)
         {
             _sharedRuleAdder.SetTarget(scope.RuleAdder, scope.RuleResolver);
