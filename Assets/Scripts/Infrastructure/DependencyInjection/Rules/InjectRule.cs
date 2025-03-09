@@ -3,18 +3,14 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
-    public class ToRule<TInput, TOutput> : IRule<TInput> where TOutput : TInput
+    // To resolve InjectRule<T>, Action<T> needs to be used instead of T
+    public class InjectRule<T> : SingletonRule<Action<T>>
     {
-        private readonly object _key;
+        private readonly Action<IRuleResolver, T> _inject;
 
-        public ToRule(object key = null)
+        public InjectRule([NotNull] Action<IRuleResolver, T> inject) : base(ruleResolver => instance => inject(ruleResolver, instance))
         {
-            _key = key;
-        }
-
-        public TInput Resolve([NotNull] IRuleResolver ruleResolver)
-        {
-            return ruleResolver.Resolve<TOutput>(_key);
+            _inject = inject;
         }
 
         public override bool Equals(object obj)
@@ -29,7 +25,7 @@ namespace Infrastructure.DependencyInjection.Rules
                 return true;
             }
 
-            if (obj is not ToRule<TInput, TOutput> other)
+            if (obj is not InjectRule<T> other)
             {
                 return false;
             }
@@ -39,12 +35,12 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_key);
+            return HashCode.Combine(_inject);
         }
 
-        protected bool Equals(ToRule<TInput, TOutput> other)
+        protected bool Equals(InjectRule<T> other)
         {
-            return Equals(_key, other._key);
+            return Equals(_inject, other._inject);
         }
     }
 }

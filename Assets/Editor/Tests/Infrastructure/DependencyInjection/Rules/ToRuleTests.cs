@@ -9,7 +9,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
     {
         private IRuleResolver _ruleResolver;
         private object _toResolveResult;
-        private object _keyToResolve;
+        private object _key;
 
         private ToRule<object, object> _toRule;
 
@@ -18,11 +18,11 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         {
             _ruleResolver = Substitute.For<IRuleResolver>();
             _toResolveResult = new object();
-            _keyToResolve = new object();
+            _key = new object();
 
-            _toRule = new ToRule<object, object>(_keyToResolve);
+            _toRule = new ToRule<object, object>(_key);
 
-            _ruleResolver.Resolve<object>(_keyToResolve).Returns(_toResolveResult);
+            _ruleResolver.Resolve<object>(_key).Returns(_toResolveResult);
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         [Test]
         public void Equals_OtherSameParams_ReturnsTrue()
         {
-            ToRule<object, object> other = new(_keyToResolve);
+            ToRule<object, object> other = new(_key);
 
             Assert.AreEqual(_toRule, other);
         }
@@ -68,8 +68,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         [Test]
         public void Equals_OtherDifferentParams_ReturnsFalse()
         {
-            object otherKeyToResolve = new();
-            ToRule<object, object> other = new(otherKeyToResolve);
+            object otherKey = new();
+            ToRule<object, object> other = new(otherKey);
 
             Assert.AreNotEqual(_toRule, other);
         }
@@ -77,7 +77,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         [Test]
         public void GetHashCode_SameParams_SameReturnedValue()
         {
-            ToRule<object, object> other = new(_keyToResolve);
+            ToRule<object, object> other = new(_key);
 
             Assert.AreEqual(_toRule.GetHashCode(), other.GetHashCode());
         }
@@ -85,8 +85,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         [Test]
         public void GetHashCode_DifferentParams_DifferentReturnedValue()
         {
-            object otherKeyToResolve = new();
-            ToRule<object, object> other = new(otherKeyToResolve);
+            object otherKey = new();
+            ToRule<object, object> other = new(otherKey);
 
             Assert.AreNotEqual(_toRule.GetHashCode(), other.GetHashCode());
         }

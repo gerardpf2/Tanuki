@@ -10,6 +10,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
     {
         private IEnabledGateKeyGetter _enabledGateKeyGetter;
         private IScopeConstructor _scopeConstructor;
+        private ISharedRuleAdder _sharedRuleAdder;
         private IScopeComposer _scopeComposer;
         private IRuleFactory _ruleFactory;
 
@@ -20,10 +21,11 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             _enabledGateKeyGetter = Substitute.For<IEnabledGateKeyGetter>();
             _scopeConstructor = Substitute.For<IScopeConstructor>();
+            _sharedRuleAdder = Substitute.For<ISharedRuleAdder>();
             _scopeComposer = Substitute.For<IScopeComposer>();
             _ruleFactory = Substitute.For<IRuleFactory>();
 
-            _scopeBuilder = new ScopeBuilder(_enabledGateKeyGetter, _scopeConstructor, _ruleFactory);
+            _scopeBuilder = new ScopeBuilder(_enabledGateKeyGetter, _scopeConstructor, _sharedRuleAdder, _ruleFactory);
         }
 
         #region Build base (Code shared between Build and BuildPartial)
@@ -85,6 +87,30 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _scopeBuilder.Build(parentScope, _scopeComposer);
 
             addRules.Received(1).Invoke(ruleAdder, _ruleFactory);
+        }
+
+        [Test]
+        public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddSharedRulesCalledWithValidParams()
+        {
+            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
+            Scope parentScope = new(null, null, null);
+            Scope childScope = new(ruleAdder, ruleResolver, null);
+            _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
+            Action<IRuleAdder, IRuleFactory> addSharedRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddSharedRules = addSharedRules));
+
+            _scopeBuilder.Build(parentScope, _scopeComposer);
+
+            Received.InOrder(
+                () =>
+                {
+                    _sharedRuleAdder.SetTarget(ruleAdder, ruleResolver);
+                    addSharedRules.Invoke(_sharedRuleAdder, _ruleFactory);
+                    _sharedRuleAdder.ClearTarget();
+                }
+            );
         }
 
         [Test]
