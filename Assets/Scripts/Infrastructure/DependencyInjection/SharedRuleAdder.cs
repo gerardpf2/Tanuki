@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
-    // TODO: Test
     public class SharedRuleAdder : ISharedRuleAdder
     {
         private readonly IRuleAdder _ruleAdder;

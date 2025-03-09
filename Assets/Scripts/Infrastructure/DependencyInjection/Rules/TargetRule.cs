@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
-    // TODO: Test
     public class TargetRule<T> : IRule<T>
     {
         private readonly IRuleResolver _ruleResolver;

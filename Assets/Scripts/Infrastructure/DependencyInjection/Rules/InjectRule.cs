@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
-    // TODO: Test
     // To resolve InjectRule<T>, Action<T> needs to be used instead of T
     public class InjectRule<T> : SingletonRule<Action<T>>
     {
