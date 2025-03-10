@@ -38,7 +38,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_inject);
         }
 
-        protected bool Equals(InjectRule<T> other)
+        protected bool Equals([NotNull] InjectRule<T> other)
         {
             return Equals(_inject, other._inject);
         }

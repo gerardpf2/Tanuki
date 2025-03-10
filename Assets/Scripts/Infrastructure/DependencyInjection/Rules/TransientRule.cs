@@ -42,7 +42,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_ctor);
         }
 
-        protected bool Equals(TransientRule<T> other)
+        protected bool Equals([NotNull] TransientRule<T> other)
         {
             return Equals(_ctor, other._ctor);
         }

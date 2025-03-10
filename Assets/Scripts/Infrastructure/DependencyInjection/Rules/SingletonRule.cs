@@ -53,7 +53,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_ctor);
         }
 
-        protected bool Equals(SingletonRule<T> other)
+        protected bool Equals([NotNull] SingletonRule<T> other)
         {
             return Equals(_ctor, other._ctor);
         }

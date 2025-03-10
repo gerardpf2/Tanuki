@@ -42,7 +42,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_key);
         }
 
-        protected bool Equals(ToRule<TInput, TOutput> other)
+        protected bool Equals([NotNull] ToRule<TInput, TOutput> other)
         {
             return Equals(_key, other._key);
         }
