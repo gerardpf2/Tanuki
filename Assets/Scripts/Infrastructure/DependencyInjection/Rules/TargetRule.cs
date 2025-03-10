@@ -3,18 +3,20 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
-    public class ToRule<TInput, TOutput> : IRule<TInput> where TOutput : TInput
+    public class TargetRule<T> : IRule<T>
     {
+        private readonly IRuleResolver _ruleResolver;
         private readonly object _key;
 
-        public ToRule(object key = null)
+        public TargetRule([NotNull] IRuleResolver ruleResolver, object key = null)
         {
+            _ruleResolver = ruleResolver;
             _key = key;
         }
 
-        public TInput Resolve([NotNull] IRuleResolver ruleResolver)
+        public T Resolve(IRuleResolver _)
         {
-            return ruleResolver.Resolve<TOutput>(_key);
+            return _ruleResolver.Resolve<T>(_key);
         }
 
         public override bool Equals(object obj)
@@ -29,7 +31,7 @@ namespace Infrastructure.DependencyInjection.Rules
                 return true;
             }
 
-            if (obj is not ToRule<TInput, TOutput> other)
+            if (obj is not TargetRule<T> other)
             {
                 return false;
             }
@@ -39,12 +41,12 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_key);
+            return HashCode.Combine(_ruleResolver, _key);
         }
 
-        protected bool Equals([NotNull] ToRule<TInput, TOutput> other)
+        protected bool Equals([NotNull] TargetRule<T> other)
         {
-            return Equals(_key, other._key);
+            return Equals(_ruleResolver, other._ruleResolver) && Equals(_key, other._key);
         }
     }
 }

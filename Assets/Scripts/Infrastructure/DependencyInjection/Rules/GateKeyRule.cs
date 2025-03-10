@@ -52,7 +52,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_enabledGateKeyGetter, _rule, _gateKey);
         }
 
-        protected bool Equals(GateKeyRule<T> other)
+        protected bool Equals([NotNull] GateKeyRule<T> other)
         {
             return
                 Equals(_enabledGateKeyGetter, other._enabledGateKeyGetter) &&

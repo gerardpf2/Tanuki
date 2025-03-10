@@ -56,10 +56,10 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void GetTo_ReturnsToRuleWithValidParams()
         {
-            object keyToResolve = new();
-            ToRule<object, string> expectedResult = new(keyToResolve);
+            object key = new();
+            ToRule<object, string> expectedResult = new(key);
 
-            IRule<object> result = _ruleFactory.GetTo<object, string>(keyToResolve);
+            IRule<object> result = _ruleFactory.GetTo<object, string>(key);
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -72,6 +72,29 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             GateKeyRule<object> expectedResult = new(_enabledGateKeyGetter, rule, gateKey);
 
             IRule<object> result = _ruleFactory.GetGateKey(rule, gateKey);
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void GetTarget_ReturnsTargetRuleWithValidParams()
+        {
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
+            object key = new();
+            TargetRule<object> expectedResult = new(ruleResolver, key);
+
+            IRule<object> result = _ruleFactory.GetTarget<object>(ruleResolver, key);
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void GetInject_ReturnsInjectRuleWithValidParams()
+        {
+            Action<IRuleResolver, object> inject = Substitute.For<Action<IRuleResolver, object>>();
+            InjectRule<object> expectedResult = new(inject);
+
+            IRule<Action<object>> result = _ruleFactory.GetInject(inject);
 
             Assert.AreEqual(expectedResult, result);
         }

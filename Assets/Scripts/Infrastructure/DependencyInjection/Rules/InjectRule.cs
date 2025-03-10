@@ -3,18 +3,14 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
-    public class TransientRule<T> : IRule<T>
+    // To resolve InjectRule<T>, Action<T> needs to be used instead of T
+    public class InjectRule<T> : SingletonRule<Action<T>>
     {
-        private readonly Func<IRuleResolver, T> _ctor;
+        private readonly Action<IRuleResolver, T> _inject;
 
-        public TransientRule([NotNull] Func<IRuleResolver, T> ctor)
+        public InjectRule([NotNull] Action<IRuleResolver, T> inject) : base(ruleResolver => instance => inject(ruleResolver, instance))
         {
-            _ctor = ctor;
-        }
-
-        public T Resolve(IRuleResolver ruleResolver)
-        {
-            return _ctor(ruleResolver);
+            _inject = inject;
         }
 
         public override bool Equals(object obj)
@@ -29,7 +25,7 @@ namespace Infrastructure.DependencyInjection.Rules
                 return true;
             }
 
-            if (obj is not TransientRule<T> other)
+            if (obj is not InjectRule<T> other)
             {
                 return false;
             }
@@ -39,12 +35,12 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_ctor);
+            return HashCode.Combine(_inject);
         }
 
-        protected bool Equals([NotNull] TransientRule<T> other)
+        protected bool Equals([NotNull] InjectRule<T> other)
         {
-            return Equals(_ctor, other._ctor);
+            return Equals(_inject, other._inject);
         }
     }
 }
