@@ -44,7 +44,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_ruleResolver, _key);
         }
 
-        protected bool Equals(TargetRule<T> other)
+        protected bool Equals([NotNull] TargetRule<T> other)
         {
             return Equals(_ruleResolver, other._ruleResolver) && Equals(_key, other._key);
         }

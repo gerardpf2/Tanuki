@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
@@ -42,7 +43,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_instance);
         }
 
-        protected bool Equals(InstanceRule<T> other)
+        protected bool Equals([NotNull] InstanceRule<T> other)
         {
             return EqualityComparer<T>.Default.Equals(_instance, other._instance);
         }
