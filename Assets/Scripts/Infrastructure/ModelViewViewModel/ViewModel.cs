@@ -1,3 +1,4 @@
+using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel.MethodBindings;
 using Infrastructure.ModelViewViewModel.PropertyBindings;
 using JetBrains.Annotations;
@@ -7,8 +8,21 @@ namespace Infrastructure.ModelViewViewModel
 {
     public class ViewModel : MonoBehaviour
     {
-        private readonly IBoundPropertyContainer _boundPropertyContainer = new BoundPropertyContainer();
-        private readonly IBoundMethodContainer _boundMethodContainer = new BoundMethodContainer();
+        private IBoundPropertyContainer _boundPropertyContainer;
+        private IBoundMethodContainer _boundMethodContainer;
+
+        protected virtual void Awake()
+        {
+            InjectResolver.Resolve(this);
+        }
+
+        public void Inject(
+            [NotNull] IBoundPropertyContainer boundPropertyContainer,
+            [NotNull] IBoundMethodContainer boundMethodContainer)
+        {
+            _boundPropertyContainer = boundPropertyContainer;
+            _boundMethodContainer = boundMethodContainer;
+        }
 
         public void Bind<T>([NotNull] IPropertyBinding<T> propertyBinding)
         {
