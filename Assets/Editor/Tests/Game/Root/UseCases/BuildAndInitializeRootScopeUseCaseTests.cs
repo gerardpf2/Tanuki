@@ -15,7 +15,7 @@ namespace Editor.Tests.Game.Root.UseCases
         }
 
         [Test]
-        public void Resolve_ScopeNotNull()
+        public void Resolve_ReturnsNotNull()
         {
             Scope scope = _buildAndInitializeRootScopeUseCase.Resolve();
 
