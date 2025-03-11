@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 
 namespace Game.Root.UseCases
 {
-    // TODO: Test
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {
         public Scope Resolve()
