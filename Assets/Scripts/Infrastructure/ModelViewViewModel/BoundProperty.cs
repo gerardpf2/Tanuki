@@ -22,7 +22,7 @@ namespace Infrastructure.ModelViewViewModel
                 }
 
                 _value = value;
-                _listeners(_value);
+                _listeners?.Invoke(_value);
             }
         }
 
