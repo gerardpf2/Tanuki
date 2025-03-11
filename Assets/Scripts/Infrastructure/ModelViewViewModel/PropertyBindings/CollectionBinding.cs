@@ -1,0 +1,57 @@
+using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
+using UnityEngine;
+
+namespace Infrastructure.ModelViewViewModel.PropertyBindings
+{
+    public abstract class CollectionBinding<T> : PropertyBinding<IEnumerable<T>>
+    {
+        [SerializeField] private GameObject _prefab;
+
+        private readonly IDictionary<T, GameObject> _instances = new Dictionary<T, GameObject>();
+
+        public override void Set(IEnumerable<T> value)
+        {
+            ICollection<T> currentData = new HashSet<T>(value ?? Enumerable.Empty<T>());
+
+            RemoveObsoleteItems(currentData);
+            AddItems(currentData);
+        }
+
+        private void RemoveObsoleteItems([NotNull] ICollection<T> currentData)
+        {
+            foreach (T data in _instances.Keys.ToList())
+            {
+                if (currentData.Contains(data))
+                {
+                    continue;
+                }
+
+                Destroy(_instances[data]);
+
+                _instances.Remove(data);
+            }
+        }
+
+        private void AddItems([NotNull] IEnumerable<T> currentData)
+        {
+            foreach (T data in currentData)
+            {
+                if (!_instances.TryGetValue(data, out GameObject instance))
+                {
+                    instance = Instantiate(_prefab, transform);
+
+                    _instances.Add(data, instance);
+                }
+
+                if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
+                {
+                    dataSettable.SetData(data);
+                }
+
+                instance.transform.SetAsLastSibling();
+            }
+        }
+    }
+}
