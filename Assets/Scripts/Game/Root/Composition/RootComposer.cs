@@ -5,7 +5,6 @@ using Infrastructure.ModelViewViewModel.Composition;
 
 namespace Game.Root.Composition
 {
-    // TODO: Test
     public class RootComposer : ScopeComposer
     {
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
