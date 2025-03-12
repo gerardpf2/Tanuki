@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Infrastructure.Logging.LogHandlers
+namespace Infrastructure.Logging
 {
     public class UnityLogHandler : ILogHandler
     {

@@ -1,4 +1,4 @@
-namespace Infrastructure.Logging.LogHandlers
+namespace Infrastructure.Logging
 {
     public interface ILogHandler
     {

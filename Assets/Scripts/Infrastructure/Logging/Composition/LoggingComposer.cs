@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Infrastructure.DependencyInjection;
 using JetBrains.Annotations;
 
@@ -12,11 +10,15 @@ namespace Infrastructure.Logging.Composition
             base.AddRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetSingleton<ILogger>(_ => new Logger()));
+
+            ruleAdder.Add(ruleFactory.GetSingleton(_ => new UnityLogHandler()));
         }
 
-        protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
+        protected override void Initialize([NotNull] IRuleResolver ruleResolver)
         {
-            return base.GetChildScopeComposers().Append(new UnityLoggingComposer());
+            base.Initialize(ruleResolver);
+
+            ruleResolver.Resolve<ILogger>().Add(ruleResolver.Resolve<UnityLogHandler>());
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Infrastructure.Logging.LogHandlers;
 using JetBrains.Annotations;
 
 namespace Infrastructure.Logging
