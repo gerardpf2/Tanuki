@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
+using Infrastructure.Gating;
 using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
     public class ScopeBuilder : IScopeBuilder
     {
-        private readonly IEnabledGateKeyGetter _enabledGateKeyGetter;
+        private readonly IGateValidator _gateValidator;
         private readonly IScopeConstructor _scopeConstructor;
         private readonly ISharedRuleAdder _sharedRuleAdder;
         private readonly IRuleFactory _ruleFactory;
 
         public ScopeBuilder(
-            [NotNull] IEnabledGateKeyGetter enabledGateKeyGetter,
+            [NotNull] IGateValidator gateValidator,
             [NotNull] IScopeConstructor scopeConstructor,
             [NotNull] ISharedRuleAdder sharedRuleAdder,
             IRuleFactory ruleFactory)
         {
-            _enabledGateKeyGetter = enabledGateKeyGetter;
+            _gateValidator = gateValidator;
             _scopeConstructor = scopeConstructor;
             _sharedRuleAdder = sharedRuleAdder;
             _ruleFactory = ruleFactory;
@@ -47,7 +48,7 @@ namespace Infrastructure.DependencyInjection
 
             scopeComposer.Compose(scopeBuildingContext);
 
-            if (!_enabledGateKeyGetter.Contains(scopeBuildingContext.GetGateKey?.Invoke()))
+            if (!_gateValidator.Validate(scopeBuildingContext.GetGateKey?.Invoke()))
             {
                 return null;
             }

@@ -1,6 +1,7 @@
 using System;
 using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
+using Infrastructure.Gating;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -8,16 +9,16 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 {
     public class RuleFactoryTests
     {
-        private IEnabledGateKeyGetter _enabledGateKeyGetter;
+        private IGateValidator _gateValidator;
 
         private RuleFactory _ruleFactory;
 
         [SetUp]
         public void SetUp()
         {
-            _enabledGateKeyGetter = Substitute.For<IEnabledGateKeyGetter>();
+            _gateValidator = Substitute.For<IGateValidator>();
 
-            _ruleFactory = new RuleFactory(_enabledGateKeyGetter);
+            _ruleFactory = new RuleFactory(_gateValidator);
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             IRule<object> rule = Substitute.For<IRule<object>>();
             const string gateKey = nameof(gateKey);
-            GateKeyRule<object> expectedResult = new(_enabledGateKeyGetter, rule, gateKey);
+            GateKeyRule<object> expectedResult = new(_gateValidator, rule, gateKey);
 
             IRule<object> result = _ruleFactory.GetGateKey(rule, gateKey);
 

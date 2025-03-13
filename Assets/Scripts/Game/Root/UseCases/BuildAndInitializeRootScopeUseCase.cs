@@ -2,6 +2,7 @@ using Game.Root.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.DependencyInjection.Utils;
+using Infrastructure.Gating;
 using JetBrains.Annotations;
 
 namespace Game.Root.UseCases
@@ -22,7 +23,7 @@ namespace Game.Root.UseCases
 
         private static void AddRules([NotNull] IRuleAdder ruleAdder)
         {
-            ruleAdder.Add(new SingletonRule<IEnabledGateKeyGetter>(_ => new EnabledGateKeyContainer()));
+            ruleAdder.Add(new SingletonRule<IGateValidator>(_ => null)); // TODO
 
             ruleAdder.Add(
                 new SingletonRule<InjectResolver>(r =>
@@ -39,7 +40,7 @@ namespace Game.Root.UseCases
             ruleAdder.Add(
                 new SingletonRule<IRuleFactory>(r =>
                     new RuleFactory(
-                        r.Resolve<IEnabledGateKeyGetter>()
+                        r.Resolve<IGateValidator>()
                     )
                 )
             );
@@ -56,7 +57,7 @@ namespace Game.Root.UseCases
             ruleAdder.Add(
                 new SingletonRule<IScopeBuilder>(r =>
                     new ScopeBuilder(
-                        r.Resolve<IEnabledGateKeyGetter>(),
+                        r.Resolve<IGateValidator>(),
                         r.Resolve<IScopeConstructor>(),
                         r.Resolve<ISharedRuleAdder>(),
                         r.Resolve<IRuleFactory>()

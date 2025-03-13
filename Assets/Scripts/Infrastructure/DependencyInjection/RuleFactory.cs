@@ -1,16 +1,17 @@
 using System;
 using Infrastructure.DependencyInjection.Rules;
+using Infrastructure.Gating;
 using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
     public class RuleFactory : IRuleFactory
     {
-        private readonly IEnabledGateKeyGetter _enabledGateKeyGetter;
+        private readonly IGateValidator _gateValidator;
 
-        public RuleFactory([NotNull] IEnabledGateKeyGetter enabledGateKeyGetter)
+        public RuleFactory([NotNull] IGateValidator gateValidator)
         {
-            _enabledGateKeyGetter = enabledGateKeyGetter;
+            _gateValidator = gateValidator;
         }
 
         public IRule<T> GetInstance<T>(T instance)
@@ -35,7 +36,7 @@ namespace Infrastructure.DependencyInjection
 
         public IRule<T> GetGateKey<T>([NotNull] IRule<T> rule, string gateKey) where T : class
         {
-            return new GateKeyRule<T>(_enabledGateKeyGetter, rule, gateKey);
+            return new GateKeyRule<T>(_gateValidator, rule, gateKey);
         }
 
         public IRule<T> GetTarget<T>([NotNull] IRuleResolver ruleResolver, object key = null)
