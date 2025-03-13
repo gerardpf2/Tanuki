@@ -23,6 +23,11 @@ namespace Infrastructure.Gating
 
         public bool Validate(string key)
         {
+            if (key == null)
+            {
+                return true;
+            }
+
             GateDefinition gateDefinition = _gateDefinitionGetter.Get(key);
 
             return
