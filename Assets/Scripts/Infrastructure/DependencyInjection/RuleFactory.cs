@@ -33,7 +33,7 @@ namespace Infrastructure.DependencyInjection
             return new ToRule<TInput, TOutput>(key);
         }
 
-        public IRule<T> GetGateKey<T>([NotNull] IRule<T> rule, object gateKey) where T : class
+        public IRule<T> GetGateKey<T>([NotNull] IRule<T> rule, string gateKey) where T : class
         {
             return new GateKeyRule<T>(_enabledGateKeyGetter, rule, gateKey);
         }

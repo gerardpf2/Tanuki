@@ -10,12 +10,12 @@ namespace Infrastructure.DependencyInjection.Rules
     {
         private readonly IEnabledGateKeyGetter _enabledGateKeyGetter;
         private readonly IRule<T> _rule;
-        private readonly object _gateKey;
+        private readonly string _gateKey;
 
         public GateKeyRule(
             [NotNull] IEnabledGateKeyGetter enabledGateKeyGetter,
             [NotNull] IRule<T> rule,
-            object gateKey)
+            string gateKey)
         {
             _enabledGateKeyGetter = enabledGateKeyGetter;
             _rule = rule;

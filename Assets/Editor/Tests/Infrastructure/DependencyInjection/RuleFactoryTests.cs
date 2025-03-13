@@ -68,7 +68,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void GetGateKey_ReturnsGateKeyRuleWithValidParams()
         {
             IRule<object> rule = Substitute.For<IRule<object>>();
-            object gateKey = new();
+            const string gateKey = nameof(gateKey);
             GateKeyRule<object> expectedResult = new(_enabledGateKeyGetter, rule, gateKey);
 
             IRule<object> result = _ruleFactory.GetGateKey(rule, gateKey);

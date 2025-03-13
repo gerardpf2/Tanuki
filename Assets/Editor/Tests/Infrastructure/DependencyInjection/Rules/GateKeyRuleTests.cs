@@ -11,7 +11,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         private IRuleResolver _ruleResolver;
         private IRule<object> _rule;
         private object _ruleResult;
-        private object _gateKey;
+        private string _gateKey;
 
         private GateKeyRule<object> _gateKeyRule;
 
@@ -22,7 +22,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
             _ruleResolver = Substitute.For<IRuleResolver>();
             _rule = Substitute.For<IRule<object>>();
             _ruleResult = new object();
-            _gateKey = new object();
+            _gateKey = nameof(_gateKey);
 
             _gateKeyRule = new GateKeyRule<object>(_enabledGateKeyGetter, _rule, _gateKey);
 
@@ -102,7 +102,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         [Test]
         public void Equals_OtherDifferentParams3_ReturnsFalse()
         {
-            object otherGateKey = new();
+            const string otherGateKey = nameof(otherGateKey);
             GateKeyRule<object> other = new(_enabledGateKeyGetter, _rule, otherGateKey);
 
             Assert.AreNotEqual(_gateKeyRule, other);
@@ -137,7 +137,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         [Test]
         public void GetHashCode_DifferentParams3_DifferentReturnedValue()
         {
-            object otherGateKey = new();
+            const string otherGateKey = nameof(otherGateKey);
             GateKeyRule<object> other = new(_enabledGateKeyGetter, _rule, otherGateKey);
 
             Assert.AreNotEqual(_gateKeyRule.GetHashCode(), other.GetHashCode());

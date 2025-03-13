@@ -24,7 +24,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void Compose_GetGateKeyReturnsNull()
         {
             _scopeComposer.Compose(_scopeBuildingContext);
-            object gateKey = _scopeBuildingContext.GetGateKey();
+            string gateKey = _scopeBuildingContext.GetGateKey();
 
             Assert.IsNull(gateKey);
         }

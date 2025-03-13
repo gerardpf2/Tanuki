@@ -16,7 +16,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Contains_GateKeyAdded_ReturnsTrue()
         {
-            object gateKey = new();
+            const string gateKey = nameof(gateKey);
             _enabledGateKeyContainer.Add(gateKey);
 
             bool result = _enabledGateKeyContainer.Contains(gateKey);
@@ -27,7 +27,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Contains_GateKeyNotAdded_ReturnsFalse()
         {
-            object gateKey = new();
+            const string gateKey = nameof(gateKey);
 
             bool result = _enabledGateKeyContainer.Contains(gateKey);
 

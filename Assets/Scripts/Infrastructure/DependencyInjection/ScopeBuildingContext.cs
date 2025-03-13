@@ -5,7 +5,7 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeBuildingContext
     {
-        public Func<object> GetGateKey { get; set; }
+        public Func<string> GetGateKey { get; set; }
 
         public Action<IRuleAdder, IRuleFactory> AddRules { get; set; }
 

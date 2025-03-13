@@ -53,8 +53,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyCalledWithValidParams()
         {
-            object gateKey = new();
-            Func<object> getGateKey = Substitute.For<Func<object>>();
+            const string gateKey = nameof(gateKey);
+            Func<string> getGateKey = Substitute.For<Func<string>>();
             getGateKey.Invoke().Returns(gateKey);
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.GetGateKey = getGateKey));
 
@@ -66,7 +66,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyNotEnabled_ReturnsNull()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(false);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(false);
 
             Scope childScope = _scopeBuilder.Build(null, _scopeComposer);
 
@@ -76,7 +76,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddRulesCalledWithValidParams()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
             Scope parentScope = new(null, null, null);
             Scope childScope = new(ruleAdder, null, null);
@@ -92,7 +92,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddSharedRulesCalledWithValidParams()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
             IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
             Scope parentScope = new(null, null, null);
@@ -116,7 +116,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetPartialScopeComposersCalled()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             Scope parentScope = new(null, null, null);
             Scope childScope = new(null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
@@ -133,7 +133,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetChildScopeComposersCalled()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             Scope parentScope = new(null, null, null);
             Scope childScope = new(null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
@@ -154,7 +154,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void BuildPartial_GateKeyEnabled_ConstructCalledWithValidParams()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             Scope mainScope = new(null, null, null);
             Action<IRuleResolver> initialize = Substitute.For<Action<IRuleResolver>>();
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.Initialize = initialize));
@@ -167,7 +167,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void BuildPartial_GateKeyEnabledAndConstructReturnsNull_ReturnsNull()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             Scope mainScope = new(null, null, null);
             _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns((PartialScope)null);
 
@@ -179,7 +179,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void BuildPartial_GateKeyEnabledAndConstructReturnsNotNull_ReturnsScope()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             Scope mainScope = new(null, null, null);
             PartialScope expectedPartialScope = new(mainScope, null, null, null);
             _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns(expectedPartialScope);
@@ -196,7 +196,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyEnabled_ConstructCalledWithValidParams()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             Scope parentScope = new(null, null, null);
             Action<IRuleResolver> initialize = Substitute.For<Action<IRuleResolver>>();
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.Initialize = initialize));
@@ -209,7 +209,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNull_ReturnsNull()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             Scope parentScope = new(null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns((Scope)null);
 
@@ -221,7 +221,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_ReturnsScope()
         {
-            _enabledGateKeyGetter.Contains(Arg.Any<object>()).Returns(true);
+            _enabledGateKeyGetter.Contains(Arg.Any<string>()).Returns(true);
             Scope parentScope = new(null, null, null);
             Scope expectedChildScope = new(null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(expectedChildScope);

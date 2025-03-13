@@ -2,6 +2,6 @@ namespace Infrastructure.DependencyInjection
 {
     public interface IEnabledGateKeyAdder
     {
-        void Add(object gateKey);
+        void Add(string gateKey);
     }
 }
