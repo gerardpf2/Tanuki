@@ -3,12 +3,20 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.DependencyInjection.Utils;
 using Infrastructure.Gating;
+using Infrastructure.System;
 using JetBrains.Annotations;
 
 namespace Game.Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {
+        private readonly IGateDefinitionGetter _gateDefinitionGetter;
+
+        public BuildAndInitializeRootScopeUseCase(IGateDefinitionGetter gateDefinitionGetter)
+        {
+            _gateDefinitionGetter = gateDefinitionGetter;
+        }
+
         public Scope Resolve()
         {
             RuleContainer ruleContainer = new();
@@ -21,9 +29,23 @@ namespace Game.Root.UseCases
             return scope;
         }
 
-        private static void AddRules([NotNull] IRuleAdder ruleAdder)
+        private void AddRules([NotNull] IRuleAdder ruleAdder)
         {
-            ruleAdder.Add(new SingletonRule<IGateValidator>(_ => null)); // TODO
+            ruleAdder.Add(new InstanceRule<IGateDefinitionGetter>(_gateDefinitionGetter));
+
+            ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
+
+            ruleAdder.Add(new SingletonRule<IVersionParser>(_ => new VersionParser()));
+
+            ruleAdder.Add(
+                new SingletonRule<IGateValidator>(r =>
+                    new GateValidator(
+                        r.Resolve<IGateDefinitionGetter>(),
+                        r.Resolve<IProjectVersionGetter>(),
+                        r.Resolve<IVersionParser>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 new SingletonRule<InjectResolver>(r =>
