@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.Gating
 {
-    // TODO: Test
     public class GateValidator : IGateValidator
     {
         private readonly IGateDefinitionGetter _gateDefinitionGetter;
@@ -28,16 +27,18 @@ namespace Infrastructure.Gating
                 return true;
             }
 
-            GateDefinition gateDefinition = _gateDefinitionGetter.Get(gateKey);
+            IGateDefinition gateDefinition = _gateDefinitionGetter.Get(gateKey);
 
             return
                 (!gateDefinition.UseConfig || ValidateConfig(gateDefinition.Config)) &&
                 (!gateDefinition.UseVersion || ValidateVersion(gateDefinition.Version, gateDefinition.VersionComparisonOperator));
         }
 
+        // TODO: Test
+        // TODO: Add support
         private bool ValidateConfig(string config)
         {
-            return true; // TODO: Add support
+            return true;
         }
 
         private bool ValidateVersion(string version, ComparisonOperator versionComparisonOperator)

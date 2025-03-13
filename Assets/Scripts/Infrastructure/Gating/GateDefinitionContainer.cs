@@ -9,9 +9,9 @@ namespace Infrastructure.Gating
     {
         [SerializeField] private List<GateDefinition> _gateDefinitions = new();
 
-        public GateDefinition Get(string gateKey)
+        public IGateDefinition Get(string gateKey)
         {
-            GateDefinition gateDefinition = _gateDefinitions.Find(gateDefinition => gateDefinition.GateKey == gateKey);
+            IGateDefinition gateDefinition = _gateDefinitions.Find(gateDefinition => gateDefinition.GateKey == gateKey);
 
             if (gateDefinition == null)
             {

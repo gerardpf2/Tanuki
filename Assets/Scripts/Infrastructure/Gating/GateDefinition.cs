@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Infrastructure.Gating
 {
     [Serializable]
-    public class GateDefinition
+    public class GateDefinition : IGateDefinition
     {
         [SerializeField] private string _gateKey;
 
