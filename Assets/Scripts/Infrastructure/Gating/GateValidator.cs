@@ -21,14 +21,14 @@ namespace Infrastructure.Gating
             _projectVersion = _versionParser.Parse(projectVersionGetter.Get());
         }
 
-        public bool Validate(string key)
+        public bool Validate(string gateKey)
         {
-            if (key == null)
+            if (gateKey == null)
             {
                 return true;
             }
 
-            GateDefinition gateDefinition = _gateDefinitionGetter.Get(key);
+            GateDefinition gateDefinition = _gateDefinitionGetter.Get(gateKey);
 
             return
                 (!gateDefinition.UseConfig || ValidateConfig(gateDefinition.Config)) &&

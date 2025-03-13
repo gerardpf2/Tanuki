@@ -9,13 +9,13 @@ namespace Infrastructure.Gating
     {
         [SerializeField] private List<GateDefinition> _gateDefinitions = new();
 
-        public GateDefinition Get(string key)
+        public GateDefinition Get(string gateKey)
         {
-            GateDefinition gateDefinition = _gateDefinitions.Find(gateDefinition => gateDefinition.Key == key);
+            GateDefinition gateDefinition = _gateDefinitions.Find(gateDefinition => gateDefinition.GateKey == gateKey);
 
             if (gateDefinition == null)
             {
-                throw new InvalidOperationException($"Cannot get gate definition with Key: {key}");
+                throw new InvalidOperationException($"Cannot get gate definition with Key: {gateKey}");
             }
 
             return gateDefinition;

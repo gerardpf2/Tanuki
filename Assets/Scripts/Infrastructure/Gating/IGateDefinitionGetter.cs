@@ -5,6 +5,6 @@ namespace Infrastructure.Gating
     public interface IGateDefinitionGetter
     {
         [NotNull]
-        GateDefinition Get(string key);
+        GateDefinition Get(string gateKey);
     }
 }
