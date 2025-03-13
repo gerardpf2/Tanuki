@@ -1,5 +1,6 @@
 using Infrastructure.DependencyInjection;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Infrastructure.Logging.Composition
 {
@@ -11,7 +12,7 @@ namespace Infrastructure.Logging.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<ILogger>(_ => new Logger()));
 
-            ruleAdder.Add(ruleFactory.GetSingleton(_ => new UnityLogHandler()));
+            ruleAdder.Add(ruleFactory.GetSingleton(_ => new UnityLogHandler(Debug.unityLogger)));
         }
 
         protected override void Initialize([NotNull] IRuleResolver ruleResolver)

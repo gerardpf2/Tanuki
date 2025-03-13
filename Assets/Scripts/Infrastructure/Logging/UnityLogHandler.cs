@@ -1,10 +1,16 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Infrastructure.Logging
 {
     public class UnityLogHandler : ILogHandler
     {
-        private readonly UnityEngine.ILogger _logger = Debug.unityLogger;
+        private readonly UnityEngine.ILogger _logger;
+
+        public UnityLogHandler([NotNull] UnityEngine.ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public void Info(string message)
         {
