@@ -7,17 +7,14 @@ namespace Infrastructure.Gating
     public class GateValidator : IGateValidator
     {
         private readonly IGateDefinitionGetter _gateDefinitionGetter;
-        private readonly IVersionParser _versionParser;
         private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
-            [NotNull] IProjectVersionGetter projectVersionGetter,
-            [NotNull] IVersionParser versionParser)
+            [NotNull] IProjectVersionGetter projectVersionGetter)
         {
             _gateDefinitionGetter = gateDefinitionGetter;
-            _versionParser = versionParser;
-            _projectVersion = _versionParser.Parse(projectVersionGetter.Get());
+            _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
 
         public bool Validate(string gateKey)
@@ -43,7 +40,7 @@ namespace Infrastructure.Gating
 
         private bool ValidateVersion(string version, ComparisonOperator versionComparisonOperator)
         {
-            Version gateVersion = _versionParser.Parse(version);
+            Version gateVersion = Version.Parse(version);
 
             return versionComparisonOperator switch
             {
