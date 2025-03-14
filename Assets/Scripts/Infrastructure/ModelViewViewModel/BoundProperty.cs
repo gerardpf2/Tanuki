@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Infrastructure.ModelViewViewModel
@@ -16,11 +15,6 @@ namespace Infrastructure.ModelViewViewModel
             get => _value;
             set
             {
-                if (EqualityComparer<T>.Default.Equals(_value, value))
-                {
-                    return;
-                }
-
                 _value = value;
                 _listeners?.Invoke(_value);
             }
