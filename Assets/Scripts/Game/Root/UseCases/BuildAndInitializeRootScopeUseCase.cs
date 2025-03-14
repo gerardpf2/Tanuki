@@ -35,14 +35,11 @@ namespace Game.Root.UseCases
 
             ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
 
-            ruleAdder.Add(new SingletonRule<IVersionParser>(_ => new VersionParser()));
-
             ruleAdder.Add(
                 new SingletonRule<IGateValidator>(r =>
                     new GateValidator(
                         r.Resolve<IGateDefinitionGetter>(),
-                        r.Resolve<IProjectVersionGetter>(),
-                        r.Resolve<IVersionParser>()
+                        r.Resolve<IProjectVersionGetter>()
                     )
                 )
             );

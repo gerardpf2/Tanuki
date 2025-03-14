@@ -4,21 +4,17 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.Gating
 {
-    // TODO: Test
     public class GateValidator : IGateValidator
     {
         private readonly IGateDefinitionGetter _gateDefinitionGetter;
-        private readonly IVersionParser _versionParser;
         private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
-            [NotNull] IProjectVersionGetter projectVersionGetter,
-            [NotNull] IVersionParser versionParser)
+            [NotNull] IProjectVersionGetter projectVersionGetter)
         {
             _gateDefinitionGetter = gateDefinitionGetter;
-            _versionParser = versionParser;
-            _projectVersion = _versionParser.Parse(projectVersionGetter.Get());
+            _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
 
         public bool Validate(string gateKey)
@@ -28,21 +24,23 @@ namespace Infrastructure.Gating
                 return true;
             }
 
-            GateDefinition gateDefinition = _gateDefinitionGetter.Get(gateKey);
+            IGateDefinition gateDefinition = _gateDefinitionGetter.Get(gateKey);
 
             return
                 (!gateDefinition.UseConfig || ValidateConfig(gateDefinition.Config)) &&
                 (!gateDefinition.UseVersion || ValidateVersion(gateDefinition.Version, gateDefinition.VersionComparisonOperator));
         }
 
+        // TODO: Test
+        // TODO: Add support
         private bool ValidateConfig(string config)
         {
-            return true; // TODO: Add support
+            return true;
         }
 
         private bool ValidateVersion(string version, ComparisonOperator versionComparisonOperator)
         {
-            Version gateVersion = _versionParser.Parse(version);
+            Version gateVersion = Version.Parse(version);
 
             return versionComparisonOperator switch
             {
