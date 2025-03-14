@@ -64,7 +64,7 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel
         }
 
         [Test]
-        public void SetValue_Same_NoListenerCalled()
+        public void SetValue_Same_AllListenersCalledWithValidParams()
         {
             object value = new();
             BoundProperty<object> boundProperty = new(null, value);
@@ -80,6 +80,8 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel
                 {
                     listener1.Invoke(value); // Add
                     listener2.Invoke(value); // Add
+                    listener1.Invoke(value);
+                    listener2.Invoke(value);
                 }
             );
         }
