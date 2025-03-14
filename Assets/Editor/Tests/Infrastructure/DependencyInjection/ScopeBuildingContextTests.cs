@@ -25,7 +25,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void GetGateKey_Set_ReturnsValue()
         {
-            Func<object> getGateKey = Substitute.For<Func<object>>();
+            Func<string> getGateKey = Substitute.For<Func<string>>();
             _scopeBuildingContext.GetGateKey = getGateKey;
 
             Assert.AreSame(getGateKey, _scopeBuildingContext.GetGateKey);

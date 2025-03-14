@@ -13,7 +13,7 @@ namespace Infrastructure.DependencyInjection
 
         IRule<TInput> GetTo<TInput, TOutput>(object key = null) where TOutput : TInput;
 
-        IRule<T> GetGateKey<T>(IRule<T> rule, object gateKey) where T : class;
+        IRule<T> GetGateKey<T>(IRule<T> rule, string gateKey) where T : class;
 
         IRule<T> GetTarget<T>(IRuleResolver ruleResolver, object key = null);
 

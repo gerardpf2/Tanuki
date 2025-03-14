@@ -1,3 +1,4 @@
 {
-	"name": "DependencyInjection"
+	"name": "DependencyInjection",
+	"references":[ "GUID:71efef2a866343241904bdd6eb70eefa" ]
 }

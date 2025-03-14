@@ -1,11 +1,11 @@
 {
-    "name": "DependencyInjectionTests",
+    "name": "GatingTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "DependencyInjection",
-        "Gating"
+        "Gating",
+        "System_"
     ],
     "includePlatforms": [
         "Editor"

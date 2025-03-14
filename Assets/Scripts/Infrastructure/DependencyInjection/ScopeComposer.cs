@@ -16,7 +16,7 @@ namespace Infrastructure.DependencyInjection
             scopeBuildingContext.Initialize = Initialize;
         }
 
-        protected virtual object GetGateKey()
+        protected virtual string GetGateKey()
         {
             return null;
         }

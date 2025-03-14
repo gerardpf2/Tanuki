@@ -2,12 +2,21 @@ using Game.Root.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.DependencyInjection.Utils;
+using Infrastructure.Gating;
+using Infrastructure.System;
 using JetBrains.Annotations;
 
 namespace Game.Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {
+        private readonly IGateDefinitionGetter _gateDefinitionGetter;
+
+        public BuildAndInitializeRootScopeUseCase(IGateDefinitionGetter gateDefinitionGetter)
+        {
+            _gateDefinitionGetter = gateDefinitionGetter;
+        }
+
         public Scope Resolve()
         {
             RuleContainer ruleContainer = new();
@@ -20,9 +29,20 @@ namespace Game.Root.UseCases
             return scope;
         }
 
-        private static void AddRules([NotNull] IRuleAdder ruleAdder)
+        private void AddRules([NotNull] IRuleAdder ruleAdder)
         {
-            ruleAdder.Add(new SingletonRule<IEnabledGateKeyGetter>(_ => new EnabledGateKeyContainer()));
+            ruleAdder.Add(new InstanceRule<IGateDefinitionGetter>(_gateDefinitionGetter));
+
+            ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
+
+            ruleAdder.Add(
+                new SingletonRule<IGateValidator>(r =>
+                    new GateValidator(
+                        r.Resolve<IGateDefinitionGetter>(),
+                        r.Resolve<IProjectVersionGetter>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 new SingletonRule<InjectResolver>(r =>
@@ -39,7 +59,7 @@ namespace Game.Root.UseCases
             ruleAdder.Add(
                 new SingletonRule<IRuleFactory>(r =>
                     new RuleFactory(
-                        r.Resolve<IEnabledGateKeyGetter>()
+                        r.Resolve<IGateValidator>()
                     )
                 )
             );
@@ -56,7 +76,7 @@ namespace Game.Root.UseCases
             ruleAdder.Add(
                 new SingletonRule<IScopeBuilder>(r =>
                     new ScopeBuilder(
-                        r.Resolve<IEnabledGateKeyGetter>(),
+                        r.Resolve<IGateValidator>(),
                         r.Resolve<IScopeConstructor>(),
                         r.Resolve<ISharedRuleAdder>(),
                         r.Resolve<IRuleFactory>()
