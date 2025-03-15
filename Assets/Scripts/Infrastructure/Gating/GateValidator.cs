@@ -1,5 +1,6 @@
 using System;
 using Infrastructure.System;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Infrastructure.Gating

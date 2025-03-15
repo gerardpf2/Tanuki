@@ -3,7 +3,7 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.DependencyInjection.Utils;
 using Infrastructure.Gating;
-using Infrastructure.System;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Root.UseCases

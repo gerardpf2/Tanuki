@@ -1,5 +1,6 @@
 using Infrastructure.Gating;
 using Infrastructure.System;
+using Infrastructure.Unity;
 using NSubstitute;
 using NUnit.Framework;
 
