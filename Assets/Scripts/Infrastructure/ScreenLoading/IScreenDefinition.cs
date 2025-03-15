@@ -10,8 +10,6 @@ namespace Infrastructure.ScreenLoading
         [NotNull]
         GameObject Prefab { get; }
 
-        bool UsePlacement { get; }
-
         string PlacementKey { get; }
     }
 }

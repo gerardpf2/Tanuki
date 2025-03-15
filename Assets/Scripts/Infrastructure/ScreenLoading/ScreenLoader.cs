@@ -8,16 +8,13 @@ namespace Infrastructure.ScreenLoading
     {
         private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         private readonly IScreenPlacementGetter _screenPlacementGetter;
-        private readonly Transform _rootTransform;
 
         public ScreenLoader(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
-            [NotNull] IScreenPlacementGetter screenPlacementGetter,
-            [NotNull] Transform rootTransform)
+            [NotNull] IScreenPlacementGetter screenPlacementGetter)
         {
             _screenDefinitionGetter = screenDefinitionGetter;
             _screenPlacementGetter = screenPlacementGetter;
-            _rootTransform = rootTransform;
         }
 
         public void Load<T>(string key, T data)
@@ -32,10 +29,7 @@ namespace Infrastructure.ScreenLoading
         private GameObject Instantiate([NotNull] IScreenDefinition screenDefinition)
         {
             GameObject prefab = screenDefinition.Prefab;
-
-            Transform placement = screenDefinition.UsePlacement ?
-                _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform :
-                _rootTransform;
+            Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
 
             return Object.Instantiate(prefab, placement);
         }
