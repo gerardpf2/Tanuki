@@ -8,7 +8,8 @@
         "DependencyInjection",
         "ModelViewViewModel",
         "Gating",
-        "Logging"
+        "Logging",
+        "ScreenLoading"
     ],
     "includePlatforms": [
         "Editor"

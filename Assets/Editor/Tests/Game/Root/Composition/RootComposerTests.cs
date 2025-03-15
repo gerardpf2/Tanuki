@@ -4,6 +4,9 @@ using Game.Root.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
+using Infrastructure.ScreenLoading;
+using Infrastructure.ScreenLoading.Composition;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Editor.Tests.Game.Root.Composition
@@ -12,16 +15,20 @@ namespace Editor.Tests.Game.Root.Composition
     {
         // Tested behaviours that differ from ScopeComposer
 
+        private IScreenDefinitionGetter _screenDefinitionGetter;
         private ScopeBuildingContext _scopeBuildingContext;
+        private IScreenPlacement _screenPlacement;
 
         private RootComposer _rootComposer;
 
         [SetUp]
         public void SetUp()
         {
+            _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _scopeBuildingContext = new ScopeBuildingContext();
+            _screenPlacement = Substitute.For<IScreenPlacement>();
 
-            _rootComposer = new RootComposer();
+            _rootComposer = new RootComposer(_screenDefinitionGetter, _screenPlacement);
         }
 
         [Test]
@@ -31,8 +38,9 @@ namespace Editor.Tests.Game.Root.Composition
 
             List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers().ToList();
 
-            Assert.IsTrue(partialScopeComposers.Count == 1);
+            Assert.IsTrue(partialScopeComposers.Count == 2);
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is LoggingComposer));
+            Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is ScreenLoadingComposer));
         }
 
         [Test]

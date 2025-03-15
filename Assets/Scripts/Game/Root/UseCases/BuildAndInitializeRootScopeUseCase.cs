@@ -3,6 +3,7 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.DependencyInjection.Utils;
 using Infrastructure.Gating;
+using Infrastructure.ScreenLoading;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 
@@ -11,10 +12,17 @@ namespace Game.Root.UseCases
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {
         private readonly IGateDefinitionGetter _gateDefinitionGetter;
+        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        private readonly IScreenPlacement _rootScreenPlacement;
 
-        public BuildAndInitializeRootScopeUseCase(IGateDefinitionGetter gateDefinitionGetter)
+        public BuildAndInitializeRootScopeUseCase(
+            [NotNull] IGateDefinitionGetter gateDefinitionGetter,
+            [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
+            [NotNull] IScreenPlacement rootScreenPlacement)
         {
             _gateDefinitionGetter = gateDefinitionGetter;
+            _screenDefinitionGetter = screenDefinitionGetter;
+            _rootScreenPlacement = rootScreenPlacement;
         }
 
         public Scope Resolve()
@@ -84,7 +92,14 @@ namespace Game.Root.UseCases
                 )
             );
 
-            ruleAdder.Add(new SingletonRule<IScopeComposer>(_ => new RootComposer()));
+            ruleAdder.Add(
+                new SingletonRule<IScopeComposer>(_ =>
+                    new RootComposer(
+                        _screenDefinitionGetter,
+                        _rootScreenPlacement
+                    )
+                )
+            );
 
             ruleAdder.Add(new SingletonRule<IScopeConstructor>(_ => new ScopeConstructor()));
 
