@@ -1,3 +1,4 @@
+using System;
 using Infrastructure.Gating;
 using Infrastructure.System;
 using Infrastructure.Unity;
@@ -68,6 +69,24 @@ namespace Editor.Tests.Infrastructure.Gating
             bool result = _gateValidator.Validate(gateKey);
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void Validate_UseVersionAndComparisonOperatorOutOfRange_ThrowsException()
+        {
+            const string projectVersion = "1.0";
+            _projectVersionGetter.Get().Returns(projectVersion);
+            _gateValidator = new GateValidator(_gateDefinitionGetter, _projectVersionGetter);
+            const string gateVersion = "1.0";
+            const ComparisonOperator versionComparisonOperator = ComparisonOperator.EqualTo - 1;
+            IGateDefinition gateDefinition = Substitute.For<IGateDefinition>();
+            gateDefinition.UseVersion.Returns(true);
+            gateDefinition.Version.Returns(gateVersion);
+            gateDefinition.VersionComparisonOperator.Returns(versionComparisonOperator);
+            const string gateKey = nameof(gateKey);
+            _gateDefinitionGetter.Get(gateKey).Returns(gateDefinition);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => { bool _ = _gateValidator.Validate(gateKey); });
         }
     }
 }
