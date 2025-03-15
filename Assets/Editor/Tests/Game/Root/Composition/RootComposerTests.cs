@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Root.Composition;
 using Infrastructure.DependencyInjection;
+using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using NUnit.Framework;
 
@@ -21,6 +22,17 @@ namespace Editor.Tests.Game.Root.Composition
             _scopeBuildingContext = new ScopeBuildingContext();
 
             _rootComposer = new RootComposer();
+        }
+
+        [Test]
+        public void GetPartialScopeComposers_ReturnsExpected()
+        {
+            _rootComposer.Compose(_scopeBuildingContext);
+
+            List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers().ToList();
+
+            Assert.IsTrue(partialScopeComposers.Count == 1);
+            Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is LoggingComposer));
         }
 
         [Test]
