@@ -9,7 +9,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
     {
         private Action<IRuleResolver> _initialize;
         private IRuleResolver _ruleResolver;
-        private IRuleAdder _ruleAdder;
+        private IRuleAdder _publicRuleAdder;
         private Scope _scope;
 
         private ScopeConstructor _scopeConstructor;
@@ -19,8 +19,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             _initialize = Substitute.For<Action<IRuleResolver>>();
             _ruleResolver = Substitute.For<IRuleResolver>();
-            _ruleAdder = Substitute.For<IRuleAdder>();
-            _scope = Substitute.For<Scope>(_ruleAdder, _ruleResolver, null);
+            _publicRuleAdder = Substitute.For<IRuleAdder>();
+            _scope = Substitute.For<Scope>(_publicRuleAdder, _ruleResolver, null);
 
             _scopeConstructor = new ScopeConstructor();
         }
@@ -30,7 +30,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             PartialScope partialScope = _scopeConstructor.ConstructPartial(_scope, _initialize);
 
-            Assert.AreSame(_ruleAdder, partialScope.RuleAdder);
+            Assert.AreSame(_publicRuleAdder, partialScope.PublicRuleAdder);
             Assert.AreSame(_ruleResolver, partialScope.RuleResolver);
             Assert.AreSame(_initialize, partialScope.Initialize);
             _scope.Received(1).AddPartial(partialScope);
@@ -41,7 +41,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             Scope childScope = _scopeConstructor.Construct(_scope, _initialize);
 
-            Assert.AreNotSame(_ruleAdder, childScope.RuleAdder);
+            Assert.AreNotSame(_publicRuleAdder, childScope.PublicRuleAdder);
             Assert.AreNotSame(_ruleResolver, childScope.RuleResolver);
             Assert.AreSame(_initialize, childScope.Initialize);
             _scope.Received(1).AddChild(childScope);

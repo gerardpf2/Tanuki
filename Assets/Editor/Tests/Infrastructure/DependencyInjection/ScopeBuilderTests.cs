@@ -78,26 +78,26 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddPublicRulesCalledWithValidParams()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
+            IRuleAdder publicRuleAdder = Substitute.For<IRuleAdder>();
             Scope parentScope = new(null, null, null);
-            Scope childScope = new(ruleAdder, null, null);
+            Scope childScope = new(publicRuleAdder, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
             Action<IRuleAdder, IRuleFactory> addPublicRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddPublicRules = addPublicRules));
 
             _scopeBuilder.Build(parentScope, _scopeComposer);
 
-            addPublicRules.Received(1).Invoke(ruleAdder, _ruleFactory);
+            addPublicRules.Received(1).Invoke(publicRuleAdder, _ruleFactory);
         }
 
         [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddGlobalRulesCalledWithValidParams()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
+            IRuleAdder publicRuleAdder = Substitute.For<IRuleAdder>();
             IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
             Scope parentScope = new(null, null, null);
-            Scope childScope = new(ruleAdder, ruleResolver, null);
+            Scope childScope = new(publicRuleAdder, ruleResolver, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
             Action<IRuleAdder, IRuleFactory> addGlobalRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddGlobalRules = addGlobalRules));
@@ -107,7 +107,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             Received.InOrder(
                 () =>
                 {
-                    _globalRuleAdder.SetTarget(ruleAdder, ruleResolver);
+                    _globalRuleAdder.SetTarget(publicRuleAdder, ruleResolver);
                     addGlobalRules.Invoke(_globalRuleAdder, _ruleFactory);
                     _globalRuleAdder.ClearTarget();
                 }

@@ -7,7 +7,7 @@ namespace Infrastructure.DependencyInjection
     {
         public PartialScope ConstructPartial([NotNull] Scope mainScope, Action<IRuleResolver> initialize)
         {
-            PartialScope partialScope = new(mainScope, mainScope.RuleAdder, mainScope.RuleResolver, initialize);
+            PartialScope partialScope = new(mainScope, mainScope.PublicRuleAdder, mainScope.RuleResolver, initialize);
 
             mainScope.AddPartial(partialScope);
 
@@ -16,9 +16,9 @@ namespace Infrastructure.DependencyInjection
 
         public Scope Construct(Scope parentScope, Action<IRuleResolver> initialize)
         {
-            RuleContainer ruleContainer = new();
-            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, parentScope?.RuleResolver);
-            Scope childScope = new(ruleContainer, ruleResolver, initialize);
+            RuleContainer publicRuleContainer = new();
+            IRuleResolver ruleResolver = new RuleResolver(publicRuleContainer, parentScope?.RuleResolver);
+            Scope childScope = new(publicRuleContainer, ruleResolver, initialize);
 
             parentScope?.AddChild(childScope);
 

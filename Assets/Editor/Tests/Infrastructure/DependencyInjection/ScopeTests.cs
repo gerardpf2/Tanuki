@@ -10,7 +10,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
     {
         private Action<IRuleResolver> _initialize;
         private IRuleResolver _ruleResolver;
-        private IRuleAdder _ruleAdder;
+        private IRuleAdder _publicRruleAdder;
 
         private Scope _scope;
 
@@ -19,15 +19,15 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             _initialize = Substitute.For<Action<IRuleResolver>>();
             _ruleResolver = Substitute.For<IRuleResolver>();
-            _ruleAdder = Substitute.For<IRuleAdder>();
+            _publicRruleAdder = Substitute.For<IRuleAdder>();
 
-            _scope = new Scope(_ruleAdder, _ruleResolver, _initialize);
+            _scope = new Scope(_publicRruleAdder, _ruleResolver, _initialize);
         }
 
         [Test]
         public void Scope_HasValidParams()
         {
-            Assert.AreSame(_ruleAdder, _scope.RuleAdder);
+            Assert.AreSame(_publicRruleAdder, _scope.PublicRuleAdder);
             Assert.AreSame(_ruleResolver, _scope.RuleResolver);
             Assert.AreSame(_initialize, _scope.Initialize);
             Assert.IsEmpty(_scope.PartialScopes);

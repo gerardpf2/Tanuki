@@ -70,12 +70,12 @@ namespace Infrastructure.DependencyInjection
 
         private void AddPublicRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addPublicRules)
         {
-            addPublicRules?.Invoke(scope.RuleAdder, _ruleFactory);
+            addPublicRules?.Invoke(scope.PublicRuleAdder, _ruleFactory);
         }
 
         private void AddGlobalRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addGlobalRules)
         {
-            _globalRuleAdder.SetTarget(scope.RuleAdder, scope.RuleResolver);
+            _globalRuleAdder.SetTarget(scope.PublicRuleAdder, scope.RuleResolver);
 
             addGlobalRules?.Invoke(_globalRuleAdder, _ruleFactory);
 
