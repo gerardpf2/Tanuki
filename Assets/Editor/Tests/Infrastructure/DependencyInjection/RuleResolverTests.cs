@@ -9,6 +9,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
     public class RuleResolverTests
     {
         private IRuleResolver _parentRuleResolver;
+        private IRuleGetter _privateRuleGetter;
         private IRuleGetter _publicRuleGetter;
         private IRule<object> _rule;
         private object _key;
@@ -19,6 +20,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void SetUp()
         {
             _parentRuleResolver = Substitute.For<IRuleResolver>();
+            _privateRuleGetter = Substitute.For<IRuleGetter>();
             _publicRuleGetter = Substitute.For<IRuleGetter>();
             _rule = Substitute.For<IRule<object>>();
             _key = new object();
@@ -128,6 +130,26 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             InvalidOperationException invalidOperationException = Assert.Throws<InvalidOperationException>(() => _ruleResolver.Resolve<object>(_key));
             Assert.AreEqual($"Cannot resolve rule with Type: {typeof(object)} and Key: {_key}", invalidOperationException.Message);
+        }
+
+        [Test]
+        public void Resolve_CanBeFoundInBothPrivateAndPublic_ReturnsPrivateResult()
+        {
+            _ruleResolver = new RuleResolver(_privateRuleGetter, _publicRuleGetter, null);
+
+            // Found
+            IRule<object> privateRule = Substitute.For<IRule<object>>();
+            _privateRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = privateRule; return true; });
+            _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
+            // ResultNotNull
+            object privateExpectedResult = new();
+            object publicExpectedResult = new();
+            privateRule.Resolve(_ruleResolver).Returns(privateExpectedResult);
+            _rule.Resolve(_ruleResolver).Returns(publicExpectedResult);
+
+            object result = _ruleResolver.Resolve<object>(_key);
+
+            Assert.AreSame(privateExpectedResult, result);
         }
 
         [Test]
@@ -247,6 +269,27 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.IsFalse(found);
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public void TryResolve_CanBeFoundInBothPrivateAndPublic_ReturnsTrueAndOutPrivateResult()
+        {
+            _ruleResolver = new RuleResolver(_privateRuleGetter, _publicRuleGetter, null);
+
+            // Found
+            IRule<object> privateRule = Substitute.For<IRule<object>>();
+            _privateRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = privateRule; return true; });
+            _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
+            // ResultNotNull
+            object privateExpectedResult = new();
+            object publicExpectedResult = new();
+            privateRule.Resolve(_ruleResolver).Returns(privateExpectedResult);
+            _rule.Resolve(_ruleResolver).Returns(publicExpectedResult);
+
+            bool found = _ruleResolver.TryResolve(out object result, _key);
+
+            Assert.IsTrue(found);
+            Assert.AreSame(privateExpectedResult, result);
         }
     }
 }

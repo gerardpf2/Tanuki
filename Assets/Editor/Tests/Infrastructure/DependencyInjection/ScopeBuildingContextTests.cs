@@ -32,6 +32,21 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
+        public void AddPrivateRules_NotSet_ReturnsNull()
+        {
+            Assert.IsNull(_scopeBuildingContext.AddPrivateRules);
+        }
+
+        [Test]
+        public void AddPrivateRules_Set_ReturnsValue()
+        {
+            Action<IRuleAdder, IRuleFactory> addPrivateRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeBuildingContext.AddPrivateRules = addPrivateRules;
+
+            Assert.AreSame(addPrivateRules, _scopeBuildingContext.AddPrivateRules);
+        }
+
+        [Test]
         public void AddPublicRules_NotSet_ReturnsNull()
         {
             Assert.IsNull(_scopeBuildingContext.AddPublicRules);

@@ -30,6 +30,18 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
+        public void Compose_AddPrivateRulesDoesNothing()
+        {
+            IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
+            IRuleFactory ruleFactory = Substitute.For<IRuleFactory>();
+
+            _scopeComposer.Compose(_scopeBuildingContext);
+            _scopeBuildingContext.AddPrivateRules(ruleAdder, ruleFactory);
+
+            ruleAdder.DidNotReceive().Add(Arg.Any<IRule<object>>(), Arg.Any<object>());
+        }
+
+        [Test]
         public void Compose_AddPublicRulesDoesNothing()
         {
             IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();

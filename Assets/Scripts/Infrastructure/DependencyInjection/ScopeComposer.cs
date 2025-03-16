@@ -22,7 +22,6 @@ namespace Infrastructure.DependencyInjection
             return null;
         }
 
-        // TODO: Test
         protected virtual void AddPrivateRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
         protected virtual void AddPublicRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }

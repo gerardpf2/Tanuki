@@ -69,7 +69,6 @@ namespace Infrastructure.DependencyInjection
             return scope;
         }
 
-        // TODO: Test
         private void AddPrivateRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addPrivateRules)
         {
             addPrivateRules?.Invoke(scope.PrivateRuleAdder, _ruleFactory);

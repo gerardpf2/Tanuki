@@ -5,8 +5,6 @@ namespace Infrastructure.DependencyInjection
 {
     public class RuleResolver : IRuleResolver
     {
-        // TODO: Test private vs public
-
         private readonly IRuleGetter _privateRuleGetter;
         private readonly IRuleGetter _publicRuleGetter;
         private readonly IRuleResolver _parentRuleResolver;
