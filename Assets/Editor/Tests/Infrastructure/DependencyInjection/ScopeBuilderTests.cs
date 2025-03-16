@@ -43,7 +43,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
                         c =>
                             c != null &&
                             c.GetGateKey == null &&
-                            c.AddRules == null &&
+                            c.AddPublicRules == null &&
                             c.GetPartialScopeComposers == null &&
                             c.GetChildScopeComposers == null &&
                             c.Initialize == null
@@ -75,19 +75,19 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddRulesCalledWithValidParams()
+        public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddPublicRulesCalledWithValidParams()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
             IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
             Scope parentScope = new(null, null, null);
             Scope childScope = new(ruleAdder, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
-            Action<IRuleAdder, IRuleFactory> addRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
-            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddRules = addRules));
+            Action<IRuleAdder, IRuleFactory> addPublicRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddPublicRules = addPublicRules));
 
             _scopeBuilder.Build(parentScope, _scopeComposer);
 
-            addRules.Received(1).Invoke(ruleAdder, _ruleFactory);
+            addPublicRules.Received(1).Invoke(ruleAdder, _ruleFactory);
         }
 
         [Test]

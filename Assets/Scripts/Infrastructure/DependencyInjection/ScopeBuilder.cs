@@ -60,7 +60,7 @@ namespace Infrastructure.DependencyInjection
                 return null;
             }
 
-            AddRules(scope, scopeBuildingContext.AddRules);
+            AddPublicRules(scope, scopeBuildingContext.AddPublicRules);
             AddGlobalRules(scope, scopeBuildingContext.AddGlobalRules);
             BuildPartialScopeComposers(scope, scopeBuildingContext.GetPartialScopeComposers);
             BuildChildScopeComposers(scope, scopeBuildingContext.GetChildScopeComposers);
@@ -68,9 +68,9 @@ namespace Infrastructure.DependencyInjection
             return scope;
         }
 
-        private void AddRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addRules)
+        private void AddPublicRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addPublicRules)
         {
-            addRules?.Invoke(scope.RuleAdder, _ruleFactory);
+            addPublicRules?.Invoke(scope.RuleAdder, _ruleFactory);
         }
 
         private void AddGlobalRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addGlobalRules)

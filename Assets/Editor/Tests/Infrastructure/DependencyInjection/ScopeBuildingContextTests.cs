@@ -32,18 +32,18 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void AddRules_NotSet_ReturnsNull()
+        public void AddPublicRules_NotSet_ReturnsNull()
         {
-            Assert.IsNull(_scopeBuildingContext.AddRules);
+            Assert.IsNull(_scopeBuildingContext.AddPublicRules);
         }
 
         [Test]
-        public void AddRules_Set_ReturnsValue()
+        public void AddPublicRules_Set_ReturnsValue()
         {
-            Action<IRuleAdder, IRuleFactory> addRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
-            _scopeBuildingContext.AddRules = addRules;
+            Action<IRuleAdder, IRuleFactory> addPublicRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeBuildingContext.AddPublicRules = addPublicRules;
 
-            Assert.AreSame(addRules, _scopeBuildingContext.AddRules);
+            Assert.AreSame(addPublicRules, _scopeBuildingContext.AddPublicRules);
         }
 
         [Test]

@@ -9,7 +9,7 @@ namespace Infrastructure.DependencyInjection
         public void Compose([NotNull] ScopeBuildingContext scopeBuildingContext)
         {
             scopeBuildingContext.GetGateKey = GetGateKey;
-            scopeBuildingContext.AddRules = AddRules;
+            scopeBuildingContext.AddPublicRules = AddPublicRules;
             scopeBuildingContext.AddGlobalRules = AddGlobalRules;
             scopeBuildingContext.GetPartialScopeComposers = GetPartialScopeComposers;
             scopeBuildingContext.GetChildScopeComposers = GetChildScopeComposers;
@@ -21,7 +21,7 @@ namespace Infrastructure.DependencyInjection
             return null;
         }
 
-        protected virtual void AddRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
+        protected virtual void AddPublicRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
         protected virtual void AddGlobalRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 

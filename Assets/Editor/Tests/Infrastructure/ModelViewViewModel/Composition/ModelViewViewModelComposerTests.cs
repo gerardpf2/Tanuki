@@ -29,7 +29,7 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel.Composition
         }
 
         [Test]
-        public void AddRules_AddExpected()
+        public void AddPublicRules_AddExpected()
         {
             IRule<IBoundPropertyContainer> boundPropertyContainerRule = Substitute.For<IRule<IBoundPropertyContainer>>();
             IRule<IBoundMethodContainer> boundMethodContainerRule = Substitute.For<IRule<IBoundMethodContainer>>();
@@ -37,7 +37,7 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel.Composition
             _ruleFactory.GetTransient(Arg.Any<Func<IRuleResolver, IBoundMethodContainer>>()).Returns(boundMethodContainerRule);
             _modelViewViewModelComposer.Compose(_scopeBuildingContext);
 
-            _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
+            _scopeBuildingContext.AddPublicRules(_ruleAdder, _ruleFactory);
 
             _ruleAdder.Received(1).Add(boundPropertyContainerRule);
             _ruleAdder.Received(1).Add(boundMethodContainerRule);

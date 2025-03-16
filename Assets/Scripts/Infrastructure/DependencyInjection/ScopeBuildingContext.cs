@@ -7,7 +7,7 @@ namespace Infrastructure.DependencyInjection
     {
         public Func<string> GetGateKey { get; set; }
 
-        public Action<IRuleAdder, IRuleFactory> AddRules { get; set; }
+        public Action<IRuleAdder, IRuleFactory> AddPublicRules { get; set; }
 
         public Action<IRuleAdder, IRuleFactory> AddGlobalRules { get; set; }
 
