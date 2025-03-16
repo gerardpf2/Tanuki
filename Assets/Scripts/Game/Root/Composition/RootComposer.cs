@@ -11,8 +11,8 @@ namespace Game.Root.Composition
 {
     public class RootComposer : ScopeComposer
     {
-        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
-        [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
+        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        private readonly IScreenPlacement _rootScreenPlacement;
 
         public RootComposer(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
@@ -22,12 +22,27 @@ namespace Game.Root.Composition
             _rootScreenPlacement = rootScreenPlacement;
         }
 
-        protected override IEnumerable<IScopeComposer> GetPartialScopeComposers(IRuleResolver ruleResolver)
+        protected override void AddPrivateRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            return base
-                .GetPartialScopeComposers(ruleResolver)
-                .Append(new LoggingComposer())
-                .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement));
+            base.AddPrivateRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(ruleFactory.GetInstance(_screenDefinitionGetter));
+
+            ruleAdder.Add(ruleFactory.GetInstance(_rootScreenPlacement));
+        }
+
+        protected override IEnumerable<IScopeComposer> GetPartialScopeComposers([NotNull] IRuleResolver ruleResolver)
+        {
+            return
+                base
+                    .GetPartialScopeComposers(ruleResolver)
+                    .Append(new LoggingComposer())
+                    .Append(
+                        new ScreenLoadingComposer(
+                            ruleResolver.Resolve<IScreenDefinitionGetter>(),
+                            ruleResolver.Resolve<IScreenPlacement>()
+                        )
+                    );
         }
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers(IRuleResolver ruleResolver)

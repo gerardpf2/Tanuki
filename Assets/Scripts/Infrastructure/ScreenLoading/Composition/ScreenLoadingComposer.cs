@@ -16,13 +16,22 @@ namespace Infrastructure.ScreenLoading.Composition
             _rootScreenPlacement = rootScreenPlacement;
         }
 
-        protected override void AddPublicRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        protected override void AddPrivateRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            base.AddPublicRules(ruleAdder, ruleFactory);
+            base.AddPrivateRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetInstance(_screenDefinitionGetter));
 
             ruleAdder.Add(ruleFactory.GetInstance(_rootScreenPlacement));
+
+            ruleAdder.Add(ruleFactory.GetSingleton(_ => new ScreenPlacementContainer()));
+            ruleAdder.Add(ruleFactory.GetTo<IScreenPlacementAdder, ScreenPlacementContainer>());
+            ruleAdder.Add(ruleFactory.GetTo<IScreenPlacementGetter, ScreenPlacementContainer>());
+        }
+
+        protected override void AddPublicRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            base.AddPublicRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IScreenLoader>(r =>
@@ -32,10 +41,6 @@ namespace Infrastructure.ScreenLoading.Composition
                     )
                 )
             );
-
-            ruleAdder.Add(ruleFactory.GetSingleton(_ => new ScreenPlacementContainer()));
-            ruleAdder.Add(ruleFactory.GetTo<IScreenPlacementAdder, ScreenPlacementContainer>());
-            ruleAdder.Add(ruleFactory.GetTo<IScreenPlacementGetter, ScreenPlacementContainer>());
         }
 
         protected override void AddGlobalRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)

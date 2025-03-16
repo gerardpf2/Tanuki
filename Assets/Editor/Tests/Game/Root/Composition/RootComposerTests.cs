@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Root.Composition;
 using Infrastructure.DependencyInjection;
+using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
@@ -19,6 +20,8 @@ namespace Editor.Tests.Game.Root.Composition
         private ScopeBuildingContext _scopeBuildingContext;
         private IScreenPlacement _screenPlacement;
         private IRuleResolver _ruleResolver;
+        private IRuleFactory _ruleFactory;
+        private IRuleAdder _ruleAdder;
 
         private RootComposer _rootComposer;
 
@@ -29,8 +32,25 @@ namespace Editor.Tests.Game.Root.Composition
             _scopeBuildingContext = new ScopeBuildingContext();
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _ruleResolver = Substitute.For<IRuleResolver>();
+            _ruleFactory = Substitute.For<IRuleFactory>();
+            _ruleAdder = Substitute.For<IRuleAdder>();
 
             _rootComposer = new RootComposer(_screenDefinitionGetter, _screenPlacement);
+        }
+
+        [Test]
+        public void AddPrivateRules_AddExpected()
+        {
+            IRule<IScreenDefinitionGetter> screenDefinitionGetterRule = Substitute.For<IRule<IScreenDefinitionGetter>>();
+            IRule<IScreenPlacement> screenPlacementRule = Substitute.For<IRule<IScreenPlacement>>();
+            _ruleFactory.GetInstance(_screenDefinitionGetter).Returns(screenDefinitionGetterRule);
+            _ruleFactory.GetInstance(_screenPlacement).Returns(screenPlacementRule);
+            _rootComposer.Compose(_scopeBuildingContext);
+
+            _scopeBuildingContext.AddPrivateRules(_ruleAdder, _ruleFactory);
+
+            _ruleAdder.Received(1).Add(screenDefinitionGetterRule);
+            _ruleAdder.Received(1).Add(screenPlacementRule);
         }
 
         [Test]
