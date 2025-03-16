@@ -24,8 +24,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_PartialScope_InitializeCalledWithValidParams()
         {
-            Scope mainScope = new(null, null, null);
-            PartialScope partialScope = new(mainScope, null, _ruleResolver, _initialize);
+            Scope mainScope = new(null, null, null, null);
+            PartialScope partialScope = new(mainScope, null, null, _ruleResolver, _initialize);
 
             _scopeInitializer.Initialize(partialScope);
 
@@ -35,7 +35,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_Scope_InitializeCalledWithValidParams()
         {
-            Scope scope = new(null, _ruleResolver, _initialize);
+            Scope scope = new(null, null, _ruleResolver, _initialize);
 
             _scopeInitializer.Initialize(scope);
 
@@ -45,8 +45,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_HasPartial_PartialScopeInitializeCalledWithValidParams()
         {
-            Scope mainScope = new(null, null, null);
-            PartialScope partialScope = new(mainScope, null, _ruleResolver, _initialize);
+            Scope mainScope = new(null, null, null, null);
+            PartialScope partialScope = new(mainScope, null, null, _ruleResolver, _initialize);
             mainScope.AddPartial(partialScope);
 
             _scopeInitializer.Initialize(mainScope);
@@ -57,8 +57,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Initialize_HasChild_ChildScopeInitializeCalledWithValidParams()
         {
-            Scope parentScope = new(null, null, null);
-            Scope childScope = new(null, _ruleResolver, _initialize);
+            Scope parentScope = new(null, null, null, null);
+            Scope childScope = new(null, null, _ruleResolver, _initialize);
             parentScope.AddChild(childScope);
 
             _scopeInitializer.Initialize(parentScope);

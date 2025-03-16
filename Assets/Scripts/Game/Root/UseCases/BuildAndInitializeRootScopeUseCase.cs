@@ -103,7 +103,7 @@ namespace Game.Root.UseCases
         {
             // Master allows root rule resolver to have global rule resolver as parent
 
-            Scope master = new(null, ruleResolver.Resolve<IRuleResolver>(), null);
+            Scope master = new(null, null, ruleResolver.Resolve<IRuleResolver>(), null);
 
             return ruleResolver.Resolve<IScopeBuilder>().Build(master, ruleResolver.Resolve<IScopeComposer>());
         }

@@ -79,8 +79,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
             IRuleAdder publicRuleAdder = Substitute.For<IRuleAdder>();
-            Scope parentScope = new(null, null, null);
-            Scope childScope = new(publicRuleAdder, null, null);
+            Scope parentScope = new(null, null, null, null);
+            Scope childScope = new(null, publicRuleAdder, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
             Action<IRuleAdder, IRuleFactory> addPublicRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddPublicRules = addPublicRules));
@@ -96,8 +96,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
             IRuleAdder publicRuleAdder = Substitute.For<IRuleAdder>();
             IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
-            Scope parentScope = new(null, null, null);
-            Scope childScope = new(publicRuleAdder, ruleResolver, null);
+            Scope parentScope = new(null, null, null, null);
+            Scope childScope = new(null, publicRuleAdder, ruleResolver, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
             Action<IRuleAdder, IRuleFactory> addGlobalRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddGlobalRules = addGlobalRules));
@@ -118,8 +118,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetPartialScopeComposersCalled()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            Scope parentScope = new(null, null, null);
-            Scope childScope = new(null, null, null);
+            Scope parentScope = new(null, null, null, null);
+            Scope childScope = new(null, null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
             Func<IEnumerable<IScopeComposer>> getPartialScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
             IScopeComposer partialScopeComposer = Substitute.For<IScopeComposer>();
@@ -135,8 +135,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetChildScopeComposersCalled()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            Scope parentScope = new(null, null, null);
-            Scope childScope = new(null, null, null);
+            Scope parentScope = new(null, null, null, null);
+            Scope childScope = new(null, null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
             Func<IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
             IScopeComposer childScopeComposer = Substitute.For<IScopeComposer>();
@@ -156,7 +156,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void BuildPartial_GateKeyEnabled_ConstructCalledWithValidParams()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            Scope mainScope = new(null, null, null);
+            Scope mainScope = new(null, null, null, null);
             Action<IRuleResolver> initialize = Substitute.For<Action<IRuleResolver>>();
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.Initialize = initialize));
 
@@ -169,7 +169,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void BuildPartial_GateKeyEnabledAndConstructReturnsNull_ReturnsNull()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            Scope mainScope = new(null, null, null);
+            Scope mainScope = new(null, null, null, null);
             _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns((PartialScope)null);
 
             PartialScope partialScope = _scopeBuilder.BuildPartial(mainScope, _scopeComposer);
@@ -181,8 +181,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void BuildPartial_GateKeyEnabledAndConstructReturnsNotNull_ReturnsScope()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            Scope mainScope = new(null, null, null);
-            PartialScope expectedPartialScope = new(mainScope, null, null, null);
+            Scope mainScope = new(null, null, null, null);
+            PartialScope expectedPartialScope = new(mainScope, null, null, null, null);
             _scopeConstructor.ConstructPartial(mainScope, Arg.Any<Action<IRuleResolver>>()).Returns(expectedPartialScope);
 
             PartialScope partialScope = _scopeBuilder.BuildPartial(mainScope, _scopeComposer);
@@ -198,7 +198,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void Build_GateKeyEnabled_ConstructCalledWithValidParams()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            Scope parentScope = new(null, null, null);
+            Scope parentScope = new(null, null, null, null);
             Action<IRuleResolver> initialize = Substitute.For<Action<IRuleResolver>>();
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.Initialize = initialize));
 
@@ -211,7 +211,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void Build_GateKeyEnabledAndConstructReturnsNull_ReturnsNull()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            Scope parentScope = new(null, null, null);
+            Scope parentScope = new(null, null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns((Scope)null);
 
             Scope childScope = _scopeBuilder.Build(parentScope, _scopeComposer);
@@ -223,8 +223,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_ReturnsScope()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
-            Scope parentScope = new(null, null, null);
-            Scope expectedChildScope = new(null, null, null);
+            Scope parentScope = new(null, null, null, null);
+            Scope expectedChildScope = new(null, null, null, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(expectedChildScope);
 
             Scope childScope = _scopeBuilder.Build(parentScope, _scopeComposer);
