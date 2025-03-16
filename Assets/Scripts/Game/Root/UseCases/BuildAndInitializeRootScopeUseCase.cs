@@ -18,10 +18,10 @@ namespace Game.Root.UseCases
 
         public Scope Resolve()
         {
-            RuleContainer ruleContainer = new();
-            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, null);
+            RuleContainer publicRuleContainer = new();
+            IRuleResolver ruleResolver = new RuleResolver(publicRuleContainer, null);
 
-            AddRules(ruleContainer);
+            AddRules(publicRuleContainer);
             Scope scope = Build(ruleResolver);
             Initialize(ruleResolver, scope);
 
