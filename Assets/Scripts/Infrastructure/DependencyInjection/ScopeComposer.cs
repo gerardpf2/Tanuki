@@ -9,6 +9,7 @@ namespace Infrastructure.DependencyInjection
         public void Compose([NotNull] ScopeBuildingContext scopeBuildingContext)
         {
             scopeBuildingContext.GetGateKey = GetGateKey;
+            scopeBuildingContext.AddPrivateRules = AddPrivateRules;
             scopeBuildingContext.AddPublicRules = AddPublicRules;
             scopeBuildingContext.AddGlobalRules = AddGlobalRules;
             scopeBuildingContext.GetPartialScopeComposers = GetPartialScopeComposers;
@@ -20,6 +21,9 @@ namespace Infrastructure.DependencyInjection
         {
             return null;
         }
+
+        // TODO: Test
+        protected virtual void AddPrivateRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
         protected virtual void AddPublicRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 

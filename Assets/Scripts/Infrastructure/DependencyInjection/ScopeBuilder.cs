@@ -60,12 +60,19 @@ namespace Infrastructure.DependencyInjection
                 return null;
             }
 
+            AddPrivateRules(scope, scopeBuildingContext.AddPrivateRules);
             AddPublicRules(scope, scopeBuildingContext.AddPublicRules);
             AddGlobalRules(scope, scopeBuildingContext.AddGlobalRules);
             BuildPartialScopeComposers(scope, scopeBuildingContext.GetPartialScopeComposers);
             BuildChildScopeComposers(scope, scopeBuildingContext.GetChildScopeComposers);
 
             return scope;
+        }
+
+        // TODO: Test
+        private void AddPrivateRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addPrivateRules)
+        {
+            addPrivateRules?.Invoke(scope.PrivateRuleAdder, _ruleFactory);
         }
 
         private void AddPublicRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addPublicRules)
