@@ -16,9 +16,9 @@ namespace Infrastructure.ScreenLoading.Composition
             _rootScreenPlacement = rootScreenPlacement;
         }
 
-        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        protected override void AddPublicRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            base.AddRules(ruleAdder, ruleFactory);
+            base.AddPublicRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetInstance(_screenDefinitionGetter));
 
@@ -38,9 +38,9 @@ namespace Infrastructure.ScreenLoading.Composition
             ruleAdder.Add(ruleFactory.GetTo<IScreenPlacementGetter, ScreenPlacementContainer>());
         }
 
-        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        protected override void AddGlobalRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            base.AddSharedRules(ruleAdder, ruleFactory);
+            base.AddGlobalRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
                 ruleFactory.GetInject<ScreenPlacement>((r, sp) =>

@@ -38,7 +38,7 @@ namespace Editor.Tests.Game.Root.Composition
         {
             _rootComposer.Compose(_scopeBuildingContext);
 
-            List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers().ToList();
+            List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers(_ruleResolver).ToList();
 
             Assert.IsTrue(partialScopeComposers.Count == 2);
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is LoggingComposer));
