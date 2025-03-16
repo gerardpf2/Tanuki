@@ -20,10 +20,14 @@ namespace Infrastructure.ScreenLoading.Composition
         {
             base.AddRules(ruleAdder, ruleFactory);
 
+            ruleAdder.Add(ruleFactory.GetInstance(_screenDefinitionGetter));
+
+            ruleAdder.Add(ruleFactory.GetInstance(_rootScreenPlacement));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IScreenLoader>(r =>
                     new ScreenLoader(
-                        _screenDefinitionGetter,
+                        r.Resolve<IScreenDefinitionGetter>(),
                         r.Resolve<IScreenPlacementGetter>()
                     )
                 )
@@ -51,7 +55,7 @@ namespace Infrastructure.ScreenLoading.Composition
         {
             base.Initialize(ruleResolver);
 
-            ruleResolver.Resolve<IScreenPlacementAdder>().Add(_rootScreenPlacement);
+            ruleResolver.Resolve<IScreenPlacementAdder>().Add(ruleResolver.Resolve<IScreenPlacement>());
         }
     }
 }
