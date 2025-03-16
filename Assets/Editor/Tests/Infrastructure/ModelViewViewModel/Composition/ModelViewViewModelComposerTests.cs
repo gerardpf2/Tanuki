@@ -29,7 +29,7 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel.Composition
         }
 
         [Test]
-        public void AddRules_AddExpected()
+        public void AddPrivateRules_AddExpected()
         {
             IRule<IBoundPropertyContainer> boundPropertyContainerRule = Substitute.For<IRule<IBoundPropertyContainer>>();
             IRule<IBoundMethodContainer> boundMethodContainerRule = Substitute.For<IRule<IBoundMethodContainer>>();
@@ -37,20 +37,20 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel.Composition
             _ruleFactory.GetTransient(Arg.Any<Func<IRuleResolver, IBoundMethodContainer>>()).Returns(boundMethodContainerRule);
             _modelViewViewModelComposer.Compose(_scopeBuildingContext);
 
-            _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
+            _scopeBuildingContext.AddPrivateRules(_ruleAdder, _ruleFactory);
 
             _ruleAdder.Received(1).Add(boundPropertyContainerRule);
             _ruleAdder.Received(1).Add(boundMethodContainerRule);
         }
 
         [Test]
-        public void AddSharedRules_AddExpected()
+        public void AddGlobalRules_AddExpected()
         {
             IRule<Action<ViewModel>> viewModelRule = Substitute.For<IRule<Action<ViewModel>>>();
             _ruleFactory.GetInject(Arg.Any<Action<IRuleResolver, ViewModel>>()).Returns(viewModelRule);
             _modelViewViewModelComposer.Compose(_scopeBuildingContext);
 
-            _scopeBuildingContext.AddSharedRules(_ruleAdder, _ruleFactory);
+            _scopeBuildingContext.AddGlobalRules(_ruleAdder, _ruleFactory);
 
             _ruleAdder.Received(1).Add(viewModelRule);
         }

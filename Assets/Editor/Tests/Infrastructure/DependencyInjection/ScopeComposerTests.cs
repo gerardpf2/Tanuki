@@ -30,25 +30,37 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void Compose_AddRulesDoesNothing()
+        public void Compose_AddPrivateRulesDoesNothing()
         {
             IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
             IRuleFactory ruleFactory = Substitute.For<IRuleFactory>();
 
             _scopeComposer.Compose(_scopeBuildingContext);
-            _scopeBuildingContext.AddRules(ruleAdder, ruleFactory);
+            _scopeBuildingContext.AddPrivateRules(ruleAdder, ruleFactory);
 
             ruleAdder.DidNotReceive().Add(Arg.Any<IRule<object>>(), Arg.Any<object>());
         }
 
         [Test]
-        public void Compose_AddSharedRulesDoesNothing()
+        public void Compose_AddPublicRulesDoesNothing()
         {
             IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
             IRuleFactory ruleFactory = Substitute.For<IRuleFactory>();
 
             _scopeComposer.Compose(_scopeBuildingContext);
-            _scopeBuildingContext.AddSharedRules(ruleAdder, ruleFactory);
+            _scopeBuildingContext.AddPublicRules(ruleAdder, ruleFactory);
+
+            ruleAdder.DidNotReceive().Add(Arg.Any<IRule<object>>(), Arg.Any<object>());
+        }
+
+        [Test]
+        public void Compose_AddGlobalRulesDoesNothing()
+        {
+            IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
+            IRuleFactory ruleFactory = Substitute.For<IRuleFactory>();
+
+            _scopeComposer.Compose(_scopeBuildingContext);
+            _scopeBuildingContext.AddGlobalRules(ruleAdder, ruleFactory);
 
             ruleAdder.DidNotReceive().Add(Arg.Any<IRule<object>>(), Arg.Any<object>());
         }
@@ -56,8 +68,10 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Compose_GetPartialScopeComposersReturnsEmpty()
         {
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
+
             _scopeComposer.Compose(_scopeBuildingContext);
-            IEnumerable<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers();
+            IEnumerable<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers(ruleResolver);
 
             Assert.IsEmpty(partialScopeComposers);
         }
@@ -65,8 +79,10 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Compose_GetChildScopeComposersReturnsEmpty()
         {
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
+
             _scopeComposer.Compose(_scopeBuildingContext);
-            IEnumerable<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers();
+            IEnumerable<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers(ruleResolver);
 
             Assert.IsEmpty(childScopeComposers);
         }

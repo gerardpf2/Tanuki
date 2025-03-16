@@ -31,18 +31,27 @@ namespace Editor.Tests.Infrastructure.Logging.Composition
         }
 
         [Test]
-        public void AddRules_AddExpected()
+        public void AddPrivateRules_AddExpected()
         {
-            IRule<ILogger> loggerRule = Substitute.For<IRule<ILogger>>();
             IRule<UnityLogHandler> unityLogHandlerRule = Substitute.For<IRule<UnityLogHandler>>();
-            _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, ILogger>>()).Returns(loggerRule);
             _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, UnityLogHandler>>()).Returns(unityLogHandlerRule);
             _loggingComposer.Compose(_scopeBuildingContext);
 
-            _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
+            _scopeBuildingContext.AddPrivateRules(_ruleAdder, _ruleFactory);
+
+            _ruleAdder.Received(1).Add(unityLogHandlerRule);
+        }
+
+        [Test]
+        public void AddPublicRules_AddExpected()
+        {
+            IRule<ILogger> loggerRule = Substitute.For<IRule<ILogger>>();
+            _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, ILogger>>()).Returns(loggerRule);
+            _loggingComposer.Compose(_scopeBuildingContext);
+
+            _scopeBuildingContext.AddPublicRules(_ruleAdder, _ruleFactory);
 
             _ruleAdder.Received(1).Add(loggerRule);
-            _ruleAdder.Received(1).Add(unityLogHandlerRule);
         }
 
         [Test]

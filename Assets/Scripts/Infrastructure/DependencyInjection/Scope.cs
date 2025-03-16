@@ -9,16 +9,25 @@ namespace Infrastructure.DependencyInjection
 
         public virtual IEnumerable<Scope> ChildScopes => _childScopes;
 
-        public readonly IRuleAdder RuleAdder;
+        public readonly IRuleAdder PrivateRuleAdder;
+        public readonly IRuleAdder PublicRuleAdder;
+        public readonly IRuleGetter PublicRuleGetter;
         public readonly IRuleResolver RuleResolver;
         public readonly Action<IRuleResolver> Initialize;
 
         private readonly HashSet<PartialScope> _partialScopes = new();
         private readonly HashSet<Scope> _childScopes = new();
 
-        public Scope(IRuleAdder ruleAdder, IRuleResolver ruleResolver, Action<IRuleResolver> initialize)
+        public Scope(
+            IRuleAdder privateRuleAdder,
+            IRuleAdder publicRuleAdder,
+            IRuleGetter publicRuleGetter,
+            IRuleResolver ruleResolver,
+            Action<IRuleResolver> initialize)
         {
-            RuleAdder = ruleAdder;
+            PrivateRuleAdder = privateRuleAdder;
+            PublicRuleAdder = publicRuleAdder;
+            PublicRuleGetter = publicRuleGetter;
             RuleResolver = ruleResolver;
             Initialize = initialize;
         }

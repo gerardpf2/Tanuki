@@ -32,33 +32,48 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void AddRules_NotSet_ReturnsNull()
+        public void AddPrivateRules_NotSet_ReturnsNull()
         {
-            Assert.IsNull(_scopeBuildingContext.AddRules);
+            Assert.IsNull(_scopeBuildingContext.AddPrivateRules);
         }
 
         [Test]
-        public void AddRules_Set_ReturnsValue()
+        public void AddPrivateRules_Set_ReturnsValue()
         {
-            Action<IRuleAdder, IRuleFactory> addRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
-            _scopeBuildingContext.AddRules = addRules;
+            Action<IRuleAdder, IRuleFactory> addPrivateRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeBuildingContext.AddPrivateRules = addPrivateRules;
 
-            Assert.AreSame(addRules, _scopeBuildingContext.AddRules);
+            Assert.AreSame(addPrivateRules, _scopeBuildingContext.AddPrivateRules);
         }
 
         [Test]
-        public void AddSharedRules_NotSet_ReturnsNull()
+        public void AddPublicRules_NotSet_ReturnsNull()
         {
-            Assert.IsNull(_scopeBuildingContext.AddSharedRules);
+            Assert.IsNull(_scopeBuildingContext.AddPublicRules);
         }
 
         [Test]
-        public void AddSharedRules_Set_ReturnsValue()
+        public void AddPublicRules_Set_ReturnsValue()
         {
-            Action<IRuleAdder, IRuleFactory> addSharedRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
-            _scopeBuildingContext.AddSharedRules = addSharedRules;
+            Action<IRuleAdder, IRuleFactory> addPublicRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeBuildingContext.AddPublicRules = addPublicRules;
 
-            Assert.AreSame(addSharedRules, _scopeBuildingContext.AddSharedRules);
+            Assert.AreSame(addPublicRules, _scopeBuildingContext.AddPublicRules);
+        }
+
+        [Test]
+        public void AddGlobalRules_NotSet_ReturnsNull()
+        {
+            Assert.IsNull(_scopeBuildingContext.AddGlobalRules);
+        }
+
+        [Test]
+        public void AddGlobalRules_Set_ReturnsValue()
+        {
+            Action<IRuleAdder, IRuleFactory> addGlobalRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeBuildingContext.AddGlobalRules = addGlobalRules;
+
+            Assert.AreSame(addGlobalRules, _scopeBuildingContext.AddGlobalRules);
         }
 
         [Test]
@@ -70,7 +85,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void GetPartialScopeComposers_Set_ReturnsValue()
         {
-            Func<IEnumerable<IScopeComposer>> getPartialScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
+            Func<IRuleResolver, IEnumerable<IScopeComposer>> getPartialScopeComposers = Substitute.For<Func<IRuleResolver, IEnumerable<IScopeComposer>>>();
             _scopeBuildingContext.GetPartialScopeComposers = getPartialScopeComposers;
 
             Assert.AreSame(getPartialScopeComposers, _scopeBuildingContext.GetPartialScopeComposers);
@@ -85,7 +100,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void GetChildScopeComposers_Set_ReturnsValue()
         {
-            Func<IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
+            Func<IRuleResolver, IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IRuleResolver, IEnumerable<IScopeComposer>>>();
             _scopeBuildingContext.GetChildScopeComposers = getChildScopeComposers;
 
             Assert.AreSame(getChildScopeComposers, _scopeBuildingContext.GetChildScopeComposers);
