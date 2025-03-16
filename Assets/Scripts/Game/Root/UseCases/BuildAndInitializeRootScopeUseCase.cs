@@ -78,7 +78,7 @@ namespace Game.Root.UseCases
                     new ScopeBuilder(
                         r.Resolve<IGateValidator>(),
                         r.Resolve<IScopeConstructor>(),
-                        r.Resolve<ISharedRuleAdder>(),
+                        r.Resolve<IGlobalRuleAdder>(),
                         r.Resolve<IRuleFactory>()
                     )
                 )
@@ -91,8 +91,8 @@ namespace Game.Root.UseCases
             ruleAdder.Add(new SingletonRule<IScopeInitializer>(_ => new ScopeInitializer()));
 
             ruleAdder.Add(
-                new SingletonRule<ISharedRuleAdder>(r =>
-                    new SharedRuleAdder(
+                new SingletonRule<IGlobalRuleAdder>(r =>
+                    new GlobalRuleAdder(
                         r.Resolve<IRuleAdder>(),
                         r.Resolve<IRuleFactory>()
                     )

@@ -47,18 +47,18 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void AddSharedRules_NotSet_ReturnsNull()
+        public void AddGlobalRules_NotSet_ReturnsNull()
         {
-            Assert.IsNull(_scopeBuildingContext.AddSharedRules);
+            Assert.IsNull(_scopeBuildingContext.AddGlobalRules);
         }
 
         [Test]
-        public void AddSharedRules_Set_ReturnsValue()
+        public void AddGlobalRules_Set_ReturnsValue()
         {
-            Action<IRuleAdder, IRuleFactory> addSharedRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
-            _scopeBuildingContext.AddSharedRules = addSharedRules;
+            Action<IRuleAdder, IRuleFactory> addGlobalRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeBuildingContext.AddGlobalRules = addGlobalRules;
 
-            Assert.AreSame(addSharedRules, _scopeBuildingContext.AddSharedRules);
+            Assert.AreSame(addGlobalRules, _scopeBuildingContext.AddGlobalRules);
         }
 
         [Test]

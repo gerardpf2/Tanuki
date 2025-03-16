@@ -44,13 +44,13 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel.Composition
         }
 
         [Test]
-        public void AddSharedRules_AddExpected()
+        public void AddGlobalRules_AddExpected()
         {
             IRule<Action<ViewModel>> viewModelRule = Substitute.For<IRule<Action<ViewModel>>>();
             _ruleFactory.GetInject(Arg.Any<Action<IRuleResolver, ViewModel>>()).Returns(viewModelRule);
             _modelViewViewModelComposer.Compose(_scopeBuildingContext);
 
-            _scopeBuildingContext.AddSharedRules(_ruleAdder, _ruleFactory);
+            _scopeBuildingContext.AddGlobalRules(_ruleAdder, _ruleFactory);
 
             _ruleAdder.Received(1).Add(viewModelRule);
         }

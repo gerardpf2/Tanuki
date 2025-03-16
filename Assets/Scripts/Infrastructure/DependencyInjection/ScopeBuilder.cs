@@ -9,18 +9,18 @@ namespace Infrastructure.DependencyInjection
     {
         private readonly IGateValidator _gateValidator;
         private readonly IScopeConstructor _scopeConstructor;
-        private readonly ISharedRuleAdder _sharedRuleAdder;
+        private readonly IGlobalRuleAdder _globalRuleAdder;
         private readonly IRuleFactory _ruleFactory;
 
         public ScopeBuilder(
             [NotNull] IGateValidator gateValidator,
             [NotNull] IScopeConstructor scopeConstructor,
-            [NotNull] ISharedRuleAdder sharedRuleAdder,
+            [NotNull] IGlobalRuleAdder globalRuleAdder,
             IRuleFactory ruleFactory)
         {
             _gateValidator = gateValidator;
             _scopeConstructor = scopeConstructor;
-            _sharedRuleAdder = sharedRuleAdder;
+            _globalRuleAdder = globalRuleAdder;
             _ruleFactory = ruleFactory;
         }
 
@@ -61,7 +61,7 @@ namespace Infrastructure.DependencyInjection
             }
 
             AddRules(scope, scopeBuildingContext.AddRules);
-            AddSharedRules(scope, scopeBuildingContext.AddSharedRules);
+            AddGlobalRules(scope, scopeBuildingContext.AddGlobalRules);
             BuildPartialScopeComposers(scope, scopeBuildingContext.GetPartialScopeComposers);
             BuildChildScopeComposers(scope, scopeBuildingContext.GetChildScopeComposers);
 
@@ -73,13 +73,13 @@ namespace Infrastructure.DependencyInjection
             addRules?.Invoke(scope.RuleAdder, _ruleFactory);
         }
 
-        private void AddSharedRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addSharedRules)
+        private void AddGlobalRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addGlobalRules)
         {
-            _sharedRuleAdder.SetTarget(scope.RuleAdder, scope.RuleResolver);
+            _globalRuleAdder.SetTarget(scope.RuleAdder, scope.RuleResolver);
 
-            addSharedRules?.Invoke(_sharedRuleAdder, _ruleFactory);
+            addGlobalRules?.Invoke(_globalRuleAdder, _ruleFactory);
 
-            _sharedRuleAdder.ClearTarget();
+            _globalRuleAdder.ClearTarget();
         }
 
         private void BuildPartialScopeComposers(

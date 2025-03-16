@@ -9,7 +9,7 @@ namespace Infrastructure.DependencyInjection
 
         public Action<IRuleAdder, IRuleFactory> AddRules { get; set; }
 
-        public Action<IRuleAdder, IRuleFactory> AddSharedRules { get; set; }
+        public Action<IRuleAdder, IRuleFactory> AddGlobalRules { get; set; }
 
         public Func<IEnumerable<IScopeComposer>> GetPartialScopeComposers { get; set; }
 

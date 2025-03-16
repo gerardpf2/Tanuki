@@ -10,7 +10,7 @@ namespace Infrastructure.DependencyInjection
         {
             scopeBuildingContext.GetGateKey = GetGateKey;
             scopeBuildingContext.AddRules = AddRules;
-            scopeBuildingContext.AddSharedRules = AddSharedRules;
+            scopeBuildingContext.AddGlobalRules = AddGlobalRules;
             scopeBuildingContext.GetPartialScopeComposers = GetPartialScopeComposers;
             scopeBuildingContext.GetChildScopeComposers = GetChildScopeComposers;
             scopeBuildingContext.Initialize = Initialize;
@@ -23,7 +23,7 @@ namespace Infrastructure.DependencyInjection
 
         protected virtual void AddRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
-        protected virtual void AddSharedRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
+        protected virtual void AddGlobalRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
         protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {

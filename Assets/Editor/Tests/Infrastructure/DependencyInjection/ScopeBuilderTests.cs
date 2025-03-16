@@ -10,7 +10,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
     public class ScopeBuilderTests
     {
         private IScopeConstructor _scopeConstructor;
-        private ISharedRuleAdder _sharedRuleAdder;
+        private IGlobalRuleAdder _globalRuleAdder;
         private IGateValidator _gateValidator;
         private IScopeComposer _scopeComposer;
         private IRuleFactory _ruleFactory;
@@ -21,12 +21,12 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void SetUp()
         {
             _scopeConstructor = Substitute.For<IScopeConstructor>();
-            _sharedRuleAdder = Substitute.For<ISharedRuleAdder>();
+            _globalRuleAdder = Substitute.For<IGlobalRuleAdder>();
             _gateValidator = Substitute.For<IGateValidator>();
             _scopeComposer = Substitute.For<IScopeComposer>();
             _ruleFactory = Substitute.For<IRuleFactory>();
 
-            _scopeBuilder = new ScopeBuilder(_gateValidator, _scopeConstructor, _sharedRuleAdder, _ruleFactory);
+            _scopeBuilder = new ScopeBuilder(_gateValidator, _scopeConstructor, _globalRuleAdder, _ruleFactory);
         }
 
         #region Build base (Code shared between Build and BuildPartial)
@@ -91,7 +91,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         }
 
         [Test]
-        public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddSharedRulesCalledWithValidParams()
+        public void Build_GateKeyEnabledAndConstructReturnsNotNull_AddGlobalRulesCalledWithValidParams()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
             IRuleAdder ruleAdder = Substitute.For<IRuleAdder>();
@@ -99,17 +99,17 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             Scope parentScope = new(null, null, null);
             Scope childScope = new(ruleAdder, ruleResolver, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
-            Action<IRuleAdder, IRuleFactory> addSharedRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
-            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddSharedRules = addSharedRules));
+            Action<IRuleAdder, IRuleFactory> addGlobalRules = Substitute.For<Action<IRuleAdder, IRuleFactory>>();
+            _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.AddGlobalRules = addGlobalRules));
 
             _scopeBuilder.Build(parentScope, _scopeComposer);
 
             Received.InOrder(
                 () =>
                 {
-                    _sharedRuleAdder.SetTarget(ruleAdder, ruleResolver);
-                    addSharedRules.Invoke(_sharedRuleAdder, _ruleFactory);
-                    _sharedRuleAdder.ClearTarget();
+                    _globalRuleAdder.SetTarget(ruleAdder, ruleResolver);
+                    addGlobalRules.Invoke(_globalRuleAdder, _ruleFactory);
+                    _globalRuleAdder.ClearTarget();
                 }
             );
         }

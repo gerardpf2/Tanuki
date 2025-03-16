@@ -14,9 +14,9 @@ namespace Infrastructure.ModelViewViewModel.Composition
             ruleAdder.Add(ruleFactory.GetTransient<IBoundMethodContainer>(_ => new BoundMethodContainer()));
         }
 
-        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        protected override void AddGlobalRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            base.AddSharedRules(ruleAdder, ruleFactory);
+            base.AddGlobalRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
                 ruleFactory.GetInject<ViewModel>((r, vm) =>
