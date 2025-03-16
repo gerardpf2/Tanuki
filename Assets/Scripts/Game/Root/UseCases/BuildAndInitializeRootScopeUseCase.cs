@@ -18,10 +18,10 @@ namespace Game.Root.UseCases
 
         public Scope Resolve()
         {
-            RuleContainer publicRuleContainer = new();
-            IRuleResolver ruleResolver = new RuleResolver(publicRuleContainer, null);
+            RuleContainer privateRuleContainer = new();
+            IRuleResolver ruleResolver = new RuleResolver(privateRuleContainer, null, null);
 
-            AddRules(publicRuleContainer);
+            AddRules(privateRuleContainer);
             Scope scope = Build(ruleResolver);
             Initialize(ruleResolver, scope);
 
@@ -66,6 +66,7 @@ namespace Game.Root.UseCases
             ruleAdder.Add(
                 new SingletonRule<IRuleResolver>(r =>
                     new RuleResolver(
+                        null,
                         r.Resolve<IRuleGetter>(),
                         null
                     )
@@ -103,7 +104,7 @@ namespace Game.Root.UseCases
         {
             // Master allows root rule resolver to have global rule resolver as parent
 
-            Scope master = new(null, null, ruleResolver.Resolve<IRuleResolver>(), null);
+            Scope master = new(null, null, null, ruleResolver.Resolve<IRuleResolver>(), null);
 
             return ruleResolver.Resolve<IScopeBuilder>().Build(master, ruleResolver.Resolve<IScopeComposer>());
         }

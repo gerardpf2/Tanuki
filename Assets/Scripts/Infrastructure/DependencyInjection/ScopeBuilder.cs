@@ -82,7 +82,7 @@ namespace Infrastructure.DependencyInjection
 
         private void AddGlobalRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addGlobalRules)
         {
-            _globalRuleAdder.SetTarget(scope.PublicRuleAdder, scope.RuleResolver);
+            _globalRuleAdder.SetTarget(scope.PrivateRuleAdder, scope.RuleResolver);
 
             addGlobalRules?.Invoke(_globalRuleAdder, _ruleFactory);
 

@@ -17,13 +17,13 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [SetUp]
         public void SetUp()
         {
-            _mainScope = Substitute.For<Scope>(null, null, null, null);
+            _mainScope = Substitute.For<Scope>(null, null, null, null, null);
         }
 
         [Test]
         public void PartialScopes_ThrowsException()
         {
-            _partialScope = new PartialScope(_mainScope, null, null, null, null);
+            _partialScope = new PartialScope(_mainScope, null, null, null, null, null);
 
             Assert.Throws<NotSupportedException>(() => { IEnumerable<PartialScope> _ = _partialScope.PartialScopes; });
         }
@@ -31,7 +31,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void ChildScopes_ThrowsException()
         {
-            _partialScope = new PartialScope(_mainScope, null, null, null, null);
+            _partialScope = new PartialScope(_mainScope, null, null, null, null, null);
 
             Assert.Throws<NotSupportedException>(() => { IEnumerable<Scope> _ = _partialScope.ChildScopes; });
         }
@@ -39,8 +39,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void AddPartial_MainScopeAddPartialCalledWithValidParams()
         {
-            PartialScope otherPartialScope = new(_mainScope, null, null, null, null);
-            _partialScope = new PartialScope(otherPartialScope, null, null, null, null);
+            PartialScope otherPartialScope = new(_mainScope, null, null, null, null, null);
+            _partialScope = new PartialScope(otherPartialScope, null, null, null, null, null);
 
             otherPartialScope.AddPartial(_partialScope);
 
@@ -50,8 +50,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void AddChild_MainScopeAddChildCalledWithValidParams()
         {
-            Scope childScope = new(null, null, null, null);
-            _partialScope = new PartialScope(_mainScope, null, null, null, null);
+            Scope childScope = new(null, null, null, null, null);
+            _partialScope = new PartialScope(_mainScope, null, null, null, null, null);
 
             _partialScope.AddChild(childScope);
 

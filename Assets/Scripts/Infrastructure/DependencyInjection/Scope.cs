@@ -11,6 +11,7 @@ namespace Infrastructure.DependencyInjection
 
         public readonly IRuleAdder PrivateRuleAdder;
         public readonly IRuleAdder PublicRuleAdder;
+        public readonly IRuleGetter PublicRuleGetter;
         public readonly IRuleResolver RuleResolver;
         public readonly Action<IRuleResolver> Initialize;
 
@@ -20,11 +21,13 @@ namespace Infrastructure.DependencyInjection
         public Scope(
             IRuleAdder privateRuleAdder,
             IRuleAdder publicRuleAdder,
+            IRuleGetter publicRuleGetter,
             IRuleResolver ruleResolver,
             Action<IRuleResolver> initialize)
         {
             PrivateRuleAdder = privateRuleAdder;
             PublicRuleAdder = publicRuleAdder;
+            PublicRuleGetter = publicRuleGetter;
             RuleResolver = ruleResolver;
             Initialize = initialize;
         }

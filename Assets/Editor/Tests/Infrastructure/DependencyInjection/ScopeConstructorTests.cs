@@ -8,6 +8,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
     public class ScopeConstructorTests
     {
         private Action<IRuleResolver> _initialize;
+        private IRuleGetter _publicRuleGetter;
         private IRuleAdder _privateRuleAdder;
         private IRuleResolver _ruleResolver;
         private IRuleAdder _publicRuleAdder;
@@ -19,9 +20,10 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void SetUp()
         {
             _initialize = Substitute.For<Action<IRuleResolver>>();
+            _publicRuleGetter = Substitute.For<IRuleGetter>();
             _ruleResolver = Substitute.For<IRuleResolver>();
             _publicRuleAdder = Substitute.For<IRuleAdder>();
-            _scope = Substitute.For<Scope>(_privateRuleAdder, _publicRuleAdder, _ruleResolver, null);
+            _scope = Substitute.For<Scope>(_privateRuleAdder, _publicRuleAdder, _publicRuleGetter, _ruleResolver, null);
 
             _scopeConstructor = new ScopeConstructor();
         }
@@ -33,7 +35,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.AreNotSame(_privateRuleAdder, partialScope.PrivateRuleAdder);
             Assert.AreSame(_publicRuleAdder, partialScope.PublicRuleAdder);
-            Assert.AreSame(_ruleResolver, partialScope.RuleResolver);
+            Assert.AreSame(_publicRuleGetter, partialScope.PublicRuleGetter);
+            Assert.AreNotSame(_ruleResolver, partialScope.RuleResolver);
             Assert.AreSame(_initialize, partialScope.Initialize);
             _scope.Received(1).AddPartial(partialScope);
         }
@@ -45,6 +48,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             Assert.AreNotSame(_privateRuleAdder, childScope.PrivateRuleAdder);
             Assert.AreNotSame(_publicRuleAdder, childScope.PublicRuleAdder);
+            Assert.AreNotSame(_publicRuleGetter, childScope.PublicRuleGetter);
             Assert.AreNotSame(_ruleResolver, childScope.RuleResolver);
             Assert.AreSame(_initialize, childScope.Initialize);
             _scope.Received(1).AddChild(childScope);

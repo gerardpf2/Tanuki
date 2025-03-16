@@ -13,7 +13,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         private IRule<object> _rule;
         private object _key;
 
-        private RuleResolver _ruleResolver;
+        private IRuleResolver _ruleResolver;
 
         [SetUp]
         public void SetUp()
@@ -27,7 +27,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Resolve_FoundAndResultNotNull_ReturnsResult()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, null);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, null);
 
             // Found
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
@@ -43,7 +43,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Resolve_FoundAndResultNullAndParentReturnsTrue_ReturnsParentResult()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, _parentRuleResolver);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, _parentRuleResolver);
 
             // Found
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
@@ -51,7 +51,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _rule.Resolve(_ruleResolver).Returns(null);
             // ParentReturnsTrue
             object expectedResult = new();
-            _parentRuleResolver.TryResolve(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = expectedResult; return true; });
+            _parentRuleResolver.TryResolve(_ruleResolver, out Arg.Any<IRule<object>>(), _key).Returns(r => { r[1] = expectedResult; return true; });
 
             object result = _ruleResolver.Resolve<object>(_key);
 
@@ -61,7 +61,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Resolve_FoundAndResultNullAndParentReturnsFalse_ThrowsException()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, _parentRuleResolver);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, _parentRuleResolver);
 
             // Found
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
@@ -77,7 +77,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Resolve_FoundAndResultNullAndNoParent_ThrowsException()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, null);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, null);
 
             // Found
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
@@ -91,13 +91,13 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Resolve_NotFoundAndParentReturnsTrue_ReturnsParentResult()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, _parentRuleResolver);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, _parentRuleResolver);
 
             // NotFound
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(false);
             // ParentReturnsTrue
             object expectedResult = new();
-            _parentRuleResolver.TryResolve(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = expectedResult; return true; });
+            _parentRuleResolver.TryResolve(_ruleResolver, out Arg.Any<IRule<object>>(), _key).Returns(r => { r[1] = expectedResult; return true; });
 
             object result = _ruleResolver.Resolve<object>(_key);
 
@@ -107,7 +107,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Resolve_NotFoundAndParentReturnsFalse_ThrowsException()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, _parentRuleResolver);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, _parentRuleResolver);
 
             // NotFound
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(false);
@@ -121,7 +121,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Resolve_NotFoundAndNoParent_ThrowsException()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, null);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, null);
 
             // NotFound
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(false);
@@ -133,7 +133,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void TryResolve_FoundAndResultNotNull_ReturnsTrueAndOutResult()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, null);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, null);
 
             // Found
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
@@ -150,7 +150,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void TryResolve_FoundAndResultNullAndParentReturnsTrue_ReturnsTrueAndOutParentResult()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, _parentRuleResolver);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, _parentRuleResolver);
 
             // Found
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
@@ -158,7 +158,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _rule.Resolve(_ruleResolver).Returns(null);
             // ParentReturnsTrue
             object expectedResult = new();
-            _parentRuleResolver.TryResolve(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = expectedResult; return true; });
+            _parentRuleResolver.TryResolve(_ruleResolver, out Arg.Any<IRule<object>>(), _key).Returns(r => { r[1] = expectedResult; return true; });
 
             bool found = _ruleResolver.TryResolve(out object result, _key);
 
@@ -169,7 +169,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void TryResolve_FoundAndResultNullAndParentReturnsFalse_ReturnsFalseAndOutParentResult()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, _parentRuleResolver);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, _parentRuleResolver);
 
             // Found
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
@@ -177,7 +177,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _rule.Resolve(_ruleResolver).Returns(null);
             // ParentReturnsFalse
             object expectedResult = new();
-            _parentRuleResolver.TryResolve(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = expectedResult; return false; });
+            _parentRuleResolver.TryResolve(_ruleResolver, out Arg.Any<IRule<object>>(), _key).Returns(r => { r[1] = expectedResult; return false; });
 
             bool found = _ruleResolver.TryResolve(out object result, _key);
 
@@ -188,7 +188,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void TryResolve_FoundAndResultNullAndNoParent_ReturnsFalseAndOutNull()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, null);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, null);
 
             // Found
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = _rule; return true; });
@@ -204,13 +204,13 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void TryResolve_NotFoundAndParentReturnsTrue_ReturnsTrueAndOutParentResult()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, _parentRuleResolver);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, _parentRuleResolver);
 
             // NotFound
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(false);
             // ParentReturnsTrue
             object expectedResult = new();
-            _parentRuleResolver.TryResolve(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = expectedResult; return true; });
+            _parentRuleResolver.TryResolve(_ruleResolver, out Arg.Any<IRule<object>>(), _key).Returns(r => { r[1] = expectedResult; return true; });
 
             bool found = _ruleResolver.TryResolve(out object result, _key);
 
@@ -221,13 +221,13 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void TryResolve_NotFoundAndParentReturnsFalse_ReturnsFalseAndOutParentResult()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, _parentRuleResolver);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, _parentRuleResolver);
 
             // NotFound
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(false);
             // ParentReturnsFalse
             object expectedResult = new();
-            _parentRuleResolver.TryResolve(out Arg.Any<IRule<object>>(), _key).Returns(r => { r[0] = expectedResult; return false; });
+            _parentRuleResolver.TryResolve(_ruleResolver, out Arg.Any<IRule<object>>(), _key).Returns(r => { r[1] = expectedResult; return false; });
 
             bool found = _ruleResolver.TryResolve(out object result, _key);
 
@@ -238,7 +238,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void TryResolve_NotFoundAndNoParent_ReturnsFalseAndOutNull()
         {
-            _ruleResolver = new RuleResolver(_publicRuleGetter, null);
+            _ruleResolver = new RuleResolver(null, _publicRuleGetter, null);
 
             // NotFound
             _publicRuleGetter.TryGet(out Arg.Any<IRule<object>>(), _key).Returns(false);
