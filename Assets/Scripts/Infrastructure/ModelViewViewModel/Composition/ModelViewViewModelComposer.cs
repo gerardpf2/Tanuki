@@ -5,9 +5,9 @@ namespace Infrastructure.ModelViewViewModel.Composition
 {
     public class ModelViewViewModelComposer : ScopeComposer
     {
-        protected override void AddPublicRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        protected override void AddPrivateRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            base.AddPublicRules(ruleAdder, ruleFactory);
+            base.AddPrivateRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetTransient<IBoundPropertyContainer>(_ => new BoundPropertyContainer()));
 
