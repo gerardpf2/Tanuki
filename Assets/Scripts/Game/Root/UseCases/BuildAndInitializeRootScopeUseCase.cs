@@ -1,7 +1,6 @@
 using Game.Root.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
-using Infrastructure.DependencyInjection.Utils;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
 using Infrastructure.Unity;
@@ -27,10 +26,10 @@ namespace Game.Root.UseCases
 
         public Scope Resolve()
         {
-            RuleContainer ruleContainer = new();
-            IRuleResolver ruleResolver = new RuleResolver(ruleContainer, null);
+            RuleContainer privateRuleContainer = new();
+            IRuleResolver ruleResolver = new RuleResolver(privateRuleContainer, null, null);
 
-            AddRules(ruleContainer);
+            AddRules(privateRuleContainer);
             Scope scope = Build(ruleResolver);
             Initialize(ruleResolver, scope);
 
@@ -75,6 +74,7 @@ namespace Game.Root.UseCases
             ruleAdder.Add(
                 new SingletonRule<IRuleResolver>(r =>
                     new RuleResolver(
+                        null,
                         r.Resolve<IRuleGetter>(),
                         null
                     )
@@ -86,7 +86,7 @@ namespace Game.Root.UseCases
                     new ScopeBuilder(
                         r.Resolve<IGateValidator>(),
                         r.Resolve<IScopeConstructor>(),
-                        r.Resolve<ISharedRuleAdder>(),
+                        r.Resolve<IGlobalRuleAdder>(),
                         r.Resolve<IRuleFactory>()
                     )
                 )
@@ -106,8 +106,8 @@ namespace Game.Root.UseCases
             ruleAdder.Add(new SingletonRule<IScopeInitializer>(_ => new ScopeInitializer()));
 
             ruleAdder.Add(
-                new SingletonRule<ISharedRuleAdder>(r =>
-                    new SharedRuleAdder(
+                new SingletonRule<IGlobalRuleAdder>(r =>
+                    new GlobalRuleAdder(
                         r.Resolve<IRuleAdder>(),
                         r.Resolve<IRuleFactory>()
                     )
@@ -117,7 +117,11 @@ namespace Game.Root.UseCases
 
         private static Scope Build([NotNull] IRuleResolver ruleResolver)
         {
-            return ruleResolver.Resolve<IScopeBuilder>().BuildRoot(ruleResolver.Resolve<IScopeComposer>());
+            // Master allows root rule resolver to have global rule resolver as parent
+
+            Scope master = new(null, null, null, ruleResolver.Resolve<IRuleResolver>(), null);
+
+            return ruleResolver.Resolve<IScopeBuilder>().Build(master, ruleResolver.Resolve<IScopeComposer>());
         }
 
         private static void Initialize([NotNull] IRuleResolver ruleResolver, Scope scope)

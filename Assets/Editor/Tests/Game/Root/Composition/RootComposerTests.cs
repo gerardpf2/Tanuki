@@ -18,6 +18,7 @@ namespace Editor.Tests.Game.Root.Composition
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private ScopeBuildingContext _scopeBuildingContext;
         private IScreenPlacement _screenPlacement;
+        private IRuleResolver _ruleResolver;
 
         private RootComposer _rootComposer;
 
@@ -27,6 +28,7 @@ namespace Editor.Tests.Game.Root.Composition
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _scopeBuildingContext = new ScopeBuildingContext();
             _screenPlacement = Substitute.For<IScreenPlacement>();
+            _ruleResolver = Substitute.For<IRuleResolver>();
 
             _rootComposer = new RootComposer(_screenDefinitionGetter, _screenPlacement);
         }
@@ -48,7 +50,7 @@ namespace Editor.Tests.Game.Root.Composition
         {
             _rootComposer.Compose(_scopeBuildingContext);
 
-            List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers().ToList();
+            List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers(_ruleResolver).ToList();
 
             Assert.IsTrue(childScopeComposers.Count == 1);
             Assert.NotNull(childScopeComposers.Find(childScopeComposer => childScopeComposer is ModelViewViewModelComposer));

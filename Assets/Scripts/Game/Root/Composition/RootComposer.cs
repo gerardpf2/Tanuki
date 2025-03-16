@@ -22,17 +22,17 @@ namespace Game.Root.Composition
             _rootScreenPlacement = rootScreenPlacement;
         }
 
-        protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
+        protected override IEnumerable<IScopeComposer> GetPartialScopeComposers(IRuleResolver ruleResolver)
         {
             return base
-                .GetPartialScopeComposers()
+                .GetPartialScopeComposers(ruleResolver)
                 .Append(new LoggingComposer())
                 .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement));
         }
 
-        protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
+        protected override IEnumerable<IScopeComposer> GetChildScopeComposers(IRuleResolver ruleResolver)
         {
-            return base.GetChildScopeComposers().Append(new ModelViewViewModelComposer());
+            return base.GetChildScopeComposers(ruleResolver).Append(new ModelViewViewModelComposer());
         }
     }
 }

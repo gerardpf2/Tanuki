@@ -6,13 +6,18 @@ namespace Infrastructure.Logging.Composition
 {
     public class LoggingComposer : ScopeComposer
     {
-        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        protected override void AddPrivateRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            base.AddRules(ruleAdder, ruleFactory);
-
-            ruleAdder.Add(ruleFactory.GetSingleton<ILogger>(_ => new Logger()));
+            base.AddPrivateRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetSingleton(_ => new UnityLogHandler(Debug.unityLogger)));
+        }
+
+        protected override void AddPublicRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            base.AddPublicRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(ruleFactory.GetSingleton<ILogger>(_ => new Logger()));
         }
 
         protected override void Initialize([NotNull] IRuleResolver ruleResolver)
