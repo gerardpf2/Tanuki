@@ -1,7 +1,6 @@
 using Game.Root.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
-using Infrastructure.DependencyInjection.Utils;
 using Infrastructure.Gating;
 using Infrastructure.System;
 using JetBrains.Annotations;
@@ -102,7 +101,11 @@ namespace Game.Root.UseCases
 
         private static Scope Build([NotNull] IRuleResolver ruleResolver)
         {
-            return ruleResolver.Resolve<IScopeBuilder>().BuildRoot(ruleResolver.Resolve<IScopeComposer>());
+            // Master allows root rule resolver to have global rule resolver as parent
+
+            Scope master = new(null, ruleResolver.Resolve<IRuleResolver>(), null);
+
+            return ruleResolver.Resolve<IScopeBuilder>().Build(master, ruleResolver.Resolve<IScopeComposer>());
         }
 
         private static void Initialize([NotNull] IRuleResolver ruleResolver, Scope scope)
