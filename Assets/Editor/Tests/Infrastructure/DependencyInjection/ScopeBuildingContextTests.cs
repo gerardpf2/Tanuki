@@ -70,7 +70,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void GetPartialScopeComposers_Set_ReturnsValue()
         {
-            Func<IEnumerable<IScopeComposer>> getPartialScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
+            Func<IRuleResolver, IEnumerable<IScopeComposer>> getPartialScopeComposers = Substitute.For<Func<IRuleResolver, IEnumerable<IScopeComposer>>>();
             _scopeBuildingContext.GetPartialScopeComposers = getPartialScopeComposers;
 
             Assert.AreSame(getPartialScopeComposers, _scopeBuildingContext.GetPartialScopeComposers);
@@ -85,7 +85,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void GetChildScopeComposers_Set_ReturnsValue()
         {
-            Func<IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
+            Func<IRuleResolver, IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IRuleResolver, IEnumerable<IScopeComposer>>>();
             _scopeBuildingContext.GetChildScopeComposers = getChildScopeComposers;
 
             Assert.AreSame(getChildScopeComposers, _scopeBuildingContext.GetChildScopeComposers);

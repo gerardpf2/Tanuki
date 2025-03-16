@@ -29,12 +29,12 @@ namespace Infrastructure.DependencyInjection
 
         protected virtual void AddGlobalRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
-        protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers()
+        protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers(IRuleResolver ruleResolver)
         {
             return Enumerable.Empty<IScopeComposer>();
         }
 
-        protected virtual IEnumerable<IScopeComposer> GetChildScopeComposers()
+        protected virtual IEnumerable<IScopeComposer> GetChildScopeComposers(IRuleResolver ruleResolver)
         {
             return Enumerable.Empty<IScopeComposer>();
         }

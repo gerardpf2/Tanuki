@@ -91,9 +91,9 @@ namespace Infrastructure.DependencyInjection
 
         private void BuildPartialScopeComposers(
             Scope mainScope,
-            Func<IEnumerable<IScopeComposer>> getPartialScopeComposers)
+            Func<IRuleResolver, IEnumerable<IScopeComposer>> getPartialScopeComposers)
         {
-            IEnumerable<IScopeComposer> partialScopeComposers = getPartialScopeComposers?.Invoke();
+            IEnumerable<IScopeComposer> partialScopeComposers = getPartialScopeComposers?.Invoke(mainScope.RuleResolver);
 
             if (partialScopeComposers == null)
             {
@@ -108,9 +108,9 @@ namespace Infrastructure.DependencyInjection
 
         private void BuildChildScopeComposers(
             Scope parentScope,
-            Func<IEnumerable<IScopeComposer>> getChildScopeComposers)
+            Func<IRuleResolver, IEnumerable<IScopeComposer>> getChildScopeComposers)
         {
-            IEnumerable<IScopeComposer> childScopeComposers = getChildScopeComposers?.Invoke();
+            IEnumerable<IScopeComposer> childScopeComposers = getChildScopeComposers?.Invoke(parentScope.RuleResolver);
 
             if (childScopeComposers == null)
             {

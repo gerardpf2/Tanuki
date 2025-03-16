@@ -14,9 +14,9 @@ namespace Infrastructure.DependencyInjection
 
         public Action<IRuleAdder, IRuleFactory> AddGlobalRules { get; set; }
 
-        public Func<IEnumerable<IScopeComposer>> GetPartialScopeComposers { get; set; }
+        public Func<IRuleResolver, IEnumerable<IScopeComposer>> GetPartialScopeComposers { get; set; }
 
-        public Func<IEnumerable<IScopeComposer>> GetChildScopeComposers { get; set; }
+        public Func<IRuleResolver, IEnumerable<IScopeComposer>> GetChildScopeComposers { get; set; }
 
         public Action<IRuleResolver> Initialize { get; set; }
     }

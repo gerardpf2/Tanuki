@@ -118,34 +118,36 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetPartialScopeComposersCalled()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
             Scope parentScope = new(null, null, null, null, null);
-            Scope childScope = new(null, null, null, null, null);
+            Scope childScope = new(null, null, null, ruleResolver, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
-            Func<IEnumerable<IScopeComposer>> getPartialScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
+            Func<IRuleResolver, IEnumerable<IScopeComposer>> getPartialScopeComposers = Substitute.For<Func<IRuleResolver, IEnumerable<IScopeComposer>>>();
             IScopeComposer partialScopeComposer = Substitute.For<IScopeComposer>();
-            getPartialScopeComposers.Invoke().Returns(new List<IScopeComposer> { partialScopeComposer });
+            getPartialScopeComposers.Invoke(ruleResolver).Returns(new List<IScopeComposer> { partialScopeComposer });
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.GetPartialScopeComposers = getPartialScopeComposers));
 
             _scopeBuilder.Build(parentScope, _scopeComposer);
 
-            getPartialScopeComposers.Received(1).Invoke();
+            getPartialScopeComposers.Received(1).Invoke(ruleResolver);
         }
 
         [Test]
         public void Build_GateKeyEnabledAndConstructReturnsNotNull_GetChildScopeComposersCalled()
         {
             _gateValidator.Validate(Arg.Any<string>()).Returns(true);
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
             Scope parentScope = new(null, null, null, null, null);
-            Scope childScope = new(null, null, null, null, null);
+            Scope childScope = new(null, null, null, ruleResolver, null);
             _scopeConstructor.Construct(parentScope, Arg.Any<Action<IRuleResolver>>()).Returns(childScope);
-            Func<IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IEnumerable<IScopeComposer>>>();
+            Func<IRuleResolver, IEnumerable<IScopeComposer>> getChildScopeComposers = Substitute.For<Func<IRuleResolver, IEnumerable<IScopeComposer>>>();
             IScopeComposer childScopeComposer = Substitute.For<IScopeComposer>();
-            getChildScopeComposers.Invoke().Returns(new List<IScopeComposer> { childScopeComposer });
+            getChildScopeComposers.Invoke(ruleResolver).Returns(new List<IScopeComposer> { childScopeComposer });
             _scopeComposer.Compose(Arg.Do<ScopeBuildingContext>(c => c.GetChildScopeComposers = getChildScopeComposers));
 
             _scopeBuilder.Build(parentScope, _scopeComposer);
 
-            getChildScopeComposers.Received(1).Invoke();
+            getChildScopeComposers.Received(1).Invoke(ruleResolver);
         }
 
         #endregion

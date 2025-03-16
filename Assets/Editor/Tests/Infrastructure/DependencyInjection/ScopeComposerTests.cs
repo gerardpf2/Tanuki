@@ -56,8 +56,10 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Compose_GetPartialScopeComposersReturnsEmpty()
         {
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
+
             _scopeComposer.Compose(_scopeBuildingContext);
-            IEnumerable<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers();
+            IEnumerable<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers(ruleResolver);
 
             Assert.IsEmpty(partialScopeComposers);
         }
@@ -65,8 +67,10 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Compose_GetChildScopeComposersReturnsEmpty()
         {
+            IRuleResolver ruleResolver = Substitute.For<IRuleResolver>();
+
             _scopeComposer.Compose(_scopeBuildingContext);
-            IEnumerable<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers();
+            IEnumerable<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers(ruleResolver);
 
             Assert.IsEmpty(childScopeComposers);
         }
