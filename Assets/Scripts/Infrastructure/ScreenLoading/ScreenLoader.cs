@@ -28,9 +28,10 @@ namespace Infrastructure.ScreenLoading
         {
             GameObject instance = LoadInstance(key);
 
-            SetData(key, instance, data);
+            SetData(instance, data, key);
         }
 
+        [NotNull]
         private GameObject LoadInstance(string key)
         {
             IScreenDefinition screenDefinition = _screenDefinitionGetter.Get(key);
@@ -54,7 +55,7 @@ namespace Infrastructure.ScreenLoading
             return Object.Instantiate(prefab, placement);
         }
 
-        private static void SetData<T>(string key, [NotNull] GameObject instance, T data)
+        private static void SetData<T>([NotNull] GameObject instance, T data, string key)
         {
             if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
             {
