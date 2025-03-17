@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
-    public class GlobalRuleAdder : IGlobalRuleAdder
+    public class SharedRuleAdder : ISharedRuleAdder
     {
         private readonly IRuleAdder _ruleAdder;
         private readonly IRuleFactory _ruleFactory;
@@ -11,7 +11,7 @@ namespace Infrastructure.DependencyInjection
         private IRuleAdder _targetRuleAdder;
         private IRuleResolver _targetRuleResolver;
 
-        public GlobalRuleAdder([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        public SharedRuleAdder([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
             _ruleAdder = ruleAdder;
             _ruleFactory = ruleFactory;
