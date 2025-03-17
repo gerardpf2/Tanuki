@@ -22,22 +22,12 @@ namespace Game.Root.Composition
             _rootScreenPlacement = rootScreenPlacement;
         }
 
-        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
-        {
-            base.AddRules(ruleAdder, ruleFactory);
-
-            ruleAdder.Add(ruleFactory.GetInstance(_screenDefinitionGetter));
-
-            ruleAdder.Add(ruleFactory.GetInstance(_rootScreenPlacement));
-        }
-
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
-            return
-                base
-                    .GetPartialScopeComposers()
-                    .Append(new LoggingComposer())
-                    .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement));
+            return base
+                .GetPartialScopeComposers()
+                .Append(new LoggingComposer())
+                .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement));
         }
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()

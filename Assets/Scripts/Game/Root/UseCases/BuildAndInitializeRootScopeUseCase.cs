@@ -40,6 +40,10 @@ namespace Game.Root.UseCases
         {
             ruleAdder.Add(new InstanceRule<IGateDefinitionGetter>(_gateDefinitionGetter));
 
+            ruleAdder.Add(new InstanceRule<IScreenDefinitionGetter>(_screenDefinitionGetter));
+
+            ruleAdder.Add(new InstanceRule<IScreenPlacement>(_rootScreenPlacement));
+
             ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
 
             ruleAdder.Add(
@@ -92,10 +96,10 @@ namespace Game.Root.UseCases
             );
 
             ruleAdder.Add(
-                new SingletonRule<IScopeComposer>(_ =>
+                new SingletonRule<IScopeComposer>(r =>
                     new RootComposer(
-                        _screenDefinitionGetter,
-                        _rootScreenPlacement
+                        r.Resolve<IScreenDefinitionGetter>(),
+                        r.Resolve<IScreenPlacement>()
                     )
                 )
             );
