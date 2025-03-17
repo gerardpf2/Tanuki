@@ -70,7 +70,7 @@ namespace Editor.Tests.Game.Root.Composition
         {
             _rootComposer.Compose(_scopeBuildingContext);
 
-            List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers(_ruleResolver).ToList();
+            List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers().ToList();
 
             Assert.IsTrue(childScopeComposers.Count == 1);
             Assert.NotNull(childScopeComposers.Find(childScopeComposer => childScopeComposer is ModelViewViewModelComposer));

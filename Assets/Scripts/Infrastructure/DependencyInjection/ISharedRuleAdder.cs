@@ -1,6 +1,6 @@
 namespace Infrastructure.DependencyInjection
 {
-    public interface IGlobalRuleAdder : IRuleAdder
+    public interface ISharedRuleAdder : IRuleAdder
     {
         void SetTarget(IRuleAdder ruleAdder, IRuleResolver ruleResolver);
 

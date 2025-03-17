@@ -45,9 +45,9 @@ namespace Game.Root.Composition
                     );
         }
 
-        protected override IEnumerable<IScopeComposer> GetChildScopeComposers(IRuleResolver ruleResolver)
+        protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
-            return base.GetChildScopeComposers(ruleResolver).Append(new ModelViewViewModelComposer());
+            return base.GetChildScopeComposers().Append(new ModelViewViewModelComposer());
         }
     }
 }

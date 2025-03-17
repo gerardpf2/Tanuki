@@ -9,9 +9,8 @@ namespace Infrastructure.DependencyInjection
         public void Compose([NotNull] ScopeBuildingContext scopeBuildingContext)
         {
             scopeBuildingContext.GetGateKey = GetGateKey;
-            scopeBuildingContext.AddPrivateRules = AddPrivateRules;
-            scopeBuildingContext.AddPublicRules = AddPublicRules;
-            scopeBuildingContext.AddGlobalRules = AddGlobalRules;
+            scopeBuildingContext.AddRules = AddRules;
+            scopeBuildingContext.AddSharedRules = AddSharedRules;
             scopeBuildingContext.GetPartialScopeComposers = GetPartialScopeComposers;
             scopeBuildingContext.GetChildScopeComposers = GetChildScopeComposers;
             scopeBuildingContext.Initialize = Initialize;
@@ -22,18 +21,16 @@ namespace Infrastructure.DependencyInjection
             return null;
         }
 
-        protected virtual void AddPrivateRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
+        protected virtual void AddRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
-        protected virtual void AddPublicRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
+        protected virtual void AddSharedRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
-        protected virtual void AddGlobalRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
-
-        protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers(IRuleResolver ruleResolver)
+        protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
             return Enumerable.Empty<IScopeComposer>();
         }
 
-        protected virtual IEnumerable<IScopeComposer> GetChildScopeComposers(IRuleResolver ruleResolver)
+        protected virtual IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
             return Enumerable.Empty<IScopeComposer>();
         }

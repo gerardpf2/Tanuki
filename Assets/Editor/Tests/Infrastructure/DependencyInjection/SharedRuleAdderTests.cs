@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Editor.Tests.Infrastructure.DependencyInjection
 {
-    public class GlobalRuleAdderTests
+    public class SharedRuleAdderTests
     {
         private IRuleResolver _targetRuleResolver;
         private IRule<object> _ruleFactoryResult;
@@ -15,7 +15,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         private IRule<object> _rule;
         private object _key;
 
-        private GlobalRuleAdder _globalRuleAdder;
+        private SharedRuleAdder _sharedRuleAdder;
 
         [SetUp]
         public void SetUp()
@@ -28,7 +28,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _rule = Substitute.For<IRule<object>>();
             _key = new object();
 
-            _globalRuleAdder = new GlobalRuleAdder(_ruleAdder, _ruleFactory);
+            _sharedRuleAdder = new SharedRuleAdder(_ruleAdder, _ruleFactory);
 
             _ruleFactory.GetTarget<object>(_targetRuleResolver, _key).Returns(_ruleFactoryResult);
         }
@@ -36,9 +36,9 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         [Test]
         public void Add_SetTarget_RuleAdderAndTargetRuleAdderAreCalledWithValidParams()
         {
-            _globalRuleAdder.SetTarget(_targetRuleAdder, _targetRuleResolver);
+            _sharedRuleAdder.SetTarget(_targetRuleAdder, _targetRuleResolver);
 
-            _globalRuleAdder.Add(_rule, _key);
+            _sharedRuleAdder.Add(_rule, _key);
 
             _ruleAdder.Received(1).Add(_ruleFactoryResult, _key);
             _targetRuleAdder.Received(1).Add(_rule, _key);

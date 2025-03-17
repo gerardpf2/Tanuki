@@ -14,19 +14,15 @@ namespace Infrastructure.DependencyInjection
 
         public PartialScope(
             [NotNull] PartialScope partialScope,
-            IRuleAdder privateRuleAdder,
-            IRuleAdder publicRuleAdder,
-            IRuleGetter publicRuleGetter,
+            IRuleAdder ruleAdder,
             IRuleResolver ruleResolver,
-            Action<IRuleResolver> initialize) : this(partialScope._mainScope, privateRuleAdder, publicRuleAdder, publicRuleGetter, ruleResolver, initialize) { }
+            Action<IRuleResolver> initialize) : this(partialScope._mainScope, ruleAdder, ruleResolver, initialize) { }
 
         public PartialScope(
             [NotNull] Scope mainScope,
-            IRuleAdder privateRuleAdder,
-            IRuleAdder publicRuleAdder,
-            IRuleGetter publicRuleGetter,
+            IRuleAdder ruleAdder,
             IRuleResolver ruleResolver,
-            Action<IRuleResolver> initialize) : base(privateRuleAdder, publicRuleAdder, publicRuleGetter, ruleResolver, initialize)
+            Action<IRuleResolver> initialize) : base(ruleAdder, ruleResolver, initialize)
         {
             _mainScope = mainScope;
         }
