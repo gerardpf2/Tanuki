@@ -19,7 +19,6 @@ namespace Editor.Tests.Game.Root.Composition
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private ScopeBuildingContext _scopeBuildingContext;
         private IScreenPlacement _screenPlacement;
-        private IRuleResolver _ruleResolver;
         private IRuleFactory _ruleFactory;
         private IRuleAdder _ruleAdder;
 
@@ -31,7 +30,6 @@ namespace Editor.Tests.Game.Root.Composition
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _scopeBuildingContext = new ScopeBuildingContext();
             _screenPlacement = Substitute.For<IScreenPlacement>();
-            _ruleResolver = Substitute.For<IRuleResolver>();
             _ruleFactory = Substitute.For<IRuleFactory>();
             _ruleAdder = Substitute.For<IRuleAdder>();
 
@@ -39,7 +37,7 @@ namespace Editor.Tests.Game.Root.Composition
         }
 
         [Test]
-        public void AddPrivateRules_AddExpected()
+        public void AddRules_AddExpected()
         {
             IRule<IScreenDefinitionGetter> screenDefinitionGetterRule = Substitute.For<IRule<IScreenDefinitionGetter>>();
             IRule<IScreenPlacement> screenPlacementRule = Substitute.For<IRule<IScreenPlacement>>();
@@ -47,7 +45,7 @@ namespace Editor.Tests.Game.Root.Composition
             _ruleFactory.GetInstance(_screenPlacement).Returns(screenPlacementRule);
             _rootComposer.Compose(_scopeBuildingContext);
 
-            _scopeBuildingContext.AddPrivateRules(_ruleAdder, _ruleFactory);
+            _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
 
             _ruleAdder.Received(1).Add(screenDefinitionGetterRule);
             _ruleAdder.Received(1).Add(screenPlacementRule);
@@ -58,7 +56,7 @@ namespace Editor.Tests.Game.Root.Composition
         {
             _rootComposer.Compose(_scopeBuildingContext);
 
-            List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers(_ruleResolver).ToList();
+            List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers().ToList();
 
             Assert.IsTrue(partialScopeComposers.Count == 2);
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is LoggingComposer));
