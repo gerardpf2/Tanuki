@@ -1,6 +1,8 @@
+using System;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Infrastructure.ScreenLoading
 {
@@ -17,28 +19,50 @@ namespace Infrastructure.ScreenLoading
             _screenPlacementGetter = screenPlacementGetter;
         }
 
+        public void Load(string key)
+        {
+            LoadInstance(key);
+        }
+
         public void Load<T>(string key, T data)
+        {
+            GameObject instance = LoadInstance(key);
+
+            SetData(key, instance, data);
+        }
+
+        private GameObject LoadInstance(string key)
         {
             IScreenDefinition screenDefinition = _screenDefinitionGetter.Get(key);
 
             GameObject instance = Instantiate(screenDefinition);
 
-            SetDataIfNeeded(instance, data);
+            if (instance == null)
+            {
+                throw new InvalidOperationException($"Cannot load screen with Key: {key}");
+            }
+
+            return instance;
         }
 
         private GameObject Instantiate([NotNull] IScreenDefinition screenDefinition)
         {
             GameObject prefab = screenDefinition.Prefab;
+
             Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
 
             return Object.Instantiate(prefab, placement);
         }
 
-        private static void SetDataIfNeeded<T>([NotNull] GameObject instance, T data)
+        private static void SetData<T>(string key, [NotNull] GameObject instance, T data)
         {
             if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
             {
                 dataSettable.SetData(data);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Cannot set data of Type: {typeof(T)} to loaded screen with Key: {key}");
             }
         }
     }
