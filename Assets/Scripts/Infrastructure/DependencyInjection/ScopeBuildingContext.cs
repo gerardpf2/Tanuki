@@ -7,15 +7,13 @@ namespace Infrastructure.DependencyInjection
     {
         public Func<string> GetGateKey { get; set; }
 
-        public Action<IRuleAdder, IRuleFactory> AddPrivateRules { get; set; }
+        public Action<IRuleAdder, IRuleFactory> AddRules { get; set; }
 
-        public Action<IRuleAdder, IRuleFactory> AddPublicRules { get; set; }
+        public Action<IRuleAdder, IRuleFactory> AddSharedRules { get; set; }
 
-        public Action<IRuleAdder, IRuleFactory> AddGlobalRules { get; set; }
+        public Func<IEnumerable<IScopeComposer>> GetPartialScopeComposers { get; set; }
 
-        public Func<IRuleResolver, IEnumerable<IScopeComposer>> GetPartialScopeComposers { get; set; }
-
-        public Func<IRuleResolver, IEnumerable<IScopeComposer>> GetChildScopeComposers { get; set; }
+        public Func<IEnumerable<IScopeComposer>> GetChildScopeComposers { get; set; }
 
         public Action<IRuleResolver> Initialize { get; set; }
     }

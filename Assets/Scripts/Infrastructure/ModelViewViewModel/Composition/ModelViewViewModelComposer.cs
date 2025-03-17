@@ -5,18 +5,18 @@ namespace Infrastructure.ModelViewViewModel.Composition
 {
     public class ModelViewViewModelComposer : ScopeComposer
     {
-        protected override void AddPrivateRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            base.AddPrivateRules(ruleAdder, ruleFactory);
+            base.AddRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetTransient<IBoundPropertyContainer>(_ => new BoundPropertyContainer()));
 
             ruleAdder.Add(ruleFactory.GetTransient<IBoundMethodContainer>(_ => new BoundMethodContainer()));
         }
 
-        protected override void AddGlobalRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
-            base.AddGlobalRules(ruleAdder, ruleFactory);
+            base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
                 ruleFactory.GetInject<ViewModel>((r, vm) =>

@@ -1,27 +1,23 @@
 using System;
 using Infrastructure.DependencyInjection.Rules;
+using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
     public class RuleResolver : IRuleResolver
     {
-        private readonly IRuleGetter _privateRuleGetter;
-        private readonly IRuleGetter _publicRuleGetter;
+        private readonly IRuleGetter _ruleGetter;
         private readonly IRuleResolver _parentRuleResolver;
 
-        public RuleResolver(
-            IRuleGetter privateRuleGetter,
-            IRuleGetter publicRuleGetter,
-            IRuleResolver parentRuleResolver)
+        public RuleResolver([NotNull] IRuleGetter ruleGetter, IRuleResolver parentRuleResolver)
         {
-            _privateRuleGetter = privateRuleGetter;
-            _publicRuleGetter = publicRuleGetter;
+            _ruleGetter = ruleGetter;
             _parentRuleResolver = parentRuleResolver;
         }
 
-        public T Resolve<T>(IRuleResolver sourceRuleResolver, object key = null)
+        public T Resolve<T>(object key = null)
         {
-            if (TryResolve(sourceRuleResolver, out T result, key))
+            if (TryResolve(out T result, key))
             {
                 return result;
             }
@@ -29,35 +25,21 @@ namespace Infrastructure.DependencyInjection
             throw new InvalidOperationException($"Cannot resolve rule with Type: {typeof(T)} and Key: {key}");
         }
 
-        public bool TryResolve<T>(IRuleResolver sourceRuleResolver, out T result, object key = null)
+        public bool TryResolve<T>(out T result, object key = null)
         {
-            if (sourceRuleResolver == this && TryResolve(_privateRuleGetter, key, out result))
+            if (_ruleGetter.TryGet(out IRule<T> rule, key))
             {
-                return true;
-            }
+                result = rule.Resolve(this);
 
-            if (TryResolve(_publicRuleGetter, key, out result))
-            {
-                return true;
+                if (result != null)
+                {
+                    return true;
+                }
             }
 
             if (_parentRuleResolver != null)
             {
-                return _parentRuleResolver.TryResolve(sourceRuleResolver, out result, key);
-            }
-
-            result = default;
-
-            return false;
-        }
-
-        private bool TryResolve<T>(IRuleGetter ruleGetter, object key, out T result)
-        {
-            if (ruleGetter != null && ruleGetter.TryGet(out IRule<T> rule, key))
-            {
-                result = rule.Resolve(this);
-
-                return result != null;
+                return _parentRuleResolver.TryResolve(out result, key);
             }
 
             result = default;

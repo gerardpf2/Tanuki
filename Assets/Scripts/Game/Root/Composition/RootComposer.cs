@@ -8,14 +8,14 @@ namespace Game.Root.Composition
 {
     public class RootComposer : ScopeComposer
     {
-        protected override IEnumerable<IScopeComposer> GetPartialScopeComposers(IRuleResolver ruleResolver)
+        protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
-            return base.GetPartialScopeComposers(ruleResolver).Append(new LoggingComposer());
+            return base.GetPartialScopeComposers().Append(new LoggingComposer());
         }
 
-        protected override IEnumerable<IScopeComposer> GetChildScopeComposers(IRuleResolver ruleResolver)
+        protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
-            return base.GetChildScopeComposers(ruleResolver).Append(new ModelViewViewModelComposer());
+            return base.GetChildScopeComposers().Append(new ModelViewViewModelComposer());
         }
     }
 }
