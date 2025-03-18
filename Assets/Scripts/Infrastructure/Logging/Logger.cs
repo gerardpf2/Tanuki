@@ -5,7 +5,7 @@ namespace Infrastructure.Logging
 {
     public class Logger : ILogger
     {
-        private readonly ICollection<ILogHandler> _logHandlers = new List<ILogHandler>();
+        [NotNull] private readonly ICollection<ILogHandler> _logHandlers = new List<ILogHandler>();
 
         public void Info(string message)
         {

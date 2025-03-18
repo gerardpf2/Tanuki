@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Infrastructure.DependencyInjection.Rules;
+using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
     public class RuleContainer : IRuleAdder, IRuleGetter
     {
-        private readonly IDictionary<(Type, object), IRule<object>> _rules = new Dictionary<(Type, object), IRule<object>>();
+        [NotNull] private readonly IDictionary<(Type, object), IRule<object>> _rules = new Dictionary<(Type, object), IRule<object>>();
 
         public void Add<T>(IRule<T> rule, object key = null) where T : class
         {

@@ -6,7 +6,7 @@ namespace Infrastructure.ModelViewViewModel
 {
     public class BoundMethodContainer : IBoundMethodContainer
     {
-        private readonly IDictionary<string, IBoundMethod> _boundMethods = new Dictionary<string, IBoundMethod>();
+        [NotNull] private readonly IDictionary<string, IBoundMethod> _boundMethods = new Dictionary<string, IBoundMethod>();
 
         public void Add([NotNull] IBoundMethod boundMethod)
         {

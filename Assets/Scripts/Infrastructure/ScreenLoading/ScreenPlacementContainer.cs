@@ -6,7 +6,7 @@ namespace Infrastructure.ScreenLoading
 {
     public class ScreenPlacementContainer : IScreenPlacementAdder, IScreenPlacementGetter
     {
-        private readonly IDictionary<string, IScreenPlacement> _screenPlacements = new Dictionary<string, IScreenPlacement>();
+        [NotNull] private readonly IDictionary<string, IScreenPlacement> _screenPlacements = new Dictionary<string, IScreenPlacement>();
 
         public void Add([NotNull] IScreenPlacement screenPlacement)
         {

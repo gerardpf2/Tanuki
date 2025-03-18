@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Infrastructure.Gating
@@ -7,7 +8,7 @@ namespace Infrastructure.Gating
     [CreateAssetMenu(fileName = nameof(GateDefinitionContainer), menuName = "Tanuki/Infrastructure/Gating/" + nameof(GateDefinitionContainer))]
     public class GateDefinitionContainer : ScriptableObject, IGateDefinitionGetter
     {
-        [SerializeField] private List<GateDefinition> _gateDefinitions = new();
+        [NotNull] [SerializeField] private List<GateDefinition> _gateDefinitions = new();
 
         public IGateDefinition Get(string gateKey)
         {

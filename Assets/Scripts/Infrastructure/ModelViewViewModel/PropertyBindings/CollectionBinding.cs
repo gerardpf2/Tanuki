@@ -10,7 +10,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
     {
         [SerializeField] private GameObject _prefab;
 
-        private readonly IDictionary<T, GameObject> _instances = new Dictionary<T, GameObject>();
+        [NotNull] private readonly IDictionary<T, GameObject> _instances = new Dictionary<T, GameObject>();
 
         public override void Set([ItemNotNull] IEnumerable<T> value)
         {

@@ -6,7 +6,7 @@ namespace Infrastructure.ModelViewViewModel
 {
     public class BoundPropertyContainer : IBoundPropertyContainer
     {
-        private readonly IDictionary<string, object> _boundProperties = new Dictionary<string, object>();
+        [NotNull] private readonly IDictionary<string, object> _boundProperties = new Dictionary<string, object>();
 
         public void Add<T>([NotNull] IBoundProperty<T> boundProperty)
         {
