@@ -8,6 +8,8 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 {
     public abstract class CollectionBinding<T> : PropertyBinding<IEnumerable<T>>
     {
+        // TODO: Exceptions
+
         [SerializeField] private GameObject _prefab;
 
         [NotNull] private readonly IDictionary<T, GameObject> _instances = new Dictionary<T, GameObject>();

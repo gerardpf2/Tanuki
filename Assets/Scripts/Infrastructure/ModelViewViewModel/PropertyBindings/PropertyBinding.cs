@@ -1,3 +1,4 @@
+using Infrastructure.System.Exceptions;
 using UnityEngine;
 
 namespace Infrastructure.ModelViewViewModel.PropertyBindings
@@ -13,11 +14,15 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 
         private void Start()
         {
+            InvalidOperationException.ThrowIfNull(_viewModel);
+
             _viewModel.Bind(this);
         }
 
         private void OnDestroy()
         {
+            InvalidOperationException.ThrowIfNull(_viewModel);
+
             _viewModel.Unbind(this);
         }
     }

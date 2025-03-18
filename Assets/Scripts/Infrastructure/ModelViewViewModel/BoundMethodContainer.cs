@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.ModelViewViewModel
 {
@@ -10,6 +11,8 @@ namespace Infrastructure.ModelViewViewModel
 
         public void Add([NotNull] IBoundMethod boundMethod)
         {
+            ArgumentNullException.ThrowIfNull(boundMethod);
+
             if (boundMethod.Key is not null && _boundMethods.TryAdd(boundMethod.Key, boundMethod))
             {
                 return;
@@ -20,6 +23,8 @@ namespace Infrastructure.ModelViewViewModel
 
         public IBoundMethod Get([NotNull] string key)
         {
+            ArgumentNullException.ThrowIfNull(key);
+
             if (_boundMethods.TryGetValue(key, out IBoundMethod boundMethod))
             {
                 return boundMethod;

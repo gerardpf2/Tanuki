@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.ModelViewViewModel
 {
@@ -10,6 +11,8 @@ namespace Infrastructure.ModelViewViewModel
 
         public void Add<T>([NotNull] IBoundProperty<T> boundProperty)
         {
+            ArgumentNullException.ThrowIfNull(boundProperty);
+
             if (boundProperty.Key is not null && _boundProperties.TryAdd(boundProperty.Key, boundProperty))
             {
                 return;
@@ -20,6 +23,8 @@ namespace Infrastructure.ModelViewViewModel
 
         public IBoundProperty<T> Get<T>([NotNull] string key)
         {
+            ArgumentNullException.ThrowIfNull(key);
+
             if (_boundProperties.TryGetValue(key, out object obj) && obj is IBoundProperty<T> boundProperty)
             {
                 return boundProperty;

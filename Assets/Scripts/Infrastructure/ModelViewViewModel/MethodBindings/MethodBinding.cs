@@ -1,3 +1,4 @@
+using Infrastructure.System.Exceptions;
 using UnityEngine;
 
 namespace Infrastructure.ModelViewViewModel.MethodBindings
@@ -11,6 +12,8 @@ namespace Infrastructure.ModelViewViewModel.MethodBindings
 
         protected void Call()
         {
+            InvalidOperationException.ThrowIfNull(_viewModel);
+
             _viewModel.Resolve(this);
         }
     }

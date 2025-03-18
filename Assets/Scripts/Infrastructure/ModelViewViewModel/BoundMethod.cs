@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.ModelViewViewModel
 {
@@ -13,6 +14,8 @@ namespace Infrastructure.ModelViewViewModel
 
         public BoundMethod(string key, [NotNull] Action method)
         {
+            ArgumentNullException.ThrowIfNull(method);
+
             Key = key;
             _method = method;
         }
