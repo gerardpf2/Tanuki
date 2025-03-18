@@ -7,8 +7,8 @@ namespace Infrastructure.Gating
 {
     public class GateValidator : IGateValidator
     {
-        private readonly IGateDefinitionGetter _gateDefinitionGetter;
-        private readonly Version _projectVersion;
+        [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
+        [NotNull] private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
@@ -39,7 +39,7 @@ namespace Infrastructure.Gating
             return true;
         }
 
-        private bool ValidateVersion(string version, ComparisonOperator versionComparisonOperator)
+        private bool ValidateVersion([NotNull] string version, ComparisonOperator versionComparisonOperator)
         {
             Version gateVersion = Version.Parse(version);
 

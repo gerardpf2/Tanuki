@@ -15,7 +15,7 @@ namespace Infrastructure.Gating
 
             if (gateDefinition == null)
             {
-                throw new InvalidOperationException($"Cannot get gate definition with Key: {gateKey}");
+                throw new InvalidOperationException($"Cannot get gate definition with GateKey: {gateKey}");
             }
 
             return gateDefinition;

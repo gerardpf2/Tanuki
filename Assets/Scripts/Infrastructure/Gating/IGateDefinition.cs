@@ -1,4 +1,5 @@
 using Infrastructure.System;
+using JetBrains.Annotations;
 
 namespace Infrastructure.Gating
 {
@@ -12,6 +13,7 @@ namespace Infrastructure.Gating
 
         bool UseVersion { get; }
 
+        [NotNull]
         string Version { get; }
 
         ComparisonOperator VersionComparisonOperator { get; }
