@@ -7,7 +7,7 @@ namespace Infrastructure.DependencyInjection
 {
     public class RuleFactory : IRuleFactory
     {
-        private readonly IGateValidator _gateValidator;
+        [NotNull] private readonly IGateValidator _gateValidator;
 
         public RuleFactory([NotNull] IGateValidator gateValidator)
         {

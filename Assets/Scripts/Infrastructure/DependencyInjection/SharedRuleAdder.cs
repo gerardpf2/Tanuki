@@ -5,8 +5,8 @@ namespace Infrastructure.DependencyInjection
 {
     public class SharedRuleAdder : ISharedRuleAdder
     {
-        private readonly IRuleAdder _ruleAdder;
-        private readonly IRuleFactory _ruleFactory;
+        [NotNull] private readonly IRuleAdder _ruleAdder;
+        [NotNull] private readonly IRuleFactory _ruleFactory;
 
         private IRuleAdder _targetRuleAdder;
         private IRuleResolver _targetRuleResolver;

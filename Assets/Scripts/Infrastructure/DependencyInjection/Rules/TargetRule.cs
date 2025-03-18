@@ -5,7 +5,7 @@ namespace Infrastructure.DependencyInjection.Rules
 {
     public class TargetRule<T> : IRule<T>
     {
-        private readonly IRuleResolver _ruleResolver;
+        [NotNull] private readonly IRuleResolver _ruleResolver;
         private readonly object _key;
 
         public TargetRule([NotNull] IRuleResolver ruleResolver, object key = null)

@@ -7,9 +7,9 @@ namespace Infrastructure.DependencyInjection
 {
     public class ScopeBuilder : IScopeBuilder
     {
-        private readonly IGateValidator _gateValidator;
-        private readonly IScopeConstructor _scopeConstructor;
-        private readonly ISharedRuleAdder _sharedRuleAdder;
+        [NotNull] private readonly IGateValidator _gateValidator;
+        [NotNull] private readonly IScopeConstructor _scopeConstructor;
+        [NotNull] private readonly ISharedRuleAdder _sharedRuleAdder;
         private readonly IRuleFactory _ruleFactory;
 
         public ScopeBuilder(

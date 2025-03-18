@@ -4,9 +4,10 @@ using JetBrains.Annotations;
 namespace Infrastructure.DependencyInjection.Rules
 {
     // To resolve InjectRule<T>, Action<T> needs to be used instead of T
+
     public class InjectRule<T> : SingletonRule<Action<T>>
     {
-        private readonly Action<IRuleResolver, T> _inject;
+        [NotNull] private readonly Action<IRuleResolver, T> _inject;
 
         public InjectRule([NotNull] Action<IRuleResolver, T> inject) : base(ruleResolver => instance => inject(ruleResolver, instance))
         {

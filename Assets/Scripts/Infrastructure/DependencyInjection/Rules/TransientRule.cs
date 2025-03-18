@@ -5,7 +5,7 @@ namespace Infrastructure.DependencyInjection.Rules
 {
     public class TransientRule<T> : IRule<T>
     {
-        private readonly Func<IRuleResolver, T> _ctor;
+        [NotNull] private readonly Func<IRuleResolver, T> _ctor;
 
         public TransientRule([NotNull] Func<IRuleResolver, T> ctor)
         {

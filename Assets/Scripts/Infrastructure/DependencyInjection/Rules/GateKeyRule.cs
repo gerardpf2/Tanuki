@@ -9,8 +9,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
     public class GateKeyRule<T> : IRule<T> where T : class
     {
-        private readonly IGateValidator _gateValidator;
-        private readonly IRule<T> _rule;
+        [NotNull] private readonly IGateValidator _gateValidator;
+        [NotNull] private readonly IRule<T> _rule;
         private readonly string _gateKey;
 
         public GateKeyRule([NotNull] IGateValidator gateValidator, [NotNull] IRule<T> rule, string gateKey)

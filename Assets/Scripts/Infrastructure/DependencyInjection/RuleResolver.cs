@@ -6,7 +6,7 @@ namespace Infrastructure.DependencyInjection
 {
     public class RuleResolver : IRuleResolver
     {
-        private readonly IRuleGetter _ruleGetter;
+        [NotNull] private readonly IRuleGetter _ruleGetter;
         private readonly IRuleResolver _parentRuleResolver;
 
         public RuleResolver([NotNull] IRuleGetter ruleGetter, IRuleResolver parentRuleResolver)

@@ -5,7 +5,7 @@ namespace Infrastructure.DependencyInjection.Rules
 {
     public class SingletonRule<T> : IRule<T>
     {
-        private readonly Func<IRuleResolver, T> _ctor;
+        [NotNull] private readonly Func<IRuleResolver, T> _ctor;
 
         private bool _resolved;
         private T _instance;

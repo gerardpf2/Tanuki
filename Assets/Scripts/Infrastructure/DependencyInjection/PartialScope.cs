@@ -10,7 +10,7 @@ namespace Infrastructure.DependencyInjection
 
         public override IEnumerable<Scope> ChildScopes => throw new NotSupportedException();
 
-        private readonly Scope _mainScope;
+        [NotNull] private readonly Scope _mainScope;
 
         public PartialScope(
             [NotNull] PartialScope partialScope,

@@ -25,11 +25,13 @@ namespace Infrastructure.DependencyInjection
 
         protected virtual void AddSharedRules(IRuleAdder ruleAdder, IRuleFactory ruleFactory) { }
 
+        [NotNull]
         protected virtual IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
             return Enumerable.Empty<IScopeComposer>();
         }
 
+        [NotNull]
         protected virtual IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
             return Enumerable.Empty<IScopeComposer>();

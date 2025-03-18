@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
 {
     public class Scope
     {
+        [NotNull]
         public virtual IEnumerable<PartialScope> PartialScopes => _partialScopes;
 
+        [NotNull]
         public virtual IEnumerable<Scope> ChildScopes => _childScopes;
 
         public readonly IRuleAdder RuleAdder;
