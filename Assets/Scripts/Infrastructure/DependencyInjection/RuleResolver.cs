@@ -1,6 +1,7 @@
 using System;
 using Infrastructure.DependencyInjection.Rules;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -11,6 +12,8 @@ namespace Infrastructure.DependencyInjection
 
         public RuleResolver([NotNull] IRuleGetter ruleGetter, IRuleResolver parentRuleResolver)
         {
+            ArgumentNullException.ThrowIfNull(ruleGetter);
+
             _ruleGetter = ruleGetter;
             _parentRuleResolver = parentRuleResolver;
         }

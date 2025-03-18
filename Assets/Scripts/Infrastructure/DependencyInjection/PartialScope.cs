@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -24,6 +25,8 @@ namespace Infrastructure.DependencyInjection
             IRuleResolver ruleResolver,
             Action<IRuleResolver> initialize) : base(ruleAdder, ruleResolver, initialize)
         {
+            ArgumentNullException.ThrowIfNull(mainScope);
+
             _mainScope = mainScope;
         }
 

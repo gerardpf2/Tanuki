@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
@@ -14,6 +15,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public TInput Resolve([NotNull] IRuleResolver ruleResolver)
         {
+            ArgumentNullException.ThrowIfNull(ruleResolver);
+
             return ruleResolver.Resolve<TOutput>(_key);
         }
 
@@ -44,6 +47,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         protected bool Equals([NotNull] ToRule<TInput, TOutput> other)
         {
+            ArgumentNullException.ThrowIfNull(other);
+
             return Equals(_key, other._key);
         }
     }

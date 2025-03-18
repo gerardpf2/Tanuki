@@ -28,9 +28,6 @@ namespace Game.Root.Composition
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
-            InvalidOperationException.ThrowIfNull(_screenDefinitionGetter);
-            InvalidOperationException.ThrowIfNull(_rootScreenPlacement);
-
             return base
                 .GetPartialScopeComposers()
                 .Append(new LoggingComposer())

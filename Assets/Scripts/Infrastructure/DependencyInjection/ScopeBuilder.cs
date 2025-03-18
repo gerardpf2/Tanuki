@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Infrastructure.Gating;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -18,6 +19,10 @@ namespace Infrastructure.DependencyInjection
             [NotNull] ISharedRuleAdder sharedRuleAdder,
             IRuleFactory ruleFactory)
         {
+            ArgumentNullException.ThrowIfNull(gateValidator);
+            ArgumentNullException.ThrowIfNull(scopeConstructor);
+            ArgumentNullException.ThrowIfNull(sharedRuleAdder);
+
             _gateValidator = gateValidator;
             _scopeConstructor = scopeConstructor;
             _sharedRuleAdder = sharedRuleAdder;
@@ -26,6 +31,8 @@ namespace Infrastructure.DependencyInjection
 
         public PartialScope BuildPartial(Scope mainScope, [NotNull] IScopeComposer scopeComposer)
         {
+            ArgumentNullException.ThrowIfNull(scopeComposer);
+
             return
                 Build(
                     scopeComposer,
@@ -35,6 +42,8 @@ namespace Infrastructure.DependencyInjection
 
         public Scope Build(Scope parentScope, [NotNull] IScopeComposer scopeComposer)
         {
+            ArgumentNullException.ThrowIfNull(scopeComposer);
+
             return
                 Build(
                     scopeComposer,
@@ -44,6 +53,9 @@ namespace Infrastructure.DependencyInjection
 
         private T Build<T>([NotNull] IScopeComposer scopeComposer, [NotNull] Func<Action<IRuleResolver>, T> ctor) where T : Scope
         {
+            ArgumentNullException.ThrowIfNull(scopeComposer);
+            ArgumentNullException.ThrowIfNull(ctor);
+
             ScopeBuildingContext scopeBuildingContext = new();
 
             scopeComposer.Compose(scopeBuildingContext);
@@ -70,11 +82,15 @@ namespace Infrastructure.DependencyInjection
 
         private void AddRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addRules)
         {
+            ArgumentNullException.ThrowIfNull(scope);
+
             addRules?.Invoke(scope.RuleAdder, _ruleFactory);
         }
 
         private void AddSharedRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addSharedRules)
         {
+            ArgumentNullException.ThrowIfNull(scope);
+
             _sharedRuleAdder.SetTarget(scope.RuleAdder, scope.RuleResolver);
 
             addSharedRules?.Invoke(_sharedRuleAdder, _ruleFactory);

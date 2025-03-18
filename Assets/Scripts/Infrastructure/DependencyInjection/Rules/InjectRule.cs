@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
@@ -11,6 +12,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public InjectRule([NotNull] Action<IRuleResolver, T> inject) : base(ruleResolver => instance => inject(ruleResolver, instance))
         {
+            ArgumentNullException.ThrowIfNull(inject);
+
             _inject = inject;
         }
 
@@ -41,6 +44,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         protected bool Equals([NotNull] InjectRule<T> other)
         {
+            ArgumentNullException.ThrowIfNull(other);
+
             return Equals(_inject, other._inject);
         }
     }

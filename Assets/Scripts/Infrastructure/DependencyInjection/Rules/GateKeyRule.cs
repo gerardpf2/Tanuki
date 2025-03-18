@@ -1,6 +1,7 @@
 using System;
 using Infrastructure.Gating;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
@@ -15,6 +16,9 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public GateKeyRule([NotNull] IGateValidator gateValidator, [NotNull] IRule<T> rule, string gateKey)
         {
+            ArgumentNullException.ThrowIfNull(gateValidator);
+            ArgumentNullException.ThrowIfNull(rule);
+
             _gateValidator = gateValidator;
             _rule = rule;
             _gateKey = gateKey;
@@ -52,6 +56,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         protected bool Equals([NotNull] GateKeyRule<T> other)
         {
+            ArgumentNullException.ThrowIfNull(other);
+
             return
                 Equals(_gateValidator, other._gateValidator) &&
                 Equals(_rule, other._rule) &&

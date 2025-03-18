@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
@@ -45,6 +46,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         protected bool Equals([NotNull] InstanceRule<T> other)
         {
+            ArgumentNullException.ThrowIfNull(other);
+
             return EqualityComparer<T>.Default.Equals(_instance, other._instance);
         }
     }

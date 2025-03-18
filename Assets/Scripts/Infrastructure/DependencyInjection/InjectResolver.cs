@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -9,6 +10,8 @@ namespace Infrastructure.DependencyInjection
 
         public InjectResolver([NotNull] IRuleResolver ruleResolver)
         {
+            ArgumentNullException.ThrowIfNull(ruleResolver);
+
             _ruleResolver = ruleResolver;
         }
 

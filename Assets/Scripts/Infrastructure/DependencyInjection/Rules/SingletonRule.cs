@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
@@ -12,6 +13,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public SingletonRule([NotNull] Func<IRuleResolver, T> ctor)
         {
+            ArgumentNullException.ThrowIfNull(ctor);
+
             _ctor = ctor;
         }
 
@@ -55,6 +58,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         protected bool Equals([NotNull] SingletonRule<T> other)
         {
+            ArgumentNullException.ThrowIfNull(other);
+
             return Equals(_ctor, other._ctor);
         }
     }

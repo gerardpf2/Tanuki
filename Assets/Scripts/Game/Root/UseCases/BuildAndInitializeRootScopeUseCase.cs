@@ -44,9 +44,6 @@ namespace Game.Root.UseCases
         private void AddRules([NotNull] IRuleAdder ruleAdder)
         {
             ArgumentNullException.ThrowIfNull(ruleAdder);
-            InvalidOperationException.ThrowIfNull(_gateDefinitionGetter);
-            InvalidOperationException.ThrowIfNull(_screenDefinitionGetter);
-            InvalidOperationException.ThrowIfNull(_rootScreenPlacement);
 
             ruleAdder.Add(new InstanceRule<IGateDefinitionGetter>(_gateDefinitionGetter));
 

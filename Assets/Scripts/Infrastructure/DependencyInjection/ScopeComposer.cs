@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Infrastructure.DependencyInjection
@@ -8,6 +9,8 @@ namespace Infrastructure.DependencyInjection
     {
         public void Compose([NotNull] ScopeBuildingContext scopeBuildingContext)
         {
+            ArgumentNullException.ThrowIfNull(scopeBuildingContext);
+
             scopeBuildingContext.GetGateKey = GetGateKey;
             scopeBuildingContext.AddRules = AddRules;
             scopeBuildingContext.AddSharedRules = AddSharedRules;
