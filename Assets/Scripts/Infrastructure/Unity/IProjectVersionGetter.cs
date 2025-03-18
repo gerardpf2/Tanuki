@@ -1,4 +1,4 @@
-namespace Infrastructure.System
+namespace Infrastructure.Unity
 {
     public interface IProjectVersionGetter
     {

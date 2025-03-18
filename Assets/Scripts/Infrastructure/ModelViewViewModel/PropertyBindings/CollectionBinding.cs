@@ -45,12 +45,17 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
                     _instances.Add(data, instance);
                 }
 
-                if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
-                {
-                    dataSettable.SetData(data);
-                }
+                SetDataIfNeeded(instance, data);
 
                 instance.transform.SetAsLastSibling();
+            }
+        }
+
+        private static void SetDataIfNeeded([NotNull] GameObject instance, T data)
+        {
+            if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
+            {
+                dataSettable.SetData(data);
             }
         }
     }

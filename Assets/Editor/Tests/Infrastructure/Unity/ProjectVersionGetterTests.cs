@@ -1,8 +1,8 @@
-using Infrastructure.System;
+using Infrastructure.Unity;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Editor.Tests.Infrastructure.System
+namespace Editor.Tests.Infrastructure.Unity
 {
     public class ProjectVersionGetterTests
     {
