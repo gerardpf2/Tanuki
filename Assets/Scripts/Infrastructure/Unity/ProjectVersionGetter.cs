@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Infrastructure.System
+namespace Infrastructure.Unity
 {
     public class ProjectVersionGetter : IProjectVersionGetter
     {
