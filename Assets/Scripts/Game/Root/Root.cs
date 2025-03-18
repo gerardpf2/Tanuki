@@ -2,6 +2,7 @@ using Game.Root.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
+using Infrastructure.System.Exceptions;
 using UnityEngine;
 
 namespace Game.Root
@@ -16,6 +17,10 @@ namespace Game.Root
 
         private void Awake()
         {
+            InvalidOperationException.ThrowIfNull(_gateDefinitionContainer);
+            InvalidOperationException.ThrowIfNull(_screenDefinitionContainer);
+            InvalidOperationException.ThrowIfNull(_rootScreenPlacement);
+
             IBuildAndInitializeRootScopeUseCase buildAndInitializeRootScopeUseCase =
                 new BuildAndInitializeRootScopeUseCase(
                     _gateDefinitionContainer,
