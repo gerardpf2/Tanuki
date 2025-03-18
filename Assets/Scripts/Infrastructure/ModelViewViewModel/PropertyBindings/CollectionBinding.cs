@@ -11,7 +11,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 
         private readonly IDictionary<T, GameObject> _instances = new Dictionary<T, GameObject>();
 
-        public override void Set(IEnumerable<T> value)
+        public override void Set([ItemNotNull] IEnumerable<T> value)
         {
             ICollection<T> currentData = new HashSet<T>(value ?? Enumerable.Empty<T>());
 
@@ -34,7 +34,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
             }
         }
 
-        private void AddItems([NotNull] IEnumerable<T> currentData)
+        private void AddItems([NotNull] [ItemNotNull] IEnumerable<T> currentData)
         {
             foreach (T data in currentData)
             {

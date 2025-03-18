@@ -5,7 +5,7 @@ namespace Infrastructure.ModelViewViewModel
 {
     public class BoundMethod : IBoundMethod
     {
-        private readonly Action _method;
+        [NotNull] private readonly Action _method;
 
         public string Key { get; }
 
