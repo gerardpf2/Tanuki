@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.ScreenLoading
 {
@@ -12,7 +13,15 @@ namespace Infrastructure.ScreenLoading
 
         public string Key => _key;
 
-        public GameObject Prefab => _prefab;
+        public GameObject Prefab
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_prefab);
+
+                return _prefab;
+            }
+        }
 
         public string PlacementKey => _placementKey;
     }

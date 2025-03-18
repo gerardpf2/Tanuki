@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.ScreenLoading
 {
@@ -10,6 +11,8 @@ namespace Infrastructure.ScreenLoading
 
         public void Add([NotNull] IScreenPlacement screenPlacement)
         {
+            ArgumentNullException.ThrowIfNull(screenPlacement);
+
             if (screenPlacement.Key is not null && _screenPlacements.TryAdd(screenPlacement.Key, screenPlacement))
             {
                 return;
@@ -20,6 +23,8 @@ namespace Infrastructure.ScreenLoading
 
         public void Remove([NotNull] IScreenPlacement screenPlacement)
         {
+            ArgumentNullException.ThrowIfNull(screenPlacement);
+
             if (screenPlacement.Key is not null && _screenPlacements.Remove(screenPlacement.Key))
             {
                 return;
@@ -30,6 +35,8 @@ namespace Infrastructure.ScreenLoading
 
         public IScreenPlacement Get([NotNull] string key)
         {
+            ArgumentNullException.ThrowIfNull(key);
+
             if (_screenPlacements.TryGetValue(key, out IScreenPlacement screenPlacement))
             {
                 return screenPlacement;

@@ -2,6 +2,7 @@ using System;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
 using UnityEngine;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using Object = UnityEngine.Object;
 
 namespace Infrastructure.ScreenLoading
@@ -15,6 +16,9 @@ namespace Infrastructure.ScreenLoading
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacementGetter screenPlacementGetter)
         {
+            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(screenPlacementGetter);
+
             _screenDefinitionGetter = screenDefinitionGetter;
             _screenPlacementGetter = screenPlacementGetter;
         }
@@ -42,6 +46,8 @@ namespace Infrastructure.ScreenLoading
         [NotNull]
         private GameObject Instantiate([NotNull] IScreenDefinition screenDefinition)
         {
+            ArgumentNullException.ThrowIfNull(screenDefinition);
+
             GameObject prefab = screenDefinition.Prefab;
 
             Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
@@ -58,6 +64,8 @@ namespace Infrastructure.ScreenLoading
 
         private static void SetData<T>([NotNull] GameObject instance, T data, string key)
         {
+            ArgumentNullException.ThrowIfNull(instance);
+
             if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
             {
                 dataSettable.SetData(data);
