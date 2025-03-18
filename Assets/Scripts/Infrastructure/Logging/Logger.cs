@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Infrastructure.Logging
 {
     public class Logger : ILogger
     {
-        [NotNull] private readonly ICollection<ILogHandler> _logHandlers = new List<ILogHandler>();
+        [NotNull] [ItemNotNull] private readonly ICollection<ILogHandler> _logHandlers = new List<ILogHandler>();
 
         public void Info(string message)
         {
@@ -33,6 +34,8 @@ namespace Infrastructure.Logging
 
         public void Add([NotNull] ILogHandler logHandler)
         {
+            ArgumentNullException.ThrowIfNull(logHandler);
+
             _logHandlers.Add(logHandler);
         }
     }
