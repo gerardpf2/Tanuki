@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Infrastructure.Unity
@@ -6,7 +7,14 @@ namespace Infrastructure.Unity
     {
         public string Get()
         {
-            return Application.version;
+            string version = Application.version;
+
+            if (version == null)
+            {
+                throw new InvalidOperationException("Cannot get project version");
+            }
+
+            return version;
         }
     }
 }
