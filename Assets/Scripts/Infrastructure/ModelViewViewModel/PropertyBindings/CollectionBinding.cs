@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -40,22 +41,39 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
             {
                 if (!_instances.TryGetValue(data, out GameObject instance))
                 {
-                    instance = Instantiate(_prefab, transform);
+                    instance = Instantiate();
 
                     _instances.Add(data, instance);
                 }
 
-                SetDataIfNeeded(instance, data);
+                SetData(instance, data);
 
                 instance.transform.SetAsLastSibling();
             }
         }
 
-        private static void SetDataIfNeeded([NotNull] GameObject instance, T data)
+        [NotNull]
+        private GameObject Instantiate()
+        {
+            GameObject instance = Instantiate(_prefab, transform);
+
+            if (instance == null)
+            {
+                throw new InvalidOperationException("Cannot instantiate item");
+            }
+
+            return instance;
+        }
+
+        private static void SetData([NotNull] GameObject instance, T data)
         {
             if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
             {
                 dataSettable.SetData(data);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Cannot set data of Type: {typeof(T)} to item");
             }
         }
     }
