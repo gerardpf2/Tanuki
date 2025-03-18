@@ -1,4 +1,4 @@
-using System;
+using Infrastructure.System.Exceptions;
 using UnityEngine;
 
 namespace Infrastructure.Unity
@@ -9,10 +9,7 @@ namespace Infrastructure.Unity
         {
             string version = Application.version;
 
-            if (version is null)
-            {
-                throw new InvalidOperationException("Cannot get project version");
-            }
+            InvalidOperationException.ThrowIfNull(version);
 
             return version;
         }
