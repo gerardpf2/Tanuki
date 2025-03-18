@@ -55,7 +55,7 @@ namespace Infrastructure.DependencyInjection
 
             T scope = ctor(scopeBuildingContext.Initialize);
 
-            if (scope == null)
+            if (scope is null)
             {
                 return null;
             }
@@ -88,7 +88,7 @@ namespace Infrastructure.DependencyInjection
         {
             IEnumerable<IScopeComposer> partialScopeComposers = getPartialScopeComposers?.Invoke();
 
-            if (partialScopeComposers == null)
+            if (partialScopeComposers is null)
             {
                 return;
             }
@@ -105,7 +105,7 @@ namespace Infrastructure.DependencyInjection
         {
             IEnumerable<IScopeComposer> childScopeComposers = getChildScopeComposers?.Invoke();
 
-            if (childScopeComposers == null)
+            if (childScopeComposers is null)
             {
                 return;
             }

@@ -48,7 +48,7 @@ namespace Infrastructure.ScreenLoading
 
             GameObject instance = Object.Instantiate(prefab, placement);
 
-            if (instance == null)
+            if (!instance)
             {
                 throw new InvalidOperationException($"Cannot instantiate screen with Key: {screenDefinition.Key}");
             }

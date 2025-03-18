@@ -14,7 +14,7 @@ namespace Infrastructure.ScreenLoading
         {
             IScreenDefinition screenDefinition = _screenDefinitions.Find(screenDefinition => screenDefinition.Key == key);
 
-            if (screenDefinition == null)
+            if (screenDefinition is null)
             {
                 throw new InvalidOperationException($"Cannot get screen definition with Key: {key}");
             }

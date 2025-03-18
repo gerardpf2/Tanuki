@@ -10,7 +10,7 @@ namespace Infrastructure.ScreenLoading
 
         public void Add([NotNull] IScreenPlacement screenPlacement)
         {
-            if (screenPlacement.Key != null && _screenPlacements.TryAdd(screenPlacement.Key, screenPlacement))
+            if (screenPlacement.Key is not null && _screenPlacements.TryAdd(screenPlacement.Key, screenPlacement))
             {
                 return;
             }
@@ -20,7 +20,7 @@ namespace Infrastructure.ScreenLoading
 
         public void Remove([NotNull] IScreenPlacement screenPlacement)
         {
-            if (screenPlacement.Key != null && _screenPlacements.Remove(screenPlacement.Key))
+            if (screenPlacement.Key is not null && _screenPlacements.Remove(screenPlacement.Key))
             {
                 return;
             }

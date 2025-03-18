@@ -20,7 +20,7 @@ namespace Infrastructure.Gating
 
         public bool Validate(string gateKey)
         {
-            if (gateKey == null)
+            if (gateKey is null)
             {
                 return true;
             }

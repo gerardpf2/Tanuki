@@ -10,7 +10,7 @@ namespace Infrastructure.ModelViewViewModel
 
         public void Add([NotNull] IBoundMethod boundMethod)
         {
-            if (boundMethod.Key != null && _boundMethods.TryAdd(boundMethod.Key, boundMethod))
+            if (boundMethod.Key is not null && _boundMethods.TryAdd(boundMethod.Key, boundMethod))
             {
                 return;
             }

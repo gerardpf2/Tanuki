@@ -9,7 +9,7 @@ namespace Infrastructure.Unity
         {
             string version = Application.version;
 
-            if (version == null)
+            if (version is null)
             {
                 throw new InvalidOperationException("Cannot get project version");
             }

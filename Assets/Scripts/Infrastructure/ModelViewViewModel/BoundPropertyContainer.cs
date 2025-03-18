@@ -10,7 +10,7 @@ namespace Infrastructure.ModelViewViewModel
 
         public void Add<T>([NotNull] IBoundProperty<T> boundProperty)
         {
-            if (boundProperty.Key != null && _boundProperties.TryAdd(boundProperty.Key, boundProperty))
+            if (boundProperty.Key is not null && _boundProperties.TryAdd(boundProperty.Key, boundProperty))
             {
                 return;
             }

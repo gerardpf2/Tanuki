@@ -31,13 +31,13 @@ namespace Infrastructure.DependencyInjection
             {
                 result = rule.Resolve(this);
 
-                if (result != null)
+                if (result is not null)
                 {
                     return true;
                 }
             }
 
-            if (_parentRuleResolver != null)
+            if (_parentRuleResolver is not null)
             {
                 return _parentRuleResolver.TryResolve(out result, key);
             }

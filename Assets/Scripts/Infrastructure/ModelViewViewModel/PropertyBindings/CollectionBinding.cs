@@ -57,7 +57,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
         {
             GameObject instance = Instantiate(_prefab, transform);
 
-            if (instance == null)
+            if (!instance)
             {
                 throw new InvalidOperationException("Cannot instantiate item");
             }
