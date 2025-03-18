@@ -5,8 +5,8 @@ namespace Infrastructure.ScreenLoading.Composition
 {
     public class ScreenLoadingComposer : ScopeComposer
     {
-        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
-        private readonly IScreenPlacement _rootScreenPlacement;
+        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
 
         public ScreenLoadingComposer(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,

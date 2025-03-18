@@ -8,8 +8,8 @@ namespace Infrastructure.ScreenLoading
 {
     public class ScreenLoader : IScreenLoader
     {
-        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
-        private readonly IScreenPlacementGetter _screenPlacementGetter;
+        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
 
         public ScreenLoader(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
