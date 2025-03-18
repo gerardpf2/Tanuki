@@ -2,6 +2,7 @@ using System;
 using Infrastructure.System;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.Gating
 {
@@ -14,6 +15,9 @@ namespace Infrastructure.Gating
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] IProjectVersionGetter projectVersionGetter)
         {
+            ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(projectVersionGetter);
+
             _gateDefinitionGetter = gateDefinitionGetter;
             _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
@@ -41,6 +45,8 @@ namespace Infrastructure.Gating
 
         private bool ValidateVersion([NotNull] string version, ComparisonOperator versionComparisonOperator)
         {
+            ArgumentNullException.ThrowIfNull(version);
+
             Version gateVersion = Version.Parse(version);
 
             return versionComparisonOperator switch
