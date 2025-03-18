@@ -11,8 +11,8 @@ namespace Game.Root.Composition
 {
     public class RootComposer : ScopeComposer
     {
-        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
-        private readonly IScreenPlacement _rootScreenPlacement;
+        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
 
         public RootComposer(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,

@@ -10,9 +10,9 @@ namespace Game.Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {
-        private readonly IGateDefinitionGetter _gateDefinitionGetter;
-        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
-        private readonly IScreenPlacement _rootScreenPlacement;
+        [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
+        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
 
         public BuildAndInitializeRootScopeUseCase(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
