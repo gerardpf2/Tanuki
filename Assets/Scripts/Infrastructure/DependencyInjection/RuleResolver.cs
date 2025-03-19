@@ -19,12 +19,12 @@ namespace Infrastructure.DependencyInjection
 
         public T Resolve<T>(object key = null)
         {
-            if (TryResolve(out T result, key))
+            if (!TryResolve(out T result, key))
             {
-                return result;
+                InvalidOperationException.Throw($"Cannot resolve rule with Type: {typeof(T)} and Key: {key}");
             }
 
-            InvalidOperationException.Throw($"Cannot resolve rule with Type: {typeof(T)} and Key: {key}");
+            return result;
         }
 
         public bool TryResolve<T>(out T result, object key = null)

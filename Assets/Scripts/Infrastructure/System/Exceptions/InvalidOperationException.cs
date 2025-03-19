@@ -6,7 +6,7 @@ namespace Infrastructure.System.Exceptions
     public static class InvalidOperationException
     {
         [ContractAnnotation("=> halt")]
-        public static void Throw(string message)
+        public static void Throw(string message = null)
         {
             throw new global::System.InvalidOperationException(message);
         }

@@ -12,12 +12,10 @@ namespace Infrastructure.ModelViewViewModel
         {
             ArgumentNullException.ThrowIfNull(boundProperty);
 
-            if (boundProperty.Key is not null && _boundProperties.TryAdd(boundProperty.Key, boundProperty))
+            if (boundProperty.Key is null || !_boundProperties.TryAdd(boundProperty.Key, boundProperty))
             {
-                return;
+                InvalidOperationException.Throw($"Cannot add bound property with Type: {typeof(T)} and Key: {boundProperty.Key}");
             }
-
-            InvalidOperationException.Throw($"Cannot add bound property with Type: {typeof(T)} and Key: {boundProperty.Key}");
         }
 
         public IBoundProperty<T> Get<T>([NotNull] string key)
@@ -30,6 +28,8 @@ namespace Infrastructure.ModelViewViewModel
             }
 
             InvalidOperationException.Throw($"Cannot get bound property with Type: {typeof(T)} and Key: {key}");
+
+            return null;
         }
     }
 }

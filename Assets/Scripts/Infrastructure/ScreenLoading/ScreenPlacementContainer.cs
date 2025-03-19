@@ -12,36 +12,32 @@ namespace Infrastructure.ScreenLoading
         {
             ArgumentNullException.ThrowIfNull(screenPlacement);
 
-            if (screenPlacement.Key is not null && _screenPlacements.TryAdd(screenPlacement.Key, screenPlacement))
+            if (screenPlacement.Key is null || !_screenPlacements.TryAdd(screenPlacement.Key, screenPlacement))
             {
-                return;
+                InvalidOperationException.Throw($"Cannot add screen placement with Key: {screenPlacement.Key}");
             }
-
-            InvalidOperationException.Throw($"Cannot add screen placement with Key: {screenPlacement.Key}");
         }
 
         public void Remove([NotNull] IScreenPlacement screenPlacement)
         {
             ArgumentNullException.ThrowIfNull(screenPlacement);
 
-            if (screenPlacement.Key is not null && _screenPlacements.Remove(screenPlacement.Key))
+            if (screenPlacement.Key is null || !_screenPlacements.Remove(screenPlacement.Key))
             {
-                return;
+                InvalidOperationException.Throw($"Cannot remove screen placement with Key: {screenPlacement.Key}");
             }
-
-            InvalidOperationException.Throw($"Cannot remove screen placement with Key: {screenPlacement.Key}");
         }
 
         public IScreenPlacement Get([NotNull] string key)
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            if (_screenPlacements.TryGetValue(key, out IScreenPlacement screenPlacement))
+            if (!_screenPlacements.TryGetValue(key, out IScreenPlacement screenPlacement))
             {
-                return screenPlacement;
+                InvalidOperationException.Throw($"Cannot get screen placement with Key: {key}");
             }
 
-            InvalidOperationException.Throw($"Cannot get screen placement with Key: {key}");
+            return screenPlacement;
         }
     }
 }

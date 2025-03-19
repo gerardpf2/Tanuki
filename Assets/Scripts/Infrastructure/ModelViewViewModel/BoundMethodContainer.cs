@@ -12,24 +12,22 @@ namespace Infrastructure.ModelViewViewModel
         {
             ArgumentNullException.ThrowIfNull(boundMethod);
 
-            if (boundMethod.Key is not null && _boundMethods.TryAdd(boundMethod.Key, boundMethod))
+            if (boundMethod.Key is null || !_boundMethods.TryAdd(boundMethod.Key, boundMethod))
             {
-                return;
+                InvalidOperationException.Throw($"Cannot add bound method with Key: {boundMethod.Key}");
             }
-
-            InvalidOperationException.Throw($"Cannot add bound method with Key: {boundMethod.Key}");
         }
 
         public IBoundMethod Get([NotNull] string key)
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            if (_boundMethods.TryGetValue(key, out IBoundMethod boundMethod))
+            if (!_boundMethods.TryGetValue(key, out IBoundMethod boundMethod))
             {
-                return boundMethod;
+                InvalidOperationException.Throw($"Cannot get bound method with Key: {key}");
             }
 
-            InvalidOperationException.Throw($"Cannot get bound method with Key: {key}");
+            return boundMethod;
         }
     }
 }
