@@ -10,13 +10,17 @@ namespace Infrastructure.DependencyInjection
         [ContractAnnotation("=> halt")]
         public override IEnumerable<PartialScope> GetPartialScopes()
         {
-            throw new NotSupportedException();
+            System.Exceptions.NotSupportedException.Throw();
+
+            return null;
         }
 
         [ContractAnnotation("=> halt")]
         public override IEnumerable<Scope> GetChildScopes()
         {
-            throw new NotSupportedException();
+            System.Exceptions.NotSupportedException.Throw();
+
+            return null;
         }
 
         [NotNull] private readonly Scope _mainScope;
