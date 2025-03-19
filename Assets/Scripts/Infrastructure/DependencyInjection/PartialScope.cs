@@ -7,9 +7,17 @@ namespace Infrastructure.DependencyInjection
 {
     public class PartialScope : Scope
     {
-        public override IEnumerable<PartialScope> PartialScopes => throw new NotSupportedException();
+        [ContractAnnotation("=> halt")]
+        public override IEnumerable<PartialScope> GetPartialScopes()
+        {
+            throw new NotSupportedException();
+        }
 
-        public override IEnumerable<Scope> ChildScopes => throw new NotSupportedException();
+        [ContractAnnotation("=> halt")]
+        public override IEnumerable<Scope> GetChildScopes()
+        {
+            throw new NotSupportedException();
+        }
 
         [NotNull] private readonly Scope _mainScope;
 
@@ -32,11 +40,15 @@ namespace Infrastructure.DependencyInjection
 
         public override void AddPartial(PartialScope partialScope)
         {
+            ArgumentNullException.ThrowIfNull(partialScope);
+
             _mainScope.AddPartial(partialScope);
         }
 
         public override void AddChild(Scope childScope)
         {
+            ArgumentNullException.ThrowIfNull(childScope);
+
             _mainScope.AddChild(childScope);
         }
     }

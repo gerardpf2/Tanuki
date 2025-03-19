@@ -18,12 +18,12 @@ namespace Infrastructure.DependencyInjection
 
             InitializeSingle(scope);
 
-            foreach (PartialScope partialScope in scope.PartialScopes)
+            foreach (PartialScope partialScope in scope.GetPartialScopes())
             {
                 Initialize(partialScope);
             }
 
-            foreach (Scope childScope in scope.ChildScopes)
+            foreach (Scope childScope in scope.GetChildScopes())
             {
                 Initialize(childScope);
             }

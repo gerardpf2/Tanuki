@@ -1,16 +1,23 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
     public class Scope
     {
-        [NotNull]
-        public virtual IEnumerable<PartialScope> PartialScopes => _partialScopes;
+        [NotNull] [ItemNotNull]
+        public virtual IEnumerable<PartialScope> GetPartialScopes()
+        {
+            return _partialScopes;
+        }
 
-        [NotNull]
-        public virtual IEnumerable<Scope> ChildScopes => _childScopes;
+        [NotNull] [ItemNotNull]
+        public virtual IEnumerable<Scope> GetChildScopes()
+        {
+            return _childScopes;
+        }
 
         public readonly IRuleAdder RuleAdder;
         public readonly IRuleResolver RuleResolver;
@@ -26,13 +33,17 @@ namespace Infrastructure.DependencyInjection
             Initialize = initialize;
         }
 
-        public virtual void AddPartial(PartialScope partialScope)
+        public virtual void AddPartial([NotNull] PartialScope partialScope)
         {
+            ArgumentNullException.ThrowIfNull(partialScope);
+
             _partialScopes.Add(partialScope);
         }
 
-        public virtual void AddChild(Scope childScope)
+        public virtual void AddChild([NotNull] Scope childScope)
         {
+            ArgumentNullException.ThrowIfNull(childScope);
+
             _childScopes.Add(childScope);
         }
     }
