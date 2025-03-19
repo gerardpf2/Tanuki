@@ -36,7 +36,7 @@ namespace Infrastructure.DependencyInjection
             return new SingletonRule<T>(ctor);
         }
 
-        public IRule<TInput> GetTo<TInput, TOutput>(object key = null) where TOutput : TInput
+        public IRule<TInput> GetTo<TInput, TOutput>(object key = null) where TOutput : class, TInput
         {
             return new ToRule<TInput, TOutput>(key);
         }
@@ -48,7 +48,7 @@ namespace Infrastructure.DependencyInjection
             return new GateKeyRule<T>(_gateValidator, rule, gateKey);
         }
 
-        public IRule<T> GetTarget<T>([NotNull] IRuleResolver ruleResolver, object key = null)
+        public IRule<T> GetTarget<T>([NotNull] IRuleResolver ruleResolver, object key = null) where T : class
         {
             ArgumentNullException.ThrowIfNull(ruleResolver);
 

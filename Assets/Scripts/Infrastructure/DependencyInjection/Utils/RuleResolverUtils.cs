@@ -6,7 +6,7 @@ namespace Infrastructure.DependencyInjection.Utils
 {
     public static class RuleResolverUtils
     {
-        public static void SafeResolve<T>([NotNull] this IRuleResolver ruleResolver, object key = null)
+        public static void SafeResolve<T>([NotNull] this IRuleResolver ruleResolver, object key = null) where T : class
         {
             ArgumentNullException.ThrowIfNull(ruleResolver);
 
@@ -16,7 +16,7 @@ namespace Infrastructure.DependencyInjection.Utils
         public static void SafeExecute<T>(
             [NotNull] this IRuleResolver ruleResolver,
             [NotNull] Action<T> action,
-            object key = null)
+            object key = null) where T : class
         {
             ArgumentNullException.ThrowIfNull(ruleResolver);
             ArgumentNullException.ThrowIfNull(action);

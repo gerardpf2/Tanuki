@@ -16,13 +16,13 @@ namespace Infrastructure.DependencyInjection
         IRule<T> GetSingleton<T>(Func<IRuleResolver, T> ctor);
 
         [NotNull]
-        IRule<TInput> GetTo<TInput, TOutput>(object key = null) where TOutput : TInput;
+        IRule<TInput> GetTo<TInput, TOutput>(object key = null) where TOutput : class, TInput;
 
         [NotNull]
         IRule<T> GetGateKey<T>(IRule<T> rule, string gateKey) where T : class;
 
         [NotNull]
-        IRule<T> GetTarget<T>(IRuleResolver ruleResolver, object key = null);
+        IRule<T> GetTarget<T>(IRuleResolver ruleResolver, object key = null) where T : class;
 
         [NotNull]
         IRule<Action<T>> GetInject<T>(Action<IRuleResolver, T> inject);

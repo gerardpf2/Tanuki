@@ -4,7 +4,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.DependencyInjection.Rules
 {
-    public class ToRule<TInput, TOutput> : IRule<TInput> where TOutput : TInput
+    public class ToRule<TInput, TOutput> : IRule<TInput> where TOutput : class, TInput
     {
         private readonly object _key;
 

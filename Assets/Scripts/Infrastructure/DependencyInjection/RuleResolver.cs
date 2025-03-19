@@ -17,7 +17,7 @@ namespace Infrastructure.DependencyInjection
             _parentRuleResolver = parentRuleResolver;
         }
 
-        public T Resolve<T>(object key = null)
+        public T Resolve<T>(object key = null) where T : class
         {
             if (!TryResolve(out T result, key))
             {
@@ -27,7 +27,7 @@ namespace Infrastructure.DependencyInjection
             return result;
         }
 
-        public bool TryResolve<T>(out T result, object key = null)
+        public bool TryResolve<T>(out T result, object key = null) where T : class
         {
             if (_ruleGetter.TryGet(out IRule<T> rule, key))
             {
@@ -44,7 +44,7 @@ namespace Infrastructure.DependencyInjection
                 return _parentRuleResolver.TryResolve(out result, key);
             }
 
-            result = default;
+            result = null;
 
             return false;
         }
