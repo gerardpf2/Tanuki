@@ -8,7 +8,7 @@ namespace Infrastructure.System.Exceptions
         [ContractAnnotation("param:null => halt")]
         public static void ThrowIfNull(object param, [CallerArgumentExpression("param")] string paramName = null)
         {
-            if (param is null)
+            if (param == null) // "==" instead of "is" because of Unity's operator overloads
             {
                 throw new global::System.ArgumentNullException(paramName);
             }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using NotSupportedException = Infrastructure.System.Exceptions.NotSupportedException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -10,7 +11,7 @@ namespace Infrastructure.DependencyInjection
         [ContractAnnotation("=> halt")]
         public override IEnumerable<PartialScope> GetPartialScopes()
         {
-            System.Exceptions.NotSupportedException.Throw();
+            NotSupportedException.Throw();
 
             return null;
         }
@@ -18,7 +19,7 @@ namespace Infrastructure.DependencyInjection
         [ContractAnnotation("=> halt")]
         public override IEnumerable<Scope> GetChildScopes()
         {
-            System.Exceptions.NotSupportedException.Throw();
+            NotSupportedException.Throw();
 
             return null;
         }

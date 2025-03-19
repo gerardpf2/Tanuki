@@ -14,10 +14,10 @@ namespace Infrastructure.Gating
         {
             IGateDefinition gateDefinition = _gateDefinitions.Find(gateDefinition => gateDefinition.GateKey == gateKey);
 
-            if (gateDefinition is null)
-            {
-                InvalidOperationException.Throw($"Cannot get gate definition with GateKey: {gateKey}");
-            }
+            InvalidOperationException.ThrowIfNullWithMessage(
+                gateDefinition,
+                $"Cannot get gate definition with GateKey: {gateKey}"
+            );
 
             return gateDefinition;
         }

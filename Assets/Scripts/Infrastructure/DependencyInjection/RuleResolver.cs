@@ -33,7 +33,7 @@ namespace Infrastructure.DependencyInjection
             {
                 result = rule.Resolve(this);
 
-                if (result is not null)
+                if (result != null) // "!=" instead of "is not" because of Unity's operator overloads
                 {
                     return true;
                 }

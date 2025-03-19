@@ -51,10 +51,10 @@ namespace Infrastructure.ScreenLoading
             Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
             GameObject instance = Object.Instantiate(prefab, placement);
 
-            if (!instance)
-            {
-                InvalidOperationException.Throw($"Cannot instantiate screen with Key: {screenDefinition.Key}");
-            }
+            InvalidOperationException.ThrowIfNullWithMessage(
+                instance,
+                $"Cannot instantiate screen with Key: {screenDefinition.Key}"
+            );
 
             return instance;
         }
@@ -63,14 +63,14 @@ namespace Infrastructure.ScreenLoading
         {
             ArgumentNullException.ThrowIfNull(instance);
 
-            if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
-            {
-                dataSettable.SetData(data);
-            }
-            else
-            {
-                InvalidOperationException.Throw($"Cannot set data of Type: {typeof(T)} to screen with Key: {key}");
-            }
+            IDataSettable<T> dataSettable = instance.GetComponent<IDataSettable<T>>();
+
+            InvalidOperationException.ThrowIfNullWithMessage(
+                dataSettable,
+                $"Cannot set data of Type: {typeof(T)} to screen with Key: {key}"
+            );
+
+            dataSettable.SetData(data);
         }
     }
 }

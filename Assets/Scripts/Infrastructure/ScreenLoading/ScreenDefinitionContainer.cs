@@ -14,10 +14,10 @@ namespace Infrastructure.ScreenLoading
         {
             IScreenDefinition screenDefinition = _screenDefinitions.Find(screenDefinition => screenDefinition.Key == key);
 
-            if (screenDefinition is null)
-            {
-                InvalidOperationException.Throw($"Cannot get screen definition with Key: {key}");
-            }
+            InvalidOperationException.ThrowIfNullWithMessage(
+                screenDefinition,
+                $"Cannot get screen definition with Key: {key}"
+            );
 
             return screenDefinition;
         }

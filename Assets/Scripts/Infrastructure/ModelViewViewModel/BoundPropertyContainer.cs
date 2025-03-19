@@ -14,7 +14,9 @@ namespace Infrastructure.ModelViewViewModel
 
             if (boundProperty.Key is null || !_boundProperties.TryAdd(boundProperty.Key, boundProperty))
             {
-                InvalidOperationException.Throw($"Cannot add bound property with Type: {typeof(T)} and Key: {boundProperty.Key}");
+                InvalidOperationException.Throw(
+                    $"Cannot add bound property with Type: {typeof(T)} and Key: {boundProperty.Key}"
+                );
             }
         }
 

@@ -12,12 +12,18 @@ namespace Infrastructure.System.Exceptions
         }
 
         [ContractAnnotation("param:null => halt")]
+        public static void ThrowIfNullWithMessage(object param, string message)
+        {
+            if (param == null) // "==" instead of "is" because of Unity's operator overloads
+            {
+                Throw(message);
+            }
+        }
+
+        [ContractAnnotation("param:null => halt")]
         public static void ThrowIfNull(object param, [CallerArgumentExpression("param")] string paramName = null)
         {
-            if (param is null)
-            {
-                Throw($"Param {paramName} cannot be null");
-            }
+            ThrowIfNullWithMessage(param, $"{paramName} cannot be null");
         }
     }
 }

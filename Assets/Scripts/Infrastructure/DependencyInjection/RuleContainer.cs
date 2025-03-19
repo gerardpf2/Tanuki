@@ -12,12 +12,10 @@ namespace Infrastructure.DependencyInjection
 
         public void Add<T>(IRule<T> rule, object key = null) where T : class
         {
-            if (_rules.TryAdd((typeof(T), key), rule))
+            if (!_rules.TryAdd((typeof(T), key), rule))
             {
-                return;
+                InvalidOperationException.Throw($"Cannot add rule with Type: {typeof(T)} and Key: {key}");
             }
-
-            InvalidOperationException.Throw($"Cannot add rule with Type: {typeof(T)} and Key: {key}");
         }
 
         public bool TryGet<T>(out IRule<T> rule, object key = null)
