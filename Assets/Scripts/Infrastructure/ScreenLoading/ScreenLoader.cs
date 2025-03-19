@@ -1,8 +1,7 @@
-using System;
 using Infrastructure.ModelViewViewModel;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using Object = UnityEngine.Object;
 
 namespace Infrastructure.ScreenLoading
@@ -49,14 +48,12 @@ namespace Infrastructure.ScreenLoading
             ArgumentNullException.ThrowIfNull(screenDefinition);
 
             GameObject prefab = screenDefinition.Prefab;
-
             Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
-
             GameObject instance = Object.Instantiate(prefab, placement);
 
             if (!instance)
             {
-                throw new InvalidOperationException($"Cannot instantiate screen with Key: {screenDefinition.Key}");
+                InvalidOperationException.Throw($"Cannot instantiate screen with Key: {screenDefinition.Key}");
             }
 
             return instance;
@@ -72,7 +69,7 @@ namespace Infrastructure.ScreenLoading
             }
             else
             {
-                throw new InvalidOperationException($"Cannot set data of Type: {typeof(T)} to screen with Key: {key}");
+                InvalidOperationException.Throw($"Cannot set data of Type: {typeof(T)} to screen with Key: {key}");
             }
         }
     }

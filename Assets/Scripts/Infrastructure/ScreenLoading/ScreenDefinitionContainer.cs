@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace Infrastructure.ScreenLoading
 
             if (screenDefinition is null)
             {
-                throw new InvalidOperationException($"Cannot get screen definition with Key: {key}");
+                InvalidOperationException.Throw($"Cannot get screen definition with Key: {key}");
             }
 
             return screenDefinition;

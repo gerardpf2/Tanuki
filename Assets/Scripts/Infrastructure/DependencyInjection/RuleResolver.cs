@@ -1,7 +1,6 @@
-using System;
 using Infrastructure.DependencyInjection.Rules;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -25,7 +24,7 @@ namespace Infrastructure.DependencyInjection
                 return result;
             }
 
-            throw new InvalidOperationException($"Cannot resolve rule with Type: {typeof(T)} and Key: {key}");
+            InvalidOperationException.Throw($"Cannot resolve rule with Type: {typeof(T)} and Key: {key}");
         }
 
         public bool TryResolve<T>(out T result, object key = null)

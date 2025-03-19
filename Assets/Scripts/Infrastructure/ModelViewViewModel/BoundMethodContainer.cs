@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.ModelViewViewModel
 {
@@ -18,7 +17,7 @@ namespace Infrastructure.ModelViewViewModel
                 return;
             }
 
-            throw new InvalidOperationException($"Cannot add bound method with Key: {boundMethod.Key}");
+            InvalidOperationException.Throw($"Cannot add bound method with Key: {boundMethod.Key}");
         }
 
         public IBoundMethod Get([NotNull] string key)
@@ -30,7 +29,7 @@ namespace Infrastructure.ModelViewViewModel
                 return boundMethod;
             }
 
-            throw new InvalidOperationException($"Cannot get bound method with Key: {key}");
+            InvalidOperationException.Throw($"Cannot get bound method with Key: {key}");
         }
     }
 }

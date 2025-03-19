@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace Infrastructure.Gating
 
             if (gateDefinition is null)
             {
-                throw new InvalidOperationException($"Cannot get gate definition with GateKey: {gateKey}");
+                InvalidOperationException.Throw($"Cannot get gate definition with GateKey: {gateKey}");
             }
 
             return gateDefinition;

@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.ModelViewViewModel
 {
@@ -18,7 +17,7 @@ namespace Infrastructure.ModelViewViewModel
                 return;
             }
 
-            throw new InvalidOperationException($"Cannot add bound property with Type: {typeof(T)} and Key: {boundProperty.Key}");
+            InvalidOperationException.Throw($"Cannot add bound property with Type: {typeof(T)} and Key: {boundProperty.Key}");
         }
 
         public IBoundProperty<T> Get<T>([NotNull] string key)
@@ -30,7 +29,7 @@ namespace Infrastructure.ModelViewViewModel
                 return boundProperty;
             }
 
-            throw new InvalidOperationException($"Cannot get bound property with Type: {typeof(T)} and Key: {key}");
+            InvalidOperationException.Throw($"Cannot get bound property with Type: {typeof(T)} and Key: {key}");
         }
     }
 }

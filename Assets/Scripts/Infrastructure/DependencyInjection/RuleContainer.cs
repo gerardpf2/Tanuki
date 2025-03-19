@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Infrastructure.DependencyInjection.Rules;
 using JetBrains.Annotations;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -16,7 +17,7 @@ namespace Infrastructure.DependencyInjection
                 return;
             }
 
-            throw new InvalidOperationException($"Cannot add rule with Type: {typeof(T)} and Key: {key}");
+            InvalidOperationException.Throw($"Cannot add rule with Type: {typeof(T)} and Key: {key}");
         }
 
         public bool TryGet<T>(out IRule<T> rule, object key = null)

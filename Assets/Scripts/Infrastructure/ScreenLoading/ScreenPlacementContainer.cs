@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.ScreenLoading
 {
@@ -18,7 +17,7 @@ namespace Infrastructure.ScreenLoading
                 return;
             }
 
-            throw new InvalidOperationException($"Cannot add screen placement with Key: {screenPlacement.Key}");
+            InvalidOperationException.Throw($"Cannot add screen placement with Key: {screenPlacement.Key}");
         }
 
         public void Remove([NotNull] IScreenPlacement screenPlacement)
@@ -30,7 +29,7 @@ namespace Infrastructure.ScreenLoading
                 return;
             }
 
-            throw new InvalidOperationException($"Cannot remove screen placement with Key: {screenPlacement.Key}");
+            InvalidOperationException.Throw($"Cannot remove screen placement with Key: {screenPlacement.Key}");
         }
 
         public IScreenPlacement Get([NotNull] string key)
@@ -42,7 +41,7 @@ namespace Infrastructure.ScreenLoading
                 return screenPlacement;
             }
 
-            throw new InvalidOperationException($"Cannot get screen placement with Key: {key}");
+            InvalidOperationException.Throw($"Cannot get screen placement with Key: {key}");
         }
     }
 }
