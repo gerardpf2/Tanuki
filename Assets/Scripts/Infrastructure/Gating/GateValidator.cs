@@ -3,6 +3,7 @@ using Infrastructure.System;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Infrastructure.Gating
 {
@@ -49,16 +50,24 @@ namespace Infrastructure.Gating
 
             Version gateVersion = Version.Parse(version);
 
-            return versionComparisonOperator switch
+            switch (versionComparisonOperator)
             {
-                ComparisonOperator.EqualTo => _projectVersion == gateVersion,
-                ComparisonOperator.UnequalTo => _projectVersion != gateVersion,
-                ComparisonOperator.LessThan => _projectVersion < gateVersion,
-                ComparisonOperator.GreaterThan => _projectVersion > gateVersion,
-                ComparisonOperator.LessThanOrEqualTo => _projectVersion <= gateVersion,
-                ComparisonOperator.GreaterThanOrEqualTo => _projectVersion >= gateVersion,
-                _ => throw new ArgumentOutOfRangeException(nameof(versionComparisonOperator), versionComparisonOperator, null)
-            };
+                case ComparisonOperator.EqualTo:
+                    return _projectVersion == gateVersion;
+                case ComparisonOperator.UnequalTo:
+                    return _projectVersion != gateVersion;
+                case ComparisonOperator.LessThan:
+                    return _projectVersion < gateVersion;
+                case ComparisonOperator.GreaterThan:
+                    return _projectVersion > gateVersion;
+                case ComparisonOperator.LessThanOrEqualTo:
+                    return _projectVersion <= gateVersion;
+                case ComparisonOperator.GreaterThanOrEqualTo:
+                    return _projectVersion >= gateVersion;
+                default:
+                    ArgumentOutOfRangeException.Throw(versionComparisonOperator);
+                    return false;
+            }
         }
     }
 }
