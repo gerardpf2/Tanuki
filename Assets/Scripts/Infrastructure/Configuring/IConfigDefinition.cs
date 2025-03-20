@@ -1,4 +1,7 @@
 namespace Infrastructure.Configuring
 {
-    public interface IConfigDefinition { }
+    public interface IConfigDefinition
+    {
+        string Value { get; }
+    }
 }

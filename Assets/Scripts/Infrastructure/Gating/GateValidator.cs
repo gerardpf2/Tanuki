@@ -11,20 +11,20 @@ namespace Infrastructure.Gating
     public class GateValidator : IGateValidator
     {
         [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
-        [NotNull] private readonly IConfigDefinitionGetter _configDefinitionGetter;
+        [NotNull] private readonly IConfigValueGetter _configValueGetter;
         [NotNull] private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
-            [NotNull] IConfigDefinitionGetter configDefinitionGetter,
+            [NotNull] IConfigValueGetter configValueGetter,
             [NotNull] IProjectVersionGetter projectVersionGetter)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(configDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(configValueGetter);
             ArgumentNullException.ThrowIfNull(projectVersionGetter);
 
             _gateDefinitionGetter = gateDefinitionGetter;
-            _configDefinitionGetter = configDefinitionGetter;
+            _configValueGetter = configValueGetter;
             _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
 
@@ -43,10 +43,9 @@ namespace Infrastructure.Gating
         }
 
         // TODO: Test
-        // TODO: Add support
         private bool ValidateConfig(string configKey)
         {
-            return true;
+            return _configValueGetter.Get<bool>(configKey);
         }
 
         private bool ValidateVersion([NotNull] string version, ComparisonOperator versionComparisonOperator)

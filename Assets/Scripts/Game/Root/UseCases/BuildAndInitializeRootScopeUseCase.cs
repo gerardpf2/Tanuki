@@ -58,13 +58,21 @@ namespace Game.Root.UseCases
 
             ruleAdder.Add(new InstanceRule<IScreenPlacement>(_rootScreenPlacement));
 
+            ruleAdder.Add(
+                new SingletonRule<IConfigValueGetter>(r =>
+                    new ConfigValueGetter(
+                        r.Resolve<IConfigDefinitionGetter>()
+                    )
+                )
+            );
+
             ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
 
             ruleAdder.Add(
                 new SingletonRule<IGateValidator>(r =>
                     new GateValidator(
                         r.Resolve<IGateDefinitionGetter>(),
-                        r.Resolve<IConfigDefinitionGetter>(),
+                        r.Resolve<IConfigValueGetter>(),
                         r.Resolve<IProjectVersionGetter>()
                     )
                 )

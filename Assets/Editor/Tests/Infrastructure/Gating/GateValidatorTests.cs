@@ -10,18 +10,18 @@ namespace Editor.Tests.Infrastructure.Gating
 {
     public class GateValidatorTests
     {
-        private IConfigDefinitionGetter _configDefinitionGetter;
         private IGateDefinitionGetter _gateDefinitionGetter;
         private IProjectVersionGetter _projectVersionGetter;
+        private IConfigValueGetter _configValueGetter;
 
         private GateValidator _gateValidator;
 
         [SetUp]
         public void SetUp()
         {
-            _configDefinitionGetter = Substitute.For<IConfigDefinitionGetter>();
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
             _projectVersionGetter = Substitute.For<IProjectVersionGetter>();
+            _configValueGetter = Substitute.For<IConfigValueGetter>();
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace Editor.Tests.Infrastructure.Gating
         {
             const string projectVersion = "1.0";
             _projectVersionGetter.Get().Returns(projectVersion);
-            _gateValidator = new GateValidator(_gateDefinitionGetter, _configDefinitionGetter, _projectVersionGetter);
+            _gateValidator = new GateValidator(_gateDefinitionGetter, _configValueGetter, _projectVersionGetter);
 
             bool result = _gateValidator.Validate(null);
 
@@ -61,7 +61,7 @@ namespace Editor.Tests.Infrastructure.Gating
             bool expectedResult)
         {
             _projectVersionGetter.Get().Returns(projectVersion);
-            _gateValidator = new GateValidator(_gateDefinitionGetter, _configDefinitionGetter, _projectVersionGetter);
+            _gateValidator = new GateValidator(_gateDefinitionGetter, _configValueGetter, _projectVersionGetter);
             IGateDefinition gateDefinition = Substitute.For<IGateDefinition>();
             gateDefinition.UseVersion.Returns(true);
             gateDefinition.Version.Returns(gateVersion);
@@ -79,7 +79,7 @@ namespace Editor.Tests.Infrastructure.Gating
         {
             const string projectVersion = "1.0";
             _projectVersionGetter.Get().Returns(projectVersion);
-            _gateValidator = new GateValidator(_gateDefinitionGetter, _configDefinitionGetter, _projectVersionGetter);
+            _gateValidator = new GateValidator(_gateDefinitionGetter, _configValueGetter, _projectVersionGetter);
             const string gateVersion = "1.0";
             const ComparisonOperator versionComparisonOperator = ComparisonOperator.EqualTo - 1;
             IGateDefinition gateDefinition = Substitute.For<IGateDefinition>();
