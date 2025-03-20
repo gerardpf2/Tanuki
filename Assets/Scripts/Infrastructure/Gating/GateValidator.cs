@@ -33,13 +33,13 @@ namespace Infrastructure.Gating
             IGateDefinition gateDefinition = _gateDefinitionGetter.Get(gateKey);
 
             return
-                (!gateDefinition.UseConfig || ValidateConfig(gateDefinition.Config)) &&
+                (!gateDefinition.UseConfig || ValidateConfig(gateDefinition.ConfigKey)) &&
                 (!gateDefinition.UseVersion || ValidateVersion(gateDefinition.Version, gateDefinition.VersionComparisonOperator));
         }
 
         // TODO: Test
         // TODO: Add support
-        private bool ValidateConfig(string config)
+        private bool ValidateConfig(string configKey)
         {
             return true;
         }
