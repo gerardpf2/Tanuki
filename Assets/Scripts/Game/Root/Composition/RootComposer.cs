@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Infrastructure.Configuring;
+using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
@@ -14,16 +16,20 @@ namespace Game.Root.Composition
     {
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
+        [NotNull] private readonly IConfigValueGetter _configValueGetter;
 
         public RootComposer(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
-            [NotNull] IScreenPlacement rootScreenPlacement)
+            [NotNull] IScreenPlacement rootScreenPlacement,
+            [NotNull] IConfigValueGetter configValueGetter)
         {
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
+            ArgumentNullException.ThrowIfNull(configValueGetter);
 
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
+            _configValueGetter = configValueGetter;
         }
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
@@ -31,7 +37,8 @@ namespace Game.Root.Composition
             return base
                 .GetPartialScopeComposers()
                 .Append(new LoggingComposer())
-                .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement));
+                .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement))
+                .Append(new ConfiguringComposer(_configValueGetter));
         }
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()

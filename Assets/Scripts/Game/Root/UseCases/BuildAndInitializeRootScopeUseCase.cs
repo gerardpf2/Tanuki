@@ -112,7 +112,8 @@ namespace Game.Root.UseCases
                 new SingletonRule<IScopeComposer>(r =>
                     new RootComposer(
                         r.Resolve<IScreenDefinitionGetter>(),
-                        r.Resolve<IScreenPlacement>()
+                        r.Resolve<IScreenPlacement>(),
+                        r.Resolve<IConfigValueGetter>()
                     )
                 )
             );
@@ -134,7 +135,7 @@ namespace Game.Root.UseCases
                 new SingletonRule<IGateValidator>(r =>
                     new GateValidator(
                         r.Resolve<IGateDefinitionGetter>(),
-                        r.Resolve<IConfigValueGetter>(),
+                        configKey => r.Resolve<IConfigValueGetter>().Get<bool>(configKey),
                         r.Resolve<IProjectVersionGetter>(),
                         r.Resolve<IVersionComparer>()
                     )

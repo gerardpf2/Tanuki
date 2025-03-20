@@ -1,4 +1,4 @@
-using Infrastructure.Configuring;
+using System;
 using Infrastructure.Gating;
 using Infrastructure.System;
 using Infrastructure.Unity;
@@ -11,7 +11,7 @@ namespace Editor.Tests.Infrastructure.Gating
     {
         private IGateDefinitionGetter _gateDefinitionGetter;
         private IProjectVersionGetter _projectVersionGetter;
-        private IConfigValueGetter _configValueGetter;
+        private Func<string, bool> _configValueGetter;
         private IVersionComparer _versionComparer;
 
         private GateValidator _gateValidator;
@@ -21,7 +21,7 @@ namespace Editor.Tests.Infrastructure.Gating
         {
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
             _projectVersionGetter = Substitute.For<IProjectVersionGetter>();
-            _configValueGetter = Substitute.For<IConfigValueGetter>();
+            _configValueGetter = Substitute.For<Func<string, bool>>();
             _versionComparer = Substitute.For<IVersionComparer>();
         }
 

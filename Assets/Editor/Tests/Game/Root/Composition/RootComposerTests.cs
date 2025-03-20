@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Root.Composition;
+using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
@@ -17,6 +18,7 @@ namespace Editor.Tests.Game.Root.Composition
 
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private ScopeBuildingContext _scopeBuildingContext;
+        private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
 
         private RootComposer _rootComposer;
@@ -25,10 +27,11 @@ namespace Editor.Tests.Game.Root.Composition
         public void SetUp()
         {
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
-            _scopeBuildingContext = new ScopeBuildingContext();
+            _configValueGetter = Substitute.For<IConfigValueGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
+            _scopeBuildingContext = new ScopeBuildingContext();
 
-            _rootComposer = new RootComposer(_screenDefinitionGetter, _screenPlacement);
+            _rootComposer = new RootComposer(_screenDefinitionGetter, _screenPlacement, _configValueGetter);
         }
 
         [Test]

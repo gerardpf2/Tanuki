@@ -1,5 +1,4 @@
 using System;
-using Infrastructure.Configuring;
 using Infrastructure.System;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
@@ -10,13 +9,13 @@ namespace Infrastructure.Gating
     public class GateValidator : IGateValidator
     {
         [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
-        [NotNull] private readonly IConfigValueGetter _configValueGetter;
+        [NotNull] private readonly Func<string, bool> _configValueGetter;
         [NotNull] private readonly IVersionComparer _versionComparer;
         [NotNull] private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
-            [NotNull] IConfigValueGetter configValueGetter,
+            [NotNull] Func<string, bool> configValueGetter, // IConfigValueGetter creates a cyclic dependency between assemblies
             [NotNull] IProjectVersionGetter projectVersionGetter,
             [NotNull] IVersionComparer versionComparer)
         {
@@ -48,7 +47,7 @@ namespace Infrastructure.Gating
         // TODO: Test
         private bool ValidateConfig(string configKey)
         {
-            return _configValueGetter.Get<bool>(configKey);
+            return _configValueGetter(configKey);
         }
 
         // TODO: Test
