@@ -1,4 +1,5 @@
 using Infrastructure.DependencyInjection;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -18,16 +19,22 @@ namespace Infrastructure.ScreenLoading
         {
             InjectResolver.Resolve(this);
 
+            InvalidOperationException.ThrowIfNull(_screenPlacementAdder);
+
             _screenPlacementAdder.Add(this);
         }
 
         private void OnDestroy()
         {
+            InvalidOperationException.ThrowIfNull(_screenPlacementAdder);
+
             _screenPlacementAdder.Remove(this);
         }
 
         public void Inject([NotNull] IScreenPlacementAdder screenPlacementAdder)
         {
+            ArgumentNullException.ThrowIfNull(screenPlacementAdder);
+
             _screenPlacementAdder = screenPlacementAdder;
         }
     }

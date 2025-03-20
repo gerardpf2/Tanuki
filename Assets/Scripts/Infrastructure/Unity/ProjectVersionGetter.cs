@@ -1,3 +1,4 @@
+using Infrastructure.System.Exceptions;
 using UnityEngine;
 
 namespace Infrastructure.Unity
@@ -6,7 +7,11 @@ namespace Infrastructure.Unity
     {
         public string Get()
         {
-            return Application.version;
+            string version = Application.version;
+
+            InvalidOperationException.ThrowIfNull(version);
+
+            return version;
         }
     }
 }

@@ -30,8 +30,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             Assert.AreSame(_ruleAdder, _scope.RuleAdder);
             Assert.AreSame(_ruleResolver, _scope.RuleResolver);
             Assert.AreSame(_initialize, _scope.Initialize);
-            Assert.IsEmpty(_scope.PartialScopes);
-            Assert.IsEmpty(_scope.ChildScopes);
+            Assert.IsEmpty(_scope.GetPartialScopes());
+            Assert.IsEmpty(_scope.GetChildScopes());
         }
 
         [Test]
@@ -41,8 +41,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             _scope.AddPartial(partialScope);
 
-            Assert.IsTrue(_scope.PartialScopes.Count() == 1);
-            Assert.IsTrue(_scope.PartialScopes.Contains(partialScope));
+            Assert.IsTrue(_scope.GetPartialScopes().Count() == 1);
+            Assert.IsTrue(_scope.GetPartialScopes().Contains(partialScope));
         }
 
         [Test]
@@ -54,9 +54,9 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _scope.AddPartial(partialScope1);
             _scope.AddPartial(partialScope2);
 
-            Assert.IsTrue(_scope.PartialScopes.Count() == 2);
-            Assert.IsTrue(_scope.PartialScopes.Contains(partialScope1));
-            Assert.IsTrue(_scope.PartialScopes.Contains(partialScope2));
+            Assert.IsTrue(_scope.GetPartialScopes().Count() == 2);
+            Assert.IsTrue(_scope.GetPartialScopes().Contains(partialScope1));
+            Assert.IsTrue(_scope.GetPartialScopes().Contains(partialScope2));
         }
 
         [Test]
@@ -67,8 +67,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _scope.AddPartial(partialScope);
             _scope.AddPartial(partialScope);
 
-            Assert.IsTrue(_scope.PartialScopes.Count() == 1);
-            Assert.IsTrue(_scope.PartialScopes.Contains(partialScope));
+            Assert.IsTrue(_scope.GetPartialScopes().Count() == 1);
+            Assert.IsTrue(_scope.GetPartialScopes().Contains(partialScope));
         }
 
         [Test]
@@ -78,8 +78,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
 
             _scope.AddChild(childScope);
 
-            Assert.IsTrue(_scope.ChildScopes.Count() == 1);
-            Assert.IsTrue(_scope.ChildScopes.Contains(childScope));
+            Assert.IsTrue(_scope.GetChildScopes().Count() == 1);
+            Assert.IsTrue(_scope.GetChildScopes().Contains(childScope));
         }
 
         [Test]
@@ -91,9 +91,9 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _scope.AddChild(childScope1);
             _scope.AddChild(childScope2);
 
-            Assert.IsTrue(_scope.ChildScopes.Count() == 2);
-            Assert.IsTrue(_scope.ChildScopes.Contains(childScope1));
-            Assert.IsTrue(_scope.ChildScopes.Contains(childScope2));
+            Assert.IsTrue(_scope.GetChildScopes().Count() == 2);
+            Assert.IsTrue(_scope.GetChildScopes().Contains(childScope1));
+            Assert.IsTrue(_scope.GetChildScopes().Contains(childScope2));
         }
 
         [Test]
@@ -104,8 +104,8 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
             _scope.AddChild(childScope);
             _scope.AddChild(childScope);
 
-            Assert.IsTrue(_scope.ChildScopes.Count() == 1);
-            Assert.IsTrue(_scope.ChildScopes.Contains(childScope));
+            Assert.IsTrue(_scope.GetChildScopes().Count() == 1);
+            Assert.IsTrue(_scope.GetChildScopes().Contains(childScope));
         }
     }
 }

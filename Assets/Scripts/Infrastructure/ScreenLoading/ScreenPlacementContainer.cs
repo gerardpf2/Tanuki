@@ -1,41 +1,43 @@
-using System;
 using System.Collections.Generic;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Infrastructure.ScreenLoading
 {
     public class ScreenPlacementContainer : IScreenPlacementAdder, IScreenPlacementGetter
     {
-        private readonly IDictionary<string, IScreenPlacement> _screenPlacements = new Dictionary<string, IScreenPlacement>();
+        [NotNull] private readonly IDictionary<string, IScreenPlacement> _screenPlacements = new Dictionary<string, IScreenPlacement>();
 
         public void Add([NotNull] IScreenPlacement screenPlacement)
         {
-            if (screenPlacement.Key != null && _screenPlacements.TryAdd(screenPlacement.Key, screenPlacement))
-            {
-                return;
-            }
+            ArgumentNullException.ThrowIfNull(screenPlacement);
 
-            throw new InvalidOperationException($"Cannot add screen placement with Key: {screenPlacement.Key}");
+            if (screenPlacement.Key is null || !_screenPlacements.TryAdd(screenPlacement.Key, screenPlacement))
+            {
+                InvalidOperationException.Throw($"Cannot add screen placement with Key: {screenPlacement.Key}");
+            }
         }
 
         public void Remove([NotNull] IScreenPlacement screenPlacement)
         {
-            if (screenPlacement.Key != null && _screenPlacements.Remove(screenPlacement.Key))
-            {
-                return;
-            }
+            ArgumentNullException.ThrowIfNull(screenPlacement);
 
-            throw new InvalidOperationException($"Cannot remove screen placement with Key: {screenPlacement.Key}");
+            if (screenPlacement.Key is null || !_screenPlacements.Remove(screenPlacement.Key))
+            {
+                InvalidOperationException.Throw($"Cannot remove screen placement with Key: {screenPlacement.Key}");
+            }
         }
 
         public IScreenPlacement Get([NotNull] string key)
         {
-            if (_screenPlacements.TryGetValue(key, out IScreenPlacement screenPlacement))
+            ArgumentNullException.ThrowIfNull(key);
+
+            if (!_screenPlacements.TryGetValue(key, out IScreenPlacement screenPlacement))
             {
-                return screenPlacement;
+                InvalidOperationException.Throw($"Cannot get screen placement with Key: {key}");
             }
 
-            throw new InvalidOperationException($"Cannot get screen placement with Key: {key}");
+            return screenPlacement;
         }
     }
 }

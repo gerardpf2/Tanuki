@@ -1,3 +1,4 @@
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -5,10 +6,12 @@ namespace Infrastructure.Logging
 {
     public class UnityLogHandler : ILogHandler
     {
-        private readonly UnityEngine.ILogger _logger;
+        [NotNull] private readonly UnityEngine.ILogger _logger;
 
         public UnityLogHandler([NotNull] UnityEngine.ILogger logger)
         {
+            ArgumentNullException.ThrowIfNull(logger);
+
             _logger = logger;
         }
 

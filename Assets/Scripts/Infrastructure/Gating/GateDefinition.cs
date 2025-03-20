@@ -1,6 +1,7 @@
 using System;
 using Infrastructure.System;
 using UnityEngine;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Gating
 {
@@ -13,7 +14,7 @@ namespace Infrastructure.Gating
         [SerializeField] private string _config; // TODO: Show / hide based on _useConfig
 
         [SerializeField] private bool _useVersion;
-        [SerializeField] private string _version; // TODO: Show / hide based on _useVersion
+        [SerializeField] private string _version = string.Empty; // TODO: Show / hide based on _useVersion
         [SerializeField] private ComparisonOperator _versionComparisonOperator; // TODO: Show / hide based on _useVersion
 
         public string GateKey => _gateKey;
@@ -24,7 +25,15 @@ namespace Infrastructure.Gating
 
         public bool UseVersion => _useVersion;
 
-        public string Version => _version;
+        public string Version
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_version);
+
+                return _version;
+            }
+        }
 
         public ComparisonOperator VersionComparisonOperator => _versionComparisonOperator;
     }

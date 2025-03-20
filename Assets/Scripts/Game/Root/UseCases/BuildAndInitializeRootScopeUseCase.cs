@@ -3,6 +3,7 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
+using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 
@@ -10,15 +11,19 @@ namespace Game.Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {
-        private readonly IGateDefinitionGetter _gateDefinitionGetter;
-        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
-        private readonly IScreenPlacement _rootScreenPlacement;
+        [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
+        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
 
         public BuildAndInitializeRootScopeUseCase(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacement rootScreenPlacement)
         {
+            ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(rootScreenPlacement);
+
             _gateDefinitionGetter = gateDefinitionGetter;
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
@@ -38,6 +43,8 @@ namespace Game.Root.UseCases
 
         private void AddRules([NotNull] IRuleAdder ruleAdder)
         {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+
             ruleAdder.Add(new InstanceRule<IGateDefinitionGetter>(_gateDefinitionGetter));
 
             ruleAdder.Add(new InstanceRule<IScreenDefinitionGetter>(_screenDefinitionGetter));
@@ -120,6 +127,8 @@ namespace Game.Root.UseCases
 
         private static Scope Build([NotNull] IRuleResolver ruleResolver)
         {
+            ArgumentNullException.ThrowIfNull(ruleResolver);
+
             // Master allows root rule resolver to have shared rule resolver as parent
 
             Scope master = new(null, ruleResolver.Resolve<IRuleResolver>(), null);
@@ -129,6 +138,8 @@ namespace Game.Root.UseCases
 
         private static void Initialize([NotNull] IRuleResolver ruleResolver, Scope scope)
         {
+            ArgumentNullException.ThrowIfNull(ruleResolver);
+
             ruleResolver.Resolve<InjectResolver>();
             ruleResolver.Resolve<IScopeInitializer>().Initialize(scope);
         }

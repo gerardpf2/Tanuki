@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -7,6 +8,8 @@ namespace Infrastructure.DependencyInjection
     {
         public PartialScope ConstructPartial([NotNull] Scope mainScope, Action<IRuleResolver> initialize)
         {
+            ArgumentNullException.ThrowIfNull(mainScope);
+
             PartialScope partialScope = new(mainScope, mainScope.RuleAdder, mainScope.RuleResolver, initialize);
 
             mainScope.AddPartial(partialScope);

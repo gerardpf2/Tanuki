@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.ModelViewViewModel
 {
@@ -28,6 +29,8 @@ namespace Infrastructure.ModelViewViewModel
 
         public void Add([NotNull] Action<T> listener)
         {
+            ArgumentNullException.ThrowIfNull(listener);
+
             _listeners += listener;
             listener(_value);
         }

@@ -1,4 +1,5 @@
 using Infrastructure.DependencyInjection;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Infrastructure.ModelViewViewModel.Composition
@@ -7,6 +8,9 @@ namespace Infrastructure.ModelViewViewModel.Composition
     {
         protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
             base.AddRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetTransient<IBoundPropertyContainer>(_ => new BoundPropertyContainer()));
@@ -16,6 +20,9 @@ namespace Infrastructure.ModelViewViewModel.Composition
 
         protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(

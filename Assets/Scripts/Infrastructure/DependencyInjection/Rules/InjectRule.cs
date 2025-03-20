@@ -1,15 +1,19 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
     // To resolve InjectRule<T>, Action<T> needs to be used instead of T
+
     public class InjectRule<T> : SingletonRule<Action<T>>
     {
-        private readonly Action<IRuleResolver, T> _inject;
+        [NotNull] private readonly Action<IRuleResolver, T> _inject;
 
         public InjectRule([NotNull] Action<IRuleResolver, T> inject) : base(ruleResolver => instance => inject(ruleResolver, instance))
         {
+            ArgumentNullException.ThrowIfNull(inject);
+
             _inject = inject;
         }
 
@@ -40,6 +44,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         protected bool Equals([NotNull] InjectRule<T> other)
         {
+            ArgumentNullException.ThrowIfNull(other);
+
             return Equals(_inject, other._inject);
         }
     }

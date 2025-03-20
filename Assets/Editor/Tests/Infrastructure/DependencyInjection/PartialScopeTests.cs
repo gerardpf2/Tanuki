@@ -25,7 +25,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             _partialScope = new PartialScope(_mainScope, null, null, null);
 
-            Assert.Throws<NotSupportedException>(() => { IEnumerable<PartialScope> _ = _partialScope.PartialScopes; });
+            Assert.Throws<NotSupportedException>(() => { IEnumerable<PartialScope> _ = _partialScope.GetPartialScopes(); });
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection
         {
             _partialScope = new PartialScope(_mainScope, null, null, null);
 
-            Assert.Throws<NotSupportedException>(() => { IEnumerable<Scope> _ = _partialScope.ChildScopes; });
+            Assert.Throws<NotSupportedException>(() => { IEnumerable<Scope> _ = _partialScope.GetChildScopes(); });
         }
 
         [Test]

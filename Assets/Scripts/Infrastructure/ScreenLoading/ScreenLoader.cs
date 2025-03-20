@@ -1,5 +1,5 @@
-using System;
 using Infrastructure.ModelViewViewModel;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -8,13 +8,16 @@ namespace Infrastructure.ScreenLoading
 {
     public class ScreenLoader : IScreenLoader
     {
-        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
-        private readonly IScreenPlacementGetter _screenPlacementGetter;
+        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
 
         public ScreenLoader(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacementGetter screenPlacementGetter)
         {
+            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(screenPlacementGetter);
+
             _screenDefinitionGetter = screenDefinitionGetter;
             _screenPlacementGetter = screenPlacementGetter;
         }
@@ -36,35 +39,38 @@ namespace Infrastructure.ScreenLoading
         {
             IScreenDefinition screenDefinition = _screenDefinitionGetter.Get(key);
 
-            GameObject instance = Instantiate(screenDefinition);
+            return Instantiate(screenDefinition);;
+        }
 
-            if (instance == null)
-            {
-                throw new InvalidOperationException($"Cannot load screen with Key: {key}");
-            }
+        [NotNull]
+        private GameObject Instantiate([NotNull] IScreenDefinition screenDefinition)
+        {
+            ArgumentNullException.ThrowIfNull(screenDefinition);
+
+            GameObject prefab = screenDefinition.Prefab;
+            Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
+            GameObject instance = Object.Instantiate(prefab, placement);
+
+            InvalidOperationException.ThrowIfNullWithMessage(
+                instance,
+                $"Cannot instantiate screen with Key: {screenDefinition.Key}"
+            );
 
             return instance;
         }
 
-        private GameObject Instantiate([NotNull] IScreenDefinition screenDefinition)
-        {
-            GameObject prefab = screenDefinition.Prefab;
-
-            Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
-
-            return Object.Instantiate(prefab, placement);
-        }
-
         private static void SetData<T>([NotNull] GameObject instance, T data, string key)
         {
-            if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
-            {
-                dataSettable.SetData(data);
-            }
-            else
-            {
-                throw new InvalidOperationException($"Cannot set data of Type: {typeof(T)} to loaded screen with Key: {key}");
-            }
+            ArgumentNullException.ThrowIfNull(instance);
+
+            IDataSettable<T> dataSettable = instance.GetComponent<IDataSettable<T>>();
+
+            InvalidOperationException.ThrowIfNullWithMessage(
+                dataSettable,
+                $"Cannot set data of Type: {typeof(T)} to screen with Key: {key}"
+            );
+
+            dataSettable.SetData(data);
         }
     }
 }

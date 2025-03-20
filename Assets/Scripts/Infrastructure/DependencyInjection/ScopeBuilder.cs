@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using Infrastructure.Gating;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
     public class ScopeBuilder : IScopeBuilder
     {
-        private readonly IGateValidator _gateValidator;
-        private readonly IScopeConstructor _scopeConstructor;
-        private readonly ISharedRuleAdder _sharedRuleAdder;
+        [NotNull] private readonly IGateValidator _gateValidator;
+        [NotNull] private readonly IScopeConstructor _scopeConstructor;
+        [NotNull] private readonly ISharedRuleAdder _sharedRuleAdder;
         private readonly IRuleFactory _ruleFactory;
 
         public ScopeBuilder(
@@ -18,6 +19,10 @@ namespace Infrastructure.DependencyInjection
             [NotNull] ISharedRuleAdder sharedRuleAdder,
             IRuleFactory ruleFactory)
         {
+            ArgumentNullException.ThrowIfNull(gateValidator);
+            ArgumentNullException.ThrowIfNull(scopeConstructor);
+            ArgumentNullException.ThrowIfNull(sharedRuleAdder);
+
             _gateValidator = gateValidator;
             _scopeConstructor = scopeConstructor;
             _sharedRuleAdder = sharedRuleAdder;
@@ -26,6 +31,8 @@ namespace Infrastructure.DependencyInjection
 
         public PartialScope BuildPartial(Scope mainScope, [NotNull] IScopeComposer scopeComposer)
         {
+            ArgumentNullException.ThrowIfNull(scopeComposer);
+
             return
                 Build(
                     scopeComposer,
@@ -35,6 +42,8 @@ namespace Infrastructure.DependencyInjection
 
         public Scope Build(Scope parentScope, [NotNull] IScopeComposer scopeComposer)
         {
+            ArgumentNullException.ThrowIfNull(scopeComposer);
+
             return
                 Build(
                     scopeComposer,
@@ -44,6 +53,9 @@ namespace Infrastructure.DependencyInjection
 
         private T Build<T>([NotNull] IScopeComposer scopeComposer, [NotNull] Func<Action<IRuleResolver>, T> ctor) where T : Scope
         {
+            ArgumentNullException.ThrowIfNull(scopeComposer);
+            ArgumentNullException.ThrowIfNull(ctor);
+
             ScopeBuildingContext scopeBuildingContext = new();
 
             scopeComposer.Compose(scopeBuildingContext);
@@ -55,7 +67,7 @@ namespace Infrastructure.DependencyInjection
 
             T scope = ctor(scopeBuildingContext.Initialize);
 
-            if (scope == null)
+            if (scope is null)
             {
                 return null;
             }
@@ -70,11 +82,15 @@ namespace Infrastructure.DependencyInjection
 
         private void AddRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addRules)
         {
+            ArgumentNullException.ThrowIfNull(scope);
+
             addRules?.Invoke(scope.RuleAdder, _ruleFactory);
         }
 
         private void AddSharedRules([NotNull] Scope scope, Action<IRuleAdder, IRuleFactory> addSharedRules)
         {
+            ArgumentNullException.ThrowIfNull(scope);
+
             _sharedRuleAdder.SetTarget(scope.RuleAdder, scope.RuleResolver);
 
             addSharedRules?.Invoke(_sharedRuleAdder, _ruleFactory);
@@ -88,7 +104,7 @@ namespace Infrastructure.DependencyInjection
         {
             IEnumerable<IScopeComposer> partialScopeComposers = getPartialScopeComposers?.Invoke();
 
-            if (partialScopeComposers == null)
+            if (partialScopeComposers is null)
             {
                 return;
             }
@@ -105,7 +121,7 @@ namespace Infrastructure.DependencyInjection
         {
             IEnumerable<IScopeComposer> childScopeComposers = getChildScopeComposers?.Invoke();
 
-            if (childScopeComposers == null)
+            if (childScopeComposers is null)
             {
                 return;
             }

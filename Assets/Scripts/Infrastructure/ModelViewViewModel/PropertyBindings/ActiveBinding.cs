@@ -1,3 +1,4 @@
+using Infrastructure.System.Exceptions;
 using UnityEngine;
 
 namespace Infrastructure.ModelViewViewModel.PropertyBindings
@@ -8,6 +9,8 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 
         public override void Set(bool value)
         {
+            InvalidOperationException.ThrowIfNull(_gameObject);
+
             _gameObject.SetActive(value);
         }
     }

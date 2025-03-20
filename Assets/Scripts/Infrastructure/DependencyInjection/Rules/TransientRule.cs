@@ -1,14 +1,17 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
     public class TransientRule<T> : IRule<T>
     {
-        private readonly Func<IRuleResolver, T> _ctor;
+        [NotNull] private readonly Func<IRuleResolver, T> _ctor;
 
         public TransientRule([NotNull] Func<IRuleResolver, T> ctor)
         {
+            ArgumentNullException.ThrowIfNull(ctor);
+
             _ctor = ctor;
         }
 
@@ -44,6 +47,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         protected bool Equals([NotNull] TransientRule<T> other)
         {
+            ArgumentNullException.ThrowIfNull(other);
+
             return Equals(_ctor, other._ctor);
         }
     }

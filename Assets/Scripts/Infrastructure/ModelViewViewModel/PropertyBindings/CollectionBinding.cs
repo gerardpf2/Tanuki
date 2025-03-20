@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -9,11 +10,20 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
     {
         [SerializeField] private GameObject _prefab;
 
-        private readonly IDictionary<T, GameObject> _instances = new Dictionary<T, GameObject>();
+        [NotNull] private readonly IDictionary<T, GameObject> _instances = new Dictionary<T, GameObject>();
 
-        public override void Set(IEnumerable<T> value)
+        public override void Set([ItemNotNull] IEnumerable<T> value)
         {
-            ICollection<T> currentData = new HashSet<T>(value ?? Enumerable.Empty<T>());
+            value ??= Enumerable.Empty<T>();
+
+            ICollection<T> currentData = new HashSet<T>();
+
+            foreach (T data in value)
+            {
+                ArgumentNullException.ThrowIfNull(data);
+
+                currentData.Add(data);
+            }
 
             RemoveObsoleteItems(currentData);
             AddItems(currentData);
@@ -21,6 +31,8 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 
         private void RemoveObsoleteItems([NotNull] ICollection<T> currentData)
         {
+            ArgumentNullException.ThrowIfNull(currentData);
+
             foreach (T data in _instances.Keys.ToList())
             {
                 if (currentData.Contains(data))
@@ -34,29 +46,48 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
             }
         }
 
-        private void AddItems([NotNull] IEnumerable<T> currentData)
+        private void AddItems([NotNull] [ItemNotNull] IEnumerable<T> currentData)
         {
+            ArgumentNullException.ThrowIfNull(currentData);
+
             foreach (T data in currentData)
             {
+                ArgumentNullException.ThrowIfNull(data);
+
                 if (!_instances.TryGetValue(data, out GameObject instance))
                 {
-                    instance = Instantiate(_prefab, transform);
+                    instance = Instantiate();
 
                     _instances.Add(data, instance);
                 }
 
-                SetDataIfNeeded(instance, data);
+                SetData(instance, data);
 
                 instance.transform.SetAsLastSibling();
             }
         }
 
-        private static void SetDataIfNeeded([NotNull] GameObject instance, T data)
+        [NotNull]
+        private GameObject Instantiate()
         {
-            if (instance.TryGetComponent(out IDataSettable<T> dataSettable))
-            {
-                dataSettable.SetData(data);
-            }
+            InvalidOperationException.ThrowIfNull(_prefab);
+
+            GameObject instance = Instantiate(_prefab, transform);
+
+            InvalidOperationException.ThrowIfNull(instance);
+
+            return instance;
+        }
+
+        private static void SetData([NotNull] GameObject instance, T data)
+        {
+            ArgumentNullException.ThrowIfNull(instance);
+
+            IDataSettable<T> dataSettable = instance.GetComponent<IDataSettable<T>>();
+
+            InvalidOperationException.ThrowIfNull(dataSettable);
+
+            dataSettable.SetData(data);
         }
     }
 }

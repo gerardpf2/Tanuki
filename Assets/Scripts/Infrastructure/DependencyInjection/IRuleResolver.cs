@@ -1,9 +1,13 @@
+using JetBrains.Annotations;
+
 namespace Infrastructure.DependencyInjection
 {
     public interface IRuleResolver
     {
-        T Resolve<T>(object key = null);
+        [NotNull]
+        T Resolve<T>(object key = null) where T : class;
 
-        bool TryResolve<T>(out T result, object key = null);
+        [ContractAnnotation("=> true, result:notnull; => false, result:null")]
+        bool TryResolve<T>(out T result, object key = null) where T : class;
     }
 }

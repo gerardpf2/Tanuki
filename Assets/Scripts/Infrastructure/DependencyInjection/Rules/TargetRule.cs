@@ -1,15 +1,18 @@
 using System;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection.Rules
 {
-    public class TargetRule<T> : IRule<T>
+    public class TargetRule<T> : IRule<T> where T : class
     {
-        private readonly IRuleResolver _ruleResolver;
+        [NotNull] private readonly IRuleResolver _ruleResolver;
         private readonly object _key;
 
         public TargetRule([NotNull] IRuleResolver ruleResolver, object key = null)
         {
+            ArgumentNullException.ThrowIfNull(ruleResolver);
+
             _ruleResolver = ruleResolver;
             _key = key;
         }
@@ -46,6 +49,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         protected bool Equals([NotNull] TargetRule<T> other)
         {
+            ArgumentNullException.ThrowIfNull(other);
+
             return Equals(_ruleResolver, other._ruleResolver) && Equals(_key, other._key);
         }
     }

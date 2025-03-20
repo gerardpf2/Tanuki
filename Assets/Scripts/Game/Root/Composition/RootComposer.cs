@@ -5,19 +5,23 @@ using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Game.Root.Composition
 {
     public class RootComposer : ScopeComposer
     {
-        private readonly IScreenDefinitionGetter _screenDefinitionGetter;
-        private readonly IScreenPlacement _rootScreenPlacement;
+        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
 
         public RootComposer(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacement rootScreenPlacement)
         {
+            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(rootScreenPlacement);
+
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
         }

@@ -2,15 +2,18 @@ using System;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.Gating;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.DependencyInjection
 {
     public class RuleFactory : IRuleFactory
     {
-        private readonly IGateValidator _gateValidator;
+        [NotNull] private readonly IGateValidator _gateValidator;
 
         public RuleFactory([NotNull] IGateValidator gateValidator)
         {
+            ArgumentNullException.ThrowIfNull(gateValidator);
+
             _gateValidator = gateValidator;
         }
 
@@ -21,31 +24,41 @@ namespace Infrastructure.DependencyInjection
 
         public IRule<T> GetTransient<T>([NotNull] Func<IRuleResolver, T> ctor)
         {
+            ArgumentNullException.ThrowIfNull(ctor);
+
             return new TransientRule<T>(ctor);
         }
 
         public IRule<T> GetSingleton<T>([NotNull] Func<IRuleResolver, T> ctor)
         {
+            ArgumentNullException.ThrowIfNull(ctor);
+
             return new SingletonRule<T>(ctor);
         }
 
-        public IRule<TInput> GetTo<TInput, TOutput>(object key = null) where TOutput : TInput
+        public IRule<TInput> GetTo<TInput, TOutput>(object key = null) where TOutput : class, TInput
         {
             return new ToRule<TInput, TOutput>(key);
         }
 
         public IRule<T> GetGateKey<T>([NotNull] IRule<T> rule, string gateKey) where T : class
         {
+            ArgumentNullException.ThrowIfNull(rule);
+
             return new GateKeyRule<T>(_gateValidator, rule, gateKey);
         }
 
-        public IRule<T> GetTarget<T>([NotNull] IRuleResolver ruleResolver, object key = null)
+        public IRule<T> GetTarget<T>([NotNull] IRuleResolver ruleResolver, object key = null) where T : class
         {
+            ArgumentNullException.ThrowIfNull(ruleResolver);
+
             return new TargetRule<T>(ruleResolver, key);
         }
 
         public IRule<Action<T>> GetInject<T>([NotNull] Action<IRuleResolver, T> inject)
         {
+            ArgumentNullException.ThrowIfNull(inject);
+
             return new InjectRule<T>(inject);
         }
     }

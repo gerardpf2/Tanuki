@@ -2,25 +2,30 @@ using System;
 using Infrastructure.System;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Infrastructure.Gating
 {
     public class GateValidator : IGateValidator
     {
-        private readonly IGateDefinitionGetter _gateDefinitionGetter;
-        private readonly Version _projectVersion;
+        [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
+        [NotNull] private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] IProjectVersionGetter projectVersionGetter)
         {
+            ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(projectVersionGetter);
+
             _gateDefinitionGetter = gateDefinitionGetter;
             _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
 
         public bool Validate(string gateKey)
         {
-            if (gateKey == null)
+            if (gateKey is null)
             {
                 return true;
             }
@@ -39,20 +44,30 @@ namespace Infrastructure.Gating
             return true;
         }
 
-        private bool ValidateVersion(string version, ComparisonOperator versionComparisonOperator)
+        private bool ValidateVersion([NotNull] string version, ComparisonOperator versionComparisonOperator)
         {
+            ArgumentNullException.ThrowIfNull(version);
+
             Version gateVersion = Version.Parse(version);
 
-            return versionComparisonOperator switch
+            switch (versionComparisonOperator)
             {
-                ComparisonOperator.EqualTo => _projectVersion == gateVersion,
-                ComparisonOperator.UnequalTo => _projectVersion != gateVersion,
-                ComparisonOperator.LessThan => _projectVersion < gateVersion,
-                ComparisonOperator.GreaterThan => _projectVersion > gateVersion,
-                ComparisonOperator.LessThanOrEqualTo => _projectVersion <= gateVersion,
-                ComparisonOperator.GreaterThanOrEqualTo => _projectVersion >= gateVersion,
-                _ => throw new ArgumentOutOfRangeException(nameof(versionComparisonOperator), versionComparisonOperator, null)
-            };
+                case ComparisonOperator.EqualTo:
+                    return _projectVersion == gateVersion;
+                case ComparisonOperator.UnequalTo:
+                    return _projectVersion != gateVersion;
+                case ComparisonOperator.LessThan:
+                    return _projectVersion < gateVersion;
+                case ComparisonOperator.GreaterThan:
+                    return _projectVersion > gateVersion;
+                case ComparisonOperator.LessThanOrEqualTo:
+                    return _projectVersion <= gateVersion;
+                case ComparisonOperator.GreaterThanOrEqualTo:
+                    return _projectVersion >= gateVersion;
+                default:
+                    ArgumentOutOfRangeException.Throw(versionComparisonOperator);
+                    return false;
+            }
         }
     }
 }
