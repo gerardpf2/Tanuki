@@ -3,7 +3,6 @@ using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOut
 
 namespace Infrastructure.System
 {
-    // TODO: Test
     public class VersionComparer : IVersionComparer
     {
         public bool IsTrueThat(Version versionA, ComparisonOperator comparisonOperator, Version versionB)
