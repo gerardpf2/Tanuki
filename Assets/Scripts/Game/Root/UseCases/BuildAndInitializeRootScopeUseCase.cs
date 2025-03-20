@@ -135,12 +135,15 @@ namespace Game.Root.UseCases
                     new GateValidator(
                         r.Resolve<IGateDefinitionGetter>(),
                         r.Resolve<IConfigValueGetter>(),
-                        r.Resolve<IProjectVersionGetter>()
+                        r.Resolve<IProjectVersionGetter>(),
+                        r.Resolve<IVersionComparer>()
                     )
                 )
             );
 
             ruleAdder.Add(new SingletonRule<IConverter>(_ => new Converter()));
+
+            ruleAdder.Add(new SingletonRule<IVersionComparer>(_ => new VersionComparer()));
 
             ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
         }
