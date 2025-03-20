@@ -4,6 +4,7 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
+using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
@@ -61,19 +62,8 @@ namespace Game.Root.UseCases
             ruleAdder.Add(
                 new SingletonRule<IConfigValueGetter>(r =>
                     new ConfigValueGetter(
-                        r.Resolve<IConfigDefinitionGetter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
-
-            ruleAdder.Add(
-                new SingletonRule<IGateValidator>(r =>
-                    new GateValidator(
-                        r.Resolve<IGateDefinitionGetter>(),
-                        r.Resolve<IConfigValueGetter>(),
-                        r.Resolve<IProjectVersionGetter>()
+                        r.Resolve<IConfigDefinitionGetter>(),
+                        r.Resolve<IConverter>()
                     )
                 )
             );
@@ -139,6 +129,20 @@ namespace Game.Root.UseCases
                     )
                 )
             );
+
+            ruleAdder.Add(
+                new SingletonRule<IGateValidator>(r =>
+                    new GateValidator(
+                        r.Resolve<IGateDefinitionGetter>(),
+                        r.Resolve<IConfigValueGetter>(),
+                        r.Resolve<IProjectVersionGetter>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(new SingletonRule<IConverter>(_ => new Converter()));
+
+            ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
         }
 
         private static Scope Build([NotNull] IRuleResolver ruleResolver)

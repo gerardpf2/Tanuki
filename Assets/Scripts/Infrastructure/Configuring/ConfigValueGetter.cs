@@ -1,40 +1,30 @@
-using System;
+using Infrastructure.System;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Configuring
 {
     public class ConfigValueGetter : IConfigValueGetter
     {
-        private readonly IConfigDefinitionGetter _configDefinitionGetter;
+        [NotNull] private readonly IConfigDefinitionGetter _configDefinitionGetter;
+        [NotNull] private readonly IConverter _converter;
 
-        public ConfigValueGetter([NotNull] IConfigDefinitionGetter configDefinitionGetter)
+        public ConfigValueGetter(
+            [NotNull] IConfigDefinitionGetter configDefinitionGetter,
+            [NotNull] IConverter converter)
         {
             ArgumentNullException.ThrowIfNull(configDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(converter);
 
             _configDefinitionGetter = configDefinitionGetter;
+            _converter = converter;
         }
 
         public T Get<T>(string configKey)
         {
             IConfigDefinition configDefinition = _configDefinitionGetter.Get(configKey);
-            T value = default;
 
-            try
-            {
-                value = (T)Convert.ChangeType(configDefinition.Value, typeof(T));
-            }
-            catch (Exception exception)
-            {
-                InvalidOperationException.Throw(
-                    $"Cannot get value of Type: {typeof(T)} from config definition with ConfigKey: {configKey}. {exception.Message}"
-                );
-            }
-
-            InvalidOperationException.ThrowIfNull(value);
-
-            return value;
+            return _converter.Convert<T>(configDefinition.Value);
         }
     }
 }
