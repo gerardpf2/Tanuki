@@ -9,7 +9,8 @@
         "ModelViewViewModel",
         "Gating",
         "Logging",
-        "ScreenLoading"
+        "ScreenLoading",
+        "Configuring"
     ],
     "includePlatforms": [
         "Editor"

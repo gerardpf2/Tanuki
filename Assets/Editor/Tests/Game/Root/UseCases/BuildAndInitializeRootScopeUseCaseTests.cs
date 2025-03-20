@@ -1,4 +1,5 @@
 using Game.Root.UseCases;
+using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
@@ -10,6 +11,7 @@ namespace Editor.Tests.Game.Root.UseCases
     public class BuildAndInitializeRootScopeUseCaseTests
     {
         private IScreenDefinitionGetter _screenDefinitionGetter;
+        private IConfigDefinitionGetter _configDefinitionGetter;
         private IGateDefinitionGetter _gateDefinitionGetter;
         private IScreenPlacement _screenPlacement;
 
@@ -19,12 +21,14 @@ namespace Editor.Tests.Game.Root.UseCases
         public void SetUp()
         {
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
+            _configDefinitionGetter = Substitute.For<IConfigDefinitionGetter>();
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
 
             _buildAndInitializeRootScopeUseCase =
                 new BuildAndInitializeRootScopeUseCase(
                     _gateDefinitionGetter,
+                    _configDefinitionGetter,
                     _screenDefinitionGetter,
                     _screenPlacement
                 );

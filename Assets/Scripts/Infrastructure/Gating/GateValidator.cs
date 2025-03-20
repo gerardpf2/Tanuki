@@ -1,4 +1,5 @@
 using System;
+using Infrastructure.Configuring;
 using Infrastructure.System;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
@@ -10,16 +11,20 @@ namespace Infrastructure.Gating
     public class GateValidator : IGateValidator
     {
         [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
+        [NotNull] private readonly IConfigDefinitionGetter _configDefinitionGetter;
         [NotNull] private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
+            [NotNull] IConfigDefinitionGetter configDefinitionGetter,
             [NotNull] IProjectVersionGetter projectVersionGetter)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(configDefinitionGetter);
             ArgumentNullException.ThrowIfNull(projectVersionGetter);
 
             _gateDefinitionGetter = gateDefinitionGetter;
+            _configDefinitionGetter = configDefinitionGetter;
             _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
 
