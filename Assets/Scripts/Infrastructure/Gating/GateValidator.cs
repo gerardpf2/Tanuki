@@ -44,13 +44,11 @@ namespace Infrastructure.Gating
                 (!gateDefinition.UseVersion || ValidateVersion(gateDefinition.Version, gateDefinition.VersionComparisonOperator));
         }
 
-        // TODO: Test
         private bool ValidateConfig(string configKey)
         {
             return _configValueGetter(configKey);
         }
 
-        // TODO: Test
         private bool ValidateVersion([NotNull] string version, ComparisonOperator versionComparisonOperator)
         {
             ArgumentNullException.ThrowIfNull(version);
