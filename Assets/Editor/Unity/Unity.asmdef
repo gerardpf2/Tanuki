@@ -1,7 +1,9 @@
 {
     "name": "Unity_",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:678d1a6d7a23284498ec7ef97c09feb7"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

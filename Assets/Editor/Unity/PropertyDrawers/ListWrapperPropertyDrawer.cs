@@ -1,8 +1,10 @@
+using Infrastructure.Unity;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor.Unity.PropertyDrawers
 {
+    [CustomPropertyDrawer(typeof(ListWrapper), true)]
     public class ListWrapperPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -17,7 +19,7 @@ namespace Editor.Unity.PropertyDrawers
 
         private static SerializedProperty GetListProperty(SerializedProperty property)
         {
-            const string propertyName = "List";
+            const string propertyName = "_list";
 
             return property.FindPropertyRelative(propertyName);
         }
