@@ -3,23 +3,30 @@ using Infrastructure.System;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Infrastructure.Gating
 {
     public class GateValidator : IGateValidator
     {
         [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
+        [NotNull] private readonly Func<string, bool> _configValueGetter;
+        [NotNull] private readonly IVersionComparer _versionComparer;
         [NotNull] private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
-            [NotNull] IProjectVersionGetter projectVersionGetter)
+            [NotNull] Func<string, bool> configValueGetter, // IConfigValueGetter creates a cyclic dependency between assemblies
+            [NotNull] IProjectVersionGetter projectVersionGetter,
+            [NotNull] IVersionComparer versionComparer)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(configValueGetter);
             ArgumentNullException.ThrowIfNull(projectVersionGetter);
+            ArgumentNullException.ThrowIfNull(versionComparer);
 
             _gateDefinitionGetter = gateDefinitionGetter;
+            _configValueGetter = configValueGetter;
+            _versionComparer = versionComparer;
             _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
 
@@ -33,15 +40,13 @@ namespace Infrastructure.Gating
             IGateDefinition gateDefinition = _gateDefinitionGetter.Get(gateKey);
 
             return
-                (!gateDefinition.UseConfig || ValidateConfig(gateDefinition.Config)) &&
+                (!gateDefinition.UseConfig || ValidateConfig(gateDefinition.ConfigKey)) &&
                 (!gateDefinition.UseVersion || ValidateVersion(gateDefinition.Version, gateDefinition.VersionComparisonOperator));
         }
 
-        // TODO: Test
-        // TODO: Add support
-        private bool ValidateConfig(string config)
+        private bool ValidateConfig(string configKey)
         {
-            return true;
+            return _configValueGetter(configKey);
         }
 
         private bool ValidateVersion([NotNull] string version, ComparisonOperator versionComparisonOperator)
@@ -50,24 +55,7 @@ namespace Infrastructure.Gating
 
             Version gateVersion = Version.Parse(version);
 
-            switch (versionComparisonOperator)
-            {
-                case ComparisonOperator.EqualTo:
-                    return _projectVersion == gateVersion;
-                case ComparisonOperator.UnequalTo:
-                    return _projectVersion != gateVersion;
-                case ComparisonOperator.LessThan:
-                    return _projectVersion < gateVersion;
-                case ComparisonOperator.GreaterThan:
-                    return _projectVersion > gateVersion;
-                case ComparisonOperator.LessThanOrEqualTo:
-                    return _projectVersion <= gateVersion;
-                case ComparisonOperator.GreaterThanOrEqualTo:
-                    return _projectVersion >= gateVersion;
-                default:
-                    ArgumentOutOfRangeException.Throw(versionComparisonOperator);
-                    return false;
-            }
+            return _versionComparer.IsTrueThat(_projectVersion, versionComparisonOperator, gateVersion);
         }
     }
 }

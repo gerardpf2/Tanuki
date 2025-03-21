@@ -1,16 +1,10 @@
 {
-    "name": "GameTests",
+    "name": "SystemTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Game",
-        "DependencyInjection",
-        "ModelViewViewModel",
-        "Gating",
-        "Logging",
-        "ScreenLoading",
-        "Configuring"
+        "System_"
     ],
     "includePlatforms": [
         "Editor"
@@ -19,8 +13,7 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll",
-        "NSubstitute.dll"
+        "nunit.framework.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

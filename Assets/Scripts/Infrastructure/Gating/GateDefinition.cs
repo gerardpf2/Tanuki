@@ -11,7 +11,7 @@ namespace Infrastructure.Gating
         [SerializeField] private string _gateKey;
 
         [SerializeField] private bool _useConfig;
-        [SerializeField] private string _config; // TODO: Show / hide based on _useConfig
+        [SerializeField] private string _configKey; // TODO: Show / hide based on _useConfig
 
         [SerializeField] private bool _useVersion;
         [SerializeField] private string _version = string.Empty; // TODO: Show / hide based on _useVersion
@@ -21,7 +21,7 @@ namespace Infrastructure.Gating
 
         public bool UseConfig => _useConfig;
 
-        public string Config => _config;
+        public string ConfigKey => _configKey;
 
         public bool UseVersion => _useVersion;
 

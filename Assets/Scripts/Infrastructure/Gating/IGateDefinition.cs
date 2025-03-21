@@ -9,7 +9,7 @@ namespace Infrastructure.Gating
 
         bool UseConfig { get; }
 
-        string Config { get; }
+        string ConfigKey { get; }
 
         bool UseVersion { get; }
 
