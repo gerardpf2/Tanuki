@@ -1,8 +1,10 @@
 using Game.Root.Composition;
+using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
+using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
@@ -12,19 +14,23 @@ namespace Game.Root.UseCases
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {
         [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
+        [NotNull] private readonly IConfigDefinitionGetter _configDefinitionGetter;
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
 
         public BuildAndInitializeRootScopeUseCase(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
+            [NotNull] IConfigDefinitionGetter configDefinitionGetter,
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacement rootScreenPlacement)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(configDefinitionGetter);
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
 
             _gateDefinitionGetter = gateDefinitionGetter;
+            _configDefinitionGetter = configDefinitionGetter;
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
         }
@@ -47,17 +53,17 @@ namespace Game.Root.UseCases
 
             ruleAdder.Add(new InstanceRule<IGateDefinitionGetter>(_gateDefinitionGetter));
 
+            ruleAdder.Add(new InstanceRule<IConfigDefinitionGetter>(_configDefinitionGetter));
+
             ruleAdder.Add(new InstanceRule<IScreenDefinitionGetter>(_screenDefinitionGetter));
 
             ruleAdder.Add(new InstanceRule<IScreenPlacement>(_rootScreenPlacement));
 
-            ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
-
             ruleAdder.Add(
-                new SingletonRule<IGateValidator>(r =>
-                    new GateValidator(
-                        r.Resolve<IGateDefinitionGetter>(),
-                        r.Resolve<IProjectVersionGetter>()
+                new SingletonRule<IConfigValueGetter>(r =>
+                    new ConfigValueGetter(
+                        r.Resolve<IConfigDefinitionGetter>(),
+                        r.Resolve<IConverter>()
                     )
                 )
             );
@@ -106,7 +112,8 @@ namespace Game.Root.UseCases
                 new SingletonRule<IScopeComposer>(r =>
                     new RootComposer(
                         r.Resolve<IScreenDefinitionGetter>(),
-                        r.Resolve<IScreenPlacement>()
+                        r.Resolve<IScreenPlacement>(),
+                        r.Resolve<IConfigValueGetter>()
                     )
                 )
             );
@@ -123,6 +130,23 @@ namespace Game.Root.UseCases
                     )
                 )
             );
+
+            ruleAdder.Add(
+                new SingletonRule<IGateValidator>(r =>
+                    new GateValidator(
+                        r.Resolve<IGateDefinitionGetter>(),
+                        configKey => r.Resolve<IConfigValueGetter>().Get<bool>(configKey),
+                        r.Resolve<IProjectVersionGetter>(),
+                        r.Resolve<IVersionComparer>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(new SingletonRule<IConverter>(_ => new Converter()));
+
+            ruleAdder.Add(new SingletonRule<IVersionComparer>(_ => new VersionComparer()));
+
+            ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
         }
 
         private static Scope Build([NotNull] IRuleResolver ruleResolver)
