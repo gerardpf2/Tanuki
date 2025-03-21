@@ -3,7 +3,6 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.System
 {
-    // TODO: Test
     public class Converter : IConverter
     {
         public T Convert<T>(object value)
