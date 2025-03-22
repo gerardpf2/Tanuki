@@ -8,7 +8,7 @@ namespace Infrastructure.Configuring
     [CreateAssetMenu(fileName = nameof(ConfigDefinitionContainer), menuName = "Tanuki/Infrastructure/Configuring/" + nameof(ConfigDefinitionContainer))]
     public class ConfigDefinitionContainer : ScriptableObject, IConfigDefinitionGetter
     {
-        [NotNull] [SerializeField] private List<ConfigDefinition> _configDefinitions = new();
+        [NotNull, SerializeField] private List<ConfigDefinition> _configDefinitions = new();
 
         public IConfigDefinition Get(string configKey)
         {

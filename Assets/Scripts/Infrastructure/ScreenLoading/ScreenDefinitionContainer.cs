@@ -8,7 +8,7 @@ namespace Infrastructure.ScreenLoading
     [CreateAssetMenu(fileName = nameof(ScreenDefinitionContainer), menuName = "Tanuki/Infrastructure/ScreenLoading/" + nameof(ScreenDefinitionContainer))]
     public class ScreenDefinitionContainer : ScriptableObject, IScreenDefinitionGetter
     {
-        [NotNull] [SerializeField] private List<ScreenDefinition> _screenDefinitions = new();
+        [NotNull, SerializeField] private List<ScreenDefinition> _screenDefinitions = new();
 
         public IScreenDefinition Get(string key)
         {

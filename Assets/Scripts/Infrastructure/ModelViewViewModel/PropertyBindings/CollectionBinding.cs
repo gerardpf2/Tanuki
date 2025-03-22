@@ -46,7 +46,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
             }
         }
 
-        private void AddItems([NotNull] [ItemNotNull] IEnumerable<T> currentData)
+        private void AddItems([NotNull, ItemNotNull] IEnumerable<T> currentData)
         {
             ArgumentNullException.ThrowIfNull(currentData);
 
