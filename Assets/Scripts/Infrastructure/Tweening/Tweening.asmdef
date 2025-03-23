@@ -1,3 +1,16 @@
 {
-	"name": "Tweening"
+    "name": "Tweening",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f494683be324d2d40986fd190775fea9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
