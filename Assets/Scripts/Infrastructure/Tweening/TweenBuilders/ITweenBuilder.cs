@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 using UnityEngine.UIElements;
 
-namespace Infrastructure.Tweening
+namespace Infrastructure.Tweening.TweenBuilders
 {
     public interface ITweenBuilder<T>
     {

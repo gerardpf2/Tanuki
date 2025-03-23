@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Infrastructure.Tweening
+namespace Infrastructure.Tweening.TweenBuilders
 {
     public abstract class TweenBuilder<T> : ITweenBuilder<T>
     {
