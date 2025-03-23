@@ -13,6 +13,7 @@ namespace Infrastructure.Tweening
         [NotNull] private readonly Func<float, float> _ease;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
+        private TweenState _tweenState;
         private float _playingTimeS;
 
         public Tween(
@@ -35,13 +36,63 @@ namespace Infrastructure.Tweening
             _lerp = lerp;
         }
 
-        public void Update(float deltaTimeS)
+        public TweenState Update(float deltaTimeS)
         {
+            if (_tweenState != TweenState.Playing)
+            {
+                return _tweenState;
+            }
+
             _playingTimeS += deltaTimeS;
 
+            if (_playingTimeS < _durationS)
+            {
+                Update();
+            }
+            else
+            {
+                Complete();
+            }
+
+            return _tweenState;
+        }
+
+        public bool Pause()
+        {
+            if (_tweenState != TweenState.Playing)
+            {
+                return false;
+            }
+
+            _tweenState = TweenState.Paused;
+
+            return true;
+        }
+
+        public bool Resume()
+        {
+            if (_tweenState != TweenState.Paused)
+            {
+                return false;
+            }
+
+            _tweenState = TweenState.Playing;
+
+            return true;
+        }
+
+        private void Update()
+        {
             float normalizedTime = _playingTimeS / _durationS;
 
             _setter(_lerp(_start, _end, _ease(normalizedTime)));
+        }
+
+        private void Complete()
+        {
+            _tweenState = TweenState.Completed;
+
+            _setter(_end);
         }
     }
 }

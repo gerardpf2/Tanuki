@@ -2,6 +2,10 @@ namespace Infrastructure.Tweening
 {
     public interface ITween
     {
-        void Update(float deltaTimeS);
+        TweenState Update(float deltaTimeS);
+
+        bool Pause();
+
+        bool Resume();
     }
 }
