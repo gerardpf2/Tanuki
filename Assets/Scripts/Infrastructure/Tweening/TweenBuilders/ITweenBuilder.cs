@@ -7,16 +7,7 @@ namespace Infrastructure.Tweening.TweenBuilders
     public interface ITweenBuilder<T>
     {
         [NotNull]
-        ITweenBuilder<T> WithStart(T start);
-
-        [NotNull]
-        ITweenBuilder<T> WithEnd(T end);
-
-        [NotNull]
         ITweenBuilder<T> WithDelayS(float delayS);
-
-        [NotNull]
-        ITweenBuilder<T> WithDurationS(float durationS);
 
         [NotNull]
         ITweenBuilder<T> WithRepetitions(int repetitions);
@@ -29,6 +20,15 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         [NotNull]
         ITweenBuilder<T> WithOnComplete(Action onComplete);
+
+        [NotNull]
+        ITweenBuilder<T> WithStart(T start);
+
+        [NotNull]
+        ITweenBuilder<T> WithEnd(T end);
+
+        [NotNull]
+        ITweenBuilder<T> WithDurationS(float durationS);
 
         [NotNull]
         ITweenBuilder<T> WithSetter(Action<T> setter);
