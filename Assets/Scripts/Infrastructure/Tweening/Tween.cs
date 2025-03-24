@@ -6,10 +6,11 @@ namespace Infrastructure.Tweening
 {
     public class Tween<T> : ITween
     {
-        // TODO: delayS, loops
+        // TODO: loops
 
         private readonly T _start;
         private readonly T _end;
+        private readonly float _delayS;
         private readonly float _durationS;
         private readonly Action _onComplete;
         [NotNull] private readonly Action<T> _setter;
@@ -22,6 +23,7 @@ namespace Infrastructure.Tweening
         public Tween(
             T start,
             T end,
+            float delayS,
             float durationS,
             Action onComplete,
             [NotNull] Action<T> setter,
@@ -34,6 +36,7 @@ namespace Infrastructure.Tweening
 
             _start = start;
             _end = end;
+            _delayS = delayS;
             _durationS = durationS;
             _onComplete = onComplete;
             _setter = setter;
@@ -50,7 +53,12 @@ namespace Infrastructure.Tweening
 
             _playingTimeS += deltaTimeS;
 
-            if (_playingTimeS < _durationS)
+            if (_playingTimeS < _delayS)
+            {
+                return _tweenState;
+            }
+
+            if (_playingTimeS - _delayS < _durationS)
             {
                 Update();
             }
@@ -88,7 +96,7 @@ namespace Infrastructure.Tweening
 
         private void Update()
         {
-            float normalizedTime = _playingTimeS / _durationS;
+            float normalizedTime = (_playingTimeS - _delayS) / _durationS;
 
             _setter(_lerp(_start, _end, _ease(normalizedTime)));
         }

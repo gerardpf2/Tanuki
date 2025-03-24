@@ -13,6 +13,7 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         private T _start;
         private T _end;
+        private float _delayS;
         private float _durationS;
         private Action _onComplete;
         private Action<T> _setter;
@@ -39,6 +40,13 @@ namespace Infrastructure.Tweening.TweenBuilders
         public ITweenBuilder<T> WithEnd(T end)
         {
             _end = end;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithDelayS(float delayS)
+        {
+            _delayS = delayS;
 
             return this;
         }
@@ -81,6 +89,7 @@ namespace Infrastructure.Tweening.TweenBuilders
                 new Tween<T>(
                     _start,
                     _end,
+                    _delayS,
                     _durationS,
                     _onComplete,
                     _setter,

@@ -13,6 +13,9 @@ namespace Infrastructure.Tweening.TweenBuilders
         ITweenBuilder<T> WithEnd(T end);
 
         [NotNull]
+        ITweenBuilder<T> WithDelayS(float delayS);
+
+        [NotNull]
         ITweenBuilder<T> WithDurationS(float durationS);
 
         [NotNull]
