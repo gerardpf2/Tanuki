@@ -14,6 +14,7 @@ namespace Infrastructure.Tweening.TweenBuilders
         private T _start;
         private T _end;
         private float _durationS;
+        private Action _onComplete;
         private Action<T> _setter;
         private EasingMode _easingMode;
 
@@ -49,6 +50,13 @@ namespace Infrastructure.Tweening.TweenBuilders
             return this;
         }
 
+        public ITweenBuilder<T> WithOnComplete(Action onComplete)
+        {
+            _onComplete = onComplete;
+
+            return this;
+        }
+
         public ITweenBuilder<T> WithSetter([NotNull] Action<T> setter)
         {
             ArgumentNullException.ThrowIfNull(setter);
@@ -69,7 +77,16 @@ namespace Infrastructure.Tweening.TweenBuilders
         {
             InvalidOperationException.ThrowIfNull(_setter);
 
-            return new Tween<T>(_start, _end, _durationS, _setter, _easingFunctionGetter.Get(_easingMode), _lerp);
+            return
+                new Tween<T>(
+                    _start,
+                    _end,
+                    _durationS,
+                    _onComplete,
+                    _setter,
+                    _easingFunctionGetter.Get(_easingMode),
+                    _lerp
+                );
         }
     }
 }

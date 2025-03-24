@@ -16,6 +16,9 @@ namespace Infrastructure.Tweening.TweenBuilders
         ITweenBuilder<T> WithDurationS(float durationS);
 
         [NotNull]
+        ITweenBuilder<T> WithOnComplete(Action onComplete);
+
+        [NotNull]
         ITweenBuilder<T> WithSetter(Action<T> setter);
 
         [NotNull]

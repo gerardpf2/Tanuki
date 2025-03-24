@@ -6,9 +6,12 @@ namespace Infrastructure.Tweening
 {
     public class Tween<T> : ITween
     {
+        // TODO: delayS, loops
+
         private readonly T _start;
         private readonly T _end;
         private readonly float _durationS;
+        private readonly Action _onComplete;
         [NotNull] private readonly Action<T> _setter;
         [NotNull] private readonly Func<float, float> _ease;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
@@ -20,6 +23,7 @@ namespace Infrastructure.Tweening
             T start,
             T end,
             float durationS,
+            Action onComplete,
             [NotNull] Action<T> setter,
             [NotNull] Func<float, float> ease,
             [NotNull] Func<T, T, float, T> lerp)
@@ -31,6 +35,7 @@ namespace Infrastructure.Tweening
             _start = start;
             _end = end;
             _durationS = durationS;
+            _onComplete = onComplete;
             _setter = setter;
             _ease = ease;
             _lerp = lerp;
@@ -93,6 +98,8 @@ namespace Infrastructure.Tweening
             _tweenState = TweenState.Completed;
 
             _setter(_end);
+
+            _onComplete?.Invoke();
         }
     }
 }
