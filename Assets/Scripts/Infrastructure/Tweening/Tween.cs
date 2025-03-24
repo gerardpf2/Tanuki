@@ -1,17 +1,19 @@
 using System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Infrastructure.Tweening
 {
     public class Tween<T> : ITween
     {
-        // TODO: loops
-
-        private readonly T _start;
-        private readonly T _end;
+        private T _start;
+        private T _end;
         private readonly float _delayS;
         private readonly float _durationS;
+        private readonly int _repetitions;
+        private readonly RepetitionType _repetitionType;
+        private readonly Action _onIterationComplete;
         private readonly Action _onComplete;
         [NotNull] private readonly Action<T> _setter;
         [NotNull] private readonly Func<float, float> _ease;
@@ -19,12 +21,16 @@ namespace Infrastructure.Tweening
 
         private TweenState _tweenState;
         private float _playingTimeS;
+        private int _iteration;
 
         public Tween(
             T start,
             T end,
             float delayS,
             float durationS,
+            int repetitions,
+            RepetitionType repetitionType,
+            Action onIterationComplete,
             Action onComplete,
             [NotNull] Action<T> setter,
             [NotNull] Func<float, float> ease,
@@ -38,6 +44,9 @@ namespace Infrastructure.Tweening
             _end = end;
             _delayS = delayS;
             _durationS = durationS;
+            _repetitions = repetitions;
+            _repetitionType = repetitionType;
+            _onIterationComplete = onIterationComplete;
             _onComplete = onComplete;
             _setter = setter;
             _ease = ease;
@@ -103,11 +112,63 @@ namespace Infrastructure.Tweening
 
         private void Complete()
         {
-            _tweenState = TweenState.Completed;
+            ++_iteration;
 
             _setter(_end);
 
-            _onComplete?.Invoke();
+            _onIterationComplete?.Invoke();
+
+            if (_repetitions < 0 || _iteration <= _repetitions)
+            {
+                PrepareNextRepetition();
+            }
+            else
+            {
+                _tweenState = TweenState.Completed;
+
+                _onComplete?.Invoke();
+            }
+        }
+
+        private void PrepareNextRepetition()
+        {
+            switch (_repetitionType)
+            {
+                case RepetitionType.Restart:
+                    UpdatePlayingTimeS();
+                    break;
+                case RepetitionType.RestartWithDelayS:
+                    UpdatePlayingTimeSWithDelayS();
+                    break;
+                case RepetitionType.Yoyo:
+                    UpdatePlayingTimeS();
+                    SwapStartEnd();
+                    break;
+                case RepetitionType.YoyoWithDelayS:
+                    UpdatePlayingTimeSWithDelayS();
+                    SwapStartEnd();
+                    break;
+                default:
+                    ArgumentOutOfRangeException.Throw(_repetitionType);
+                    break;
+            }
+
+            return;
+
+            void UpdatePlayingTimeS()
+            {
+                _playingTimeS -= _durationS;
+            }
+
+            void UpdatePlayingTimeSWithDelayS()
+            {
+                _playingTimeS = _playingTimeS - _durationS - _delayS;
+            }
+
+            void SwapStartEnd()
+            {
+                (_start, _end) = (_end, _start);
+            }
         }
     }
 }

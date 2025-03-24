@@ -19,6 +19,15 @@ namespace Infrastructure.Tweening.TweenBuilders
         ITweenBuilder<T> WithDurationS(float durationS);
 
         [NotNull]
+        ITweenBuilder<T> WithRepetitions(int repetitions);
+
+        [NotNull]
+        ITweenBuilder<T> WithRepetitionType(RepetitionType repetitionType);
+
+        [NotNull]
+        ITweenBuilder<T> WithOnIterationComplete(Action onIterationComplete);
+
+        [NotNull]
         ITweenBuilder<T> WithOnComplete(Action onComplete);
 
         [NotNull]

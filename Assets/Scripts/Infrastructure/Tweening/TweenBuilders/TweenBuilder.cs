@@ -15,6 +15,9 @@ namespace Infrastructure.Tweening.TweenBuilders
         private T _end;
         private float _delayS;
         private float _durationS;
+        private int _repetitions;
+        private RepetitionType _repetitionType;
+        private Action _onIterationComplete;
         private Action _onComplete;
         private Action<T> _setter;
         private EasingMode _easingMode;
@@ -58,6 +61,27 @@ namespace Infrastructure.Tweening.TweenBuilders
             return this;
         }
 
+        public ITweenBuilder<T> WithRepetitions(int repetitions)
+        {
+            _repetitions = repetitions;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithRepetitionType(RepetitionType repetitionType)
+        {
+            _repetitionType = repetitionType;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithOnIterationComplete(Action onIterationComplete)
+        {
+            _onIterationComplete = onIterationComplete;
+
+            return this;
+        }
+
         public ITweenBuilder<T> WithOnComplete(Action onComplete)
         {
             _onComplete = onComplete;
@@ -91,6 +115,9 @@ namespace Infrastructure.Tweening.TweenBuilders
                     _end,
                     _delayS,
                     _durationS,
+                    _repetitions,
+                    _repetitionType,
+                    _onIterationComplete,
                     _onComplete,
                     _setter,
                     _easingFunctionGetter.Get(_easingMode),
