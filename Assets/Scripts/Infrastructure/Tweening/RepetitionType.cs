@@ -3,8 +3,8 @@ namespace Infrastructure.Tweening
     public enum RepetitionType
     {
         Restart,
-        RestartWithDelayS,
+        RestartWithDelay,
         Yoyo,
-        YoyoWithDelayS
+        YoyoWithDelay
     }
 }

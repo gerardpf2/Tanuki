@@ -11,9 +11,11 @@ namespace Infrastructure.Tweening
         private readonly Action _onIterationComplete;
         private readonly Action _onComplete;
 
-        private TweenState _tweenState;
         private float _playingTimeS;
+        private bool _backwards;
         private int _iteration;
+
+        public TweenState State { get; private set; }
 
         protected TweenBase(
             float delayS,
@@ -29,11 +31,11 @@ namespace Infrastructure.Tweening
             _onComplete = onComplete;
         }
 
-        public TweenState Update(float deltaTimeS)
+        public void Update(float deltaTimeS, bool backwards = false)
         {
-            if (_tweenState != TweenState.Playing)
+            if (State != TweenState.Playing)
             {
-                return _tweenState;
+                return;
             }
 
             _playingTimeS += deltaTimeS;
@@ -42,54 +44,64 @@ namespace Infrastructure.Tweening
 
             if (sinceDelayS < 0.0f)
             {
-                return _tweenState;
+                return;
             }
+
+            backwards = _backwards ? !backwards : backwards;
 
             if (CanRefresh(sinceDelayS))
             {
-                Refresh(deltaTimeS, sinceDelayS);
+                Refresh(deltaTimeS, sinceDelayS, backwards);
             }
             else
             {
-                Complete();
+                Complete(backwards);
             }
-
-            return _tweenState;
         }
 
         public bool Pause()
         {
-            if (_tweenState != TweenState.Playing)
+            if (State != TweenState.Playing)
             {
                 return false;
             }
 
-            _tweenState = TweenState.Paused;
+            State = TweenState.Paused;
 
             return true;
         }
 
         public bool Resume()
         {
-            if (_tweenState != TweenState.Paused)
+            if (State != TweenState.Paused)
             {
                 return false;
             }
 
-            _tweenState = TweenState.Playing;
+            State = TweenState.Playing;
 
             return true;
         }
 
+        public virtual void Restart(bool withDelay)
+        {
+            State = TweenState.Playing;
+
+            RestartPlayingTime(withDelay);
+
+            _backwards = false;
+            _iteration = 0;
+        }
+
         protected abstract bool CanRefresh(float sinceDelayS);
 
-        protected abstract void Refresh(float deltaTimeS, float sinceDelayS);
+        protected abstract void Refresh(float deltaTimeS, float sinceDelayS, bool backwards);
 
-        private void Complete()
+        private void Complete(bool backwards)
         {
-            OnComplete();
-
             ++_iteration;
+
+            OnIterationComplete(backwards);
 
             _onIterationComplete?.Invoke();
 
@@ -99,30 +111,30 @@ namespace Infrastructure.Tweening
             }
             else
             {
-                _tweenState = TweenState.Completed;
+                State = TweenState.Completed;
 
                 _onComplete?.Invoke();
             }
         }
 
-        protected virtual void OnComplete() { }
+        protected virtual void OnIterationComplete(bool backwards) { }
 
         private void PrepareNextRepetition()
         {
             switch (_repetitionType)
             {
                 case RepetitionType.Restart:
-                    ResetPlayingTime(false);
+                    RestartForNextRepetition(false);
                     break;
-                case RepetitionType.RestartWithDelayS:
-                    ResetPlayingTime(true);
+                case RepetitionType.RestartWithDelay:
+                    RestartForNextRepetition(true);
                     break;
                 case RepetitionType.Yoyo:
-                    ResetPlayingTime(false);
+                    RestartForNextRepetition(false);
                     ApplyYoyo();
                     break;
-                case RepetitionType.YoyoWithDelayS:
-                    ResetPlayingTime(true);
+                case RepetitionType.YoyoWithDelay:
+                    RestartForNextRepetition(true);
                     ApplyYoyo();
                     break;
                 default:
@@ -131,11 +143,19 @@ namespace Infrastructure.Tweening
             }
         }
 
-        private void ResetPlayingTime(bool withDelay)
+        protected virtual void RestartForNextRepetition(bool withDelay)
+        {
+            RestartPlayingTime(withDelay);
+        }
+
+        private void RestartPlayingTime(bool withDelay)
         {
             _playingTimeS = withDelay ? 0.0f : _delayS;
         }
 
-        protected abstract void ApplyYoyo();
+        private void ApplyYoyo()
+        {
+            _backwards = !_backwards;
+        }
     }
 }

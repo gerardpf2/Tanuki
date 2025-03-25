@@ -6,8 +6,8 @@ namespace Infrastructure.Tweening
 {
     public class Tween<T> : TweenBase
     {
-        private T _start;
-        private T _end;
+        private readonly T _start;
+        private readonly T _end;
         private readonly float _durationS;
         [NotNull] private readonly Action<T> _setter;
         [NotNull] private readonly Func<float, float> _ease;
@@ -43,23 +43,28 @@ namespace Infrastructure.Tweening
             return sinceDelayS < _durationS;
         }
 
-        protected override void Refresh(float _, float sinceDelayS)
+        protected override void Refresh(float _, float sinceDelayS, bool backwards)
         {
             float normalizedTime = sinceDelayS / _durationS;
 
-            _setter(_lerp(_start, _end, _ease(normalizedTime)));
+            _setter(_lerp(GetStart(backwards), GetEnd(backwards), _ease(normalizedTime)));
         }
 
-        protected override void OnComplete()
+        protected override void OnIterationComplete(bool backwards)
         {
-            base.OnComplete();
+            base.OnIterationComplete(backwards);
 
-            _setter(_end);
+            _setter(GetEnd(backwards));
         }
 
-        protected override void ApplyYoyo()
+        private T GetStart(bool backwards)
         {
-            (_start, _end) = (_end, _start);
+            return backwards ? _end : _start;
+        }
+
+        private T GetEnd(bool backwards)
+        {
+            return backwards ? _start : _end;
         }
     }
 }

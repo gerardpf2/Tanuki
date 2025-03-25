@@ -39,8 +39,17 @@ namespace Infrastructure.Tweening
                 float deltaTimeS = Time.deltaTime;
 
                 _tweens.AddRange(_tweensToRun);
+
                 _tweensToRun.Clear();
-                _tweens.RemoveAll(tween => tween.Update(deltaTimeS) == TweenState.Completed);
+
+                _tweens.RemoveAll(
+                    tween =>
+                    {
+                        tween.Update(deltaTimeS);
+
+                        return tween.State == TweenState.Completed;
+                    }
+                );
 
                 yield return null;
             }
