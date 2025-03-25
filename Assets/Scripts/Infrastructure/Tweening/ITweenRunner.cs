@@ -2,6 +2,6 @@ namespace Infrastructure.Tweening
 {
     public interface ITweenRunner
     {
-        void Run(ITween tween);
+        void Run(ITween tween, bool keepAlive = false);
     }
 }

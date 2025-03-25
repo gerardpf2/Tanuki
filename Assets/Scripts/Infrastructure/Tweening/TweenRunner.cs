@@ -9,10 +9,24 @@ namespace Infrastructure.Tweening
 {
     public class TweenRunner : ITweenRunner
     {
+        private sealed class TweenWrapper
+        {
+            [NotNull] public readonly ITween Tween;
+            public readonly bool KeepAlive;
+
+            public TweenWrapper([NotNull] ITween tween, bool keepAlive)
+            {
+                ArgumentNullException.ThrowIfNull(tween);
+
+                Tween = tween;
+                KeepAlive = keepAlive;
+            }
+        }
+
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
-        [NotNull, ItemNotNull] private readonly ICollection<ITween> _tweensToRun = new List<ITween>();
-        [NotNull, ItemNotNull] private readonly List<ITween> _tweens = new();
+        [NotNull, ItemNotNull] private readonly ICollection<TweenWrapper> _tweenToRunWrappers = new List<TweenWrapper>();
+        [NotNull, ItemNotNull] private readonly List<TweenWrapper> _tweenWrappers = new();
 
         private Coroutine _updateCoroutine;
 
@@ -23,31 +37,31 @@ namespace Infrastructure.Tweening
             _coroutineRunner = coroutineRunner;
         }
 
-        public void Run([NotNull] ITween tween)
+        public void Run([NotNull] ITween tween, bool keepAlive = false)
         {
             ArgumentNullException.ThrowIfNull(tween);
 
-            _tweensToRun.Add(tween);
+            _tweenToRunWrappers.Add(new TweenWrapper(tween, keepAlive));
 
             _updateCoroutine ??= _coroutineRunner.Run(Update());
         }
 
         private IEnumerator Update()
         {
-            while (_tweensToRun.Count > 0 || _tweens.Count > 0)
+            while (_tweenToRunWrappers.Count > 0 || _tweenWrappers.Count > 0)
             {
                 float deltaTimeS = Time.deltaTime;
 
-                _tweens.AddRange(_tweensToRun);
+                _tweenWrappers.AddRange(_tweenToRunWrappers);
 
-                _tweensToRun.Clear();
+                _tweenToRunWrappers.Clear();
 
-                _tweens.RemoveAll(
-                    tween =>
+                _tweenWrappers.RemoveAll(
+                    tweenWrapper =>
                     {
-                        tween.Update(deltaTimeS);
+                        tweenWrapper.Tween.Update(deltaTimeS);
 
-                        return tween.State == TweenState.Completed;
+                        return tweenWrapper.Tween.State == TweenState.Completed && !tweenWrapper.KeepAlive;
                     }
                 );
 
