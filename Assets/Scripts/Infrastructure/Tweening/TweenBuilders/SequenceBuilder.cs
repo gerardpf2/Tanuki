@@ -10,9 +10,9 @@ namespace Infrastructure.Tweening.TweenBuilders
         [NotNull, ItemNotNull] private readonly ICollection<ITween> _tweens = new List<ITween>();
 
         private float _delayS;
-        private bool _autoPlay;
+        private bool _autoPlay = SequenceBuilderDefaults.AutoPlay;
         private int _repetitions;
-        private RepetitionType _repetitionType;
+        private RepetitionType _repetitionType = SequenceBuilderDefaults.RepetitionType;
         private Action _onIterationComplete;
         private Action _onComplete;
 

@@ -12,16 +12,16 @@ namespace Infrastructure.Tweening.TweenBuilders
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
         private float _delayS;
-        private bool _autoPlay;
+        private bool _autoPlay = TweenBuilderDefaults.AutoPlay;
         private int _repetitions;
-        private RepetitionType _repetitionType;
+        private RepetitionType _repetitionType = TweenBuilderDefaults.RepetitionType;
         private Action _onIterationComplete;
         private Action _onComplete;
         private T _start;
         private T _end;
         private float _durationS;
         private Action<T> _setter;
-        private EasingMode _easingMode;
+        private EasingMode _easingMode = TweenBuilderDefaults.EasingMode;
 
         protected TweenBuilder(
             [NotNull] IEasingFunctionGetter easingFunctionGetter,
