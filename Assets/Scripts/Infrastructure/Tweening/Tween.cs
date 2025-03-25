@@ -51,9 +51,9 @@ namespace Infrastructure.Tweening
             _setter(_lerp(GetStart(backwards), GetEnd(backwards), _ease(normalizedTime)));
         }
 
-        protected override void OnIterationComplete(bool backwards)
+        protected override void CompleteIteration(bool backwards)
         {
-            base.OnIterationComplete(backwards);
+            base.CompleteIteration(backwards);
 
             _setter(GetEnd(backwards));
         }

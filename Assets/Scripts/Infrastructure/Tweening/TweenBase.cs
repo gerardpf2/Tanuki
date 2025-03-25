@@ -60,7 +60,7 @@ namespace Infrastructure.Tweening
             }
             else
             {
-                Complete(backwards);
+                TryComplete(backwards);
             }
         }
 
@@ -107,13 +107,9 @@ namespace Infrastructure.Tweening
 
         protected abstract void Refresh(float deltaTimeS, float sinceDelayS, bool backwards);
 
-        private void Complete(bool backwards)
+        private void TryComplete(bool backwards)
         {
-            ++_iteration;
-
-            OnIterationComplete(backwards);
-
-            _onIterationComplete?.Invoke();
+            CompleteIteration(backwards);
 
             if (_repetitions < 0 || _iteration <= _repetitions)
             {
@@ -121,13 +117,16 @@ namespace Infrastructure.Tweening
             }
             else
             {
-                State = TweenState.Completed;
-
-                _onComplete?.Invoke();
+                Complete();
             }
         }
 
-        protected virtual void OnIterationComplete(bool backwards) { }
+        protected virtual void CompleteIteration(bool backwards)
+        {
+            ++_iteration;
+
+            _onIterationComplete?.Invoke();
+        }
 
         private void PrepareNextRepetition()
         {
@@ -166,6 +165,13 @@ namespace Infrastructure.Tweening
         private void ApplyYoyo()
         {
             _backwards = !_backwards;
+        }
+
+        private void Complete()
+        {
+            State = TweenState.Completed;
+
+            _onComplete?.Invoke();
         }
     }
 }
