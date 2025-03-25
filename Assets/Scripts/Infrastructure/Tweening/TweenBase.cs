@@ -47,7 +47,7 @@ namespace Infrastructure.Tweening
                 return;
             }
 
-            backwards = _backwards ? !backwards : backwards;
+            backwards ^= _backwards;
 
             if (CanRefresh(sinceDelayS))
             {
