@@ -6,9 +6,9 @@ namespace Infrastructure.Tweening
 
         void Update(float deltaTimeS, bool backwards = false);
 
-        bool Pause();
+        bool Play();
 
-        bool Resume();
+        bool Pause();
 
         void Restart(bool withDelay);
     }

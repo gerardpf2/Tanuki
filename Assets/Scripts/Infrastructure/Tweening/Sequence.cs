@@ -12,11 +12,12 @@ namespace Infrastructure.Tweening
 
         public Sequence(
             float delayS,
+            bool autoPlay,
             int repetitions,
             RepetitionType repetitionType,
             Action onIterationComplete,
             Action onComplete,
-            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(delayS, repetitions, repetitionType, onIterationComplete, onComplete)
+            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(delayS, autoPlay, repetitions, repetitionType, onIterationComplete, onComplete)
         {
             ArgumentNullException.ThrowIfNull(tweens);
 

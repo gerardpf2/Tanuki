@@ -11,14 +11,15 @@ namespace Infrastructure.Tweening.TweenBuilders
         [NotNull] private readonly IEasingFunctionGetter _easingFunctionGetter;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
-        private T _start;
-        private T _end;
         private float _delayS;
-        private float _durationS;
+        private bool _autoPlay;
         private int _repetitions;
         private RepetitionType _repetitionType;
         private Action _onIterationComplete;
         private Action _onComplete;
+        private T _start;
+        private T _end;
+        private float _durationS;
         private Action<T> _setter;
         private EasingMode _easingMode;
 
@@ -36,6 +37,13 @@ namespace Infrastructure.Tweening.TweenBuilders
         public ITweenBuilder<T> WithDelayS(float delayS)
         {
             _delayS = delayS;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithAutoPlay(bool autoPlay)
+        {
+            _autoPlay = autoPlay;
 
             return this;
         }
@@ -112,6 +120,7 @@ namespace Infrastructure.Tweening.TweenBuilders
             return
                 new Tween<T>(
                     _delayS,
+                    _autoPlay,
                     _repetitions,
                     _repetitionType,
                     _onIterationComplete,

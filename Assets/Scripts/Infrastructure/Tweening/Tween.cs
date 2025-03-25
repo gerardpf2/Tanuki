@@ -15,6 +15,7 @@ namespace Infrastructure.Tweening
 
         public Tween(
             float delayS,
+            bool autoPlay,
             int repetitions,
             RepetitionType repetitionType,
             Action onIterationComplete,
@@ -24,7 +25,7 @@ namespace Infrastructure.Tweening
             float durationS,
             [NotNull] Action<T> setter,
             [NotNull] Func<float, float> ease,
-            [NotNull] Func<T, T, float, T> lerp) : base(delayS, repetitions, repetitionType, onIterationComplete, onComplete)
+            [NotNull] Func<T, T, float, T> lerp) : base(delayS, autoPlay, repetitions, repetitionType, onIterationComplete, onComplete)
         {
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(ease);

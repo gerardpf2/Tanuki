@@ -6,6 +6,7 @@ namespace Infrastructure.Tweening
     public abstract class TweenBase : ITween
     {
         private readonly float _delayS;
+        private readonly bool _autoPlay;
         private readonly int _repetitions;
         private readonly RepetitionType _repetitionType;
         private readonly Action _onIterationComplete;
@@ -19,16 +20,20 @@ namespace Infrastructure.Tweening
 
         protected TweenBase(
             float delayS,
+            bool autoPlay,
             int repetitions,
             RepetitionType repetitionType,
             Action onIterationComplete,
             Action onComplete)
         {
             _delayS = delayS;
+            _autoPlay = autoPlay;
             _repetitions = repetitions;
             _repetitionType = repetitionType;
             _onIterationComplete = onIterationComplete;
             _onComplete = onComplete;
+
+            State = GetInitialState();
         }
 
         public void Update(float deltaTimeS, bool backwards = false)
@@ -59,6 +64,18 @@ namespace Infrastructure.Tweening
             }
         }
 
+        public bool Play()
+        {
+            if (State != TweenState.Paused)
+            {
+                return false;
+            }
+
+            State = TweenState.Playing;
+
+            return true;
+        }
+
         public bool Pause()
         {
             if (State != TweenState.Playing)
@@ -71,26 +88,19 @@ namespace Infrastructure.Tweening
             return true;
         }
 
-        public bool Resume()
-        {
-            if (State != TweenState.Paused)
-            {
-                return false;
-            }
-
-            State = TweenState.Playing;
-
-            return true;
-        }
-
         public virtual void Restart(bool withDelay)
         {
-            State = TweenState.Playing;
+            State = GetInitialState();
 
             RestartPlayingTime(withDelay);
 
             _backwards = false;
             _iteration = 0;
+        }
+
+        private TweenState GetInitialState()
+        {
+            return _autoPlay ? TweenState.Playing : TweenState.Paused;
         }
 
         protected abstract bool CanRefresh(float sinceDelayS);

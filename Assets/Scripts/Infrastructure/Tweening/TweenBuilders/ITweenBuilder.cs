@@ -10,6 +10,9 @@ namespace Infrastructure.Tweening.TweenBuilders
         ITweenBuilder<T> WithDelayS(float delayS);
 
         [NotNull]
+        ITweenBuilder<T> WithAutoPlay(bool autoPlay);
+
+        [NotNull]
         ITweenBuilder<T> WithRepetitions(int repetitions);
 
         [NotNull]
