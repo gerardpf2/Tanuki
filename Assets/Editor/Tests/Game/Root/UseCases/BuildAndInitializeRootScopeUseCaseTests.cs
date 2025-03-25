@@ -3,6 +3,7 @@ using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
+using Infrastructure.Unity;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -14,6 +15,7 @@ namespace Editor.Tests.Game.Root.UseCases
         private IConfigDefinitionGetter _configDefinitionGetter;
         private IGateDefinitionGetter _gateDefinitionGetter;
         private IScreenPlacement _screenPlacement;
+        private ICoroutineRunner _coroutineRunner;
 
         private BuildAndInitializeRootScopeUseCase _buildAndInitializeRootScopeUseCase;
 
@@ -24,13 +26,15 @@ namespace Editor.Tests.Game.Root.UseCases
             _configDefinitionGetter = Substitute.For<IConfigDefinitionGetter>();
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
+            _coroutineRunner = Substitute.For<ICoroutineRunner>();
 
             _buildAndInitializeRootScopeUseCase =
                 new BuildAndInitializeRootScopeUseCase(
                     _gateDefinitionGetter,
                     _configDefinitionGetter,
                     _screenDefinitionGetter,
-                    _screenPlacement
+                    _screenPlacement,
+                    _coroutineRunner
                 );
         }
 
