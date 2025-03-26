@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening
 {
@@ -38,7 +37,7 @@ namespace Infrastructure.Tweening
 
         protected override float Refresh(float deltaTimeS, bool backwards)
         {
-            float remainingDeltaTimeS = deltaTimeS;
+            backwards ^= Backwards;
 
             do
             {
@@ -49,18 +48,11 @@ namespace Infrastructure.Tweening
                     break;
                 }
 
-                float updatedRemainingDeltaTimeS = tween.Update(remainingDeltaTimeS, backwards);
-
-                if (updatedRemainingDeltaTimeS > remainingDeltaTimeS || updatedRemainingDeltaTimeS < 0.0f)
-                {
-                    InvalidOperationException.Throw(); // TODO
-                }
-
-                remainingDeltaTimeS = updatedRemainingDeltaTimeS;
+                deltaTimeS = tween.Update(deltaTimeS, backwards);
             }
-            while (remainingDeltaTimeS > 0.0f);
+            while (deltaTimeS > 0.0f);
 
-            return remainingDeltaTimeS;
+            return deltaTimeS;
         }
 
         protected override void RestartForNextIteration(bool withDelay)

@@ -50,6 +50,8 @@ namespace Infrastructure.Tweening
 
         protected override float Refresh(float deltaTimeS, bool backwards)
         {
+            backwards ^= Backwards;
+
             _playingTimeS += deltaTimeS;
 
             if (_playingTimeS < _durationS)

@@ -1,6 +1,5 @@
 using System;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening
 {
@@ -15,7 +14,6 @@ namespace Infrastructure.Tweening
 
         private TweenState _state = TweenState.SettingUp;
         private float _waitingTimeS;
-        private bool _backwards;
         private int _iteration;
 
         public TweenState State
@@ -23,16 +21,13 @@ namespace Infrastructure.Tweening
             get => _state;
             private set
             {
-                if (State == value)
-                {
-                    InvalidOperationException.Throw(); // TODO
-                }
-
                 _state = value;
 
                 CheckCallbackOnStateUpdated();
             }
         }
+
+        protected bool Backwards { get; private set; }
 
         protected TweenBase(
             float delayS,
@@ -104,7 +99,8 @@ namespace Infrastructure.Tweening
         {
             RestartTimesAndUpdateState(withDelay);
 
-            _backwards = false;
+            Backwards = false;
+
             _iteration = 0;
         }
 
@@ -156,26 +152,23 @@ namespace Infrastructure.Tweening
 
             State = TweenState.Playing;
 
-            return Update(_waitingTimeS - _delayS, backwards);
+            deltaTimeS = _waitingTimeS - _delayS;
+
+            return Update(deltaTimeS, backwards);
         }
 
         private float ProcessPlayingState(float deltaTimeS, bool backwards)
         {
-            float remainingDeltaTimeS = Refresh(deltaTimeS, backwards ^ _backwards);
+            deltaTimeS = Refresh(deltaTimeS, backwards);
 
-            if (remainingDeltaTimeS > deltaTimeS || remainingDeltaTimeS < 0.0f)
-            {
-                InvalidOperationException.Throw(); // TODO
-            }
-
-            if (remainingDeltaTimeS > 0.0f)
+            if (deltaTimeS > 0.0f)
             {
                 State = TweenState.CompletingIteration;
 
-                remainingDeltaTimeS = Update(remainingDeltaTimeS, backwards);
+                deltaTimeS = Update(deltaTimeS, backwards);
             }
 
-            return remainingDeltaTimeS;
+            return deltaTimeS;
         }
 
         private float ProcessCompletingIterationState(float deltaTimeS, bool backwards)
@@ -243,7 +236,7 @@ namespace Infrastructure.Tweening
 
         private void ToggleBackwards()
         {
-            _backwards = !_backwards;
+            Backwards = !Backwards;
         }
     }
 }
