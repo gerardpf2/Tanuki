@@ -10,11 +10,16 @@ namespace Infrastructure.Tweening.TweenBuilders
         [NotNull, ItemNotNull] private readonly ICollection<ITween> _tweens = new List<ITween>();
 
         private float _delayS;
-        private bool _autoPlay = SequenceBuilderDefaults.AutoPlay;
+        private bool _autoPlay;
         private int _repetitions;
-        private RepetitionType _repetitionType = SequenceBuilderDefaults.RepetitionType;
+        private RepetitionType _repetitionType;
         private Action _onIterationComplete;
         private Action _onComplete;
+
+        public SequenceBuilder()
+        {
+            Reset();
+        }
 
         public ISequenceBuilder WithDelayS(float delayS)
         {
@@ -69,7 +74,7 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         public ITween Build()
         {
-            return
+            ITween sequence =
                 new Sequence(
                     _delayS,
                     _autoPlay,
@@ -77,8 +82,23 @@ namespace Infrastructure.Tweening.TweenBuilders
                     _repetitionType,
                     _onIterationComplete,
                     _onComplete,
-                    _tweens
+                    new List<ITween>(_tweens)
                 );
+
+            Reset();
+
+            return sequence;
+        }
+
+        private void Reset()
+        {
+            _delayS = 0.0f;
+            _autoPlay = SequenceBuilderDefaults.AutoPlay;
+            _repetitions = 0;
+            _repetitionType = SequenceBuilderDefaults.RepetitionType;
+            _onIterationComplete = null;
+            _onComplete = null;
+            _tweens.Clear();
         }
     }
 }

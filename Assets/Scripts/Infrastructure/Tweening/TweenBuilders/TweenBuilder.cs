@@ -12,16 +12,16 @@ namespace Infrastructure.Tweening.TweenBuilders
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
         private float _delayS;
-        private bool _autoPlay = TweenBuilderDefaults.AutoPlay;
+        private bool _autoPlay;
         private int _repetitions;
-        private RepetitionType _repetitionType = TweenBuilderDefaults.RepetitionType;
+        private RepetitionType _repetitionType;
         private Action _onIterationComplete;
         private Action _onComplete;
         private T _start;
         private T _end;
         private float _durationS;
         private Action<T> _setter;
-        private EasingMode _easingMode = TweenBuilderDefaults.EasingMode;
+        private EasingMode _easingMode;
 
         protected TweenBuilder(
             [NotNull] IEasingFunctionGetter easingFunctionGetter,
@@ -32,6 +32,8 @@ namespace Infrastructure.Tweening.TweenBuilders
 
             _easingFunctionGetter = easingFunctionGetter;
             _lerp = lerp;
+
+            Reset();
         }
 
         public ITweenBuilder<T> WithDelayS(float delayS)
@@ -117,7 +119,7 @@ namespace Infrastructure.Tweening.TweenBuilders
         {
             InvalidOperationException.ThrowIfNull(_setter);
 
-            return
+            ITween tween =
                 new Tween<T>(
                     _delayS,
                     _autoPlay,
@@ -132,6 +134,25 @@ namespace Infrastructure.Tweening.TweenBuilders
                     _easingFunctionGetter.Get(_easingMode),
                     _lerp
                 );
+
+            Reset();
+
+            return tween;
+        }
+
+        private void Reset()
+        {
+            _delayS = 0.0f;
+            _autoPlay = TweenBuilderDefaults.AutoPlay;
+            _repetitions = 0;
+            _repetitionType = TweenBuilderDefaults.RepetitionType;
+            _onIterationComplete = null;
+            _onComplete = null;
+            _start = default;
+            _end = default;
+            _durationS = 0.0f;
+            _setter = null;
+            _easingMode = TweenBuilderDefaults.EasingMode;
         }
     }
 }

@@ -15,10 +15,10 @@ namespace Infrastructure.Tweening.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            ruleAdder.Add(ruleFactory.GetTransient<ISequenceBuilder>(_ => new SequenceBuilder()));
+            ruleAdder.Add(ruleFactory.GetSingleton<ISequenceBuilder>(_ => new SequenceBuilder()));
 
             ruleAdder.Add(
-                ruleFactory.GetTransient(r =>
+                ruleFactory.GetSingleton(r =>
                     new TweenBuilderFloat(
                         r.Resolve<IEasingFunctionGetter>()
                     )
@@ -26,7 +26,7 @@ namespace Infrastructure.Tweening.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetTransient(r =>
+                ruleFactory.GetSingleton(r =>
                     new TweenBuilderVector3(
                         r.Resolve<IEasingFunctionGetter>()
                     )
