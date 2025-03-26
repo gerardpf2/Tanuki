@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 using UnityEngine;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.Tweening
 {
@@ -12,14 +13,14 @@ namespace Infrastructure.Tweening
         private sealed class TweenWrapper
         {
             [NotNull] public readonly ITween Tween;
-            public readonly bool KeepAlive;
+            public readonly Func<bool> KeepAliveAfterComplete;
 
-            public TweenWrapper([NotNull] ITween tween, bool keepAlive)
+            public TweenWrapper([NotNull] ITween tween, Func<bool> keepAliveAfterComplete)
             {
                 ArgumentNullException.ThrowIfNull(tween);
 
                 Tween = tween;
-                KeepAlive = keepAlive;
+                KeepAliveAfterComplete = keepAliveAfterComplete;
             }
         }
 
@@ -37,11 +38,11 @@ namespace Infrastructure.Tweening
             _coroutineRunner = coroutineRunner;
         }
 
-        public void Run([NotNull] ITween tween, bool keepAlive = false)
+        public void Run([NotNull] ITween tween, Func<bool> keepAliveAfterComplete = null)
         {
             ArgumentNullException.ThrowIfNull(tween);
 
-            _tweenToRunWrappers.Add(new TweenWrapper(tween, keepAlive));
+            _tweenToRunWrappers.Add(new TweenWrapper(tween, keepAliveAfterComplete));
 
             _updateCoroutine ??= _coroutineRunner.Run(Update());
         }
@@ -53,23 +54,30 @@ namespace Infrastructure.Tweening
                 float deltaTimeS = Time.deltaTime;
 
                 _tweenWrappers.AddRange(_tweenToRunWrappers);
-
                 _tweenToRunWrappers.Clear();
-
-                _tweenWrappers.RemoveAll(
-                    tweenWrapper =>
-                    {
-                        tweenWrapper.Tween.Update(deltaTimeS);
-
-                        return tweenWrapper.Tween.State == TweenState.Completed && !tweenWrapper.KeepAlive;
-                    }
-                );
+                _tweenWrappers.RemoveAll(tweenWrapper => Update(tweenWrapper, deltaTimeS));
 
                 yield return null;
             }
 
             _coroutineRunner.Stop(_updateCoroutine);
             _updateCoroutine = null;
+        }
+
+        private static bool Update([NotNull] TweenWrapper tweenWrapper, float deltaTimeS)
+        {
+            ArgumentNullException.ThrowIfNull(tweenWrapper);
+
+            tweenWrapper.Tween.Update(deltaTimeS);
+
+            bool remove = tweenWrapper.Tween.State == TweenState.Completed;
+
+            if (remove && tweenWrapper.KeepAliveAfterComplete is not null)
+            {
+                remove = !tweenWrapper.KeepAliveAfterComplete();
+            }
+
+            return remove;
         }
     }
 }

@@ -1,7 +1,9 @@
+using System;
+
 namespace Infrastructure.Tweening
 {
     public interface ITweenRunner
     {
-        void Run(ITween tween, bool keepAlive = false);
+        void Run(ITween tween, Func<bool> keepAliveAfterComplete = null);
     }
 }
