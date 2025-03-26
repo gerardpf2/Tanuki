@@ -6,8 +6,6 @@ namespace Infrastructure.Tweening
 {
     public abstract class TweenBase : ITween
     {
-        // TODO: Move callbacks to State set and add missing ones
-
         private readonly float _delayS;
         private readonly bool _autoPlay;
         private readonly int _repetitions;
@@ -32,6 +30,8 @@ namespace Infrastructure.Tweening
                 }
 
                 _state = value;
+
+                CheckCallbackOnStateUpdated();
             }
         }
 
@@ -114,6 +114,36 @@ namespace Infrastructure.Tweening
             _iteration = 0;
         }
 
+        private void CheckCallbackOnStateUpdated()
+        {
+            // TODO
+
+            switch (State)
+            {
+                case TweenState.SettingUp:
+                    break;
+                case TweenState.Waiting:
+                    break;
+                case TweenState.Playing:
+                    break;
+                case TweenState.CompletingIteration:
+                    _onIterationComplete?.Invoke();
+                    break;
+                case TweenState.PreparingNextIteration:
+                    break;
+                case TweenState.Completing:
+                    break;
+                case TweenState.Paused:
+                    break;
+                case TweenState.Completed:
+                    _onComplete?.Invoke();
+                    break;
+                default:
+                    ArgumentOutOfRangeException.Throw(State);
+                    return;
+            }
+        }
+
         private void ProcessSettingUpState(float deltaTimeS, bool backwards)
         {
             State = _autoPlay ? TweenState.Waiting : TweenState.Paused;
@@ -156,8 +186,6 @@ namespace Infrastructure.Tweening
         private void ProcessCompletingIterationState(float deltaTimeS, bool backwards)
         {
             ++_iteration;
-
-            _onIterationComplete?.Invoke();
 
             CompleteIteration(backwards ^ _backwards);
 
@@ -202,8 +230,6 @@ namespace Infrastructure.Tweening
         private void ProcessCompletingState(float deltaTimeS, bool backwards)
         {
             State = TweenState.Completed;
-
-            _onComplete?.Invoke();
 
             Update(deltaTimeS, backwards);
         }
