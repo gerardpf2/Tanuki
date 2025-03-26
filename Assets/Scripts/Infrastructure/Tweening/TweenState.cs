@@ -2,10 +2,10 @@ namespace Infrastructure.Tweening
 {
     public enum TweenState
     {
+        // TODO: Add comments
+
         SettingUp,
-        Entering,
         Waiting,
-        Starting,
         Playing,
         CompletingIteration,
         PreparingNextIteration,

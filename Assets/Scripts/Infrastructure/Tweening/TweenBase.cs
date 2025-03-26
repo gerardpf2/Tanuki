@@ -1,10 +1,13 @@
 using System;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening
 {
     public abstract class TweenBase : ITween
     {
+        // TODO: Move callbacks to State set and add missing ones
+
         private readonly float _delayS;
         private readonly bool _autoPlay;
         private readonly int _repetitions;
@@ -12,13 +15,25 @@ namespace Infrastructure.Tweening
         private readonly Action _onIterationComplete;
         private readonly Action _onComplete;
 
+        private TweenState _state = TweenState.SettingUp;
         private float _waitingTimeS;
         private float _playingTimeS;
         private bool _backwards;
         private int _iteration;
-        private bool _started;
 
-        public TweenState State { get; private set; } = TweenState.SettingUp;
+        public TweenState State
+        {
+            get => _state;
+            private set
+            {
+                if (State == value)
+                {
+                    InvalidOperationException.Throw(); // TODO
+                }
+
+                _state = value;
+            }
+        }
 
         protected TweenBase(
             float delayS,
@@ -43,14 +58,8 @@ namespace Infrastructure.Tweening
                 case TweenState.SettingUp:
                     ProcessSettingUpState(deltaTimeS, backwards);
                     break;
-                case TweenState.Entering:
-                    ProcessEnteringState(deltaTimeS, backwards);
-                    break;
                 case TweenState.Waiting:
                     ProcessWaitingState(deltaTimeS, backwards);
-                    break;
-                case TweenState.Starting:
-                    ProcessStartingState(deltaTimeS, backwards);
                     break;
                 case TweenState.Playing:
                     ProcessPlayingState(deltaTimeS, backwards);
@@ -92,41 +101,22 @@ namespace Infrastructure.Tweening
                 return false;
             }
 
-            State = TweenState.Entering;
+            State = _waitingTimeS < _delayS ? TweenState.Waiting : TweenState.Playing;
 
             return true;
         }
 
         public virtual void Restart(bool withDelay)
         {
-            RestartTimesAndSetEnteringState(withDelay);
+            RestartTimesAndUpdateState(withDelay);
 
             _backwards = false;
             _iteration = 0;
-            _started = false;
         }
 
         private void ProcessSettingUpState(float deltaTimeS, bool backwards)
         {
-            State = _autoPlay ? TweenState.Entering : TweenState.Paused;
-
-            Update(deltaTimeS, backwards);
-        }
-
-        private void ProcessEnteringState(float deltaTimeS, bool backwards)
-        {
-            if (_waitingTimeS < _delayS)
-            {
-                State = TweenState.Waiting;
-            }
-            else if (_started)
-            {
-                State = TweenState.Playing;
-            }
-            else
-            {
-                State = TweenState.Starting;
-            }
+            State = _autoPlay ? TweenState.Waiting : TweenState.Paused;
 
             Update(deltaTimeS, backwards);
         }
@@ -140,23 +130,16 @@ namespace Infrastructure.Tweening
                 return;
             }
 
-            State = TweenState.Entering;
-
-            Update(_waitingTimeS - _delayS, backwards);
-        }
-
-        private void ProcessStartingState(float deltaTimeS, bool backwards)
-        {
-            _started = true;
-
             State = TweenState.Playing;
 
-            Update(deltaTimeS, backwards);
+            Update(_waitingTimeS - _delayS, backwards);
         }
 
         private void ProcessPlayingState(float deltaTimeS, bool backwards)
         {
             _playingTimeS += deltaTimeS;
+
+            // TODO: TryRefresh and remove _playingTimeS
 
             if (CanRefresh(_playingTimeS))
             {
@@ -225,12 +208,12 @@ namespace Infrastructure.Tweening
             Update(deltaTimeS, backwards);
         }
 
-        private void RestartTimesAndSetEnteringState(bool withDelay)
+        private void RestartTimesAndUpdateState(bool withDelay)
         {
+            State = withDelay ? TweenState.Waiting : TweenState.Playing;
+
             _waitingTimeS = withDelay ? 0.0f : _delayS;
             _playingTimeS = 0.0f;
-
-            State = TweenState.Entering;
         }
 
         protected abstract bool CanRefresh(float playingTimeS);
@@ -241,7 +224,7 @@ namespace Infrastructure.Tweening
 
         protected virtual void RestartForNextIteration(bool withDelay)
         {
-            RestartTimesAndSetEnteringState(withDelay);
+            RestartTimesAndUpdateState(withDelay);
         }
 
         private void ToggleBackwards()
