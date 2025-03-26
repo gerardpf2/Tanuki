@@ -39,7 +39,7 @@ namespace Infrastructure.Tweening
         {
             backwards ^= Backwards;
 
-            do
+            while (deltaTimeS > 0.0f)
             {
                 ITween tween = FirstNotCompleted(backwards);
 
@@ -50,7 +50,6 @@ namespace Infrastructure.Tweening
 
                 deltaTimeS = tween.Update(deltaTimeS, backwards);
             }
-            while (deltaTimeS > 0.0f);
 
             return deltaTimeS;
         }
