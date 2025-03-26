@@ -39,14 +39,14 @@ namespace Infrastructure.Tweening
             _lerp = lerp;
         }
 
-        protected override bool CanRefresh(float sinceDelayS)
+        protected override bool CanRefresh(float playingTimeS)
         {
-            return sinceDelayS < _durationS;
+            return playingTimeS < _durationS;
         }
 
-        protected override void Refresh(float _, float sinceDelayS, bool backwards)
+        protected override void Refresh(float _, float playingTimeS, bool backwards)
         {
-            float normalizedTime = sinceDelayS / _durationS;
+            float normalizedTime = playingTimeS / _durationS;
 
             _setter(_lerp(GetStart(backwards), GetEnd(backwards), _ease(normalizedTime)));
         }

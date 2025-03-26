@@ -50,9 +50,9 @@ namespace Infrastructure.Tweening
             tween.Update(deltaTimeS, backwards);
         }
 
-        protected override void RestartForNextRepetition(bool withDelay)
+        protected override void RestartForNextIteration(bool withDelay)
         {
-            base.RestartForNextRepetition(withDelay);
+            base.RestartForNextIteration(withDelay);
 
             RestartTweens(withDelay);
         }
