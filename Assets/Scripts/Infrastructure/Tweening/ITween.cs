@@ -4,7 +4,8 @@ namespace Infrastructure.Tweening
     {
         TweenState State { get; }
 
-        void Update(float deltaTimeS, bool backwards = false);
+        // Returns remaining deltaTimeS
+        float Update(float deltaTimeS, bool backwards = false);
 
         bool Pause();
 

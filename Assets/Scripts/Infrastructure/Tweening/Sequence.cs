@@ -36,18 +36,31 @@ namespace Infrastructure.Tweening
             RestartTweens(withDelay);
         }
 
-        protected override bool CanRefresh(float _)
+        protected override float Refresh(float deltaTimeS, bool backwards)
         {
-            return AnyNotCompleted();
-        }
+            float remainingDeltaTimeS = deltaTimeS;
 
-        protected override void Refresh(float deltaTimeS, float _, bool backwards)
-        {
-            ITween tween = FirstNotCompleted(backwards);
+            do
+            {
+                ITween tween = FirstNotCompleted(backwards);
 
-            InvalidOperationException.ThrowIfNull(tween);
+                if (tween is null)
+                {
+                    break;
+                }
 
-            tween.Update(deltaTimeS, backwards);
+                float updatedRemainingDeltaTimeS = tween.Update(remainingDeltaTimeS, backwards);
+
+                if (updatedRemainingDeltaTimeS > remainingDeltaTimeS || updatedRemainingDeltaTimeS < 0.0f)
+                {
+                    InvalidOperationException.Throw(); // TODO
+                }
+
+                remainingDeltaTimeS = updatedRemainingDeltaTimeS;
+            }
+            while (remainingDeltaTimeS > 0.0f);
+
+            return remainingDeltaTimeS;
         }
 
         protected override void RestartForNextIteration(bool withDelay)
@@ -63,11 +76,6 @@ namespace Infrastructure.Tweening
             {
                 tween.Restart(withDelay);
             }
-        }
-
-        private bool AnyNotCompleted()
-        {
-            return _tweens.Exists(IsNotCompleted);
         }
 
         private ITween FirstNotCompleted(bool backwards)

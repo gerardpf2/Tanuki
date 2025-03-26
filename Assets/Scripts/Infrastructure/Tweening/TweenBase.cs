@@ -15,7 +15,6 @@ namespace Infrastructure.Tweening
 
         private TweenState _state = TweenState.SettingUp;
         private float _waitingTimeS;
-        private float _playingTimeS;
         private bool _backwards;
         private int _iteration;
 
@@ -51,34 +50,29 @@ namespace Infrastructure.Tweening
             _onComplete = onComplete;
         }
 
-        public void Update(float deltaTimeS, bool backwards = false)
+        public float Update(float deltaTimeS, bool backwards = false)
         {
             switch (State)
             {
                 case TweenState.SettingUp:
-                    ProcessSettingUpState(deltaTimeS, backwards);
-                    break;
+                    return ProcessSettingUpState(deltaTimeS, backwards);
                 case TweenState.Waiting:
-                    ProcessWaitingState(deltaTimeS, backwards);
-                    break;
+                    return ProcessWaitingState(deltaTimeS, backwards);
                 case TweenState.Playing:
-                    ProcessPlayingState(deltaTimeS, backwards);
-                    break;
+                    return ProcessPlayingState(deltaTimeS, backwards);
                 case TweenState.CompletingIteration:
-                    ProcessCompletingIterationState(deltaTimeS, backwards);
-                    break;
+                    return ProcessCompletingIterationState(deltaTimeS, backwards);
                 case TweenState.PreparingNextIteration:
-                    ProcessPreparingNextIterationState(deltaTimeS, backwards);
-                    break;
+                    return ProcessPreparingNextIterationState(deltaTimeS, backwards);
                 case TweenState.Completing:
-                    ProcessCompletingState(deltaTimeS, backwards);
-                    break;
+                    return ProcessCompletingState(deltaTimeS, backwards);
                 case TweenState.Paused:
+                    return 0.0f;
                 case TweenState.Completed:
-                    return;
+                    return deltaTimeS;
                 default:
                     ArgumentOutOfRangeException.Throw(State);
-                    return;
+                    return 0.0f;
             }
         }
 
@@ -144,50 +138,49 @@ namespace Infrastructure.Tweening
             }
         }
 
-        private void ProcessSettingUpState(float deltaTimeS, bool backwards)
+        private float ProcessSettingUpState(float deltaTimeS, bool backwards)
         {
             State = _autoPlay ? TweenState.Waiting : TweenState.Paused;
 
-            Update(deltaTimeS, backwards);
+            return Update(deltaTimeS, backwards);
         }
 
-        private void ProcessWaitingState(float deltaTimeS, bool backwards)
+        private float ProcessWaitingState(float deltaTimeS, bool backwards)
         {
             _waitingTimeS += deltaTimeS;
 
             if (_waitingTimeS < _delayS)
             {
-                return;
+                return 0.0f;
             }
 
             State = TweenState.Playing;
 
-            Update(_waitingTimeS - _delayS, backwards);
+            return Update(_waitingTimeS - _delayS, backwards);
         }
 
-        private void ProcessPlayingState(float deltaTimeS, bool backwards)
+        private float ProcessPlayingState(float deltaTimeS, bool backwards)
         {
-            _playingTimeS += deltaTimeS;
+            float remainingDeltaTimeS = Refresh(deltaTimeS, backwards ^ _backwards);
 
-            // TODO: TryRefresh and remove _playingTimeS
-
-            if (CanRefresh(_playingTimeS))
+            if (remainingDeltaTimeS > deltaTimeS || remainingDeltaTimeS < 0.0f)
             {
-                Refresh(deltaTimeS, _playingTimeS, backwards ^ _backwards);
+                InvalidOperationException.Throw(); // TODO
             }
-            else
+
+            if (remainingDeltaTimeS > 0.0f)
             {
                 State = TweenState.CompletingIteration;
 
-                Update(deltaTimeS, backwards);
+                remainingDeltaTimeS = Update(remainingDeltaTimeS, backwards);
             }
+
+            return remainingDeltaTimeS;
         }
 
-        private void ProcessCompletingIterationState(float deltaTimeS, bool backwards)
+        private float ProcessCompletingIterationState(float deltaTimeS, bool backwards)
         {
             ++_iteration;
-
-            CompleteIteration(backwards ^ _backwards);
 
             if (_repetitions < 0 || _iteration <= _repetitions)
             {
@@ -198,10 +191,10 @@ namespace Infrastructure.Tweening
                 State = TweenState.Completing;
             }
 
-            Update(deltaTimeS, backwards);
+            return Update(deltaTimeS, backwards);
         }
 
-        private void ProcessPreparingNextIterationState(float deltaTimeS, bool backwards)
+        private float ProcessPreparingNextIterationState(float deltaTimeS, bool backwards)
         {
             switch (_repetitionType)
             {
@@ -221,17 +214,17 @@ namespace Infrastructure.Tweening
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(_repetitionType);
-                    return;
+                    return 0.0f;
             }
 
-            Update(deltaTimeS, backwards);
+            return Update(deltaTimeS, backwards);
         }
 
-        private void ProcessCompletingState(float deltaTimeS, bool backwards)
+        private float ProcessCompletingState(float deltaTimeS, bool backwards)
         {
             State = TweenState.Completed;
 
-            Update(deltaTimeS, backwards);
+            return Update(deltaTimeS, backwards);
         }
 
         private void RestartTimesAndUpdateState(bool withDelay)
@@ -239,14 +232,9 @@ namespace Infrastructure.Tweening
             State = withDelay ? TweenState.Waiting : TweenState.Playing;
 
             _waitingTimeS = withDelay ? 0.0f : _delayS;
-            _playingTimeS = 0.0f;
         }
 
-        protected abstract bool CanRefresh(float playingTimeS);
-
-        protected abstract void Refresh(float deltaTimeS, float playingTimeS, bool backwards);
-
-        protected virtual void CompleteIteration(bool backwards) { }
+        protected abstract float Refresh(float deltaTimeS, bool backwards);
 
         protected virtual void RestartForNextIteration(bool withDelay)
         {

@@ -13,6 +13,8 @@ namespace Infrastructure.Tweening
         [NotNull] private readonly Func<float, float> _ease;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
+        private float _playingTimeS;
+
         public Tween(
             float delayS,
             bool autoPlay,
@@ -39,23 +41,36 @@ namespace Infrastructure.Tweening
             _lerp = lerp;
         }
 
-        protected override bool CanRefresh(float playingTimeS)
+        public override void Restart(bool withDelay)
         {
-            return playingTimeS < _durationS;
+            base.Restart(withDelay);
+
+            _playingTimeS = 0.0f;
         }
 
-        protected override void Refresh(float _, float playingTimeS, bool backwards)
+        protected override float Refresh(float deltaTimeS, bool backwards)
         {
-            float normalizedTime = playingTimeS / _durationS;
+            _playingTimeS += deltaTimeS;
 
-            _setter(_lerp(GetStart(backwards), GetEnd(backwards), _ease(normalizedTime)));
-        }
+            if (_playingTimeS < _durationS)
+            {
+                float normalizedTime = _playingTimeS / _durationS;
 
-        protected override void CompleteIteration(bool backwards)
-        {
-            base.CompleteIteration(backwards);
+                _setter(_lerp(GetStart(backwards), GetEnd(backwards), _ease(normalizedTime)));
+
+                return 0.0f;
+            }
 
             _setter(GetEnd(backwards));
+
+            return _playingTimeS - _durationS;
+        }
+
+        protected override void RestartForNextIteration(bool withDelay)
+        {
+            base.RestartForNextIteration(withDelay);
+
+            _playingTimeS = 0.0f;
         }
 
         private T GetStart(bool backwards)
