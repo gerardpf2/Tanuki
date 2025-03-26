@@ -9,7 +9,6 @@ namespace Infrastructure.Tweening
         Playing,
         CompletingIteration,
         PreparingNextIteration,
-        Completing,
         Paused,
         Completed
     }

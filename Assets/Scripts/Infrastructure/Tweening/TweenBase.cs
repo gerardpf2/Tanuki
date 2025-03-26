@@ -59,8 +59,6 @@ namespace Infrastructure.Tweening
                     return ProcessCompletingIterationState(deltaTimeS, backwards);
                 case TweenState.PreparingNextIteration:
                     return ProcessPreparingNextIterationState(deltaTimeS, backwards);
-                case TweenState.Completing:
-                    return ProcessCompletingState(deltaTimeS, backwards);
                 case TweenState.Paused:
                     return 0.0f;
                 case TweenState.Completed:
@@ -121,8 +119,6 @@ namespace Infrastructure.Tweening
                     break;
                 case TweenState.PreparingNextIteration:
                     break;
-                case TweenState.Completing:
-                    break;
                 case TweenState.Paused:
                     break;
                 case TweenState.Completed:
@@ -181,7 +177,7 @@ namespace Infrastructure.Tweening
             }
             else
             {
-                State = TweenState.Completing;
+                State = TweenState.Completed;
             }
 
             return Update(deltaTimeS, backwards);
@@ -209,13 +205,6 @@ namespace Infrastructure.Tweening
                     ArgumentOutOfRangeException.Throw(_repetitionType);
                     return 0.0f;
             }
-
-            return Update(deltaTimeS, backwards);
-        }
-
-        private float ProcessCompletingState(float deltaTimeS, bool backwards)
-        {
-            State = TweenState.Completed;
 
             return Update(deltaTimeS, backwards);
         }
