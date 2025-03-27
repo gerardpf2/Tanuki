@@ -11,12 +11,15 @@ namespace Infrastructure.Tweening.TweenBuilders
         [NotNull] private readonly IEasingFunctionGetter _easingFunctionGetter;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
-        private float _delayS;
         private bool _autoPlay;
+        private float _delayBeforeS;
+        private float _delayAfterS;
         private int _repetitions;
         private RepetitionType _repetitionType;
-        private Action _onIterationComplete;
-        private Action _onComplete;
+        private DelayManagement _delayManagementRepetition;
+        private DelayManagement _delayManagementRestart;
+        private Action _onEndIteration;
+        private Action _onCompleted;
         private T _start;
         private T _end;
         private float _durationS;
@@ -36,16 +39,23 @@ namespace Infrastructure.Tweening.TweenBuilders
             Reset();
         }
 
-        public ITweenBuilder<T> WithDelayS(float delayS)
+        public ITweenBuilder<T> WithAutoPlay(bool autoPlay)
         {
-            _delayS = delayS;
+            _autoPlay = autoPlay;
 
             return this;
         }
 
-        public ITweenBuilder<T> WithAutoPlay(bool autoPlay)
+        public ITweenBuilder<T> WithDelayBeforeS(float delayBeforeS)
         {
-            _autoPlay = autoPlay;
+            _delayBeforeS = delayBeforeS;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithDelayAfterS(float delayAfterS)
+        {
+            _delayAfterS = delayAfterS;
 
             return this;
         }
@@ -64,16 +74,30 @@ namespace Infrastructure.Tweening.TweenBuilders
             return this;
         }
 
-        public ITweenBuilder<T> WithOnIterationComplete(Action onIterationComplete)
+        public ITweenBuilder<T> WithDelayManagementRepetition(DelayManagement delayManagementRepetition)
         {
-            _onIterationComplete = onIterationComplete;
+            _delayManagementRepetition = delayManagementRepetition;
 
             return this;
         }
 
-        public ITweenBuilder<T> WithOnComplete(Action onComplete)
+        public ITweenBuilder<T> WithDelayManagementRestart(DelayManagement delayManagementRestart)
         {
-            _onComplete = onComplete;
+            _delayManagementRestart = delayManagementRestart;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithOnEndIteration(Action onEndIteration)
+        {
+            _onEndIteration = onEndIteration;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithOnCompleted(Action onCompleted)
+        {
+            _onCompleted = onCompleted;
 
             return this;
         }
@@ -121,12 +145,15 @@ namespace Infrastructure.Tweening.TweenBuilders
 
             ITween tween =
                 new Tween<T>(
-                    _delayS,
                     _autoPlay,
+                    _delayBeforeS,
+                    _delayAfterS,
                     _repetitions,
                     _repetitionType,
-                    _onIterationComplete,
-                    _onComplete,
+                    _delayManagementRepetition,
+                    _delayManagementRestart,
+                    _onEndIteration,
+                    _onCompleted,
                     _start,
                     _end,
                     _durationS,
@@ -142,12 +169,15 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         private void Reset()
         {
-            _delayS = 0.0f;
             _autoPlay = TweenBuilderDefaults.AutoPlay;
+            _delayBeforeS = 0.0f;
+            _delayAfterS = 0.0f;
             _repetitions = 0;
             _repetitionType = TweenBuilderDefaults.RepetitionType;
-            _onIterationComplete = null;
-            _onComplete = null;
+            _delayManagementRepetition = TweenBuilderDefaults.DelayManagementRepetition;
+            _delayManagementRestart = TweenBuilderDefaults.DelayManagementRestart;
+            _onEndIteration = null;
+            _onCompleted = null;
             _start = default;
             _end = default;
             _durationS = 0.0f;

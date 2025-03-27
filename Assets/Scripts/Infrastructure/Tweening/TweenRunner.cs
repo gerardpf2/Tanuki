@@ -13,14 +13,14 @@ namespace Infrastructure.Tweening
         private sealed class TweenWrapper
         {
             [NotNull] public readonly ITween Tween;
-            public readonly Func<bool> KeepAliveAfterComplete;
+            public readonly Func<bool> KeepAliveAfterCompleted;
 
-            public TweenWrapper([NotNull] ITween tween, Func<bool> keepAliveAfterComplete)
+            public TweenWrapper([NotNull] ITween tween, Func<bool> keepAliveAfterCompleted)
             {
                 ArgumentNullException.ThrowIfNull(tween);
 
                 Tween = tween;
-                KeepAliveAfterComplete = keepAliveAfterComplete;
+                KeepAliveAfterCompleted = keepAliveAfterCompleted;
             }
         }
 
@@ -38,11 +38,11 @@ namespace Infrastructure.Tweening
             _coroutineRunner = coroutineRunner;
         }
 
-        public void Run([NotNull] ITween tween, Func<bool> keepAliveAfterComplete = null)
+        public void Run([NotNull] ITween tween, Func<bool> keepAliveAfterCompleted = null)
         {
             ArgumentNullException.ThrowIfNull(tween);
 
-            _tweenToRunWrappers.Add(new TweenWrapper(tween, keepAliveAfterComplete));
+            _tweenToRunWrappers.Add(new TweenWrapper(tween, keepAliveAfterCompleted));
 
             _updateCoroutine ??= _coroutineRunner.Run(Update());
         }
@@ -72,9 +72,9 @@ namespace Infrastructure.Tweening
 
             bool remove = tweenWrapper.Tween.State == TweenState.Completed;
 
-            if (remove && tweenWrapper.KeepAliveAfterComplete is not null)
+            if (remove && tweenWrapper.KeepAliveAfterCompleted is not null)
             {
-                remove = !tweenWrapper.KeepAliveAfterComplete();
+                remove = !tweenWrapper.KeepAliveAfterCompleted();
             }
 
             return remove;

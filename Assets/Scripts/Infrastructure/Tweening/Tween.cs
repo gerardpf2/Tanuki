@@ -13,21 +13,24 @@ namespace Infrastructure.Tweening
         [NotNull] private readonly Func<float, float> _ease;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
-        private float _playingTimeS;
+        private float _playTimeS;
 
         public Tween(
-            float delayS,
             bool autoPlay,
+            float delayBeforeS,
+            float delayAfterS,
             int repetitions,
             RepetitionType repetitionType,
-            Action onIterationComplete,
-            Action onComplete,
+            DelayManagement delayManagementRepetition,
+            DelayManagement delayManagementRestart,
+            Action onEndIteration,
+            Action onCompleted,
             T start,
             T end,
             float durationS,
             [NotNull] Action<T> setter,
             [NotNull] Func<float, float> ease,
-            [NotNull] Func<T, T, float, T> lerp) : base(delayS, autoPlay, repetitions, repetitionType, onIterationComplete, onComplete)
+            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onEndIteration, onCompleted)
         {
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(ease);
@@ -41,22 +44,22 @@ namespace Infrastructure.Tweening
             _lerp = lerp;
         }
 
-        public override void Restart(bool withDelay)
+        public override void Restart()
         {
-            base.Restart(withDelay);
+            base.Restart();
 
-            _playingTimeS = 0.0f;
+            _playTimeS = 0.0f;
         }
 
         protected override float Refresh(float deltaTimeS, bool backwards)
         {
             backwards ^= Backwards;
 
-            _playingTimeS += deltaTimeS;
+            _playTimeS += deltaTimeS;
 
-            if (_playingTimeS < _durationS)
+            if (_playTimeS < _durationS)
             {
-                float normalizedTime = _playingTimeS / _durationS;
+                float normalizedTime = _playTimeS / _durationS;
 
                 _setter(_lerp(GetStart(backwards), GetEnd(backwards), _ease(normalizedTime)));
 
@@ -65,14 +68,14 @@ namespace Infrastructure.Tweening
 
             _setter(GetEnd(backwards));
 
-            return _playingTimeS - _durationS;
+            return _playTimeS - _durationS;
         }
 
-        protected override void RestartForNextIteration(bool withDelay)
+        protected override void PrepareRepetition()
         {
-            base.RestartForNextIteration(withDelay);
+            base.PrepareRepetition();
 
-            _playingTimeS = 0.0f;
+            _playTimeS = 0.0f;
         }
 
         private T GetStart(bool backwards)

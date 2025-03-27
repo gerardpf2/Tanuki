@@ -10,13 +10,16 @@ namespace Infrastructure.Tweening
         [NotNull, ItemNotNull] private readonly List<ITween> _tweens = new();
 
         public Sequence(
-            float delayS,
             bool autoPlay,
+            float delayBeforeS,
+            float delayAfterS,
             int repetitions,
             RepetitionType repetitionType,
-            Action onIterationComplete,
-            Action onComplete,
-            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(delayS, autoPlay, repetitions, repetitionType, onIterationComplete, onComplete)
+            DelayManagement delayManagementRepetition,
+            DelayManagement delayManagementRestart,
+            Action onEndIteration,
+            Action onCompleted,
+            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onEndIteration, onCompleted)
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
@@ -28,11 +31,11 @@ namespace Infrastructure.Tweening
             }
         }
 
-        public override void Restart(bool withDelay)
+        public override void Restart()
         {
-            base.Restart(withDelay);
+            base.Restart();
 
-            RestartTweens(withDelay);
+            RestartTweens();
         }
 
         protected override float Refresh(float deltaTimeS, bool backwards)
@@ -54,18 +57,18 @@ namespace Infrastructure.Tweening
             return deltaTimeS;
         }
 
-        protected override void RestartForNextIteration(bool withDelay)
+        protected override void PrepareRepetition()
         {
-            base.RestartForNextIteration(withDelay);
+            base.PrepareRepetition();
 
-            RestartTweens(withDelay);
+            RestartTweens();
         }
 
-        private void RestartTweens(bool withDelay)
+        private void RestartTweens()
         {
             foreach (ITween tween in _tweens)
             {
-                tween.Restart(withDelay);
+                tween.Restart();
             }
         }
 

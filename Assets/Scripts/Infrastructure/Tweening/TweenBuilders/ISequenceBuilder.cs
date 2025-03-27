@@ -6,10 +6,13 @@ namespace Infrastructure.Tweening.TweenBuilders
     public interface ISequenceBuilder
     {
         [NotNull]
-        ISequenceBuilder WithDelayS(float delayS);
+        ISequenceBuilder WithAutoPlay(bool autoPlay);
 
         [NotNull]
-        ISequenceBuilder WithAutoPlay(bool autoPlay);
+        ISequenceBuilder WithDelayBeforeS(float delayBeforeS);
+
+        [NotNull]
+        ISequenceBuilder WithDelayAfterS(float delayAfterS);
 
         [NotNull]
         ISequenceBuilder WithRepetitions(int repetitions);
@@ -18,10 +21,16 @@ namespace Infrastructure.Tweening.TweenBuilders
         ISequenceBuilder WithRepetitionType(RepetitionType repetitionType);
 
         [NotNull]
-        ISequenceBuilder WithOnIterationComplete(Action onIterationComplete);
+        ISequenceBuilder WithDelayManagementRepetition(DelayManagement delayManagementRepetition);
 
         [NotNull]
-        ISequenceBuilder WithOnComplete(Action onComplete);
+        ISequenceBuilder WithDelayManagementRestart(DelayManagement delayManagementRestart);
+
+        [NotNull]
+        ISequenceBuilder WithOnEndIteration(Action onEndIteration);
+
+        [NotNull]
+        ISequenceBuilder WithOnCompleted(Action onCompleted);
 
         [NotNull]
         ISequenceBuilder AddTween(ITween tween);

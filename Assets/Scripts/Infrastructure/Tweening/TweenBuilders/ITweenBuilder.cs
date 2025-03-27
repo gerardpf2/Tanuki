@@ -7,10 +7,13 @@ namespace Infrastructure.Tweening.TweenBuilders
     public interface ITweenBuilder<T>
     {
         [NotNull]
-        ITweenBuilder<T> WithDelayS(float delayS);
+        ITweenBuilder<T> WithAutoPlay(bool autoPlay);
 
         [NotNull]
-        ITweenBuilder<T> WithAutoPlay(bool autoPlay);
+        ITweenBuilder<T> WithDelayBeforeS(float delayBeforeS);
+
+        [NotNull]
+        ITweenBuilder<T> WithDelayAfterS(float delayAfterS);
 
         [NotNull]
         ITweenBuilder<T> WithRepetitions(int repetitions);
@@ -19,10 +22,16 @@ namespace Infrastructure.Tweening.TweenBuilders
         ITweenBuilder<T> WithRepetitionType(RepetitionType repetitionType);
 
         [NotNull]
-        ITweenBuilder<T> WithOnIterationComplete(Action onIterationComplete);
+        ITweenBuilder<T> WithDelayManagementRepetition(DelayManagement delayManagementRepetition);
 
         [NotNull]
-        ITweenBuilder<T> WithOnComplete(Action onComplete);
+        ITweenBuilder<T> WithDelayManagementRestart(DelayManagement delayManagementRestart);
+
+        [NotNull]
+        ITweenBuilder<T> WithOnEndIteration(Action onEndIteration);
+
+        [NotNull]
+        ITweenBuilder<T> WithOnCompleted(Action onCompleted);
 
         [NotNull]
         ITweenBuilder<T> WithStart(T start);

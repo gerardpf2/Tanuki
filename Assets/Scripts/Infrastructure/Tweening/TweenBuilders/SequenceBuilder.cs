@@ -9,28 +9,38 @@ namespace Infrastructure.Tweening.TweenBuilders
     {
         [NotNull, ItemNotNull] private readonly ICollection<ITween> _tweens = new List<ITween>();
 
-        private float _delayS;
         private bool _autoPlay;
+        private float _delayBeforeS;
+        private float _delayAfterS;
         private int _repetitions;
         private RepetitionType _repetitionType;
-        private Action _onIterationComplete;
-        private Action _onComplete;
+        private DelayManagement _delayManagementRepetition;
+        private DelayManagement _delayManagementRestart;
+        private Action _onEndIteration;
+        private Action _onCompleted;
 
         public SequenceBuilder()
         {
             Reset();
         }
 
-        public ISequenceBuilder WithDelayS(float delayS)
+        public ISequenceBuilder WithAutoPlay(bool autoPlay)
         {
-            _delayS = delayS;
+            _autoPlay = autoPlay;
 
             return this;
         }
 
-        public ISequenceBuilder WithAutoPlay(bool autoPlay)
+        public ISequenceBuilder WithDelayBeforeS(float delayBeforeS)
         {
-            _autoPlay = autoPlay;
+            _delayBeforeS = delayBeforeS;
+
+            return this;
+        }
+
+        public ISequenceBuilder WithDelayAfterS(float delayAfterS)
+        {
+            _delayAfterS = delayAfterS;
 
             return this;
         }
@@ -49,16 +59,30 @@ namespace Infrastructure.Tweening.TweenBuilders
             return this;
         }
 
-        public ISequenceBuilder WithOnIterationComplete(Action onIterationComplete)
+        public ISequenceBuilder WithDelayManagementRepetition(DelayManagement delayManagementRepetition)
         {
-            _onIterationComplete = onIterationComplete;
+            _delayManagementRepetition = delayManagementRepetition;
 
             return this;
         }
 
-        public ISequenceBuilder WithOnComplete(Action onComplete)
+        public ISequenceBuilder WithDelayManagementRestart(DelayManagement delayManagementRestart)
         {
-            _onComplete = onComplete;
+            _delayManagementRestart = delayManagementRestart;
+
+            return this;
+        }
+
+        public ISequenceBuilder WithOnEndIteration(Action onEndIteration)
+        {
+            _onEndIteration = onEndIteration;
+
+            return this;
+        }
+
+        public ISequenceBuilder WithOnCompleted(Action onCompleted)
+        {
+            _onCompleted = onCompleted;
 
             return this;
         }
@@ -76,12 +100,15 @@ namespace Infrastructure.Tweening.TweenBuilders
         {
             ITween sequence =
                 new Sequence(
-                    _delayS,
                     _autoPlay,
+                    _delayBeforeS,
+                    _delayAfterS,
                     _repetitions,
                     _repetitionType,
-                    _onIterationComplete,
-                    _onComplete,
+                    _delayManagementRepetition,
+                    _delayManagementRestart,
+                    _onEndIteration,
+                    _onCompleted,
                     new List<ITween>(_tweens)
                 );
 
@@ -92,12 +119,15 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         private void Reset()
         {
-            _delayS = 0.0f;
             _autoPlay = SequenceBuilderDefaults.AutoPlay;
+            _delayBeforeS = 0.0f;
+            _delayAfterS = 0.0f;
             _repetitions = 0;
             _repetitionType = SequenceBuilderDefaults.RepetitionType;
-            _onIterationComplete = null;
-            _onComplete = null;
+            _delayManagementRepetition = SequenceBuilderDefaults.DelayManagementRepetition;
+            _delayManagementRestart = SequenceBuilderDefaults.DelayManagementRestart;
+            _onEndIteration = null;
+            _onCompleted = null;
             _tweens.Clear();
         }
     }

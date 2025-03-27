@@ -11,6 +11,6 @@ namespace Infrastructure.Tweening
 
         bool Resume();
 
-        void Restart(bool withDelay);
+        void Restart();
     }
 }

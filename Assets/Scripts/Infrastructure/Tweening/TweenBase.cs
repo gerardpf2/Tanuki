@@ -5,15 +5,19 @@ namespace Infrastructure.Tweening
 {
     public abstract class TweenBase : ITween
     {
-        private readonly float _delayS;
         private readonly bool _autoPlay;
+        private readonly float _delayBeforeS;
+        private readonly float _delayAfterS;
         private readonly int _repetitions;
         private readonly RepetitionType _repetitionType;
-        private readonly Action _onIterationComplete;
-        private readonly Action _onComplete;
+        private readonly DelayManagement _delayManagementRepetition;
+        private readonly DelayManagement _delayManagementRestart;
+        private readonly Action _onEndIteration;
+        private readonly Action _onCompleted;
 
-        private TweenState _state = TweenState.SettingUp;
-        private float _waitingTimeS;
+        private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
+        private TweenState _state = TweenState.SetUp;
+        private float _waitTimeS;
         private int _iteration;
 
         public TweenState State
@@ -30,19 +34,25 @@ namespace Infrastructure.Tweening
         protected bool Backwards { get; private set; }
 
         protected TweenBase(
-            float delayS,
             bool autoPlay,
+            float delayBeforeS,
+            float delayAfterS,
             int repetitions,
             RepetitionType repetitionType,
-            Action onIterationComplete,
-            Action onComplete)
+            DelayManagement delayManagementRepetition,
+            DelayManagement delayManagementRestart,
+            Action onEndIteration,
+            Action onCompleted)
         {
-            _delayS = delayS;
             _autoPlay = autoPlay;
+            _delayBeforeS = delayBeforeS;
+            _delayAfterS = delayAfterS;
             _repetitions = repetitions;
             _repetitionType = repetitionType;
-            _onIterationComplete = onIterationComplete;
-            _onComplete = onComplete;
+            _delayManagementRepetition = delayManagementRepetition;
+            _delayManagementRestart = delayManagementRestart;
+            _onEndIteration = onEndIteration;
+            _onCompleted = onCompleted;
         }
 
         public float Update(float deltaTimeS, bool backwards = false)
@@ -51,20 +61,23 @@ namespace Infrastructure.Tweening
             {
                 switch (State)
                 {
-                    case TweenState.SettingUp:
-                        deltaTimeS = ProcessSettingUpState(deltaTimeS);
+                    case TweenState.SetUp:
+                        ProcessSetUp();
                         break;
-                    case TweenState.Waiting:
-                        deltaTimeS = ProcessWaitingState(deltaTimeS);
+                    case TweenState.StartIteration:
+                        ProcessStartIteration();
                         break;
-                    case TweenState.Playing:
-                        deltaTimeS = ProcessPlayingState(deltaTimeS, backwards);
+                    case TweenState.WaitBefore:
+                        deltaTimeS = ProcessWaitBefore(deltaTimeS);
                         break;
-                    case TweenState.CompletingIteration:
-                        deltaTimeS = ProcessCompletingIterationState(deltaTimeS);
+                    case TweenState.Play:
+                        deltaTimeS = ProcessPlay(deltaTimeS, backwards);
                         break;
-                    case TweenState.PreparingNextIteration:
-                        deltaTimeS = ProcessPreparingNextIterationState(deltaTimeS);
+                    case TweenState.WaitAfter:
+                        deltaTimeS = ProcessWaitAfter(deltaTimeS);
+                        break;
+                    case TweenState.EndIteration:
+                        ProcessEndIteration();
                         break;
                     case TweenState.Paused:
                     case TweenState.Completed:
@@ -81,7 +94,7 @@ namespace Infrastructure.Tweening
 
         public bool Pause()
         {
-            if (State is not (TweenState.Waiting or TweenState.Playing))
+            if (State is TweenState.Paused)
             {
                 return false;
             }
@@ -98,17 +111,19 @@ namespace Infrastructure.Tweening
                 return false;
             }
 
-            SetInitialState();
+            // TODO
 
             return true;
         }
 
-        public virtual void Restart(bool withDelay)
+        public virtual void Restart()
         {
-            RestartWaitingTimeAndSetInitialState(withDelay);
+            State = TweenState.SetUp;
 
             Backwards = false;
 
+            _delayManagement = _delayManagementRestart;
+            _waitTimeS = 0.0f;
             _iteration = 0;
         }
 
@@ -118,21 +133,23 @@ namespace Infrastructure.Tweening
 
             switch (State)
             {
-                case TweenState.SettingUp:
+                case TweenState.SetUp:
                     break;
-                case TweenState.Waiting:
+                case TweenState.StartIteration:
                     break;
-                case TweenState.Playing:
+                case TweenState.WaitBefore:
                     break;
-                case TweenState.CompletingIteration:
-                    _onIterationComplete?.Invoke();
+                case TweenState.Play:
                     break;
-                case TweenState.PreparingNextIteration:
+                case TweenState.WaitAfter:
+                    break;
+                case TweenState.EndIteration:
+                    _onEndIteration?.Invoke();
                     break;
                 case TweenState.Paused:
                     break;
                 case TweenState.Completed:
-                    _onComplete?.Invoke();
+                    _onCompleted?.Invoke();
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(State);
@@ -140,103 +157,86 @@ namespace Infrastructure.Tweening
             }
         }
 
-        private float ProcessSettingUpState(float deltaTimeS)
+        private void ProcessSetUp()
         {
-            State = _autoPlay ? TweenState.Waiting : TweenState.Paused;
-
-            return deltaTimeS;
+            State = _autoPlay ? TweenState.StartIteration : TweenState.Paused;
         }
 
-        private float ProcessWaitingState(float deltaTimeS)
+        private void ProcessStartIteration()
         {
-            _waitingTimeS += deltaTimeS;
-
-            if (_waitingTimeS < _delayS)
-            {
-                return 0.0f;
-            }
-
-            State = TweenState.Playing;
-
-            return _waitingTimeS - _delayS;
+            State = _delayManagement is DelayManagement.BeforeAndAfter or DelayManagement.Before ?
+                TweenState.WaitBefore :
+                TweenState.Play;
         }
 
-        private float ProcessPlayingState(float deltaTimeS, bool backwards)
+        private float ProcessWaitBefore(float deltaTimeS)
+        {
+            return ProcessWait(deltaTimeS, _delayBeforeS, TweenState.Play);
+        }
+
+        private float ProcessPlay(float deltaTimeS, bool backwards)
         {
             deltaTimeS = Refresh(deltaTimeS, backwards);
 
             if (deltaTimeS > 0.0f)
             {
-                State = TweenState.CompletingIteration;
+                State = _delayManagement is DelayManagement.BeforeAndAfter or DelayManagement.After ?
+                    TweenState.WaitAfter :
+                    TweenState.EndIteration;
             }
 
             return deltaTimeS;
         }
 
-        private float ProcessCompletingIterationState(float deltaTimeS)
+        private float ProcessWaitAfter(float deltaTimeS)
+        {
+            return ProcessWait(deltaTimeS, _delayAfterS, TweenState.EndIteration);
+        }
+
+        private void ProcessEndIteration()
         {
             ++_iteration;
 
             if (_repetitions < 0 || _iteration <= _repetitions)
             {
-                State = TweenState.PreparingNextIteration;
+                PrepareRepetition();
             }
             else
             {
                 State = TweenState.Completed;
             }
-
-            return deltaTimeS;
         }
 
-        private float ProcessPreparingNextIterationState(float deltaTimeS)
+        private float ProcessWait(float deltaTimeS, float delayS, TweenState nextState)
         {
-            switch (_repetitionType)
+            _waitTimeS += deltaTimeS;
+
+            if (_waitTimeS < delayS)
             {
-                case RepetitionType.Restart:
-                    RestartForNextIteration(false);
-                    break;
-                case RepetitionType.RestartWithDelay:
-                    RestartForNextIteration(true);
-                    break;
-                case RepetitionType.Yoyo:
-                    RestartForNextIteration(false);
-                    ToggleBackwards();
-                    break;
-                case RepetitionType.YoyoWithDelay:
-                    RestartForNextIteration(true);
-                    ToggleBackwards();
-                    break;
-                default:
-                    ArgumentOutOfRangeException.Throw(_repetitionType);
-                    return 0.0f;
+                return 0.0f;
             }
 
-            return deltaTimeS;
-        }
+            State = nextState;
 
-        private void SetInitialState()
-        {
-            State = _waitingTimeS < _delayS ? TweenState.Waiting : TweenState.Playing;
-        }
+            float remainingDeltaTimeS = _waitTimeS - delayS;
 
-        private void RestartWaitingTimeAndSetInitialState(bool withDelay)
-        {
-            _waitingTimeS = withDelay ? 0.0f : _delayS;
+            _waitTimeS = 0.0f;
 
-            SetInitialState();
+            return remainingDeltaTimeS;
         }
 
         protected abstract float Refresh(float deltaTimeS, bool backwards);
 
-        protected virtual void RestartForNextIteration(bool withDelay)
+        protected virtual void PrepareRepetition()
         {
-            RestartWaitingTimeAndSetInitialState(withDelay);
-        }
+            State = TweenState.StartIteration;
 
-        private void ToggleBackwards()
-        {
-            Backwards = !Backwards;
+            if (_repetitionType is RepetitionType.Yoyo)
+            {
+                Backwards = !Backwards;
+            }
+
+            _delayManagement = _delayManagementRepetition;
         }
     }
 }
