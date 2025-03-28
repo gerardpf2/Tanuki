@@ -5,10 +5,8 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening
 {
-    public class Sequence : TweenBase
+    public class Sequence : SequenceBase
     {
-        [NotNull, ItemNotNull] private readonly List<ITween> _tweens = new();
-
         public Sequence(
             bool autoPlay,
             float delayBeforeS,
@@ -19,69 +17,26 @@ namespace Infrastructure.Tweening
             DelayManagement delayManagementRestart,
             Action onEndIteration,
             Action onCompleted,
-            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onEndIteration, onCompleted)
+            [NotNull] [ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onEndIteration, onCompleted, tweens) { }
+
+        protected override float Refresh(float deltaTimeS, bool backwards, IReadOnlyList<ITween> tweens)
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
-            foreach (ITween tween in tweens)
-            {
-                ArgumentNullException.ThrowIfNull(tween);
-
-                _tweens.Add(tween);
-            }
-        }
-
-        public override void Restart()
-        {
-            base.Restart();
-
-            RestartTweens();
-        }
-
-        protected override float Refresh(float deltaTimeS, bool backwards)
-        {
             backwards ^= Backwards;
 
-            while (deltaTimeS > 0.0f)
+            for (int i = 0; deltaTimeS > 0.0f && i < tweens.Count; ++i)
             {
-                ITween tween = FirstNotCompleted(backwards);
+                int index = backwards ? tweens.Count - 1 - i : i;
 
-                if (tween is null)
-                {
-                    break;
-                }
+                ITween tween = tweens[index];
+
+                ArgumentNullException.ThrowIfNull(tween);
 
                 deltaTimeS = tween.Update(deltaTimeS, backwards);
             }
 
             return deltaTimeS;
-        }
-
-        protected override void PrepareRepetition()
-        {
-            base.PrepareRepetition();
-
-            RestartTweens();
-        }
-
-        private void RestartTweens()
-        {
-            foreach (ITween tween in _tweens)
-            {
-                tween.Restart();
-            }
-        }
-
-        private ITween FirstNotCompleted(bool backwards)
-        {
-            return backwards ? _tweens.FindLast(IsNotCompleted) : _tweens.Find(IsNotCompleted);
-        }
-
-        private static bool IsNotCompleted([NotNull] ITween tween)
-        {
-            ArgumentNullException.ThrowIfNull(tween);
-
-            return tween.State != TweenState.Completed;
         }
     }
 }

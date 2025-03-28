@@ -80,9 +80,9 @@ namespace Infrastructure.Tweening
                         ProcessEndIteration();
                         break;
                     case TweenState.Paused:
+                        return 0.0f;
                     case TweenState.Completed:
-                        deltaTimeS = 0.0f;
-                        break;
+                        return deltaTimeS;
                     default:
                         ArgumentOutOfRangeException.Throw(State);
                         return 0.0f;

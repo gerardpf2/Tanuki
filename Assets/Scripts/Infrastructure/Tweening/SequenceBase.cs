@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+
+namespace Infrastructure.Tweening
+{
+    public abstract class SequenceBase : TweenBase
+    {
+        [NotNull, ItemNotNull] private readonly List<ITween> _tweens = new();
+
+        protected SequenceBase(
+            bool autoPlay,
+            float delayBeforeS,
+            float delayAfterS,
+            int repetitions,
+            RepetitionType repetitionType,
+            DelayManagement delayManagementRepetition,
+            DelayManagement delayManagementRestart,
+            Action onEndIteration,
+            Action onCompleted,
+            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onEndIteration, onCompleted)
+        {
+            ArgumentNullException.ThrowIfNull(tweens);
+
+            foreach (ITween tween in tweens)
+            {
+                ArgumentNullException.ThrowIfNull(tween);
+
+                _tweens.Add(tween);
+            }
+        }
+
+        public override void Restart()
+        {
+            base.Restart();
+
+            RestartTweens();
+        }
+
+        protected override float Refresh(float deltaTimeS, bool backwards)
+        {
+            return Refresh(deltaTimeS, backwards, _tweens);
+        }
+
+        protected override void PrepareRepetition()
+        {
+            base.PrepareRepetition();
+
+            RestartTweens();
+        }
+
+        private void RestartTweens()
+        {
+            foreach (ITween tween in _tweens)
+            {
+                tween.Restart();
+            }
+        }
+
+        protected abstract float Refresh(
+            float deltaTimeS,
+            bool backwards,
+            [NotNull, ItemNotNull] IReadOnlyList<ITween> tweens
+        );
+    }
+}
