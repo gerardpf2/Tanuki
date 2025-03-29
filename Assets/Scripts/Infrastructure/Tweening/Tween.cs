@@ -24,8 +24,8 @@ namespace Infrastructure.Tweening
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
             Action onStartIteration,
-            Action onPlay,
-            Action onRefresh,
+            Action onStartPlay,
+            Action onEndPlay,
             Action onEndIteration,
             Action onPaused,
             Action onCompleted,
@@ -34,7 +34,7 @@ namespace Infrastructure.Tweening
             float durationS,
             [NotNull] Action<T> setter,
             [NotNull] Func<float, float> ease,
-            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onPlay, onRefresh, onEndIteration, onPaused, onCompleted)
+            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPaused, onCompleted)
         {
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(ease);
@@ -55,7 +55,7 @@ namespace Infrastructure.Tweening
             _playTimeS = 0.0f;
         }
 
-        protected override float Refresh(float deltaTimeS, bool backwards)
+        protected override float Play(float deltaTimeS, bool backwards)
         {
             backwards ^= Backwards;
 

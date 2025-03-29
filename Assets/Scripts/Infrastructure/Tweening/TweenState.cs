@@ -6,7 +6,9 @@ namespace Infrastructure.Tweening
 
         StartIteration,
         WaitBefore,
+        StartPlay,
         Play,
+        EndPlay,
         WaitAfter,
         EndIteration,
 

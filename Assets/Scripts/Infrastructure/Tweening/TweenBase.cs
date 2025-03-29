@@ -13,8 +13,8 @@ namespace Infrastructure.Tweening
         private readonly DelayManagement _delayManagementRepetition;
         private readonly DelayManagement _delayManagementRestart;
         private readonly Action _onStartIteration;
-        private readonly Action _onPlay;
-        private readonly Action _onRefresh;
+        private readonly Action _onStartPlay;
+        private readonly Action _onEndPlay;
         private readonly Action _onEndIteration;
         private readonly Action _onPaused;
         private readonly Action _onCompleted;
@@ -46,8 +46,8 @@ namespace Infrastructure.Tweening
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
             Action onStartIteration,
-            Action onPlay,
-            Action onRefresh,
+            Action onStartPlay,
+            Action onEndPlay,
             Action onEndIteration,
             Action onPaused,
             Action onCompleted)
@@ -60,8 +60,8 @@ namespace Infrastructure.Tweening
             _delayManagementRepetition = delayManagementRepetition;
             _delayManagementRestart = delayManagementRestart;
             _onStartIteration = onStartIteration;
-            _onPlay = onPlay;
-            _onRefresh = onRefresh;
+            _onStartPlay = onStartPlay;
+            _onEndPlay = onEndPlay;
             _onEndIteration = onEndIteration;
             _onPaused = onPaused;
             _onCompleted = onCompleted;
@@ -82,8 +82,14 @@ namespace Infrastructure.Tweening
                     case TweenState.WaitBefore:
                         deltaTimeS = ProcessWaitBefore(deltaTimeS);
                         break;
+                    case TweenState.StartPlay:
+                        ProcessStartPlay();
+                        break;
                     case TweenState.Play:
                         deltaTimeS = ProcessPlay(deltaTimeS, backwards);
+                        break;
+                    case TweenState.EndPlay:
+                        ProcessEndPlay();
                         break;
                     case TweenState.WaitAfter:
                         deltaTimeS = ProcessWaitAfter(deltaTimeS);
@@ -150,8 +156,13 @@ namespace Infrastructure.Tweening
                     break;
                 case TweenState.WaitBefore:
                     break;
+                case TweenState.StartPlay:
+                    _onStartPlay?.Invoke();
+                    break;
                 case TweenState.Play:
-                    _onPlay?.Invoke();
+                    break;
+                case TweenState.EndPlay:
+                    _onEndPlay?.Invoke();
                     break;
                 case TweenState.WaitAfter:
                     break;
@@ -179,28 +190,36 @@ namespace Infrastructure.Tweening
         {
             State = _delayManagement is DelayManagement.BeforeAndAfter or DelayManagement.Before ?
                 TweenState.WaitBefore :
-                TweenState.Play;
+                TweenState.StartPlay;
         }
 
         private float ProcessWaitBefore(float deltaTimeS)
         {
-            return ProcessWait(deltaTimeS, _delayBeforeS, TweenState.Play);
+            return ProcessWait(deltaTimeS, _delayBeforeS, TweenState.StartPlay);
+        }
+
+        private void ProcessStartPlay()
+        {
+            State = TweenState.Play;
         }
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
         {
-            _onRefresh?.Invoke();
-
-            deltaTimeS = Refresh(deltaTimeS, backwards);
+            deltaTimeS = Play(deltaTimeS, backwards);
 
             if (deltaTimeS > 0.0f)
             {
-                State = _delayManagement is DelayManagement.BeforeAndAfter or DelayManagement.After ?
-                    TweenState.WaitAfter :
-                    TweenState.EndIteration;
+                State = TweenState.EndPlay;
             }
 
             return deltaTimeS;
+        }
+
+        private void ProcessEndPlay()
+        {
+            State = _delayManagement is DelayManagement.BeforeAndAfter or DelayManagement.After ?
+                TweenState.WaitAfter :
+                TweenState.EndIteration;
         }
 
         private float ProcessWaitAfter(float deltaTimeS)
@@ -240,7 +259,7 @@ namespace Infrastructure.Tweening
             return remainingDeltaTimeS;
         }
 
-        protected abstract float Refresh(float deltaTimeS, bool backwards);
+        protected abstract float Play(float deltaTimeS, bool backwards);
 
         protected virtual void PrepareRepetition()
         {

@@ -18,12 +18,12 @@ namespace Infrastructure.Tweening
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
             Action onStartIteration,
-            Action onPlay,
-            Action onRefresh,
+            Action onStartPlay,
+            Action onEndPlay,
             Action onEndIteration,
             Action onPaused,
             Action onCompleted,
-            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onPlay, onRefresh, onEndIteration, onPaused, onCompleted)
+            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPaused, onCompleted)
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
@@ -42,9 +42,9 @@ namespace Infrastructure.Tweening
             RestartTweens();
         }
 
-        protected override float Refresh(float deltaTimeS, bool backwards)
+        protected override float Play(float deltaTimeS, bool backwards)
         {
-            return Refresh(deltaTimeS, backwards, _tweens);
+            return Play(deltaTimeS, backwards, _tweens);
         }
 
         protected override void PrepareRepetition()
@@ -62,7 +62,7 @@ namespace Infrastructure.Tweening
             }
         }
 
-        protected abstract float Refresh(
+        protected abstract float Play(
             float deltaTimeS,
             bool backwards,
             [NotNull, ItemNotNull] IReadOnlyList<ITween> tweens

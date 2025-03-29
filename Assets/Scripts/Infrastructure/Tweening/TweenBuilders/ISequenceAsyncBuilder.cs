@@ -30,10 +30,10 @@ namespace Infrastructure.Tweening.TweenBuilders
         ISequenceAsyncBuilder WithOnStartIteration(Action onStartIteration);
 
         [NotNull]
-        ISequenceAsyncBuilder WithOnPlay(Action onPlay);
+        ISequenceAsyncBuilder WithOnStartPlay(Action onStartPlay);
 
         [NotNull]
-        ISequenceAsyncBuilder WithOnRefresh(Action onRefresh);
+        ISequenceAsyncBuilder WithOnEndPlay(Action onEndPlay);
 
         [NotNull]
         ISequenceAsyncBuilder WithOnEndIteration(Action onEndIteration);

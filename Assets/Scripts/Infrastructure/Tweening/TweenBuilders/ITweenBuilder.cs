@@ -31,10 +31,10 @@ namespace Infrastructure.Tweening.TweenBuilders
         ITweenBuilder<T> WithOnStartIteration(Action onStartIteration);
 
         [NotNull]
-        ITweenBuilder<T> WithOnPlay(Action onPlay);
+        ITweenBuilder<T> WithOnStartPlay(Action onStartPlay);
 
         [NotNull]
-        ITweenBuilder<T> WithOnRefresh(Action onRefresh);
+        ITweenBuilder<T> WithOnEndPlay(Action onEndPlay);
 
         [NotNull]
         ITweenBuilder<T> WithOnEndIteration(Action onEndIteration);

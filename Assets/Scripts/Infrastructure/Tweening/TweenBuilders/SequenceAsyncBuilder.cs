@@ -17,8 +17,8 @@ namespace Infrastructure.Tweening.TweenBuilders
         private DelayManagement _delayManagementRepetition;
         private DelayManagement _delayManagementRestart;
         private Action _onStartIteration;
-        private Action _onPlay;
-        private Action _onRefresh;
+        private Action _onStartPlay;
+        private Action _onEndPlay;
         private Action _onEndIteration;
         private Action _onPaused;
         private Action _onCompleted;
@@ -84,16 +84,16 @@ namespace Infrastructure.Tweening.TweenBuilders
             return this;
         }
 
-        public ISequenceAsyncBuilder WithOnPlay(Action onPlay)
+        public ISequenceAsyncBuilder WithOnStartPlay(Action onStartPlay)
         {
-            _onPlay = onPlay;
+            _onStartPlay = onStartPlay;
 
             return this;
         }
 
-        public ISequenceAsyncBuilder WithOnRefresh(Action onRefresh)
+        public ISequenceAsyncBuilder WithOnEndPlay(Action onEndPlay)
         {
-            _onRefresh = onRefresh;
+            _onEndPlay = onEndPlay;
 
             return this;
         }
@@ -140,8 +140,8 @@ namespace Infrastructure.Tweening.TweenBuilders
                     _delayManagementRepetition,
                     _delayManagementRestart,
                     _onStartIteration,
-                    _onPlay,
-                    _onRefresh,
+                    _onStartPlay,
+                    _onEndPlay,
                     _onEndIteration,
                     _onPaused,
                     _onCompleted,
