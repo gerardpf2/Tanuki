@@ -48,9 +48,9 @@ namespace Infrastructure.Tweening
             _lerp = lerp;
         }
 
-        public override void Restart()
+        protected override void PreparePlay()
         {
-            base.Restart();
+            base.PreparePlay();
 
             _playTimeS = 0.0f;
         }
@@ -73,13 +73,6 @@ namespace Infrastructure.Tweening
             _setter(GetEnd(backwards));
 
             return _playTimeS - _durationS;
-        }
-
-        protected override void PrepareRepetition()
-        {
-            base.PrepareRepetition();
-
-            _playTimeS = 0.0f;
         }
 
         private T GetStart(bool backwards)

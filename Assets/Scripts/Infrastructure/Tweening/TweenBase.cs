@@ -134,7 +134,7 @@ namespace Infrastructure.Tweening
             return true;
         }
 
-        public virtual void Restart()
+        public void Restart()
         {
             State = TweenState.SetUp;
 
@@ -201,6 +201,8 @@ namespace Infrastructure.Tweening
         private void ProcessStartPlay()
         {
             State = TweenState.Play;
+
+            PreparePlay();
         }
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
@@ -259,9 +261,11 @@ namespace Infrastructure.Tweening
             return remainingDeltaTimeS;
         }
 
+        protected virtual void PreparePlay() { }
+
         protected abstract float Play(float deltaTimeS, bool backwards);
 
-        protected virtual void PrepareRepetition()
+        private void PrepareRepetition()
         {
             State = TweenState.StartIteration;
 

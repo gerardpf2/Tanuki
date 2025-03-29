@@ -35,31 +35,19 @@ namespace Infrastructure.Tweening
             }
         }
 
-        public override void Restart()
+        protected override void PreparePlay()
         {
-            base.Restart();
+            base.PreparePlay();
 
-            RestartTweens();
+            foreach (ITween tween in _tweens)
+            {
+                tween.Restart();
+            }
         }
 
         protected override float Play(float deltaTimeS, bool backwards)
         {
             return Play(deltaTimeS, backwards, _tweens);
-        }
-
-        protected override void PrepareRepetition()
-        {
-            base.PrepareRepetition();
-
-            RestartTweens();
-        }
-
-        private void RestartTweens()
-        {
-            foreach (ITween tween in _tweens)
-            {
-                tween.Restart();
-            }
         }
 
         protected abstract float Play(
