@@ -12,7 +12,11 @@ namespace Infrastructure.Tweening
         private readonly RepetitionType _repetitionType;
         private readonly DelayManagement _delayManagementRepetition;
         private readonly DelayManagement _delayManagementRestart;
+        private readonly Action _onStartIteration;
+        private readonly Action _onPlay;
+        private readonly Action _onRefresh;
         private readonly Action _onEndIteration;
+        private readonly Action _onPaused;
         private readonly Action _onCompleted;
 
         private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
@@ -41,7 +45,11 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
+            Action onStartIteration,
+            Action onPlay,
+            Action onRefresh,
             Action onEndIteration,
+            Action onPaused,
             Action onCompleted)
         {
             _autoPlay = autoPlay;
@@ -51,7 +59,11 @@ namespace Infrastructure.Tweening
             _repetitionType = repetitionType;
             _delayManagementRepetition = delayManagementRepetition;
             _delayManagementRestart = delayManagementRestart;
+            _onStartIteration = onStartIteration;
+            _onPlay = onPlay;
+            _onRefresh = onRefresh;
             _onEndIteration = onEndIteration;
+            _onPaused = onPaused;
             _onCompleted = onCompleted;
         }
 
@@ -129,17 +141,17 @@ namespace Infrastructure.Tweening
 
         private void CheckCallbackOnStateUpdated()
         {
-            // TODO
-
             switch (State)
             {
                 case TweenState.SetUp:
                     break;
                 case TweenState.StartIteration:
+                    _onStartIteration?.Invoke();
                     break;
                 case TweenState.WaitBefore:
                     break;
                 case TweenState.Play:
+                    _onPlay?.Invoke();
                     break;
                 case TweenState.WaitAfter:
                     break;
@@ -147,6 +159,7 @@ namespace Infrastructure.Tweening
                     _onEndIteration?.Invoke();
                     break;
                 case TweenState.Paused:
+                    _onPaused?.Invoke();
                     break;
                 case TweenState.Completed:
                     _onCompleted?.Invoke();
@@ -176,6 +189,8 @@ namespace Infrastructure.Tweening
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
         {
+            _onRefresh?.Invoke();
+
             deltaTimeS = Refresh(deltaTimeS, backwards);
 
             if (deltaTimeS > 0.0f)

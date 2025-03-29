@@ -28,7 +28,19 @@ namespace Infrastructure.Tweening.TweenBuilders
         ITweenBuilder<T> WithDelayManagementRestart(DelayManagement delayManagementRestart);
 
         [NotNull]
+        ITweenBuilder<T> WithOnStartIteration(Action onStartIteration);
+
+        [NotNull]
+        ITweenBuilder<T> WithOnPlay(Action onPlay);
+
+        [NotNull]
+        ITweenBuilder<T> WithOnRefresh(Action onRefresh);
+
+        [NotNull]
         ITweenBuilder<T> WithOnEndIteration(Action onEndIteration);
+
+        [NotNull]
+        ITweenBuilder<T> WithOnPaused(Action onPaused);
 
         [NotNull]
         ITweenBuilder<T> WithOnCompleted(Action onCompleted);

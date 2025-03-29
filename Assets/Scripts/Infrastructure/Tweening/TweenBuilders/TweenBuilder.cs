@@ -18,7 +18,11 @@ namespace Infrastructure.Tweening.TweenBuilders
         private RepetitionType _repetitionType;
         private DelayManagement _delayManagementRepetition;
         private DelayManagement _delayManagementRestart;
+        private Action _onStartIteration;
+        private Action _onPlay;
+        private Action _onRefresh;
         private Action _onEndIteration;
+        private Action _onPaused;
         private Action _onCompleted;
         private T _start;
         private T _end;
@@ -88,9 +92,37 @@ namespace Infrastructure.Tweening.TweenBuilders
             return this;
         }
 
+        public ITweenBuilder<T> WithOnStartIteration(Action onStartIteration)
+        {
+            _onStartIteration = onStartIteration;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithOnPlay(Action onPlay)
+        {
+            _onPlay = onPlay;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithOnRefresh(Action onRefresh)
+        {
+            _onRefresh = onRefresh;
+
+            return this;
+        }
+
         public ITweenBuilder<T> WithOnEndIteration(Action onEndIteration)
         {
             _onEndIteration = onEndIteration;
+
+            return this;
+        }
+
+        public ITweenBuilder<T> WithOnPaused(Action onPaused)
+        {
+            _onPaused = onPaused;
 
             return this;
         }
@@ -152,7 +184,11 @@ namespace Infrastructure.Tweening.TweenBuilders
                     _repetitionType,
                     _delayManagementRepetition,
                     _delayManagementRestart,
+                    _onStartIteration,
+                    _onPlay,
+                    _onRefresh,
                     _onEndIteration,
+                    _onPaused,
                     _onCompleted,
                     _start,
                     _end,

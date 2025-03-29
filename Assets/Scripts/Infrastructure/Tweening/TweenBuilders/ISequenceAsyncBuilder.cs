@@ -27,7 +27,19 @@ namespace Infrastructure.Tweening.TweenBuilders
         ISequenceAsyncBuilder WithDelayManagementRestart(DelayManagement delayManagementRestart);
 
         [NotNull]
+        ISequenceAsyncBuilder WithOnStartIteration(Action onStartIteration);
+
+        [NotNull]
+        ISequenceAsyncBuilder WithOnPlay(Action onPlay);
+
+        [NotNull]
+        ISequenceAsyncBuilder WithOnRefresh(Action onRefresh);
+
+        [NotNull]
         ISequenceAsyncBuilder WithOnEndIteration(Action onEndIteration);
+
+        [NotNull]
+        ISequenceAsyncBuilder WithOnPaused(Action onPaused);
 
         [NotNull]
         ISequenceAsyncBuilder WithOnCompleted(Action onCompleted);

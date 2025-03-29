@@ -23,14 +23,18 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
+            Action onStartIteration,
+            Action onPlay,
+            Action onRefresh,
             Action onEndIteration,
+            Action onPaused,
             Action onCompleted,
             T start,
             T end,
             float durationS,
             [NotNull] Action<T> setter,
             [NotNull] Func<float, float> ease,
-            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onEndIteration, onCompleted)
+            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onPlay, onRefresh, onEndIteration, onPaused, onCompleted)
         {
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(ease);
