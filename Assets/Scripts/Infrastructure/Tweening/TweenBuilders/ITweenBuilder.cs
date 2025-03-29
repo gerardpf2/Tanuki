@@ -4,47 +4,8 @@ using UnityEngine.UIElements;
 
 namespace Infrastructure.Tweening.TweenBuilders
 {
-    public interface ITweenBuilder<T>
+    public interface ITweenBuilder<T> : ITweenBaseBuilderHelper<ITweenBuilder<T>>
     {
-        [NotNull]
-        ITweenBuilder<T> WithAutoPlay(bool autoPlay);
-
-        [NotNull]
-        ITweenBuilder<T> WithDelayBeforeS(float delayBeforeS);
-
-        [NotNull]
-        ITweenBuilder<T> WithDelayAfterS(float delayAfterS);
-
-        [NotNull]
-        ITweenBuilder<T> WithRepetitions(int repetitions);
-
-        [NotNull]
-        ITweenBuilder<T> WithRepetitionType(RepetitionType repetitionType);
-
-        [NotNull]
-        ITweenBuilder<T> WithDelayManagementRepetition(DelayManagement delayManagementRepetition);
-
-        [NotNull]
-        ITweenBuilder<T> WithDelayManagementRestart(DelayManagement delayManagementRestart);
-
-        [NotNull]
-        ITweenBuilder<T> WithOnStartIteration(Action onStartIteration);
-
-        [NotNull]
-        ITweenBuilder<T> WithOnStartPlay(Action onStartPlay);
-
-        [NotNull]
-        ITweenBuilder<T> WithOnEndPlay(Action onEndPlay);
-
-        [NotNull]
-        ITweenBuilder<T> WithOnEndIteration(Action onEndIteration);
-
-        [NotNull]
-        ITweenBuilder<T> WithOnPaused(Action onPaused);
-
-        [NotNull]
-        ITweenBuilder<T> WithOnCompleted(Action onCompleted);
-
         [NotNull]
         ITweenBuilder<T> WithStart(T start);
 
@@ -59,8 +20,5 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         [NotNull]
         ITweenBuilder<T> WithEasingMode(EasingMode easingMode);
-
-        [NotNull]
-        ITween Build();
     }
 }
