@@ -1,5 +1,6 @@
 using System;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening
 {
@@ -16,12 +17,16 @@ namespace Infrastructure.Tweening
         private readonly Action _onStartPlay;
         private readonly Action _onEndPlay;
         private readonly Action _onEndIteration;
-        private readonly Action _onPaused;
-        private readonly Action _onCompleted;
+        private readonly Action _onPause;
+        private readonly Action _onResume;
+        private readonly Action _onRestart;
+        private readonly Action _onComplete;
 
         private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
         private TweenState _state = TweenState.SetUp;
+        private TweenState? _stateBeforePause;
         private float _waitTimeS;
+        private bool _setupDone;
         private int _iteration;
 
         public TweenState State
@@ -29,6 +34,11 @@ namespace Infrastructure.Tweening
             get => _state;
             private set
             {
+                if (value is TweenState.Pause)
+                {
+                    _stateBeforePause = State;
+                }
+
                 _state = value;
 
                 CheckCallbackOnStateUpdated();
@@ -49,8 +59,10 @@ namespace Infrastructure.Tweening
             Action onStartPlay,
             Action onEndPlay,
             Action onEndIteration,
-            Action onPaused,
-            Action onCompleted)
+            Action onPause,
+            Action onResume,
+            Action onRestart,
+            Action onComplete)
         {
             _autoPlay = autoPlay;
             _delayBeforeS = delayBeforeS;
@@ -63,8 +75,10 @@ namespace Infrastructure.Tweening
             _onStartPlay = onStartPlay;
             _onEndPlay = onEndPlay;
             _onEndIteration = onEndIteration;
-            _onPaused = onPaused;
-            _onCompleted = onCompleted;
+            _onPause = onPause;
+            _onResume = onResume;
+            _onRestart = onRestart;
+            _onComplete = onComplete;
         }
 
         public float Update(float deltaTimeS, bool backwards = false)
@@ -97,9 +111,15 @@ namespace Infrastructure.Tweening
                     case TweenState.EndIteration:
                         ProcessEndIteration();
                         break;
-                    case TweenState.Paused:
+                    case TweenState.Pause:
                         return 0.0f;
-                    case TweenState.Completed:
+                    case TweenState.Resume:
+                        ProcessResume();
+                        break;
+                    case TweenState.Restart:
+                        ProcessRestart();
+                        break;
+                    case TweenState.Complete:
                         return deltaTimeS;
                     default:
                         ArgumentOutOfRangeException.Throw(State);
@@ -112,37 +132,31 @@ namespace Infrastructure.Tweening
 
         public bool Pause()
         {
-            if (State is TweenState.Paused)
+            if (State is not (TweenState.WaitBefore or TweenState.Play or TweenState.WaitAfter))
             {
                 return false;
             }
 
-            State = TweenState.Paused;
+            State = TweenState.Pause;
 
             return true;
         }
 
         public bool Resume()
         {
-            if (State is not TweenState.Paused)
+            if (State is not TweenState.Pause)
             {
                 return false;
             }
 
-            // TODO
+            State = TweenState.Resume;
 
             return true;
         }
 
         public void Restart()
         {
-            State = TweenState.SetUp;
-
-            Backwards = false;
-
-            _delayManagement = _delayManagementRestart;
-            _waitTimeS = 0.0f;
-            _iteration = 0;
+            State = TweenState.Restart;
         }
 
         private void CheckCallbackOnStateUpdated()
@@ -169,11 +183,17 @@ namespace Infrastructure.Tweening
                 case TweenState.EndIteration:
                     _onEndIteration?.Invoke();
                     break;
-                case TweenState.Paused:
-                    _onPaused?.Invoke();
+                case TweenState.Pause:
+                    _onPause?.Invoke();
                     break;
-                case TweenState.Completed:
-                    _onCompleted?.Invoke();
+                case TweenState.Resume:
+                    _onResume?.Invoke();
+                    break;
+                case TweenState.Restart:
+                    _onRestart?.Invoke();
+                    break;
+                case TweenState.Complete:
+                    _onComplete?.Invoke();
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(State);
@@ -183,7 +203,9 @@ namespace Infrastructure.Tweening
 
         private void ProcessSetUp()
         {
-            State = _autoPlay ? TweenState.StartIteration : TweenState.Paused;
+            State = _autoPlay || _setupDone ? TweenState.StartIteration : TweenState.Pause;
+
+            _setupDone = true;
         }
 
         private void ProcessStartIteration()
@@ -239,8 +261,29 @@ namespace Infrastructure.Tweening
             }
             else
             {
-                State = TweenState.Completed;
+                State = TweenState.Complete;
             }
+        }
+
+        private void ProcessResume()
+        {
+            InvalidOperationException.ThrowIfNull(_stateBeforePause);
+
+            State = _stateBeforePause.Value;
+
+            _stateBeforePause = null;
+        }
+
+        private void ProcessRestart()
+        {
+            State = TweenState.StartIteration;
+
+            Backwards = false;
+
+            _delayManagement = _delayManagementRestart;
+            _stateBeforePause = null;
+            _waitTimeS = 0.0f;
+            _iteration = 0;
         }
 
         private float ProcessWait(float deltaTimeS, float delayS, TweenState nextState)

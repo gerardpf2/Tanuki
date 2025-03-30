@@ -27,14 +27,16 @@ namespace Infrastructure.Tweening
             Action onStartPlay,
             Action onEndPlay,
             Action onEndIteration,
-            Action onPaused,
-            Action onCompleted,
+            Action onPause,
+            Action onResume,
+            Action onRestart,
+            Action onComplete,
             T start,
             T end,
             float durationS,
             [NotNull] Action<T> setter,
             [NotNull] Func<float, float> ease,
-            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPaused, onCompleted)
+            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
         {
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(ease);

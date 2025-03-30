@@ -12,7 +12,9 @@ namespace Infrastructure.Tweening
         WaitAfter,
         EndIteration,
 
-        Paused,
-        Completed
+        Pause,
+        Resume,
+        Restart,
+        Complete
     }
 }

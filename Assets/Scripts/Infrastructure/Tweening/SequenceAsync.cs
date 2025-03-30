@@ -19,9 +19,11 @@ namespace Infrastructure.Tweening
             Action onStartPlay,
             Action onEndPlay,
             Action onEndIteration,
-            Action onPaused,
-            Action onCompleted,
-            [NotNull] [ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPaused, onCompleted, tweens) { }
+            Action onPause,
+            Action onResume,
+            Action onRestart,
+            Action onComplete,
+            [NotNull] [ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete, tweens) { }
 
         protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITween> tweens)
         {

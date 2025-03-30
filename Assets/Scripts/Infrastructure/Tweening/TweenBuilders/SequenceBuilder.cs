@@ -19,8 +19,10 @@ namespace Infrastructure.Tweening.TweenBuilders
                     OnStartPlay,
                     OnEndPlay,
                     OnEndIteration,
-                    OnPaused,
-                    OnCompleted,
+                    OnPause,
+                    OnResume,
+                    OnRestart,
+                    OnComplete,
                     Tweens
                 );
         }

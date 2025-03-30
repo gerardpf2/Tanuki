@@ -39,10 +39,16 @@ namespace Infrastructure.Tweening.TweenBuilders
         TBuilder WithOnEndIteration(Action onEndIteration);
 
         [NotNull]
-        TBuilder WithOnPaused(Action onPaused);
+        TBuilder WithOnPause(Action onPause);
 
         [NotNull]
-        TBuilder WithOnCompleted(Action onCompleted);
+        TBuilder WithOnResume(Action onResume);
+
+        [NotNull]
+        TBuilder WithOnRestart(Action onRestart);
+
+        [NotNull]
+        TBuilder WithOnComplete(Action onComplete);
 
         [NotNull]
         ITween Build();

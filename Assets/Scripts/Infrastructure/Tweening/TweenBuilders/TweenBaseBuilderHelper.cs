@@ -16,8 +16,10 @@ namespace Infrastructure.Tweening.TweenBuilders
         protected Action OnStartPlay;
         protected Action OnEndPlay;
         protected Action OnEndIteration;
-        protected Action OnPaused;
-        protected Action OnCompleted;
+        protected Action OnPause;
+        protected Action OnResume;
+        protected Action OnRestart;
+        protected Action OnComplete;
 
         [NotNull]
         protected abstract TBuilder This { get; }
@@ -104,16 +106,30 @@ namespace Infrastructure.Tweening.TweenBuilders
             return This;
         }
 
-        public TBuilder WithOnPaused(Action onPaused)
+        public TBuilder WithOnPause(Action onPause)
         {
-            OnPaused = onPaused;
+            OnPause = onPause;
 
             return This;
         }
 
-        public TBuilder WithOnCompleted(Action onCompleted)
+        public TBuilder WithOnResume(Action onResume)
         {
-            OnCompleted = onCompleted;
+            OnResume = onResume;
+
+            return This;
+        }
+
+        public TBuilder WithOnRestart(Action onRestart)
+        {
+            OnRestart = onRestart;
+
+            return This;
+        }
+
+        public TBuilder WithOnComplete(Action onComplete)
+        {
+            OnComplete = onComplete;
 
             return This;
         }
@@ -140,8 +156,8 @@ namespace Infrastructure.Tweening.TweenBuilders
             OnStartPlay = null;
             OnEndPlay = null;
             OnEndIteration = null;
-            OnPaused = null;
-            OnCompleted = null;
+            OnPause = null;
+            OnComplete = null;
 
             CustomReset();
         }
