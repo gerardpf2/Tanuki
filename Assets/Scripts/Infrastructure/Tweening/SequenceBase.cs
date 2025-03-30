@@ -37,19 +37,23 @@ namespace Infrastructure.Tweening
             }
         }
 
-        protected override void PreparePlay()
-        {
-            base.PreparePlay();
-
-            foreach (ITween tween in _tweens)
-            {
-                tween.Restart();
-            }
-        }
-
         protected override float Play(float deltaTimeS, bool backwards)
         {
             return Play(deltaTimeS, backwards, _tweens);
+        }
+
+        protected override void OnRestart()
+        {
+            base.OnRestart();
+
+            RestartTweens();
+        }
+
+        protected override void OnPrepareRepetition()
+        {
+            base.OnPrepareRepetition();
+
+            RestartTweens();
         }
 
         protected abstract float Play(
@@ -57,5 +61,13 @@ namespace Infrastructure.Tweening
             bool backwards,
             [NotNull, ItemNotNull] IReadOnlyList<ITween> tweens
         );
+
+        private void RestartTweens()
+        {
+            foreach (ITween tween in _tweens)
+            {
+                tween.Restart();
+            }
+        }
     }
 }

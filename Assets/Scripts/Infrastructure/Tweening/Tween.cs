@@ -50,9 +50,9 @@ namespace Infrastructure.Tweening
             _lerp = lerp;
         }
 
-        protected override void PreparePlay()
+        protected override void OnStartPlay()
         {
-            base.PreparePlay();
+            base.OnStartPlay();
 
             _playTimeS = 0.0f;
         }

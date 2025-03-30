@@ -224,7 +224,7 @@ namespace Infrastructure.Tweening
         {
             State = TweenState.Play;
 
-            PreparePlay();
+            OnStartPlay();
         }
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
@@ -284,6 +284,8 @@ namespace Infrastructure.Tweening
             _stateBeforePause = null;
             _waitTimeS = 0.0f;
             _iteration = 0;
+
+            OnRestart();
         }
 
         private float ProcessWait(float deltaTimeS, float delayS, TweenState nextState)
@@ -304,7 +306,7 @@ namespace Infrastructure.Tweening
             return remainingDeltaTimeS;
         }
 
-        protected virtual void PreparePlay() { }
+        protected virtual void OnStartPlay() { }
 
         protected abstract float Play(float deltaTimeS, bool backwards);
 
@@ -318,6 +320,12 @@ namespace Infrastructure.Tweening
             }
 
             _delayManagement = _delayManagementRepetition;
+
+            OnPrepareRepetition();
         }
+
+        protected virtual void OnRestart() { }
+
+        protected virtual void OnPrepareRepetition() { }
     }
 }
