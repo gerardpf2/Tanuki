@@ -111,6 +111,9 @@ namespace Infrastructure.Tweening
                     case TweenState.EndIteration:
                         ProcessEndIteration();
                         break;
+                    case TweenState.PrepareRepetition:
+                        ProcessPrepareRepetition();
+                        break;
                     case TweenState.Pause:
                         return 0.0f;
                     case TweenState.Resume:
@@ -182,6 +185,8 @@ namespace Infrastructure.Tweening
                     break;
                 case TweenState.EndIteration:
                     _onEndIteration?.Invoke();
+                    break;
+                case TweenState.PrepareRepetition:
                     break;
                 case TweenState.Pause:
                     _onPause?.Invoke();
@@ -255,12 +260,26 @@ namespace Infrastructure.Tweening
 
             if (_repetitions < 0 || _iteration <= _repetitions)
             {
-                PrepareRepetition();
+                State = TweenState.PrepareRepetition;
             }
             else
             {
                 State = TweenState.Complete;
             }
+        }
+
+        private void ProcessPrepareRepetition()
+        {
+            State = TweenState.StartIteration;
+
+            if (_repetitionType is RepetitionType.Yoyo)
+            {
+                Backwards = !Backwards;
+            }
+
+            _delayManagement = _delayManagementRepetition;
+
+            OnPrepareRepetition();
         }
 
         private void ProcessResume()
@@ -305,20 +324,6 @@ namespace Infrastructure.Tweening
         }
 
         protected abstract float Play(float deltaTimeS, bool backwards);
-
-        private void PrepareRepetition()
-        {
-            State = TweenState.StartIteration;
-
-            if (_repetitionType is RepetitionType.Yoyo)
-            {
-                Backwards = !Backwards;
-            }
-
-            _delayManagement = _delayManagementRepetition;
-
-            OnPrepareRepetition();
-        }
 
         protected virtual void OnRestart() { }
 

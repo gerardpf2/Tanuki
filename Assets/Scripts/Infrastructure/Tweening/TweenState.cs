@@ -11,6 +11,7 @@ namespace Infrastructure.Tweening
         EndPlay,
         WaitAfter,
         EndIteration,
+        PrepareRepetition,
 
         Pause,
         Resume,
