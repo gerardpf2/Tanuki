@@ -73,7 +73,7 @@ namespace Infrastructure.Tweening
 
             tweenWrapper.Tween.Update(deltaTimeS);
 
-            bool remove = tweenWrapper.Tween.State == TweenState.Complete;
+            bool remove = tweenWrapper.Tween.State is TweenState.Complete;
 
             if (remove && tweenWrapper.KeepAliveAfterComplete is not null)
             {
