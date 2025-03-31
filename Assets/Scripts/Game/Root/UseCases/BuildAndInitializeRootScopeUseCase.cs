@@ -144,14 +144,14 @@ namespace Game.Root.UseCases
                         r.Resolve<IGateDefinitionGetter>(),
                         configKey => r.Resolve<IConfigValueGetter>().Get<bool>(configKey),
                         r.Resolve<IProjectVersionGetter>(),
-                        r.Resolve<IVersionComparer>()
+                        r.Resolve<IComparer>()
                     )
                 )
             );
 
             ruleAdder.Add(new SingletonRule<IConverter>(_ => new Converter()));
 
-            ruleAdder.Add(new SingletonRule<IVersionComparer>(_ => new VersionComparer()));
+            ruleAdder.Add(new SingletonRule<IComparer>(_ => new Comparer()));
 
             ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
         }
