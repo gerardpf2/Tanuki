@@ -50,13 +50,6 @@ namespace Infrastructure.Tweening
             _lerp = lerp;
         }
 
-        protected override void OnStartPlay()
-        {
-            base.OnStartPlay();
-
-            _playTimeS = 0.0f;
-        }
-
         protected override float Play(float deltaTimeS, bool backwards)
         {
             backwards ^= Backwards;
@@ -75,6 +68,20 @@ namespace Infrastructure.Tweening
             _setter(GetEnd(backwards));
 
             return _playTimeS - _durationS;
+        }
+
+        protected override void OnRestart()
+        {
+            base.OnRestart();
+
+            _playTimeS = 0.0f;
+        }
+
+        protected override void OnPrepareRepetition()
+        {
+            base.OnPrepareRepetition();
+
+            _playTimeS = 0.0f;
         }
 
         private T GetStart(bool backwards)

@@ -223,8 +223,6 @@ namespace Infrastructure.Tweening
         private void ProcessStartPlay()
         {
             State = TweenState.Play;
-
-            OnStartPlay();
         }
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
@@ -305,8 +303,6 @@ namespace Infrastructure.Tweening
 
             return remainingDeltaTimeS;
         }
-
-        protected virtual void OnStartPlay() { }
 
         protected abstract float Play(float deltaTimeS, bool backwards);
 
