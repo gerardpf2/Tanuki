@@ -9,18 +9,22 @@ namespace Infrastructure.System.Exceptions
         [NotNull] private static readonly Comparer Comparer = new();
 
         [ContractAnnotation("=> halt")]
-        public static void Throw(object param, [CallerArgumentExpression("param")] string paramName = null)
+        public static void Throw(object param, string message = null, [CallerArgumentExpression("param")] string paramName = null)
         {
-            throw new global::System.ArgumentOutOfRangeException(paramName, param, null);
+            throw new global::System.ArgumentOutOfRangeException(paramName, param, message);
         }
 
-        public static void ThrowIfNot<T>([NotNull] T param, ComparisonOperator comparisonOperator, T value) where T : IComparable
+        public static void ThrowIfNot<T>(
+            [NotNull] T param,
+            ComparisonOperator comparisonOperator,
+            T value,
+            [CallerArgumentExpression("param")] string paramName = null) where T : IComparable
         {
             ArgumentNullException.ThrowIfNull(param);
 
             if (!Comparer.IsTrueThat(param, comparisonOperator, value))
             {
-                Throw(param);
+                Throw(param, $"{paramName} with value {param} is not {comparisonOperator} {value}");
             }
         }
     }

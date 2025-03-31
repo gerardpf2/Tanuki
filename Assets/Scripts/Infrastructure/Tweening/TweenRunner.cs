@@ -49,6 +49,7 @@ namespace Infrastructure.Tweening
             _updateCoroutine ??= _coroutineRunner.Run(Update());
         }
 
+        [NotNull]
         private IEnumerator Update()
         {
             while (_tweenToRunWrappers.Count > 0 || _tweenWrappers.Count > 0)

@@ -1,6 +1,9 @@
 using System;
+using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening
 {
@@ -8,7 +11,7 @@ namespace Infrastructure.Tweening
     {
         private readonly T _start;
         private readonly T _end;
-        private readonly float _durationS;
+        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] private readonly float _durationS;
         [NotNull] private readonly Action<T> _setter;
         [NotNull] private readonly Func<float, float> _ease;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
@@ -17,8 +20,8 @@ namespace Infrastructure.Tweening
 
         public Tween(
             bool autoPlay,
-            float delayBeforeS,
-            float delayAfterS,
+            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayBeforeS,
+            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayAfterS,
             int repetitions,
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
@@ -33,11 +36,12 @@ namespace Infrastructure.Tweening
             Action onComplete,
             T start,
             T end,
-            float durationS,
+            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float durationS,
             [NotNull] Action<T> setter,
             [NotNull] Func<float, float> ease,
             [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
         {
+            ArgumentOutOfRangeException.ThrowIfNot(durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(ease);
             ArgumentNullException.ThrowIfNull(lerp);
@@ -50,8 +54,11 @@ namespace Infrastructure.Tweening
             _lerp = lerp;
         }
 
-        protected override float Play(float deltaTimeS, bool backwards)
+        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
+        protected override float Play([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards)
         {
+            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
+
             backwards ^= Backwards;
 
             _playTimeS += deltaTimeS;
@@ -67,7 +74,14 @@ namespace Infrastructure.Tweening
 
             _setter(GetEnd(backwards));
 
-            return _playTimeS - _durationS;
+            float remainingDeltaTimeS = _playTimeS - _durationS;
+
+            if (remainingDeltaTimeS > deltaTimeS)
+            {
+                InvalidOperationException.Throw(); // TODO
+            }
+
+            return remainingDeltaTimeS;
         }
 
         protected override void OnRestart()

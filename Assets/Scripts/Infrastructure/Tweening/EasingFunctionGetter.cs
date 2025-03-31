@@ -9,7 +9,7 @@ namespace Infrastructure.Tweening
 {
     public class EasingFunctionGetter : IEasingFunctionGetter
     {
-        [NotNull] private readonly IDictionary<EasingMode, Func<float, float>> _easingFunctions =
+        [NotNull] private static readonly IDictionary<EasingMode, Func<float, float>> EasingFunctions =
             new Dictionary<EasingMode, Func<float, float>>
             {
                 { EasingMode.EaseIn, Easing.InQuad },
@@ -38,7 +38,7 @@ namespace Infrastructure.Tweening
 
         public Func<float, float> Get(EasingMode easingMode)
         {
-            if (!_easingFunctions.TryGetValue(easingMode, out Func<float, float> easingFunction))
+            if (!EasingFunctions.TryGetValue(easingMode, out Func<float, float> easingFunction))
             {
                 InvalidOperationException.Throw($"Cannot get easing function with EasingMode: {easingMode}");
             }

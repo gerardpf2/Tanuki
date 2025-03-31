@@ -1,7 +1,9 @@
 using System;
+using Infrastructure.System;
 using JetBrains.Annotations;
 using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening.TweenBuilders
@@ -44,8 +46,10 @@ namespace Infrastructure.Tweening.TweenBuilders
             return This;
         }
 
-        public ITweenBuilder<T> WithDurationS(float durationS)
+        public ITweenBuilder<T> WithDurationS([Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float durationS)
         {
+            ArgumentOutOfRangeException.ThrowIfNot(durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
+
             _durationS = durationS;
 
             return This;
@@ -76,6 +80,7 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         protected override ITween BuildTween()
         {
+            InvalidOperationException.ThrowIfNot(_durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
             InvalidOperationException.ThrowIfNull(_setter);
 
             return

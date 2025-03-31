@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
@@ -5,6 +6,8 @@ namespace Infrastructure.System.Exceptions
 {
     public static class InvalidOperationException
     {
+        [NotNull] private static readonly Comparer Comparer = new();
+
         [ContractAnnotation("=> halt")]
         public static void Throw(string message = null)
         {
@@ -24,6 +27,20 @@ namespace Infrastructure.System.Exceptions
         public static void ThrowIfNull(object param, [CallerArgumentExpression("param")] string paramName = null)
         {
             ThrowIfNullWithMessage(param, $"{paramName} cannot be null");
+        }
+
+        public static void ThrowIfNot<T>(
+            [NotNull] T param,
+            ComparisonOperator comparisonOperator,
+            T value,
+            [CallerArgumentExpression("param")] string paramName = null) where T : IComparable
+        {
+            ArgumentNullException.ThrowIfNull(param);
+
+            if (!Comparer.IsTrueThat(param, comparisonOperator, value))
+            {
+                Throw($"{paramName} with value {param} is not {comparisonOperator} {value}");
+            }
         }
     }
 }
