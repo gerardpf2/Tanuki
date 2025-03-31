@@ -78,7 +78,7 @@ namespace Infrastructure.Tweening
 
             if (remainingDeltaTimeS > deltaTimeS)
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Remaining delta time cannot be greater than delta time");
             }
 
             return remainingDeltaTimeS;

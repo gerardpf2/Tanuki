@@ -37,7 +37,7 @@ namespace Infrastructure.Tweening
             {
                 if (State == value)
                 {
-                    InvalidOperationException.Throw(); // TODO
+                    InvalidOperationException.Throw($"State is already {value}");
                 }
 
                 if (value is TweenState.Pause)
@@ -356,7 +356,7 @@ namespace Infrastructure.Tweening
 
             if (remainingDeltaTimeS > deltaTimeS)
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Remaining delta time cannot be greater than delta time");
             }
 
             return remainingDeltaTimeS;
