@@ -12,25 +12,25 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
         ITweenBuilder<Vector3> Move(Transform transform, Vector3 end, float durationS);
 
         [NotNull]
-        ITweenBuilder<float> MoveX(Transform transform, float end, float durationS);
+        ITweenBuilder<Vector3> MoveX(Transform transform, float end, float durationS);
 
         [NotNull]
-        ITweenBuilder<float> MoveY(Transform transform, float end, float durationS);
+        ITweenBuilder<Vector3> MoveY(Transform transform, float end, float durationS);
 
         [NotNull]
-        ITweenBuilder<float> MoveZ(Transform transform, float end, float durationS);
+        ITweenBuilder<Vector3> MoveZ(Transform transform, float end, float durationS);
 
         [NotNull]
         ITweenBuilder<Vector3> LocalMove(Transform transform, Vector3 end, float durationS);
 
         [NotNull]
-        ITweenBuilder<float> LocalMoveX(Transform transform, float end, float durationS);
+        ITweenBuilder<Vector3> LocalMoveX(Transform transform, float end, float durationS);
 
         [NotNull]
-        ITweenBuilder<float> LocalMoveY(Transform transform, float end, float durationS);
+        ITweenBuilder<Vector3> LocalMoveY(Transform transform, float end, float durationS);
 
         [NotNull]
-        ITweenBuilder<float> LocalMoveZ(Transform transform, float end, float durationS);
+        ITweenBuilder<Vector3> LocalMoveZ(Transform transform, float end, float durationS);
 
         #endregion
     }

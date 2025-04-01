@@ -1,7 +1,8 @@
-using Infrastructure.System.Exceptions;
 using Infrastructure.Tweening.TweenBuilders;
+using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.Tweening.TweenBuilderHelpers
 {
@@ -30,58 +31,25 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
                     .WithSetter(value => transform.position = value);
         }
 
-        public ITweenBuilder<float> MoveX([NotNull] Transform transform, float end, float durationS)
+        public ITweenBuilder<Vector3> MoveX([NotNull] Transform transform, float end, float durationS)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            return
-                _tweenBuilderFactory.GetTweenBuilderFloat()
-                    .WithStart(transform.position.x)
-                    .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value =>
-                        transform.position = new Vector3(
-                            value,
-                            transform.position.y,
-                            transform.position.z
-                        )
-                    );
+            return Move(transform, transform.position.WithX(end), durationS);
         }
 
-        public ITweenBuilder<float> MoveY([NotNull] Transform transform, float end, float durationS)
+        public ITweenBuilder<Vector3> MoveY([NotNull] Transform transform, float end, float durationS)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            return
-                _tweenBuilderFactory.GetTweenBuilderFloat()
-                    .WithStart(transform.position.y)
-                    .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value =>
-                        transform.position = new Vector3(
-                            transform.position.x,
-                            value,
-                            transform.position.z
-                        )
-                    );
+            return Move(transform, transform.position.WithY(end), durationS);
         }
 
-        public ITweenBuilder<float> MoveZ([NotNull] Transform transform, float end, float durationS)
+        public ITweenBuilder<Vector3> MoveZ([NotNull] Transform transform, float end, float durationS)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            return
-                _tweenBuilderFactory.GetTweenBuilderFloat()
-                    .WithStart(transform.position.z)
-                    .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value =>
-                        transform.position = new Vector3(
-                            transform.position.x,
-                            transform.position.y,
-                            value
-                        )
-                    );
+            return Move(transform, transform.position.WithZ(end), durationS);
         }
 
         public ITweenBuilder<Vector3> LocalMove([NotNull] Transform transform, Vector3 end, float durationS)
@@ -96,58 +64,25 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
                     .WithSetter(value => transform.localPosition = value);
         }
 
-        public ITweenBuilder<float> LocalMoveX([NotNull] Transform transform, float end, float durationS)
+        public ITweenBuilder<Vector3> LocalMoveX([NotNull] Transform transform, float end, float durationS)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            return
-                _tweenBuilderFactory.GetTweenBuilderFloat()
-                    .WithStart(transform.localPosition.x)
-                    .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value =>
-                        transform.localPosition = new Vector3(
-                            value,
-                            transform.localPosition.y,
-                            transform.localPosition.z
-                        )
-                    );
+            return LocalMove(transform, transform.localPosition.WithX(end), durationS);
         }
 
-        public ITweenBuilder<float> LocalMoveY([NotNull] Transform transform, float end, float durationS)
+        public ITweenBuilder<Vector3> LocalMoveY([NotNull] Transform transform, float end, float durationS)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            return
-                _tweenBuilderFactory.GetTweenBuilderFloat()
-                    .WithStart(transform.localPosition.y)
-                    .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value =>
-                        transform.localPosition = new Vector3(
-                            transform.localPosition.x,
-                            value,
-                            transform.localPosition.z
-                        )
-                    );
+            return LocalMove(transform, transform.localPosition.WithY(end), durationS);
         }
 
-        public ITweenBuilder<float> LocalMoveZ([NotNull] Transform transform, float end, float durationS)
+        public ITweenBuilder<Vector3> LocalMoveZ([NotNull] Transform transform, float end, float durationS)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            return
-                _tweenBuilderFactory.GetTweenBuilderFloat()
-                    .WithStart(transform.localPosition.z)
-                    .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value =>
-                        transform.localPosition = new Vector3(
-                            transform.localPosition.x,
-                            transform.localPosition.y,
-                            value
-                        )
-                    );
+            return LocalMove(transform, transform.localPosition.WithZ(end), durationS);
         }
 
         #endregion
