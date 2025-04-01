@@ -19,9 +19,6 @@ namespace Infrastructure.Tweening.TweenBuilders
         ITweenBuilder<T> WithSetter(Action<T> setter);
 
         [NotNull]
-        ITweenBuilder<T> WithEasingMode(EasingMode easingMode);
-
-        [NotNull]
-        ITweenBuilder<T> WithEasingModeBackwards(EasingMode easingModeBackwards);
+        ITweenBuilder<T> WithEasingMode(EasingMode easingMode, EasingMode? easingModeBackwards = null);
     }
 }

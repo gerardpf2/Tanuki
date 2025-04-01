@@ -45,20 +45,17 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
             ITween moveXZ =
                 Move(transform, end, durationS, Axis.X | Axis.Z)
                     .WithEasingMode(EasingMode.Linear)
-                    .WithEasingModeBackwards(EasingMode.Linear)
                     .Build();
 
             ITween moveYStartToMiddle =
                 Move(transform, middle, 0.5f * durationS, Axis.Y)
-                    .WithEasingMode(EasingMode.EaseOut)
-                    .WithEasingModeBackwards(EasingMode.EaseIn)
+                    .WithEasingMode(EasingMode.EaseOut, EasingMode.EaseIn)
                     .Build();
 
             ITween moveYMiddleToEnd =
                 Move(transform, end, 0.5f * durationS, Axis.Y)
                     .WithStart(middle)
-                    .WithEasingMode(EasingMode.EaseIn)
-                    .WithEasingModeBackwards(EasingMode.EaseOut)
+                    .WithEasingMode(EasingMode.EaseIn, EasingMode.EaseOut)
                     .Build();
 
             ITween moveY =

@@ -18,7 +18,7 @@ namespace Infrastructure.Tweening.TweenBuilders
         private float _durationS;
         private Action<T> _setter;
         private EasingMode _easingMode = EasingMode.EaseOut;
-        private EasingMode _easingModeBackwards = EasingMode.EaseOut;
+        private EasingMode? _easingModeBackwards;
 
         protected override ITweenBuilder<T> This => this;
 
@@ -65,15 +65,9 @@ namespace Infrastructure.Tweening.TweenBuilders
             return This;
         }
 
-        public ITweenBuilder<T> WithEasingMode(EasingMode easingMode)
+        public ITweenBuilder<T> WithEasingMode(EasingMode easingMode, EasingMode? easingModeBackwards = null)
         {
             _easingMode = easingMode;
-
-            return This;
-        }
-
-        public ITweenBuilder<T> WithEasingModeBackwards(EasingMode easingModeBackwards)
-        {
             _easingModeBackwards = easingModeBackwards;
 
             return This;
@@ -106,7 +100,7 @@ namespace Infrastructure.Tweening.TweenBuilders
                     _durationS,
                     _setter,
                     _easingFunctionGetter.Get(_easingMode),
-                    _easingFunctionGetter.Get(_easingModeBackwards),
+                    _easingFunctionGetter.Get(_easingModeBackwards ?? _easingMode),
                     _lerp
                 );
         }
