@@ -17,7 +17,7 @@ namespace Infrastructure.Tweening.TweenBuilders
         private T _end;
         private float _durationS;
         private Action<T> _setter;
-        private EasingMode _easingMode;
+        private EasingMode _easingMode = EasingMode.EaseOut;
 
         protected override ITweenBuilder<T> This => this;
 
@@ -71,14 +71,7 @@ namespace Infrastructure.Tweening.TweenBuilders
             return This;
         }
 
-        protected override void CustomReset()
-        {
-            base.CustomReset();
-
-            _easingMode = EasingMode.EaseOut;
-        }
-
-        protected override ITween BuildTween()
+        public override ITween Build()
         {
             InvalidOperationException.ThrowIfNot(_durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
             InvalidOperationException.ThrowIfNull(_setter);

@@ -16,12 +16,5 @@ namespace Infrastructure.Tweening.TweenBuilders
 
             return This;
         }
-
-        protected override void CustomReset()
-        {
-            base.CustomReset();
-
-            Tweens.Clear();
-        }
     }
 }

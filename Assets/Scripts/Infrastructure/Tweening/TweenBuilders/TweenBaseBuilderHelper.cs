@@ -39,11 +39,11 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         protected int Repetitions { get; private set; }
 
-        protected RepetitionType RepetitionType { get; private set; }
+        protected RepetitionType RepetitionType { get; private set; } = RepetitionType.Restart;
 
-        protected DelayManagement DelayManagementRepetition { get; private set; }
+        protected DelayManagement DelayManagementRepetition { get; private set; } = DelayManagement.BeforeAndAfter;
 
-        protected DelayManagement DelayManagementRestart { get; private set; }
+        protected DelayManagement DelayManagementRestart { get; private set; } = DelayManagement.BeforeAndAfter;
 
         protected Action OnStartIteration { get; private set; }
 
@@ -63,11 +63,6 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         [NotNull]
         protected abstract TBuilder This { get; }
-
-        protected TweenBaseBuilderHelper()
-        {
-            Reset();
-        }
 
         public TBuilder WithAutoPlay(bool autoPlay)
         {
@@ -178,36 +173,6 @@ namespace Infrastructure.Tweening.TweenBuilders
             return This;
         }
 
-        public ITween Build()
-        {
-            ITween tween = BuildTween();
-
-            Reset();
-
-            return tween;
-        }
-
-        private void Reset()
-        {
-            AutoPlay = true;
-            DelayBeforeS = 0.0f;
-            DelayAfterS = 0.0f;
-            Repetitions = 0;
-            RepetitionType = RepetitionType.Restart;
-            DelayManagementRepetition = DelayManagement.BeforeAndAfter;
-            DelayManagementRestart = DelayManagement.BeforeAndAfter;
-            OnStartIteration = null;
-            OnStartPlay = null;
-            OnEndPlay = null;
-            OnEndIteration = null;
-            OnPause = null;
-            OnComplete = null;
-
-            CustomReset();
-        }
-
-        protected virtual void CustomReset() { }
-
-        protected abstract ITween BuildTween();
+        public abstract ITween Build();
     }
 }

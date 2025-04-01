@@ -4,7 +4,7 @@ namespace Infrastructure.Tweening.TweenBuilders
     {
         protected override ISequenceBuilder This => this;
 
-        protected override ITween BuildTween()
+        public override ITween Build()
         {
             return
                 new Sequence(
