@@ -1,7 +1,9 @@
 using Infrastructure.Tweening.TweenBuilders;
+using Infrastructure.Unity;
 using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.Tweening.TweenBuilderHelpers
@@ -17,9 +19,11 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
             _tweenBuilderFactory = tweenBuilderFactory;
         }
 
-        #region Movement
-
-        public ITweenBuilder<Vector3> Move([NotNull] Transform transform, Vector3 end, float durationS)
+        public ITweenBuilder<Vector3> Move(
+            [NotNull] Transform transform,
+            Vector3 end,
+            float durationS,
+            Axis axis = Axis.All)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
@@ -28,63 +32,42 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
                     .WithStart(transform.position)
                     .WithEnd(end)
                     .WithDurationS(durationS)
-                    .WithSetter(value => transform.position = value);
+                    .WithSetter(value => transform.position = transform.position.With(value, axis));
         }
 
-        public ITweenBuilder<Vector3> MoveX([NotNull] Transform transform, float end, float durationS)
+        public ISequenceAsyncBuilder Jump([NotNull] Transform transform, Vector3 end, float height, float durationS)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            return Move(transform, transform.position.WithX(end), durationS);
-        }
+            Vector3 start = transform.position;
+            Vector3 middle = (0.5f * (start + end)).AddY(height);
 
-        public ITweenBuilder<Vector3> MoveY([NotNull] Transform transform, float end, float durationS)
-        {
-            ArgumentNullException.ThrowIfNull(transform);
+            ITween moveXZ =
+                Move(transform, end, durationS, Axis.X | Axis.Z)
+                    .WithEasingMode(EasingMode.Linear)
+                    .Build();
 
-            return Move(transform, transform.position.WithY(end), durationS);
-        }
+            ITween moveYFirstHalf =
+                Move(transform, middle, 0.5f * durationS, Axis.Y)
+                    .WithEasingMode(EasingMode.EaseOut)
+                    .Build();
 
-        public ITweenBuilder<Vector3> MoveZ([NotNull] Transform transform, float end, float durationS)
-        {
-            ArgumentNullException.ThrowIfNull(transform);
+            ITween moveYSecondHalf =
+                Move(transform, end, 0.5f * durationS, Axis.Y)
+                    .WithStart(middle)
+                    .WithEasingMode(EasingMode.EaseIn)
+                    .Build();
 
-            return Move(transform, transform.position.WithZ(end), durationS);
-        }
-
-        public ITweenBuilder<Vector3> LocalMove([NotNull] Transform transform, Vector3 end, float durationS)
-        {
-            ArgumentNullException.ThrowIfNull(transform);
+            ITween moveY =
+                _tweenBuilderFactory.GetSequenceBuilder()
+                    .AddTween(moveYFirstHalf)
+                    .AddTween(moveYSecondHalf)
+                    .Build();
 
             return
-                _tweenBuilderFactory.GetTweenBuilderVector3()
-                    .WithStart(transform.localPosition)
-                    .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value => transform.localPosition = value);
+                _tweenBuilderFactory.GetSequenceAsyncBuilder()
+                    .AddTween(moveXZ)
+                    .AddTween(moveY);
         }
-
-        public ITweenBuilder<Vector3> LocalMoveX([NotNull] Transform transform, float end, float durationS)
-        {
-            ArgumentNullException.ThrowIfNull(transform);
-
-            return LocalMove(transform, transform.localPosition.WithX(end), durationS);
-        }
-
-        public ITweenBuilder<Vector3> LocalMoveY([NotNull] Transform transform, float end, float durationS)
-        {
-            ArgumentNullException.ThrowIfNull(transform);
-
-            return LocalMove(transform, transform.localPosition.WithY(end), durationS);
-        }
-
-        public ITweenBuilder<Vector3> LocalMoveZ([NotNull] Transform transform, float end, float durationS)
-        {
-            ArgumentNullException.ThrowIfNull(transform);
-
-            return LocalMove(transform, transform.localPosition.WithZ(end), durationS);
-        }
-
-        #endregion
     }
 }
