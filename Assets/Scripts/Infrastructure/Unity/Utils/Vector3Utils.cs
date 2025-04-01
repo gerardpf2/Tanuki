@@ -32,23 +32,5 @@ namespace Infrastructure.Unity.Utils
                     (axis & Axis.Z) == Axis.Z ? target.z : source.z
                 );
         }
-
-        // TODO: Test
-        public static Vector3 AddX(this Vector3 source, float value)
-        {
-            return source.WithX(source.x + value);
-        }
-
-        // TODO: Test
-        public static Vector3 AddY(this Vector3 source, float value)
-        {
-            return source.WithY(source.y + value);
-        }
-
-        // TODO: Test
-        public static Vector3 AddZ(this Vector3 source, float value)
-        {
-            return source.WithZ(source.z + value);
-        }
     }
 }

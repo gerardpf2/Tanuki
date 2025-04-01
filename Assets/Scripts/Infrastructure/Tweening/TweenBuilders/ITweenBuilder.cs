@@ -20,5 +20,8 @@ namespace Infrastructure.Tweening.TweenBuilders
 
         [NotNull]
         ITweenBuilder<T> WithEasingMode(EasingMode easingMode);
+
+        [NotNull]
+        ITweenBuilder<T> WithEasingModeBackwards(EasingMode easingModeBackwards);
     }
 }
