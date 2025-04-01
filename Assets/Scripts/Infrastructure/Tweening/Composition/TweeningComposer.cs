@@ -1,5 +1,6 @@
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Tweening.TweenBuilderHelpers;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 
@@ -13,6 +14,14 @@ namespace Infrastructure.Tweening.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ITransformTweenBuilderHelper>(r =>
+                    new TransformTweenBuilderHelper(
+                        r.Resolve<ITweenBuilderFactory>()
+                    )
+                )
+            );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEasingFunctionGetter>(_ => new EasingFunctionGetter()));
 

@@ -11,7 +11,7 @@ namespace Infrastructure.Tweening.TweenBuilders
         private float _delayBeforeS;
         private float _delayAfterS;
 
-        protected bool AutoPlay { get; private set; }
+        protected bool AutoPlay { get; private set; } = true;
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
         protected float DelayBeforeS
