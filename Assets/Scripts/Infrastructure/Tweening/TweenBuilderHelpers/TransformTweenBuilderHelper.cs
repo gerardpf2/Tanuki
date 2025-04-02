@@ -71,5 +71,21 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
                     .AddTween(moveXZ)
                     .AddTween(moveY);
         }
+
+        public ITweenBuilder<Vector3> Scale(
+            [NotNull] Transform transform,
+            Vector3 end,
+            float durationS,
+            Axis axis = Axis.All)
+        {
+            ArgumentNullException.ThrowIfNull(transform);
+
+            return
+                _tweenBuilderFactory.GetTweenBuilderVector3()
+                    .WithStart(transform.localScale)
+                    .WithEnd(end)
+                    .WithDurationS(durationS)
+                    .WithSetter(value => transform.localScale = transform.localScale.With(value, axis));
+        }
     }
 }
