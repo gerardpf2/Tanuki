@@ -72,6 +72,22 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
                     .AddTween(moveY);
         }
 
+        public ITweenBuilder<Vector3> Rotate(
+            [NotNull] Transform transform,
+            Vector3 end,
+            float durationS,
+            Axis axis = Axis.All)
+        {
+            ArgumentNullException.ThrowIfNull(transform);
+
+            return
+                _tweenBuilderFactory.GetTweenBuilderVector3()
+                    .WithStart(transform.rotation.eulerAngles)
+                    .WithEnd(end)
+                    .WithDurationS(durationS)
+                    .WithSetter(value => transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.With(value, axis)));
+        }
+
         public ITweenBuilder<Vector3> Scale(
             [NotNull] Transform transform,
             Vector3 end,
