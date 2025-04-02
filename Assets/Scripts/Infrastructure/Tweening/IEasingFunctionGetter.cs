@@ -8,5 +8,8 @@ namespace Infrastructure.Tweening
     {
         [NotNull]
         Func<float, float> Get(EasingMode easingMode);
+
+        [NotNull]
+        Func<float, float> GetComplementary(EasingMode easingMode);
     }
 }
