@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Infrastructure.Tweening.TweenBuilderHelpers
 {
@@ -76,13 +77,18 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
             [NotNull] Transform transform,
             Vector3 end,
             float durationS,
+            RotationType rotationType = RotationType.Full,
             Axis axis = Axis.All)
         {
             ArgumentNullException.ThrowIfNull(transform);
 
+            Vector3 start = transform.rotation.eulerAngles;
+
+            end = GetRotateEnd(start, end, rotationType);
+
             return
                 _tweenBuilderFactory.GetTweenBuilderVector3()
-                    .WithStart(transform.rotation.eulerAngles)
+                    .WithStart(start)
                     .WithEnd(end)
                     .WithDurationS(durationS)
                     .WithSetter(value => transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.With(value, axis)));
@@ -102,6 +108,25 @@ namespace Infrastructure.Tweening.TweenBuilderHelpers
                     .WithEnd(end)
                     .WithDurationS(durationS)
                     .WithSetter(value => transform.localScale = transform.localScale.With(value, axis));
+        }
+
+        private static Vector3 GetRotateEnd(Vector3 start, Vector3 end, RotationType rotationType)
+        {
+            switch (rotationType)
+            {
+                case RotationType.Full:
+                    return end;
+                case RotationType.Closest:
+                {
+                    Vector3 endA = end.Remainder(360.0f);
+                    Vector3 endB = endA - endA.Sign() * 360.0f;
+
+                    return start.ClosestByCoordinate(endA, endB);
+                }
+                default:
+                    ArgumentOutOfRangeException.Throw(rotationType);
+                    return Vector3.zero;
+            }
         }
     }
 }
