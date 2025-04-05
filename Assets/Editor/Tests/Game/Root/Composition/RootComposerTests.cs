@@ -4,6 +4,7 @@ using Game.Root.Composition;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
+using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
@@ -24,6 +25,8 @@ namespace Editor.Tests.Game.Root.Composition
         private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
         private ICoroutineRunner _coroutineRunner;
+        private IRuleFactory _ruleFactory;
+        private IRuleAdder _ruleAdder;
 
         private RootComposer _rootComposer;
 
@@ -35,6 +38,8 @@ namespace Editor.Tests.Game.Root.Composition
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
             _scopeBuildingContext = new ScopeBuildingContext();
+            _ruleFactory = Substitute.For<IRuleFactory>();
+            _ruleAdder = Substitute.For<IRuleAdder>();
 
             _rootComposer =
                 new RootComposer(
@@ -43,13 +48,24 @@ namespace Editor.Tests.Game.Root.Composition
                     _configValueGetter,
                     _coroutineRunner
                 );
+
+            _rootComposer.Compose(_scopeBuildingContext);
+        }
+
+        [Test]
+        public void AddRules_AddExpected()
+        {
+            IRule<ICoroutineRunner> coroutineRunnerRule = Substitute.For<IRule<ICoroutineRunner>>();
+            _ruleFactory.GetInstance(_coroutineRunner).Returns(coroutineRunnerRule);
+
+            _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
+
+            _ruleAdder.Received(1).Add(coroutineRunnerRule);
         }
 
         [Test]
         public void GetPartialScopeComposers_ReturnsExpected()
         {
-            _rootComposer.Compose(_scopeBuildingContext);
-
             List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers().ToList();
 
             Assert.IsTrue(partialScopeComposers.Count == 4);
@@ -62,8 +78,6 @@ namespace Editor.Tests.Game.Root.Composition
         [Test]
         public void GetChildScopeComposers_ReturnsExpected()
         {
-            _rootComposer.Compose(_scopeBuildingContext);
-
             List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers().ToList();
 
             Assert.IsTrue(childScopeComposers.Count == 1);

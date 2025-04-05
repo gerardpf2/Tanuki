@@ -38,7 +38,6 @@ namespace Game.Root.Composition
             _coroutineRunner = coroutineRunner;
         }
 
-        // TODO: Test
         protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
         {
             ArgumentNullException.ThrowIfNull(ruleAdder);
