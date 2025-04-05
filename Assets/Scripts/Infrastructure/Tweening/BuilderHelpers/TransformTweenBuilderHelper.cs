@@ -1,4 +1,4 @@
-using Infrastructure.Tweening.TweenBuilders;
+using Infrastructure.Tweening.Builders;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
-namespace Infrastructure.Tweening.TweenBuilderHelpers
+namespace Infrastructure.Tweening.BuilderHelpers
 {
     public class TransformTweenBuilderHelper : ITransformTweenBuilderHelper
     {

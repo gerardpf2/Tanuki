@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Infrastructure.Tweening.TweenBuilders
+namespace Infrastructure.Tweening.Builders
 {
     public abstract class TweenBaseBuilderHelper<TBuilder> : ITweenBaseBuilderHelper<TBuilder>
     {

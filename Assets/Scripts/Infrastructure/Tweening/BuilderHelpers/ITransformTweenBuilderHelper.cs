@@ -1,9 +1,9 @@
-using Infrastructure.Tweening.TweenBuilders;
+using Infrastructure.Tweening.Builders;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Infrastructure.Tweening.TweenBuilderHelpers
+namespace Infrastructure.Tweening.BuilderHelpers
 {
     public interface ITransformTweenBuilderHelper
     {

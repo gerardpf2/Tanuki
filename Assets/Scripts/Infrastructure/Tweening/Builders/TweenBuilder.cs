@@ -6,7 +6,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Infrastructure.Tweening.TweenBuilders
+namespace Infrastructure.Tweening.Builders
 {
     public class TweenBuilder<T> : TweenBaseBuilderHelper<ITweenBuilder<T>>, ITweenBuilder<T>
     {

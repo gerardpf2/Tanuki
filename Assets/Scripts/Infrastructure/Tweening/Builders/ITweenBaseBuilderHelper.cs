@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
 
-namespace Infrastructure.Tweening.TweenBuilders
+namespace Infrastructure.Tweening.Builders
 {
     public interface ITweenBaseBuilderHelper<out TBuilder>
     {

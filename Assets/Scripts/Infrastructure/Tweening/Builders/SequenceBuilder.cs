@@ -1,4 +1,4 @@
-namespace Infrastructure.Tweening.TweenBuilders
+namespace Infrastructure.Tweening.Builders
 {
     public class SequenceBuilder : SequenceBaseBuilderHelper<ISequenceBuilder>, ISequenceBuilder
     {

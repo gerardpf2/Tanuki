@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Infrastructure.Tweening.TweenBuilders
+namespace Infrastructure.Tweening.Builders
 {
     public abstract class SequenceBaseBuilderHelper<TBuilder> : TweenBaseBuilderHelper<TBuilder>, ISequenceBaseBuilderHelper<TBuilder>
     {

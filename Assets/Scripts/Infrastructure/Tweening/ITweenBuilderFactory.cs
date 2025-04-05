@@ -1,4 +1,4 @@
-using Infrastructure.Tweening.TweenBuilders;
+using Infrastructure.Tweening.Builders;
 using JetBrains.Annotations;
 using UnityEngine;
 

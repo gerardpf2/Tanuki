@@ -1,6 +1,6 @@
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
-using Infrastructure.Tweening.TweenBuilderHelpers;
+using Infrastructure.Tweening.BuilderHelpers;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 

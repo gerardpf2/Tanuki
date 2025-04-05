@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Infrastructure.Tweening.TweenBuilders
+namespace Infrastructure.Tweening.Builders
 {
     public interface ISequenceBaseBuilderHelper<out TBuilder> : ITweenBaseBuilderHelper<TBuilder>
     {
