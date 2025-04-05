@@ -82,7 +82,7 @@ namespace Infrastructure.Tweening.BuilderHelpers
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            Vector3 start = transform.rotation.eulerAngles;
+            Vector3 start = transform.eulerAngles;
 
             end = GetRotateEnd(start, end, rotationType);
 
@@ -91,7 +91,7 @@ namespace Infrastructure.Tweening.BuilderHelpers
                     .WithStart(start)
                     .WithEnd(end)
                     .WithDurationS(durationS)
-                    .WithSetter(value => transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.With(value, axis)));
+                    .WithSetter(value => transform.eulerAngles = transform.eulerAngles.With(value, axis));
         }
 
         public ITweenBuilder<Vector3> Scale(
