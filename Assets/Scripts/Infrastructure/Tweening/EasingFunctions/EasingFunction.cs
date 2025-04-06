@@ -4,11 +4,11 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening.EasingFunctions
 {
-    public abstract class EasingFunction : IEasingFunction
+    public class EasingFunction : IEasingFunction
     {
         [NotNull] private readonly Func<float, float> _getter;
 
-        protected EasingFunction([NotNull] Func<float, float> getter)
+        public EasingFunction([NotNull] Func<float, float> getter)
         {
             ArgumentNullException.ThrowIfNull(getter);
 
