@@ -3,7 +3,6 @@ using Infrastructure.Unity;
 using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
@@ -45,20 +44,20 @@ namespace Infrastructure.Tweening.BuilderHelpers
 
             ITween moveXZ =
                 Move(transform, end, durationS, Axis.X | Axis.Z)
-                    .WithEasingMode(EasingMode.Linear)
+                    .WithEasingType(EasingType.Linear)
                     .Build();
 
             ITween moveYStartToMiddle =
                 Move(transform, middle, 0.5f * durationS, Axis.Y)
-                    .WithEasingMode(EasingMode.EaseOut)
-                    .WithComplementaryEasingModeBackwards(true)
+                    .WithEasingType(EasingType.OutQuad)
+                    .WithComplementaryEasingTypeBackwards(true)
                     .Build();
 
             ITween moveYMiddleToEnd =
                 Move(transform, end, 0.5f * durationS, Axis.Y)
                     .WithStart(middle)
-                    .WithEasingMode(EasingMode.EaseIn)
-                    .WithComplementaryEasingModeBackwards(true)
+                    .WithEasingType(EasingType.InQuad)
+                    .WithComplementaryEasingTypeBackwards(true)
                     .Build();
 
             ITween moveY =

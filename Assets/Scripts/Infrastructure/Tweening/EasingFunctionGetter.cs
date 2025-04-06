@@ -1,9 +1,7 @@
-using System;
+using Infrastructure.Tweening.EasingFunctions;
 using JetBrains.Annotations;
-using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening
 {
@@ -18,122 +16,116 @@ namespace Infrastructure.Tweening
             _easingFunctionFactory = easingFunctionFactory;
         }
 
-        public Func<float, float> Get(EasingMode easingMode)
+        public IEasingFunction Get(EasingType easingType)
         {
-            switch (easingMode)
+            switch (easingType)
             {
-                case EasingMode.EaseIn:
+                case EasingType.InQuad:
                     return _easingFunctionFactory.GetInQuad();
-                case EasingMode.EaseOut:
+                case EasingType.OutQuad:
                     return _easingFunctionFactory.GetOutQuad();
-                case EasingMode.EaseInOut:
+                case EasingType.InOutQuad:
                     return _easingFunctionFactory.GetInOutQuad();
-                case EasingMode.Linear:
+                case EasingType.Linear:
                     return _easingFunctionFactory.GetLinear();
-                case EasingMode.EaseInSine:
+                case EasingType.InSine:
                     return _easingFunctionFactory.GetInSine();
-                case EasingMode.EaseOutSine:
+                case EasingType.OutSine:
                     return _easingFunctionFactory.GetOutSine();
-                case EasingMode.EaseInOutSine:
+                case EasingType.InOutSine:
                     return _easingFunctionFactory.GetInOutSine();
-                case EasingMode.EaseInCubic:
+                case EasingType.InCubic:
                     return _easingFunctionFactory.GetInCubic();
-                case EasingMode.EaseOutCubic:
+                case EasingType.OutCubic:
                     return _easingFunctionFactory.GetOutCubic();
-                case EasingMode.EaseInOutCubic:
+                case EasingType.InOutCubic:
                     return _easingFunctionFactory.GetInOutCubic();
-                case EasingMode.EaseInCirc:
+                case EasingType.InCirc:
                     return _easingFunctionFactory.GetInCirc();
-                case EasingMode.EaseOutCirc:
+                case EasingType.OutCirc:
                     return _easingFunctionFactory.GetOutCirc();
-                case EasingMode.EaseInOutCirc:
+                case EasingType.InOutCirc:
                     return _easingFunctionFactory.GetInOutCirc();
-                case EasingMode.EaseInElastic:
+                case EasingType.InElastic:
                     return _easingFunctionFactory.GetInElastic();
-                case EasingMode.EaseOutElastic:
+                case EasingType.OutElastic:
                     return _easingFunctionFactory.GetOutElastic();
-                case EasingMode.EaseInOutElastic:
+                case EasingType.InOutElastic:
                     return _easingFunctionFactory.GetInOutElastic();
-                case EasingMode.EaseInBack:
+                case EasingType.InBack:
                     return _easingFunctionFactory.GetInBack();
-                case EasingMode.EaseOutBack:
+                case EasingType.OutBack:
                     return _easingFunctionFactory.GetOutBack();
-                case EasingMode.EaseInOutBack:
+                case EasingType.InOutBack:
                     return _easingFunctionFactory.GetInOutBack();
-                case EasingMode.EaseInBounce:
+                case EasingType.InBounce:
                     return _easingFunctionFactory.GetInBounce();
-                case EasingMode.EaseOutBounce:
+                case EasingType.OutBounce:
                     return _easingFunctionFactory.GetOutBounce();
-                case EasingMode.EaseInOutBounce:
+                case EasingType.InOutBounce:
                     return _easingFunctionFactory.GetInOutBounce();
-                case EasingMode.Ease:
-                    InvalidOperationException.Throw($"Cannot get easing function for {easingMode}");
-                    return null;
                 default:
-                    ArgumentOutOfRangeException.Throw(easingMode);
+                    ArgumentOutOfRangeException.Throw(easingType);
                     return null;
             }
         }
 
-        public Func<float, float> GetComplementary(EasingMode easingMode)
+        public IEasingFunction GetComplementary(EasingType easingType)
         {
-            return Get(GetComplementaryEasingMode(easingMode));
+            return Get(GetComplementaryEasingType(easingType));
         }
 
-        private static EasingMode GetComplementaryEasingMode(EasingMode easingMode)
+        private static EasingType GetComplementaryEasingType(EasingType easingType)
         {
-            switch (easingMode)
+            switch (easingType)
             {
-                case EasingMode.EaseIn:
-                    return EasingMode.EaseOut;
-                case EasingMode.EaseOut:
-                    return EasingMode.EaseIn;
-                case EasingMode.EaseInOut:
-                    return EasingMode.EaseInOut;
-                case EasingMode.Linear:
-                    return EasingMode.Linear;
-                case EasingMode.EaseInSine:
-                    return EasingMode.EaseOutSine;
-                case EasingMode.EaseOutSine:
-                    return EasingMode.EaseInSine;
-                case EasingMode.EaseInOutSine:
-                    return EasingMode.EaseInOutSine;
-                case EasingMode.EaseInCubic:
-                    return EasingMode.EaseOutCubic;
-                case EasingMode.EaseOutCubic:
-                    return EasingMode.EaseInCubic;
-                case EasingMode.EaseInOutCubic:
-                    return EasingMode.EaseInOutCubic;
-                case EasingMode.EaseInCirc:
-                    return EasingMode.EaseOutCirc;
-                case EasingMode.EaseOutCirc:
-                    return EasingMode.EaseInCirc;
-                case EasingMode.EaseInOutCirc:
-                    return EasingMode.EaseInOutCirc;
-                case EasingMode.EaseInElastic:
-                    return EasingMode.EaseOutElastic;
-                case EasingMode.EaseOutElastic:
-                    return EasingMode.EaseInElastic;
-                case EasingMode.EaseInOutElastic:
-                    return EasingMode.EaseInOutElastic;
-                case EasingMode.EaseInBack:
-                    return EasingMode.EaseOutBack;
-                case EasingMode.EaseOutBack:
-                    return EasingMode.EaseInBack;
-                case EasingMode.EaseInOutBack:
-                    return EasingMode.EaseInOutBack;
-                case EasingMode.EaseInBounce:
-                    return EasingMode.EaseOutBounce;
-                case EasingMode.EaseOutBounce:
-                    return EasingMode.EaseInBounce;
-                case EasingMode.EaseInOutBounce:
-                    return EasingMode.EaseInOutBounce;
-                case EasingMode.Ease:
-                    InvalidOperationException.Throw($"Cannot get complementary easing mode for {easingMode}");
-                    return EasingMode.Ease;
+                case EasingType.InQuad:
+                    return EasingType.OutQuad;
+                case EasingType.OutQuad:
+                    return EasingType.InQuad;
+                case EasingType.InOutQuad:
+                    return EasingType.InOutQuad;
+                case EasingType.Linear:
+                    return EasingType.Linear;
+                case EasingType.InSine:
+                    return EasingType.OutSine;
+                case EasingType.OutSine:
+                    return EasingType.InSine;
+                case EasingType.InOutSine:
+                    return EasingType.InOutSine;
+                case EasingType.InCubic:
+                    return EasingType.OutCubic;
+                case EasingType.OutCubic:
+                    return EasingType.InCubic;
+                case EasingType.InOutCubic:
+                    return EasingType.InOutCubic;
+                case EasingType.InCirc:
+                    return EasingType.OutCirc;
+                case EasingType.OutCirc:
+                    return EasingType.InCirc;
+                case EasingType.InOutCirc:
+                    return EasingType.InOutCirc;
+                case EasingType.InElastic:
+                    return EasingType.OutElastic;
+                case EasingType.OutElastic:
+                    return EasingType.InElastic;
+                case EasingType.InOutElastic:
+                    return EasingType.InOutElastic;
+                case EasingType.InBack:
+                    return EasingType.OutBack;
+                case EasingType.OutBack:
+                    return EasingType.InBack;
+                case EasingType.InOutBack:
+                    return EasingType.InOutBack;
+                case EasingType.InBounce:
+                    return EasingType.OutBounce;
+                case EasingType.OutBounce:
+                    return EasingType.InBounce;
+                case EasingType.InOutBounce:
+                    return EasingType.InOutBounce;
                 default:
-                    ArgumentOutOfRangeException.Throw(easingMode);
-                    return EasingMode.Ease;
+                    ArgumentOutOfRangeException.Throw(easingType);
+                    return easingType;
             }
         }
     }

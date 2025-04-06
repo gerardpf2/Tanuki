@@ -1,4 +1,4 @@
-using System;
+using Infrastructure.Tweening.EasingFunctions;
 using JetBrains.Annotations;
 
 namespace Infrastructure.Tweening
@@ -6,69 +6,69 @@ namespace Infrastructure.Tweening
     public interface IEasingFunctionFactory
     {
         [NotNull]
-        Func<float, float> GetInQuad();
+        IEasingFunction GetInQuad();
 
         [NotNull]
-        Func<float, float> GetOutQuad();
+        IEasingFunction GetOutQuad();
 
         [NotNull]
-        Func<float, float> GetInOutQuad();
+        IEasingFunction GetInOutQuad();
 
         [NotNull]
-        Func<float, float> GetLinear();
+        IEasingFunction GetLinear();
 
         [NotNull]
-        Func<float, float> GetInSine();
+        IEasingFunction GetInSine();
 
         [NotNull]
-        Func<float, float> GetOutSine();
+        IEasingFunction GetOutSine();
 
         [NotNull]
-        Func<float, float> GetInOutSine();
+        IEasingFunction GetInOutSine();
 
         [NotNull]
-        Func<float, float> GetInCubic();
+        IEasingFunction GetInCubic();
 
         [NotNull]
-        Func<float, float> GetOutCubic();
+        IEasingFunction GetOutCubic();
 
         [NotNull]
-        Func<float, float> GetInOutCubic();
+        IEasingFunction GetInOutCubic();
 
         [NotNull]
-        Func<float, float> GetInCirc();
+        IEasingFunction GetInCirc();
 
         [NotNull]
-        Func<float, float> GetOutCirc();
+        IEasingFunction GetOutCirc();
 
         [NotNull]
-        Func<float, float> GetInOutCirc();
+        IEasingFunction GetInOutCirc();
 
         [NotNull]
-        Func<float, float> GetInElastic();
+        IEasingFunction GetInElastic();
 
         [NotNull]
-        Func<float, float> GetOutElastic();
+        IEasingFunction GetOutElastic();
 
         [NotNull]
-        Func<float, float> GetInOutElastic();
+        IEasingFunction GetInOutElastic();
 
         [NotNull]
-        Func<float, float> GetInBack();
+        IEasingFunction GetInBack();
 
         [NotNull]
-        Func<float, float> GetOutBack();
+        IEasingFunction GetOutBack();
 
         [NotNull]
-        Func<float, float> GetInOutBack();
+        IEasingFunction GetInOutBack();
 
         [NotNull]
-        Func<float, float> GetInBounce();
+        IEasingFunction GetInBounce();
 
         [NotNull]
-        Func<float, float> GetOutBounce();
+        IEasingFunction GetOutBounce();
 
         [NotNull]
-        Func<float, float> GetInOutBounce();
+        IEasingFunction GetInOutBounce();
     }
 }

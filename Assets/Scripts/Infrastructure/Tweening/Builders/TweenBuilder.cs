@@ -1,7 +1,7 @@
 using System;
 using Infrastructure.System;
+using Infrastructure.Tweening.EasingFunctions;
 using JetBrains.Annotations;
-using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
@@ -17,8 +17,8 @@ namespace Infrastructure.Tweening.Builders
         private T _end;
         private float _durationS;
         private Action<T> _setter;
-        private EasingMode _easingMode = EasingMode.EaseOut;
-        private bool _complementaryEasingModeBackwards;
+        private EasingType _easingType = EasingType.OutQuad;
+        private bool _complementaryEasingTypeBackwards;
 
         protected override ITweenBuilder<T> This => this;
 
@@ -65,16 +65,16 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public ITweenBuilder<T> WithEasingMode(EasingMode easingMode)
+        public ITweenBuilder<T> WithEasingType(EasingType easingType)
         {
-            _easingMode = easingMode;
+            _easingType = easingType;
 
             return This;
         }
 
-        public ITweenBuilder<T> WithComplementaryEasingModeBackwards(bool complementaryEasingModeBackwards)
+        public ITweenBuilder<T> WithComplementaryEasingTypeBackwards(bool complementaryEasingTypeBackwards)
         {
-            _complementaryEasingModeBackwards = complementaryEasingModeBackwards;
+            _complementaryEasingTypeBackwards = complementaryEasingTypeBackwards;
 
             return This;
         }
@@ -84,10 +84,10 @@ namespace Infrastructure.Tweening.Builders
             InvalidOperationException.ThrowIfNot(_durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
             InvalidOperationException.ThrowIfNull(_setter);
 
-            Func<float, float> ease = _easingFunctionGetter.Get(_easingMode);
-            Func<float, float> easeBackwards = _complementaryEasingModeBackwards ?
-                _easingFunctionGetter.GetComplementary(_easingMode) :
-                ease;
+            IEasingFunction easingFunction = _easingFunctionGetter.Get(_easingType);
+            IEasingFunction easingFunctionBackwards = _complementaryEasingTypeBackwards ?
+                _easingFunctionGetter.GetComplementary(_easingType) :
+                easingFunction;
 
             return
                 new Tween<T>(
@@ -110,8 +110,8 @@ namespace Infrastructure.Tweening.Builders
                     _end,
                     _durationS,
                     _setter,
-                    ease,
-                    easeBackwards,
+                    easingFunction,
+                    easingFunctionBackwards,
                     _lerp
                 );
         }

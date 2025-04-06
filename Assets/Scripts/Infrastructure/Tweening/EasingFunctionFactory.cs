@@ -1,118 +1,117 @@
-using System;
-using UnityEngine.UIElements.Experimental;
+using Infrastructure.Tweening.EasingFunctions;
 
 namespace Infrastructure.Tweening
 {
     public class EasingFunctionFactory : IEasingFunctionFactory
     {
-        public Func<float, float> GetInQuad()
+        public IEasingFunction GetInQuad()
         {
-            return Easing.InQuad;
+            return new InQuadFunction();
         }
 
-        public Func<float, float> GetOutQuad()
+        public IEasingFunction GetOutQuad()
         {
-            return Easing.OutQuad;
+            return new OutQuadFunction();
         }
 
-        public Func<float, float> GetInOutQuad()
+        public IEasingFunction GetInOutQuad()
         {
-            return Easing.InOutQuad;
+            return new InOutQuadFunction();
         }
 
-        public Func<float, float> GetLinear()
+        public IEasingFunction GetLinear()
         {
-            return Easing.Linear;
+            return new LinearFunction();
         }
 
-        public Func<float, float> GetInSine()
+        public IEasingFunction GetInSine()
         {
-            return Easing.InSine;
+            return new InSineFunction();
         }
 
-        public Func<float, float> GetOutSine()
+        public IEasingFunction GetOutSine()
         {
-            return Easing.OutSine;
+            return new OutSineFunction();
         }
 
-        public Func<float, float> GetInOutSine()
+        public IEasingFunction GetInOutSine()
         {
-            return Easing.InOutSine;
+            return new InOutSineFunction();
         }
 
-        public Func<float, float> GetInCubic()
+        public IEasingFunction GetInCubic()
         {
-            return Easing.InCubic;
+            return new InCubicFunction();
         }
 
-        public Func<float, float> GetOutCubic()
+        public IEasingFunction GetOutCubic()
         {
-            return Easing.OutCubic;
+            return new OutCubicFunction();
         }
 
-        public Func<float, float> GetInOutCubic()
+        public IEasingFunction GetInOutCubic()
         {
-            return Easing.InOutCubic;
+            return new InOutCubicFunction();
         }
 
-        public Func<float, float> GetInCirc()
+        public IEasingFunction GetInCirc()
         {
-            return Easing.InCirc;
+            return new InCircFunction();
         }
 
-        public Func<float, float> GetOutCirc()
+        public IEasingFunction GetOutCirc()
         {
-            return Easing.OutCirc;
+            return new OutCircFunction();
         }
 
-        public Func<float, float> GetInOutCirc()
+        public IEasingFunction GetInOutCirc()
         {
-            return Easing.InOutCirc;
+            return new InOutCircFunction();
         }
 
-        public Func<float, float> GetInElastic()
+        public IEasingFunction GetInElastic()
         {
-            return Easing.InElastic;
+            return new InElasticFunction();
         }
 
-        public Func<float, float> GetOutElastic()
+        public IEasingFunction GetOutElastic()
         {
-            return Easing.OutElastic;
+            return new OutElasticFunction();
         }
 
-        public Func<float, float> GetInOutElastic()
+        public IEasingFunction GetInOutElastic()
         {
-            return Easing.InOutElastic;
+            return new InOutElasticFunction();
         }
 
-        public Func<float, float> GetInBack()
+        public IEasingFunction GetInBack()
         {
-            return Easing.InBack;
+            return new InBackFunction();
         }
 
-        public Func<float, float> GetOutBack()
+        public IEasingFunction GetOutBack()
         {
-            return Easing.OutBack;
+            return new OutBackFunction();
         }
 
-        public Func<float, float> GetInOutBack()
+        public IEasingFunction GetInOutBack()
         {
-            return Easing.InOutBack;
+            return new InOutBackFunction();
         }
 
-        public Func<float, float> GetInBounce()
+        public IEasingFunction GetInBounce()
         {
-            return Easing.InBounce;
+            return new InBounceFunction();
         }
 
-        public Func<float, float> GetOutBounce()
+        public IEasingFunction GetOutBounce()
         {
-            return Easing.OutBounce;
+            return new OutBounceFunction();
         }
 
-        public Func<float, float> GetInOutBounce()
+        public IEasingFunction GetInOutBounce()
         {
-            return Easing.InOutBounce;
+            return new InOutBounceFunction();
         }
     }
 }

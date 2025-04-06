@@ -1,5 +1,6 @@
 using System;
 using Infrastructure.System;
+using Infrastructure.Tweening.EasingFunctions;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
@@ -13,8 +14,8 @@ namespace Infrastructure.Tweening
         private readonly T _end;
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] private readonly float _durationS;
         [NotNull] private readonly Action<T> _setter;
-        [NotNull] private readonly Func<float, float> _ease;
-        [NotNull] private readonly Func<float, float> _easeBackwards;
+        [NotNull] private readonly IEasingFunction _easingFunction;
+        [NotNull] private readonly IEasingFunction _easingFunctionBackwards;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
         private float _playTimeS;
@@ -39,22 +40,22 @@ namespace Infrastructure.Tweening
             T end,
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float durationS,
             [NotNull] Action<T> setter,
-            [NotNull] Func<float, float> ease,
-            [NotNull] Func<float, float> easeBackwards,
+            [NotNull] IEasingFunction easingFunction,
+            [NotNull] IEasingFunction easingFunctionBackwards,
             [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
         {
             ArgumentOutOfRangeException.ThrowIfNot(durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
             ArgumentNullException.ThrowIfNull(setter);
-            ArgumentNullException.ThrowIfNull(ease);
-            ArgumentNullException.ThrowIfNull(easeBackwards);
+            ArgumentNullException.ThrowIfNull(easingFunction);
+            ArgumentNullException.ThrowIfNull(easingFunctionBackwards);
             ArgumentNullException.ThrowIfNull(lerp);
 
             _start = start;
             _end = end;
             _durationS = durationS;
             _setter = setter;
-            _ease = ease;
-            _easeBackwards = easeBackwards;
+            _easingFunction = easingFunction;
+            _easingFunctionBackwards = easingFunctionBackwards;
             _lerp = lerp;
         }
 
@@ -75,7 +76,9 @@ namespace Infrastructure.Tweening
                     _lerp(
                         GetStart(backwards),
                         GetEnd(backwards),
-                        backwards ? _easeBackwards(normalizedTime) : _ease(normalizedTime)
+                        backwards ?
+                            _easingFunctionBackwards.Evaluate(normalizedTime) :
+                            _easingFunction.Evaluate(normalizedTime)
                     )
                 );
 
