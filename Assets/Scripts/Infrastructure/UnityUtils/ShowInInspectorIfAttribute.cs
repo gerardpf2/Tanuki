@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Infrastructure.Unity
+namespace Infrastructure.UnityUtils
 {
     public class ShowInInspectorIfAttribute : PropertyAttribute
     {

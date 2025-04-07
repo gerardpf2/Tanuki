@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Infrastructure.Unity
+namespace Infrastructure.UnityUtils
 {
     public abstract class ListWrapper { }
 

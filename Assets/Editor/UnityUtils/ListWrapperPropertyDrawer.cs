@@ -1,8 +1,8 @@
-using Infrastructure.Unity;
+using Infrastructure.UnityUtils;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Unity.PropertyDrawers
+namespace Editor.UnityUtils
 {
     [CustomPropertyDrawer(typeof(ListWrapper), true)]
     public class ListWrapperPropertyDrawer : PropertyDrawer

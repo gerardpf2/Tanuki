@@ -1,8 +1,8 @@
 {
-    "name": "Unity_",
+    "name": "UnityUtils_",
     "rootNamespace": "",
     "references": [
-        "GUID:678d1a6d7a23284498ec7ef97c09feb7"
+        "GUID:0e460e2cb9b9cae4baac78399e499134"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

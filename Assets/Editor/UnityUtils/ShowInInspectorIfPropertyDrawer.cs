@@ -1,8 +1,8 @@
-using Infrastructure.Unity;
+using Infrastructure.UnityUtils;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Unity.PropertyDrawers
+namespace Editor.UnityUtils
 {
     [CustomPropertyDrawer(typeof(ShowInInspectorIfAttribute))]
     public class ShowInInspectorIfPropertyDrawer : PropertyDrawer

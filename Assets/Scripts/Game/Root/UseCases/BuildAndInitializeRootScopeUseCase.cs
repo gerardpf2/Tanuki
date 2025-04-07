@@ -143,7 +143,7 @@ namespace Game.Root.UseCases
                     new GateValidator(
                         r.Resolve<IGateDefinitionGetter>(),
                         configKey => r.Resolve<IConfigValueGetter>().Get<bool>(configKey),
-                        r.Resolve<IProjectVersionGetter>(),
+                        r.Resolve<IProjectVersionGetter>().Get(),
                         r.Resolve<IComparer>()
                     )
                 )
