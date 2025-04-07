@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.Unity.Composition
 {
-    // TODO: Test
     public class UnityComposer : ScopeComposer
     {
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
