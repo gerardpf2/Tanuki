@@ -43,7 +43,8 @@ namespace Infrastructure.Tweening.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ITweenRunner>(r =>
                     new TweenRunner(
-                        r.Resolve<ICoroutineRunner>()
+                        r.Resolve<ICoroutineRunner>(),
+                        r.Resolve<IDeltaTimeGetter>()
                     )
                 )
             );

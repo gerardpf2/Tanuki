@@ -27,17 +27,20 @@ namespace Infrastructure.Tweening
         }
 
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
+        [NotNull] private readonly IDeltaTimeGetter _deltaTimeGetter;
 
         [NotNull, ItemNotNull] private readonly ICollection<TweenWrapper> _tweenToRunWrappers = new List<TweenWrapper>();
         [NotNull, ItemNotNull] private readonly List<TweenWrapper> _tweenWrappers = new();
 
         private Coroutine _updateCoroutine;
 
-        public TweenRunner([NotNull] ICoroutineRunner coroutineRunner)
+        public TweenRunner([NotNull] ICoroutineRunner coroutineRunner, [NotNull] IDeltaTimeGetter deltaTimeGetter)
         {
             ArgumentNullException.ThrowIfNull(coroutineRunner);
+            ArgumentNullException.ThrowIfNull(deltaTimeGetter);
 
             _coroutineRunner = coroutineRunner;
+            _deltaTimeGetter = deltaTimeGetter;
         }
 
         public void Run([NotNull] ITween tween, Action onRemove = null, Func<bool> keepAliveAfterComplete = null)
@@ -54,7 +57,7 @@ namespace Infrastructure.Tweening
         {
             while (_tweenToRunWrappers.Count > 0 || _tweenWrappers.Count > 0)
             {
-                float deltaTimeS = Time.deltaTime;
+                float deltaTimeS = _deltaTimeGetter.Get();
 
                 _tweenWrappers.AddRange(_tweenToRunWrappers);
                 _tweenToRunWrappers.Clear();
