@@ -33,6 +33,7 @@ namespace Infrastructure.Tweening
         [NotNull, ItemNotNull] private readonly List<TweenWrapper> _tweenWrappers = new();
 
         private Coroutine _updateCoroutine;
+        private bool _running;
 
         public TweenRunner([NotNull] ICoroutineRunner coroutineRunner, [NotNull] IDeltaTimeGetter deltaTimeGetter)
         {
@@ -49,7 +50,14 @@ namespace Infrastructure.Tweening
 
             _tweenToRunWrappers.Add(new TweenWrapper(tween, onRemove, keepAliveAfterComplete));
 
-            _updateCoroutine ??= _coroutineRunner.Run(Update());
+            if (_running)
+            {
+                return;
+            }
+
+            _running = true;
+
+            _updateCoroutine = _coroutineRunner.Run(Update());
         }
 
         [NotNull]
@@ -65,6 +73,8 @@ namespace Infrastructure.Tweening
 
                 yield return null;
             }
+
+            _running = false;
 
             _coroutineRunner.Stop(_updateCoroutine);
             _updateCoroutine = null;
