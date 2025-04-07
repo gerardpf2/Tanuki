@@ -4,13 +4,13 @@ using Game.Root.Composition;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
-using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
 using Infrastructure.Tweening.Composition;
 using Infrastructure.Unity;
+using Infrastructure.Unity.Composition;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -25,8 +25,6 @@ namespace Editor.Tests.Game.Root.Composition
         private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
         private ICoroutineRunner _coroutineRunner;
-        private IRuleFactory _ruleFactory;
-        private IRuleAdder _ruleAdder;
 
         private RootComposer _rootComposer;
 
@@ -38,8 +36,6 @@ namespace Editor.Tests.Game.Root.Composition
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
             _scopeBuildingContext = new ScopeBuildingContext();
-            _ruleFactory = Substitute.For<IRuleFactory>();
-            _ruleAdder = Substitute.For<IRuleAdder>();
 
             _rootComposer =
                 new RootComposer(
@@ -53,26 +49,16 @@ namespace Editor.Tests.Game.Root.Composition
         }
 
         [Test]
-        public void AddRules_AddExpected()
-        {
-            IRule<ICoroutineRunner> coroutineRunnerRule = Substitute.For<IRule<ICoroutineRunner>>();
-            _ruleFactory.GetInstance(_coroutineRunner).Returns(coroutineRunnerRule);
-
-            _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
-
-            _ruleAdder.Received(1).Add(coroutineRunnerRule);
-        }
-
-        [Test]
         public void GetPartialScopeComposers_ReturnsExpected()
         {
             List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers().ToList();
 
-            Assert.IsTrue(partialScopeComposers.Count == 4);
+            Assert.IsTrue(partialScopeComposers.Count == 5);
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is LoggingComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is ScreenLoadingComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is ConfiguringComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is TweeningComposer));
+            Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is UnityComposer));
         }
 
         [Test]
