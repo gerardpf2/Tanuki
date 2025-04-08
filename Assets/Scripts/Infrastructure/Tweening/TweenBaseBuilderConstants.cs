@@ -1,6 +1,6 @@
 namespace Infrastructure.Tweening
 {
-    public static class TweenBaseConstants
+    public static class TweenBaseBuilderConstants
     {
         public const bool AutoPlay = true;
 
