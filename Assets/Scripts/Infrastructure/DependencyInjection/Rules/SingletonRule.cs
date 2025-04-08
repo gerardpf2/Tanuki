@@ -56,7 +56,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_ctor);
         }
 
-        protected bool Equals([NotNull] SingletonRule<T> other)
+        private bool Equals([NotNull] SingletonRule<T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

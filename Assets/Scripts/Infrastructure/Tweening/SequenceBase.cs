@@ -85,14 +85,9 @@ namespace Infrastructure.Tweening
 
         public override bool Equals(object obj)
         {
-            if (obj is null)
+            if (!base.Equals(obj)) // Already checks null / ReferenceEquals
             {
                 return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
             }
 
             if (obj is not SequenceBase other)
@@ -108,11 +103,11 @@ namespace Infrastructure.Tweening
             return HashCode.Combine(base.GetHashCode(), _ctorTweens);
         }
 
-        protected bool Equals([NotNull] SequenceBase other)
+        private bool Equals([NotNull] SequenceBase other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
-            return base.Equals(other) && Equals(_ctorTweens, other._ctorTweens);
+            return Equals(_ctorTweens, other._ctorTweens);
         }
     }
 }

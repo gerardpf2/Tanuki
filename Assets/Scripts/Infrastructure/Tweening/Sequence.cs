@@ -51,5 +51,24 @@ namespace Infrastructure.Tweening
 
             return deltaTimeS;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!base.Equals(obj)) // Already checks null / ReferenceEquals
+            {
+                return false;
+            }
+
+            return obj is Sequence;
+        }
+
+        public override int GetHashCode()
+        {
+            return
+                HashCode.Combine(
+                    base.GetHashCode(),
+                    typeof(Sequence) // Not sure if it is needed, but since Sequence has no new fields, this should differentiate its hash code from base
+                );
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_key);
         }
 
-        protected bool Equals([NotNull] ToRule<TInput, TOutput> other)
+        private bool Equals([NotNull] ToRule<TInput, TOutput> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

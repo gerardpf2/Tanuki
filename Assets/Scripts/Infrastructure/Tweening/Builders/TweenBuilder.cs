@@ -146,7 +146,7 @@ namespace Infrastructure.Tweening.Builders
             return HashCode.Combine(_easingFunctionGetter, _lerp);
         }
 
-        protected bool Equals([NotNull] TweenBuilder<T> other)
+        private bool Equals([NotNull] TweenBuilder<T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

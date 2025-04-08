@@ -415,7 +415,7 @@ namespace Infrastructure.Tweening
             return hashCode.ToHashCode();
         }
 
-        protected bool Equals([NotNull] TweenBase other)
+        private bool Equals([NotNull] TweenBase other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

@@ -44,7 +44,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_instance);
         }
 
-        protected bool Equals([NotNull] InstanceRule<T> other)
+        private bool Equals([NotNull] InstanceRule<T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

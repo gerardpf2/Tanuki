@@ -124,14 +124,9 @@ namespace Infrastructure.Tweening
 
         public override bool Equals(object obj)
         {
-            if (obj is null)
+            if (!base.Equals(obj)) // Already checks null / ReferenceEquals
             {
                 return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
             }
 
             if (obj is not Tween<T> other)
@@ -157,12 +152,11 @@ namespace Infrastructure.Tweening
                 );
         }
 
-        protected bool Equals([NotNull] Tween<T> other)
+        private bool Equals([NotNull] Tween<T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
             return
-                base.Equals(other) &&
                 EqualityComparer<T>.Default.Equals(_start, other._start) &&
                 EqualityComparer<T>.Default.Equals(_end, other._end) &&
                 _durationS.Equals(other._durationS) &&

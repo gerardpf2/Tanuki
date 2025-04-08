@@ -45,7 +45,7 @@ namespace Infrastructure.Tweening.EasingFunctions
             return HashCode.Combine(_getter);
         }
 
-        protected bool Equals([NotNull] EasingFunction other)
+        private bool Equals([NotNull] EasingFunction other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

@@ -54,7 +54,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_gateValidator, _rule, _gateKey);
         }
 
-        protected bool Equals([NotNull] GateKeyRule<T> other)
+        private bool Equals([NotNull] GateKeyRule<T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
