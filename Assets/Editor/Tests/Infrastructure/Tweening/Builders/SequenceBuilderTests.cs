@@ -46,6 +46,17 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Assert.IsTrue(resultList.Contains(tween));
         }
 
+        [Test]
+        public void AddTween_ReturnsThis()
+        {
+            ISequenceBuilder expectedResult = _sequenceBuilder;
+            ITween tween = Substitute.For<ITween>();
+
+            ISequenceBuilder result = _sequenceBuilder.AddTween(tween);
+            
+            Assert.AreSame(expectedResult, result);
+        }
+
         #endregion
     }
 }

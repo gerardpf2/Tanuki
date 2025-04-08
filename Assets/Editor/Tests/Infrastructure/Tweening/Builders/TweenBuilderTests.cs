@@ -48,6 +48,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithAutoPlay_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithAutoPlay(false);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void DelayBeforeS_NotSet_ReturnsDefault()
         {
             const float expectedResult = 0.0f;
@@ -66,6 +76,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             float result = _tweenBuilder.DelayBeforeS;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithDelayBeforeS_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithDelayBeforeS(0.0f);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
@@ -90,6 +110,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithDelayAfterS_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithDelayAfterS(0.0f);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void Repetitions_NotSet_ReturnsDefault()
         {
             const int expectedResult = 0;
@@ -108,6 +138,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             int result = _tweenBuilder.Repetitions;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithRepetitions_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithRepetitions(0);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
@@ -134,6 +174,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithRepetitionType_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithRepetitionType(RepetitionType.Restart);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void DelayManagementRepetition_NotSet_ReturnsConstant()
         {
             const DelayManagement expectedResult = TweenBaseBuilderConstants.DelayManagementRepetition;
@@ -154,6 +204,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
 
                 Assert.AreEqual(expectedResult, result);
             }
+        }
+
+        [Test]
+        public void WithDelayManagementRepetition_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithDelayManagementRepetition(DelayManagement.BeforeAndAfter);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
@@ -180,6 +240,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithDelayManagementRestart_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithDelayManagementRestart(DelayManagement.BeforeAndAfter);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void OnStartIteration_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
@@ -198,6 +268,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action result = _tweenBuilder.OnStartIteration;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithOnStartIteration_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnStartIteration(null);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
@@ -222,6 +302,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithOnStartPlay_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnStartPlay(null);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void OnEndPlay_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
@@ -240,6 +330,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action result = _tweenBuilder.OnEndPlay;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithOnEndPlay_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnEndPlay(null);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
@@ -264,6 +364,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithOnEndIteration_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnEndIteration(null);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void OnPause_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
@@ -282,6 +392,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action result = _tweenBuilder.OnPause;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithOnPause_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnPause(null);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
@@ -306,6 +426,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithOnResume_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnResume(null);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void OnRestart_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
@@ -327,6 +457,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithOnRestart_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnRestart(null);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void OnComplete_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
@@ -345,6 +485,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action result = _tweenBuilder.OnComplete;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithOnComplete_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnComplete(null);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         #endregion
@@ -371,6 +521,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithStart_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithStart(null);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void End_NotSet_ReturnsDefault()
         {
             const object expectedResult = null;
@@ -389,6 +549,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             object result = _tweenBuilder.End;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithEnd_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithEnd(null);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
@@ -413,6 +583,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithDurationS_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithDurationS(0.0f);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void Setter_NotSet_ReturnsDefault()
         {
             const Action<object> expectedResult = null;
@@ -431,6 +611,17 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action<object> result = _tweenBuilder.Setter;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithSetter_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+            Action<object> setter = Substitute.For<Action<object>>();
+
+            ITweenBuilder<object> result = _tweenBuilder.WithSetter(setter);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
@@ -457,6 +648,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void WithEasingType_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithEasingType(EasingType.InQuad);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void ComplementaryEasingTypeBackwards_NotSet_ReturnsDefault()
         {
             const bool expectedResult = false;
@@ -475,6 +676,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             bool result = _tweenBuilder.ComplementaryEasingTypeBackwards;
 
             Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithComplementaryEasingTypeBackwards_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithComplementaryEasingTypeBackwards(false);
+
+            Assert.AreSame(expectedResult, result);
         }
 
         [Test]
