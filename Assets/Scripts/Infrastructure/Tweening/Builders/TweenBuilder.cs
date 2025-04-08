@@ -84,7 +84,6 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        // TODO: Test
         public override ITween Build()
         {
             InvalidOperationException.ThrowIfNot(DurationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);

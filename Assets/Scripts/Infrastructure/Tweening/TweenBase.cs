@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Infrastructure.System;
+using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
@@ -368,5 +371,70 @@ namespace Infrastructure.Tweening
         protected virtual void OnRestart() { }
 
         protected virtual void OnPrepareRepetition() { }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj is not TweenBase other)
+            {
+                return false;
+            }
+
+            return Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            HashCode hashCode = new();
+
+            hashCode.Add(_autoPlay);
+            hashCode.Add(_delayBeforeS);
+            hashCode.Add(_delayAfterS);
+            hashCode.Add(_repetitions);
+            hashCode.Add(_repetitionType);
+            hashCode.Add(_delayManagementRepetition);
+            hashCode.Add(_delayManagementRestart);
+            hashCode.Add(_onStartIteration);
+            hashCode.Add(_onStartPlay);
+            hashCode.Add(_onEndPlay);
+            hashCode.Add(_onEndIteration);
+            hashCode.Add(_onPause);
+            hashCode.Add(_onResume);
+            hashCode.Add(_onRestart);
+            hashCode.Add(_onComplete);
+
+            return hashCode.ToHashCode();
+        }
+
+        protected bool Equals([NotNull] TweenBase other)
+        {
+            ArgumentNullException.ThrowIfNull(other);
+
+            return
+                _autoPlay.Equals(other._autoPlay) &&
+                _delayBeforeS.Equals(other._delayBeforeS) &&
+                _delayAfterS.Equals(other._delayAfterS) &&
+                _repetitions.Equals(other._repetitions) &&
+                EqualityComparer<RepetitionType>.Default.Equals(_repetitionType, other._repetitionType) &&
+                EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRepetition, other._delayManagementRepetition) &&
+                EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRestart, other._delayManagementRestart) &&
+                Equals(_onStartIteration, other._onStartIteration) &&
+                Equals(_onStartPlay, other._onStartPlay) &&
+                Equals(_onEndPlay, other._onEndPlay) &&
+                Equals(_onEndIteration, other._onEndIteration) &&
+                Equals(_onPause, other._onPause) &&
+                Equals(_onResume, other._onResume) &&
+                Equals(_onRestart, other._onRestart) &&
+                Equals(_onComplete, other._onComplete);
+        }
     }
 }

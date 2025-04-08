@@ -9,7 +9,8 @@ namespace Infrastructure.Tweening
 {
     public abstract class SequenceBase : TweenBase
     {
-        [NotNull, ItemNotNull] private readonly List<ITween> _tweens = new();
+        [NotNull, ItemNotNull] private readonly IReadOnlyList<ITween> _tweens;
+        private readonly IEnumerable<ITween> _ctorTweens;
 
         protected SequenceBase(
             bool autoPlay,
@@ -31,12 +32,18 @@ namespace Infrastructure.Tweening
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
-            foreach (ITween tween in tweens)
+            _ctorTweens = tweens;
+
+            List<ITween> tweensCopy = new();
+
+            foreach (ITween tween in _ctorTweens)
             {
                 ArgumentNullException.ThrowIfNull(tween);
 
-                _tweens.Add(tween);
+                tweensCopy.Add(tween);
             }
+
+            _tweens = tweensCopy;
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
@@ -74,6 +81,38 @@ namespace Infrastructure.Tweening
             {
                 tween.Restart();
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj is not SequenceBase other)
+            {
+                return false;
+            }
+
+            return Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), _ctorTweens);
+        }
+
+        protected bool Equals([NotNull] SequenceBase other)
+        {
+            ArgumentNullException.ThrowIfNull(other);
+
+            return base.Equals(other) && Equals(_ctorTweens, other._ctorTweens);
         }
     }
 }

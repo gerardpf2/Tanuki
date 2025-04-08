@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Infrastructure.Tweening;
 using Infrastructure.Tweening.Builders;
 using NSubstitute;
@@ -8,57 +6,15 @@ using NUnit.Framework;
 
 namespace Editor.Tests.Infrastructure.Tweening.Builders
 {
-    public class SequenceBuilderTests
+    public class SequenceAsyncBuilderTests
     {
-        // It also covers SequenceBaseBuilderHelper tests
-
-        private SequenceBuilder _sequenceBuilder;
+        private SequenceAsyncBuilder _sequenceAsyncBuilder;
 
         [SetUp]
         public void SetUp()
         {
-            _sequenceBuilder = new SequenceBuilder();
+            _sequenceAsyncBuilder = new SequenceAsyncBuilder();
         }
-
-        #region SequenceBaseBuilderHelper
-
-        [Test]
-        public void Tweens_NotSet_ReturnsNotNullAndEmpty()
-        {
-            IEnumerable<ITween> result = _sequenceBuilder.Tweens;
-
-            Assert.IsNotNull(result);
-            Assert.IsEmpty(result);
-        }
-
-        [Test]
-        public void Tweens_AddTween_ReturnsNotNullAndTweenIsAdded()
-        {
-            ITween tween = Substitute.For<ITween>();
-            _sequenceBuilder.AddTween(tween);
-
-            IEnumerable<ITween> result = _sequenceBuilder.Tweens;
-
-            Assert.IsNotNull(result);
-
-            List<ITween> resultList = result.ToList();
-
-            Assert.IsTrue(resultList.Count == 1);
-            Assert.IsTrue(resultList.Contains(tween));
-        }
-
-        [Test]
-        public void AddTween_ReturnsThis()
-        {
-            ISequenceBuilder expectedResult = _sequenceBuilder;
-            ITween tween = Substitute.For<ITween>();
-
-            ISequenceBuilder result = _sequenceBuilder.AddTween(tween);
-
-            Assert.AreSame(expectedResult, result);
-        }
-
-        #endregion
 
         [Test]
         public void Build_ReturnsExpected()
@@ -79,7 +35,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action onRestart = Substitute.For<Action>();
             Action onComplete = Substitute.For<Action>();
             ITween expectedResult =
-                new Sequence(
+                new SequenceAsync(
                     autoPlay,
                     delayBeforeS,
                     delayAfterS,
@@ -95,9 +51,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     onResume,
                     onRestart,
                     onComplete,
-                    _sequenceBuilder.Tweens
+                    _sequenceAsyncBuilder.Tweens
                 );
-            _sequenceBuilder
+            _sequenceAsyncBuilder
                 .WithAutoPlay(autoPlay)
                 .WithDelayBeforeS(delayBeforeS)
                 .WithDelayAfterS(delayAfterS)
@@ -114,7 +70,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithOnRestart(onRestart)
                 .WithOnComplete(onComplete);
 
-            ITween result = _sequenceBuilder.Build();
+            ITween result = _sequenceAsyncBuilder.Build();
 
             Assert.AreEqual(expectedResult, result);
         }

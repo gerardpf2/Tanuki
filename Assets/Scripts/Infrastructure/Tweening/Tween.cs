@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Infrastructure.System;
 using Infrastructure.Tweening.EasingFunctions;
 using JetBrains.Annotations;
@@ -119,6 +120,56 @@ namespace Infrastructure.Tweening
         private T GetEnd(bool backwards)
         {
             return backwards ? _start : _end;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj is not Tween<T> other)
+            {
+                return false;
+            }
+
+            return Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return
+                HashCode.Combine(
+                    base.GetHashCode(),
+                    _start,
+                    _end,
+                    _durationS,
+                    _setter,
+                    _easingFunction,
+                    _easingFunctionBackwards,
+                    _lerp
+                );
+        }
+
+        protected bool Equals([NotNull] Tween<T> other)
+        {
+            ArgumentNullException.ThrowIfNull(other);
+
+            return
+                base.Equals(other) &&
+                EqualityComparer<T>.Default.Equals(_start, other._start) &&
+                EqualityComparer<T>.Default.Equals(_end, other._end) &&
+                _durationS.Equals(other._durationS) &&
+                Equals(_setter, other._setter) &&
+                Equals(_easingFunction, other._easingFunction) &&
+                Equals(_easingFunctionBackwards, other._easingFunctionBackwards) &&
+                Equals(_lerp, other._lerp);
         }
     }
 }

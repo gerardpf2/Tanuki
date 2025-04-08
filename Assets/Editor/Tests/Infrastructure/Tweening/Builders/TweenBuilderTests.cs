@@ -1,6 +1,7 @@
 using System;
 using Infrastructure.Tweening;
 using Infrastructure.Tweening.Builders;
+using Infrastructure.Tweening.EasingFunctions;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -686,6 +687,87 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             ITweenBuilder<object> result = _tweenBuilder.WithComplementaryEasingTypeBackwards(false);
 
             Assert.AreSame(expectedResult, result);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Build_ReturnsExpected(bool complementaryEasingTypeBackwards)
+        {
+            const bool autoPlay = true;
+            const float delayBeforeS = 1.0f;
+            const float delayAfterS = 2.0f;
+            const int repetitions = 1;
+            const RepetitionType repetitionType = RepetitionType.Yoyo;
+            const DelayManagement delayManagementRepetition = DelayManagement.Before;
+            const DelayManagement delayManagementRestart = DelayManagement.After;
+            Action onStartIteration = Substitute.For<Action>();
+            Action onStartPlay = Substitute.For<Action>();
+            Action onEndPlay = Substitute.For<Action>();
+            Action onEndIteration = Substitute.For<Action>();
+            Action onPause = Substitute.For<Action>();
+            Action onResume = Substitute.For<Action>();
+            Action onRestart = Substitute.For<Action>();
+            Action onComplete = Substitute.For<Action>();
+            object start = new();
+            object end = new();
+            const float durationS = 1.0f;
+            Action<object> setter = Substitute.For<Action<object>>();
+            const EasingType easingType = EasingType.InCubic;
+            IEasingFunction easingFunction = Substitute.For<IEasingFunction>();
+            IEasingFunction easingFunctionBackwards = Substitute.For<IEasingFunction>();
+            _easingFunctionGetter.Get(easingType).Returns(easingFunction);
+            _easingFunctionGetter.GetComplementary(easingType).Returns(easingFunctionBackwards);
+            ITween expectedResult =
+                new Tween<object>(
+                    autoPlay,
+                    delayBeforeS,
+                    delayAfterS,
+                    repetitions,
+                    repetitionType,
+                    delayManagementRepetition,
+                    delayManagementRestart,
+                    onStartIteration,
+                    onStartPlay,
+                    onEndPlay,
+                    onEndIteration,
+                    onPause,
+                    onResume,
+                    onRestart,
+                    onComplete,
+                    start,
+                    end,
+                    durationS,
+                    setter,
+                    easingFunction,
+                    complementaryEasingTypeBackwards ? easingFunctionBackwards : easingFunction,
+                    _lerp
+                );
+            _tweenBuilder
+                .WithAutoPlay(autoPlay)
+                .WithDelayBeforeS(delayBeforeS)
+                .WithDelayAfterS(delayAfterS)
+                .WithRepetitions(repetitions)
+                .WithRepetitionType(repetitionType)
+                .WithDelayManagementRepetition(delayManagementRepetition)
+                .WithDelayManagementRestart(delayManagementRestart)
+                .WithOnStartIteration(onStartIteration)
+                .WithOnStartPlay(onStartPlay)
+                .WithOnEndPlay(onEndPlay)
+                .WithOnEndIteration(onEndIteration)
+                .WithOnPause(onPause)
+                .WithOnResume(onResume)
+                .WithOnRestart(onRestart)
+                .WithOnComplete(onComplete)
+                .WithStart(start)
+                .WithEnd(end)
+                .WithDurationS(durationS)
+                .WithSetter(setter)
+                .WithEasingType(easingType)
+                .WithComplementaryEasingTypeBackwards(complementaryEasingTypeBackwards);
+
+            ITween result = _tweenBuilder.Build();
+
+            Assert.AreEqual(expectedResult, result);
         }
 
         [Test]
