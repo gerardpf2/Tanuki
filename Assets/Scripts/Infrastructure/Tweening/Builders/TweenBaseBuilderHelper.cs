@@ -11,7 +11,7 @@ namespace Infrastructure.Tweening.Builders
         private float _delayBeforeS;
         private float _delayAfterS;
 
-        protected bool AutoPlay { get; private set; } = true;
+        protected bool AutoPlay { get; private set; } = TweenBaseBuilderConstants.AutoPlay;
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
         protected float DelayBeforeS
@@ -39,11 +39,11 @@ namespace Infrastructure.Tweening.Builders
 
         protected int Repetitions { get; private set; }
 
-        protected RepetitionType RepetitionType { get; private set; } = RepetitionType.Restart;
+        protected RepetitionType RepetitionType { get; private set; } = TweenBaseBuilderConstants.RepetitionType;
 
-        protected DelayManagement DelayManagementRepetition { get; private set; } = DelayManagement.BeforeAndAfter;
+        protected DelayManagement DelayManagementRepetition { get; private set; } = TweenBaseBuilderConstants.DelayManagementRepetition;
 
-        protected DelayManagement DelayManagementRestart { get; private set; } = DelayManagement.BeforeAndAfter;
+        protected DelayManagement DelayManagementRestart { get; private set; } = TweenBaseBuilderConstants.DelayManagementRestart;
 
         protected Action OnStartIteration { get; private set; }
 

@@ -17,7 +17,7 @@ namespace Infrastructure.Tweening.Builders
         private T _end;
         private float _durationS;
         private Action<T> _setter;
-        private EasingType _easingType = EasingType.OutQuad;
+        private EasingType _easingType = TweenBuilderConstants.EasingType;
         private bool _complementaryEasingTypeBackwards;
 
         protected override ITweenBuilder<T> This => this;
