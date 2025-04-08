@@ -60,7 +60,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         {
             SingletonRule<object> other = _singletonRule;
 
-            Assert.IsTrue(_singletonRule.Equals(other)); // Assert.AreNotEqual cannot be used in here
+            Assert.IsTrue(_singletonRule.Equals(other)); // Assert.AreEqual cannot be used in here
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_SameParams_SameReturnedValue()
+        public void GetHashCode_OtherSameParams_SameReturnedValue()
         {
             SingletonRule<object> other = new(_ctor);
 
@@ -97,7 +97,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_DifferentParams_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams_DifferentReturnedValue()
         {
             Func<IRuleResolver, object> otherCtor = Substitute.For<Func<IRuleResolver, object>>();
             SingletonRule<object> other = new(otherCtor);

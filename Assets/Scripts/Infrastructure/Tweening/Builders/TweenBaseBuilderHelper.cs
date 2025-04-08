@@ -11,10 +11,10 @@ namespace Infrastructure.Tweening.Builders
         private float _delayBeforeS;
         private float _delayAfterS;
 
-        protected bool AutoPlay { get; private set; } = TweenBaseBuilderConstants.AutoPlay;
+        public bool AutoPlay { get; private set; } = TweenBaseBuilderConstants.AutoPlay;
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
-        protected float DelayBeforeS
+        public float DelayBeforeS
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Infrastructure.Tweening.Builders
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
-        protected float DelayAfterS
+        public float DelayAfterS
         {
             get
             {
@@ -37,29 +37,29 @@ namespace Infrastructure.Tweening.Builders
             private set => _delayAfterS = value;
         }
 
-        protected int Repetitions { get; private set; }
+        public int Repetitions { get; private set; }
 
-        protected RepetitionType RepetitionType { get; private set; } = TweenBaseBuilderConstants.RepetitionType;
+        public RepetitionType RepetitionType { get; private set; } = TweenBaseBuilderConstants.RepetitionType;
 
-        protected DelayManagement DelayManagementRepetition { get; private set; } = TweenBaseBuilderConstants.DelayManagementRepetition;
+        public DelayManagement DelayManagementRepetition { get; private set; } = TweenBaseBuilderConstants.DelayManagementRepetition;
 
-        protected DelayManagement DelayManagementRestart { get; private set; } = TweenBaseBuilderConstants.DelayManagementRestart;
+        public DelayManagement DelayManagementRestart { get; private set; } = TweenBaseBuilderConstants.DelayManagementRestart;
 
-        protected Action OnStartIteration { get; private set; }
+        public Action OnStartIteration { get; private set; }
 
-        protected Action OnStartPlay { get; private set; }
+        public Action OnStartPlay { get; private set; }
 
-        protected Action OnEndPlay { get; private set; }
+        public Action OnEndPlay { get; private set; }
 
-        protected Action OnEndIteration { get; private set; }
+        public Action OnEndIteration { get; private set; }
 
-        protected Action OnPause { get; private set; }
+        public Action OnPause { get; private set; }
 
-        protected Action OnResume { get; private set; }
+        public Action OnResume { get; private set; }
 
-        protected Action OnRestart { get; private set; }
+        public Action OnRestart { get; private set; }
 
-        protected Action OnComplete { get; private set; }
+        public Action OnComplete { get; private set; }
 
         [NotNull]
         protected abstract TBuilder This { get; }

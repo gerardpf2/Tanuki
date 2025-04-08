@@ -63,7 +63,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         {
             GateKeyRule<object> other = _gateKeyRule;
 
-            Assert.IsTrue(_gateKeyRule.Equals(other)); // Assert.AreNotEqual cannot be used in here
+            Assert.IsTrue(_gateKeyRule.Equals(other)); // Assert.AreEqual cannot be used in here
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_SameParams_SameReturnedValue()
+        public void GetHashCode_OtherSameParams_SameReturnedValue()
         {
             GateKeyRule<object> other = new(_gateValidator, _rule, _gateKey);
 
@@ -118,7 +118,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_DifferentParams1_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams1_DifferentReturnedValue()
         {
             IGateValidator otherGateValidator = Substitute.For<IGateValidator>();
             GateKeyRule<object> other = new(otherGateValidator, _rule, _gateKey);
@@ -127,7 +127,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_DifferentParams2_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams2_DifferentReturnedValue()
         {
             IRule<object> otherRule = Substitute.For<IRule<object>>();
             GateKeyRule<object> other = new(_gateValidator, otherRule, _gateKey);
@@ -136,7 +136,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_DifferentParams3_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams3_DifferentReturnedValue()
         {
             const string otherGateKey = nameof(otherGateKey);
             GateKeyRule<object> other = new(_gateValidator, _rule, otherGateKey);

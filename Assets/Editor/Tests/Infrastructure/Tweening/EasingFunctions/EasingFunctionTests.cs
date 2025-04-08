@@ -44,7 +44,7 @@ namespace Editor.Tests.Infrastructure.Tweening.EasingFunctions
         {
             EasingFunction other = _easingFunction;
 
-            Assert.IsTrue(_easingFunction.Equals(other)); // Assert.AreNotEqual cannot be used in here
+            Assert.IsTrue(_easingFunction.Equals(other)); // Assert.AreEqual cannot be used in here
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Editor.Tests.Infrastructure.Tweening.EasingFunctions
         }
 
         [Test]
-        public void GetHashCode_SameParams_SameReturnedValue()
+        public void GetHashCode_OtherSameParams_SameReturnedValue()
         {
             EasingFunction other = new(_getter);
 
@@ -81,7 +81,7 @@ namespace Editor.Tests.Infrastructure.Tweening.EasingFunctions
         }
 
         [Test]
-        public void GetHashCode_DifferentParams_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams_DifferentReturnedValue()
         {
             Func<float, float> otherGetter = Substitute.For<Func<float, float>>();
             EasingFunction other = new(otherGetter);
