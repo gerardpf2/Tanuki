@@ -829,7 +829,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams1_ReturnsFalse()
+        public void GetHashCode_OtherDifferentParams1_DifferentReturnedValue()
         {
             IEasingFunctionGetter otherEasingFunctionGetter = Substitute.For<IEasingFunctionGetter>();
             TweenBuilder<object> other = new(otherEasingFunctionGetter, _lerp);
@@ -838,7 +838,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams2_ReturnsFalse()
+        public void GetHashCode_OtherDifferentParams2_DifferentReturnedValue()
         {
             Func<object, object, float, object> otherLerp = Substitute.For<Func<object, object, float, object>>();
             TweenBuilder<object> other = new(_easingFunctionGetter, otherLerp);

@@ -118,5 +118,45 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
 
             Assert.AreEqual(expectedResult, result);
         }
+
+        [Test]
+        public void Equals_OtherNull_ReturnsFalse()
+        {
+            const SequenceBuilder other = null;
+
+            Assert.IsFalse(_sequenceBuilder.Equals(other)); // Assert.AreNotEqual cannot be used in here
+        }
+
+        [Test]
+        public void Equals_SameRef_ReturnsTrue()
+        {
+            SequenceBuilder other = _sequenceBuilder;
+
+            Assert.IsTrue(_sequenceBuilder.Equals(other)); // Assert.AreEqual cannot be used in here
+        }
+
+        [Test]
+        public void Equals_OtherWrongType_ReturnsFalse()
+        {
+            object other = new();
+
+            Assert.AreNotEqual(_sequenceBuilder, other);
+        }
+
+        [Test]
+        public void Equals_OtherSameParams_ReturnsTrue()
+        {
+            SequenceBuilder other = new();
+
+            Assert.AreEqual(_sequenceBuilder, other);
+        }
+
+        [Test]
+        public void GetHashCode_OtherSameParams_SameReturnedValue()
+        {
+            SequenceBuilder other = new();
+
+            Assert.AreEqual(_sequenceBuilder.GetHashCode(), other.GetHashCode());
+        }
     }
 }
