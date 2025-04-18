@@ -10,6 +10,7 @@ namespace Infrastructure.Tweening.Builders
     {
         private float _delayBeforeS;
         private float _delayAfterS;
+        private bool _built;
 
         public bool AutoPlay { get; private set; } = TweenBaseBuilderConstants.AutoPlay;
 
@@ -173,6 +174,20 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public abstract ITween Build();
+        public ITween Build()
+        {
+            if (_built)
+            {
+                InvalidOperationException.Throw("Tween has already been built. Tween builders are not expected to be reused");
+            }
+
+            ITween tween = BuildTween();
+
+            _built = true;
+
+            return tween;
+        }
+
+        protected abstract ITween BuildTween();
     }
 }

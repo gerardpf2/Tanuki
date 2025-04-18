@@ -84,7 +84,7 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public override ITween Build()
+        protected override ITween BuildTween()
         {
             InvalidOperationException.ThrowIfNot(DurationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
             InvalidOperationException.ThrowIfNull(Setter);

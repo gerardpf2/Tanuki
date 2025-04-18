@@ -771,6 +771,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void Build_AlreadyBuilt_ThrowsException()
+        {
+            Action<object> setter = Substitute.For<Action<object>>();
+            ITween _ = _tweenBuilder.WithSetter(setter).Build();
+
+            InvalidOperationException invalidOperationException = Assert.Throws<InvalidOperationException>(() => { ITween __ = _tweenBuilder.WithSetter(setter).Build(); });
+            Assert.AreEqual("Tween has already been built. Tween builders are not expected to be reused", invalidOperationException.Message);
+        }
+
+        [Test]
         public void Equals_OtherNull_ReturnsFalse()
         {
             const TweenBuilder<object> other = null;
