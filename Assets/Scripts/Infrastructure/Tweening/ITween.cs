@@ -6,15 +6,17 @@ namespace Infrastructure.Tweening
     {
         TweenState State { get; }
 
+        bool IsPaused { get; }
+
         // Returns remaining deltaTimeS
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         float Step(float deltaTimeS, bool backwards = false);
 
-        bool Pause();
+        void Pause();
 
-        bool Resume();
+        void Resume();
 
-        bool Restart();
+        void Restart();
 
         // Returns remaining deltaTimeS
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]

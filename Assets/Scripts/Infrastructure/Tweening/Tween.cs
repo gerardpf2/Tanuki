@@ -98,16 +98,16 @@ namespace Infrastructure.Tweening
             return remainingDeltaTimeS;
         }
 
-        protected override void OnRestart()
+        protected override void OnPrepareRepetition()
         {
-            base.OnRestart();
+            base.OnPrepareRepetition();
 
             _playTimeS = 0.0f;
         }
 
-        protected override void OnPrepareRepetition()
+        protected override void OnRestart()
         {
-            base.OnPrepareRepetition();
+            base.OnRestart();
 
             _playTimeS = 0.0f;
         }

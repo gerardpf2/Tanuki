@@ -54,16 +54,16 @@ namespace Infrastructure.Tweening
             return Play(deltaTimeS, backwards, _tweens);
         }
 
-        protected override void OnRestart()
+        protected override void OnPrepareRepetition()
         {
-            base.OnRestart();
+            base.OnPrepareRepetition();
 
             RestartTweens();
         }
 
-        protected override void OnPrepareRepetition()
+        protected override void OnRestart()
         {
-            base.OnPrepareRepetition();
+            base.OnRestart();
 
             RestartTweens();
         }

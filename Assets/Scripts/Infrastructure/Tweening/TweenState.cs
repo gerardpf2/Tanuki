@@ -13,9 +13,6 @@ namespace Infrastructure.Tweening
         EndIteration,
         PrepareRepetition,
 
-        Pause,
-        Resume,
-        Restart,
         Complete
     }
 }

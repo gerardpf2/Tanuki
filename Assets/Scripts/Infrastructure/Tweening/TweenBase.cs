@@ -28,9 +28,8 @@ namespace Infrastructure.Tweening
 
         private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
         private TweenState _state = TweenState.SetUp;
-        private TweenState? _stateBeforePause;
         private float _waitTimeS;
-        private bool _setupDone;
+        private bool _isPaused;
         private int _iteration;
 
         public TweenState State
@@ -43,14 +42,32 @@ namespace Infrastructure.Tweening
                     InvalidOperationException.Throw($"State is already {value}");
                 }
 
-                if (value is TweenState.Pause)
-                {
-                    _stateBeforePause = State;
-                }
-
                 _state = value;
 
                 CheckCallbackOnStateUpdated();
+            }
+        }
+
+        public bool IsPaused
+        {
+            get => _isPaused;
+            private set
+            {
+                if (IsPaused == value)
+                {
+                    return;
+                }
+
+                _isPaused = value;
+
+                if (IsPaused)
+                {
+                    _onPause?.Invoke();
+                }
+                else
+                {
+                    _onResume?.Invoke();
+                }
             }
         }
 
@@ -98,6 +115,11 @@ namespace Infrastructure.Tweening
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
+            if (IsPaused)
+            {
+                return 0.0f;
+            }
+
             switch (State)
             {
                 case TweenState.SetUp:
@@ -127,15 +149,6 @@ namespace Infrastructure.Tweening
                 case TweenState.PrepareRepetition:
                     ProcessPrepareRepetition();
                     break;
-                case TweenState.Pause:
-                    deltaTimeS = 0.0f;
-                    break;
-                case TweenState.Resume:
-                    ProcessResume();
-                    break;
-                case TweenState.Restart:
-                    ProcessRestart();
-                    break;
                 case TweenState.Complete:
                     break;
                 default:
@@ -146,40 +159,29 @@ namespace Infrastructure.Tweening
             return deltaTimeS;
         }
 
-        public bool Pause()
+        public void Pause()
         {
-            if (State is not (TweenState.WaitBefore or TweenState.Play or TweenState.WaitAfter))
-            {
-                return false;
-            }
-
-            State = TweenState.Pause;
-
-            return true;
+            IsPaused = true;
         }
 
-        public bool Resume()
+        public void Resume()
         {
-            if (State is not TweenState.Pause)
-            {
-                return false;
-            }
-
-            State = TweenState.Resume;
-
-            return true;
+            IsPaused = false;
         }
 
-        public bool Restart()
+        public void Restart()
         {
-            if (State is TweenState.Restart)
-            {
-                return false;
-            }
+            State = TweenState.StartIteration;
 
-            State = TweenState.Restart;
+            Backwards = false;
 
-            return true;
+            _delayManagement = _delayManagementRestart;
+            _waitTimeS = 0.0f;
+            _iteration = 0;
+
+            _onRestart?.Invoke();
+
+            OnRestart();
         }
 
         private void CheckCallbackOnStateUpdated()
@@ -208,15 +210,6 @@ namespace Infrastructure.Tweening
                     break;
                 case TweenState.PrepareRepetition:
                     break;
-                case TweenState.Pause:
-                    _onPause?.Invoke();
-                    break;
-                case TweenState.Resume:
-                    _onResume?.Invoke();
-                    break;
-                case TweenState.Restart:
-                    _onRestart?.Invoke();
-                    break;
                 case TweenState.Complete:
                     _onComplete?.Invoke();
                     break;
@@ -228,9 +221,12 @@ namespace Infrastructure.Tweening
 
         private void ProcessSetUp()
         {
-            State = _autoPlay || _setupDone ? TweenState.StartIteration : TweenState.Pause;
+            State = TweenState.StartIteration;
 
-            _setupDone = true;
+            if (!_autoPlay)
+            {
+                Pause();
+            }
         }
 
         private void ProcessStartIteration()
@@ -311,29 +307,6 @@ namespace Infrastructure.Tweening
             OnPrepareRepetition();
         }
 
-        private void ProcessResume()
-        {
-            InvalidOperationException.ThrowIfNull(_stateBeforePause);
-
-            State = _stateBeforePause.Value;
-
-            _stateBeforePause = null;
-        }
-
-        private void ProcessRestart()
-        {
-            State = TweenState.StartIteration;
-
-            Backwards = false;
-
-            _delayManagement = _delayManagementRestart;
-            _stateBeforePause = null;
-            _waitTimeS = 0.0f;
-            _iteration = 0;
-
-            OnRestart();
-        }
-
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         private float ProcessWait(
             [Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS,
@@ -366,9 +339,9 @@ namespace Infrastructure.Tweening
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         protected abstract float Play([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards);
 
-        protected virtual void OnRestart() { }
-
         protected virtual void OnPrepareRepetition() { }
+
+        protected virtual void OnRestart() { }
 
         public override bool Equals(object obj)
         {
