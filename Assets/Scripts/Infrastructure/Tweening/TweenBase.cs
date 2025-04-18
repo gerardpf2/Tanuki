@@ -94,56 +94,54 @@ namespace Infrastructure.Tweening
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        public float Update([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards = false)
+        public float Step([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards = false)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
-            do
+            switch (State)
             {
-                switch (State)
-                {
-                    case TweenState.SetUp:
-                        ProcessSetUp();
-                        break;
-                    case TweenState.StartIteration:
-                        ProcessStartIteration();
-                        break;
-                    case TweenState.WaitBefore:
-                        deltaTimeS = ProcessWaitBefore(deltaTimeS);
-                        break;
-                    case TweenState.StartPlay:
-                        ProcessStartPlay();
-                        break;
-                    case TweenState.Play:
-                        deltaTimeS = ProcessPlay(deltaTimeS, backwards);
-                        break;
-                    case TweenState.EndPlay:
-                        ProcessEndPlay();
-                        break;
-                    case TweenState.WaitAfter:
-                        deltaTimeS = ProcessWaitAfter(deltaTimeS);
-                        break;
-                    case TweenState.EndIteration:
-                        ProcessEndIteration();
-                        break;
-                    case TweenState.PrepareRepetition:
-                        ProcessPrepareRepetition();
-                        break;
-                    case TweenState.Pause:
-                        return 0.0f;
-                    case TweenState.Resume:
-                        ProcessResume();
-                        break;
-                    case TweenState.Restart:
-                        ProcessRestart();
-                        break;
-                    case TweenState.Complete:
-                        return deltaTimeS;
-                    default:
-                        ArgumentOutOfRangeException.Throw(State);
-                        return 0.0f;
-                }
-            } while (deltaTimeS > 0.0f);
+                case TweenState.SetUp:
+                    ProcessSetUp();
+                    break;
+                case TweenState.StartIteration:
+                    ProcessStartIteration();
+                    break;
+                case TweenState.WaitBefore:
+                    deltaTimeS = ProcessWaitBefore(deltaTimeS);
+                    break;
+                case TweenState.StartPlay:
+                    ProcessStartPlay();
+                    break;
+                case TweenState.Play:
+                    deltaTimeS = ProcessPlay(deltaTimeS, backwards);
+                    break;
+                case TweenState.EndPlay:
+                    ProcessEndPlay();
+                    break;
+                case TweenState.WaitAfter:
+                    deltaTimeS = ProcessWaitAfter(deltaTimeS);
+                    break;
+                case TweenState.EndIteration:
+                    ProcessEndIteration();
+                    break;
+                case TweenState.PrepareRepetition:
+                    ProcessPrepareRepetition();
+                    break;
+                case TweenState.Pause:
+                    deltaTimeS = 0.0f;
+                    break;
+                case TweenState.Resume:
+                    ProcessResume();
+                    break;
+                case TweenState.Restart:
+                    ProcessRestart();
+                    break;
+                case TweenState.Complete:
+                    break;
+                default:
+                    ArgumentOutOfRangeException.Throw(State);
+                    return 0.0f;
+            }
 
             return deltaTimeS;
         }
