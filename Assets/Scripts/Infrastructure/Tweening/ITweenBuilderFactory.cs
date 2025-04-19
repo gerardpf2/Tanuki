@@ -1,3 +1,4 @@
+using System;
 using Infrastructure.Tweening.Builders;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -13,9 +14,9 @@ namespace Infrastructure.Tweening
         ISequenceBuilder GetSequenceBuilder();
 
         [NotNull]
-        ITweenBuilder<float> GetTweenBuilderFloat();
+        ITweenBuilder<float> GetTweenBuilderFloat(Action<float> setter);
 
         [NotNull]
-        ITweenBuilder<Vector3> GetTweenBuilderVector3();
+        ITweenBuilder<Vector3> GetTweenBuilderVector3(Action<Vector3> setter);
     }
 }

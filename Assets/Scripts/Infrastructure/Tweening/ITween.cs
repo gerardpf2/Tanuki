@@ -6,7 +6,7 @@ namespace Infrastructure.Tweening
     {
         TweenState State { get; }
 
-        bool IsPaused { get; }
+        bool Paused { get; }
 
         // Returns remaining deltaTimeS
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]

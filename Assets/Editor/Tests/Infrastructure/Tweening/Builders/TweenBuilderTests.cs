@@ -13,6 +13,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
 
         private IEasingFunctionGetter _easingFunctionGetter;
         private Func<object, object, float, object> _lerp;
+        private Action<object> _setter;
 
         private TweenBuilder<object> _tweenBuilder;
 
@@ -21,8 +22,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         {
             _easingFunctionGetter = Substitute.For<IEasingFunctionGetter>();
             _lerp = Substitute.For<Func<object, object, float, object>>();
+            _setter = Substitute.For<Action<object>>();
 
-            _tweenBuilder = new TweenBuilder<object>(_easingFunctionGetter, _lerp);
+            _tweenBuilder = new TweenBuilder<object>(_setter, _easingFunctionGetter, _lerp);
         }
 
         #region TweenBaseBuilderHelper
@@ -594,38 +596,6 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
-        public void Setter_NotSet_ReturnsDefault()
-        {
-            const Action<object> expectedResult = null;
-
-            Action<object> result = _tweenBuilder.Setter;
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [Test]
-        public void Setter_Set_ReturnsExpected()
-        {
-            Action<object> expectedResult = Substitute.For<Action<object>>();
-            _tweenBuilder.WithSetter(expectedResult);
-
-            Action<object> result = _tweenBuilder.Setter;
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [Test]
-        public void WithSetter_ReturnsThis()
-        {
-            ITweenBuilder<object> expectedResult = _tweenBuilder;
-            Action<object> setter = Substitute.For<Action<object>>();
-
-            ITweenBuilder<object> result = _tweenBuilder.WithSetter(setter);
-
-            Assert.AreSame(expectedResult, result);
-        }
-
-        [Test]
         public void EasingType_NotSet_ReturnsConstant()
         {
             const EasingType expectedResult = TweenBuilderConstants.EasingType;
@@ -711,7 +681,6 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             object start = new();
             object end = new();
             const float durationS = 1.0f;
-            Action<object> setter = Substitute.For<Action<object>>();
             const EasingType easingType = EasingType.InCubic;
             IEasingFunction easingFunction = Substitute.For<IEasingFunction>();
             IEasingFunction easingFunctionBackwards = Substitute.For<IEasingFunction>();
@@ -737,7 +706,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     start,
                     end,
                     durationS,
-                    setter,
+                    _setter,
                     easingFunction,
                     complementaryEasingTypeBackwards ? easingFunctionBackwards : easingFunction,
                     _lerp
@@ -761,7 +730,6 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithStart(start)
                 .WithEnd(end)
                 .WithDurationS(durationS)
-                .WithSetter(setter)
                 .WithEasingType(easingType)
                 .WithComplementaryEasingTypeBackwards(complementaryEasingTypeBackwards);
 
@@ -773,10 +741,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void Build_AlreadyBuilt_ThrowsException()
         {
-            Action<object> setter = Substitute.For<Action<object>>();
-            ITween _ = _tweenBuilder.WithSetter(setter).Build();
+            ITween _ = _tweenBuilder.Build();
 
-            InvalidOperationException invalidOperationException = Assert.Throws<InvalidOperationException>(() => { ITween __ = _tweenBuilder.WithSetter(setter).Build(); });
+            InvalidOperationException invalidOperationException = Assert.Throws<InvalidOperationException>(() => { ITween __ = _tweenBuilder.Build(); });
             Assert.AreEqual("Tween has already been built. Tween builders are not expected to be reused", invalidOperationException.Message);
         }
 
@@ -807,7 +774,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void Equals_OtherSameParams_ReturnsTrue()
         {
-            TweenBuilder<object> other = new(_easingFunctionGetter, _lerp);
+            TweenBuilder<object> other = new(_setter, _easingFunctionGetter, _lerp);
 
             Assert.AreEqual(_tweenBuilder, other);
         }
@@ -815,8 +782,8 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void Equals_OtherDifferentParams1_ReturnsFalse()
         {
-            IEasingFunctionGetter otherEasingFunctionGetter = Substitute.For<IEasingFunctionGetter>();
-            TweenBuilder<object> other = new(otherEasingFunctionGetter, _lerp);
+            Action<object> otherSetter = Substitute.For<Action<object>>();
+            TweenBuilder<object> other = new(otherSetter, _easingFunctionGetter, _lerp);
 
             Assert.AreNotEqual(_tweenBuilder, other);
         }
@@ -824,8 +791,17 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void Equals_OtherDifferentParams2_ReturnsFalse()
         {
+            IEasingFunctionGetter otherEasingFunctionGetter = Substitute.For<IEasingFunctionGetter>();
+            TweenBuilder<object> other = new(_setter, otherEasingFunctionGetter, _lerp);
+
+            Assert.AreNotEqual(_tweenBuilder, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams3_ReturnsFalse()
+        {
             Func<object, object, float, object> otherLerp = Substitute.For<Func<object, object, float, object>>();
-            TweenBuilder<object> other = new(_easingFunctionGetter, otherLerp);
+            TweenBuilder<object> other = new(_setter, _easingFunctionGetter, otherLerp);
 
             Assert.AreNotEqual(_tweenBuilder, other);
         }
@@ -833,7 +809,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void GetHashCode_OtherSameParams_SameReturnedValue()
         {
-            TweenBuilder<object> other = new(_easingFunctionGetter, _lerp);
+            TweenBuilder<object> other = new(_setter, _easingFunctionGetter, _lerp);
 
             Assert.AreEqual(_tweenBuilder.GetHashCode(), other.GetHashCode());
         }
@@ -841,8 +817,8 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void GetHashCode_OtherDifferentParams1_DifferentReturnedValue()
         {
-            IEasingFunctionGetter otherEasingFunctionGetter = Substitute.For<IEasingFunctionGetter>();
-            TweenBuilder<object> other = new(otherEasingFunctionGetter, _lerp);
+            Action<object> otherSetter = Substitute.For<Action<object>>();
+            TweenBuilder<object> other = new(otherSetter, _easingFunctionGetter, _lerp);
 
             Assert.AreNotEqual(_tweenBuilder.GetHashCode(), other.GetHashCode());
         }
@@ -850,8 +826,17 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void GetHashCode_OtherDifferentParams2_DifferentReturnedValue()
         {
+            IEasingFunctionGetter otherEasingFunctionGetter = Substitute.For<IEasingFunctionGetter>();
+            TweenBuilder<object> other = new(_setter, otherEasingFunctionGetter, _lerp);
+
+            Assert.AreNotEqual(_tweenBuilder.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams3_DifferentReturnedValue()
+        {
             Func<object, object, float, object> otherLerp = Substitute.For<Func<object, object, float, object>>();
-            TweenBuilder<object> other = new(_easingFunctionGetter, otherLerp);
+            TweenBuilder<object> other = new(_setter, _easingFunctionGetter, otherLerp);
 
             Assert.AreNotEqual(_tweenBuilder.GetHashCode(), other.GetHashCode());
         }

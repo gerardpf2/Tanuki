@@ -1,3 +1,4 @@
+using System;
 using Infrastructure.Tweening;
 using Infrastructure.Tweening.Builders;
 using NSubstitute;
@@ -43,9 +44,10 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void GetTweenBuilderFloat_ReturnsTweenBuilderFloatWithValidParams()
         {
-            TweenBuilderFloat expectedResult = new(_easingFunctionGetter);
+            Action<float> setter = Substitute.For<Action<float>>();
+            TweenBuilderFloat expectedResult = new(setter, _easingFunctionGetter);
 
-            ITweenBuilder<float> result = _tweenBuilderFactory.GetTweenBuilderFloat();
+            ITweenBuilder<float> result = _tweenBuilderFactory.GetTweenBuilderFloat(setter);
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -53,9 +55,10 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void GetTweenBuilderVector3_ReturnsTweenBuilderVector3WithValidParams()
         {
-            TweenBuilderVector3 expectedResult = new(_easingFunctionGetter);
+            Action<Vector3> setter = Substitute.For<Action<Vector3>>();
+            TweenBuilderVector3 expectedResult = new(setter, _easingFunctionGetter);
 
-            ITweenBuilder<Vector3> result = _tweenBuilderFactory.GetTweenBuilderVector3();
+            ITweenBuilder<Vector3> result = _tweenBuilderFactory.GetTweenBuilderVector3(setter);
 
             Assert.AreEqual(expectedResult, result);
         }

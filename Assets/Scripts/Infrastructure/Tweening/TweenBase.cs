@@ -29,8 +29,8 @@ namespace Infrastructure.Tweening
         private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
         private TweenState _state = TweenState.SetUp;
         private float _waitTimeS;
-        private bool _isPaused;
         private int _iteration;
+        private bool _paused;
 
         public TweenState State
         {
@@ -48,19 +48,19 @@ namespace Infrastructure.Tweening
             }
         }
 
-        public bool IsPaused
+        public bool Paused
         {
-            get => _isPaused;
+            get => _paused;
             private set
             {
-                if (IsPaused == value)
+                if (Paused == value)
                 {
                     return;
                 }
 
-                _isPaused = value;
+                _paused = value;
 
-                if (IsPaused)
+                if (Paused)
                 {
                     _onPause?.Invoke();
                 }
@@ -115,7 +115,7 @@ namespace Infrastructure.Tweening
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
-            if (IsPaused)
+            if (Paused)
             {
                 return 0.0f;
             }
@@ -161,12 +161,12 @@ namespace Infrastructure.Tweening
 
         public void Pause()
         {
-            IsPaused = true;
+            Paused = true;
         }
 
         public void Resume()
         {
-            IsPaused = false;
+            Paused = false;
         }
 
         public void Restart()

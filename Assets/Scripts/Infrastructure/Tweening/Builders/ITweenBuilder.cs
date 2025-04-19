@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 
 namespace Infrastructure.Tweening.Builders
@@ -13,9 +12,6 @@ namespace Infrastructure.Tweening.Builders
 
         [NotNull]
         ITweenBuilder<T> WithDurationS(float durationS);
-
-        [NotNull]
-        ITweenBuilder<T> WithSetter(Action<T> setter);
 
         [NotNull]
         ITweenBuilder<T> WithEasingType(EasingType easingType);

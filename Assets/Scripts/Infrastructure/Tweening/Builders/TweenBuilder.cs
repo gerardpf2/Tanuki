@@ -10,16 +10,27 @@ namespace Infrastructure.Tweening.Builders
 {
     public class TweenBuilder<T> : TweenBaseBuilderHelper<ITweenBuilder<T>>, ITweenBuilder<T>
     {
+        [NotNull] private readonly Action<T> _setter;
         [NotNull] private readonly IEasingFunctionGetter _easingFunctionGetter;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
+
+        private float _durationS;
 
         public T Start { get; private set; }
 
         public T End { get; private set; }
 
-        public float DurationS { get; private set; }
+        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
+        public float DurationS
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNot(_durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
 
-        public Action<T> Setter { get; private set; }
+                return _durationS;
+            }
+            private set => _durationS = value;
+        }
 
         public EasingType EasingType { get; private set; } = TweenBuilderConstants.EasingType;
 
@@ -28,12 +39,15 @@ namespace Infrastructure.Tweening.Builders
         protected override ITweenBuilder<T> This => this;
 
         public TweenBuilder(
+            [NotNull] Action<T> setter,
             [NotNull] IEasingFunctionGetter easingFunctionGetter,
             [NotNull] Func<T, T, float, T> lerp)
         {
+            ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(easingFunctionGetter);
             ArgumentNullException.ThrowIfNull(lerp);
 
+            _setter = setter;
             _easingFunctionGetter = easingFunctionGetter;
             _lerp = lerp;
         }
@@ -61,15 +75,6 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public ITweenBuilder<T> WithSetter([NotNull] Action<T> setter)
-        {
-            ArgumentNullException.ThrowIfNull(setter);
-
-            Setter = setter;
-
-            return This;
-        }
-
         public ITweenBuilder<T> WithEasingType(EasingType easingType)
         {
             EasingType = easingType;
@@ -86,9 +91,6 @@ namespace Infrastructure.Tweening.Builders
 
         protected override ITween BuildTween()
         {
-            InvalidOperationException.ThrowIfNot(DurationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-            InvalidOperationException.ThrowIfNull(Setter);
-
             IEasingFunction easingFunction = _easingFunctionGetter.Get(EasingType);
             IEasingFunction easingFunctionBackwards = ComplementaryEasingTypeBackwards ?
                 _easingFunctionGetter.GetComplementary(EasingType) :
@@ -114,7 +116,7 @@ namespace Infrastructure.Tweening.Builders
                     Start,
                     End,
                     DurationS,
-                    Setter,
+                    _setter,
                     easingFunction,
                     easingFunctionBackwards,
                     _lerp
@@ -143,14 +145,17 @@ namespace Infrastructure.Tweening.Builders
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_easingFunctionGetter, _lerp);
+            return HashCode.Combine(_setter, _easingFunctionGetter, _lerp);
         }
 
         private bool Equals([NotNull] TweenBuilder<T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
-            return Equals(_easingFunctionGetter, other._easingFunctionGetter) && Equals(_lerp, other._lerp);
+            return
+                Equals(_setter, other._setter) &&
+                Equals(_easingFunctionGetter, other._easingFunctionGetter) &&
+                Equals(_lerp, other._lerp);
         }
     }
 }
