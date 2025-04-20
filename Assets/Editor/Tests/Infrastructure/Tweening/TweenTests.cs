@@ -8,16 +8,6 @@ namespace Editor.Tests.Infrastructure.Tweening
 {
     public class TweenTests
     {
-        // TODO
-
-        private Action _onStartIteration;
-        private Action _onStartPlay;
-        private Action _onEndPlay;
-        private Action _onEndIteration;
-        private Action _onPause;
-        private Action _onResume;
-        private Action _onRestart;
-        private Action _onComplete;
         private object _start;
         private object _end;
         private Action<object> _setter;
@@ -28,14 +18,6 @@ namespace Editor.Tests.Infrastructure.Tweening
         [SetUp]
         public void SetUp()
         {
-            _onStartIteration = Substitute.For<Action>();
-            _onStartPlay = Substitute.For<Action>();
-            _onEndPlay = Substitute.For<Action>();
-            _onEndIteration = Substitute.For<Action>();
-            _onPause = Substitute.For<Action>();
-            _onResume = Substitute.For<Action>();
-            _onRestart = Substitute.For<Action>();
-            _onComplete = Substitute.For<Action>();
             _start = new object();
             _end = new object();
             _setter = Substitute.For<Action<object>>();
@@ -44,40 +26,297 @@ namespace Editor.Tests.Infrastructure.Tweening
             _lerp = Substitute.For<Func<object, object, float, object>>();
         }
 
-        private ITween Build(
-            bool autoPlay = true,
-            float delayBeforeS = 0.0f,
-            float delayAfterS = 0.0f,
-            int repetitions = 0,
-            RepetitionType repetitionType = RepetitionType.Restart,
-            DelayManagement delayManagementRepetition = DelayManagement.BeforeAndAfter,
-            DelayManagement delayManagementRestart = DelayManagement.BeforeAndAfter,
-            float durationS = 1.0f)
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Step_PlayAndPlayTimeLessThanDuration_ReturnsExpectedAndSetterCalledWithValidParams(bool backwards)
+        {
+            const float durationS = 1.5f;
+            const float deltaTimeS = 1.0f;
+            float expectedRemainingDeltaTimeS = Math.Max(deltaTimeS - durationS, 0.0f);
+            const float playTimeS = deltaTimeS;
+            const float normalizedTime = playTimeS / durationS;
+            const float easingFunctionBackwardsEvaluateResult = 5.0f;
+            const float easingFunctionEvaluateResult = 10.0f;
+            object lerpResult = new();
+            if (backwards)
+            {
+                _easingFunctionBackwards.Evaluate(normalizedTime).Returns(easingFunctionBackwardsEvaluateResult);
+            }
+            else
+            {
+                _easingFunction.Evaluate(normalizedTime).Returns(easingFunctionEvaluateResult);
+            }
+            _lerp.Invoke(backwards ? _end : _start, backwards ? _start : _end, backwards ? easingFunctionBackwardsEvaluateResult : easingFunctionEvaluateResult).Returns(lerpResult);
+            Tween<object> tween = Build(durationS: durationS);
+            tween.Step(deltaTimeS); // SetUp
+            tween.Step(deltaTimeS); // StartIteration
+            tween.Step(deltaTimeS); // WaitBefore
+            tween.Step(deltaTimeS); // StartPlay
+
+            float remainingDeltaTimeS = tween.Step(deltaTimeS, backwards);
+
+            Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
+            _setter.Received(1).Invoke(lerpResult);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Step_PlayAndPlayTimeEqualToDuration_ReturnsExpectedAndSetterCalledWithValidParams(bool backwards)
+        {
+            const float durationS = 1.5f;
+            const float deltaTimeS = durationS;
+            float expectedRemainingDeltaTimeS = Math.Max(deltaTimeS - durationS, 0.0f);
+            Tween<object> tween = Build(durationS: durationS);
+            tween.Step(deltaTimeS); // SetUp
+            tween.Step(deltaTimeS); // StartIteration
+            tween.Step(deltaTimeS); // WaitBefore
+            tween.Step(deltaTimeS); // StartPlay
+
+            float remainingDeltaTimeS = tween.Step(deltaTimeS, backwards);
+
+            Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
+            _setter.Received(1).Invoke(backwards ? _start : _end);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Step_PlayAndPlayTimeBiggerThanDuration_ReturnsExpectedAndSetterCalledWithValidParams(bool backwards)
+        {
+            const float durationS = 1.5f;
+            const float deltaTimeS = 2.0f;
+            float expectedRemainingDeltaTimeS = Math.Max(deltaTimeS - durationS, 0.0f);
+            Tween<object> tween = Build(durationS: durationS);
+            tween.Step(deltaTimeS); // SetUp
+            tween.Step(deltaTimeS); // StartIteration
+            tween.Step(deltaTimeS); // WaitBefore
+            tween.Step(deltaTimeS); // StartPlay
+
+            float remainingDeltaTimeS = tween.Step(deltaTimeS, backwards);
+
+            Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
+            _setter.Received(1).Invoke(backwards ? _start : _end);
+        }
+
+        [Test]
+        public void Equals_OtherNull_ReturnsFalse()
+        {
+            Tween<object> tween = Build();
+            const Tween<object> other = null;
+
+            Assert.IsFalse(tween.Equals(other)); // Assert.AreNotEqual cannot be used in here
+        }
+
+        [Test]
+        public void Equals_SameRef_ReturnsTrue()
+        {
+            Tween<object> tween = Build();
+            Tween<object> other = tween;
+
+            Assert.IsTrue(tween.Equals(other)); // Assert.AreEqual cannot be used in here
+        }
+
+        [Test]
+        public void Equals_OtherWrongType_ReturnsFalse()
+        {
+            Tween<object> tween = Build();
+            object other = new();
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherSameParams_ReturnsTrue()
+        {
+            Tween<object> tween = Build();
+            Tween<object> other = Build();
+
+            Assert.AreEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams1_ReturnsFalse()
+        {
+            object otherStart = new();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(start: otherStart);
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams2_ReturnsFalse()
+        {
+            object otherEnd = new();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(end: otherEnd);
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams3_ReturnsFalse()
+        {
+            const float durationS = 1.0f;
+            const float otherDurationS = 2.0f;
+            Tween<object> tween = Build(durationS: durationS);
+            Tween<object> other = Build(durationS: otherDurationS);
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams4_ReturnsFalse()
+        {
+            Action<object> otherSetter = Substitute.For<Action<object>>();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(setter: otherSetter);
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams5_ReturnsFalse()
+        {
+            IEasingFunction otherEasingFunction = Substitute.For<IEasingFunction>();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(easingFunction: otherEasingFunction);
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams6_ReturnsFalse()
+        {
+            IEasingFunction otherEasingFunctionBackwards = Substitute.For<IEasingFunction>();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(easingFunctionBackwards: otherEasingFunctionBackwards);
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams7_ReturnsFalse()
+        {
+            Func<object, object, float, object> otherLerp = Substitute.For<Func<object, object, float, object>>();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(lerp: otherLerp);
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void GetHashCode_OtherSameParams_SameReturnedValue()
+        {
+            Tween<object> tween = Build();
+            Tween<object> other = Build();
+
+            Assert.AreEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams1_DifferentReturnedValue()
+        {
+            object otherStart = new();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(start: otherStart);
+
+            Assert.AreNotEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams2_DifferentReturnedValue()
+        {
+            object otherEnd = new();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(end: otherEnd);
+
+            Assert.AreNotEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams3_DifferentReturnedValue()
+        {
+            const float durationS = 1.0f;
+            const float otherDurationS = 2.0f;
+            Tween<object> tween = Build(durationS: durationS);
+            Tween<object> other = Build(durationS: otherDurationS);
+
+            Assert.AreNotEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams4_DifferentReturnedValue()
+        {
+            Action<object> otherSetter = Substitute.For<Action<object>>();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(setter: otherSetter);
+
+            Assert.AreNotEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams5_DifferentReturnedValue()
+        {
+            IEasingFunction otherEasingFunction = Substitute.For<IEasingFunction>();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(easingFunction: otherEasingFunction);
+
+            Assert.AreNotEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams6_DifferentReturnedValue()
+        {
+            IEasingFunction otherEasingFunctionBackwards = Substitute.For<IEasingFunction>();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(easingFunctionBackwards: otherEasingFunctionBackwards);
+
+            Assert.AreNotEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams7_DifferentReturnedValue()
+        {
+            Func<object, object, float, object> otherLerp = Substitute.For<Func<object, object, float, object>>();
+            Tween<object> tween = Build();
+            Tween<object> other = Build(lerp: otherLerp);
+
+            Assert.AreNotEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        private Tween<object> Build(
+            object start = null,
+            object end = null,
+            float durationS = 1.0f,
+            Action<object> setter = null,
+            IEasingFunction easingFunction = null,
+            IEasingFunction easingFunctionBackwards = null,
+            Func<object, object, float, object> lerp = null)
         {
             return
                 new Tween<object>(
-                    autoPlay,
-                    delayBeforeS,
-                    delayAfterS,
-                    repetitions,
-                    repetitionType,
-                    delayManagementRepetition,
-                    delayManagementRestart,
-                    _onStartIteration,
-                    _onStartPlay,
-                    _onEndPlay,
-                    _onEndIteration,
-                    _onPause,
-                    _onResume,
-                    _onRestart,
-                    _onComplete,
-                    _start,
-                    _end,
+                    true,
+                    0.0f,
+                    0.0f,
+                    0,
+                    RepetitionType.Restart,
+                    DelayManagement.BeforeAndAfter,
+                    DelayManagement.BeforeAndAfter,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    start ?? _start,
+                    end ?? _end,
                     durationS,
-                    _setter,
-                    _easingFunction,
-                    _easingFunctionBackwards,
-                    _lerp
+                    setter ?? _setter,
+                    easingFunction ?? _easingFunction,
+                    easingFunctionBackwards ?? _easingFunctionBackwards,
+                    lerp ?? _lerp
                 );
         }
     }
