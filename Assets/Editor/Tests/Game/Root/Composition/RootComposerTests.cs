@@ -8,6 +8,8 @@ using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
+using Infrastructure.Tweening.Composition;
+using Infrastructure.Unity;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -21,6 +23,7 @@ namespace Editor.Tests.Game.Root.Composition
         private ScopeBuildingContext _scopeBuildingContext;
         private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
+        private ICoroutineRunner _coroutineRunner;
 
         private RootComposer _rootComposer;
 
@@ -30,9 +33,16 @@ namespace Editor.Tests.Game.Root.Composition
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _configValueGetter = Substitute.For<IConfigValueGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
+            _coroutineRunner = Substitute.For<ICoroutineRunner>();
             _scopeBuildingContext = new ScopeBuildingContext();
 
-            _rootComposer = new RootComposer(_screenDefinitionGetter, _screenPlacement, _configValueGetter);
+            _rootComposer =
+                new RootComposer(
+                    _screenDefinitionGetter,
+                    _screenPlacement,
+                    _configValueGetter,
+                    _coroutineRunner
+                );
         }
 
         [Test]
@@ -42,10 +52,11 @@ namespace Editor.Tests.Game.Root.Composition
 
             List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers().ToList();
 
-            Assert.IsTrue(partialScopeComposers.Count == 3);
+            Assert.IsTrue(partialScopeComposers.Count == 4);
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is LoggingComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is ScreenLoadingComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is ConfiguringComposer));
+            Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is TweeningComposer));
         }
 
         [Test]
