@@ -19,6 +19,8 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public override bool Equals(object obj)
         {
+            // It is intended not to call base.Equals
+
             if (obj is null)
             {
                 return false;
@@ -39,10 +41,12 @@ namespace Infrastructure.DependencyInjection.Rules
 
         public override int GetHashCode()
         {
+            // It is intended not to call base.GetHashCode
+
             return HashCode.Combine(_inject);
         }
 
-        protected bool Equals([NotNull] InjectRule<T> other)
+        private bool Equals([NotNull] InjectRule<T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

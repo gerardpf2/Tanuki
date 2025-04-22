@@ -1,7 +1,6 @@
 using System;
 using Infrastructure.Gating;
 using Infrastructure.System;
-using Infrastructure.Unity;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -10,9 +9,8 @@ namespace Editor.Tests.Infrastructure.Gating
     public class GateValidatorTests
     {
         private IGateDefinitionGetter _gateDefinitionGetter;
-        private IProjectVersionGetter _projectVersionGetter;
         private Func<string, bool> _configValueGetter;
-        private IVersionComparer _versionComparer;
+        private IComparer _comparer;
         private string _projectVersion;
 
         private GateValidator _gateValidator;
@@ -21,15 +19,11 @@ namespace Editor.Tests.Infrastructure.Gating
         public void SetUp()
         {
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
-            _projectVersionGetter = Substitute.For<IProjectVersionGetter>();
             _configValueGetter = Substitute.For<Func<string, bool>>();
-            _versionComparer = Substitute.For<IVersionComparer>();
+            _comparer = Substitute.For<IComparer>();
             _projectVersion = "1.0";
 
-            _projectVersionGetter.Get().Returns(_projectVersion);
-
-            // Needs to be done after _projectVersionGetter setup
-            _gateValidator = new GateValidator(_gateDefinitionGetter, _configValueGetter, _projectVersionGetter, _versionComparer);
+            _gateValidator = new GateValidator(_gateDefinitionGetter, _configValueGetter, _projectVersion, _comparer);
         }
 
         [Test]
@@ -69,7 +63,7 @@ namespace Editor.Tests.Infrastructure.Gating
             gateDefinition.Version.Returns(gateVersion);
             const string gateKey = nameof(gateKey);
             _gateDefinitionGetter.Get(gateKey).Returns(gateDefinition);
-            _versionComparer
+            _comparer
                 .IsTrueThat(
                     Arg.Is<Version>(version => version.ToString() == _projectVersion),
                     Arg.Any<ComparisonOperator>(),

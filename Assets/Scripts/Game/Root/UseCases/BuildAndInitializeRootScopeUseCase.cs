@@ -17,22 +17,26 @@ namespace Game.Root.UseCases
         [NotNull] private readonly IConfigDefinitionGetter _configDefinitionGetter;
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
+        [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
         public BuildAndInitializeRootScopeUseCase(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] IConfigDefinitionGetter configDefinitionGetter,
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
-            [NotNull] IScreenPlacement rootScreenPlacement)
+            [NotNull] IScreenPlacement rootScreenPlacement,
+            [NotNull] ICoroutineRunner coroutineRunner)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
             ArgumentNullException.ThrowIfNull(configDefinitionGetter);
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
+            ArgumentNullException.ThrowIfNull(coroutineRunner);
 
             _gateDefinitionGetter = gateDefinitionGetter;
             _configDefinitionGetter = configDefinitionGetter;
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
+            _coroutineRunner = coroutineRunner;
         }
 
         public Scope Resolve()
@@ -58,6 +62,8 @@ namespace Game.Root.UseCases
             ruleAdder.Add(new InstanceRule<IScreenDefinitionGetter>(_screenDefinitionGetter));
 
             ruleAdder.Add(new InstanceRule<IScreenPlacement>(_rootScreenPlacement));
+
+            ruleAdder.Add(new InstanceRule<ICoroutineRunner>(_coroutineRunner));
 
             ruleAdder.Add(
                 new SingletonRule<IConfigValueGetter>(r =>
@@ -113,7 +119,8 @@ namespace Game.Root.UseCases
                     new RootComposer(
                         r.Resolve<IScreenDefinitionGetter>(),
                         r.Resolve<IScreenPlacement>(),
-                        r.Resolve<IConfigValueGetter>()
+                        r.Resolve<IConfigValueGetter>(),
+                        r.Resolve<ICoroutineRunner>()
                     )
                 )
             );
@@ -136,15 +143,15 @@ namespace Game.Root.UseCases
                     new GateValidator(
                         r.Resolve<IGateDefinitionGetter>(),
                         configKey => r.Resolve<IConfigValueGetter>().Get<bool>(configKey),
-                        r.Resolve<IProjectVersionGetter>(),
-                        r.Resolve<IVersionComparer>()
+                        r.Resolve<IProjectVersionGetter>().Get(),
+                        r.Resolve<IComparer>()
                     )
                 )
             );
 
             ruleAdder.Add(new SingletonRule<IConverter>(_ => new Converter()));
 
-            ruleAdder.Add(new SingletonRule<IVersionComparer>(_ => new VersionComparer()));
+            ruleAdder.Add(new SingletonRule<IComparer>(_ => new Comparer()));
 
             ruleAdder.Add(new SingletonRule<IProjectVersionGetter>(_ => new ProjectVersionGetter()));
         }

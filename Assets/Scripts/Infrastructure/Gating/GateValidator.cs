@@ -1,6 +1,5 @@
 using System;
 using Infrastructure.System;
-using Infrastructure.Unity;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
@@ -10,24 +9,24 @@ namespace Infrastructure.Gating
     {
         [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
         [NotNull] private readonly Func<string, bool> _configValueGetter;
-        [NotNull] private readonly IVersionComparer _versionComparer;
+        [NotNull] private readonly IComparer _comparer;
         [NotNull] private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] Func<string, bool> configValueGetter, // IConfigValueGetter creates a cyclic dependency between assemblies
-            [NotNull] IProjectVersionGetter projectVersionGetter,
-            [NotNull] IVersionComparer versionComparer)
+            [NotNull] string projectVersion, // IProjectVersionGetter creates a cyclic dependency between assemblies
+            [NotNull] IComparer comparer)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
             ArgumentNullException.ThrowIfNull(configValueGetter);
-            ArgumentNullException.ThrowIfNull(projectVersionGetter);
-            ArgumentNullException.ThrowIfNull(versionComparer);
+            ArgumentNullException.ThrowIfNull(projectVersion);
+            ArgumentNullException.ThrowIfNull(comparer);
 
             _gateDefinitionGetter = gateDefinitionGetter;
             _configValueGetter = configValueGetter;
-            _versionComparer = versionComparer;
-            _projectVersion = Version.Parse(projectVersionGetter.Get());
+            _projectVersion = Version.Parse(projectVersion);
+            _comparer = comparer;
         }
 
         public bool Validate(string gateKey)
@@ -55,7 +54,7 @@ namespace Infrastructure.Gating
 
             Version gateVersion = Version.Parse(version);
 
-            return _versionComparer.IsTrueThat(_projectVersion, versionComparisonOperator, gateVersion);
+            return _comparer.IsTrueThat(_projectVersion, versionComparisonOperator, gateVersion);
         }
     }
 }

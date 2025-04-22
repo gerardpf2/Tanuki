@@ -10,7 +10,9 @@
         "Gating",
         "Logging",
         "ScreenLoading",
-        "Configuring"
+        "Configuring",
+        "Unity",
+        "Tweening"
     ],
     "includePlatforms": [
         "Editor"

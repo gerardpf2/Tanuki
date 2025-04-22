@@ -45,7 +45,7 @@ namespace Infrastructure.DependencyInjection.Rules
             return HashCode.Combine(_ctor);
         }
 
-        protected bool Equals([NotNull] TransientRule<T> other)
+        private bool Equals([NotNull] TransientRule<T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

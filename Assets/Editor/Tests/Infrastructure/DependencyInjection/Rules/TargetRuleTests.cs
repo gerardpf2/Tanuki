@@ -46,7 +46,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         {
             TargetRule<object> other = _targetRule;
 
-            Assert.IsTrue(_targetRule.Equals(other)); // Assert.AreNotEqual cannot be used in here
+            Assert.IsTrue(_targetRule.Equals(other)); // Assert.AreEqual cannot be used in here
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_SameParams_SameReturnedValue()
+        public void GetHashCode_OtherSameParams_SameReturnedValue()
         {
             TargetRule<object> other = new(_ruleResolver, _key);
 
@@ -92,7 +92,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_DifferentParams1_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams1_DifferentReturnedValue()
         {
             IRuleResolver otherRuleResolver = Substitute.For<IRuleResolver>();
             TargetRule<object> other = new(otherRuleResolver, _key);
@@ -101,7 +101,7 @@ namespace Editor.Tests.Infrastructure.DependencyInjection.Rules
         }
 
         [Test]
-        public void GetHashCode_DifferentParams2_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams2_DifferentReturnedValue()
         {
             object otherKey = new();
             TargetRule<object> other = new(_ruleResolver, otherKey);

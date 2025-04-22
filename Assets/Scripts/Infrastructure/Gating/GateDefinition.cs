@@ -1,6 +1,6 @@
 using System;
 using Infrastructure.System;
-using Infrastructure.Unity;
+using Infrastructure.UnityUtils;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
