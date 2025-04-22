@@ -10,23 +10,23 @@ namespace Infrastructure.Gating
     {
         [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
         [NotNull] private readonly Func<string, bool> _configValueGetter;
-        [NotNull] private readonly IVersionComparer _versionComparer;
+        [NotNull] private readonly IComparer _comparer;
         [NotNull] private readonly Version _projectVersion;
 
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] Func<string, bool> configValueGetter, // IConfigValueGetter creates a cyclic dependency between assemblies
             [NotNull] IProjectVersionGetter projectVersionGetter,
-            [NotNull] IVersionComparer versionComparer)
+            [NotNull] IComparer comparer)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
             ArgumentNullException.ThrowIfNull(configValueGetter);
             ArgumentNullException.ThrowIfNull(projectVersionGetter);
-            ArgumentNullException.ThrowIfNull(versionComparer);
+            ArgumentNullException.ThrowIfNull(comparer);
 
             _gateDefinitionGetter = gateDefinitionGetter;
             _configValueGetter = configValueGetter;
-            _versionComparer = versionComparer;
+            _comparer = comparer;
             _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
 
@@ -55,7 +55,7 @@ namespace Infrastructure.Gating
 
             Version gateVersion = Version.Parse(version);
 
-            return _versionComparer.IsTrueThat(_projectVersion, versionComparisonOperator, gateVersion);
+            return _comparer.IsTrueThat(_projectVersion, versionComparisonOperator, gateVersion);
         }
     }
 }
