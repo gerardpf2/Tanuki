@@ -97,29 +97,13 @@ namespace Editor.Tests.Infrastructure.Tweening
             _setter.Received(1).Invoke(backwards ? _start : _end);
         }
 
-        [Test]
-        public void Equals_OtherNull_ReturnsFalse()
-        {
-            Tween<object> tween = Build();
-            const Tween<object> other = null;
-
-            Assert.IsFalse(tween.Equals(other)); // Assert.AreNotEqual cannot be used in here
-        }
-
-        [Test]
-        public void Equals_SameRef_ReturnsTrue()
-        {
-            Tween<object> tween = Build();
-            Tween<object> other = tween;
-
-            Assert.IsTrue(tween.Equals(other)); // Assert.AreEqual cannot be used in here
-        }
+        // Equals Null / ReferenceEquals already tested
 
         [Test]
         public void Equals_OtherWrongType_ReturnsFalse()
         {
             Tween<object> tween = Build();
-            object other = new();
+            Tween<string> other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null, 1.0f, Substitute.For<Action<string>>(), Substitute.For<IEasingFunction>(), Substitute.For<IEasingFunction>(), Substitute.For<Func<string, string, float, string>>());
 
             Assert.AreNotEqual(tween, other);
         }
