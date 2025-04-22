@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Infrastructure.Tweening.TweenBuilders
+namespace Infrastructure.Tweening.Builders
 {
     public abstract class SequenceBaseBuilderHelper<TBuilder> : TweenBaseBuilderHelper<TBuilder>, ISequenceBaseBuilderHelper<TBuilder>
     {
@@ -15,13 +15,6 @@ namespace Infrastructure.Tweening.TweenBuilders
             Tweens.Add(tween);
 
             return This;
-        }
-
-        protected override void CustomReset()
-        {
-            base.CustomReset();
-
-            Tweens.Clear();
         }
     }
 }

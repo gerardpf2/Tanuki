@@ -1,10 +1,10 @@
-namespace Infrastructure.Tweening.TweenBuilders
+namespace Infrastructure.Tweening.Builders
 {
     public class SequenceAsyncBuilder : SequenceBaseBuilderHelper<ISequenceAsyncBuilder>, ISequenceAsyncBuilder
     {
         protected override ISequenceAsyncBuilder This => this;
 
-        protected override ITween BuildTween()
+        public override ITween Build()
         {
             return
                 new SequenceAsync(
