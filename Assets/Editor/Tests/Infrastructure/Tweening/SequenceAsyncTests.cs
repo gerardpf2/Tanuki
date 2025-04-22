@@ -8,7 +8,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 {
     public class SequenceAsyncTests
     {
-        private IList<ITween> _tweens;
+        private IReadOnlyList<ITween> _tweens;
 
         [SetUp]
         public void SetUp()
