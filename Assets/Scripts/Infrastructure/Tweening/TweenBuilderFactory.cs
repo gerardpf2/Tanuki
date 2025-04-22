@@ -1,7 +1,8 @@
-using Infrastructure.System.Exceptions;
+using System;
 using Infrastructure.Tweening.Builders;
 using JetBrains.Annotations;
 using UnityEngine;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Infrastructure.Tweening
 {
@@ -26,14 +27,18 @@ namespace Infrastructure.Tweening
             return new SequenceBuilder();
         }
 
-        public ITweenBuilder<float> GetTweenBuilderFloat()
+        public ITweenBuilder<float> GetTweenBuilderFloat([NotNull] Action<float> setter)
         {
-            return new TweenBuilderFloat(_easingFunctionGetter);
+            ArgumentNullException.ThrowIfNull(setter);
+
+            return new TweenBuilderFloat(setter, _easingFunctionGetter);
         }
 
-        public ITweenBuilder<Vector3> GetTweenBuilderVector3()
+        public ITweenBuilder<Vector3> GetTweenBuilderVector3([NotNull] Action<Vector3> setter)
         {
-            return new TweenBuilderVector3(_easingFunctionGetter);
+            ArgumentNullException.ThrowIfNull(setter);
+
+            return new TweenBuilderVector3(setter, _easingFunctionGetter);
         }
     }
 }

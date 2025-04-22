@@ -9,7 +9,8 @@ namespace Infrastructure.Tweening
 {
     public abstract class SequenceBase : TweenBase
     {
-        [NotNull, ItemNotNull] private readonly List<ITween> _tweens = new();
+        [NotNull, ItemNotNull] private readonly IReadOnlyList<ITween> _tweens;
+        private readonly IEnumerable<ITween> _ctorTweens;
 
         protected SequenceBase(
             bool autoPlay,
@@ -31,12 +32,18 @@ namespace Infrastructure.Tweening
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
-            foreach (ITween tween in tweens)
+            _ctorTweens = tweens;
+
+            List<ITween> tweensCopy = new();
+
+            foreach (ITween tween in _ctorTweens)
             {
                 ArgumentNullException.ThrowIfNull(tween);
 
-                _tweens.Add(tween);
+                tweensCopy.Add(tween);
             }
+
+            _tweens = tweensCopy;
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
@@ -47,16 +54,16 @@ namespace Infrastructure.Tweening
             return Play(deltaTimeS, backwards, _tweens);
         }
 
-        protected override void OnRestart()
+        protected override void OnPrepareRepetition()
         {
-            base.OnRestart();
+            base.OnPrepareRepetition();
 
             RestartTweens();
         }
 
-        protected override void OnPrepareRepetition()
+        protected override void OnRestart()
         {
-            base.OnPrepareRepetition();
+            base.OnRestart();
 
             RestartTweens();
         }
@@ -74,6 +81,33 @@ namespace Infrastructure.Tweening
             {
                 tween.Restart();
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!base.Equals(obj)) // Already checks null / ReferenceEquals
+            {
+                return false;
+            }
+
+            if (obj is not SequenceBase other)
+            {
+                return false;
+            }
+
+            return Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), _ctorTweens);
+        }
+
+        private bool Equals([NotNull] SequenceBase other)
+        {
+            ArgumentNullException.ThrowIfNull(other);
+
+            return Equals(_ctorTweens, other._ctorTweens);
         }
     }
 }

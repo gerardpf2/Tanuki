@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Infrastructure.Unity.Utils
 {
-    // TODO: Test
     public static class Vector3Utils
     {
         public static Vector3 WithX(this Vector3 source, float value)

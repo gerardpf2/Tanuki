@@ -7,7 +7,6 @@ namespace Infrastructure.System
 {
     public class Comparer : IComparer
     {
-        // TODO: Test
         public bool IsTrueThat<T>([NotNull] T valueA, ComparisonOperator comparisonOperator, T valueB) where T : IComparable
         {
             ArgumentNullException.ThrowIfNull(valueA);

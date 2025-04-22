@@ -1,7 +1,6 @@
 using System;
 using Infrastructure.Gating;
 using Infrastructure.System;
-using Infrastructure.Unity;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -10,7 +9,6 @@ namespace Editor.Tests.Infrastructure.Gating
     public class GateValidatorTests
     {
         private IGateDefinitionGetter _gateDefinitionGetter;
-        private IProjectVersionGetter _projectVersionGetter;
         private Func<string, bool> _configValueGetter;
         private IComparer _comparer;
         private string _projectVersion;
@@ -21,15 +19,11 @@ namespace Editor.Tests.Infrastructure.Gating
         public void SetUp()
         {
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
-            _projectVersionGetter = Substitute.For<IProjectVersionGetter>();
             _configValueGetter = Substitute.For<Func<string, bool>>();
             _comparer = Substitute.For<IComparer>();
             _projectVersion = "1.0";
 
-            _projectVersionGetter.Get().Returns(_projectVersion);
-
-            // Needs to be done after _projectVersionGetter setup
-            _gateValidator = new GateValidator(_gateDefinitionGetter, _configValueGetter, _projectVersionGetter, _comparer);
+            _gateValidator = new GateValidator(_gateDefinitionGetter, _configValueGetter, _projectVersion, _comparer);
         }
 
         [Test]

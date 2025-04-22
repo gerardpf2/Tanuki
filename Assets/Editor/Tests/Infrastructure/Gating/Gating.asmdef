@@ -5,8 +5,7 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Gating",
-        "System_",
-        "Unity"
+        "System_"
     ],
     "includePlatforms": [
         "Editor"

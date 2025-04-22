@@ -10,6 +10,7 @@ using Infrastructure.ScreenLoading.Composition;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Tweening.Composition;
 using Infrastructure.Unity;
+using Infrastructure.Unity.Composition;
 using JetBrains.Annotations;
 
 namespace Game.Root.Composition
@@ -38,17 +39,6 @@ namespace Game.Root.Composition
             _coroutineRunner = coroutineRunner;
         }
 
-        // TODO: Test
-        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
-        {
-            ArgumentNullException.ThrowIfNull(ruleAdder);
-            ArgumentNullException.ThrowIfNull(ruleFactory);
-
-            base.AddRules(ruleAdder, ruleFactory);
-
-            ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
-        }
-
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
             return base
@@ -56,7 +46,8 @@ namespace Game.Root.Composition
                 .Append(new LoggingComposer())
                 .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement))
                 .Append(new ConfiguringComposer(_configValueGetter))
-                .Append(new TweeningComposer());
+                .Append(new TweeningComposer())
+                .Append(new UnityComposer(_coroutineRunner));
         }
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()

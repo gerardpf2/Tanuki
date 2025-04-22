@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Infrastructure.System;
+using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
@@ -25,10 +28,9 @@ namespace Infrastructure.Tweening
 
         private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
         private TweenState _state = TweenState.SetUp;
-        private TweenState? _stateBeforePause;
         private float _waitTimeS;
-        private bool _setupDone;
         private int _iteration;
+        private bool _paused;
 
         public TweenState State
         {
@@ -40,14 +42,32 @@ namespace Infrastructure.Tweening
                     InvalidOperationException.Throw($"State is already {value}");
                 }
 
-                if (value is TweenState.Pause)
-                {
-                    _stateBeforePause = State;
-                }
-
                 _state = value;
 
                 CheckCallbackOnStateUpdated();
+            }
+        }
+
+        public bool Paused
+        {
+            get => _paused;
+            private set
+            {
+                if (Paused == value)
+                {
+                    return;
+                }
+
+                _paused = value;
+
+                if (Paused)
+                {
+                    _onPause?.Invoke();
+                }
+                else
+                {
+                    _onResume?.Invoke();
+                }
             }
         }
 
@@ -91,94 +111,77 @@ namespace Infrastructure.Tweening
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        public float Update([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards = false)
+        public float Step([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards = false)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
-            do
+            if (Paused)
             {
-                switch (State)
-                {
-                    case TweenState.SetUp:
-                        ProcessSetUp();
-                        break;
-                    case TweenState.StartIteration:
-                        ProcessStartIteration();
-                        break;
-                    case TweenState.WaitBefore:
-                        deltaTimeS = ProcessWaitBefore(deltaTimeS);
-                        break;
-                    case TweenState.StartPlay:
-                        ProcessStartPlay();
-                        break;
-                    case TweenState.Play:
-                        deltaTimeS = ProcessPlay(deltaTimeS, backwards);
-                        break;
-                    case TweenState.EndPlay:
-                        ProcessEndPlay();
-                        break;
-                    case TweenState.WaitAfter:
-                        deltaTimeS = ProcessWaitAfter(deltaTimeS);
-                        break;
-                    case TweenState.EndIteration:
-                        ProcessEndIteration();
-                        break;
-                    case TweenState.PrepareRepetition:
-                        ProcessPrepareRepetition();
-                        break;
-                    case TweenState.Pause:
-                        return 0.0f;
-                    case TweenState.Resume:
-                        ProcessResume();
-                        break;
-                    case TweenState.Restart:
-                        ProcessRestart();
-                        break;
-                    case TweenState.Complete:
-                        return deltaTimeS;
-                    default:
-                        ArgumentOutOfRangeException.Throw(State);
-                        return 0.0f;
-                }
-            } while (deltaTimeS > 0.0f);
+                return 0.0f;
+            }
+
+            switch (State)
+            {
+                case TweenState.SetUp:
+                    ProcessSetUp();
+                    break;
+                case TweenState.StartIteration:
+                    ProcessStartIteration();
+                    break;
+                case TweenState.WaitBefore:
+                    deltaTimeS = ProcessWaitBefore(deltaTimeS);
+                    break;
+                case TweenState.StartPlay:
+                    ProcessStartPlay();
+                    break;
+                case TweenState.Play:
+                    deltaTimeS = ProcessPlay(deltaTimeS, backwards);
+                    break;
+                case TweenState.EndPlay:
+                    ProcessEndPlay();
+                    break;
+                case TweenState.WaitAfter:
+                    deltaTimeS = ProcessWaitAfter(deltaTimeS);
+                    break;
+                case TweenState.EndIteration:
+                    ProcessEndIteration();
+                    break;
+                case TweenState.PrepareRepetition:
+                    ProcessPrepareRepetition();
+                    break;
+                case TweenState.Complete:
+                    break;
+                default:
+                    ArgumentOutOfRangeException.Throw(State);
+                    return 0.0f;
+            }
 
             return deltaTimeS;
         }
 
-        public bool Pause()
+        public void Pause()
         {
-            if (State is not (TweenState.WaitBefore or TweenState.Play or TweenState.WaitAfter))
-            {
-                return false;
-            }
-
-            State = TweenState.Pause;
-
-            return true;
+            Paused = true;
         }
 
-        public bool Resume()
+        public void Resume()
         {
-            if (State is not TweenState.Pause)
-            {
-                return false;
-            }
-
-            State = TweenState.Resume;
-
-            return true;
+            Paused = false;
         }
 
-        public bool Restart()
+        public void Restart()
         {
-            if (State is TweenState.Restart)
-            {
-                return false;
-            }
+            State = TweenState.StartIteration;
 
-            State = TweenState.Restart;
+            Backwards = false;
 
-            return true;
+            _delayManagement = _delayManagementRestart;
+            _waitTimeS = 0.0f;
+            _iteration = 0;
+
+            _onRestart?.Invoke();
+
+            OnRestart();
         }
 
         private void CheckCallbackOnStateUpdated()
@@ -207,15 +210,6 @@ namespace Infrastructure.Tweening
                     break;
                 case TweenState.PrepareRepetition:
                     break;
-                case TweenState.Pause:
-                    _onPause?.Invoke();
-                    break;
-                case TweenState.Resume:
-                    _onResume?.Invoke();
-                    break;
-                case TweenState.Restart:
-                    _onRestart?.Invoke();
-                    break;
                 case TweenState.Complete:
                     _onComplete?.Invoke();
                     break;
@@ -227,9 +221,12 @@ namespace Infrastructure.Tweening
 
         private void ProcessSetUp()
         {
-            State = _autoPlay || _setupDone ? TweenState.StartIteration : TweenState.Pause;
+            State = TweenState.StartIteration;
 
-            _setupDone = true;
+            if (!_autoPlay)
+            {
+                Pause();
+            }
         }
 
         private void ProcessStartIteration()
@@ -310,29 +307,6 @@ namespace Infrastructure.Tweening
             OnPrepareRepetition();
         }
 
-        private void ProcessResume()
-        {
-            InvalidOperationException.ThrowIfNull(_stateBeforePause);
-
-            State = _stateBeforePause.Value;
-
-            _stateBeforePause = null;
-        }
-
-        private void ProcessRestart()
-        {
-            State = TweenState.StartIteration;
-
-            Backwards = false;
-
-            _delayManagement = _delayManagementRestart;
-            _stateBeforePause = null;
-            _waitTimeS = 0.0f;
-            _iteration = 0;
-
-            OnRestart();
-        }
-
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         private float ProcessWait(
             [Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS,
@@ -365,8 +339,73 @@ namespace Infrastructure.Tweening
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         protected abstract float Play([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards);
 
+        protected virtual void OnPrepareRepetition() { }
+
         protected virtual void OnRestart() { }
 
-        protected virtual void OnPrepareRepetition() { }
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj is not TweenBase other)
+            {
+                return false;
+            }
+
+            return Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            HashCode hashCode = new();
+
+            hashCode.Add(_autoPlay);
+            hashCode.Add(_delayBeforeS);
+            hashCode.Add(_delayAfterS);
+            hashCode.Add(_repetitions);
+            hashCode.Add(_repetitionType);
+            hashCode.Add(_delayManagementRepetition);
+            hashCode.Add(_delayManagementRestart);
+            hashCode.Add(_onStartIteration);
+            hashCode.Add(_onStartPlay);
+            hashCode.Add(_onEndPlay);
+            hashCode.Add(_onEndIteration);
+            hashCode.Add(_onPause);
+            hashCode.Add(_onResume);
+            hashCode.Add(_onRestart);
+            hashCode.Add(_onComplete);
+
+            return hashCode.ToHashCode();
+        }
+
+        private bool Equals([NotNull] TweenBase other)
+        {
+            ArgumentNullException.ThrowIfNull(other);
+
+            return
+                _autoPlay.Equals(other._autoPlay) &&
+                _delayBeforeS.Equals(other._delayBeforeS) &&
+                _delayAfterS.Equals(other._delayAfterS) &&
+                _repetitions.Equals(other._repetitions) &&
+                EqualityComparer<RepetitionType>.Default.Equals(_repetitionType, other._repetitionType) &&
+                EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRepetition, other._delayManagementRepetition) &&
+                EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRestart, other._delayManagementRestart) &&
+                Equals(_onStartIteration, other._onStartIteration) &&
+                Equals(_onStartPlay, other._onStartPlay) &&
+                Equals(_onEndPlay, other._onEndPlay) &&
+                Equals(_onEndIteration, other._onEndIteration) &&
+                Equals(_onPause, other._onPause) &&
+                Equals(_onResume, other._onResume) &&
+                Equals(_onRestart, other._onRestart) &&
+                Equals(_onComplete, other._onComplete);
+        }
     }
 }

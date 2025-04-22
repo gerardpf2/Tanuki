@@ -10,6 +10,8 @@ namespace Editor.Tests.Infrastructure.ScreenLoading.Composition
 {
     public class ScreenLoadingComposerTests
     {
+        // Tested behaviours that differ from ScopeComposer
+
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private ScopeBuildingContext _scopeBuildingContext;
         private IScreenPlacement _screenPlacement;

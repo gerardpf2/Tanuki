@@ -1,6 +1,5 @@
 using System;
 using Infrastructure.System;
-using Infrastructure.Unity;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
@@ -16,18 +15,18 @@ namespace Infrastructure.Gating
         public GateValidator(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] Func<string, bool> configValueGetter, // IConfigValueGetter creates a cyclic dependency between assemblies
-            [NotNull] IProjectVersionGetter projectVersionGetter,
+            [NotNull] string projectVersion, // IProjectVersionGetter creates a cyclic dependency between assemblies
             [NotNull] IComparer comparer)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
             ArgumentNullException.ThrowIfNull(configValueGetter);
-            ArgumentNullException.ThrowIfNull(projectVersionGetter);
+            ArgumentNullException.ThrowIfNull(projectVersion);
             ArgumentNullException.ThrowIfNull(comparer);
 
             _gateDefinitionGetter = gateDefinitionGetter;
             _configValueGetter = configValueGetter;
+            _projectVersion = Version.Parse(projectVersion);
             _comparer = comparer;
-            _projectVersion = Version.Parse(projectVersionGetter.Get());
         }
 
         public bool Validate(string gateKey)

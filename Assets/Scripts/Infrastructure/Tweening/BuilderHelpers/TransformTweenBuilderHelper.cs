@@ -3,7 +3,6 @@ using Infrastructure.Unity;
 using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UIElements;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
@@ -29,11 +28,11 @@ namespace Infrastructure.Tweening.BuilderHelpers
             ArgumentNullException.ThrowIfNull(transform);
 
             return
-                _tweenBuilderFactory.GetTweenBuilderVector3()
+                _tweenBuilderFactory
+                    .GetTweenBuilderVector3(value => transform.position = transform.position.With(value, axis))
                     .WithStart(transform.position)
                     .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value => transform.position = transform.position.With(value, axis));
+                    .WithDurationS(durationS);
         }
 
         public ISequenceAsyncBuilder Jump([NotNull] Transform transform, Vector3 end, float height, float durationS)
@@ -45,30 +44,32 @@ namespace Infrastructure.Tweening.BuilderHelpers
 
             ITween moveXZ =
                 Move(transform, end, durationS, Axis.X | Axis.Z)
-                    .WithEasingMode(EasingMode.Linear)
+                    .WithEasingType(EasingType.Linear)
                     .Build();
 
             ITween moveYStartToMiddle =
                 Move(transform, middle, 0.5f * durationS, Axis.Y)
-                    .WithEasingMode(EasingMode.EaseOut)
-                    .WithComplementaryEasingModeBackwards(true)
+                    .WithEasingType(EasingType.OutQuad)
+                    .WithComplementaryEasingTypeBackwards(true)
                     .Build();
 
             ITween moveYMiddleToEnd =
                 Move(transform, end, 0.5f * durationS, Axis.Y)
                     .WithStart(middle)
-                    .WithEasingMode(EasingMode.EaseIn)
-                    .WithComplementaryEasingModeBackwards(true)
+                    .WithEasingType(EasingType.InQuad)
+                    .WithComplementaryEasingTypeBackwards(true)
                     .Build();
 
             ITween moveY =
-                _tweenBuilderFactory.GetSequenceBuilder()
+                _tweenBuilderFactory
+                    .GetSequenceBuilder()
                     .AddTween(moveYStartToMiddle)
                     .AddTween(moveYMiddleToEnd)
                     .Build();
 
             return
-                _tweenBuilderFactory.GetSequenceAsyncBuilder()
+                _tweenBuilderFactory
+                    .GetSequenceAsyncBuilder()
                     .AddTween(moveXZ)
                     .AddTween(moveY);
         }
@@ -82,16 +83,16 @@ namespace Infrastructure.Tweening.BuilderHelpers
         {
             ArgumentNullException.ThrowIfNull(transform);
 
-            Vector3 start = transform.rotation.eulerAngles;
+            Vector3 start = transform.eulerAngles;
 
             end = GetRotateEnd(start, end, rotationType);
 
             return
-                _tweenBuilderFactory.GetTweenBuilderVector3()
+                _tweenBuilderFactory
+                    .GetTweenBuilderVector3(value => transform.eulerAngles = transform.eulerAngles.With(value, axis))
                     .WithStart(start)
                     .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value => transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.With(value, axis)));
+                    .WithDurationS(durationS);
         }
 
         public ITweenBuilder<Vector3> Scale(
@@ -103,11 +104,11 @@ namespace Infrastructure.Tweening.BuilderHelpers
             ArgumentNullException.ThrowIfNull(transform);
 
             return
-                _tweenBuilderFactory.GetTweenBuilderVector3()
+                _tweenBuilderFactory
+                    .GetTweenBuilderVector3(value => transform.localScale = transform.localScale.With(value, axis))
                     .WithStart(transform.localScale)
                     .WithEnd(end)
-                    .WithDurationS(durationS)
-                    .WithSetter(value => transform.localScale = transform.localScale.With(value, axis));
+                    .WithDurationS(durationS);
         }
 
         private static Vector3 GetRotateEnd(Vector3 start, Vector3 end, RotationType rotationType)

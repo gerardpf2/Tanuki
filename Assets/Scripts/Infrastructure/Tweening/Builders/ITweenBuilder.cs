@@ -1,6 +1,4 @@
-using System;
 using JetBrains.Annotations;
-using UnityEngine.UIElements;
 
 namespace Infrastructure.Tweening.Builders
 {
@@ -16,12 +14,9 @@ namespace Infrastructure.Tweening.Builders
         ITweenBuilder<T> WithDurationS(float durationS);
 
         [NotNull]
-        ITweenBuilder<T> WithSetter(Action<T> setter);
+        ITweenBuilder<T> WithEasingType(EasingType easingType);
 
         [NotNull]
-        ITweenBuilder<T> WithEasingMode(EasingMode easingMode);
-
-        [NotNull]
-        ITweenBuilder<T> WithComplementaryEasingModeBackwards(bool complementaryEasingModeBackwards);
+        ITweenBuilder<T> WithComplementaryEasingTypeBackwards(bool complementaryEasingTypeBackwards);
     }
 }

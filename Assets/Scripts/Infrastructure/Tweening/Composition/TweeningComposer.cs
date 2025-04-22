@@ -23,7 +23,14 @@ namespace Infrastructure.Tweening.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IEasingFunctionGetter>(_ => new EasingFunctionGetter()));
+            ruleAdder.Add(ruleFactory.GetSingleton<IEasingFunctionFactory>(_ => new EasingFunctionFactory()));
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IEasingFunctionGetter>(r =>
+                    new EasingFunctionGetter(
+                        r.Resolve<IEasingFunctionFactory>())
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ITweenBuilderFactory>(r =>
@@ -36,7 +43,8 @@ namespace Infrastructure.Tweening.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ITweenRunner>(r =>
                     new TweenRunner(
-                        r.Resolve<ICoroutineRunner>()
+                        r.Resolve<ICoroutineRunner>(),
+                        r.Resolve<IDeltaTimeGetter>()
                     )
                 )
             );
