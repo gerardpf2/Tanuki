@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.UseCases
 {
-    public class LoadGameplayScreen : ILoadGameplayScreen
+    public class LoadGameplay : ILoadGameplay
     {
         [NotNull] private readonly IScreenLoader _screenLoader;
 
-        public LoadGameplayScreen([NotNull] IScreenLoader screenLoader)
+        public LoadGameplay([NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(screenLoader);
 

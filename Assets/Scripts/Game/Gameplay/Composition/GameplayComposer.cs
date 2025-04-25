@@ -16,8 +16,8 @@ namespace Game.Gameplay.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ILoadGameplayScreen>(r =>
-                    new LoadGameplayScreen(
+                ruleFactory.GetSingleton<ILoadGameplay>(r =>
+                    new LoadGameplay(
                         r.Resolve<IScreenLoader>()
                     )
                 )

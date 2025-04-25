@@ -1,6 +1,6 @@
 namespace Game.Gameplay.UseCases
 {
-    public interface ILoadGameplayScreen
+    public interface ILoadGameplay
     {
         void Resolve();
     }
