@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Composition;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
@@ -52,7 +53,10 @@ namespace Game.Root.Composition
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
-            return base.GetChildScopeComposers().Append(new ModelViewViewModelComposer());
+            return base
+                .GetChildScopeComposers()
+                .Append(new ModelViewViewModelComposer())
+                .Append(new GameComposer());
         }
     }
 }
