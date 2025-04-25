@@ -1,10 +1,10 @@
-using Game.Features.Gameplay.UseCases;
+using Game.Gameplay.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Features.Gameplay.Composition
+namespace Game.Gameplay.Composition
 {
     public class GameplayComposer : ScopeComposer
     {

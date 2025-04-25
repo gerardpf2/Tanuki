@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Features.Gameplay.Composition;
-using Game.Features.Gameplay.UseCases;
+using Game.Gameplay.Composition;
+using Game.Gameplay.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -21,7 +21,7 @@ namespace Game.Composition
 
             base.Initialize(ruleResolver);
 
-            ruleResolver.Resolve<ILoadGameplayScreen>().Resolve();
+            ruleResolver.Resolve<ILoadGameplayScreen>().Resolve(); // TODO
         }
     }
 }

@@ -2,7 +2,7 @@ using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Features.Gameplay.UseCases
+namespace Game.Gameplay.UseCases
 {
     public class LoadGameplayScreen : ILoadGameplayScreen
     {

@@ -1,4 +1,4 @@
-namespace Game.Features.Gameplay.UseCases
+namespace Game.Gameplay.UseCases
 {
     public interface ILoadGameplayScreen
     {
