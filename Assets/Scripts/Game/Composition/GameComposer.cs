@@ -21,7 +21,7 @@ namespace Game.Composition
 
             base.Initialize(ruleResolver);
 
-            ruleResolver.Resolve<ILoadGameplay>().Resolve(); // TODO
+            ruleResolver.Resolve<ILoadGameplay>().Resolve("Test"); // TODO
         }
     }
 }

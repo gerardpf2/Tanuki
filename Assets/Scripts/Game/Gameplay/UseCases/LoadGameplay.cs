@@ -1,3 +1,4 @@
+using Game.Gameplay.View;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -15,9 +16,9 @@ namespace Game.Gameplay.UseCases
             _screenLoader = screenLoader;
         }
 
-        public void Resolve()
+        public void Resolve(string boardId)
         {
-            _screenLoader.Load("Gameplay");
+            _screenLoader.Load("Gameplay", new GameplayViewData(boardId));
         }
     }
 }
