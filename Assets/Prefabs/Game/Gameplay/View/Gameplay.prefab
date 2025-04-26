@@ -211,6 +211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4392792618915613607}
+  - component: {fileID: 3298602903235670754}
   m_Layer: 0
   m_Name: BoardHolder
   m_TagString: Untagged
@@ -238,6 +239,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3298602903235670754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8991211399905830382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af23897933f54299bc4e20c33e0abbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 3713900644408999983}
+  _key: BoardViewData
+  _gameObject: {fileID: 5651827824569271605}
 --- !u!1 &9093016455285510126
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,6 +426,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16df6d8bc2b74af42ab2ff4076cfea4e, type: 3}
+--- !u!1 &5651827824569271605 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5214830546546539606, guid: 16df6d8bc2b74af42ab2ff4076cfea4e, type: 3}
+  m_PrefabInstance: {fileID: 446313444365171043}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6653825572884015762 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6514101359585039345, guid: 16df6d8bc2b74af42ab2ff4076cfea4e, type: 3}
