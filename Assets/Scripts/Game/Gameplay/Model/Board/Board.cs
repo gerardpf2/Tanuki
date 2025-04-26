@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Model.Board.Pieces;
 using Game.Gameplay.Model.Board.Utils;
+using Game.Gameplay.Utils;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -9,12 +10,12 @@ namespace Game.Gameplay.Model.Board
 {
     public class Board : IBoard
     {
-        [NotNull] private readonly IDictionary<IPiece, Coordinate> _sourceCoordinates = new Dictionary<IPiece, Coordinate>();
+        [NotNull] private readonly IDictionary<IPiece, Coordinate> _pieceSourceCoordinates = new Dictionary<IPiece, Coordinate>();
         [NotNull] private readonly IPiece[,] _pieces;
 
-        public int Rows => _pieces.GetLength(0);
+        public int Rows { get; }
 
-        public int Columns => _pieces.GetLength(1);
+        public int Columns { get; }
 
         public Board(
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
@@ -23,6 +24,9 @@ namespace Game.Gameplay.Model.Board
             ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
 
+            Rows = rows;
+            Columns = columns;
+
             _pieces = new IPiece[rows, columns];
         }
 
@@ -30,12 +34,12 @@ namespace Game.Gameplay.Model.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            if (_sourceCoordinates.ContainsKey(piece))
+            if (_pieceSourceCoordinates.ContainsKey(piece))
             {
                 InvalidOperationException.Throw(); // TODO
             }
 
-            _sourceCoordinates.Add(piece, sourceCoordinate);
+            _pieceSourceCoordinates.Add(piece, sourceCoordinate);
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
@@ -62,12 +66,12 @@ namespace Game.Gameplay.Model.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            if (!_sourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
+            if (!_pieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
             {
                 InvalidOperationException.Throw(); // TODO
             }
 
-            _sourceCoordinates.Remove(piece);
+            _pieceSourceCoordinates.Remove(piece);
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
@@ -84,14 +88,14 @@ namespace Game.Gameplay.Model.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            if (!_sourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
+            if (!_pieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
             {
                 InvalidOperationException.Throw(); // TODO
             }
 
             Remove(piece);
 
-            Coordinate newSourceCoordinate = new(sourceCoordinate.Row + rowOffset, sourceCoordinate.Column + columnOffset);
+            Coordinate newSourceCoordinate = sourceCoordinate.WithOffset(rowOffset, columnOffset);
 
             Add(piece, newSourceCoordinate);
         }

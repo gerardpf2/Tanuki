@@ -1,4 +1,4 @@
-namespace Game.Gameplay.Model.Board
+namespace Game.Gameplay
 {
     // TODO
     public enum PieceType
