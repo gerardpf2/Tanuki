@@ -5,6 +5,8 @@ namespace Game.Gameplay.Model.Board.Pieces
 {
     public interface IPiece
     {
+        bool Alive { get; }
+
         [NotNull]
         IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
     }

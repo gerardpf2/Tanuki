@@ -6,7 +6,9 @@ namespace Game.Gameplay.Model.Board
     {
         public IPiece GetTest()
         {
-            return new Test();
+            // TODO
+
+            return new Test(true, 0);
         }
     }
 }
