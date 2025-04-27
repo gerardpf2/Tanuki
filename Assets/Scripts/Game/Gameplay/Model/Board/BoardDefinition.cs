@@ -39,6 +39,6 @@ namespace Game.Gameplay.Model.Board
             }
         }
 
-        public IEnumerable<PiecePlacement> PiecePlacements => _piecePlacements;
+        public IEnumerable<IPiecePlacement> PiecePlacements => _piecePlacements;
     }
 }

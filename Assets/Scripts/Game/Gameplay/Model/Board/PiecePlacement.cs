@@ -6,7 +6,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 namespace Game.Gameplay.Model.Board
 {
     [Serializable]
-    public class PiecePlacement
+    public class PiecePlacement : IPiecePlacement
     {
         [SerializeField] private PieceType _pieceType;
         [SerializeField, Min(0)] private int _row;

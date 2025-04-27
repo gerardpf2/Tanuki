@@ -17,12 +17,12 @@ namespace Game.Gameplay.Model.PhaseResolution.Phases
             _pieceGetter = pieceGetter;
         }
 
-        public void Resolve([NotNull] IBoard board, [NotNull, ItemNotNull] IEnumerable<PiecePlacement> piecePlacements)
+        public void Resolve([NotNull] IBoard board, [NotNull, ItemNotNull] IEnumerable<IPiecePlacement> piecePlacements)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(piecePlacements);
 
-            foreach (PiecePlacement piecePlacement in piecePlacements)
+            foreach (IPiecePlacement piecePlacement in piecePlacements)
             {
                 ArgumentNullException.ThrowIfNull(piecePlacement);
 

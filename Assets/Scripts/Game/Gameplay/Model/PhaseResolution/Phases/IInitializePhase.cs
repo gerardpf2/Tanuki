@@ -5,6 +5,6 @@ namespace Game.Gameplay.Model.PhaseResolution.Phases
 {
     public interface IInitializePhase
     {
-        void Resolve(IBoard board, IEnumerable<PiecePlacement> piecePlacements);
+        void Resolve(IBoard board, IEnumerable<IPiecePlacement> piecePlacements);
     }
 }

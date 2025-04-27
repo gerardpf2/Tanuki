@@ -17,7 +17,7 @@ namespace Game.Gameplay.Model.PhaseResolution
             _initializePhase = initializePhase;
         }
 
-        public void InitializeAndResolve(IBoard board, IEnumerable<PiecePlacement> piecePlacements)
+        public void InitializeAndResolve(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
         {
             _initializePhase.Resolve(board, piecePlacements);
 
