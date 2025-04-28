@@ -39,7 +39,7 @@ namespace Game.Gameplay
 
             _boardView.Initialize(rows, columns);
 
-            _phaseResolver.InitializeAndResolve(_board, boardDefinition.PiecePlacements);
+            _phaseResolver.ResolveInstantiateInitial(_board, boardDefinition.PiecePlacements);
         }
     }
 }

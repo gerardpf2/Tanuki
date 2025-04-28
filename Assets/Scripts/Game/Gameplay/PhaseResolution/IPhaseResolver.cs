@@ -5,7 +5,7 @@ namespace Game.Gameplay.PhaseResolution
 {
     public interface IPhaseResolver
     {
-        void InitializeAndResolve(IBoard board, IEnumerable<IPiecePlacement> piecePlacements);
+        void ResolveInstantiateInitial(IBoard board, IEnumerable<IPiecePlacement> piecePlacements);
 
         void Resolve(IBoard board);
     }

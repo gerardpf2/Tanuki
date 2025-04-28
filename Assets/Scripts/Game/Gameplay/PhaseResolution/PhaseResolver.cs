@@ -8,18 +8,18 @@ namespace Game.Gameplay.PhaseResolution
 {
     public class PhaseResolver : IPhaseResolver
     {
-        [NotNull] private readonly IInitializePhase _initializePhase;
+        [NotNull] private readonly IInstantiateInitial _instantiateInitial;
 
-        public PhaseResolver([NotNull] IInitializePhase initializePhase)
+        public PhaseResolver([NotNull] IInstantiateInitial instantiateInitial)
         {
-            ArgumentNullException.ThrowIfNull(initializePhase);
+            ArgumentNullException.ThrowIfNull(instantiateInitial);
 
-            _initializePhase = initializePhase;
+            _instantiateInitial = instantiateInitial;
         }
 
-        public void InitializeAndResolve(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
+        public void ResolveInstantiateInitial(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
         {
-            _initializePhase.Resolve(board, piecePlacements);
+            _instantiateInitial.Resolve(board, piecePlacements);
 
             Resolve(board);
         }

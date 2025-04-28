@@ -7,13 +7,13 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class InitializePhase : IInitializePhase
+    public class InstantiateInitial : IInstantiateInitial
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        public InitializePhase(
+        public InstantiateInitial(
             [NotNull] IPieceGetter pieceGetter,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
