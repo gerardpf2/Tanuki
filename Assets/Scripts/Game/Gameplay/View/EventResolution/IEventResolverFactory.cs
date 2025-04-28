@@ -1,8 +1,8 @@
 using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.View.EventsResolution.EventResolvers;
+using Game.Gameplay.View.EventResolution.EventResolvers;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.EventsResolution
+namespace Game.Gameplay.View.EventResolution
 {
     public interface IEventResolverFactory
     {

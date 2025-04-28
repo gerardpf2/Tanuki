@@ -2,7 +2,7 @@ using Game.Gameplay.EventEnqueueing.Events;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.EventsResolution
+namespace Game.Gameplay.View.EventResolution
 {
     public class EventsResolver : IEventsResolver
     {

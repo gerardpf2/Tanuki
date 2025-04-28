@@ -1,6 +1,6 @@
 using Game.Gameplay.EventEnqueueing.Events;
 
-namespace Game.Gameplay.View.EventsResolution.EventResolvers
+namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
     public interface IEventResolver<in T> where T : IEvent
     {
