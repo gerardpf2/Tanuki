@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Model.Board;
 using Game.Gameplay.Model.Board.Pieces;
 using Infrastructure.System.Exceptions;
@@ -9,12 +10,21 @@ namespace Game.Gameplay.Model.PhaseResolution.Phases
     public class InitializePhase : IInitializePhase
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
+        [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
+        [NotNull] private readonly IEventFactory _eventFactory;
 
-        public InitializePhase([NotNull] IPieceGetter pieceGetter)
+        public InitializePhase(
+            [NotNull] IPieceGetter pieceGetter,
+            [NotNull] IEventEnqueuer eventEnqueuer,
+            [NotNull] IEventFactory eventFactory)
         {
             ArgumentNullException.ThrowIfNull(pieceGetter);
+            ArgumentNullException.ThrowIfNull(eventEnqueuer);
+            ArgumentNullException.ThrowIfNull(eventFactory);
 
             _pieceGetter = pieceGetter;
+            _eventEnqueuer = eventEnqueuer;
+            _eventFactory = eventFactory;
         }
 
         public void Resolve([NotNull] IBoard board, [NotNull, ItemNotNull] IEnumerable<IPiecePlacement> piecePlacements)
@@ -31,7 +41,13 @@ namespace Game.Gameplay.Model.PhaseResolution.Phases
 
                 board.Add(piece, sourceCoordinate);
 
-                // TODO: Add action
+                _eventEnqueuer.Enqueue(
+                    _eventFactory.GetInstantiate(
+                        piece,
+                        piecePlacement.PieceType,
+                        sourceCoordinate
+                    )
+                );
             }
         }
     }
