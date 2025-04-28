@@ -1,5 +1,5 @@
+using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.Model.Board.Pieces;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Board.Pieces;
 using Infrastructure.ModelViewViewModel;

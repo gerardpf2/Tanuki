@@ -1,4 +1,4 @@
-using Game.Gameplay.Model.Board.Pieces;
+using Game.Gameplay.Board.Pieces;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
 

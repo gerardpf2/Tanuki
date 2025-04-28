@@ -1,4 +1,5 @@
-using Game.Gameplay.Model.Board.Pieces;
+using Game.Gameplay.Board;
+using Game.Gameplay.Board.Pieces;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -8,7 +9,7 @@ namespace Game.Gameplay.View.Board
 {
     public class BoardView : IBoardView
     {
-        private Model.Board.Board _board;
+        private Gameplay.Board.Board _board;
 
         public void Initialize(
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
@@ -17,7 +18,7 @@ namespace Game.Gameplay.View.Board
             ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
 
-            _board = new Model.Board.Board(rows, columns);
+            _board = new Gameplay.Board.Board(rows, columns);
 
             // TODO
         }

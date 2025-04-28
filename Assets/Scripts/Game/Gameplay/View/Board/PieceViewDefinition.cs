@@ -1,4 +1,5 @@
 using System;
+using Game.Gameplay.Board;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 

@@ -1,4 +1,5 @@
-using Game.Gameplay.Model.Board.Pieces;
+using Game.Gameplay.Board;
+using Game.Gameplay.Board.Pieces;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {

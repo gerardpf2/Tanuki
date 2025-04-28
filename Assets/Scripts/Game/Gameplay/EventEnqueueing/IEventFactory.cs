@@ -1,5 +1,6 @@
+using Game.Gameplay.Board;
+using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.Model.Board.Pieces;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.EventEnqueueing
