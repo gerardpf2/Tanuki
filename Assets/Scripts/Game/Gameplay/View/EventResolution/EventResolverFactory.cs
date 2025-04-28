@@ -8,6 +8,8 @@ namespace Game.Gameplay.View.EventResolution
 {
     public class EventResolverFactory : IEventResolverFactory
     {
+        // TODO: Reuse instead of new ¿?
+
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IBoardView _boardView;
 

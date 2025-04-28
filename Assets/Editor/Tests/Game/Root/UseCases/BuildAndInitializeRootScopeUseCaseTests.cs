@@ -1,4 +1,5 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.View.Board;
 using Game.Root.UseCases;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
@@ -12,6 +13,7 @@ namespace Editor.Tests.Game.Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCaseTests
     {
+        private IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private IConfigDefinitionGetter _configDefinitionGetter;
         private IBoardDefinitionGetter _boardDefinitionGetter;
@@ -24,6 +26,7 @@ namespace Editor.Tests.Game.Root.UseCases
         [SetUp]
         public void SetUp()
         {
+            _pieceViewDefinitionGetter = Substitute.For<IPieceViewDefinitionGetter>();
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _configDefinitionGetter = Substitute.For<IConfigDefinitionGetter>();
             _boardDefinitionGetter = Substitute.For<IBoardDefinitionGetter>();
@@ -38,7 +41,8 @@ namespace Editor.Tests.Game.Root.UseCases
                     _screenDefinitionGetter,
                     _screenPlacement,
                     _coroutineRunner,
-                    _boardDefinitionGetter
+                    _boardDefinitionGetter,
+                    _pieceViewDefinitionGetter
                 );
         }
 

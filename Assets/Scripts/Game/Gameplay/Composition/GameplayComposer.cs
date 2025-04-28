@@ -5,9 +5,11 @@ using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.EventResolution;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Composition
@@ -15,12 +17,17 @@ namespace Game.Gameplay.Composition
     public class GameplayComposer : ScopeComposer
     {
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
 
-        public GameplayComposer([NotNull] IBoardDefinitionGetter boardDefinitionGetter)
+        public GameplayComposer(
+            [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
+            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
         {
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
             _boardDefinitionGetter = boardDefinitionGetter;
+            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
         }
 
         protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
@@ -68,11 +75,40 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<IBoardView>(_ => new BoardView()));
 
+            ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IEventListener>(r =>
+                    new EventListener(
+                        r.Resolve<ICoroutineRunner>(),
+                        r.Resolve<IEventDequeuer>(),
+                        r.Resolve<IEventsResolver>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IEventResolverFactory>(r =>
+                    new EventResolverFactory(
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IBoardView>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IEventsResolver>(r =>
+                    new EventsResolver(
+                        r.Resolve<IEventResolverFactory>())
+                )
+            );
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IGameplay>(r =>
                     new Gameplay(
                         r.Resolve<IBoardDefinitionGetter>(),
                         r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventListener>(),
                         r.Resolve<IBoardView>()
                     )
                 )

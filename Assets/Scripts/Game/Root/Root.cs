@@ -1,4 +1,5 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.View.Board;
 using Game.Root.UseCases;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
@@ -18,6 +19,7 @@ namespace Game.Root
         [SerializeField] private RootScreenPlacement _rootScreenPlacement;
         [SerializeField] private CoroutineRunner _coroutineRunner;
         [SerializeField] private BoardDefinitionContainer _boardDefinitionContainer;
+        [SerializeField] private PieceViewDefinitionContainer _pieceViewDefinitionContainer;
 
         private Scope _root; // TODO: Check if storing ref is needed
 
@@ -29,6 +31,7 @@ namespace Game.Root
             InvalidOperationException.ThrowIfNull(_rootScreenPlacement);
             InvalidOperationException.ThrowIfNull(_coroutineRunner);
             InvalidOperationException.ThrowIfNull(_boardDefinitionContainer);
+            InvalidOperationException.ThrowIfNull(_pieceViewDefinitionContainer);
 
             IBuildAndInitializeRootScopeUseCase buildAndInitializeRootScopeUseCase =
                 new BuildAndInitializeRootScopeUseCase(
@@ -37,7 +40,8 @@ namespace Game.Root
                     _screenDefinitionContainer,
                     _rootScreenPlacement,
                     _coroutineRunner,
-                    _boardDefinitionContainer
+                    _boardDefinitionContainer,
+                    _pieceViewDefinitionContainer
                 );
 
             _root = buildAndInitializeRootScopeUseCase.Resolve();
