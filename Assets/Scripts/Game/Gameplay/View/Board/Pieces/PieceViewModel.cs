@@ -1,3 +1,4 @@
+using System;
 using Game.Gameplay.Board.Pieces;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
@@ -17,9 +18,11 @@ namespace Game.Gameplay.View.Board.Pieces
             SyncState();
         }
 
-        public void OnInstantiated()
+        public void OnInstantiated(Action onComplete)
         {
             // TODO: Trigger ¿?
+
+            onComplete?.Invoke();
         }
 
         protected abstract void SyncState();

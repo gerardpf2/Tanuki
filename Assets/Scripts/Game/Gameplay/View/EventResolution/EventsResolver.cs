@@ -1,6 +1,8 @@
+using System;
 using Game.Gameplay.EventEnqueueing.Events;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Game.Gameplay.View.EventResolution
 {
@@ -15,14 +17,14 @@ namespace Game.Gameplay.View.EventResolution
             _eventResolverFactory = eventResolverFactory;
         }
 
-        public void Resolve([NotNull] IEvent evt)
+        public void Resolve([NotNull] IEvent evt, Action onComplete)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
             switch (evt)
             {
                 case InstantiateEvent instantiateEvent:
-                    _eventResolverFactory.GetInstantiate().Resolve(instantiateEvent);
+                    _eventResolverFactory.GetInstantiate().Resolve(instantiateEvent, onComplete);
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);

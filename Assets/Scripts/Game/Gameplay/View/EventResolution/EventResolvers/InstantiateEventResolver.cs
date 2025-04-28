@@ -1,11 +1,14 @@
+using System;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Board.Pieces;
 using Infrastructure.ModelViewViewModel;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
+using Object = UnityEngine.Object;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
@@ -25,7 +28,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             _boardView = boardView;
         }
 
-        public void Resolve([NotNull] InstantiateEvent evt)
+        public void Resolve([NotNull] InstantiateEvent evt, Action onComplete)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
@@ -41,7 +44,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
             dataSettable.SetData(evt.Piece);
-            pieceViewEventNotifier.OnInstantiated();
+            pieceViewEventNotifier.OnInstantiated(onComplete);
         }
     }
 }

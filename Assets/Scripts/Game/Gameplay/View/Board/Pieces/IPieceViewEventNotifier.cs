@@ -1,7 +1,9 @@
+using System;
+
 namespace Game.Gameplay.View.Board.Pieces
 {
     public interface IPieceViewEventNotifier
     {
-        void OnInstantiated(); // TODO: InstantiateReason
+        void OnInstantiated(Action onComplete); // TODO: InstantiateReason
     }
 }
