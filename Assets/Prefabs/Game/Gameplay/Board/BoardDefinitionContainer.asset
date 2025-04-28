@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b88da05d61cb41778ccbb31627f29853, type: 3}
   m_Name: BoardDefinitionContainer
   m_EditorClassIdentifier: 
-  _boardDefinitions: []
+  _boardDefinitions:
+  - _id: Test
+    _rows: 5
+    _columns: 3
+    _piecePlacements:
+    - _pieceType: 0
+      _row: 1
+      _column: 0

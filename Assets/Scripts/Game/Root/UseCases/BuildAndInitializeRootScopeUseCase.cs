@@ -1,3 +1,4 @@
+using Game.Gameplay.Board;
 using Game.Root.Composition;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
@@ -18,25 +19,29 @@ namespace Game.Root.UseCases
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
+        [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
 
         public BuildAndInitializeRootScopeUseCase(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] IConfigDefinitionGetter configDefinitionGetter,
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacement rootScreenPlacement,
-            [NotNull] ICoroutineRunner coroutineRunner)
+            [NotNull] ICoroutineRunner coroutineRunner,
+            [NotNull] IBoardDefinitionGetter boardDefinitionGetter)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
             ArgumentNullException.ThrowIfNull(configDefinitionGetter);
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
+            ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
 
             _gateDefinitionGetter = gateDefinitionGetter;
             _configDefinitionGetter = configDefinitionGetter;
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
             _coroutineRunner = coroutineRunner;
+            _boardDefinitionGetter = boardDefinitionGetter;
         }
 
         public Scope Resolve()
@@ -64,6 +69,8 @@ namespace Game.Root.UseCases
             ruleAdder.Add(new InstanceRule<IScreenPlacement>(_rootScreenPlacement));
 
             ruleAdder.Add(new InstanceRule<ICoroutineRunner>(_coroutineRunner));
+
+            ruleAdder.Add(new InstanceRule<IBoardDefinitionGetter>(_boardDefinitionGetter));
 
             ruleAdder.Add(
                 new SingletonRule<IConfigValueGetter>(r =>
@@ -120,7 +127,8 @@ namespace Game.Root.UseCases
                         r.Resolve<IScreenDefinitionGetter>(),
                         r.Resolve<IScreenPlacement>(),
                         r.Resolve<IConfigValueGetter>(),
-                        r.Resolve<ICoroutineRunner>()
+                        r.Resolve<ICoroutineRunner>(),
+                        r.Resolve<IBoardDefinitionGetter>()
                     )
                 )
             );

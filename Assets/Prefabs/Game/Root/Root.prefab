@@ -55,6 +55,7 @@ MonoBehaviour:
   _screenDefinitionContainer: {fileID: 11400000, guid: 9a91396219a24d247a832a793b766d13, type: 2}
   _rootScreenPlacement: {fileID: 4383156189738232352}
   _coroutineRunner: {fileID: 7875382986150243213}
+  _boardDefinitionContainer: {fileID: 11400000, guid: ca9335aecc89e2548b846bc0ff8c7e70, type: 2}
 --- !u!114 &4383156189738232352
 MonoBehaviour:
   m_ObjectHideFlags: 0

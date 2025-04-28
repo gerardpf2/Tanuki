@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Gameplay.Board;
 using Game.Gameplay.Composition;
 using Game.Gameplay.UseCases;
 using Infrastructure.DependencyInjection;
@@ -10,9 +11,18 @@ namespace Game.Composition
 {
     public class GameComposer : ScopeComposer
     {
+        [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+
+        public GameComposer([NotNull] IBoardDefinitionGetter boardDefinitionGetter)
+        {
+            ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+
+            _boardDefinitionGetter = boardDefinitionGetter;
+        }
+
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
-            return base.GetChildScopeComposers().Append(new GameplayComposer());
+            return base.GetChildScopeComposers().Append(new GameplayComposer(_boardDefinitionGetter));
         }
 
         protected override void Initialize([NotNull] IRuleResolver ruleResolver)

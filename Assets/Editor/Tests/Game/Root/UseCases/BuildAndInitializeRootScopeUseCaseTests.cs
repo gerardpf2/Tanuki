@@ -1,3 +1,4 @@
+using Game.Gameplay.Board;
 using Game.Root.UseCases;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
@@ -13,6 +14,7 @@ namespace Editor.Tests.Game.Root.UseCases
     {
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private IConfigDefinitionGetter _configDefinitionGetter;
+        private IBoardDefinitionGetter _boardDefinitionGetter;
         private IGateDefinitionGetter _gateDefinitionGetter;
         private IScreenPlacement _screenPlacement;
         private ICoroutineRunner _coroutineRunner;
@@ -24,6 +26,7 @@ namespace Editor.Tests.Game.Root.UseCases
         {
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _configDefinitionGetter = Substitute.For<IConfigDefinitionGetter>();
+            _boardDefinitionGetter = Substitute.For<IBoardDefinitionGetter>();
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
@@ -34,7 +37,8 @@ namespace Editor.Tests.Game.Root.UseCases
                     _configDefinitionGetter,
                     _screenDefinitionGetter,
                     _screenPlacement,
-                    _coroutineRunner
+                    _coroutineRunner,
+                    _boardDefinitionGetter
                 );
         }
 
