@@ -3,6 +3,7 @@ using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.UseCases;
+using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
@@ -88,7 +89,14 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplay>(r =>
                     new LoadGameplay(
-                        r.Resolve<IScreenLoader>(),
+                        r.Resolve<IScreenLoader>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<GameplayViewModel>((r, vm) =>
+                    vm.Inject(
                         r.Resolve<IGameplay>()
                     )
                 )

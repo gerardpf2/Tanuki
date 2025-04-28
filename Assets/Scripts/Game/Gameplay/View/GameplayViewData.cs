@@ -2,6 +2,11 @@ namespace Game.Gameplay.View
 {
     public class GameplayViewData
     {
-        // TODO
+        public readonly string BoardId;
+
+        public GameplayViewData(string boardId)
+        {
+            BoardId = boardId;
+        }
     }
 }

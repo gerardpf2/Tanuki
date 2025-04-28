@@ -33,7 +33,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             ArgumentNullException.ThrowIfNull(evt);
 
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(evt.PieceType);
-            GameObject instance = Object.Instantiate(pieceViewDefinition.Prefab);
+            GameObject instance = Object.Instantiate(pieceViewDefinition.Prefab); // TODO: Parent
 
             _boardView.Add(evt.Piece, evt.SourceCoordinate, instance);
 
