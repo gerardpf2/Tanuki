@@ -47,7 +47,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
             dataSettable.SetData(evt.Piece);
-            pieceViewEventNotifier.OnInstantiated(onComplete);
+            pieceViewEventNotifier.OnInstantiated(evt.InstantiateReason, onComplete);
         }
     }
 }

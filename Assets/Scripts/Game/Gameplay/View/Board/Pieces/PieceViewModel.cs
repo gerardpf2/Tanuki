@@ -1,7 +1,7 @@
 using System;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Infrastructure.ModelViewViewModel;
-using JetBrains.Annotations;
 using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
 
 namespace Game.Gameplay.View.Board.Pieces
@@ -10,7 +10,7 @@ namespace Game.Gameplay.View.Board.Pieces
     {
         protected T Piece;
 
-        public void SetData([NotNull] IPiece data)
+        public void SetData(IPiece data)
         {
             ArgumentException.ThrowIfTypeIsNot<T>(data);
 
@@ -19,9 +19,9 @@ namespace Game.Gameplay.View.Board.Pieces
             SyncState();
         }
 
-        public void OnInstantiated(Action onComplete)
+        public void OnInstantiated(InstantiateReason instantiateReason, Action onComplete)
         {
-            // TODO: Trigger ¿?
+            // TODO
 
             onComplete?.Invoke();
         }

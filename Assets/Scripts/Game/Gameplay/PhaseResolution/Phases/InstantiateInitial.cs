@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -45,7 +46,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
                     _eventFactory.GetInstantiate(
                         piece,
                         piecePlacement.PieceType,
-                        sourceCoordinate
+                        sourceCoordinate,
+                        InstantiateReason.Initialize
                     )
                 );
             }

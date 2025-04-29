@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {
@@ -8,13 +9,18 @@ namespace Game.Gameplay.EventEnqueueing.Events
         public readonly IPiece Piece;
         public readonly PieceType PieceType;
         public readonly Coordinate SourceCoordinate;
-        // TODO: InstantiateReason
+        public readonly InstantiateReason InstantiateReason;
 
-        public InstantiateEvent(IPiece piece, PieceType pieceType, Coordinate sourceCoordinate)
+        public InstantiateEvent(
+            IPiece piece,
+            PieceType pieceType,
+            Coordinate sourceCoordinate,
+            InstantiateReason instantiateReason)
         {
             Piece = piece;
             PieceType = pieceType;
             SourceCoordinate = sourceCoordinate;
+            InstantiateReason = instantiateReason;
         }
     }
 }
