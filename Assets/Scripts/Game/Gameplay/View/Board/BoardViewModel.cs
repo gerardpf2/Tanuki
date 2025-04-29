@@ -50,7 +50,7 @@ namespace Game.Gameplay.View.Board
             _boardViewController.Initialize(_boardController.Rows, _boardController.Columns);
             _eventListener.Initialize();
 
-            _boardController.ResolveInstantiateInitialPhase();
+            _boardController.ResolveInstantiateInitialAndCascade();
         }
     }
 }

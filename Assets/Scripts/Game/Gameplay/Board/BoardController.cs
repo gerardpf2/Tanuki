@@ -52,9 +52,9 @@ namespace Game.Gameplay.Board
             _piecePlacements = boardDefinition.PiecePlacements;
         }
 
-        public void ResolveInstantiateInitialPhase()
+        public void ResolveInstantiateInitialAndCascade()
         {
-            _phaseResolver.ResolveInstantiateInitial(_board, _piecePlacements);
+            _phaseResolver.ResolveInstantiateInitialAndCascade(_board, _piecePlacements);
         }
     }
 }

@@ -17,13 +17,13 @@ namespace Game.Gameplay.PhaseResolution
             _instantiateInitial = instantiateInitial;
         }
 
-        public void ResolveInstantiateInitial(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
+        public void ResolveInstantiateInitialAndCascade(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
         {
             _instantiateInitial.Resolve(board, piecePlacements);
 
-            Resolve(board);
+            ResolveCascade(board);
         }
 
-        public void Resolve(IBoard board) { }
+        public void ResolveCascade(IBoard board) { }
     }
 }

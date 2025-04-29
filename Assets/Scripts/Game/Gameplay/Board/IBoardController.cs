@@ -8,6 +8,6 @@ namespace Game.Gameplay.Board
 
         void Initialize(string boardId);
 
-        void ResolveInstantiateInitialPhase();
+        void ResolveInstantiateInitialAndCascade();
     }
 }
