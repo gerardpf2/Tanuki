@@ -2,6 +2,7 @@ using System;
 using Game.Gameplay.Board.Pieces;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
+using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
 
 namespace Game.Gameplay.View.Board.Pieces
 {
@@ -11,7 +12,7 @@ namespace Game.Gameplay.View.Board.Pieces
 
         public void SetData([NotNull] IPiece data)
         {
-            // TODO: Check data is T, otherwise throw ArgumentException
+            ArgumentException.ThrowIfTypeIsNot<T>(data);
 
             Piece = (T)data;
 
