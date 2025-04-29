@@ -6,9 +6,8 @@ namespace Game.Gameplay.View.Board
 {
     public interface IBoardViewController
     {
-        void Initialize(int rows, int columns);
+        void Initialize(int rows, int columns, Transform piecesParent);
 
-        // TODO: Instantiate instead of Add
-        void Add(IPiece piece, Coordinate sourceCoordinate, GameObject instance);
+        GameObject Instantiate(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
     }
 }

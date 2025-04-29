@@ -4,11 +4,14 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
     public class BoardViewModel : ViewModel, IDataSettable<BoardViewData>
     {
+        [SerializeField] private Transform _piecesParent;
+
         private IBoardController _boardController;
         private IBoardViewController _boardViewController;
         private IEventListener _eventListener;
@@ -47,7 +50,7 @@ namespace Game.Gameplay.View.Board
             InvalidOperationException.ThrowIfNull(_boardViewController);
 
             _boardController.Initialize(boardId);
-            _boardViewController.Initialize(_boardController.Rows, _boardController.Columns);
+            _boardViewController.Initialize(_boardController.Rows, _boardController.Columns, _piecesParent);
             _eventListener.Initialize();
 
             _boardController.ResolveInstantiateInitialAndCascade();

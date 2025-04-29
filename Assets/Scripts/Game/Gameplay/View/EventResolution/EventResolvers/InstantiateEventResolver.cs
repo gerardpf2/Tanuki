@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
-using Object = UnityEngine.Object;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
@@ -33,9 +32,13 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             ArgumentNullException.ThrowIfNull(evt);
 
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(evt.PieceType);
-            GameObject instance = Object.Instantiate(pieceViewDefinition.Prefab); // TODO: Parent
 
-            _boardViewController.Add(evt.Piece, evt.SourceCoordinate, instance);
+            GameObject instance =
+                _boardViewController.Instantiate(
+                    evt.Piece,
+                    evt.SourceCoordinate,
+                    pieceViewDefinition.Prefab
+                );
 
             IDataSettable<IPiece> dataSettable = instance.GetComponent<IDataSettable<IPiece>>();
             IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
