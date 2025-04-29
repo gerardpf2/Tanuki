@@ -1,82 +1,47 @@
-using System.Collections;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.EventEnqueueing.Events;
 using Infrastructure.System.Exceptions;
-using Infrastructure.Unity;
 using JetBrains.Annotations;
-using UnityEngine;
 
 namespace Game.Gameplay.View.EventResolution
 {
     public class EventListener : IEventListener
     {
-        [NotNull] private readonly ICoroutineRunner _coroutineRunner;
         [NotNull] private readonly IEventDequeuer _eventDequeuer;
         [NotNull] private readonly IEventsResolver _eventsResolver;
 
-        private Coroutine _coroutine;
         private bool _resolving;
 
-        public EventListener(
-            [NotNull] ICoroutineRunner coroutineRunner,
-            [NotNull] IEventDequeuer eventDequeuer,
-            [NotNull] IEventsResolver eventsResolver)
+        public EventListener([NotNull] IEventDequeuer eventDequeuer, [NotNull] IEventsResolver eventsResolver)
         {
-            ArgumentNullException.ThrowIfNull(coroutineRunner);
             ArgumentNullException.ThrowIfNull(eventDequeuer);
             ArgumentNullException.ThrowIfNull(eventsResolver);
 
-            _coroutineRunner = coroutineRunner;
             _eventDequeuer = eventDequeuer;
             _eventsResolver = eventsResolver;
         }
 
         public void Initialize()
         {
-            StartListening();
+            ResolveOrStartListening();
         }
 
-        private void StartListening()
+        private void ResolveOrStartListening()
         {
-            StopListening();
-
-            _coroutine = _coroutineRunner.Run(Listen());
-        }
-
-        private void StopListening()
-        {
-            if (_coroutine is null)
+            if (_eventDequeuer.TryDequeue(out IEvent evt))
             {
-                return;
+                Resolve(evt);
             }
-
-            _coroutineRunner.Stop(_coroutine);
-            _coroutine = null;
-        }
-
-        private IEnumerator Listen()
-        {
-            while (true)
+            else
             {
-                TryResolve();
-
-                yield return null;
+                StartListening();
             }
-        }
-
-        private void TryResolve()
-        {
-            if (!_eventDequeuer.TryDequeue(out IEvent evt))
-            {
-                return;
-            }
-
-            StopListening();
-            Resolve(evt);
         }
 
         private void Resolve(IEvent evt)
         {
+            StopListening();
+
             if (_resolving)
             {
                 InvalidOperationException.Throw(); // TODO
@@ -90,9 +55,21 @@ namespace Game.Gameplay.View.EventResolution
                 {
                     _resolving = false;
 
-                    StartListening();
+                    ResolveOrStartListening();
                 }
             );
+        }
+
+        private void StartListening()
+        {
+            StopListening();
+
+            _eventDequeuer.OnEventToDequeue += ResolveOrStartListening;
+        }
+
+        private void StopListening()
+        {
+            _eventDequeuer.OnEventToDequeue -= ResolveOrStartListening;
         }
     }
 }

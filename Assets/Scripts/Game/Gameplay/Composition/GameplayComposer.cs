@@ -8,7 +8,6 @@ using Game.Gameplay.View.EventResolution;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
-using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Composition
@@ -88,7 +87,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventListener>(r =>
                     new EventListener(
-                        r.Resolve<ICoroutineRunner>(),
                         r.Resolve<IEventDequeuer>(),
                         r.Resolve<IEventsResolver>()
                     )
