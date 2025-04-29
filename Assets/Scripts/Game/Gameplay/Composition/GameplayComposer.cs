@@ -3,7 +3,6 @@ using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.UseCases;
-using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.EventResolution;
 using Infrastructure.DependencyInjection;
@@ -37,6 +36,16 @@ namespace Game.Gameplay.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IBoardController>(r =>
+                    new BoardController(
+                        r.Resolve<IBoardDefinitionGetter>(),
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventListener>()
+                    )
+                )
+            );
+
             ruleAdder.Add(ruleFactory.GetInstance(_boardDefinitionGetter));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceFactory>(_ => new PieceFactory()));
@@ -50,8 +59,8 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton(_ => new EventContainer()));
-            ruleAdder.Add(ruleFactory.GetTo<IEventEnqueuer, EventContainer>());
             ruleAdder.Add(ruleFactory.GetTo<IEventDequeuer, EventContainer>());
+            ruleAdder.Add(ruleFactory.GetTo<IEventEnqueuer, EventContainer>());
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
@@ -73,7 +82,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IBoardView>(_ => new BoardView()));
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoardViewController>(_ => new BoardViewController()));
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
@@ -91,7 +100,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IEventResolverFactory>(r =>
                     new EventResolverFactory(
                         r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IBoardView>()
+                        r.Resolve<IBoardViewController>()
                     )
                 )
             );
@@ -100,17 +109,6 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IEventsResolver>(r =>
                     new EventsResolver(
                         r.Resolve<IEventResolverFactory>())
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IGameplay>(r =>
-                    new Gameplay(
-                        r.Resolve<IBoardDefinitionGetter>(),
-                        r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IEventListener>(),
-                        r.Resolve<IBoardView>()
-                    )
                 )
             );
         }
@@ -131,9 +129,10 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetInject<GameplayViewModel>((r, vm) =>
+                ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IGameplay>()
+                        r.Resolve<IBoardController>(),
+                        r.Resolve<IBoardViewController>()
                     )
                 )
             );

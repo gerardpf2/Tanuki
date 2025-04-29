@@ -1,12 +1,14 @@
+using Game.Gameplay.View.Board;
+
 namespace Game.Gameplay.View
 {
     public class GameplayViewData
     {
-        public readonly string BoardId;
+        public readonly BoardViewData BoardViewData;
 
-        public GameplayViewData(string boardId)
+        public GameplayViewData(BoardViewData boardViewData)
         {
-            BoardId = boardId;
+            BoardViewData = boardViewData;
         }
     }
 }

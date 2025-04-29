@@ -7,9 +7,9 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public class BoardView : IBoardView
+    public class BoardViewController : IBoardViewController
     {
-        private Game.Gameplay.Board.Board _board;
+        private Gameplay.Board.Board _board;
 
         public void Initialize(
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
@@ -18,7 +18,7 @@ namespace Game.Gameplay.View.Board
             ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
 
-            _board = new Game.Gameplay.Board.Board(rows, columns);
+            _board = new Gameplay.Board.Board(rows, columns);
 
             // TODO
         }

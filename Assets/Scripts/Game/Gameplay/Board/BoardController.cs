@@ -1,52 +1,67 @@
-using Game.Gameplay.Board;
+using System.Collections.Generic;
 using Game.Gameplay.PhaseResolution;
-using Game.Gameplay.View.Board;
 using Game.Gameplay.View.EventResolution;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay
+namespace Game.Gameplay.Board
 {
-    public class Gameplay : IGameplay
+    public class BoardController : IBoardController
     {
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IEventListener _eventListener;
-        [NotNull] private readonly IBoardView _boardView;
 
-        private Board.Board _board;
+        private Board _board;
+        private IEnumerable<IPiecePlacement> _piecePlacements;
 
-        public Gameplay(
+        public int Rows
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_board);
+
+                return _board.Rows;
+            }
+        }
+
+        public int Columns
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_board);
+
+                return _board.Columns;
+            }
+        }
+
+        public BoardController(
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
             [NotNull] IPhaseResolver phaseResolver,
-            [NotNull] IEventListener eventListener,
-            [NotNull] IBoardView boardView)
+            [NotNull] IEventListener eventListener)
         {
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(eventListener);
-            ArgumentNullException.ThrowIfNull(boardView);
 
             _boardDefinitionGetter = boardDefinitionGetter;
             _phaseResolver = phaseResolver;
             _eventListener = eventListener;
-            _boardView = boardView;
         }
 
         public void Initialize(string boardId)
         {
             IBoardDefinition boardDefinition = _boardDefinitionGetter.Get(boardId);
 
-            int rows = boardDefinition.Rows;
-            int columns = boardDefinition.Columns;
-
-            _board = new Board.Board(rows, columns);
-
-            _boardView.Initialize(rows, columns);
+            _board = new Board(boardDefinition.Rows, boardDefinition.Columns);
+            _piecePlacements = boardDefinition.PiecePlacements;
 
             _eventListener.Initialize();
+        }
 
-            _phaseResolver.ResolveInstantiateInitial(_board, boardDefinition.PiecePlacements);
+        public void ResolveInstantiateInitialPhase()
+        {
+            _phaseResolver.ResolveInstantiateInitial(_board, _piecePlacements);
         }
     }
 }
