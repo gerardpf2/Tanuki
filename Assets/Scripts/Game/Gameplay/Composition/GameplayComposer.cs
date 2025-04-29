@@ -40,8 +40,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IBoardController>(r =>
                     new BoardController(
                         r.Resolve<IBoardDefinitionGetter>(),
-                        r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IEventListener>()
+                        r.Resolve<IPhaseResolver>()
                     )
                 )
             );
@@ -132,7 +131,8 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
                         r.Resolve<IBoardController>(),
-                        r.Resolve<IBoardViewController>()
+                        r.Resolve<IBoardViewController>(),
+                        r.Resolve<IEventListener>()
                     )
                 )
             );

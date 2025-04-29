@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Game.Gameplay.PhaseResolution;
-using Game.Gameplay.View.EventResolution;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -10,7 +9,6 @@ namespace Game.Gameplay.Board
     {
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
-        [NotNull] private readonly IEventListener _eventListener;
 
         private Board _board;
         private IEnumerable<IPiecePlacement> _piecePlacements;
@@ -37,16 +35,13 @@ namespace Game.Gameplay.Board
 
         public BoardController(
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
-            [NotNull] IPhaseResolver phaseResolver,
-            [NotNull] IEventListener eventListener)
+            [NotNull] IPhaseResolver phaseResolver)
         {
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
             ArgumentNullException.ThrowIfNull(phaseResolver);
-            ArgumentNullException.ThrowIfNull(eventListener);
 
             _boardDefinitionGetter = boardDefinitionGetter;
             _phaseResolver = phaseResolver;
-            _eventListener = eventListener;
         }
 
         public void Initialize(string boardId)
@@ -55,8 +50,6 @@ namespace Game.Gameplay.Board
 
             _board = new Board(boardDefinition.Rows, boardDefinition.Columns);
             _piecePlacements = boardDefinition.PiecePlacements;
-
-            _eventListener.Initialize();
         }
 
         public void ResolveInstantiateInitialPhase()

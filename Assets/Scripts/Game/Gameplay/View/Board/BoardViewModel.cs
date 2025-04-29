@@ -1,4 +1,5 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.View.EventResolution;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
@@ -10,6 +11,7 @@ namespace Game.Gameplay.View.Board
     {
         private IBoardController _boardController;
         private IBoardViewController _boardViewController;
+        private IEventListener _eventListener;
 
         protected override void Awake()
         {
@@ -20,13 +22,16 @@ namespace Game.Gameplay.View.Board
 
         public void Inject(
             [NotNull] IBoardController boardController,
-            [NotNull] IBoardViewController boardViewController)
+            [NotNull] IBoardViewController boardViewController,
+            [NotNull] IEventListener eventListener)
         {
             ArgumentNullException.ThrowIfNull(boardController);
             ArgumentNullException.ThrowIfNull(boardViewController);
+            ArgumentNullException.ThrowIfNull(eventListener);
 
             _boardController = boardController;
             _boardViewController = boardViewController;
+            _eventListener = eventListener;
         }
 
         public void SetData([NotNull] BoardViewData data)
@@ -43,6 +48,7 @@ namespace Game.Gameplay.View.Board
 
             _boardController.Initialize(boardId);
             _boardViewController.Initialize(_boardController.Rows, _boardController.Columns);
+            _eventListener.Initialize();
 
             _boardController.ResolveInstantiateInitialPhase();
         }
