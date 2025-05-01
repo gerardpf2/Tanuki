@@ -48,6 +48,7 @@ namespace Game.Gameplay.View.Board
         {
             InvalidOperationException.ThrowIfNull(_boardController);
             InvalidOperationException.ThrowIfNull(_boardViewController);
+            InvalidOperationException.ThrowIfNull(_eventListener);
 
             _boardController.Initialize(boardId);
             _boardViewController.Initialize(_boardController.Rows, _boardController.Columns, _piecesParent);
