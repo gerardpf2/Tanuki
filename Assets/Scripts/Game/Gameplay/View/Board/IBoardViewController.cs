@@ -7,7 +7,7 @@ namespace Game.Gameplay.View.Board
 {
     public interface IBoardViewController
     {
-        void Initialize(int rows, int columns, Transform piecesParent);
+        void Initialize(int rows, int columns);
 
         [NotNull]
         GameObject Instantiate(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);

@@ -23,17 +23,13 @@ namespace Game.Gameplay.View.Board
 
         public void Initialize(
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int columns,
-            [NotNull] Transform piecesParent)
+            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int columns)
         {
             ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
-            ArgumentNullException.ThrowIfNull(piecesParent);
 
             _board = new Gameplay.Board.Board(rows, columns);
-            _piecesParent = piecesParent;
-
-            // TODO: Prepare view, camera, etc
+            _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 
         public GameObject Instantiate([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
