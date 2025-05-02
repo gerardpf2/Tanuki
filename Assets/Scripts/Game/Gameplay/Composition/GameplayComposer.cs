@@ -82,15 +82,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IBoardPositionGetter>(_ => new BoardPositionGetter()));
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IBoardViewController>(r =>
-                    new BoardViewController(
-                        r.Resolve<IBoardPositionGetter>()
-                    )
-                )
-            );
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoardViewController>(_ => new BoardViewController()));
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 

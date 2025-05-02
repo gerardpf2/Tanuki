@@ -8,17 +8,8 @@ namespace Game.Gameplay.View.Board
 {
     public class BoardViewController : IBoardViewController
     {
-        [NotNull] private readonly IBoardPositionGetter _boardPositionGetter;
-
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
-
-        public BoardViewController([NotNull] IBoardPositionGetter boardPositionGetter)
-        {
-            ArgumentNullException.ThrowIfNull(boardPositionGetter);
-
-            _boardPositionGetter = boardPositionGetter;
-        }
 
         public void Initialize([NotNull] IReadonlyBoard board)
         {
@@ -39,7 +30,7 @@ namespace Game.Gameplay.View.Board
 
             _board.Add(piece, sourceCoordinate);
 
-            Vector3 position = _boardPositionGetter.Get(sourceCoordinate);
+            Vector3 position = new(sourceCoordinate.Column, sourceCoordinate.Row);
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
