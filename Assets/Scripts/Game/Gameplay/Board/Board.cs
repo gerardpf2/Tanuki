@@ -10,6 +10,7 @@ namespace Game.Gameplay.Board
     public class Board : IBoard
     {
         [NotNull] private readonly IDictionary<IPiece, Coordinate> _pieceSourceCoordinates = new Dictionary<IPiece, Coordinate>();
+        [NotNull] private readonly SortedList<int, int> _piecesPerRowSorted = new();
         [NotNull] private readonly IPiece[,] _pieces;
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
@@ -18,7 +19,7 @@ namespace Game.Gameplay.Board
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Columns { get; }
 
-        public int HighestNonEmptyRow { get; private set; }
+        public int HighestNonEmptyRow => _piecesPerRowSorted.Count > 0 ? _piecesPerRowSorted.Keys[^1] : 0;
 
         public Board(
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
@@ -112,38 +113,40 @@ namespace Game.Gameplay.Board
 
             _pieces[coordinate.Row, coordinate.Column] = piece;
 
-            UpdateHighestNonEmptyRow(coordinate.Row, piece is not null);
+            UpdatePiecesPerRowSorted(coordinate.Row, piece is not null);
         }
 
-        private void UpdateHighestNonEmptyRow(int updatedRow, bool pieceAdded)
+        private void UpdatePiecesPerRowSorted(int updatedRow, bool pieceAdded)
         {
             if (pieceAdded)
             {
-                if (HighestNonEmptyRow < updatedRow)
+                if (!_piecesPerRowSorted.TryAdd(updatedRow, 1))
                 {
-                    HighestNonEmptyRow = updatedRow;
+                    ++_piecesPerRowSorted[updatedRow];
                 }
             }
             else
             {
-                for (int row = Rows - 1; row >= 0; --row)
+                if (!_piecesPerRowSorted.ContainsKey(updatedRow))
                 {
-                    for (int column = 0; column < Columns; ++column)
-                    {
-                        Coordinate coordinate = new(row, column);
-
-                        if (Get(coordinate) is null)
-                        {
-                            continue;
-                        }
-
-                        HighestNonEmptyRow = row;
-
-                        return;
-                    }
+                    InvalidOperationException.Throw(); // TODO
                 }
 
-                HighestNonEmptyRow = 0;
+                int piecesRow = _piecesPerRowSorted[updatedRow];
+
+                if (piecesRow <= 0)
+                {
+                    InvalidOperationException.Throw(); // TODO
+                }
+
+                if (piecesRow == 1)
+                {
+                    _piecesPerRowSorted.Remove(updatedRow);
+                }
+                else
+                {
+                    _piecesPerRowSorted[updatedRow] = piecesRow - 1;
+                }
             }
         }
     }
