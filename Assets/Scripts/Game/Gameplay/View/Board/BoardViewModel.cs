@@ -11,6 +11,7 @@ namespace Game.Gameplay.View.Board
 {
     public class BoardViewModel : ViewModel, IDataSettable<BoardViewData>
     {
+        [SerializeField] private Transform _top;
         [SerializeField] private Transform _bottom;
 
         private IBoardController _boardController;
@@ -61,11 +62,10 @@ namespace Game.Gameplay.View.Board
 
             IReadonlyBoard board = _boardController.Initialize(boardId);
 
-            _boardViewController.Initialize(board);
-            _cameraController.Initialize(board, _bottom.position.y);
-            _eventListener.Initialize();
-
             _boardController.ResolveInstantiateInitialAndCascade();
+            _boardViewController.Initialize(board);
+            _cameraController.Initialize(board, _top.position.y, _bottom.position.y); // TODO: Needs to be done after InstantiateInitial so HighestNonEmptyRow is set. Consider adding OnHighestNonEmptyRowUpdated and CameraController sub
+            _eventListener.Initialize();
         }
     }
 }

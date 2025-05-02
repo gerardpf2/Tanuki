@@ -7,7 +7,7 @@ namespace Game.Gameplay.View.Board
     {
         public Vector3 Get(Coordinate coordinate)
         {
-            return new Vector3(coordinate.Column, coordinate.Row, 0.0f);
+            return new Vector3(coordinate.Column, coordinate.Row);
         }
     }
 }

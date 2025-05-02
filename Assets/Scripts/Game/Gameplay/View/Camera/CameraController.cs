@@ -9,24 +9,27 @@ namespace Game.Gameplay.View.Camera
 {
     public class CameraController : ICameraController
     {
-        [NotNull] private readonly UnityEngine.Camera _camera; // TODO: Remove and keep transform only if no camera actions need to be done
+        private const int ExtraRowsOnTop = 5; // TODO: Scriptable object for this and other camera params
+
         [NotNull] private readonly Transform _cameraTransform;
 
         public CameraController([NotNull] ICameraGetter cameraGetter)
         {
             ArgumentNullException.ThrowIfNull(cameraGetter);
 
-            _camera = cameraGetter.GetMain();
-            _cameraTransform = _camera.transform;
+            _cameraTransform = cameraGetter.GetMain().transform;
         }
 
-        public void Initialize([NotNull] IReadonlyBoard board, float viewBottomY)
+        public void Initialize([NotNull] IReadonlyBoard board, float boardViewTopY, float boardViewBottomY)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
             ArgumentNullException.ThrowIfNull(board);
 
-            _cameraTransform.position = _cameraTransform.position.WithX(0.5f * board.Columns).WithY(-viewBottomY);
+            float x = Mathf.Floor(0.5f * board.Columns);
+            float y = Mathf.Max(board.HighestNonEmptyRow + ExtraRowsOnTop - boardViewTopY, -boardViewBottomY);
+
+            _cameraTransform.position = _cameraTransform.position.WithX(x).WithY(y);
         }
     }
 }
