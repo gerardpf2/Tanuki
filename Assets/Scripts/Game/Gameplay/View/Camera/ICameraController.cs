@@ -1,7 +1,9 @@
+using Game.Gameplay.Board;
+
 namespace Game.Gameplay.View.Camera
 {
     public interface ICameraController
     {
-        void Initialize(int rows, int columns, float viewBottomY);
+        void Initialize(IReadonlyBoard board, float viewBottomY);
     }
 }

@@ -12,9 +12,13 @@ namespace Game.Gameplay.Board
         [NotNull] private readonly IDictionary<IPiece, Coordinate> _pieceSourceCoordinates = new Dictionary<IPiece, Coordinate>();
         [NotNull] private readonly IPiece[,] _pieces;
 
+        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Rows { get; }
 
+        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Columns { get; }
+
+        public int HighestNonEmptyRow { get; private set; }
 
         public Board(
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
@@ -27,6 +31,16 @@ namespace Game.Gameplay.Board
             Columns = columns;
 
             _pieces = new IPiece[rows, columns];
+        }
+
+        public IPiece Get(Coordinate coordinate)
+        {
+            if (!this.IsInside(coordinate))
+            {
+                InvalidOperationException.Throw(); // TODO
+            }
+
+            return _pieces[coordinate.Row, coordinate.Column];
         }
 
         public void Add([NotNull] IPiece piece, Coordinate sourceCoordinate)
@@ -49,16 +63,6 @@ namespace Game.Gameplay.Board
 
                 Set(piece, coordinate);
             }
-        }
-
-        public IPiece Get(Coordinate coordinate)
-        {
-            if (!this.IsInside(coordinate))
-            {
-                InvalidOperationException.Throw(); // TODO
-            }
-
-            return _pieces[coordinate.Row, coordinate.Column];
         }
 
         public void Remove([NotNull] IPiece piece)
@@ -107,6 +111,40 @@ namespace Game.Gameplay.Board
             }
 
             _pieces[coordinate.Row, coordinate.Column] = piece;
+
+            UpdateHighestNonEmptyRow(coordinate.Row, piece is not null);
+        }
+
+        private void UpdateHighestNonEmptyRow(int updatedRow, bool pieceAdded)
+        {
+            if (pieceAdded)
+            {
+                if (HighestNonEmptyRow < updatedRow)
+                {
+                    HighestNonEmptyRow = updatedRow;
+                }
+            }
+            else
+            {
+                for (int row = Rows - 1; row >= 0; --row)
+                {
+                    for (int column = 0; column < Columns; ++column)
+                    {
+                        Coordinate coordinate = new(row, column);
+
+                        if (Get(coordinate) is null)
+                        {
+                            continue;
+                        }
+
+                        HighestNonEmptyRow = row;
+
+                        return;
+                    }
+                }
+
+                HighestNonEmptyRow = 0;
+            }
         }
     }
 }

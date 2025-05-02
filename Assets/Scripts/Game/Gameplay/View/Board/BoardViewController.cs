@@ -1,6 +1,5 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
-using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -21,16 +20,13 @@ namespace Game.Gameplay.View.Board
             _boardPositionGetter = boardPositionGetter;
         }
 
-        public void Initialize(
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int columns)
+        public void Initialize([NotNull] IReadonlyBoard board)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
-            ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
-            ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
+            ArgumentNullException.ThrowIfNull(board);
 
-            _board = new Gameplay.Board.Board(rows, columns);
+            _board = new Gameplay.Board.Board(board.Rows, board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 

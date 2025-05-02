@@ -59,13 +59,10 @@ namespace Game.Gameplay.View.Board
             InvalidOperationException.ThrowIfNull(_cameraController);
             InvalidOperationException.ThrowIfNull(_eventListener);
 
-            _boardController.Initialize(boardId);
+            IReadonlyBoard board = _boardController.Initialize(boardId);
 
-            int rows = _boardController.Rows;
-            int columns = _boardController.Columns;
-
-            _boardViewController.Initialize(rows, columns);
-            _cameraController.Initialize(rows, columns, _bottom.position.y);
+            _boardViewController.Initialize(board);
+            _cameraController.Initialize(board, _bottom.position.y);
             _eventListener.Initialize();
 
             _boardController.ResolveInstantiateInitialAndCascade();

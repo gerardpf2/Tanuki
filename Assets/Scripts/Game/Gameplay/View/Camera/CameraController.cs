@@ -1,3 +1,4 @@
+using Game.Gameplay.Board;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Utils;
@@ -19,11 +20,13 @@ namespace Game.Gameplay.View.Camera
             _cameraTransform = _camera.transform;
         }
 
-        public void Initialize(int rows, int columns, float viewBottomY)
+        public void Initialize([NotNull] IReadonlyBoard board, float viewBottomY)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
-            _cameraTransform.position = _cameraTransform.position.WithX(0.5f * columns).WithY(-viewBottomY);
+            ArgumentNullException.ThrowIfNull(board);
+
+            _cameraTransform.position = _cameraTransform.position.WithX(0.5f * board.Columns).WithY(-viewBottomY);
         }
     }
 }
