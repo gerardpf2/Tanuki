@@ -46,6 +46,8 @@ namespace Game.Gameplay.Board
 
         public void Initialize(string boardId)
         {
+            // TODO: Check allow multiple Initialize. Add Clear ¿?
+
             IBoardDefinition boardDefinition = _boardDefinitionGetter.Get(boardId);
 
             _board = new Board(boardDefinition.Rows, boardDefinition.Columns);

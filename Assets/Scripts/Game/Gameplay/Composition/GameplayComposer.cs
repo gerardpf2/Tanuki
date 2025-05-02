@@ -4,6 +4,7 @@ using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
@@ -92,6 +93,8 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
+            ruleAdder.Add(ruleFactory.GetSingleton<ICameraController>(_ => new CameraController()));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventListener>(r =>
                     new EventListener(
@@ -138,6 +141,7 @@ namespace Game.Gameplay.Composition
                     vm.Inject(
                         r.Resolve<IBoardController>(),
                         r.Resolve<IBoardViewController>(),
+                        r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>()
                     )
                 )

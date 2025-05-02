@@ -25,6 +25,8 @@ namespace Game.Gameplay.View.Board
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int columns)
         {
+            // TODO: Check allow multiple Initialize. Add Clear ¿?
+
             ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
 
