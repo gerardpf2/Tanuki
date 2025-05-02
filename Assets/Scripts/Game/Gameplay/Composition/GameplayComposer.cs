@@ -9,6 +9,7 @@ using Game.Gameplay.View.EventResolution;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Composition
@@ -93,7 +94,13 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
-            ruleAdder.Add(ruleFactory.GetSingleton<ICameraController>(_ => new CameraController()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ICameraController>(r =>
+                    new CameraController(
+                        r.Resolve<ICameraGetter>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventListener>(r =>

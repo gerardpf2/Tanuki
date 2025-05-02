@@ -5,11 +5,14 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
     public class BoardViewModel : ViewModel, IDataSettable<BoardViewData>
     {
+        [SerializeField] private Transform _bottom;
+
         private IBoardController _boardController;
         private IBoardViewController _boardViewController;
         private ICameraController _cameraController;
@@ -50,6 +53,7 @@ namespace Game.Gameplay.View.Board
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
+            InvalidOperationException.ThrowIfNull(_bottom);
             InvalidOperationException.ThrowIfNull(_boardController);
             InvalidOperationException.ThrowIfNull(_boardViewController);
             InvalidOperationException.ThrowIfNull(_cameraController);
@@ -61,7 +65,7 @@ namespace Game.Gameplay.View.Board
             int columns = _boardController.Columns;
 
             _boardViewController.Initialize(rows, columns);
-            _cameraController.Initialize(rows, columns);
+            _cameraController.Initialize(rows, columns, _bottom.position.y);
             _eventListener.Initialize();
 
             _boardController.ResolveInstantiateInitialAndCascade();
