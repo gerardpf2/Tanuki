@@ -21,8 +21,8 @@ MonoBehaviour:
       _row: 0
       _column: 0
     - _pieceType: 0
-      _row: 1
-      _column: 1
-    - _pieceType: 0
       _row: 2
       _column: 2
+    - _pieceType: 1
+      _row: 1
+      _column: 1

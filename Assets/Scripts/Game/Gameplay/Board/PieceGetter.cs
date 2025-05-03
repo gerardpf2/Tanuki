@@ -22,6 +22,8 @@ namespace Game.Gameplay.Board
             {
                 case PieceType.Test:
                     return _pieceFactory.GetTest();
+                case PieceType.PlayerBlock:
+                    return _pieceFactory.GetPlayerBlock();
                 default:
                     ArgumentOutOfRangeException.Throw(pieceType);
                     return null;

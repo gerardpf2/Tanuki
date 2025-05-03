@@ -26,6 +26,6 @@ namespace Game.Gameplay.View.Board.Pieces
             onComplete?.Invoke();
         }
 
-        protected abstract void SyncState();
+        protected virtual void SyncState() { }
     }
 }

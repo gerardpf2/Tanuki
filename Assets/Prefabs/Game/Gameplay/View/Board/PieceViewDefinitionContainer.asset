@@ -15,3 +15,5 @@ MonoBehaviour:
   _pieceViewDefinitions:
   - _pieceType: 0
     _prefab: {fileID: 6451969163346834527, guid: 8c89310b2782a15488919f493a7f7130, type: 3}
+  - _pieceType: 1
+    _prefab: {fileID: 6451969163346834527, guid: 5d9c659e424c2184a975f8529597358c, type: 3}

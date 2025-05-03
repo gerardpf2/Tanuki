@@ -7,5 +7,8 @@ namespace Game.Gameplay.Board
     {
         [NotNull]
         IPiece GetTest();
+
+        [NotNull]
+        IPiece GetPlayerBlock();
     }
 }
