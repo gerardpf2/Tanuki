@@ -8,5 +8,8 @@ namespace Game.Gameplay.View.EventResolution
     {
         [NotNull]
         IEventResolver<InstantiateEvent> GetInstantiate();
+
+        [NotNull]
+        IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPiece();
     }
 }

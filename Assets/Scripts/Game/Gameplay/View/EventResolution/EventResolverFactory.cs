@@ -28,5 +28,10 @@ namespace Game.Gameplay.View.EventResolution
         {
             return new InstantiateEventResolver(_pieceViewDefinitionGetter, _boardViewController);
         }
+
+        public IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPiece()
+        {
+            return new InstantiatePlayerPieceEventResolver();
+        }
     }
 }

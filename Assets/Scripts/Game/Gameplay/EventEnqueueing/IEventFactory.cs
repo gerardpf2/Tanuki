@@ -15,5 +15,8 @@ namespace Game.Gameplay.EventEnqueueing
             Coordinate sourceCoordinate,
             InstantiateReason instantiateReason
         );
+
+        [NotNull]
+        IEvent GetInstantiatePlayerPiece(IPiece piece, PieceType pieceType);
     }
 }

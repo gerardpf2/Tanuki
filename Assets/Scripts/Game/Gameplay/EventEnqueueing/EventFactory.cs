@@ -15,5 +15,10 @@ namespace Game.Gameplay.EventEnqueueing
         {
             return new InstantiateEvent(piece, pieceType, sourceCoordinate, instantiateReason);
         }
+
+        public IEvent GetInstantiatePlayerPiece(IPiece piece, PieceType pieceType)
+        {
+            return new InstantiatePlayerPieceEvent(piece, pieceType);
+        }
     }
 }
