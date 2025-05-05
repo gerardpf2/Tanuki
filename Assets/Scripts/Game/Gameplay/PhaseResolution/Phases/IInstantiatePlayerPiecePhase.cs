@@ -1,7 +1,7 @@
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public interface IInstantiatePlayerPiecePhase
+    public interface IInstantiatePlayerPiecePhase : IPhase
     {
-        void Resolve();
+        void Initialize();
     }
 }

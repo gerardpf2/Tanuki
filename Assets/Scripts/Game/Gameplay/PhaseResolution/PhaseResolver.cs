@@ -10,6 +10,7 @@ namespace Game.Gameplay.PhaseResolution
     {
         [NotNull] private readonly IInstantiateInitialPiecesPhase _instantiateInitialPiecesPhase;
         [NotNull] private readonly IInstantiatePlayerPiecePhase _instantiatePlayerPiecePhase;
+        [NotNull, ItemNotNull] private readonly IReadOnlyList<IPhase> _phases;
 
         public PhaseResolver(
             [NotNull] IInstantiateInitialPiecesPhase instantiateInitialPiecesPhase,
@@ -20,18 +21,34 @@ namespace Game.Gameplay.PhaseResolution
 
             _instantiateInitialPiecesPhase = instantiateInitialPiecesPhase;
             _instantiatePlayerPiecePhase = instantiatePlayerPiecePhase;
+
+            _phases = new List<IPhase>
+            {
+                _instantiateInitialPiecesPhase,
+                _instantiatePlayerPiecePhase
+            };
         }
 
-        public void ResolveInstantiateInitialAndCascade(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
+        public void Initialize(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
         {
-            _instantiateInitialPiecesPhase.Resolve(board, piecePlacements);
+            // TODO: Check allow multiple Initialize. Add Clear ¿?
 
-            ResolveCascade(board);
+            _instantiateInitialPiecesPhase.Initialize(board, piecePlacements);
+            _instantiatePlayerPiecePhase.Initialize();
         }
 
-        public void ResolveCascade(IBoard board)
+        public void Resolve()
         {
-            _instantiatePlayerPiecePhase.Resolve();
+            int index = 0;
+
+            while (index < _phases.Count)
+            {
+                IPhase phase = _phases[index];
+
+                bool resolved = phase.Resolve();
+
+                index = resolved ? 0 : index + 1;
+            }
         }
     }
 }

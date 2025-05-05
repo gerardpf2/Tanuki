@@ -3,8 +3,8 @@ using Game.Gameplay.Board;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public interface IInstantiateInitialPiecesPhase
+    public interface IInstantiateInitialPiecesPhase : IPhase
     {
-        void Resolve(IBoard board, IEnumerable<IPiecePlacement> piecePlacements);
+        void Initialize(IBoard board, IEnumerable<IPiecePlacement> piecePlacements);
     }
 }

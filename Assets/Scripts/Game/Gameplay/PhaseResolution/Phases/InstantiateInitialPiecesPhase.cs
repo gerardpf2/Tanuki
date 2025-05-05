@@ -14,6 +14,10 @@ namespace Game.Gameplay.PhaseResolution.Phases
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
+        private IBoard _board;
+        private IEnumerable<IPiecePlacement> _piecePlacements;
+        private bool _resolved;
+
         public InstantiateInitialPiecesPhase(
             [NotNull] IPieceGetter pieceGetter,
             [NotNull] IEventEnqueuer eventEnqueuer,
@@ -28,19 +32,55 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _eventFactory = eventFactory;
         }
 
-        public void Resolve([NotNull] IBoard board, [NotNull, ItemNotNull] IEnumerable<IPiecePlacement> piecePlacements)
+        public void Initialize(
+            [NotNull] IBoard board,
+            [NotNull, ItemNotNull] IEnumerable<IPiecePlacement> piecePlacements)
         {
+            // TODO: Check allow multiple Initialize. Add Clear ¿?
+
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(piecePlacements);
+
+            ICollection<IPiecePlacement> piecePlacementsCopy = new List<IPiecePlacement>();
 
             foreach (IPiecePlacement piecePlacement in piecePlacements)
             {
                 ArgumentNullException.ThrowIfNull(piecePlacement);
 
+                piecePlacementsCopy.Add(piecePlacement);
+            }
+
+            _board = board;
+            _piecePlacements = piecePlacementsCopy;
+        }
+
+        public bool Resolve()
+        {
+            if (_resolved)
+            {
+                return false;
+            }
+
+            ResolveImpl();
+
+            _resolved = true;
+
+            return true;
+        }
+
+        private void ResolveImpl()
+        {
+            InvalidOperationException.ThrowIfNull(_board);
+            InvalidOperationException.ThrowIfNull(_piecePlacements);
+
+            foreach (IPiecePlacement piecePlacement in _piecePlacements)
+            {
+                InvalidOperationException.ThrowIfNull(piecePlacement);
+
                 IPiece piece = _pieceGetter.Get(piecePlacement.PieceType);
                 Coordinate sourceCoordinate = new(piecePlacement.Row, piecePlacement.Column);
 
-                board.Add(piece, sourceCoordinate);
+                _board.Add(piece, sourceCoordinate);
 
                 _eventEnqueuer.Enqueue(
                     _eventFactory.GetInstantiatePieceEvent(

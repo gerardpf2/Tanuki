@@ -55,7 +55,8 @@ namespace Game.Gameplay.UseCases
             IBoardDefinition boardDefinition = _boardDefinitionGetter.Get(boardId);
             IBoard board = new Board.Board(boardDefinition.Rows, boardDefinition.Columns);
 
-            _phaseResolver.ResolveInstantiateInitialAndCascade(board, boardDefinition.PiecePlacements);
+            _phaseResolver.Initialize(board, boardDefinition.PiecePlacements);
+            _phaseResolver.Resolve();
 
             return board;
         }

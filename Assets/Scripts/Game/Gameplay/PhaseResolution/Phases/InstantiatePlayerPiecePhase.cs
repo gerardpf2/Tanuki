@@ -26,15 +26,22 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _eventFactory = eventFactory;
         }
 
-        public void Resolve()
+        public void Initialize()
         {
+            // TODO: Check allow multiple Initialize. Add Clear ¿?
+        }
+
+        public bool Resolve()
+        {
+            // TODO
+
             const PieceType pieceType = PieceType.PlayerBlock;
 
             IPiece piece = _pieceGetter.Get(pieceType);
 
-            // TODO: Player controller, etc ¿?
-
             _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece, pieceType));
+
+            return false;
         }
     }
 }
