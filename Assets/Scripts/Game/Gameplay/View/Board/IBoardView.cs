@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public interface IBoardViewController
+    public interface IBoardView
     {
         void Initialize(IReadonlyBoard board);
 

@@ -84,7 +84,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IBoardViewController>(_ => new BoardViewController()));
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoardView>(_ => new BoardView()));
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
@@ -109,7 +109,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IEventResolverFactory>(r =>
                     new EventResolverFactory(
                         r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IBoardViewController>()
+                        r.Resolve<IBoardView>()
                     )
                 )
             );
@@ -144,7 +144,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IBoardViewController>(),
+                        r.Resolve<IBoardView>(),
                         r.Resolve<ICameraController>()
                     )
                 )

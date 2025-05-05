@@ -14,17 +14,17 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
     public class InstantiateEventResolver : IEventResolver<InstantiateEvent>
     {
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
-        [NotNull] private readonly IBoardViewController _boardViewController;
+        [NotNull] private readonly IBoardView _boardView;
 
         public InstantiateEventResolver(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] IBoardViewController boardViewController)
+            [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(boardViewController);
+            ArgumentNullException.ThrowIfNull(boardView);
 
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
-            _boardViewController = boardViewController;
+            _boardView = boardView;
         }
 
         public void Resolve([NotNull] InstantiateEvent evt, Action onComplete)
@@ -34,7 +34,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(evt.PieceType);
 
             GameObject instance =
-                _boardViewController.Instantiate(
+                _boardView.Instantiate(
                     evt.Piece,
                     evt.SourceCoordinate,
                     pieceViewDefinition.Prefab

@@ -11,22 +11,22 @@ namespace Game.Gameplay.View.EventResolution
         // TODO: Reuse instead of new ¿?
 
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
-        [NotNull] private readonly IBoardViewController _boardViewController;
+        [NotNull] private readonly IBoardView _boardView;
 
         public EventResolverFactory(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] IBoardViewController boardViewController)
+            [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(boardViewController);
+            ArgumentNullException.ThrowIfNull(boardView);
 
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
-            _boardViewController = boardViewController;
+            _boardView = boardView;
         }
 
         public IEventResolver<InstantiateEvent> GetInstantiate()
         {
-            return new InstantiateEventResolver(_pieceViewDefinitionGetter, _boardViewController);
+            return new InstantiateEventResolver(_pieceViewDefinitionGetter, _boardView);
         }
 
         public IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPiece()

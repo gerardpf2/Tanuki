@@ -15,7 +15,7 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private Transform _top;
         [SerializeField] private Transform _bottom;
 
-        private IBoardViewController _boardViewController;
+        private IBoardView _boardView;
         private ICameraController _cameraController;
 
         protected override void Awake()
@@ -26,13 +26,13 @@ namespace Game.Gameplay.View.Board
         }
 
         public void Inject(
-            [NotNull] IBoardViewController boardViewController,
+            [NotNull] IBoardView boardView,
             [NotNull] ICameraController cameraController)
         {
-            ArgumentNullException.ThrowIfNull(boardViewController);
+            ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraController);
 
-            _boardViewController = boardViewController;
+            _boardView = boardView;
             _cameraController = cameraController;
         }
 
@@ -49,10 +49,10 @@ namespace Game.Gameplay.View.Board
 
             InvalidOperationException.ThrowIfNull(_top);
             InvalidOperationException.ThrowIfNull(_bottom);
-            InvalidOperationException.ThrowIfNull(_boardViewController);
+            InvalidOperationException.ThrowIfNull(_boardView);
             InvalidOperationException.ThrowIfNull(_cameraController);
 
-            _boardViewController.Initialize(board);
+            _boardView.Initialize(board);
             _cameraController.Initialize(board, _top.position.y, _bottom.position.y);
 
             onViewReady?.Invoke();

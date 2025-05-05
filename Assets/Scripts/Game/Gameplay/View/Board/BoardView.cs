@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public class BoardViewController : IBoardViewController
+    public class BoardView : IBoardView
     {
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
