@@ -19,7 +19,7 @@ namespace Game.Gameplay.View.Board.Pieces
             SyncState();
         }
 
-        public void OnInstantiated(InstantiateReason instantiateReason, Action onComplete)
+        public void OnInstantiated(InstantiatePieceReason instantiatePieceReason, Action onComplete)
         {
             // TODO
 

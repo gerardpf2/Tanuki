@@ -56,8 +56,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IInstantiateInitial>(r =>
-                    new InstantiateInitial(
+                ruleFactory.GetSingleton<IInstantiateInitialPiecesPhase>(r =>
+                    new InstantiateInitialPiecesPhase(
                         r.Resolve<IPieceGetter>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
@@ -66,8 +66,8 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IInstantiatePlayerPiece>(r =>
-                    new InstantiatePlayerPiece(
+                ruleFactory.GetSingleton<IInstantiatePlayerPiecePhase>(r =>
+                    new InstantiatePlayerPiecePhase(
                         r.Resolve<IPieceGetter>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
@@ -78,8 +78,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseResolver>(r =>
                     new PhaseResolver(
-                        r.Resolve<IInstantiateInitial>(),
-                        r.Resolve<IInstantiatePlayerPiece>()
+                        r.Resolve<IInstantiateInitialPiecesPhase>(),
+                        r.Resolve<IInstantiatePlayerPiecePhase>()
                     )
                 )
             );

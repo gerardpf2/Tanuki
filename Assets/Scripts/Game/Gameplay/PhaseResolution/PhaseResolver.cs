@@ -8,30 +8,30 @@ namespace Game.Gameplay.PhaseResolution
 {
     public class PhaseResolver : IPhaseResolver
     {
-        [NotNull] private readonly IInstantiateInitial _instantiateInitial;
-        [NotNull] private readonly IInstantiatePlayerPiece _instantiatePlayerPiece;
+        [NotNull] private readonly IInstantiateInitialPiecesPhase _instantiateInitialPiecesPhase;
+        [NotNull] private readonly IInstantiatePlayerPiecePhase _instantiatePlayerPiecePhase;
 
         public PhaseResolver(
-            [NotNull] IInstantiateInitial instantiateInitial,
-            [NotNull] IInstantiatePlayerPiece instantiatePlayerPiece)
+            [NotNull] IInstantiateInitialPiecesPhase instantiateInitialPiecesPhase,
+            [NotNull] IInstantiatePlayerPiecePhase instantiatePlayerPiecePhase)
         {
-            ArgumentNullException.ThrowIfNull(instantiateInitial);
-            ArgumentNullException.ThrowIfNull(instantiatePlayerPiece);
+            ArgumentNullException.ThrowIfNull(instantiateInitialPiecesPhase);
+            ArgumentNullException.ThrowIfNull(instantiatePlayerPiecePhase);
 
-            _instantiateInitial = instantiateInitial;
-            _instantiatePlayerPiece = instantiatePlayerPiece;
+            _instantiateInitialPiecesPhase = instantiateInitialPiecesPhase;
+            _instantiatePlayerPiecePhase = instantiatePlayerPiecePhase;
         }
 
         public void ResolveInstantiateInitialAndCascade(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
         {
-            _instantiateInitial.Resolve(board, piecePlacements);
+            _instantiateInitialPiecesPhase.Resolve(board, piecePlacements);
 
             ResolveCascade(board);
         }
 
         public void ResolveCascade(IBoard board)
         {
-            _instantiatePlayerPiece.Resolve();
+            _instantiatePlayerPiecePhase.Resolve();
         }
     }
 }

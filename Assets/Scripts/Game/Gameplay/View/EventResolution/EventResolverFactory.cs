@@ -24,12 +24,12 @@ namespace Game.Gameplay.View.EventResolution
             _boardView = boardView;
         }
 
-        public IEventResolver<InstantiateEvent> GetInstantiate()
+        public IEventResolver<InstantiatePieceEvent> GetInstantiatePieceEventResolver()
         {
-            return new InstantiateEventResolver(_pieceViewDefinitionGetter, _boardView);
+            return new InstantiatePieceEventResolver(_pieceViewDefinitionGetter, _boardView);
         }
 
-        public IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPiece()
+        public IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPieceEventResolver()
         {
             return new InstantiatePlayerPieceEventResolver();
         }

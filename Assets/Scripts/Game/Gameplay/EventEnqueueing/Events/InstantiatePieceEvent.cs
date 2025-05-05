@@ -4,23 +4,23 @@ using Game.Gameplay.EventEnqueueing.Events.Reasons;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {
-    public class InstantiateEvent : IEvent
+    public class InstantiatePieceEvent : IEvent
     {
         public readonly IPiece Piece;
         public readonly PieceType PieceType;
         public readonly Coordinate SourceCoordinate;
-        public readonly InstantiateReason InstantiateReason;
+        public readonly InstantiatePieceReason InstantiatePieceReason;
 
-        public InstantiateEvent(
+        public InstantiatePieceEvent(
             IPiece piece,
             PieceType pieceType,
             Coordinate sourceCoordinate,
-            InstantiateReason instantiateReason)
+            InstantiatePieceReason instantiatePieceReason)
         {
             Piece = piece;
             PieceType = pieceType;
             SourceCoordinate = sourceCoordinate;
-            InstantiateReason = instantiateReason;
+            InstantiatePieceReason = instantiatePieceReason;
         }
     }
 }

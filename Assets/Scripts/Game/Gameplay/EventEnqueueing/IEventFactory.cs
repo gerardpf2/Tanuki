@@ -9,14 +9,14 @@ namespace Game.Gameplay.EventEnqueueing
     public interface IEventFactory
     {
         [NotNull]
-        IEvent GetInstantiate(
+        IEvent GetInstantiatePieceEvent(
             IPiece piece,
             PieceType pieceType,
             Coordinate sourceCoordinate,
-            InstantiateReason instantiateReason
+            InstantiatePieceReason instantiatePieceReason
         );
 
         [NotNull]
-        IEvent GetInstantiatePlayerPiece(IPiece piece, PieceType pieceType);
+        IEvent GetInstantiatePlayerPieceEvent(IPiece piece, PieceType pieceType);
     }
 }

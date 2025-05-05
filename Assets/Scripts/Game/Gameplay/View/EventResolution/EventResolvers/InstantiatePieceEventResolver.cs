@@ -11,12 +11,12 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
-    public class InstantiateEventResolver : IEventResolver<InstantiateEvent>
+    public class InstantiatePieceEventResolver : IEventResolver<InstantiatePieceEvent>
     {
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IBoardView _boardView;
 
-        public InstantiateEventResolver(
+        public InstantiatePieceEventResolver(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IBoardView boardView)
         {
@@ -27,7 +27,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             _boardView = boardView;
         }
 
-        public void Resolve([NotNull] InstantiateEvent evt, Action onComplete)
+        public void Resolve([NotNull] InstantiatePieceEvent evt, Action onComplete)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
@@ -47,7 +47,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
             dataSettable.SetData(evt.Piece);
-            pieceViewEventNotifier.OnInstantiated(evt.InstantiateReason, onComplete);
+            pieceViewEventNotifier.OnInstantiated(evt.InstantiatePieceReason, onComplete);
         }
     }
 }

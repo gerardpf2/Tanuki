@@ -6,13 +6,13 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class InstantiatePlayerPiece : IInstantiatePlayerPiece
+    public class InstantiatePlayerPiecePhase : IInstantiatePlayerPiecePhase
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        public InstantiatePlayerPiece(
+        public InstantiatePlayerPiecePhase(
             [NotNull] IPieceGetter pieceGetter,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
@@ -34,7 +34,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             // TODO: Player controller, etc ¿?
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPiece(piece, pieceType));
+            _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece, pieceType));
         }
     }
 }

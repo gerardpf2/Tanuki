@@ -23,11 +23,11 @@ namespace Game.Gameplay.View.EventResolution
 
             switch (evt)
             {
-                case InstantiateEvent instantiateEvent:
-                    _eventResolverFactory.GetInstantiate().Resolve(instantiateEvent, onComplete);
+                case InstantiatePieceEvent instantiateEvent:
+                    _eventResolverFactory.GetInstantiatePieceEventResolver().Resolve(instantiateEvent, onComplete);
                     break;
                 case InstantiatePlayerPieceEvent instantiatePlayerPieceEvent:
-                    _eventResolverFactory.GetInstantiatePlayerPiece().Resolve(instantiatePlayerPieceEvent, onComplete);
+                    _eventResolverFactory.GetInstantiatePlayerPieceEventResolver().Resolve(instantiatePlayerPieceEvent, onComplete);
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);

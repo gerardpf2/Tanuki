@@ -7,16 +7,16 @@ namespace Game.Gameplay.EventEnqueueing
 {
     public class EventFactory : IEventFactory
     {
-        public IEvent GetInstantiate(
+        public IEvent GetInstantiatePieceEvent(
             IPiece piece,
             PieceType pieceType,
             Coordinate sourceCoordinate,
-            InstantiateReason instantiateReason)
+            InstantiatePieceReason instantiatePieceReason)
         {
-            return new InstantiateEvent(piece, pieceType, sourceCoordinate, instantiateReason);
+            return new InstantiatePieceEvent(piece, pieceType, sourceCoordinate, instantiatePieceReason);
         }
 
-        public IEvent GetInstantiatePlayerPiece(IPiece piece, PieceType pieceType)
+        public IEvent GetInstantiatePlayerPieceEvent(IPiece piece, PieceType pieceType)
         {
             return new InstantiatePlayerPieceEvent(piece, pieceType);
         }

@@ -8,13 +8,13 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class InstantiateInitial : IInstantiateInitial
+    public class InstantiateInitialPiecesPhase : IInstantiateInitialPiecesPhase
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        public InstantiateInitial(
+        public InstantiateInitialPiecesPhase(
             [NotNull] IPieceGetter pieceGetter,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
@@ -43,11 +43,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 board.Add(piece, sourceCoordinate);
 
                 _eventEnqueuer.Enqueue(
-                    _eventFactory.GetInstantiate(
+                    _eventFactory.GetInstantiatePieceEvent(
                         piece,
                         piecePlacement.PieceType,
                         sourceCoordinate,
-                        InstantiateReason.Initialize
+                        InstantiatePieceReason.Initial
                     )
                 );
             }
