@@ -2,6 +2,7 @@ namespace Game.Gameplay.EventEnqueueing.Events.Reasons
 {
     public enum InstantiatePieceReason
     {
-        Initial
+        Initial,
+        Player
     }
 }

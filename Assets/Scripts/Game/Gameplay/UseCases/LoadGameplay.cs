@@ -5,6 +5,7 @@ using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
+using Game.Gameplay.View.Player;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -17,6 +18,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
+        [NotNull] private readonly IPlayerView _playerView;
         [NotNull] private readonly ICameraController _cameraController;
         [NotNull] private readonly IEventListener _eventListener;
         [NotNull] private readonly IScreenLoader _screenLoader;
@@ -26,6 +28,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
+            [NotNull] IPlayerView playerView,
             [NotNull] ICameraController cameraController,
             [NotNull] IEventListener eventListener,
             [NotNull] IScreenLoader screenLoader)
@@ -34,6 +37,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
+            ArgumentNullException.ThrowIfNull(playerView);
             ArgumentNullException.ThrowIfNull(cameraController);
             ArgumentNullException.ThrowIfNull(eventListener);
             ArgumentNullException.ThrowIfNull(screenLoader);
@@ -42,6 +46,7 @@ namespace Game.Gameplay.UseCases
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
+            _playerView = playerView;
             _cameraController = cameraController;
             _eventListener = eventListener;
             _screenLoader = screenLoader;
@@ -71,6 +76,7 @@ namespace Game.Gameplay.UseCases
         private GameplayViewData PrepareView(IReadonlyBoard board)
         {
             _boardView.Initialize(board);
+            _playerView.Initialize();
             _cameraController.Initialize(board);
 
             BoardViewData boardViewData = new(_eventListener.Initialize);

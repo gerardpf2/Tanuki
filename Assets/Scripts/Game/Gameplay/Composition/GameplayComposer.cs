@@ -7,6 +7,7 @@ using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
+using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -113,7 +114,8 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IEventResolverFactory>(r =>
                     new EventResolverFactory(
                         r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IBoardView>()
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<IPlayerView>()
                     )
                 )
             );
@@ -125,6 +127,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IPlayerView>(_ => new PlayerView()));
         }
 
         protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
@@ -141,6 +145,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
                         r.Resolve<IScreenLoader>()

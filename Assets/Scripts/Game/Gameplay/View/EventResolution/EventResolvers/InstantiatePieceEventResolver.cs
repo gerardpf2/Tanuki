@@ -29,6 +29,8 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         public void Resolve([NotNull] InstantiatePieceEvent evt, Action onComplete)
         {
+            // TODO: Reuse code InstantiatePieceEventResolver and InstantiatePlayerPieceEventResolver
+
             ArgumentNullException.ThrowIfNull(evt);
 
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(evt.PieceType);
