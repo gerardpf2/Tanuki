@@ -37,15 +37,6 @@ namespace Game.Gameplay.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IBoardController>(r =>
-                    new BoardController(
-                        r.Resolve<IBoardDefinitionGetter>(),
-                        r.Resolve<IPhaseResolver>()
-                    )
-                )
-            );
-
             ruleAdder.Add(ruleFactory.GetInstance(_boardDefinitionGetter));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceFactory>(_ => new PieceFactory()));
@@ -126,7 +117,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventsResolver>(r =>
                     new EventsResolver(
-                        r.Resolve<IEventResolverFactory>())
+                        r.Resolve<IEventResolverFactory>()
+                    )
                 )
             );
         }
@@ -141,6 +133,9 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplay>(r =>
                     new LoadGameplay(
+                        r.Resolve<IBoardDefinitionGetter>(),
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventListener>(),
                         r.Resolve<IScreenLoader>()
                     )
                 )
@@ -149,10 +144,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IBoardController>(),
                         r.Resolve<IBoardViewController>(),
-                        r.Resolve<ICameraController>(),
-                        r.Resolve<IEventListener>()
+                        r.Resolve<ICameraController>()
                     )
                 )
             );

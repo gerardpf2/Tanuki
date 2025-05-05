@@ -1,12 +1,17 @@
+using System;
+using Game.Gameplay.Board;
+
 namespace Game.Gameplay.View.Board
 {
     public class BoardViewData
     {
-        public readonly string BoardId;
+        public readonly IReadonlyBoard Board;
+        public readonly Action OnViewReady;
 
-        public BoardViewData(string boardId)
+        public BoardViewData(IReadonlyBoard board, Action onViewReady)
         {
-            BoardId = boardId;
+            Board = board;
+            OnViewReady = onViewReady;
         }
     }
 }
