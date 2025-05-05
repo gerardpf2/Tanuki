@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.PhaseResolution;
+using Game.Gameplay.Player;
 using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -14,6 +15,7 @@ namespace Game.Gameplay.UseCases
     {
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
+        [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraController _cameraController;
         [NotNull] private readonly IEventListener _eventListener;
@@ -22,6 +24,7 @@ namespace Game.Gameplay.UseCases
         public LoadGameplay(
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
             [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraController cameraController,
             [NotNull] IEventListener eventListener,
@@ -29,6 +32,7 @@ namespace Game.Gameplay.UseCases
         {
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
             ArgumentNullException.ThrowIfNull(phaseResolver);
+            ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraController);
             ArgumentNullException.ThrowIfNull(eventListener);
@@ -36,6 +40,7 @@ namespace Game.Gameplay.UseCases
 
             _boardDefinitionGetter = boardDefinitionGetter;
             _phaseResolver = phaseResolver;
+            _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
             _cameraController = cameraController;
             _eventListener = eventListener;
@@ -56,6 +61,8 @@ namespace Game.Gameplay.UseCases
             IBoard board = new Board.Board(boardDefinition.Rows, boardDefinition.Columns);
 
             _phaseResolver.Initialize(board, boardDefinition.PiecePlacements);
+            _playerPiecesBag.Initialize();
+
             _phaseResolver.Resolve();
 
             return board;

@@ -1,6 +1,7 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -11,19 +12,23 @@ namespace Game.Gameplay.PhaseResolution.Phases
         [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
+        [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
 
         public InstantiatePlayerPiecePhase(
             [NotNull] IPieceGetter pieceGetter,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory)
+            [NotNull] IEventFactory eventFactory,
+            [NotNull] IPlayerPiecesBag playerPiecesBag)
         {
             ArgumentNullException.ThrowIfNull(pieceGetter);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
+            ArgumentNullException.ThrowIfNull(playerPiecesBag);
 
             _pieceGetter = pieceGetter;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
+            _playerPiecesBag = playerPiecesBag;
         }
 
         public void Initialize()
@@ -33,15 +38,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         public bool Resolve()
         {
-            // TODO
-
-            const PieceType pieceType = PieceType.PlayerBlock;
-
+            PieceType pieceType = _playerPiecesBag.GetNext();
             IPiece piece = _pieceGetter.Get(pieceType);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece, pieceType));
 
-            return false;
+            return false; // TODO: Return always false ¿?
         }
     }
 }

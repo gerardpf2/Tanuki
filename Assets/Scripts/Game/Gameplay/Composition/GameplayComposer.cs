@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
+using Game.Gameplay.Player;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -70,7 +71,8 @@ namespace Game.Gameplay.Composition
                     new InstantiatePlayerPiecePhase(
                         r.Resolve<IPieceGetter>(),
                         r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>()
+                        r.Resolve<IEventFactory>(),
+                        r.Resolve<IPlayerPiecesBag>()
                     )
                 )
             );
@@ -83,6 +85,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IPlayerPiecesBag>(_ => new PlayerPiecesBag()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IBoardView>(_ => new BoardView()));
 
@@ -135,6 +139,7 @@ namespace Game.Gameplay.Composition
                     new LoadGameplay(
                         r.Resolve<IBoardDefinitionGetter>(),
                         r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
