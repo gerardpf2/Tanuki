@@ -1,5 +1,4 @@
 using System;
-using Game.Gameplay.Board;
 using Game.Gameplay.View.Camera;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
@@ -15,7 +14,6 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private Transform _top;
         [SerializeField] private Transform _bottom;
 
-        private IBoardView _boardView;
         private ICameraController _cameraController;
 
         protected override void Awake()
@@ -25,14 +23,10 @@ namespace Game.Gameplay.View.Board
             InjectResolver.Resolve(this);
         }
 
-        public void Inject(
-            [NotNull] IBoardView boardView,
-            [NotNull] ICameraController cameraController)
+        public void Inject([NotNull] ICameraController cameraController)
         {
-            ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraController);
 
-            _boardView = boardView;
             _cameraController = cameraController;
         }
 
@@ -40,20 +34,16 @@ namespace Game.Gameplay.View.Board
         {
             ArgumentNullException.ThrowIfNull(data);
 
-            Initialize(data.Board, data.OnViewReady);
+            Initialize(data.OnViewReady);
         }
 
-        private void Initialize(IReadonlyBoard board, Action onViewReady)
+        private void Initialize(Action onViewReady)
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
-
             InvalidOperationException.ThrowIfNull(_top);
             InvalidOperationException.ThrowIfNull(_bottom);
-            InvalidOperationException.ThrowIfNull(_boardView);
             InvalidOperationException.ThrowIfNull(_cameraController);
 
-            _boardView.Initialize(board);
-            _cameraController.Initialize(board, _top.position.y, _bottom.position.y);
+            _cameraController.SetBoardViewLimits(_top.position.y, _bottom.position.y);
 
             onViewReady?.Invoke();
         }

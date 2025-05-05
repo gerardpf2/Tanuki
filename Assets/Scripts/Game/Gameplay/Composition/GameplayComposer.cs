@@ -135,6 +135,8 @@ namespace Game.Gameplay.Composition
                     new LoadGameplay(
                         r.Resolve<IBoardDefinitionGetter>(),
                         r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
                         r.Resolve<IScreenLoader>()
                     )
@@ -144,7 +146,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IBoardView>(),
                         r.Resolve<ICameraController>()
                     )
                 )

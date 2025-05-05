@@ -13,6 +13,10 @@ namespace Game.Gameplay.View.Camera
 
         [NotNull] private readonly Transform _cameraTransform;
 
+        private IReadonlyBoard _board;
+        private float? _topPositionY;
+        private float? _bottomPositionY;
+
         public CameraController([NotNull] ICameraGetter cameraGetter)
         {
             ArgumentNullException.ThrowIfNull(cameraGetter);
@@ -20,14 +24,36 @@ namespace Game.Gameplay.View.Camera
             _cameraTransform = cameraGetter.GetMain().transform;
         }
 
-        public void Initialize([NotNull] IReadonlyBoard board, float boardViewTopY, float boardViewBottomY)
+        public void Initialize([NotNull] IReadonlyBoard board)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
             ArgumentNullException.ThrowIfNull(board);
 
-            float x = Mathf.Floor(0.5f * board.Columns);
-            float y = Mathf.Max(board.HighestNonEmptyRow + ExtraRowsOnTop - boardViewTopY, -boardViewBottomY);
+            _board = board;
+        }
+
+        public void SetBoardViewLimits(float topPositionY, float bottomPositionY)
+        {
+            _topPositionY = topPositionY;
+            _bottomPositionY = bottomPositionY;
+
+            MoveToHighestNonEmptyRow(); // TODO
+        }
+
+        private void MoveToHighestNonEmptyRow()
+        {
+            InvalidOperationException.ThrowIfNull(_board);
+            InvalidOperationException.ThrowIfNull(_topPositionY);
+            InvalidOperationException.ThrowIfNull(_bottomPositionY);
+
+            float x = Mathf.Floor(0.5f * _board.Columns);
+
+            float y =
+                Mathf.Max(
+                    _board.HighestNonEmptyRow + ExtraRowsOnTop - _topPositionY.Value,
+                    -_bottomPositionY.Value
+                );
 
             _cameraTransform.position = _cameraTransform.position.WithX(x).WithY(y);
         }

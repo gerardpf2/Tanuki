@@ -4,6 +4,8 @@ namespace Game.Gameplay.View.Camera
 {
     public interface ICameraController
     {
-        void Initialize(IReadonlyBoard board, float boardViewTopY, float boardViewBottomY);
+        void Initialize(IReadonlyBoard board);
+
+        void SetBoardViewLimits(float topPositionY, float bottomPositionY);
     }
 }

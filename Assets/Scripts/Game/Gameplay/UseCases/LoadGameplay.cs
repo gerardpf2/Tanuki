@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -13,22 +14,30 @@ namespace Game.Gameplay.UseCases
     {
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
+        [NotNull] private readonly IBoardView _boardView;
+        [NotNull] private readonly ICameraController _cameraController;
         [NotNull] private readonly IEventListener _eventListener;
         [NotNull] private readonly IScreenLoader _screenLoader;
 
         public LoadGameplay(
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
             [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IBoardView boardView,
+            [NotNull] ICameraController cameraController,
             [NotNull] IEventListener eventListener,
             [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
             ArgumentNullException.ThrowIfNull(phaseResolver);
+            ArgumentNullException.ThrowIfNull(boardView);
+            ArgumentNullException.ThrowIfNull(cameraController);
             ArgumentNullException.ThrowIfNull(eventListener);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
             _boardDefinitionGetter = boardDefinitionGetter;
             _phaseResolver = phaseResolver;
+            _boardView = boardView;
+            _cameraController = cameraController;
             _eventListener = eventListener;
             _screenLoader = screenLoader;
         }
@@ -36,8 +45,9 @@ namespace Game.Gameplay.UseCases
         public void Resolve(string boardId)
         {
             IReadonlyBoard board = PrepareModel(boardId);
+            GameplayViewData gameplayViewData = PrepareView(board);
 
-            LoadView(board);
+            LoadScreen(gameplayViewData);
         }
 
         private IReadonlyBoard PrepareModel(string boardId)
@@ -50,11 +60,19 @@ namespace Game.Gameplay.UseCases
             return board;
         }
 
-        private void LoadView(IReadonlyBoard board)
+        private GameplayViewData PrepareView(IReadonlyBoard board)
         {
-            BoardViewData boardViewData = new(board, _eventListener.Initialize);
+            _boardView.Initialize(board);
+            _cameraController.Initialize(board);
+
+            BoardViewData boardViewData = new(_eventListener.Initialize);
             GameplayViewData gameplayViewData = new(boardViewData);
 
+            return gameplayViewData;
+        }
+
+        private void LoadScreen(GameplayViewData gameplayViewData)
+        {
             _screenLoader.Load("Gameplay", gameplayViewData);
         }
     }
