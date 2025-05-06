@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.View.Camera;
 using Infrastructure.System.Exceptions;
 using UnityEngine;
 
@@ -7,7 +8,16 @@ namespace Game.Gameplay.View.Player
 {
     public class PlayerView : IPlayerView
     {
+        [NotNull] private readonly ICameraBoardViewGetter _cameraBoardViewGetter;
+
         private Transform _playerPieceParent;
+
+        public PlayerView([NotNull] ICameraBoardViewGetter cameraBoardViewGetter)
+        {
+            ArgumentNullException.ThrowIfNull(cameraBoardViewGetter);
+
+            _cameraBoardViewGetter = cameraBoardViewGetter;
+        }
 
         public void Initialize()
         {
@@ -22,7 +32,8 @@ namespace Game.Gameplay.View.Player
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_playerPieceParent);
 
-            GameObject instance = Object.Instantiate(prefab, _playerPieceParent);
+            Vector3 position = GetPosition();
+            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _playerPieceParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 instance,
@@ -30,6 +41,11 @@ namespace Game.Gameplay.View.Player
             );
 
             return instance;
+        }
+
+        private Vector3 GetPosition()
+        {
+            return new Vector3(_cameraBoardViewGetter.Column, _cameraBoardViewGetter.VisibleTopRow);
         }
     }
 }

@@ -94,12 +94,15 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ICameraController>(r =>
+                ruleFactory.GetSingleton(r =>
                     new CameraController(
                         r.Resolve<ICameraGetter>()
                     )
                 )
             );
+            ruleAdder.Add(ruleFactory.GetTo<ICameraController, CameraController>());
+            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewGetter, CameraController>());
+            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewSetter, CameraController>());
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventListener>(r =>
@@ -128,7 +131,13 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IPlayerView>(_ => new PlayerView()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerView>(r =>
+                    new PlayerView(
+                        r.Resolve<ICameraBoardViewGetter>()
+                    )
+                )
+            );
         }
 
         protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
@@ -156,7 +165,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<ICameraController>()
+                        r.Resolve<ICameraBoardViewSetter>()
                     )
                 )
             );

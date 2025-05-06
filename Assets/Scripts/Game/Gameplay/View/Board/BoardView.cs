@@ -30,7 +30,7 @@ namespace Game.Gameplay.View.Board
 
             _board.Add(piece, sourceCoordinate);
 
-            Vector3 position = new(sourceCoordinate.Column, sourceCoordinate.Row);
+            Vector3 position = GetPosition(sourceCoordinate);
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
@@ -39,6 +39,11 @@ namespace Game.Gameplay.View.Board
             );
 
             return instance;
+        }
+
+        private static Vector3 GetPosition(Coordinate sourceCoordinate)
+        {
+            return new Vector3(sourceCoordinate.Column, sourceCoordinate.Row);
         }
     }
 }
