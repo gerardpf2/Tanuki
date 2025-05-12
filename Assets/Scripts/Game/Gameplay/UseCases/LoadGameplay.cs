@@ -77,7 +77,7 @@ namespace Game.Gameplay.UseCases
         {
             _boardView.Initialize(board);
             _playerView.Initialize();
-            _cameraController.Initialize(board);
+            _cameraController.Initialize();
 
             BoardViewData boardViewData = new(_eventListener.Initialize);
             GameplayViewData gameplayViewData = new(boardViewData);

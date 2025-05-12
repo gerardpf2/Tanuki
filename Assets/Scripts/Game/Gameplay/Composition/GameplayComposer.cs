@@ -96,6 +96,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton(r =>
                     new CameraController(
+                        r.Resolve<IBoardView>(),
                         r.Resolve<ICameraGetter>()
                     )
                 )

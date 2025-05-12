@@ -1,4 +1,4 @@
-using Game.Gameplay.Board;
+using Game.Gameplay.View.Board;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Utils;
@@ -11,9 +11,9 @@ namespace Game.Gameplay.View.Camera
     {
         private const int ExtraRowsOnTop = 5; // TODO: Scriptable object for this and other camera params
 
+        [NotNull] private readonly IReadonlyBoardView _boardView;
         [NotNull] private readonly Transform _cameraTransform;
 
-        private IReadonlyBoard _board;
         private float? _topPositionY;
         private float? _bottomPositionY;
 
@@ -27,20 +27,18 @@ namespace Game.Gameplay.View.Camera
             }
         }
 
-        public CameraController([NotNull] ICameraGetter cameraGetter)
+        public CameraController([NotNull] IReadonlyBoardView boardView, [NotNull] ICameraGetter cameraGetter)
         {
+            ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraGetter);
 
+            _boardView = boardView;
             _cameraTransform = cameraGetter.GetMain().transform;
         }
 
-        public void Initialize([NotNull] IReadonlyBoard board)
+        public void Initialize()
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
-
-            ArgumentNullException.ThrowIfNull(board);
-
-            _board = board;
         }
 
         public void SetBoardViewLimits(float topPositionY, float bottomPositionY)
@@ -53,15 +51,14 @@ namespace Game.Gameplay.View.Camera
 
         private void MoveToHighestNonEmptyRow()
         {
-            InvalidOperationException.ThrowIfNull(_board);
             InvalidOperationException.ThrowIfNull(_topPositionY);
             InvalidOperationException.ThrowIfNull(_bottomPositionY);
 
-            float x = Mathf.Floor(0.5f * _board.Columns);
+            float x = Mathf.Floor(0.5f * _boardView.Board.Columns);
 
             float y =
                 Mathf.Max(
-                    _board.HighestNonEmptyRow + ExtraRowsOnTop - _topPositionY.Value,
+                    _boardView.Board.HighestNonEmptyRow + ExtraRowsOnTop - _topPositionY.Value,
                     -_bottomPositionY.Value
                 );
 
