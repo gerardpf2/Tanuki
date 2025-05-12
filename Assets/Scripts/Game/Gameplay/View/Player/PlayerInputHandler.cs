@@ -48,6 +48,11 @@ namespace Game.Gameplay.View.Player
                 InvalidOperationException.Throw(); // TODO
             }
 
+            if (IsOutsideScreen(eventData))
+            {
+                return;
+            }
+
             Vector2 currentWorldPosition = GetWorldPosition(eventData);
             float deltaX = (currentWorldPosition - _previousWorldPosition).x;
 
@@ -71,6 +76,15 @@ namespace Game.Gameplay.View.Player
             ArgumentNullException.ThrowIfNull(eventData);
 
             return eventData.pointerCurrentRaycast.worldPosition;
+        }
+
+        private static bool IsOutsideScreen([NotNull] PointerEventData eventData)
+        {
+            ArgumentNullException.ThrowIfNull(eventData);
+
+            Vector2 position = eventData.position;
+
+            return position.x < 0.0f || position.x > Screen.width || position.y < 0.0f || position.y > Screen.height;
         }
     }
 }

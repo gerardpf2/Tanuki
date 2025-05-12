@@ -13,6 +13,7 @@ namespace Game.Gameplay.View.Player
 
         private Transform _playerPieceParent;
         private Transform _instanceTransform;
+        private float _instanceX;
 
         public PlayerView([NotNull] ICameraBoardViewGetter cameraBoardViewGetter)
         {
@@ -44,6 +45,7 @@ namespace Game.Gameplay.View.Player
             );
 
             _instanceTransform = instance.transform;
+            _instanceX = position.x;
 
             return instance;
         }
@@ -52,12 +54,20 @@ namespace Game.Gameplay.View.Player
         {
             InvalidOperationException.ThrowIfNull(_instanceTransform);
 
-            _instanceTransform.position = _instanceTransform.position.WithX(_instanceTransform.position.x + deltaX);
+            _instanceX = ClampX(_instanceX + deltaX);
+            _instanceTransform.position = _instanceTransform.position.WithX(Mathf.RoundToInt(_instanceX));
         }
 
         private Vector3 GetWorldPosition()
         {
             return new Vector3(_cameraBoardViewGetter.Column, _cameraBoardViewGetter.VisibleTopRow);
+        }
+
+        private static float ClampX(float x)
+        {
+            // TODO: 0 to Columns - 1
+
+            return Mathf.Clamp(x, 0.0f, 2.0f);
         }
     }
 }
