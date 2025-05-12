@@ -27,8 +27,6 @@ namespace Game.Gameplay.View.Camera
             }
         }
 
-        public int Column => (int)Mathf.Floor(_cameraTransform.position.x);
-
         public CameraController([NotNull] ICameraGetter cameraGetter)
         {
             ArgumentNullException.ThrowIfNull(cameraGetter);

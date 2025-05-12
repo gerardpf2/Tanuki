@@ -11,6 +11,16 @@ namespace Game.Gameplay.View.Board
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
 
+        public IReadonlyBoard Board
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_board);
+
+                return _board;
+            }
+        }
+
         public void Initialize([NotNull] IReadonlyBoard board)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?

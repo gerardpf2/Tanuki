@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Utils;
@@ -9,16 +10,21 @@ namespace Game.Gameplay.View.Player
 {
     public class PlayerView : IPlayerView
     {
+        [NotNull] private readonly IReadonlyBoardView _boardView;
         [NotNull] private readonly ICameraBoardViewGetter _cameraBoardViewGetter;
 
         private Transform _playerPieceParent;
         private Transform _instanceTransform;
         private float _instanceX;
 
-        public PlayerView([NotNull] ICameraBoardViewGetter cameraBoardViewGetter)
+        public PlayerView(
+            [NotNull] IReadonlyBoardView boardView,
+            [NotNull] ICameraBoardViewGetter cameraBoardViewGetter)
         {
+            ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraBoardViewGetter);
 
+            _boardView = boardView;
             _cameraBoardViewGetter = cameraBoardViewGetter;
         }
 
@@ -60,14 +66,12 @@ namespace Game.Gameplay.View.Player
 
         private Vector3 GetWorldPosition()
         {
-            return new Vector3(_cameraBoardViewGetter.Column, _cameraBoardViewGetter.VisibleTopRow);
+            return new Vector3(Mathf.Floor(0.5f * _boardView.Board.Columns), _cameraBoardViewGetter.VisibleTopRow);
         }
 
-        private static float ClampX(float x)
+        private float ClampX(float x)
         {
-            // TODO: 0 to Columns - 1
-
-            return Mathf.Clamp(x, 0.0f, 2.0f);
+            return Mathf.Clamp(x, 0.0f, _boardView.Board.Columns - 1);
         }
     }
 }

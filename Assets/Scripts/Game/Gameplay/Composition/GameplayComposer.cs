@@ -134,6 +134,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerView>(r =>
                     new PlayerView(
+                        r.Resolve<IBoardView>(),
                         r.Resolve<ICameraBoardViewGetter>()
                     )
                 )
