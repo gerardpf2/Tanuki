@@ -30,7 +30,7 @@ namespace Game.Gameplay.View.Board
 
             _board.Add(piece, sourceCoordinate);
 
-            Vector3 position = GetPosition(sourceCoordinate);
+            Vector3 position = GetWorldPosition(sourceCoordinate);
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
@@ -41,7 +41,7 @@ namespace Game.Gameplay.View.Board
             return instance;
         }
 
-        private static Vector3 GetPosition(Coordinate sourceCoordinate)
+        private static Vector3 GetWorldPosition(Coordinate sourceCoordinate)
         {
             return new Vector3(sourceCoordinate.Column, sourceCoordinate.Row);
         }

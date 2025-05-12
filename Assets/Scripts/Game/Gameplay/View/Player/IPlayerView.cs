@@ -10,5 +10,7 @@ namespace Game.Gameplay.View.Player
 
         [NotNull]
         GameObject Instantiate(IPiece piece, GameObject prefab);
+
+        void Move(float deltaX);
     }
 }

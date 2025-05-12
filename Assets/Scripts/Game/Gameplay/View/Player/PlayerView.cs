@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.View.Camera;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity.Utils;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Player
@@ -11,6 +12,7 @@ namespace Game.Gameplay.View.Player
         [NotNull] private readonly ICameraBoardViewGetter _cameraBoardViewGetter;
 
         private Transform _playerPieceParent;
+        private Transform _instanceTransform;
 
         public PlayerView([NotNull] ICameraBoardViewGetter cameraBoardViewGetter)
         {
@@ -31,8 +33,9 @@ namespace Game.Gameplay.View.Player
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_playerPieceParent);
+            InvalidOperationException.ThrowIfNotNull(_instanceTransform);
 
-            Vector3 position = GetPosition();
+            Vector3 position = GetWorldPosition();
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _playerPieceParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
@@ -40,10 +43,19 @@ namespace Game.Gameplay.View.Player
                 $"Cannot instantiate player piece with Prefab: {prefab.name}"
             );
 
+            _instanceTransform = instance.transform;
+
             return instance;
         }
 
-        private Vector3 GetPosition()
+        public void Move(float deltaX)
+        {
+            InvalidOperationException.ThrowIfNull(_instanceTransform);
+
+            _instanceTransform.position = _instanceTransform.position.WithX(_instanceTransform.position.x + deltaX);
+        }
+
+        private Vector3 GetWorldPosition()
         {
             return new Vector3(_cameraBoardViewGetter.Column, _cameraBoardViewGetter.VisibleTopRow);
         }
