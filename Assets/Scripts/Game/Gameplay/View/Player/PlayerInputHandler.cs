@@ -10,7 +10,7 @@ namespace Game.Gameplay.View.Player
     {
         private IPlayerView _playerView;
 
-        private Vector2 _previousWorldPosition;
+        private float _previousWorldPositionX;
         private bool _dragging;
 
         private void Awake()
@@ -34,31 +34,30 @@ namespace Game.Gameplay.View.Player
                 InvalidOperationException.Throw(); // TODO
             }
 
+            _previousWorldPositionX = GetWorldPositionX(eventData);
             _dragging = true;
-            _previousWorldPosition = GetWorldPosition(eventData);
         }
 
         public void OnDrag([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
-            InvalidOperationException.ThrowIfNull(_playerView);
 
             if (!_dragging)
             {
                 InvalidOperationException.Throw(); // TODO
             }
 
-            if (IsOutsideScreen(eventData))
+            if (!IsInsideScreen(eventData.position))
             {
                 return;
             }
 
-            Vector2 currentWorldPosition = GetWorldPosition(eventData);
-            float deltaX = (currentWorldPosition - _previousWorldPosition).x;
+            float currentWorldPositionX = GetWorldPositionX(eventData);
+            float deltaX = currentWorldPositionX - _previousWorldPositionX;
 
-            _playerView.Move(deltaX);
+            _previousWorldPositionX = currentWorldPositionX;
 
-            _previousWorldPosition = currentWorldPosition;
+            Move(deltaX);
         }
 
         public void OnEndDrag(PointerEventData _)
@@ -71,20 +70,23 @@ namespace Game.Gameplay.View.Player
             _dragging = false;
         }
 
-        private static Vector2 GetWorldPosition([NotNull] PointerEventData eventData)
+        private static float GetWorldPositionX([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
-            return eventData.pointerCurrentRaycast.worldPosition;
+            return eventData.pointerCurrentRaycast.worldPosition.x;
         }
 
-        private static bool IsOutsideScreen([NotNull] PointerEventData eventData)
+        private static bool IsInsideScreen(Vector2 position)
         {
-            ArgumentNullException.ThrowIfNull(eventData);
+            return position.x >= 0.0f && position.x <= Screen.width && position.y >= 0.0f && position.y <= Screen.height;
+        }
 
-            Vector2 position = eventData.position;
+        private void Move(float deltaX)
+        {
+            InvalidOperationException.ThrowIfNull(_playerView);
 
-            return position.x < 0.0f || position.x > Screen.width || position.y < 0.0f || position.y > Screen.height;
+            _playerView.Move(deltaX);
         }
     }
 }
