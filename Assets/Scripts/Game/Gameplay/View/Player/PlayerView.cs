@@ -11,7 +11,7 @@ namespace Game.Gameplay.View.Player
     public class PlayerView : IPlayerView
     {
         [NotNull] private readonly IReadonlyBoardView _boardView;
-        [NotNull] private readonly ICameraBoardViewGetter _cameraBoardViewGetter;
+        [NotNull] private readonly ICameraBoardViewPropertiesGetter _cameraBoardViewPropertiesGetter;
 
         private Transform _playerPieceParent;
         private Transform _instanceTransform;
@@ -19,13 +19,13 @@ namespace Game.Gameplay.View.Player
 
         public PlayerView(
             [NotNull] IReadonlyBoardView boardView,
-            [NotNull] ICameraBoardViewGetter cameraBoardViewGetter)
+            [NotNull] ICameraBoardViewPropertiesGetter cameraBoardViewPropertiesGetter)
         {
             ArgumentNullException.ThrowIfNull(boardView);
-            ArgumentNullException.ThrowIfNull(cameraBoardViewGetter);
+            ArgumentNullException.ThrowIfNull(cameraBoardViewPropertiesGetter);
 
             _boardView = boardView;
-            _cameraBoardViewGetter = cameraBoardViewGetter;
+            _cameraBoardViewPropertiesGetter = cameraBoardViewPropertiesGetter;
         }
 
         public void Initialize()
@@ -66,7 +66,7 @@ namespace Game.Gameplay.View.Player
 
         private Vector3 GetWorldPosition()
         {
-            return new Vector3(Mathf.Floor(0.5f * _boardView.Board.Columns), _cameraBoardViewGetter.VisibleTopRow);
+            return new Vector3(Mathf.Floor(0.5f * _boardView.Board.Columns), _cameraBoardViewPropertiesGetter.VisibleTopRow);
         }
 
         private float ClampX(float x)

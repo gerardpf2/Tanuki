@@ -14,7 +14,7 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private Transform _top;
         [SerializeField] private Transform _bottom;
 
-        private ICameraBoardViewSetter _cameraBoardViewSetter;
+        private ICameraBoardViewPropertiesSetter _cameraBoardViewPropertiesSetter;
 
         protected override void Awake()
         {
@@ -23,11 +23,11 @@ namespace Game.Gameplay.View.Board
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] ICameraBoardViewSetter cameraBoardViewSetter)
+        public void Inject([NotNull] ICameraBoardViewPropertiesSetter cameraBoardViewPropertiesSetter)
         {
-            ArgumentNullException.ThrowIfNull(cameraBoardViewSetter);
+            ArgumentNullException.ThrowIfNull(cameraBoardViewPropertiesSetter);
 
-            _cameraBoardViewSetter = cameraBoardViewSetter;
+            _cameraBoardViewPropertiesSetter = cameraBoardViewPropertiesSetter;
         }
 
         public void SetData([NotNull] BoardViewData data)
@@ -41,9 +41,9 @@ namespace Game.Gameplay.View.Board
         {
             InvalidOperationException.ThrowIfNull(_top);
             InvalidOperationException.ThrowIfNull(_bottom);
-            InvalidOperationException.ThrowIfNull(_cameraBoardViewSetter);
+            InvalidOperationException.ThrowIfNull(_cameraBoardViewPropertiesSetter);
 
-            _cameraBoardViewSetter.SetBoardViewLimits(_top.position.y, _bottom.position.y);
+            _cameraBoardViewPropertiesSetter.SetBoardViewLimits(_top.position.y, _bottom.position.y);
 
             onViewReady?.Invoke();
         }

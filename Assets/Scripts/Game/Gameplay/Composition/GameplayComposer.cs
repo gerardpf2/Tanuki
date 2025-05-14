@@ -102,8 +102,8 @@ namespace Game.Gameplay.Composition
                 )
             );
             ruleAdder.Add(ruleFactory.GetTo<ICameraController, CameraController>());
-            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewGetter, CameraController>());
-            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewSetter, CameraController>());
+            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewPropertiesGetter, CameraController>());
+            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewPropertiesSetter, CameraController>());
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventListener>(r =>
@@ -136,7 +136,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IPlayerView>(r =>
                     new PlayerView(
                         r.Resolve<IBoardView>(),
-                        r.Resolve<ICameraBoardViewGetter>()
+                        r.Resolve<ICameraBoardViewPropertiesGetter>()
                     )
                 )
             );
@@ -167,7 +167,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<ICameraBoardViewSetter>()
+                        r.Resolve<ICameraBoardViewPropertiesSetter>()
                     )
                 )
             );

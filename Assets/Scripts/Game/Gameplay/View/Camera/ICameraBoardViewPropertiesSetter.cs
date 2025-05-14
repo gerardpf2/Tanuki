@@ -1,6 +1,6 @@
 namespace Game.Gameplay.View.Camera
 {
-    public interface ICameraBoardViewSetter
+    public interface ICameraBoardViewPropertiesSetter
     {
         void SetBoardViewLimits(float topPositionY, float bottomPositionY);
     }

@@ -1,6 +1,6 @@
 namespace Game.Gameplay.View.Camera
 {
-    public interface ICameraBoardViewGetter
+    public interface ICameraBoardViewPropertiesGetter
     {
         int VisibleTopRow { get; }
     }
