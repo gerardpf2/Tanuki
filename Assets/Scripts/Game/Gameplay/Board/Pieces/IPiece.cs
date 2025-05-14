@@ -5,6 +5,8 @@ namespace Game.Gameplay.Board.Pieces
 {
     public interface IPiece
     {
+        PieceType Type { get; }
+
         bool Alive { get; }
 
         [NotNull]

@@ -1,17 +1,18 @@
-using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {
     public class InstantiatePlayerPieceEvent : IEvent
     {
-        public readonly IPiece Piece;
-        public readonly PieceType PieceType;
+        [NotNull] public readonly IPiece Piece;
 
-        public InstantiatePlayerPieceEvent(IPiece piece, PieceType pieceType)
+        public InstantiatePlayerPieceEvent([NotNull] IPiece piece)
         {
+            ArgumentNullException.ThrowIfNull(piece);
+
             Piece = piece;
-            PieceType = pieceType;
         }
     }
 }

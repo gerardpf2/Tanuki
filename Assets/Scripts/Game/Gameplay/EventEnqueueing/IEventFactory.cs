@@ -11,12 +11,11 @@ namespace Game.Gameplay.EventEnqueueing
         [NotNull]
         IEvent GetInstantiatePieceEvent(
             IPiece piece,
-            PieceType pieceType,
             Coordinate sourceCoordinate,
             InstantiatePieceReason instantiatePieceReason
         );
 
         [NotNull]
-        IEvent GetInstantiatePlayerPieceEvent(IPiece piece, PieceType pieceType);
+        IEvent GetInstantiatePlayerPieceEvent(IPiece piece);
     }
 }

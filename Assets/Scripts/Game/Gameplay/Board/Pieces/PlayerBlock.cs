@@ -14,6 +14,8 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
+        public PieceType Type => PieceType.PlayerBlock;
+
         public bool Alive { get; private set; } = true;
 
         public IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate)

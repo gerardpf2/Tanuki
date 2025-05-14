@@ -18,6 +18,8 @@ namespace Game.Gameplay.Board.Pieces
 
         private int _eyeRowOffset;
 
+        public PieceType Type => PieceType.Test;
+
         public bool Alive { get; private set; } = true;
 
         public bool EyeMovementDirectionUp { get; private set; }

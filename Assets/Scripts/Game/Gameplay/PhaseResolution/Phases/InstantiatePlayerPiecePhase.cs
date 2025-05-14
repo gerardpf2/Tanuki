@@ -50,7 +50,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             PieceType pieceType = _playerPiecesBag.Current.Value;
             IPiece piece = _pieceGetter.Get(pieceType);
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece, pieceType));
+            _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece));
 
             return true;
         }

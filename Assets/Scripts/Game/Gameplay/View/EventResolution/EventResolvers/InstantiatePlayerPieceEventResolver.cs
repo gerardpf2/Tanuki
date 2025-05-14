@@ -35,7 +35,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
             ArgumentNullException.ThrowIfNull(evt);
 
-            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(evt.PieceType);
+            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(evt.Piece.Type);
 
             GameObject instance = _playerView.Instantiate(evt.Piece, pieceViewDefinition.Prefab);
 

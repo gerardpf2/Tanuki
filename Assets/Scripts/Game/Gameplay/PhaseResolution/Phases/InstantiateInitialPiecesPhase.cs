@@ -85,7 +85,6 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 _eventEnqueuer.Enqueue(
                     _eventFactory.GetInstantiatePieceEvent(
                         piece,
-                        piecePlacement.PieceType,
                         sourceCoordinate,
                         InstantiatePieceReason.Initial
                     )
