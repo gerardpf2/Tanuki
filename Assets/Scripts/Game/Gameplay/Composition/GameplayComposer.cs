@@ -78,10 +78,13 @@ namespace Game.Gameplay.Composition
                 )
             );
 
+            ruleAdder.Add(ruleFactory.GetSingleton<ILockPlayerPiecePhase>(_ => new LockPlayerPiecePhase()));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseResolver>(r =>
                     new PhaseResolver(
                         r.Resolve<IInstantiateInitialPiecesPhase>(),
+                        r.Resolve<ILockPlayerPiecePhase>(),
                         r.Resolve<IInstantiatePlayerPiecePhase>()
                     )
                 )

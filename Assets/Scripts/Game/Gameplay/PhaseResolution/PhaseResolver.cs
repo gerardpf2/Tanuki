@@ -9,22 +9,27 @@ namespace Game.Gameplay.PhaseResolution
     public class PhaseResolver : IPhaseResolver
     {
         [NotNull] private readonly IInstantiateInitialPiecesPhase _instantiateInitialPiecesPhase;
+        [NotNull] private readonly ILockPlayerPiecePhase _lockPlayerPiecePhase;
         [NotNull] private readonly IInstantiatePlayerPiecePhase _instantiatePlayerPiecePhase;
         [NotNull, ItemNotNull] private readonly IReadOnlyList<IPhase> _phases;
 
         public PhaseResolver(
             [NotNull] IInstantiateInitialPiecesPhase instantiateInitialPiecesPhase,
+            [NotNull] ILockPlayerPiecePhase lockPlayerPiecePhase,
             [NotNull] IInstantiatePlayerPiecePhase instantiatePlayerPiecePhase)
         {
             ArgumentNullException.ThrowIfNull(instantiateInitialPiecesPhase);
+            ArgumentNullException.ThrowIfNull(lockPlayerPiecePhase);
             ArgumentNullException.ThrowIfNull(instantiatePlayerPiecePhase);
 
             _instantiateInitialPiecesPhase = instantiateInitialPiecesPhase;
+            _lockPlayerPiecePhase = lockPlayerPiecePhase;
             _instantiatePlayerPiecePhase = instantiatePlayerPiecePhase;
 
             _phases = new List<IPhase>
             {
                 _instantiateInitialPiecesPhase,
+                _lockPlayerPiecePhase,
                 _instantiatePlayerPiecePhase
             };
         }
@@ -34,6 +39,7 @@ namespace Game.Gameplay.PhaseResolution
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
             _instantiateInitialPiecesPhase.Initialize(board, piecePlacements);
+            _lockPlayerPiecePhase.Initialize();
             _instantiatePlayerPiecePhase.Initialize();
         }
 
