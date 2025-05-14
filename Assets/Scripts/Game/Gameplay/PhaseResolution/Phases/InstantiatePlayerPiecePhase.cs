@@ -38,12 +38,21 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         public bool Resolve()
         {
-            PieceType pieceType = _playerPiecesBag.GetNext();
+            if (_playerPiecesBag.Current.HasValue)
+            {
+                return false;
+            }
+
+            _playerPiecesBag.PrepareNext();
+
+            InvalidOperationException.ThrowIfNull(_playerPiecesBag.Current);
+
+            PieceType pieceType = _playerPiecesBag.Current.Value;
             IPiece piece = _pieceGetter.Get(pieceType);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece, pieceType));
 
-            return false; // TODO: Return always false ¿?
+            return true;
         }
     }
 }

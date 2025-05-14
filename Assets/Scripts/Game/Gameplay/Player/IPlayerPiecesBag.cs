@@ -4,8 +4,12 @@ namespace Game.Gameplay.Player
 {
     public interface IPlayerPiecesBag
     {
+        PieceType? Current { get; }
+
         void Initialize();
 
-        PieceType GetNext();
+        void ConsumeCurrent();
+
+        void PrepareNext();
     }
 }
