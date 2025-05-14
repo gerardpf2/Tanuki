@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Infrastructure.Unity
 {
+    // TODO: Test
     public class CameraGetter : ICameraGetter
     {
         public Camera GetMain()

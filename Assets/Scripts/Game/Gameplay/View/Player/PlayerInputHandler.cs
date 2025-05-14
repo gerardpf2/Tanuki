@@ -1,5 +1,6 @@
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,6 +10,7 @@ namespace Game.Gameplay.View.Player
     public class PlayerInputHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private IPlayerView _playerView;
+        private IScreenPropertiesGetter _screenPropertiesGetter;
 
         private float _previousWorldPositionX;
         private bool _dragging;
@@ -18,11 +20,13 @@ namespace Game.Gameplay.View.Player
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] IPlayerView playerView)
+        public void Inject([NotNull] IPlayerView playerView, [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
         {
             ArgumentNullException.ThrowIfNull(playerView);
+            ArgumentNullException.ThrowIfNull(screenPropertiesGetter);
 
             _playerView = playerView;
+            _screenPropertiesGetter = screenPropertiesGetter;
         }
 
         public void OnBeginDrag([NotNull] PointerEventData eventData)
@@ -77,9 +81,13 @@ namespace Game.Gameplay.View.Player
             return eventData.pointerCurrentRaycast.worldPosition.x;
         }
 
-        private static bool IsInsideScreen(Vector2 position)
+        private bool IsInsideScreen(Vector2 position)
         {
-            return position.x >= 0.0f && position.x <= Screen.width && position.y >= 0.0f && position.y <= Screen.height;
+            InvalidOperationException.ThrowIfNull(_screenPropertiesGetter);
+
+            return
+                position.x >= 0.0f && position.x <= _screenPropertiesGetter.Width &&
+                position.y >= 0.0f && position.y <= _screenPropertiesGetter.Height;
         }
 
         private void Move(float deltaX)
