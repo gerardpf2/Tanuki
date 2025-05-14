@@ -1,3 +1,4 @@
+using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -7,6 +8,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
     public class LockPlayerPiecePhase : Phase, ILockPlayerPiecePhase
     {
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
+
+        private IPiece _targetPiece;
 
         public LockPlayerPiecePhase([NotNull] IPlayerPiecesBag playerPiecesBag)
         {
@@ -20,9 +23,16 @@ namespace Game.Gameplay.PhaseResolution.Phases
             // TODO: Check allow multiple Initialize. Add Clear ¿?
         }
 
+        public override void OnBeginIteration()
+        {
+            base.OnBeginIteration();
+
+            _targetPiece = _playerPiecesBag.Current;
+        }
+
         public override bool Resolve()
         {
-            if (_playerPiecesBag.Current is null)
+            if (_targetPiece is null || _playerPiecesBag.Current != _targetPiece)
             {
                 return false;
             }
@@ -30,6 +40,13 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _playerPiecesBag.ConsumeCurrent();
 
             return true;
+        }
+
+        public override void OnEndIteration()
+        {
+            base.OnEndIteration();
+
+            _targetPiece = null;
         }
     }
 }
