@@ -15,7 +15,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         public InstantiatePlayerPiecePhase(
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
-            [NotNull] IPlayerPiecesBag playerPiecesBag)
+            [NotNull] IPlayerPiecesBag playerPiecesBag) : base(-1, 1)
         {
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
@@ -31,7 +31,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             // TODO: Check allow multiple Initialize. Add Clear ¿?
         }
 
-        public override bool Resolve()
+        protected override bool ResolveImpl()
         {
             if (_playerPiecesBag.Current is not null)
             {

@@ -11,7 +11,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         private IPiece _targetPiece;
 
-        public LockPlayerPiecePhase([NotNull] IPlayerPiecesBag playerPiecesBag)
+        public LockPlayerPiecePhase([NotNull] IPlayerPiecesBag playerPiecesBag) : base(-1, 1)
         {
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
 
@@ -30,7 +30,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _targetPiece = _playerPiecesBag.Current;
         }
 
-        public override bool Resolve()
+        protected override bool ResolveImpl()
         {
             if (_targetPiece is null || _playerPiecesBag.Current != _targetPiece)
             {

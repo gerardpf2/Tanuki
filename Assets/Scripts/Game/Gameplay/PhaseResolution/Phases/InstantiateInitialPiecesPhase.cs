@@ -16,12 +16,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         private IBoard _board;
         private IEnumerable<IPiecePlacement> _piecePlacements;
-        private bool _resolved;
 
         public InstantiateInitialPiecesPhase(
             [NotNull] IPieceGetter pieceGetter,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory)
+            [NotNull] IEventFactory eventFactory) : base(1, -1)
         {
             ArgumentNullException.ThrowIfNull(pieceGetter);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
@@ -54,21 +53,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _piecePlacements = piecePlacementsCopy;
         }
 
-        public override bool Resolve()
-        {
-            if (_resolved)
-            {
-                return false;
-            }
-
-            ResolveImpl();
-
-            _resolved = true;
-
-            return true;
-        }
-
-        private void ResolveImpl()
+        protected override bool ResolveImpl()
         {
             InvalidOperationException.ThrowIfNull(_board);
             InvalidOperationException.ThrowIfNull(_piecePlacements);
@@ -90,6 +75,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
                     )
                 );
             }
+
+            return true;
         }
     }
 }
