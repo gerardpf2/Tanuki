@@ -175,6 +175,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<PlayerInputHandler>((r, vm) =>
                     vm.Inject(
+                        r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<IScreenPropertiesGetter>()
                     )

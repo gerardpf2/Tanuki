@@ -1,3 +1,4 @@
+using Game.Gameplay.PhaseResolution;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
@@ -9,10 +10,13 @@ namespace Game.Gameplay.View.Player
 {
     public class PlayerInputHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        private const float LockPieceDeltaY = -0.5f; // TODO: Scriptable object for this and other input params
+
+        private IPhaseResolver _phaseResolver;
         private IPlayerView _playerView;
         private IScreenPropertiesGetter _screenPropertiesGetter;
 
-        private float _previousWorldPositionX;
+        private Vector2 _previousWorldPosition;
         private bool _dragging;
 
         private void Awake()
@@ -20,11 +24,16 @@ namespace Game.Gameplay.View.Player
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] IPlayerView playerView, [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
+        public void Inject(
+            [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IPlayerView playerView,
+            [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
         {
+            ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerView);
             ArgumentNullException.ThrowIfNull(screenPropertiesGetter);
 
+            _phaseResolver = phaseResolver;
             _playerView = playerView;
             _screenPropertiesGetter = screenPropertiesGetter;
         }
@@ -38,7 +47,7 @@ namespace Game.Gameplay.View.Player
                 InvalidOperationException.Throw(); // TODO
             }
 
-            _previousWorldPositionX = GetWorldPositionX(eventData);
+            _previousWorldPosition = GetWorldPosition(eventData);
             _dragging = true;
         }
 
@@ -56,12 +65,12 @@ namespace Game.Gameplay.View.Player
                 return;
             }
 
-            float currentWorldPositionX = GetWorldPositionX(eventData);
-            float deltaX = currentWorldPositionX - _previousWorldPositionX;
+            Vector2 currentWorldPosition = GetWorldPosition(eventData);
+            Vector2 worldPositionDelta = currentWorldPosition - _previousWorldPosition;
 
-            _previousWorldPositionX = currentWorldPositionX;
+            _previousWorldPosition = currentWorldPosition;
 
-            Move(deltaX);
+            HandleDrag(worldPositionDelta);
         }
 
         public void OnEndDrag(PointerEventData _)
@@ -74,11 +83,11 @@ namespace Game.Gameplay.View.Player
             _dragging = false;
         }
 
-        private static float GetWorldPositionX([NotNull] PointerEventData eventData)
+        private static Vector2 GetWorldPosition([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
-            return eventData.pointerCurrentRaycast.worldPosition.x;
+            return eventData.pointerCurrentRaycast.worldPosition;
         }
 
         private bool IsInsideScreen(Vector2 position)
@@ -90,11 +99,19 @@ namespace Game.Gameplay.View.Player
                 position.y >= 0.0f && position.y <= _screenPropertiesGetter.Height;
         }
 
-        private void Move(float deltaX)
+        private void HandleDrag(Vector2 worldPositionDelta)
         {
+            InvalidOperationException.ThrowIfNull(_phaseResolver);
             InvalidOperationException.ThrowIfNull(_playerView);
 
-            _playerView.Move(deltaX);
+            if (worldPositionDelta.y <= LockPieceDeltaY)
+            {
+                _phaseResolver.Resolve();
+            }
+            else
+            {
+                _playerView.Move(worldPositionDelta.x);
+            }
         }
     }
 }
