@@ -22,7 +22,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         public bool Resolve()
         {
-            if (!_playerPiecesBag.Current.HasValue)
+            if (_playerPiecesBag.Current is null)
             {
                 return false;
             }

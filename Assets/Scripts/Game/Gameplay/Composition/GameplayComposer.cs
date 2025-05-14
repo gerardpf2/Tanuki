@@ -70,7 +70,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IInstantiatePlayerPiecePhase>(r =>
                     new InstantiatePlayerPiecePhase(
-                        r.Resolve<IPieceGetter>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
                         r.Resolve<IPlayerPiecesBag>()
@@ -96,7 +95,13 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IPlayerPiecesBag>(_ => new PlayerPiecesBag()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerPiecesBag>(r =>
+                    new PlayerPiecesBag(
+                        r.Resolve<IPieceGetter>()
+                    )
+                )
+            );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IBoardView>(_ => new BoardView()));
 

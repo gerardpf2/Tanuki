@@ -1,11 +1,22 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Pieces;
 using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.Player
 {
     public class PlayerPiecesBag : IPlayerPiecesBag
     {
-        public PieceType? Current { get; private set; }
+        [NotNull] private readonly IPieceGetter _pieceGetter;
+
+        public IPiece Current { get; private set; }
+
+        public PlayerPiecesBag([NotNull] IPieceGetter pieceGetter)
+        {
+            ArgumentNullException.ThrowIfNull(pieceGetter);
+
+            _pieceGetter = pieceGetter;
+        }
 
         public void Initialize()
         {
@@ -23,7 +34,7 @@ namespace Game.Gameplay.Player
         {
             InvalidOperationException.ThrowIfNotNull(Current);
 
-            Current = PieceType.PlayerBlock;
+            Current = _pieceGetter.Get(PieceType.PlayerBlock);
         }
     }
 }

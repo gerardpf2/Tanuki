@@ -1,10 +1,10 @@
-using Game.Gameplay.Board;
+using Game.Gameplay.Board.Pieces;
 
 namespace Game.Gameplay.Player
 {
     public interface IPlayerPiecesBag
     {
-        PieceType? Current { get; }
+        IPiece Current { get; }
 
         void Initialize();
 
