@@ -190,6 +190,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetInject<PlayerInputHandler>((r, vm) =>
                     vm.Inject(
                         r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<IScreenPropertiesGetter>()
                     )

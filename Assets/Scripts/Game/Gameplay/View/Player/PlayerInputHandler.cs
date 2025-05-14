@@ -1,4 +1,5 @@
 using Game.Gameplay.PhaseResolution;
+using Game.Gameplay.View.EventResolution;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
@@ -13,6 +14,7 @@ namespace Game.Gameplay.View.Player
         private const float LockPieceDeltaY = -0.5f; // TODO: Scriptable object for this and other input params
 
         private IPhaseResolver _phaseResolver;
+        private IReadonlyEventsResolver _eventsResolver;
         private IPlayerView _playerView;
         private IScreenPropertiesGetter _screenPropertiesGetter;
 
@@ -26,14 +28,17 @@ namespace Game.Gameplay.View.Player
 
         public void Inject(
             [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IReadonlyEventsResolver eventsResolver,
             [NotNull] IPlayerView playerView,
             [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
         {
             ArgumentNullException.ThrowIfNull(phaseResolver);
+            ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(playerView);
             ArgumentNullException.ThrowIfNull(screenPropertiesGetter);
 
             _phaseResolver = phaseResolver;
+            _eventsResolver = eventsResolver;
             _playerView = playerView;
             _screenPropertiesGetter = screenPropertiesGetter;
         }
@@ -102,7 +107,13 @@ namespace Game.Gameplay.View.Player
         private void HandleDrag(Vector2 worldPositionDelta)
         {
             InvalidOperationException.ThrowIfNull(_phaseResolver);
+            InvalidOperationException.ThrowIfNull(_eventsResolver);
             InvalidOperationException.ThrowIfNull(_playerView);
+
+            if (_eventsResolver.Resolving)
+            {
+                return;
+            }
 
             if (worldPositionDelta.y <= LockPieceDeltaY)
             {
