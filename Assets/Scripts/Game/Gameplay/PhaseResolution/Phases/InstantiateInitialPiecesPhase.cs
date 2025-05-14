@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class InstantiateInitialPiecesPhase : IInstantiateInitialPiecesPhase
+    public class InstantiateInitialPiecesPhase : Phase, IInstantiateInitialPiecesPhase
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
@@ -54,7 +54,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _piecePlacements = piecePlacementsCopy;
         }
 
-        public bool Resolve()
+        public override bool Resolve()
         {
             if (_resolved)
             {

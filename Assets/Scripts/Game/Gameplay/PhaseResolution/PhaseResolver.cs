@@ -11,6 +11,7 @@ namespace Game.Gameplay.PhaseResolution
         [NotNull] private readonly IInstantiateInitialPiecesPhase _instantiateInitialPiecesPhase;
         [NotNull] private readonly ILockPlayerPiecePhase _lockPlayerPiecePhase;
         [NotNull] private readonly IInstantiatePlayerPiecePhase _instantiatePlayerPiecePhase;
+
         [NotNull, ItemNotNull] private readonly IReadOnlyList<IPhase> _phases;
 
         public PhaseResolver(
@@ -45,6 +46,8 @@ namespace Game.Gameplay.PhaseResolution
 
         public void Resolve()
         {
+            NotifyBeginIteration();
+
             int index = 0;
 
             while (index < _phases.Count)
@@ -54,6 +57,24 @@ namespace Game.Gameplay.PhaseResolution
                 bool resolved = phase.Resolve();
 
                 index = resolved ? 0 : index + 1;
+            }
+
+            NotifyEndIteration();
+        }
+
+        private void NotifyBeginIteration()
+        {
+            foreach (IPhase phase in _phases)
+            {
+                phase.OnBeginIteration();
+            }
+        }
+
+        private void NotifyEndIteration()
+        {
+            foreach (IPhase phase in _phases)
+            {
+                phase.OnEndIteration();
             }
         }
     }

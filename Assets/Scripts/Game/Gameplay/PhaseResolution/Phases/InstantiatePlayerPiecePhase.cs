@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class InstantiatePlayerPiecePhase : IInstantiatePlayerPiecePhase
+    public class InstantiatePlayerPiecePhase : Phase, IInstantiatePlayerPiecePhase
     {
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
@@ -31,7 +31,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             // TODO: Check allow multiple Initialize. Add Clear ¿?
         }
 
-        public bool Resolve()
+        public override bool Resolve()
         {
             if (_playerPiecesBag.Current is not null)
             {

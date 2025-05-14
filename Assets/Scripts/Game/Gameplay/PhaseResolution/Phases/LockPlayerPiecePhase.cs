@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class LockPlayerPiecePhase : ILockPlayerPiecePhase
+    public class LockPlayerPiecePhase : Phase, ILockPlayerPiecePhase
     {
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
 
@@ -20,7 +20,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             // TODO: Check allow multiple Initialize. Add Clear ¿?
         }
 
-        public bool Resolve()
+        public override bool Resolve()
         {
             if (_playerPiecesBag.Current is null)
             {
