@@ -40,7 +40,7 @@ namespace Game.Gameplay.PhaseResolution
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
             _instantiateInitialPiecesPhase.Initialize(board, piecePlacements);
-            _lockPlayerPiecePhase.Initialize();
+            _lockPlayerPiecePhase.Initialize(board);
             _instantiatePlayerPiecePhase.Initialize();
         }
 

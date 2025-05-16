@@ -19,6 +19,6 @@ namespace Game.Gameplay.EventEnqueueing
         IEvent GetInstantiatePlayerPieceEvent(IPiece piece);
 
         [NotNull]
-        IEvent GetLockPlayerPieceEvent(IPiece piece);
+        IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate);
     }
 }

@@ -26,11 +26,11 @@ namespace Game.Gameplay.EventEnqueueing
             return new InstantiatePlayerPieceEvent(piece);
         }
 
-        public IEvent GetLockPlayerPieceEvent([NotNull] IPiece piece)
+        public IEvent GetLockPlayerPieceEvent([NotNull] IPiece piece, Coordinate lockSourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return new LockPlayerPieceEvent(piece);
+            return new LockPlayerPieceEvent(piece, lockSourceCoordinate);
         }
     }
 }

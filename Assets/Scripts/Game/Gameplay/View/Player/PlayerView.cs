@@ -51,6 +51,8 @@ namespace Game.Gameplay.View.Player
 
         public GameObject Instantiate([NotNull] IPiece piece, [NotNull] GameObject prefab)
         {
+            // TODO: Store piece and add GetCoordinates support (GetWorldPosition, Move, etc)
+
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_playerPieceParent);

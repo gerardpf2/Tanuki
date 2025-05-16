@@ -1,4 +1,6 @@
+using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Player;
 using Infrastructure.System.Exceptions;
@@ -12,6 +14,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
 
+        private IBoard _board;
         private IPiece _targetPiece;
 
         public LockPlayerPiecePhase(
@@ -28,9 +31,13 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _playerPiecesBag = playerPiecesBag;
         }
 
-        public void Initialize()
+        public void Initialize([NotNull] IBoard board)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
+
+            ArgumentNullException.ThrowIfNull(board);
+
+            _board = board;
         }
 
         public override void OnBeginIteration()
@@ -40,9 +47,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _targetPiece = _playerPiecesBag.Current;
         }
 
-        protected override bool ResolveImpl(ResolveContext resolveContext)
+        protected override bool ResolveImpl([NotNull] ResolveContext resolveContext)
         {
-            if (_targetPiece is null || _playerPiecesBag.Current != _targetPiece)
+            ArgumentNullException.ThrowIfNull(resolveContext);
+            InvalidOperationException.ThrowIfNull(_board);
+
+            if (_targetPiece is null || _playerPiecesBag.Current != _targetPiece || !resolveContext.Column.HasValue)
             {
                 return false;
             }
@@ -51,9 +61,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             _playerPiecesBag.ConsumeCurrent();
 
-            // TODO: Find end position and update board
+            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(piece, resolveContext.Column.Value);
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(piece));
+            _board.Add(piece, lockSourceCoordinate); // TODO: Resize if needed
+
+            _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(piece, lockSourceCoordinate));
 
             return true;
         }
@@ -63,6 +75,18 @@ namespace Game.Gameplay.PhaseResolution.Phases
             base.OnEndIteration();
 
             _targetPiece = null;
+        }
+
+        private Coordinate GetLockSourceCoordinate([NotNull] IPiece piece, int column)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+            InvalidOperationException.ThrowIfNull(_board);
+
+            Coordinate sourceCoordinate = new(_board.Rows, column);
+            int fall = _board.ComputeFall(piece, sourceCoordinate);
+            Coordinate lockSourceCoordinate = new(sourceCoordinate.Row - fall, sourceCoordinate.Column);
+
+            return lockSourceCoordinate;
         }
     }
 }
