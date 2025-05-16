@@ -1,55 +1,28 @@
 using System;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.View.Board;
-using Game.Gameplay.View.Board.Pieces;
-using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
-using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
     public class InstantiatePieceEventResolver : IEventResolver<InstantiatePieceEvent>
     {
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
-        [NotNull] private readonly IBoardView _boardView;
+        [NotNull] private readonly IActionFactory _actionFactory;
 
-        public InstantiatePieceEventResolver(
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] IBoardView boardView)
+        public InstantiatePieceEventResolver([NotNull] IActionFactory actionFactory)
         {
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(boardView);
+            ArgumentNullException.ThrowIfNull(actionFactory);
 
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
-            _boardView = boardView;
+            _actionFactory = actionFactory;
         }
 
         public void Resolve([NotNull] InstantiatePieceEvent evt, Action onComplete)
         {
-            // TODO: Reuse code InstantiatePieceEventResolver and InstantiatePlayerPieceEventResolver
-
             ArgumentNullException.ThrowIfNull(evt);
 
-            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(evt.Piece.Type);
-
-            GameObject instance =
-                _boardView.Instantiate(
-                    evt.Piece,
-                    evt.SourceCoordinate,
-                    pieceViewDefinition.Prefab
-                );
-
-            IDataSettable<IPiece> dataSettable = instance.GetComponent<IDataSettable<IPiece>>();
-            IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
-
-            InvalidOperationException.ThrowIfNull(dataSettable);
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
-
-            dataSettable.SetData(evt.Piece);
-            pieceViewEventNotifier.OnInstantiated(evt.InstantiatePieceReason, onComplete);
+            _actionFactory
+                .GetInstantiatePieceAction(evt.Piece, evt.InstantiatePieceReason, evt.SourceCoordinate)
+                .Resolve(onComplete);
         }
     }
 }

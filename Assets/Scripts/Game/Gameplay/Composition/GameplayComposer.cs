@@ -7,6 +7,7 @@ using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
+using Game.Gameplay.View.EventResolution.EventResolvers;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
@@ -122,6 +123,16 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewPropertiesSetter, CameraController>());
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IActionFactory>(r =>
+                    new ActionFactory(
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<IPlayerView>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventListener>(r =>
                     new EventListener(
                         r.Resolve<IEventDequeuer>(),
@@ -133,8 +144,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventResolverFactory>(r =>
                     new EventResolverFactory(
-                        r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IBoardView>(),
+                        r.Resolve<IActionFactory>(),
                         r.Resolve<IPlayerView>()
                     )
                 )

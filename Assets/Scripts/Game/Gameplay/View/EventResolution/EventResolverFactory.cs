@@ -1,5 +1,4 @@
 using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.View.Board;
 using Game.Gameplay.View.EventResolution.EventResolvers;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
@@ -11,32 +10,26 @@ namespace Game.Gameplay.View.EventResolution
     {
         // TODO: Reuse instead of new ¿?
 
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
-        [NotNull] private readonly IBoardView _boardView;
+        [NotNull] private readonly IActionFactory _actionFactory;
         [NotNull] private readonly IPlayerView _playerView;
 
-        public EventResolverFactory(
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] IBoardView boardView,
-            [NotNull] IPlayerView playerView)
+        public EventResolverFactory([NotNull] IActionFactory actionFactory, [NotNull] IPlayerView playerView)
         {
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(boardView);
+            ArgumentNullException.ThrowIfNull(actionFactory);
             ArgumentNullException.ThrowIfNull(playerView);
 
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
-            _boardView = boardView;
+            _actionFactory = actionFactory;
             _playerView = playerView;
         }
 
         public IEventResolver<InstantiatePieceEvent> GetInstantiatePieceEventResolver()
         {
-            return new InstantiatePieceEventResolver(_pieceViewDefinitionGetter, _boardView);
+            return new InstantiatePieceEventResolver(_actionFactory);
         }
 
         public IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPieceEventResolver()
         {
-            return new InstantiatePlayerPieceEventResolver(_pieceViewDefinitionGetter, _playerView);
+            return new InstantiatePlayerPieceEventResolver(_actionFactory);
         }
 
         public IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver()
