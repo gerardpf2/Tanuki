@@ -31,7 +31,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             // TODO: Check allow multiple Initialize. Add Clear ¿?
         }
 
-        protected override bool ResolveImpl()
+        protected override bool ResolveImpl(ResolveContext _)
         {
             if (_playerPiecesBag.Current is not null)
             {

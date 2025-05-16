@@ -4,7 +4,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
     {
         void OnBeginIteration();
 
-        bool Resolve();
+        bool Resolve(ResolveContext resolveContext);
 
         void OnEndIteration();
     }

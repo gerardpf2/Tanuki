@@ -68,7 +68,7 @@ namespace Game.Gameplay.UseCases
             _phaseResolver.Initialize(board, boardDefinition.PiecePlacements);
             _playerPiecesBag.Initialize();
 
-            _phaseResolver.Resolve();
+            _phaseResolver.Resolve(new ResolveContext(null));
 
             return board;
         }

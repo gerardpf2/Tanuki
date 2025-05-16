@@ -40,7 +40,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _targetPiece = _playerPiecesBag.Current;
         }
 
-        protected override bool ResolveImpl()
+        protected override bool ResolveImpl(ResolveContext resolveContext)
         {
             if (_targetPiece is null || _playerPiecesBag.Current != _targetPiece)
             {
@@ -50,6 +50,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
             IPiece piece = _playerPiecesBag.Current;
 
             _playerPiecesBag.ConsumeCurrent();
+
+            // TODO: Find end position and update board
 
             _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(piece));
 

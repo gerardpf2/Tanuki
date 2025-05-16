@@ -53,7 +53,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _piecePlacements = piecePlacementsCopy;
         }
 
-        protected override bool ResolveImpl()
+        protected override bool ResolveImpl(ResolveContext _)
         {
             InvalidOperationException.ThrowIfNull(_board);
             InvalidOperationException.ThrowIfNull(_piecePlacements);

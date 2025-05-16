@@ -117,7 +117,7 @@ namespace Game.Gameplay.View.Player
 
             if (worldPositionDelta.y <= LockPieceDeltaY)
             {
-                _phaseResolver.Resolve();
+                _phaseResolver.Resolve(new ResolveContext(_playerView.Coordinate.Column));
             }
             else
             {

@@ -1,6 +1,5 @@
 using Game.Gameplay.EventEnqueueing.Events;
 using Game.Gameplay.View.EventResolution.EventResolvers;
-using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -11,15 +10,12 @@ namespace Game.Gameplay.View.EventResolution
         // TODO: Reuse instead of new ¿?
 
         [NotNull] private readonly IActionFactory _actionFactory;
-        [NotNull] private readonly IPlayerView _playerView;
 
-        public EventResolverFactory([NotNull] IActionFactory actionFactory, [NotNull] IPlayerView playerView)
+        public EventResolverFactory([NotNull] IActionFactory actionFactory)
         {
             ArgumentNullException.ThrowIfNull(actionFactory);
-            ArgumentNullException.ThrowIfNull(playerView);
 
             _actionFactory = actionFactory;
-            _playerView = playerView;
         }
 
         public IEventResolver<InstantiatePieceEvent> GetInstantiatePieceEventResolver()
@@ -34,7 +30,7 @@ namespace Game.Gameplay.View.EventResolution
 
         public IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver()
         {
-            return new LockPlayerPieceEventResolver(_playerView);
+            return new LockPlayerPieceEventResolver();
         }
     }
 }

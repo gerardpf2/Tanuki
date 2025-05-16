@@ -44,7 +44,7 @@ namespace Game.Gameplay.PhaseResolution
             _instantiatePlayerPiecePhase.Initialize();
         }
 
-        public void Resolve()
+        public void Resolve(ResolveContext resolveContext)
         {
             NotifyBeginIteration();
 
@@ -54,7 +54,7 @@ namespace Game.Gameplay.PhaseResolution
             {
                 IPhase phase = _phases[index];
 
-                bool resolved = phase.Resolve();
+                bool resolved = phase.Resolve(resolveContext);
 
                 index = resolved ? 0 : index + 1;
             }

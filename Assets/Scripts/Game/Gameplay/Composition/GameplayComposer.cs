@@ -144,8 +144,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventResolverFactory>(r =>
                     new EventResolverFactory(
-                        r.Resolve<IActionFactory>(),
-                        r.Resolve<IPlayerView>()
+                        r.Resolve<IActionFactory>()
                     )
                 )
             );

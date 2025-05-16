@@ -19,9 +19,9 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _resolveTimesPerIteration = 0;
         }
 
-        public bool Resolve()
+        public bool Resolve(ResolveContext resolveContext)
         {
-            bool resolved = CanResolve() && ResolveImpl();
+            bool resolved = CanResolve() && ResolveImpl(resolveContext);
 
             if (resolved)
             {
@@ -32,7 +32,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             return resolved;
         }
 
-        protected abstract bool ResolveImpl();
+        protected abstract bool ResolveImpl(ResolveContext resolveContext);
 
         public virtual void OnEndIteration() { }
 
