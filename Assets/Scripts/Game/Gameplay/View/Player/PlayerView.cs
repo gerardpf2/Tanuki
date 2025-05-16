@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -16,6 +17,19 @@ namespace Game.Gameplay.View.Player
         private Transform _playerPieceParent;
         private Transform _instanceTransform;
         private float _instanceX;
+
+        public Coordinate Coordinate
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_instanceTransform);
+
+                int row = Mathf.FloorToInt(_instanceTransform.position.y);
+                int column = Mathf.FloorToInt(_instanceTransform.position.x);
+
+                return new Coordinate(row, column);
+            }
+        }
 
         public PlayerView(
             [NotNull] IReadonlyBoardView boardView,

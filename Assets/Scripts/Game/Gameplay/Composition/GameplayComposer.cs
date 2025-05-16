@@ -80,6 +80,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILockPlayerPiecePhase>(r =>
                     new LockPlayerPiecePhase(
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>(),
                         r.Resolve<IPlayerPiecesBag>()
                     )
                 )

@@ -25,5 +25,12 @@ namespace Game.Gameplay.EventEnqueueing
 
             return new InstantiatePlayerPieceEvent(piece);
         }
+
+        public IEvent GetLockPlayerPieceEvent([NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            return new LockPlayerPieceEvent(piece);
+        }
     }
 }

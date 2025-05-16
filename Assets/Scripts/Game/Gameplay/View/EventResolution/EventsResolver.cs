@@ -39,6 +39,9 @@ namespace Game.Gameplay.View.EventResolution
                 case InstantiatePlayerPieceEvent instantiatePlayerPieceEvent:
                     _eventResolverFactory.GetInstantiatePlayerPieceEventResolver().Resolve(instantiatePlayerPieceEvent, OnComplete);
                     break;
+                case LockPlayerPieceEvent lockPlayerPieceEvent:
+                    _eventResolverFactory.GetLockPlayerPieceEventResolver().Resolve(lockPlayerPieceEvent, OnComplete);
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);
                     return;

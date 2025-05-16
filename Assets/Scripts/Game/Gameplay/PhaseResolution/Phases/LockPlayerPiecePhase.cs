@@ -1,4 +1,5 @@
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -7,14 +8,23 @@ namespace Game.Gameplay.PhaseResolution.Phases
 {
     public class LockPlayerPiecePhase : Phase, ILockPlayerPiecePhase
     {
+        [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
+        [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
 
         private IPiece _targetPiece;
 
-        public LockPlayerPiecePhase([NotNull] IPlayerPiecesBag playerPiecesBag) : base(-1, 1)
+        public LockPlayerPiecePhase(
+            [NotNull] IEventEnqueuer eventEnqueuer,
+            [NotNull] IEventFactory eventFactory,
+            [NotNull] IPlayerPiecesBag playerPiecesBag) : base(-1, 1)
         {
+            ArgumentNullException.ThrowIfNull(eventEnqueuer);
+            ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
 
+            _eventEnqueuer = eventEnqueuer;
+            _eventFactory = eventFactory;
             _playerPiecesBag = playerPiecesBag;
         }
 
@@ -37,7 +47,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 return false;
             }
 
+            IPiece piece = _playerPiecesBag.Current;
+
             _playerPiecesBag.ConsumeCurrent();
+
+            _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(piece));
 
             return true;
         }
