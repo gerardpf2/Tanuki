@@ -1,6 +1,5 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Player
@@ -9,10 +8,13 @@ namespace Game.Gameplay.View.Player
     {
         Coordinate Coordinate { get; }
 
+        GameObject Instance { get; }
+
         void Initialize();
 
-        [NotNull]
-        GameObject Instantiate(IPiece piece, GameObject prefab);
+        void Instantiate(IPiece piece, GameObject prefab);
+
+        void Destroy();
 
         void Move(float deltaX);
     }

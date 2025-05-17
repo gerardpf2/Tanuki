@@ -27,7 +27,13 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinition);
 
-            return _playerView.Instantiate(piece, pieceViewDefinition.Prefab);
+            _playerView.Instantiate(piece, pieceViewDefinition.Prefab);
+
+            GameObject instance = _playerView.Instance;
+
+            InvalidOperationException.ThrowIfNull(instance);
+
+            return instance;
         }
     }
 }
