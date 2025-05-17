@@ -17,22 +17,22 @@ namespace Game.Gameplay.View.Player
         private Transform _playerPieceParent;
         private float _instanceX;
 
-        public Coordinate Coordinate
+        public Coordinate PieceCoordinate
         {
             get
             {
-                InvalidOperationException.ThrowIfNull(Instance);
+                InvalidOperationException.ThrowIfNull(PieceInstance);
 
-                Transform instanceTransform = Instance.transform;
+                Transform pieceInstanceTransform = PieceInstance.transform;
 
-                int row = Mathf.FloorToInt(instanceTransform.position.y);
-                int column = Mathf.FloorToInt(instanceTransform.position.x);
+                int row = Mathf.FloorToInt(pieceInstanceTransform.position.y);
+                int column = Mathf.FloorToInt(pieceInstanceTransform.position.x);
 
                 return new Coordinate(row, column);
             }
         }
 
-        public GameObject Instance { get; private set; }
+        public GameObject PieceInstance { get; private set; }
 
         public PlayerView(
             [NotNull] IReadonlyBoardView boardView,
@@ -52,44 +52,44 @@ namespace Game.Gameplay.View.Player
             _playerPieceParent = new GameObject("PlayerPieceParent").transform; // New game object outside canvas, etc
         }
 
-        public void Instantiate([NotNull] IPiece piece, [NotNull] GameObject prefab)
+        public void InstantiatePiece([NotNull] IPiece piece, [NotNull] GameObject prefab)
         {
             // TODO: Store piece and add GetCoordinates support (GetWorldPosition, Move, etc)
 
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_playerPieceParent);
-            InvalidOperationException.ThrowIfNotNull(Instance);
+            InvalidOperationException.ThrowIfNotNull(PieceInstance);
 
             Vector3 position = GetWorldPosition();
 
-            Instance = Object.Instantiate(prefab, position, Quaternion.identity, _playerPieceParent);
+            PieceInstance = Object.Instantiate(prefab, position, Quaternion.identity, _playerPieceParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
-                Instance,
+                PieceInstance,
                 $"Cannot instantiate player piece with Prefab: {prefab.name}"
             );
 
             _instanceX = position.x;
         }
 
-        public void Destroy()
+        public void DestroyPiece()
         {
-            InvalidOperationException.ThrowIfNull(Instance);
+            InvalidOperationException.ThrowIfNull(PieceInstance);
 
-            Object.Destroy(Instance);
+            Object.Destroy(PieceInstance);
 
-            Instance = null;
+            PieceInstance = null;
         }
 
-        public void Move(float deltaX)
+        public void MovePiece(float deltaX)
         {
-            InvalidOperationException.ThrowIfNull(Instance);
+            InvalidOperationException.ThrowIfNull(PieceInstance);
 
-            Transform instanceTransform = Instance.transform;
+            Transform pieceInstanceTransform = PieceInstance.transform;
 
             _instanceX = ClampX(_instanceX + deltaX);
-            instanceTransform.position = instanceTransform.position.WithX(Mathf.RoundToInt(_instanceX));
+            pieceInstanceTransform.position = pieceInstanceTransform.position.WithX(Mathf.RoundToInt(_instanceX));
         }
 
         private Vector3 GetWorldPosition()

@@ -26,11 +26,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
             _sourceCoordinate = sourceCoordinate;
         }
 
-        protected override GameObject Instantiate(IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
+        protected override GameObject InstantiatePiece(IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinition);
 
-            return _boardView.Instantiate(piece, _sourceCoordinate, pieceViewDefinition.Prefab);
+            return _boardView.InstantiatePiece(piece, _sourceCoordinate, pieceViewDefinition.Prefab);
         }
     }
 }

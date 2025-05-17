@@ -23,17 +23,17 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
             _playerView = playerView;
         }
 
-        protected override GameObject Instantiate(IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
+        protected override GameObject InstantiatePiece(IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinition);
 
-            _playerView.Instantiate(piece, pieceViewDefinition.Prefab);
+            _playerView.InstantiatePiece(piece, pieceViewDefinition.Prefab);
 
-            GameObject instance = _playerView.Instance;
+            GameObject pieceInstance = _playerView.PieceInstance;
 
-            InvalidOperationException.ThrowIfNull(instance);
+            InvalidOperationException.ThrowIfNull(pieceInstance);
 
-            return instance;
+            return pieceInstance;
         }
     }
 }

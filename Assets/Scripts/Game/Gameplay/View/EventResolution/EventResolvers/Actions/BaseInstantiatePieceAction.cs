@@ -34,10 +34,10 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
         {
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(_piece.Type);
 
-            GameObject instance = Instantiate(_piece, pieceViewDefinition);
+            GameObject pieceInstance = InstantiatePiece(_piece, pieceViewDefinition);
 
-            IDataSettable<IPiece> dataSettable = instance.GetComponent<IDataSettable<IPiece>>();
-            IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
+            IDataSettable<IPiece> dataSettable = pieceInstance.GetComponent<IDataSettable<IPiece>>();
+            IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
 
             InvalidOperationException.ThrowIfNull(dataSettable);
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
@@ -47,6 +47,6 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
         }
 
         [NotNull]
-        protected abstract GameObject Instantiate(IPiece piece, IPieceViewDefinition pieceViewDefinition);
+        protected abstract GameObject InstantiatePiece(IPiece piece, IPieceViewDefinition pieceViewDefinition);
     }
 }

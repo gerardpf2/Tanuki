@@ -117,11 +117,11 @@ namespace Game.Gameplay.View.Player
 
             if (worldPositionDelta.y <= LockPieceDeltaY)
             {
-                _phaseResolver.Resolve(new ResolveContext(_playerView.Coordinate.Column));
+                _phaseResolver.Resolve(new ResolveContext(_playerView.PieceCoordinate.Column));
             }
             else
             {
-                _playerView.Move(worldPositionDelta.x);
+                _playerView.MovePiece(worldPositionDelta.x);
             }
         }
     }

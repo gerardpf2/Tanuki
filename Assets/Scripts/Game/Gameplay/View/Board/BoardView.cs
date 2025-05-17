@@ -31,7 +31,7 @@ namespace Game.Gameplay.View.Board
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 
-        public GameObject Instantiate([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
+        public GameObject InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
         {
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);

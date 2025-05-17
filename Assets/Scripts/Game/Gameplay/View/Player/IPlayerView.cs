@@ -6,16 +6,16 @@ namespace Game.Gameplay.View.Player
 {
     public interface IPlayerView
     {
-        Coordinate Coordinate { get; }
+        Coordinate PieceCoordinate { get; }
 
-        GameObject Instance { get; }
+        GameObject PieceInstance { get; }
 
         void Initialize();
 
-        void Instantiate(IPiece piece, GameObject prefab);
+        void InstantiatePiece(IPiece piece, GameObject prefab);
 
-        void Destroy();
+        void DestroyPiece();
 
-        void Move(float deltaX);
+        void MovePiece(float deltaX);
     }
 }

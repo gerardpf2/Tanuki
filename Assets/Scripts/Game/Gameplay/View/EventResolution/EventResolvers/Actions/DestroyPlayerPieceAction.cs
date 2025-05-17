@@ -21,11 +21,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
         public void Resolve(Action onComplete)
         {
-            GameObject instance = _playerView.Instance;
+            GameObject pieceInstance = _playerView.PieceInstance;
 
-            InvalidOperationException.ThrowIfNull(instance);
+            InvalidOperationException.ThrowIfNull(pieceInstance);
 
-            IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
+            IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
 
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
@@ -35,7 +35,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             void OnComplete()
             {
-                _playerView.Destroy();
+                _playerView.DestroyPiece();
 
                 onComplete?.Invoke();
             }

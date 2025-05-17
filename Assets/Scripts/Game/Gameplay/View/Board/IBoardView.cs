@@ -10,6 +10,6 @@ namespace Game.Gameplay.View.Board
         void Initialize(IReadonlyBoard board);
 
         [NotNull]
-        GameObject Instantiate(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
+        GameObject InstantiatePiece(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
     }
 }
