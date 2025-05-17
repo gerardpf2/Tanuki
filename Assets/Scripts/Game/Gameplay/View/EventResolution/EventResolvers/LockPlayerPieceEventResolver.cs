@@ -1,5 +1,6 @@
 using System;
 using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
@@ -20,12 +21,23 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            // TODO
-            // 1) Move to board position
-            // 2) Despawn player
-            // 3) Spawn board
+            // TODO: Move to board position
 
-            _actionFactory.GetDestroyPlayerPieceAction().Resolve(onComplete);
+            DestroyPlayerPieceStep(() => InstantiatePieceStep(onComplete));
+
+            return;
+
+            void DestroyPlayerPieceStep(Action onStepComplete)
+            {
+                _actionFactory.GetDestroyPlayerPieceAction().Resolve(onStepComplete);
+            }
+
+            void InstantiatePieceStep(Action onStepComplete)
+            {
+                _actionFactory
+                    .GetInstantiatePieceAction(evt.Piece, InstantiatePieceReason.Lock, evt.LockSourceCoordinate)
+                    .Resolve(onStepComplete);
+            }
         }
     }
 }
