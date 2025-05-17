@@ -19,6 +19,7 @@ namespace Game.Gameplay.View.Player
         private IScreenPropertiesGetter _screenPropertiesGetter;
 
         private Vector2 _previousWorldPosition;
+        private bool _waitingDragEnd;
         private bool _dragging;
 
         private void Awake()
@@ -65,6 +66,11 @@ namespace Game.Gameplay.View.Player
                 InvalidOperationException.Throw(); // TODO
             }
 
+            if (_waitingDragEnd)
+            {
+                return;
+            }
+
             if (!IsInsideScreen(eventData.position))
             {
                 return;
@@ -85,6 +91,7 @@ namespace Game.Gameplay.View.Player
                 InvalidOperationException.Throw(); // TODO
             }
 
+            _waitingDragEnd = false;
             _dragging = false;
         }
 
@@ -118,6 +125,8 @@ namespace Game.Gameplay.View.Player
             if (worldPositionDelta.y <= LockPieceDeltaY)
             {
                 _phaseResolver.Resolve(new ResolveContext(_playerView.PieceCoordinate.Column));
+
+                _waitingDragEnd = true;
             }
             else
             {
