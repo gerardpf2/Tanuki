@@ -42,6 +42,8 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetInstance(_boardDefinitionGetter));
 
+            ruleAdder.Add(ruleFactory.GetSingleton<IPieceCachedPropertiesGetter>(_ => new PieceCachedPropertiesGetter()));
+
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceFactory>(_ => new PieceFactory()));
 
             ruleAdder.Add(
