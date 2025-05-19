@@ -12,19 +12,45 @@ namespace Game.Gameplay.Board
 {
     public class Board : IBoard
     {
+        [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
+
         [NotNull] private readonly IDictionary<IPiece, Coordinate> _pieceSourceCoordinates = new Dictionary<IPiece, Coordinate>();
         [NotNull] private readonly SortedList<int, int> _piecesPerRowSorted = new();
-        [NotNull] private readonly IPiece[,] _pieces;
+        private IPiece[,] _pieces;
 
         private int _highestNonEmptyRow;
 
         public event Action OnHighestNonEmptyRowUpdated;
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
-        public int Rows { get; }
+        public int Rows
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_pieces);
+
+                int rows = _pieces.GetLength(0);
+
+                InvalidOperationException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
+
+                return rows;
+            }
+        }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
-        public int Columns { get; }
+        public int Columns
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_pieces);
+
+                int columns = _pieces.GetLength(1);
+
+                InvalidOperationException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
+
+                return columns;
+            }
+        }
 
         public int HighestNonEmptyRow
         {
@@ -43,14 +69,15 @@ namespace Game.Gameplay.Board
         }
 
         public Board(
+            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int columns)
         {
+            ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
             ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
 
-            Rows = rows;
-            Columns = columns;
+            _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
 
             _pieces = new IPiece[rows, columns];
         }
@@ -59,8 +86,10 @@ namespace Game.Gameplay.Board
         {
             if (!this.IsInside(coordinate))
             {
-                InvalidOperationException.Throw(); // TODO
+                ArgumentOutOfRangeException.Throw(coordinate); // TODO
             }
+
+            InvalidOperationException.ThrowIfNull(_pieces);
 
             return _pieces[coordinate.Row, coordinate.Column];
         }
@@ -75,6 +104,8 @@ namespace Game.Gameplay.Board
             }
 
             _pieceSourceCoordinates.Add(piece, sourceCoordinate);
+
+            ExpandRowsIfNeeded(piece, sourceCoordinate.Row);
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
@@ -125,12 +156,49 @@ namespace Game.Gameplay.Board
             Add(piece, newSourceCoordinate);
         }
 
+        private void ExpandRowsIfNeeded([NotNull] IPiece piece, int row)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            int newRows = row + _pieceCachedPropertiesGetter.GetTopMostRowOffset(piece) + 1;
+
+            if (Rows >= newRows)
+            {
+                return;
+            }
+
+            ExpandRows(newRows);
+        }
+
+        private void ExpandRows(int newRows)
+        {
+            ArgumentOutOfRangeException.ThrowIfNot(newRows, ComparisonOperator.GreaterThan, Rows);
+            InvalidOperationException.ThrowIfNull(_pieces);
+
+            int rows = Rows;
+            int columns = Columns;
+
+            IPiece[,] newPieces = new IPiece[newRows, columns];
+
+            for (int row = 0; row < rows; ++row)
+            {
+                for (int column = 0; column < columns; ++column)
+                {
+                    newPieces[row, column] = _pieces[row, column];
+                }
+            }
+
+            _pieces = newPieces;
+        }
+
         private void Set(IPiece piece, Coordinate coordinate)
         {
             if (!this.IsInside(coordinate))
             {
-                InvalidOperationException.Throw(); // TODO
+                ArgumentOutOfRangeException.Throw(coordinate); // TODO
             }
+
+            InvalidOperationException.ThrowIfNull(_pieces);
 
             _pieces[coordinate.Row, coordinate.Column] = piece;
 

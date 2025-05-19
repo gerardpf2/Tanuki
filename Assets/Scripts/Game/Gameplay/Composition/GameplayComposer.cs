@@ -108,7 +108,12 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IBoardView>(_ => new BoardView()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IBoardView>(r =>
+                    new BoardView(
+                        r.Resolve<IPieceCachedPropertiesGetter>())
+                )
+            );
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
@@ -180,6 +185,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<ILoadGameplay>(r =>
                     new LoadGameplay(
                         r.Resolve<IBoardDefinitionGetter>(),
+                        r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
