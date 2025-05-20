@@ -1,10 +1,6 @@
-using System.Collections.Generic;
-using Infrastructure.System;
-using Infrastructure.System.Exceptions;
-
 namespace Game.Gameplay.Board.Pieces
 {
-    public class PlayerBlock11 : IPiece, IPieceUpdater
+    public class PlayerBlock11 : RectangularPiece
     {
         /*
          *
@@ -14,23 +10,6 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
-        public PieceType Type => PieceType.PlayerBlock11;
-
-        public bool Alive { get; private set; } = true;
-
-        public IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate)
-        {
-            yield return sourceCoordinate;
-        }
-
-        public void Damage(
-            [Is(ComparisonOperator.EqualTo, 0)] int rowOffset,
-            [Is(ComparisonOperator.EqualTo, 0)] int columnOffset)
-        {
-            ArgumentOutOfRangeException.ThrowIfNot(rowOffset, ComparisonOperator.EqualTo, 0);
-            ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.EqualTo, 0);
-
-            Alive = false;
-        }
+        public PlayerBlock11() : base(PieceType.PlayerBlock11, 1, 1) { }
     }
 }
