@@ -4,7 +4,7 @@ using Infrastructure.System.Exceptions;
 
 namespace Game.Gameplay.Board.Pieces
 {
-    public class PlayerBlock : IPiece, IPieceUpdater
+    public class PlayerBlock11 : IPiece, IPieceUpdater
     {
         /*
          *
@@ -14,7 +14,7 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
-        public PieceType Type => PieceType.PlayerBlock;
+        public PieceType Type => PieceType.PlayerBlock11;
 
         public bool Alive { get; private set; } = true;
 

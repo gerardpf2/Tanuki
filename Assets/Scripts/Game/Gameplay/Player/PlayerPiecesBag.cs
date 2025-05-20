@@ -34,7 +34,7 @@ namespace Game.Gameplay.Player
         {
             InvalidOperationException.ThrowIfNotNull(Current);
 
-            Current = _pieceGetter.Get(PieceType.PlayerBlock);
+            Current = _pieceGetter.Get(PieceType.PlayerBlock11);
         }
     }
 }
