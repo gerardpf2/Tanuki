@@ -7,6 +7,6 @@ namespace Game.Gameplay.View.Board.Pieces
     {
         void OnInstantiated(InstantiatePieceReason instantiatePieceReason, Action onComplete);
 
-        void OnDestroyed(Action onComplete); // TODO: Add reason
+        void OnDestroyed(DestroyPieceReason destroyPieceReason, Action onComplete);
     }
 }

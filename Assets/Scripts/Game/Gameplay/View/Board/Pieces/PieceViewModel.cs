@@ -26,7 +26,7 @@ namespace Game.Gameplay.View.Board.Pieces
             onComplete?.Invoke();
         }
 
-        public void OnDestroyed(Action onComplete)
+        public void OnDestroyed(DestroyPieceReason destroyPieceReason, Action onComplete)
         {
             // TODO
 

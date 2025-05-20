@@ -7,8 +7,6 @@ namespace Game.Gameplay.View.EventResolution
 {
     public class EventResolverFactory : IEventResolverFactory
     {
-        // TODO: Reuse instead of new ¿?
-
         [NotNull] private readonly IActionFactory _actionFactory;
 
         public EventResolverFactory([NotNull] IActionFactory actionFactory)
