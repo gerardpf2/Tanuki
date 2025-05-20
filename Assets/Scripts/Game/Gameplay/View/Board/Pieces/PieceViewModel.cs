@@ -6,6 +6,8 @@ using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
 
 namespace Game.Gameplay.View.Board.Pieces
 {
+    public class PieceViewModel : PieceViewModel<IPiece> { }
+
     public abstract class PieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier where T : IPiece
     {
         protected T Piece;

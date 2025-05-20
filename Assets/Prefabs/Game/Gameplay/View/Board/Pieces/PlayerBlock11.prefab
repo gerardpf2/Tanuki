@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1070835727361169376}
-  - component: {fileID: 5805735492612493918}
+  - component: {fileID: 4221798655330004932}
   m_Layer: 0
   m_Name: PlayerBlock11
   m_TagString: Untagged
@@ -120,7 +120,7 @@ Transform:
   - {fileID: 2382537397673491627}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5805735492612493918
+--- !u!114 &4221798655330004932
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,6 +129,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6451969163346834527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e5db75c642c485396faf4fb3e4c93ae, type: 3}
+  m_Script: {fileID: 11500000, guid: c2c0cc70e5f740f692779563217513a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
