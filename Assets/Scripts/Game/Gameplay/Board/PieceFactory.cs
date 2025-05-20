@@ -16,6 +16,11 @@ namespace Game.Gameplay.Board
             return new PlayerBlock11();
         }
 
+        public IPiece GetPlayerBlock12()
+        {
+            return new PlayerBlock12();
+        }
+
         public IPiece GetPlayerBlock21()
         {
             return new PlayerBlock21();

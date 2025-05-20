@@ -12,6 +12,9 @@ namespace Game.Gameplay.Board
         IPiece GetPlayerBlock11();
 
         [NotNull]
+        IPiece GetPlayerBlock12();
+
+        [NotNull]
         IPiece GetPlayerBlock21();
     }
 }

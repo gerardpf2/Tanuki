@@ -24,6 +24,8 @@ namespace Game.Gameplay.Board
                     return _pieceFactory.GetTest();
                 case PieceType.PlayerBlock11:
                     return _pieceFactory.GetPlayerBlock11();
+                case PieceType.PlayerBlock12:
+                    return _pieceFactory.GetPlayerBlock12();
                 case PieceType.PlayerBlock21:
                     return _pieceFactory.GetPlayerBlock21();
                 default:

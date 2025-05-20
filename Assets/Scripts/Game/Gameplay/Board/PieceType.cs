@@ -4,6 +4,7 @@ namespace Game.Gameplay.Board
     {
         Test,
         PlayerBlock11,
+        PlayerBlock12,
         PlayerBlock21
     }
 }
