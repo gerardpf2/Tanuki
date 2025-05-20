@@ -86,7 +86,7 @@ namespace Game.Gameplay.Board
         {
             if (!this.IsInside(coordinate))
             {
-                ArgumentOutOfRangeException.Throw(coordinate); // TODO
+                ArgumentOutOfRangeException.Throw(coordinate);
             }
 
             InvalidOperationException.ThrowIfNull(_pieces);
@@ -100,7 +100,7 @@ namespace Game.Gameplay.Board
 
             if (_pieceSourceCoordinates.ContainsKey(piece))
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Piece has already been added");
             }
 
             _pieceSourceCoordinates.Add(piece, sourceCoordinate);
@@ -111,7 +111,7 @@ namespace Game.Gameplay.Board
             {
                 if (Get(coordinate) is not null)
                 {
-                    InvalidOperationException.Throw(); // TODO
+                    InvalidOperationException.Throw($"Coordinate {coordinate} is not empty");
                 }
 
                 Set(piece, coordinate);
@@ -124,7 +124,7 @@ namespace Game.Gameplay.Board
 
             if (!_pieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Piece cannot be found");
             }
 
             _pieceSourceCoordinates.Remove(piece);
@@ -133,7 +133,7 @@ namespace Game.Gameplay.Board
             {
                 if (Get(coordinate) != piece)
                 {
-                    InvalidOperationException.Throw(); // TODO
+                    InvalidOperationException.Throw($"Coordinate {coordinate} does not contain the expected piece");
                 }
 
                 Set(null, coordinate);
@@ -146,7 +146,7 @@ namespace Game.Gameplay.Board
 
             if (!_pieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Piece cannot be found");
             }
 
             Remove(piece);
@@ -195,7 +195,7 @@ namespace Game.Gameplay.Board
         {
             if (!this.IsInside(coordinate))
             {
-                ArgumentOutOfRangeException.Throw(coordinate); // TODO
+                ArgumentOutOfRangeException.Throw(coordinate);
             }
 
             InvalidOperationException.ThrowIfNull(_pieces);
@@ -220,14 +220,14 @@ namespace Game.Gameplay.Board
             {
                 if (!_piecesPerRowSorted.ContainsKey(updatedRow))
                 {
-                    InvalidOperationException.Throw(); // TODO
+                    InvalidOperationException.Throw($"Row {updatedRow} cannot be found in pieces per row");
                 }
 
                 int piecesRow = _piecesPerRowSorted[updatedRow];
 
                 if (piecesRow <= 0)
                 {
-                    InvalidOperationException.Throw(); // TODO
+                    InvalidOperationException.Throw($"Row {updatedRow} cannot contain {piecesRow} pieces");
                 }
 
                 if (piecesRow == 1)

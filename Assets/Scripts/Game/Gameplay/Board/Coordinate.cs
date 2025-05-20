@@ -10,5 +10,10 @@ namespace Game.Gameplay.Board
             Row = row;
             Column = column;
         }
+
+        public override string ToString()
+        {
+            return $"(Row: {Row}, Column: {Column})";
+        }
     }
 }
