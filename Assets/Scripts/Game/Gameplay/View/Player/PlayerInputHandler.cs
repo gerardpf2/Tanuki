@@ -50,7 +50,7 @@ namespace Game.Gameplay.View.Player
 
             if (_dragging)
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Drag has already started");
             }
 
             _previousWorldPosition = GetWorldPosition(eventData);
@@ -63,7 +63,7 @@ namespace Game.Gameplay.View.Player
 
             if (!_dragging)
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Drag has not started");
             }
 
             if (_waitingDragEnd)
@@ -88,7 +88,7 @@ namespace Game.Gameplay.View.Player
         {
             if (!_dragging)
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Drag has not started");
             }
 
             _waitingDragEnd = false;
