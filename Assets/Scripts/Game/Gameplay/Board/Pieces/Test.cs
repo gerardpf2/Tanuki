@@ -56,10 +56,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate)
         {
-            for (int rowOffset = 0; rowOffset < ITest.Rows; ++rowOffset)
-            {
-                yield return sourceCoordinate.WithOffset(rowOffset, 0);
-            }
+            return sourceCoordinate.Rect(ITest.Rows, 1);
         }
 
         public void Damage(
