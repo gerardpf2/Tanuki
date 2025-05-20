@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Composition;
 using Game.Gameplay.Board;
 using Game.Gameplay.View.Board;
 using Game.Root.Composition;
@@ -74,8 +75,9 @@ namespace Editor.Tests.Game.Root.Composition
         {
             List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers().ToList();
 
-            Assert.IsTrue(childScopeComposers.Count == 1);
+            Assert.IsTrue(childScopeComposers.Count == 2);
             Assert.NotNull(childScopeComposers.Find(childScopeComposer => childScopeComposer is ModelViewViewModelComposer));
+            Assert.NotNull(childScopeComposers.Find(childScopeComposer => childScopeComposer is GameComposer));
         }
     }
 }
