@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boardDefinitions:
   - _id: Test
-    _serializedData: '{"Rows":5,"Columns":3,"PiecePlacementSerializedData":[{"Row":0,"Column":0,"PieceSerializedData":{"PieceType":"Test"}},{"Row":2,"Column":2,"PieceSerializedData":{"PieceType":"Test"}},{"Row":1,"Column":1,"PieceSerializedData":{"PieceType":"PlayerBlock11"}}]}'
+    _serializedData: '{"R":5,"C":3,"P":[{"P":{"P":"Test"}},{"R":2,"C":2,"P":{"P":"Test"}},{"R":1,"C":1,"P":{"P":"PlayerBlock11"}}]}'

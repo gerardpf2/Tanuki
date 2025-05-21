@@ -6,9 +6,10 @@ namespace Game.Gameplay.Board.Parsing
 {
     public class PieceSerializedData
     {
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty("P"), JsonConverter(typeof(StringEnumConverter))]
         public PieceType PieceType { get; set; }
 
+        [JsonProperty("M", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public Dictionary<string, object> Metadata { get; set; }
     }
 }
