@@ -17,6 +17,6 @@ namespace Game.Gameplay.Board
         int Columns { get; }
 
         [NotNull, ItemNotNull]
-        IEnumerable<IPiecePlacement> PiecePlacements { get; }
+        IEnumerable<PiecePlacement> PiecePlacements { get; }
     }
 }

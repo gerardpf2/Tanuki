@@ -14,7 +14,7 @@ namespace Game.Gameplay.Board.Parsing
             _pieceSerializedDataConverter = pieceSerializedDataConverter;
         }
 
-        public IPiecePlacement To([NotNull] PiecePlacementSerializedData piecePlacementSerializedData)
+        public PiecePlacement To([NotNull] PiecePlacementSerializedData piecePlacementSerializedData)
         {
             ArgumentNullException.ThrowIfNull(piecePlacementSerializedData);
 
@@ -26,7 +26,7 @@ namespace Game.Gameplay.Board.Parsing
                 );
         }
 
-        public PiecePlacementSerializedData From([NotNull] IPiecePlacement piecePlacement)
+        public PiecePlacementSerializedData From([NotNull] PiecePlacement piecePlacement)
         {
             ArgumentNullException.ThrowIfNull(piecePlacement);
 

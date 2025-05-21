@@ -8,7 +8,7 @@ namespace Game.Gameplay.Board.Parsing
         void To(
             BoardSerializedData boardSerializedData,
             [NotNull] out IBoard board,
-            [NotNull] out IEnumerable<IPiecePlacement> piecePlacements
+            [NotNull] out IEnumerable<PiecePlacement> piecePlacements
         );
 
         [NotNull]

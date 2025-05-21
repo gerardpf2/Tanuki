@@ -28,7 +28,7 @@ namespace Game.Gameplay.Board.Parsing
             return _parser.Serialize(boardSerializedData);
         }
 
-        public void Deserialize(string value, out IBoard board, out IEnumerable<IPiecePlacement> piecePlacements)
+        public void Deserialize(string value, out IBoard board, out IEnumerable<PiecePlacement> piecePlacements)
         {
             BoardSerializedData boardSerializedData = _parser.Deserialize<BoardSerializedData>(value);
 

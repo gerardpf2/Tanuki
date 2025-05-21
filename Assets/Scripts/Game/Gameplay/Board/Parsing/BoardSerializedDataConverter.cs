@@ -26,7 +26,7 @@ namespace Game.Gameplay.Board.Parsing
         public void To(
             [NotNull] BoardSerializedData boardSerializedData,
             out IBoard board,
-            out IEnumerable<IPiecePlacement> piecePlacements)
+            out IEnumerable<PiecePlacement> piecePlacements)
         {
             ArgumentNullException.ThrowIfNull(boardSerializedData);
 
@@ -61,12 +61,7 @@ namespace Game.Gameplay.Board.Parsing
                 IPiece piece = pieceSourceCoordinate.Key;
                 Coordinate sourceCoordinate = pieceSourceCoordinate.Value;
 
-                IPiecePlacement piecePlacement =
-                    new PiecePlacement(
-                        sourceCoordinate.Row,
-                        sourceCoordinate.Column,
-                        piece
-                    );
+                PiecePlacement piecePlacement = new(sourceCoordinate.Row, sourceCoordinate.Column, piece);
 
                 return _piecePlacementSerializedDataConverter.From(piecePlacement);
             }

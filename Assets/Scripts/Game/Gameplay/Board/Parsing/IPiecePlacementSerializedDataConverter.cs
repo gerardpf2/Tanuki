@@ -5,9 +5,9 @@ namespace Game.Gameplay.Board.Parsing
     public interface IPiecePlacementSerializedDataConverter
     {
         [NotNull]
-        IPiecePlacement To(PiecePlacementSerializedData piecePlacementSerializedData);
+        PiecePlacement To(PiecePlacementSerializedData piecePlacementSerializedData);
 
         [NotNull]
-        PiecePlacementSerializedData From(IPiecePlacement piecePlacement);
+        PiecePlacementSerializedData From(PiecePlacement piecePlacement);
     }
 }

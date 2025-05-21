@@ -35,7 +35,7 @@ namespace Game.Gameplay.PhaseResolution
             };
         }
 
-        public void Initialize(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
+        public void Initialize(IBoard board, IEnumerable<PiecePlacement> piecePlacements)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 

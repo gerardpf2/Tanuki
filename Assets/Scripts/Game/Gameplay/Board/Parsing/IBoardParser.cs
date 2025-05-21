@@ -10,7 +10,7 @@ namespace Game.Gameplay.Board.Parsing
         void Deserialize(
             string value,
             [NotNull] out IBoard board,
-            [NotNull] out IEnumerable<IPiecePlacement> piecePlacements
+            [NotNull] out IEnumerable<PiecePlacement> piecePlacements
         );
     }
 }

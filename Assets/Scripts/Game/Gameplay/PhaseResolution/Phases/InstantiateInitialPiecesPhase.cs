@@ -14,7 +14,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         [NotNull] private readonly IEventFactory _eventFactory;
 
         private IBoard _board;
-        private IEnumerable<IPiecePlacement> _piecePlacements;
+        private IEnumerable<PiecePlacement> _piecePlacements;
 
         public InstantiateInitialPiecesPhase(
             [NotNull] IEventEnqueuer eventEnqueuer,
@@ -29,16 +29,16 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         public void Initialize(
             [NotNull] IBoard board,
-            [NotNull, ItemNotNull] IEnumerable<IPiecePlacement> piecePlacements)
+            [NotNull, ItemNotNull] IEnumerable<PiecePlacement> piecePlacements)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(piecePlacements);
 
-            ICollection<IPiecePlacement> piecePlacementsCopy = new List<IPiecePlacement>();
+            ICollection<PiecePlacement> piecePlacementsCopy = new List<PiecePlacement>();
 
-            foreach (IPiecePlacement piecePlacement in piecePlacements)
+            foreach (PiecePlacement piecePlacement in piecePlacements)
             {
                 ArgumentNullException.ThrowIfNull(piecePlacement);
 
@@ -54,7 +54,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             InvalidOperationException.ThrowIfNull(_board);
             InvalidOperationException.ThrowIfNull(_piecePlacements);
 
-            foreach (IPiecePlacement piecePlacement in _piecePlacements)
+            foreach (PiecePlacement piecePlacement in _piecePlacements)
             {
                 InvalidOperationException.ThrowIfNull(piecePlacement);
 
