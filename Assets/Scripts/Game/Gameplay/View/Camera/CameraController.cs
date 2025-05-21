@@ -47,21 +47,23 @@ namespace Game.Gameplay.View.Camera
         {
             _topPositionY = topPositionY;
             _bottomPositionY = bottomPositionY;
+
+            UpdatePosition();
         }
 
         private void RegisterToEvents()
         {
             UnregisterFromEvents();
 
-            _boardView.Board.OnHighestNonEmptyRowUpdated += HandleHighestNonEmptyRowUpdated;
+            _boardView.Board.OnHighestNonEmptyRowUpdated += UpdatePosition;
         }
 
         private void UnregisterFromEvents()
         {
-            _boardView.Board.OnHighestNonEmptyRowUpdated -= HandleHighestNonEmptyRowUpdated;
+            _boardView.Board.OnHighestNonEmptyRowUpdated -= UpdatePosition;
         }
 
-        private void HandleHighestNonEmptyRowUpdated()
+        private void UpdatePosition()
         {
             InvalidOperationException.ThrowIfNull(_topPositionY);
             InvalidOperationException.ThrowIfNull(_bottomPositionY);
