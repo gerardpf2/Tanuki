@@ -11,11 +11,14 @@ namespace Game.Gameplay.Board
     public class BoardDefinition : IBoardDefinition
     {
         [SerializeField] private string _id;
+        [SerializeField] private string _serializedData;
         [SerializeField, Min(0)] private int _rows;
         [SerializeField, Min(0)] private int _columns;
         [NotNull, ItemNotNull, SerializeField] private List<PiecePlacement> _piecePlacements = new();
 
         public string Id => _id;
+
+        public string SerializedData => _serializedData;
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Rows

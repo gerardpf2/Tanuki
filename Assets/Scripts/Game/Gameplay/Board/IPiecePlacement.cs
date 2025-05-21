@@ -1,15 +1,14 @@
-using Infrastructure.System;
+using Game.Gameplay.Board.Pieces;
 
 namespace Game.Gameplay.Board
 {
+    // TODO: Remove
     public interface IPiecePlacement
     {
-        PieceType PieceType { get; }
-
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         int Row { get; }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         int Column { get; }
+
+        IPiece Piece { get; }
     }
 }

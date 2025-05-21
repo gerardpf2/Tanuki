@@ -68,6 +68,8 @@ namespace Game.Gameplay.Board
             }
         }
 
+        public IEnumerable<KeyValuePair<IPiece, Coordinate>> PieceSourceCoordinates => _pieceSourceCoordinates;
+
         public Board(
             [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,

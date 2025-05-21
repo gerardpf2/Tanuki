@@ -10,7 +10,6 @@ namespace Game.Gameplay.PhaseResolution.Phases
 {
     public class InstantiateInitialPiecesPhase : Phase, IInstantiateInitialPiecesPhase
     {
-        [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
@@ -18,15 +17,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
         private IEnumerable<IPiecePlacement> _piecePlacements;
 
         public InstantiateInitialPiecesPhase(
-            [NotNull] IPieceGetter pieceGetter,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory) : base(1, -1)
         {
-            ArgumentNullException.ThrowIfNull(pieceGetter);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
-            _pieceGetter = pieceGetter;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
@@ -62,7 +58,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             {
                 InvalidOperationException.ThrowIfNull(piecePlacement);
 
-                IPiece piece = _pieceGetter.Get(piecePlacement.PieceType);
+                IPiece piece = piecePlacement.Piece;
                 Coordinate sourceCoordinate = new(piecePlacement.Row, piecePlacement.Column);
 
                 _board.Add(piece, sourceCoordinate);

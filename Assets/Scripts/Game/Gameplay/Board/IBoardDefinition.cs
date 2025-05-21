@@ -8,6 +8,8 @@ namespace Game.Gameplay.Board
     {
         string Id { get; }
 
+        string SerializedData { get; }
+
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         int Rows { get; }
 

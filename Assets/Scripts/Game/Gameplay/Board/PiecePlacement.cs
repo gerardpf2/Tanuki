@@ -1,39 +1,20 @@
-using System;
-using Infrastructure.System;
-using UnityEngine;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
+using Game.Gameplay.Board.Pieces;
 
 namespace Game.Gameplay.Board
 {
-    [Serializable]
     public class PiecePlacement : IPiecePlacement
     {
-        [SerializeField] private PieceType _pieceType;
-        [SerializeField, Min(0)] private int _row;
-        [SerializeField, Min(0)] private int _column;
+        public int Row { get; }
 
-        public PieceType PieceType => _pieceType;
+        public int Column { get; }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
-        public int Row
+        public IPiece Piece { get; }
+
+        public PiecePlacement(int row, int column, IPiece piece)
         {
-            get
-            {
-                InvalidOperationException.ThrowIfNot(_row, ComparisonOperator.GreaterThanOrEqualTo, 0);
-
-                return _row;
-            }
-        }
-
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
-        public int Column
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNot(_column, ComparisonOperator.GreaterThanOrEqualTo, 0);
-
-                return _column;
-            }
+            Row = row;
+            Column = column;
+            Piece = piece;
         }
     }
 }
