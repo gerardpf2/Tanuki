@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.Player;
 using Game.Gameplay.View;
@@ -14,8 +16,8 @@ namespace Game.Gameplay.UseCases
 {
     public class LoadGameplay : ILoadGameplay
     {
+        [NotNull] private readonly IBoardParser _boardParser;
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
-        [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
@@ -25,8 +27,8 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IScreenLoader _screenLoader;
 
         public LoadGameplay(
+            [NotNull] IBoardParser boardParser,
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
-            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
@@ -35,8 +37,8 @@ namespace Game.Gameplay.UseCases
             [NotNull] IEventListener eventListener,
             [NotNull] IScreenLoader screenLoader)
         {
+            ArgumentNullException.ThrowIfNull(boardParser);
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
@@ -45,8 +47,8 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(eventListener);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
+            _boardParser = boardParser;
             _boardDefinitionGetter = boardDefinitionGetter;
-            _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
@@ -67,9 +69,14 @@ namespace Game.Gameplay.UseCases
         private IReadonlyBoard PrepareModel(string boardId)
         {
             IBoardDefinition boardDefinition = _boardDefinitionGetter.Get(boardId);
-            IBoard board = new Board.Board(_pieceCachedPropertiesGetter, boardDefinition.Rows, boardDefinition.Columns);
 
-            _phaseResolver.Initialize(board, boardDefinition.PiecePlacements);
+            _boardParser.Deserialize(
+                boardDefinition.SerializedData,
+                out IBoard board,
+                out IEnumerable<PiecePlacement> piecePlacements
+            );
+
+            _phaseResolver.Initialize(board, piecePlacements);
             _playerPiecesBag.Initialize();
 
             _phaseResolver.Resolve(new ResolveContext(null));

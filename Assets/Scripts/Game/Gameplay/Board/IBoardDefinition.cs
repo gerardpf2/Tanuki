@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using Infrastructure.System;
-using JetBrains.Annotations;
-
 namespace Game.Gameplay.Board
 {
     public interface IBoardDefinition
@@ -9,14 +5,5 @@ namespace Game.Gameplay.Board
         string Id { get; }
 
         string SerializedData { get; }
-
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
-        int Rows { get; }
-
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
-        int Columns { get; }
-
-        [NotNull, ItemNotNull]
-        IEnumerable<PiecePlacement> PiecePlacements { get; }
     }
 }

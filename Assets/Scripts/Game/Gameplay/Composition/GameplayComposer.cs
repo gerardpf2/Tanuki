@@ -1,4 +1,5 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
@@ -12,6 +13,7 @@ using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
+using Infrastructure.System.Parsing;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 
@@ -39,6 +41,40 @@ namespace Game.Gameplay.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IBoardParser>(r =>
+                    new BoardParser(
+                        r.Resolve<IBoardSerializedDataConverter>(),
+                        r.Resolve<IParser>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IBoardSerializedDataConverter>(r =>
+                    new BoardSerializedDataConverter(
+                        r.Resolve<IPieceCachedPropertiesGetter>(),
+                        r.Resolve<IPiecePlacementSerializedDataConverter>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPiecePlacementSerializedDataConverter>(r =>
+                    new PiecePlacementSerializedDataConverter(
+                        r.Resolve<IPieceSerializedDataConverter>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPieceSerializedDataConverter>(r =>
+                    new PieceSerializedDataConverter(
+                        r.Resolve<IPieceGetter>()
+                    )
+                )
+            );
 
             ruleAdder.Add(ruleFactory.GetInstance(_boardDefinitionGetter));
 
@@ -184,8 +220,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplay>(r =>
                     new LoadGameplay(
+                        r.Resolve<IBoardParser>(),
                         r.Resolve<IBoardDefinitionGetter>(),
-                        r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
