@@ -11,6 +11,7 @@ using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
 using Infrastructure.System.Exceptions;
+using Infrastructure.System.Parsing;
 using Infrastructure.Tweening.Composition;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Composition;
@@ -48,6 +49,18 @@ namespace Game.Root.Composition
             _coroutineRunner = coroutineRunner;
             _boardDefinitionGetter = boardDefinitionGetter;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
+        }
+
+        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddRules(ruleAdder, ruleFactory);
+
+            // System services need to be registered in here because it cannot have a composer (because of assembly circular dependencies)
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IParser>(_ => new JsonParser()));
         }
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
