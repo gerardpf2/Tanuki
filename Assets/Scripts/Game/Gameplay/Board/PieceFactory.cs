@@ -7,7 +7,7 @@ namespace Game.Gameplay.Board
     {
         public IPiece GetTest(IEnumerable<KeyValuePair<string, object>> customData)
         {
-            return new Test(customData);
+            return ProcessCustomData(new Test(), customData);
         }
 
         public IPiece GetPlayerBlock11()
@@ -23,6 +23,16 @@ namespace Game.Gameplay.Board
         public IPiece GetPlayerBlock21()
         {
             return new PlayerBlock21();
+        }
+
+        private static IPiece ProcessCustomData(IPiece piece, IEnumerable<KeyValuePair<string, object>> customData)
+        {
+            if (piece is IPieceUpdater pieceUpdater)
+            {
+                pieceUpdater.ProcessCustomData(customData);
+            }
+
+            return piece;
         }
     }
 }

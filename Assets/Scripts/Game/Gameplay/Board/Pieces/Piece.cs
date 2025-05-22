@@ -11,26 +11,14 @@ namespace Game.Gameplay.Board.Pieces
 
         public virtual IEnumerable<KeyValuePair<string, object>> CustomData => null;
 
-        protected Piece(PieceType type, IEnumerable<KeyValuePair<string, object>> customData)
+        protected Piece(PieceType type)
         {
             Type = type;
-
-            ProcessCustomData(customData);
         }
 
         public abstract IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
 
-        public void Damage(int rowOffset, int columnOffset)
-        {
-            if (!IsInside(rowOffset, columnOffset))
-            {
-                InvalidOperationException.Throw($"Offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset}) are not inside");
-            }
-
-            HandleDamaged(rowOffset, columnOffset);
-        }
-
-        private void ProcessCustomData(IEnumerable<KeyValuePair<string, object>> customData)
+        public void ProcessCustomData(IEnumerable<KeyValuePair<string, object>> customData)
         {
             if (customData is null)
             {
@@ -46,6 +34,16 @@ namespace Game.Gameplay.Board.Pieces
                     InvalidOperationException.Throw($"Custom data entry with Key: {key} and Value: {value} cannot be processed");
                 }
             }
+        }
+
+        public void Damage(int rowOffset, int columnOffset)
+        {
+            if (!IsInside(rowOffset, columnOffset))
+            {
+                InvalidOperationException.Throw($"Offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset}) are not inside");
+            }
+
+            HandleDamaged(rowOffset, columnOffset);
         }
 
         protected virtual bool ProcessCustomDataEntry(string key, object value)

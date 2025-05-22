@@ -10,6 +10,6 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
-        public PlayerBlock12() : base(PieceType.PlayerBlock12, null, 1, 2) { }
+        public PlayerBlock12() : base(PieceType.PlayerBlock12, 1, 2) { }
     }
 }

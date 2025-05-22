@@ -65,7 +65,7 @@ namespace Game.Gameplay.Board.Pieces
             }
         }
 
-        public Test(IEnumerable<KeyValuePair<string, object>> customData) : base(PieceType.Test, customData, ITest.Rows, 1) { }
+        public Test() : base(PieceType.Test, ITest.Rows, 1) { }
 
         public void MoveEye()
         {
