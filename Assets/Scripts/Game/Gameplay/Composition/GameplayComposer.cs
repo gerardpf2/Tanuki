@@ -12,6 +12,7 @@ using Game.Gameplay.View.EventResolution.EventResolvers;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
+using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
 using Infrastructure.Unity;
@@ -80,7 +81,13 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceCachedPropertiesGetter>(_ => new PieceCachedPropertiesGetter()));
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IPieceFactory>(_ => new PieceFactory()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPieceFactory>(r =>
+                    new PieceFactory(
+                        r.Resolve<IConverter>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceGetter>(r =>

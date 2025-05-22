@@ -4,7 +4,7 @@ namespace Game.Gameplay.Board.Pieces
 {
     public interface IPieceUpdater
     {
-        void ProcessCustomData(IEnumerable<KeyValuePair<string, object>> customData);
+        void ProcessCustomData(IEnumerable<KeyValuePair<string, string>> customData);
 
         void Damage(int rowOffset, int columnOffset);
     }

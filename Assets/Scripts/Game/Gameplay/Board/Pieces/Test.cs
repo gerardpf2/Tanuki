@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Pieces
 {
@@ -18,23 +19,25 @@ namespace Game.Gameplay.Board.Pieces
         private const string CustomDataEyeMovementDirectionUpKey = "EyeMovementDirectionUp";
         private const string CustomDataEyeRowOffsetKey = "EyeRowOffset";
 
+        [NotNull] private readonly IConverter _converter;
+
         private int _eyeRowOffset;
 
-        public override IEnumerable<KeyValuePair<string, object>> CustomData
+        public override IEnumerable<KeyValuePair<string, string>> CustomData
         {
             get
             {
-                IDictionary<string, object> customData = new Dictionary<string, object>
+                IDictionary<string, string> customData = new Dictionary<string, string>
                 {
-                    { CustomDataEyeMovementDirectionUpKey, EyeMovementDirectionUp },
-                    { CustomDataEyeRowOffsetKey, EyeRowOffset },
+                    { CustomDataEyeMovementDirectionUpKey, _converter.Convert<string>(EyeMovementDirectionUp) },
+                    { CustomDataEyeRowOffsetKey, _converter.Convert<string>(EyeRowOffset) },
                 };
 
-                IEnumerable<KeyValuePair<string, object>> baseCustomData = base.CustomData;
+                IEnumerable<KeyValuePair<string, string>> baseCustomData = base.CustomData;
 
                 if (baseCustomData is not null)
                 {
-                    foreach ((string key, object value) in baseCustomData)
+                    foreach ((string key, string value) in baseCustomData)
                     {
                         customData.Add(key, value);
                     }
@@ -65,7 +68,12 @@ namespace Game.Gameplay.Board.Pieces
             }
         }
 
-        public Test() : base(PieceType.Test, ITest.Rows, 1) { }
+        public Test([NotNull] IConverter converter) : base(PieceType.Test, ITest.Rows, 1)
+        {
+            ArgumentNullException.ThrowIfNull(converter);
+
+            _converter = converter;
+        }
 
         public void MoveEye()
         {
@@ -86,19 +94,19 @@ namespace Game.Gameplay.Board.Pieces
             }
         }
 
-        protected override bool ProcessCustomDataEntry(string key, object value)
+        protected override bool ProcessCustomDataEntry(string key, string value)
         {
             switch (key)
             {
                 case CustomDataEyeMovementDirectionUpKey:
                 {
-                    EyeMovementDirectionUp = (bool)value;
+                    EyeMovementDirectionUp = _converter.Convert<bool>(value);
 
                     return true;
                 }
                 case CustomDataEyeRowOffsetKey:
                 {
-                    int eyeRowOffset = (int)(long)value; // TODO
+                    int eyeRowOffset = _converter.Convert<int>(value);
 
                     ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
                     ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.LessThan, ITest.Rows);

@@ -31,7 +31,7 @@ namespace Game.Gameplay.Board.Parsing
                 new PieceSerializedData
                 {
                     PieceType = piece.Type,
-                    CustomData = piece.CustomData is null ? null : new Dictionary<string, object>(piece.CustomData)
+                    CustomData = piece.CustomData is null ? null : new Dictionary<string, string>(piece.CustomData)
                 };
         }
     }

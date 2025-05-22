@@ -9,7 +9,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public bool Alive { get; protected set; } = true;
 
-        public virtual IEnumerable<KeyValuePair<string, object>> CustomData => null;
+        public virtual IEnumerable<KeyValuePair<string, string>> CustomData => null;
 
         protected Piece(PieceType type)
         {
@@ -18,14 +18,14 @@ namespace Game.Gameplay.Board.Pieces
 
         public abstract IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
 
-        public void ProcessCustomData(IEnumerable<KeyValuePair<string, object>> customData)
+        public void ProcessCustomData(IEnumerable<KeyValuePair<string, string>> customData)
         {
             if (customData is null)
             {
                 return;
             }
 
-            foreach ((string key, object value) in customData)
+            foreach ((string key, string value) in customData)
             {
                 bool processed = ProcessCustomDataEntry(key, value);
 
@@ -46,7 +46,7 @@ namespace Game.Gameplay.Board.Pieces
             HandleDamaged(rowOffset, columnOffset);
         }
 
-        protected virtual bool ProcessCustomDataEntry(string key, object value)
+        protected virtual bool ProcessCustomDataEntry(string key, string value)
         {
             return false;
         }

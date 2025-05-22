@@ -19,7 +19,7 @@ namespace Game.Gameplay.Board
             _pieceFactory = pieceFactory;
         }
 
-        public IPiece Get(PieceType pieceType, IEnumerable<KeyValuePair<string, object>> customData)
+        public IPiece Get(PieceType pieceType, IEnumerable<KeyValuePair<string, string>> customData)
         {
             IPiece piece;
 

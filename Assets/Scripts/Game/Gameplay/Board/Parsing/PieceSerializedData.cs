@@ -10,6 +10,6 @@ namespace Game.Gameplay.Board.Parsing
         public PieceType PieceType { get; set; }
 
         [JsonProperty("C", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public Dictionary<string, object> CustomData { get; set; }
+        public Dictionary<string, string> CustomData { get; set; }
     }
 }

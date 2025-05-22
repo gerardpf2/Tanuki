@@ -1,13 +1,25 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
+using Infrastructure.System;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board
 {
     public class PieceFactory : IPieceFactory
     {
-        public IPiece GetTest(IEnumerable<KeyValuePair<string, object>> customData)
+        [NotNull] private readonly IConverter _converter;
+
+        public PieceFactory([NotNull] IConverter converter)
         {
-            return ProcessCustomData(new Test(), customData);
+            ArgumentNullException.ThrowIfNull(converter);
+
+            _converter = converter;
+        }
+
+        public IPiece GetTest(IEnumerable<KeyValuePair<string, string>> customData)
+        {
+            return ProcessCustomData(new Test(_converter), customData);
         }
 
         public IPiece GetPlayerBlock11()
@@ -25,7 +37,7 @@ namespace Game.Gameplay.Board
             return new PlayerBlock21();
         }
 
-        private static IPiece ProcessCustomData(IPiece piece, IEnumerable<KeyValuePair<string, object>> customData)
+        private static IPiece ProcessCustomData(IPiece piece, IEnumerable<KeyValuePair<string, string>> customData)
         {
             if (piece is IPieceUpdater pieceUpdater)
             {

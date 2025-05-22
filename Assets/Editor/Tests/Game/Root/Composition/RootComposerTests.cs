@@ -13,6 +13,7 @@ using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
+using Infrastructure.System;
 using Infrastructure.System.Parsing;
 using Infrastructure.Tweening.Composition;
 using Infrastructure.Unity;
@@ -35,6 +36,7 @@ namespace Editor.Tests.Game.Root.Composition
         private ICoroutineRunner _coroutineRunner;
         private IRuleFactory _ruleFactory;
         private IRuleAdder _ruleAdder;
+        private IConverter _converter;
 
         private RootComposer _rootComposer;
 
@@ -50,6 +52,7 @@ namespace Editor.Tests.Game.Root.Composition
             _scopeBuildingContext = new ScopeBuildingContext();
             _ruleFactory = Substitute.For<IRuleFactory>();
             _ruleAdder = Substitute.For<IRuleAdder>();
+            _converter = Substitute.For<IConverter>();
 
             _rootComposer =
                 new RootComposer(
@@ -58,7 +61,8 @@ namespace Editor.Tests.Game.Root.Composition
                     _configValueGetter,
                     _coroutineRunner,
                     _boardDefinitionGetter,
-                    _pieceViewDefinitionGetter
+                    _pieceViewDefinitionGetter,
+                    _converter
                 );
         }
 
