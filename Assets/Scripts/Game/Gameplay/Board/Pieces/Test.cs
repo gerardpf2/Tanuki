@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -23,30 +22,6 @@ namespace Game.Gameplay.Board.Pieces
 
         private int _eyeRowOffset;
 
-        public override IEnumerable<KeyValuePair<string, string>> CustomData
-        {
-            get
-            {
-                IDictionary<string, string> customData = new Dictionary<string, string>
-                {
-                    { CustomDataEyeMovementDirectionUpKey, _converter.Convert<string>(EyeMovementDirectionUp) },
-                    { CustomDataEyeRowOffsetKey, _converter.Convert<string>(EyeRowOffset) },
-                };
-
-                IEnumerable<KeyValuePair<string, string>> baseCustomData = base.CustomData;
-
-                if (baseCustomData is not null)
-                {
-                    foreach ((string key, string value) in baseCustomData)
-                    {
-                        customData.Add(key, value);
-                    }
-                }
-
-                return customData;
-            }
-        }
-
         public bool EyeMovementDirectionUp { get; private set; }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0), Is(ComparisonOperator.LessThan, ITest.Rows)]
@@ -68,7 +43,7 @@ namespace Game.Gameplay.Board.Pieces
             }
         }
 
-        public Test([NotNull] IConverter converter) : base(PieceType.Test, ITest.Rows, 1)
+        public Test([NotNull] IConverter converter) : base(converter, PieceType.Test, ITest.Rows, 1)
         {
             ArgumentNullException.ThrowIfNull(converter);
 
@@ -92,6 +67,14 @@ namespace Game.Gameplay.Board.Pieces
             {
                 --EyeRowOffset;
             }
+        }
+
+        protected override void AddCustomDataEntries()
+        {
+            base.AddCustomDataEntries();
+
+            AddCustomDataEntry(CustomDataEyeMovementDirectionUpKey, EyeMovementDirectionUp);
+            AddCustomDataEntry(CustomDataEyeRowOffsetKey, EyeRowOffset);
         }
 
         protected override bool ProcessCustomDataEntry(string key, string value)

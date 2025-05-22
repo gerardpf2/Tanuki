@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Game.Gameplay.Board.Utils;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Pieces
 {
@@ -11,9 +12,10 @@ namespace Game.Gameplay.Board.Pieces
         [Is(ComparisonOperator.GreaterThan, 0)] private readonly int _columns;
 
         protected RectangularPiece(
+            [NotNull] IConverter converter,
             PieceType type,
             [Is(ComparisonOperator.GreaterThan, 0)] int rows,
-            [Is(ComparisonOperator.GreaterThan, 0)] int columns) : base(type)
+            [Is(ComparisonOperator.GreaterThan, 0)] int columns) : base(converter, type)
         {
             ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThan, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThan, 0);

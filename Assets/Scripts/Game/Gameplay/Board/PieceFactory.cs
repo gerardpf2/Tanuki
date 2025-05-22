@@ -24,17 +24,17 @@ namespace Game.Gameplay.Board
 
         public IPiece GetPlayerBlock11()
         {
-            return new PlayerBlock11();
+            return new PlayerBlock11(_converter);
         }
 
         public IPiece GetPlayerBlock12()
         {
-            return new PlayerBlock12();
+            return new PlayerBlock12(_converter);
         }
 
         public IPiece GetPlayerBlock21()
         {
-            return new PlayerBlock21();
+            return new PlayerBlock21(_converter);
         }
 
         private static IPiece ProcessCustomData(IPiece piece, IEnumerable<KeyValuePair<string, string>> customData)

@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
-using Infrastructure.System.Exceptions;
+using Infrastructure.System;
+using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board.Pieces
 {
@@ -9,10 +13,18 @@ namespace Game.Gameplay.Board.Pieces
 
         public bool Alive { get; protected set; } = true;
 
-        public virtual IEnumerable<KeyValuePair<string, string>> CustomData => null;
+        public IEnumerable<KeyValuePair<string, string>> CustomData => GetCustomData();
 
-        protected Piece(PieceType type)
+        [NotNull] private readonly IConverter _converter;
+
+        [NotNull] private readonly IDictionary<string, string> _temporaryCustomDataEntries = new Dictionary<string, string>();
+
+        protected Piece([NotNull] IConverter converter, PieceType type)
         {
+            ArgumentNullException.ThrowIfNull(converter);
+
+            _converter = converter;
+
             Type = type;
         }
 
@@ -44,6 +56,32 @@ namespace Game.Gameplay.Board.Pieces
             }
 
             HandleDamaged(rowOffset, columnOffset);
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> GetCustomData()
+        {
+            _temporaryCustomDataEntries.Clear();
+
+            AddCustomDataEntries();
+
+            return
+                _temporaryCustomDataEntries.Count > 0 ?
+                    new Dictionary<string, string>(_temporaryCustomDataEntries) :
+                    null; // Avoid serialize when empty
+        }
+
+        protected virtual void AddCustomDataEntries() { }
+
+        protected void AddCustomDataEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
+        {
+            ArgumentNullException.ThrowIfNull(key);
+
+            if (value is null || value.Equals(default))
+            {
+                return; // Avoid serialize when null or default
+            }
+
+            _temporaryCustomDataEntries.Add(key, _converter.Convert<string>(value));
         }
 
         protected virtual bool ProcessCustomDataEntry(string key, string value)

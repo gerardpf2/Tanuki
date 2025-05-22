@@ -1,3 +1,6 @@
+using Infrastructure.System;
+using JetBrains.Annotations;
+
 namespace Game.Gameplay.Board.Pieces
 {
     public class PlayerBlock11 : RectangularPiece
@@ -10,6 +13,6 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
-        public PlayerBlock11() : base(PieceType.PlayerBlock11, 1, 1) { }
+        public PlayerBlock11([NotNull] IConverter converter) : base(converter, PieceType.PlayerBlock11, 1, 1) { }
     }
 }
