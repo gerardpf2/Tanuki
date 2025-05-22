@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game.Gameplay.Board.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -31,7 +32,7 @@ namespace Game.Gameplay.Board.Parsing
                 new PieceSerializedData
                 {
                     PieceType = piece.Type,
-                    CustomData = new Dictionary<string, object>(piece.CustomData)
+                    CustomData = new Dictionary<string, object>(piece.CustomData ?? Enumerable.Empty<KeyValuePair<string, object>>())
                 };
         }
     }
