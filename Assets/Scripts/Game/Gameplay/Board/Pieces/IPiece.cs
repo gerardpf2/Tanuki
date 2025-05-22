@@ -9,6 +9,8 @@ namespace Game.Gameplay.Board.Pieces
 
         bool Alive { get; }
 
+        IEnumerable<KeyValuePair<string, object>> CustomData { get; }
+
         [NotNull]
         IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
     }

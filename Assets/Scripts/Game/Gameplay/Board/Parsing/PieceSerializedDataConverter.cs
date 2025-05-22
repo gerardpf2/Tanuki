@@ -6,7 +6,7 @@ namespace Game.Gameplay.Board.Parsing
 {
     public class PieceSerializedDataConverter : IPieceSerializedDataConverter
     {
-        // TODO: Add metadata support
+        // TODO: Add custom data support
 
         [NotNull] private readonly IPieceGetter _pieceGetter;
 
