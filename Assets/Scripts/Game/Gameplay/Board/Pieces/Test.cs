@@ -90,14 +90,16 @@ namespace Game.Gameplay.Board.Pieces
         {
             switch (key)
             {
-                case CustomDataEyeMovementDirectionUpKey when value is bool eyeMovementDirectionUp:
+                case CustomDataEyeMovementDirectionUpKey:
                 {
-                    EyeMovementDirectionUp = eyeMovementDirectionUp;
+                    EyeMovementDirectionUp = (bool)value;
 
                     return true;
                 }
-                case CustomDataEyeRowOffsetKey when value is int eyeRowOffset:
+                case CustomDataEyeRowOffsetKey:
                 {
+                    int eyeRowOffset = (int)(long)value; // TODO
+
                     ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
                     ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.LessThan, ITest.Rows);
 
