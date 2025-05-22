@@ -12,8 +12,9 @@ namespace Game.Gameplay.Board.Pieces
 
         protected RectangularPiece(
             PieceType type,
+            IEnumerable<KeyValuePair<string, object>> customData,
             [Is(ComparisonOperator.GreaterThan, 0)] int rows,
-            [Is(ComparisonOperator.GreaterThan, 0)] int columns) : base(type)
+            [Is(ComparisonOperator.GreaterThan, 0)] int columns) : base(type, customData)
         {
             ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThan, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThan, 0);

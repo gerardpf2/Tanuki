@@ -9,11 +9,13 @@ namespace Game.Gameplay.Board.Pieces
 
         public bool Alive { get; protected set; } = true;
 
-        public IEnumerable<KeyValuePair<string, object>> CustomData { get; }
+        public virtual IEnumerable<KeyValuePair<string, object>> CustomData => null;
 
-        protected Piece(PieceType type)
+        protected Piece(PieceType type, IEnumerable<KeyValuePair<string, object>> customData)
         {
             Type = type;
+
+            ProcessCustomData(customData);
         }
 
         public abstract IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
@@ -26,6 +28,29 @@ namespace Game.Gameplay.Board.Pieces
             }
 
             HandleDamaged(rowOffset, columnOffset);
+        }
+
+        private void ProcessCustomData(IEnumerable<KeyValuePair<string, object>> customData)
+        {
+            if (customData is null)
+            {
+                return;
+            }
+
+            foreach ((string key, object value) in customData)
+            {
+                bool processed = ProcessCustomDataEntry(key, value);
+
+                if (!processed)
+                {
+                    InvalidOperationException.Throw($"Custom data entry with Key: {key} and Value: {value} cannot be processed");
+                }
+            }
+        }
+
+        protected virtual bool ProcessCustomDataEntry(string key, object value)
+        {
+            return false;
         }
 
         protected abstract bool IsInside(int rowOffset, int columnOffset);
