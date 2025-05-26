@@ -40,8 +40,10 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _board = board;
         }
 
-        public void Uninitialize()
+        public override void Uninitialize()
         {
+            base.Uninitialize();
+
             _board = null;
         }
 

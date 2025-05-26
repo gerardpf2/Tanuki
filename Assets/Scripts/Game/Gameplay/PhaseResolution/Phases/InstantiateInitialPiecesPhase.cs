@@ -49,8 +49,10 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _piecePlacements = piecePlacementsCopy;
         }
 
-        public void Uninitialize()
+        public override void Uninitialize()
         {
+            base.Uninitialize();
+
             _board = null;
             _piecePlacements = null;
         }

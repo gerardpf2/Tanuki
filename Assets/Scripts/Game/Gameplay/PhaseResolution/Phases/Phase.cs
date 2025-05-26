@@ -14,10 +14,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _maxResolveTimesPerIteration = maxResolveTimesPerIteration;
         }
 
-        public virtual void OnBeginIteration()
+        public virtual void Uninitialize()
         {
-            _resolveTimesPerIteration = 0;
+            _resolveTimes = 0;
         }
+
+        public virtual void OnBeginIteration() { }
 
         public bool Resolve(ResolveContext resolveContext)
         {
@@ -34,7 +36,10 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected abstract bool ResolveImpl(ResolveContext resolveContext);
 
-        public virtual void OnEndIteration() { }
+        public virtual void OnEndIteration()
+        {
+            _resolveTimesPerIteration = 0;
+        }
 
         private bool CanResolve()
         {

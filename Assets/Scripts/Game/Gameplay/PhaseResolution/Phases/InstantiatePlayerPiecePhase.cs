@@ -33,9 +33,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
             Uninitialize();
         }
 
-        public void Uninitialize()
+        public override void Uninitialize()
         {
             // TODO: Remove if not needed
+
+            base.Uninitialize();
         }
 
         protected override bool ResolveImpl(ResolveContext _)
