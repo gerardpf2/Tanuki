@@ -13,17 +13,7 @@ namespace Game.Gameplay.View.Board
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
 
-        public IReadonlyBoard Board
-        {
-            get
-            {
-                // TODO: Remove NotNull
-
-                InvalidOperationException.ThrowIfNull(_board);
-
-                return _board;
-            }
-        }
+        public IReadonlyBoard Board => _board;
 
         public BoardView([NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter)
         {
@@ -53,7 +43,7 @@ namespace Game.Gameplay.View.Board
                 return;
             }
 
-            Object.Destroy(_piecesParent);
+            Object.Destroy(_piecesParent.gameObject);
 
             _piecesParent = null;
         }

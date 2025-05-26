@@ -63,16 +63,22 @@ namespace Game.Gameplay.View.Camera
         {
             UnregisterFromEvents();
 
+            InvalidOperationException.ThrowIfNull(_boardView.Board);
+
             _boardView.Board.OnHighestNonEmptyRowUpdated += UpdatePosition;
         }
 
         private void UnregisterFromEvents()
         {
-            _boardView.Board.OnHighestNonEmptyRowUpdated -= UpdatePosition;
+            if (_boardView.Board is not null)
+            {
+                _boardView.Board.OnHighestNonEmptyRowUpdated -= UpdatePosition;
+            }
         }
 
         private void UpdatePosition()
         {
+            InvalidOperationException.ThrowIfNull(_boardView.Board);
             InvalidOperationException.ThrowIfNull(_topPositionY);
             InvalidOperationException.ThrowIfNull(_bottomPositionY);
 

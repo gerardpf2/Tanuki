@@ -86,7 +86,7 @@ namespace Game.Gameplay.View.Player
                 return;
             }
 
-            Object.Destroy(_playerPieceParent);
+            Object.Destroy(_playerPieceParent.gameObject);
 
             _playerPieceParent = null;
         }
@@ -146,6 +146,7 @@ namespace Game.Gameplay.View.Player
 
         private Vector3 GetInitialPosition()
         {
+            InvalidOperationException.ThrowIfNull(_boardView.Board);
             InvalidOperationException.ThrowIfNull(_pieceData);
 
             int x = (_boardView.Board.Columns - _pieceData.RightMostColumnOffset) / 2;
@@ -156,6 +157,7 @@ namespace Game.Gameplay.View.Player
 
         private float ClampX(float x)
         {
+            InvalidOperationException.ThrowIfNull(_boardView.Board);
             InvalidOperationException.ThrowIfNull(_pieceData);
 
             const int minX = 0;
