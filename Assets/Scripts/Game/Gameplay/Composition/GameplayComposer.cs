@@ -151,6 +151,9 @@ namespace Game.Gameplay.Composition
                 )
             );
 
+            // Not shared so it can only be unloaded from here
+            ruleAdder.Add(ruleFactory.GetSingleton<IUnloadGameplayUseCase>(_ => new UnloadGameplayUseCase()));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
@@ -228,11 +231,13 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<LoadUnloadGameplay>((r, s) =>
                     s.Inject(
-                        r.Resolve<ILoadGameplayUseCase>()
+                        r.Resolve<ILoadGameplayUseCase>(),
+                        r.Resolve<IUnloadGameplayUseCase>()
                     )
                 )
             );
 
+            // Shared so it can be loaded from anywhere
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
                     new LoadGameplayUseCase(
