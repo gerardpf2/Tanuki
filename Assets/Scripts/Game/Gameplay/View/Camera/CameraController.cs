@@ -38,9 +38,17 @@ namespace Game.Gameplay.View.Camera
 
         public void Initialize()
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
+            Uninitialize();
 
             RegisterToEvents();
+        }
+
+        public void Uninitialize()
+        {
+            UnregisterFromEvents();
+
+            _topPositionY = null;
+            _bottomPositionY = null;
         }
 
         public void SetBoardViewLimits(float topPositionY, float bottomPositionY)
