@@ -157,7 +157,8 @@ namespace Game.Gameplay.Composition
                     new UnloadGameplayUseCase(
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
-                        r.Resolve<IBoardView>()
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<IPlayerView>()
                     )
                 )
             );

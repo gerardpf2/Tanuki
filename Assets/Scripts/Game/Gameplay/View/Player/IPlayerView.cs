@@ -12,6 +12,8 @@ namespace Game.Gameplay.View.Player
 
         void Initialize();
 
+        void Uninitialize();
+
         void InstantiatePiece(IPiece piece, GameObject prefab);
 
         void DestroyPiece();

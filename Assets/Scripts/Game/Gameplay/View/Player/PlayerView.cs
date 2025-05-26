@@ -72,9 +72,23 @@ namespace Game.Gameplay.View.Player
 
         public void Initialize()
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
+            Uninitialize();
 
             _playerPieceParent = new GameObject("PlayerPieceParent").transform; // New game object outside canvas, etc
+        }
+
+        public void Uninitialize()
+        {
+            TryDestroyPiece();
+
+            if (_playerPieceParent == null)
+            {
+                return;
+            }
+
+            Object.Destroy(_playerPieceParent);
+
+            _playerPieceParent = null;
         }
 
         public void InstantiatePiece(IPiece piece, [NotNull] GameObject prefab)
@@ -118,6 +132,16 @@ namespace Game.Gameplay.View.Player
             Transform pieceInstanceTransform = PieceInstance.transform;
 
             pieceInstanceTransform.position = pieceInstanceTransform.position.WithX(Mathf.RoundToInt(_pieceData.X));
+        }
+
+        private void TryDestroyPiece()
+        {
+            if (_pieceData is null || PieceInstance == null)
+            {
+                return;
+            }
+
+            DestroyPiece();
         }
 
         private Vector3 GetInitialPosition()

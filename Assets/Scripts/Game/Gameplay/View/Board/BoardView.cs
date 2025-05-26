@@ -44,6 +44,8 @@ namespace Game.Gameplay.View.Board
 
         public void Uninitialize()
         {
+            // TODO: TryDestroyPiece
+
             _board = null;
 
             if (_piecesParent == null)
