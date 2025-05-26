@@ -269,7 +269,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<ICameraBoardViewPropertiesSetter>()
+                        r.Resolve<ICameraBoardViewPropertiesSetter>(),
+                        r.Resolve<ICoroutineRunner>()
                     )
                 )
             );

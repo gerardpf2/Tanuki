@@ -40,12 +40,16 @@ namespace Game.Gameplay.View.Camera
         {
             Uninitialize();
 
+            SetInitialPosition();
+
             RegisterToEvents();
         }
 
         public void Uninitialize()
         {
             UnregisterFromEvents();
+
+            SetInitialPosition();
 
             _topPositionY = null;
             _bottomPositionY = null;
@@ -74,6 +78,11 @@ namespace Game.Gameplay.View.Camera
             {
                 _boardView.Board.OnHighestNonEmptyRowUpdated -= UpdatePosition;
             }
+        }
+
+        private void SetInitialPosition()
+        {
+            _cameraTransform.position = _cameraTransform.position.WithX(0.0f).WithY(0.0f);
         }
 
         private void UpdatePosition()
