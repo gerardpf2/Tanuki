@@ -4,6 +4,7 @@ using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.Player;
+using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -225,6 +226,14 @@ namespace Game.Gameplay.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
+                ruleFactory.GetInject<LoadUnloadGameplay>((r, s) =>
+                    s.Inject(
+                        r.Resolve<ILoadGameplay>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplay>(r =>
                     new LoadGameplay(
                         r.Resolve<IBoardParser>(),
@@ -249,8 +258,8 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetInject<PlayerInputHandler>((r, vm) =>
-                    vm.Inject(
+                ruleFactory.GetInject<PlayerInputHandler>((r, s) =>
+                    s.Inject(
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerView>(),

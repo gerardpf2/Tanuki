@@ -63,7 +63,7 @@ namespace Game.Root.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            // System services need to be registered in here because it cannot have a composer (because of assembly circular dependencies)
+            // TODO: Add SystemComposer (inside DependencyInjection assembly to avoid circular dependency)
 
             ruleAdder.Add(ruleFactory.GetSingleton<IParser>(_ => new JsonParser()));
 

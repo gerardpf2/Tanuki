@@ -14,6 +14,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.UseCases
 {
+    // TODO: Rename
     public class LoadGameplay : ILoadGameplay
     {
         [NotNull] private readonly IBoardParser _boardParser;
