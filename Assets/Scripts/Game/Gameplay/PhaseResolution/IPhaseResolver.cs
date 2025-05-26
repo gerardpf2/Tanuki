@@ -7,6 +7,8 @@ namespace Game.Gameplay.PhaseResolution
     {
         void Initialize(IBoard board, IEnumerable<PiecePlacement> piecePlacements);
 
+        void Uninitialize();
+
         void Resolve(ResolveContext resolveContext);
     }
 }

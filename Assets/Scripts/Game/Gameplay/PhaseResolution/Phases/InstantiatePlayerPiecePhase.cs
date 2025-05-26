@@ -28,7 +28,14 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         public void Initialize()
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
+            // TODO: Remove if not needed
+
+            Uninitialize();
+        }
+
+        public void Uninitialize()
+        {
+            // TODO: Remove if not needed
         }
 
         protected override bool ResolveImpl(ResolveContext _)

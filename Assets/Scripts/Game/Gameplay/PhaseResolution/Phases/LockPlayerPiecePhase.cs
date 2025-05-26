@@ -33,11 +33,16 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         public void Initialize([NotNull] IBoard board)
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
-
             ArgumentNullException.ThrowIfNull(board);
 
+            Uninitialize();
+
             _board = board;
+        }
+
+        public void Uninitialize()
+        {
+            _board = null;
         }
 
         public override void OnBeginIteration()
