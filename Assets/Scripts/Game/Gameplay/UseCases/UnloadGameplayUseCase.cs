@@ -1,5 +1,6 @@
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.Player;
+using Game.Gameplay.View.Board;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -9,14 +10,20 @@ namespace Game.Gameplay.UseCases
     {
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
+        [NotNull] private readonly IBoardView _boardView;
 
-        public UnloadGameplayUseCase([NotNull] IPhaseResolver phaseResolver, [NotNull] IPlayerPiecesBag playerPiecesBag)
+        public UnloadGameplayUseCase(
+            [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IPlayerPiecesBag playerPiecesBag,
+            [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
+            ArgumentNullException.ThrowIfNull(boardView);
 
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
+            _boardView = boardView;
         }
 
         public void Resolve()
@@ -34,8 +41,9 @@ namespace Game.Gameplay.UseCases
 
         private void PrepareView()
         {
+            _boardView.Uninitialize();
+
             // TODO
-            // _boardView
             // _playerView
             // _cameraController
             // _eventListener
