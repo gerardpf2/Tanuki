@@ -155,7 +155,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
-                        r.Resolve<IPhaseResolver>()
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPlayerPiecesBag>()
                     )
                 )
             );

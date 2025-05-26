@@ -8,6 +8,8 @@ namespace Game.Gameplay.Player
 
         void Initialize();
 
+        void Uninitialize();
+
         void ConsumeCurrent();
 
         void PrepareNext();
