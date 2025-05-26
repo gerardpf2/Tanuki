@@ -252,6 +252,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
                     new LoadGameplayUseCase(
+                        r.Resolve<IUnloadGameplayUseCase>(),
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IBoardDefinitionGetter>(),
                         r.Resolve<IPhaseResolver>(),

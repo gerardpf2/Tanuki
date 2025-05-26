@@ -16,6 +16,7 @@ namespace Game.Gameplay.UseCases
 {
     public class LoadGameplayUseCase : ILoadGameplayUseCase
     {
+        [NotNull] private readonly IUnloadGameplayUseCase _unloadGameplayUseCase;
         [NotNull] private readonly IBoardParser _boardParser;
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
@@ -27,6 +28,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IScreenLoader _screenLoader;
 
         public LoadGameplayUseCase(
+            [NotNull] IUnloadGameplayUseCase unloadGameplayUseCase,
             [NotNull] IBoardParser boardParser,
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
             [NotNull] IPhaseResolver phaseResolver,
@@ -37,6 +39,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IEventListener eventListener,
             [NotNull] IScreenLoader screenLoader)
         {
+            ArgumentNullException.ThrowIfNull(unloadGameplayUseCase);
             ArgumentNullException.ThrowIfNull(boardParser);
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
             ArgumentNullException.ThrowIfNull(phaseResolver);
@@ -47,6 +50,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(eventListener);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
+            _unloadGameplayUseCase = unloadGameplayUseCase;
             _boardParser = boardParser;
             _boardDefinitionGetter = boardDefinitionGetter;
             _phaseResolver = phaseResolver;
@@ -60,6 +64,8 @@ namespace Game.Gameplay.UseCases
 
         public void Resolve(string boardId)
         {
+            _unloadGameplayUseCase.Resolve();
+
             IReadonlyBoard board = PrepareModel(boardId);
             GameplayViewData gameplayViewData = PrepareView(board);
 
