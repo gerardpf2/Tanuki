@@ -159,7 +159,8 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<IPlayerView>(),
-                        r.Resolve<ICameraController>()
+                        r.Resolve<ICameraController>(),
+                        r.Resolve<IEventListener>()
                     )
                 )
             );

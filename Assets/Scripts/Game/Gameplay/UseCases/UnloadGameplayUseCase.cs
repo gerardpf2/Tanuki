@@ -2,6 +2,7 @@ using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.Player;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
+using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -15,25 +16,29 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly IPlayerView _playerView;
         [NotNull] private readonly ICameraController _cameraController;
+        [NotNull] private readonly IEventListener _eventListener;
 
         public UnloadGameplayUseCase(
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
             [NotNull] IPlayerView playerView,
-            [NotNull] ICameraController cameraController)
+            [NotNull] ICameraController cameraController,
+            [NotNull] IEventListener eventListener)
         {
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(playerView);
             ArgumentNullException.ThrowIfNull(cameraController);
+            ArgumentNullException.ThrowIfNull(eventListener);
 
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
             _playerView = playerView;
             _cameraController = cameraController;
+            _eventListener = eventListener;
         }
 
         public void Resolve()
@@ -54,9 +59,7 @@ namespace Game.Gameplay.UseCases
             _boardView.Uninitialize();
             _playerView.Uninitialize();
             _cameraController.Uninitialize();
-
-            // TODO
-            // _eventListener
+            _eventListener.Uninitialize();
         }
 
         private void UnloadScreen()
