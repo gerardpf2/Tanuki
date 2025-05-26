@@ -1,7 +1,6 @@
 namespace Game.Gameplay.UseCases
 {
-    // TODO: Rename
-    public interface ILoadGameplay
+    public interface ILoadGameplayUseCase
     {
         void Resolve(string boardId);
     }

@@ -8,18 +8,18 @@ namespace Game.Gameplay.REMOVE
 {
     public class LoadUnloadGameplay : MonoBehaviour
     {
-        private ILoadGameplay _loadGameplay;
+        private ILoadGameplayUseCase _loadGameplayUseCase;
 
         private void Start()
         {
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] ILoadGameplay loadGameplay)
+        public void Inject([NotNull] ILoadGameplayUseCase loadGameplayUseCase)
         {
-            ArgumentNullException.ThrowIfNull(loadGameplay);
+            ArgumentNullException.ThrowIfNull(loadGameplayUseCase);
 
-            _loadGameplay = loadGameplay;
+            _loadGameplayUseCase = loadGameplayUseCase;
         }
 
         private void Update()
@@ -36,9 +36,9 @@ namespace Game.Gameplay.REMOVE
 
         private void LoadGameplay()
         {
-            InvalidOperationException.ThrowIfNull(_loadGameplay);
+            InvalidOperationException.ThrowIfNull(_loadGameplayUseCase);
 
-            _loadGameplay.Resolve("Test");
+            _loadGameplayUseCase.Resolve("Test");
         }
 
         private void UnloadGameplay()

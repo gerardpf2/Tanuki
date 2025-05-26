@@ -14,8 +14,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.UseCases
 {
-    // TODO: Rename
-    public class LoadGameplay : ILoadGameplay
+    public class LoadGameplayUseCase : ILoadGameplayUseCase
     {
         [NotNull] private readonly IBoardParser _boardParser;
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
@@ -27,7 +26,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IEventListener _eventListener;
         [NotNull] private readonly IScreenLoader _screenLoader;
 
-        public LoadGameplay(
+        public LoadGameplayUseCase(
             [NotNull] IBoardParser boardParser,
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
             [NotNull] IPhaseResolver phaseResolver,

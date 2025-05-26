@@ -228,14 +228,14 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<LoadUnloadGameplay>((r, s) =>
                     s.Inject(
-                        r.Resolve<ILoadGameplay>()
+                        r.Resolve<ILoadGameplayUseCase>()
                     )
                 )
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ILoadGameplay>(r =>
-                    new LoadGameplay(
+                ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
+                    new LoadGameplayUseCase(
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IBoardDefinitionGetter>(),
                         r.Resolve<IPhaseResolver>(),
