@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -11,6 +12,8 @@ namespace Infrastructure.ScreenLoading
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
 
+        [NotNull] private readonly IDictionary<string, GameObject> _loaded = new Dictionary<string, GameObject>();
+
         public ScreenLoader(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacementGetter screenPlacementGetter)
@@ -22,24 +25,64 @@ namespace Infrastructure.ScreenLoading
             _screenPlacementGetter = screenPlacementGetter;
         }
 
-        public void Load(string key)
+        public void Load([NotNull] string key)
         {
-            LoadInstance(key);
+            ArgumentNullException.ThrowIfNull(key);
+
+            LoadAndAddRef(key);
         }
 
-        public void Load<T>(string key, T data)
+        public void Load<T>([NotNull] string key, T data)
         {
-            GameObject instance = LoadInstance(key);
+            ArgumentNullException.ThrowIfNull(key);
+
+            GameObject instance = LoadAndAddRef(key);
 
             SetData(instance, data, key);
         }
 
-        [NotNull]
-        private GameObject LoadInstance(string key)
+        public void Unload([NotNull] string key)
         {
-            IScreenDefinition screenDefinition = _screenDefinitionGetter.Get(key);
+            ArgumentNullException.ThrowIfNull(key);
 
-            return Instantiate(screenDefinition);;
+            UnloadAndRemoveRef(key);
+        }
+
+        [NotNull]
+        private GameObject LoadAndAddRef([NotNull] string key)
+        {
+            ArgumentNullException.ThrowIfNull(key);
+
+            if (!_loaded.TryGetValue(key, out GameObject instance))
+            {
+                IScreenDefinition screenDefinition = _screenDefinitionGetter.Get(key);
+
+                instance = Instantiate(screenDefinition);
+
+                _loaded.Add(key, instance);
+            }
+            else
+            {
+                InvalidOperationException.ThrowIfNull(instance);
+            }
+
+            return instance;
+        }
+
+        private void UnloadAndRemoveRef([NotNull] string key)
+        {
+            ArgumentNullException.ThrowIfNull(key);
+
+            if (!_loaded.TryGetValue(key, out GameObject instance))
+            {
+                return;
+            }
+
+            InvalidOperationException.ThrowIfNull(instance);
+
+            Object.Destroy(instance);
+
+            _loaded.Remove(key);
         }
 
         [NotNull]

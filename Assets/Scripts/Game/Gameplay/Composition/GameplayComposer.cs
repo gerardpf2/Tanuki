@@ -160,7 +160,8 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
-                        r.Resolve<IEventListener>()
+                        r.Resolve<IEventListener>(),
+                        r.Resolve<IScreenLoader>()
                     )
                 )
             );

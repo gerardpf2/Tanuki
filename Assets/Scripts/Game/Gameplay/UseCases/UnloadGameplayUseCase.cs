@@ -4,6 +4,7 @@ using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.Player;
+using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -17,6 +18,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IPlayerView _playerView;
         [NotNull] private readonly ICameraController _cameraController;
         [NotNull] private readonly IEventListener _eventListener;
+        [NotNull] private readonly IScreenLoader _screenLoader;
 
         public UnloadGameplayUseCase(
             [NotNull] IPhaseResolver phaseResolver,
@@ -24,7 +26,8 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBoardView boardView,
             [NotNull] IPlayerView playerView,
             [NotNull] ICameraController cameraController,
-            [NotNull] IEventListener eventListener)
+            [NotNull] IEventListener eventListener,
+            [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
@@ -32,6 +35,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(playerView);
             ArgumentNullException.ThrowIfNull(cameraController);
             ArgumentNullException.ThrowIfNull(eventListener);
+            ArgumentNullException.ThrowIfNull(screenLoader);
 
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
@@ -39,6 +43,7 @@ namespace Game.Gameplay.UseCases
             _playerView = playerView;
             _cameraController = cameraController;
             _eventListener = eventListener;
+            _screenLoader = screenLoader;
         }
 
         public void Resolve()
@@ -64,8 +69,7 @@ namespace Game.Gameplay.UseCases
 
         private void UnloadScreen()
         {
-            // TODO
-            // _screenLoader
+            _screenLoader.Unload("Gameplay"); // TODO: Key const
         }
     }
 }
