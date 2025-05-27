@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Composition;
@@ -8,13 +7,12 @@ using Game.Root.Composition;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
-using Infrastructure.DependencyInjection.Rules;
+using Infrastructure.DependencyInjection.Composition;
 using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
 using Infrastructure.System;
-using Infrastructure.System.Parsing;
 using Infrastructure.Tweening.Composition;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Composition;
@@ -34,8 +32,6 @@ namespace Editor.Tests.Game.Root.Composition
         private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
         private ICoroutineRunner _coroutineRunner;
-        private IRuleFactory _ruleFactory;
-        private IRuleAdder _ruleAdder;
         private IConverter _converter;
 
         private RootComposer _rootComposer;
@@ -50,8 +46,6 @@ namespace Editor.Tests.Game.Root.Composition
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
             _scopeBuildingContext = new ScopeBuildingContext();
-            _ruleFactory = Substitute.For<IRuleFactory>();
-            _ruleAdder = Substitute.For<IRuleAdder>();
             _converter = Substitute.For<IConverter>();
 
             _rootComposer =
@@ -67,30 +61,19 @@ namespace Editor.Tests.Game.Root.Composition
         }
 
         [Test]
-        public void AddRules_AddExpected()
-        {
-            IRule<IParser> parserRule = Substitute.For<IRule<IParser>>();
-            _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, IParser>>()).Returns(parserRule);
-            _rootComposer.Compose(_scopeBuildingContext);
-
-            _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
-
-            _ruleAdder.Received(1).Add(parserRule);
-        }
-
-        [Test]
         public void GetPartialScopeComposers_ReturnsExpected()
         {
             _rootComposer.Compose(_scopeBuildingContext);
 
             List<IScopeComposer> partialScopeComposers = _scopeBuildingContext.GetPartialScopeComposers().ToList();
 
-            Assert.IsTrue(partialScopeComposers.Count == 5);
+            Assert.IsTrue(partialScopeComposers.Count == 6);
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is LoggingComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is ScreenLoadingComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is ConfiguringComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is TweeningComposer));
             Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is UnityComposer));
+            Assert.NotNull(partialScopeComposers.Find(partialScopeComposer => partialScopeComposer is SystemComposer));
         }
 
         [Test]
