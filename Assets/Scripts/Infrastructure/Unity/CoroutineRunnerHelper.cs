@@ -19,13 +19,13 @@ namespace Infrastructure.Unity
             _coroutineRunner = coroutineRunner;
         }
 
-        public Coroutine GetWaitForEndOfFrame(Action action)
+        public Coroutine RunWaitForEndOfFrame(Action action)
         {
-            return _coroutineRunner.Run(WaitForEndOfFrameImpl(action));
+            return _coroutineRunner.Run(GetWaitForEndOfFrame(action));
         }
 
         [NotNull]
-        private static IEnumerator WaitForEndOfFrameImpl(Action action)
+        private static IEnumerator GetWaitForEndOfFrame(Action action)
         {
             yield return WaitForEndOfFrame;
 

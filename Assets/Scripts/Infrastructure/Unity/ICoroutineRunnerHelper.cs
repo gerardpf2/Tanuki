@@ -7,6 +7,6 @@ namespace Infrastructure.Unity
     public interface ICoroutineRunnerHelper
     {
         [NotNull]
-        Coroutine GetWaitForEndOfFrame(Action action);
+        Coroutine RunWaitForEndOfFrame(Action action);
     }
 }
