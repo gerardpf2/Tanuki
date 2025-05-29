@@ -13,7 +13,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        private IBoard _board;
+        private IReadonlyBoard _board;
 
         public LineClearPhase([NotNull] IEventEnqueuer eventEnqueuer, [NotNull] IEventFactory eventFactory) : base(-1, -1)
         {
@@ -24,7 +24,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _eventFactory = eventFactory;
         }
 
-        public void Initialize([NotNull] IBoard board)
+        public void Initialize([NotNull] IReadonlyBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);
 

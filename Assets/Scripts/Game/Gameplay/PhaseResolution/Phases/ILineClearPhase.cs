@@ -4,6 +4,6 @@ namespace Game.Gameplay.PhaseResolution.Phases
 {
     public interface ILineClearPhase : IPhase
     {
-        void Initialize(IBoard board);
+        void Initialize(IReadonlyBoard board);
     }
 }
