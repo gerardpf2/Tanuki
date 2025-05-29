@@ -11,5 +11,7 @@ namespace Game.Gameplay.View.Board
         void Uninitialize();
 
         void InstantiatePiece(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
+
+        void DestroyPiece(IPiece piece);
     }
 }

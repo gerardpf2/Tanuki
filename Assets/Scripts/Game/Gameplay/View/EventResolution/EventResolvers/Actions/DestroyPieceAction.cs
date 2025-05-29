@@ -14,12 +14,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     {
         private readonly IPiece _piece;
         private readonly DestroyPieceReason _destroyPieceReason;
-        [NotNull] private readonly IReadonlyBoardView _boardView;
+        [NotNull] private readonly IBoardView _boardView;
 
-        public DestroyPieceAction(
-            IPiece piece,
-            DestroyPieceReason destroyPieceReason,
-            [NotNull] IReadonlyBoardView boardView)
+        public DestroyPieceAction(IPiece piece, DestroyPieceReason destroyPieceReason, [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(boardView);
 
@@ -42,8 +39,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             void OnComplete()
             {
-                // TODO
-                // _boardView.DestroyPiece(_piece);
+                _boardView.DestroyPiece(_piece);
 
                 onComplete?.Invoke();
             }
