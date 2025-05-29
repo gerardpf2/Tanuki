@@ -1,19 +1,21 @@
 using System;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Board.Pieces;
 using JetBrains.Annotations;
+using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class DamagePieceAction : IAction
     {
-        [NotNull] private readonly IPiece _piece;
+        private readonly IPiece _piece;
         [NotNull] private readonly IReadonlyBoardView _boardView;
 
-        public DamagePieceAction([NotNull] IPiece piece, [NotNull] IReadonlyBoardView boardView)
+        public DamagePieceAction(IPiece piece, [NotNull] IReadonlyBoardView boardView)
         {
-            ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(boardView);
 
             _piece = piece;
@@ -22,9 +24,13 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
         public void Resolve(Action onComplete)
         {
-            // TODO
+            GameObject pieceInstance = _boardView.GetPieceInstance(_piece);
 
-            onComplete?.Invoke();
+            IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
+
+            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+
+            pieceViewEventNotifier.OnDamaged(onComplete);
         }
     }
 }

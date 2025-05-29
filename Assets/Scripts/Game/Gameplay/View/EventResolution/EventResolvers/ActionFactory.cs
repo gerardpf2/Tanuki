@@ -66,10 +66,8 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new DestroyPlayerPieceAction(destroyPieceReason, _playerView);
         }
 
-        public IAction GetDamagePieceAction([NotNull] IPiece piece)
+        public IAction GetDamagePieceAction(IPiece piece)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
             return new DamagePieceAction(piece, _boardView);
         }
     }
