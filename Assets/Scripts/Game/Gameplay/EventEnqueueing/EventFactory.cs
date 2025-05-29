@@ -29,5 +29,10 @@ namespace Game.Gameplay.EventEnqueueing
         {
             return new DamagePieceEvent(piece);
         }
+
+        public IEvent GetDestroyPieceEvent(IPiece piece, DestroyPieceReason destroyPieceReason)
+        {
+            return new DestroyPieceEvent(piece, destroyPieceReason);
+        }
     }
 }

@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -58,6 +59,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         private bool TryDestroyPiece([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
+            InvalidOperationException.ThrowIfNull(_board);
 
             if (piece.Alive)
             {
@@ -66,7 +68,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             _board.Remove(piece);
 
-            // TODO: EventEnqueuer
+            _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(piece, DestroyPieceReason.NotAlive));
 
             return true;
         }

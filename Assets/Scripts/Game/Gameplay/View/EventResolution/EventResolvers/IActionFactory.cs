@@ -23,5 +23,8 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         [NotNull]
         IAction GetDamagePieceAction(IPiece piece);
+
+        [NotNull]
+        IAction GetDestroyPieceAction(IPiece piece, DestroyPieceReason destroyPieceReason);
     }
 }
