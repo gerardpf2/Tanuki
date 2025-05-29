@@ -1,48 +1,33 @@
-using System;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.View.Board;
-using Game.Gameplay.View.Board.Pieces;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
-    public class DestroyPieceAction : IAction
+    public class DestroyPieceAction : BaseDestroyPieceAction
     {
         private readonly IPiece _piece;
-        private readonly DestroyPieceReason _destroyPieceReason;
         [NotNull] private readonly IBoardView _boardView;
 
-        public DestroyPieceAction(IPiece piece, DestroyPieceReason destroyPieceReason, [NotNull] IBoardView boardView)
+        public DestroyPieceAction(DestroyPieceReason destroyPieceReason, IPiece piece, [NotNull] IBoardView boardView) : base(destroyPieceReason)
         {
             ArgumentNullException.ThrowIfNull(boardView);
 
             _piece = piece;
-            _destroyPieceReason = destroyPieceReason;
             _boardView = boardView;
         }
 
-        public void Resolve(Action onComplete)
+        protected override GameObject GetPieceInstance()
         {
-            GameObject pieceInstance = _boardView.GetPieceInstance(_piece);
+            return _boardView.GetPieceInstance(_piece);
+        }
 
-            IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
-
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
-
-            pieceViewEventNotifier.OnDestroyed(_destroyPieceReason, OnComplete);
-
-            return;
-
-            void OnComplete()
-            {
-                _boardView.DestroyPiece(_piece);
-
-                onComplete?.Invoke();
-            }
+        protected override void DestroyPiece()
+        {
+            _boardView.DestroyPiece(_piece);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         public IAction GetDestroyPieceAction(IPiece piece, DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPieceAction(piece, destroyPieceReason, _boardView);
+            return new DestroyPieceAction(destroyPieceReason, piece, _boardView);
         }
     }
 }
