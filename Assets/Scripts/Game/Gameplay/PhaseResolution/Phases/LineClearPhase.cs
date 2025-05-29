@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
@@ -60,18 +59,14 @@ namespace Game.Gameplay.PhaseResolution.Phases
         {
             InvalidOperationException.ThrowIfNull(_board);
 
-            ICollection<PiecePlacement> rowPieces = _board.GetPiecesInRow(row);
-
-            int columns = _board.Columns;
-
-            if (rowPieces.Count != columns)
+            if (!_board.IsRowFull(row))
             {
                 return false;
             }
 
             bool anyDamaged = false;
 
-            foreach (PiecePlacement piecePlacement in rowPieces)
+            foreach (PiecePlacement piecePlacement in _board.GetPiecesInRow(row))
             {
                 IPiece piece = piecePlacement.Piece;
 
