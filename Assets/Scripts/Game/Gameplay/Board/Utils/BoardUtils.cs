@@ -20,6 +20,14 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull, ItemNotNull]
+        public static ICollection<PiecePlacement> GetAllPieces([NotNull] this IReadonlyBoard board)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            return board.GetPiecesInRange(0, board.Rows - 1, 0, board.Columns - 1);
+        }
+
+        [NotNull, ItemNotNull]
         public static ICollection<PiecePlacement> GetPiecesInRow([NotNull] this IReadonlyBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);

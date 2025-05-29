@@ -1,4 +1,6 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -39,7 +41,34 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override bool ResolveImpl(ResolveContext _)
         {
-            return false;
+            InvalidOperationException.ThrowIfNull(_board);
+
+            bool resolved = false;
+
+            foreach (PiecePlacement piecePlacement in _board.GetAllPieces())
+            {
+                InvalidOperationException.ThrowIfNull(piecePlacement.Piece);
+
+                resolved = TryDestroyPiece(piecePlacement.Piece) || resolved;
+            }
+
+            return resolved;
+        }
+
+        private bool TryDestroyPiece([NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            if (piece.Alive)
+            {
+                return false;
+            }
+
+            _board.Remove(piece);
+
+            // TODO: EventEnqueuer
+
+            return true;
         }
     }
 }
