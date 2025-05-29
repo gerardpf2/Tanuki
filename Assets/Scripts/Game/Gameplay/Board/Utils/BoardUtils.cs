@@ -20,31 +20,11 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull, ItemNotNull]
-        public static ICollection<PiecePlacement> GetRowPieces([NotNull] this IReadonlyBoard board, int row)
+        public static ICollection<PiecePlacement> GetPiecesInRow([NotNull] this IReadonlyBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            IDictionary<IPiece, PiecePlacement> pieces = new Dictionary<IPiece, PiecePlacement>();
-
-            int columns = board.Columns;
-
-            for (int column = 0; column < columns; ++column)
-            {
-                Coordinate coordinate = new(row, column);
-
-                IPiece piece = board.Get(coordinate);
-
-                if (piece is null || pieces.ContainsKey(piece))
-                {
-                    continue;
-                }
-
-                PiecePlacement piecePlacement = new(row, column, piece);
-
-                pieces.Add(piece, piecePlacement);
-            }
-
-            return pieces.Values;
+            return board.GetPiecesInRange(row, row, 0, board.Columns - 1);
         }
 
         public static void GetPieceRowColumnOffset(
@@ -81,6 +61,40 @@ namespace Game.Gameplay.Board.Utils
             }
 
             return fall;
+        }
+
+        [NotNull, ItemNotNull]
+        private static ICollection<PiecePlacement> GetPiecesInRange(
+            [NotNull] this IReadonlyBoard board,
+            int rowStart,
+            int rowEnd,
+            int columnStart,
+            int columnEnd)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            IDictionary<IPiece, PiecePlacement> pieces = new Dictionary<IPiece, PiecePlacement>();
+
+            for (int row = rowStart; row <= rowEnd; ++row)
+            {
+                for (int column = columnStart; column <= columnEnd; ++column)
+                {
+                    Coordinate coordinate = new(row, column);
+
+                    IPiece piece = board.Get(coordinate);
+
+                    if (piece is null || pieces.ContainsKey(piece))
+                    {
+                        continue;
+                    }
+
+                    PiecePlacement piecePlacement = new(row, column, piece);
+
+                    pieces.Add(piece, piecePlacement);
+                }
+            }
+
+            return pieces.Values;
         }
 
         private static Coordinate GetPieceSourceCoordinate([NotNull] this IReadonlyBoard board, [NotNull] IPiece piece)

@@ -60,7 +60,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         {
             InvalidOperationException.ThrowIfNull(_board);
 
-            ICollection<PiecePlacement> rowPieces = _board.GetRowPieces(row);
+            ICollection<PiecePlacement> rowPieces = _board.GetPiecesInRow(row);
 
             int columns = _board.Columns;
 
