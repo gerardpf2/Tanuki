@@ -93,6 +93,8 @@ namespace Game.Gameplay.View.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
+            _board.Remove(piece);
+
             GameObject pieceInstance = GetPieceInstance(piece);
 
             Object.Destroy(pieceInstance);
@@ -105,6 +107,8 @@ namespace Game.Gameplay.View.Board
             foreach (KeyValuePair<IPiece, GameObject> pieceInstance in _pieceInstances)
             {
                 InvalidOperationException.ThrowIfNull(pieceInstance.Value);
+
+                _board.Remove(pieceInstance.Key);
 
                 Object.Destroy(pieceInstance.Value);
             }
