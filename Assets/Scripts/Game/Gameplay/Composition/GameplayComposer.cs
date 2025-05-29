@@ -123,6 +123,8 @@ namespace Game.Gameplay.Composition
                 )
             );
 
+            ruleAdder.Add(ruleFactory.GetSingleton<ILineClearPhase>(_ => new LineClearPhase()));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILockPlayerPiecePhase>(r =>
                     new LockPlayerPiecePhase(
@@ -138,6 +140,7 @@ namespace Game.Gameplay.Composition
                     new PhaseResolver(
                         r.Resolve<IInstantiateInitialPiecesPhase>(),
                         r.Resolve<ILockPlayerPiecePhase>(),
+                        r.Resolve<ILineClearPhase>(),
                         r.Resolve<IInstantiatePlayerPiecePhase>()
                     )
                 )
