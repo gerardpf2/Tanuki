@@ -49,7 +49,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         {
             InvalidOperationException.ThrowIfNull(_board);
 
-            IReadOnlyCollection<IPiece> rowPieces = _board.GetRowPieces(row);
+            ICollection<PiecePlacement> rowPieces = _board.GetRowPieces(row);
 
             int columns = _board.Columns;
 
@@ -60,14 +60,22 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             bool anyDamaged = false;
 
-            foreach (IPiece piece in rowPieces)
+            foreach (PiecePlacement piecePlacement in rowPieces)
             {
-                if (piece is not IPieceUpdater pieceUpdater)
+                if (piecePlacement.Piece is not IPieceUpdater pieceUpdater)
                 {
                     continue;
                 }
 
-                pieceUpdater.Damage(0, 0); // TODO
+                _board.GetPieceRowColumnOffset(
+                    piecePlacement.Piece,
+                    piecePlacement.Row,
+                    piecePlacement.Column,
+                    out int rowOffset,
+                    out int columnOffset
+                );
+
+                pieceUpdater.Damage(rowOffset, columnOffset);
 
                 // TODO: EventEnqueuer
 

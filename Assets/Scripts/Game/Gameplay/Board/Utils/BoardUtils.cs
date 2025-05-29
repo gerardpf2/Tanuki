@@ -4,6 +4,7 @@ using Game.Gameplay.Board.Pieces;
 using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board.Utils
 {
@@ -19,11 +20,11 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull, ItemNotNull]
-        public static IReadOnlyCollection<IPiece> GetRowPieces([NotNull] this IReadonlyBoard board, int row)
+        public static ICollection<PiecePlacement> GetRowPieces([NotNull] this IReadonlyBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            HashSet<IPiece> pieces = new();
+            IDictionary<IPiece, PiecePlacement> pieces = new Dictionary<IPiece, PiecePlacement>();
 
             int columns = board.Columns;
 
@@ -33,35 +34,70 @@ namespace Game.Gameplay.Board.Utils
 
                 IPiece piece = board.Get(coordinate);
 
-                if (piece is null)
+                if (piece is null || pieces.ContainsKey(piece))
                 {
                     continue;
                 }
 
-                pieces.Add(piece);
+                PiecePlacement piecePlacement = new(row, column, piece);
+
+                pieces.Add(piece, piecePlacement);
             }
 
-            return pieces;
+            return pieces.Values;
+        }
+
+        public static void GetPieceRowColumnOffset(
+            [NotNull] this IReadonlyBoard board,
+            [NotNull] IPiece piece,
+            int row,
+            int column,
+            out int rowOffset,
+            out int columnOffset)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            Coordinate sourceCoordinate = board.GetPieceSourceCoordinate(piece);
+
+            rowOffset = row - sourceCoordinate.Row;
+            columnOffset = column - sourceCoordinate.Column;
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
-        public static int ComputeFall(
+        public static int ComputePieceFall(
             [NotNull] this IReadonlyBoard board,
             [NotNull] IPiece piece,
             Coordinate sourceCoordinate)
         {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
             int fall = int.MaxValue;
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                fall = Math.Min(board.ComputeFallImpl(piece, coordinate), fall);
+                fall = Math.Min(board.ComputePieceFallImpl(piece, coordinate), fall);
             }
 
             return fall;
         }
 
+        private static Coordinate GetPieceSourceCoordinate([NotNull] this IReadonlyBoard board, [NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            if (!board.PieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
+            {
+                InvalidOperationException.Throw("Piece cannot be found");
+            }
+
+            return sourceCoordinate;
+        }
+
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
-        private static int ComputeFallImpl(
+        private static int ComputePieceFallImpl(
             [NotNull] this IReadonlyBoard board,
             IPiece ignorePiece,
             Coordinate coordinate)

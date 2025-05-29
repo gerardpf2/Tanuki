@@ -14,7 +14,6 @@ namespace Game.Gameplay.Board
     {
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
 
-        [NotNull] private readonly IDictionary<IPiece, Coordinate> _pieceSourceCoordinates = new Dictionary<IPiece, Coordinate>();
         [NotNull] private readonly SortedList<int, int> _piecesPerRowSorted = new();
         private IPiece[,] _pieces;
 
@@ -68,7 +67,7 @@ namespace Game.Gameplay.Board
             }
         }
 
-        public IEnumerable<KeyValuePair<IPiece, Coordinate>> PieceSourceCoordinates => _pieceSourceCoordinates;
+        public IDictionary<IPiece, Coordinate> PieceSourceCoordinates { get; } = new Dictionary<IPiece, Coordinate>();
 
         public Board(
             [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
@@ -100,12 +99,12 @@ namespace Game.Gameplay.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            if (_pieceSourceCoordinates.ContainsKey(piece))
+            if (PieceSourceCoordinates.ContainsKey(piece))
             {
                 InvalidOperationException.Throw("Piece has already been added");
             }
 
-            _pieceSourceCoordinates.Add(piece, sourceCoordinate);
+            PieceSourceCoordinates.Add(piece, sourceCoordinate);
 
             ExpandRowsIfNeeded(piece, sourceCoordinate.Row);
 
@@ -124,12 +123,12 @@ namespace Game.Gameplay.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            if (!_pieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
+            if (!PieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
             {
                 InvalidOperationException.Throw("Piece cannot be found");
             }
 
-            _pieceSourceCoordinates.Remove(piece);
+            PieceSourceCoordinates.Remove(piece);
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
@@ -146,7 +145,7 @@ namespace Game.Gameplay.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            if (!_pieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
+            if (!PieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
             {
                 InvalidOperationException.Throw("Piece cannot be found");
             }
