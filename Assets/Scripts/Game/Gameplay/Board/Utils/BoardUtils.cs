@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
 using Infrastructure.System;
 using JetBrains.Annotations;
@@ -15,6 +16,32 @@ namespace Game.Gameplay.Board.Utils
             return
                 coordinate.Row >= 0 && coordinate.Row < board.Rows &&
                 coordinate.Column >= 0 && coordinate.Column < board.Columns;
+        }
+
+        [NotNull, ItemNotNull]
+        public static IReadOnlyCollection<IPiece> GetRowPieces([NotNull] this IReadonlyBoard board, int row)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            HashSet<IPiece> pieces = new();
+
+            int columns = board.Columns;
+
+            for (int column = 0; column < columns; ++column)
+            {
+                Coordinate coordinate = new(row, column);
+
+                IPiece piece = board.Get(coordinate);
+
+                if (piece is null)
+                {
+                    continue;
+                }
+
+                pieces.Add(piece);
+            }
+
+            return pieces;
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]

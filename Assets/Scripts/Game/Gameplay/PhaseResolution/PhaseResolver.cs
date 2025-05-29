@@ -46,7 +46,7 @@ namespace Game.Gameplay.PhaseResolution
 
             _instantiateInitialPiecesPhase.Initialize(board, piecePlacements);
             _lockPlayerPiecePhase.Initialize(board);
-            _lineClearPhase.Initialize();
+            _lineClearPhase.Initialize(board);
             _instantiatePlayerPiecePhase.Initialize();
         }
 
