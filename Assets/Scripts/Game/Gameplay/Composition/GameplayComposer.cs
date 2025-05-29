@@ -105,6 +105,15 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IDestroyNotAlivePiecesPhase>(r =>
+                    new DestroyNotAlivePiecesPhase(
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IInstantiateInitialPiecesPhase>(r =>
                     new InstantiateInitialPiecesPhase(
                         r.Resolve<IEventEnqueuer>(),
@@ -147,6 +156,7 @@ namespace Game.Gameplay.Composition
                     new PhaseResolver(
                         r.Resolve<IInstantiateInitialPiecesPhase>(),
                         r.Resolve<ILockPlayerPiecePhase>(),
+                        r.Resolve<IDestroyNotAlivePiecesPhase>(),
                         r.Resolve<ILineClearPhase>(),
                         r.Resolve<IInstantiatePlayerPiecePhase>()
                     )

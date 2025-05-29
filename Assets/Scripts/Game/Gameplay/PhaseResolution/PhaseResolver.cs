@@ -10,6 +10,7 @@ namespace Game.Gameplay.PhaseResolution
     {
         [NotNull] private readonly IInstantiateInitialPiecesPhase _instantiateInitialPiecesPhase;
         [NotNull] private readonly ILockPlayerPiecePhase _lockPlayerPiecePhase;
+        [NotNull] private readonly IDestroyNotAlivePiecesPhase _destroyNotAlivePiecesPhase;
         [NotNull] private readonly ILineClearPhase _lineClearPhase;
         [NotNull] private readonly IInstantiatePlayerPiecePhase _instantiatePlayerPiecePhase;
 
@@ -18,16 +19,19 @@ namespace Game.Gameplay.PhaseResolution
         public PhaseResolver(
             [NotNull] IInstantiateInitialPiecesPhase instantiateInitialPiecesPhase,
             [NotNull] ILockPlayerPiecePhase lockPlayerPiecePhase,
+            [NotNull] IDestroyNotAlivePiecesPhase destroyNotAlivePiecesPhase,
             [NotNull] ILineClearPhase lineClearPhase,
             [NotNull] IInstantiatePlayerPiecePhase instantiatePlayerPiecePhase)
         {
             ArgumentNullException.ThrowIfNull(instantiateInitialPiecesPhase);
             ArgumentNullException.ThrowIfNull(lockPlayerPiecePhase);
+            ArgumentNullException.ThrowIfNull(destroyNotAlivePiecesPhase);
             ArgumentNullException.ThrowIfNull(lineClearPhase);
             ArgumentNullException.ThrowIfNull(instantiatePlayerPiecePhase);
 
             _instantiateInitialPiecesPhase = instantiateInitialPiecesPhase;
             _lockPlayerPiecePhase = lockPlayerPiecePhase;
+            _destroyNotAlivePiecesPhase = destroyNotAlivePiecesPhase;
             _lineClearPhase = lineClearPhase;
             _instantiatePlayerPiecePhase = instantiatePlayerPiecePhase;
 
@@ -35,6 +39,7 @@ namespace Game.Gameplay.PhaseResolution
             {
                 _instantiateInitialPiecesPhase,
                 _lockPlayerPiecePhase,
+                _destroyNotAlivePiecesPhase,
                 _lineClearPhase,
                 _instantiatePlayerPiecePhase
             };
@@ -46,16 +51,17 @@ namespace Game.Gameplay.PhaseResolution
 
             _instantiateInitialPiecesPhase.Initialize(board, piecePlacements);
             _lockPlayerPiecePhase.Initialize(board);
+            _destroyNotAlivePiecesPhase.Initialize(board);
             _lineClearPhase.Initialize(board);
             _instantiatePlayerPiecePhase.Initialize();
         }
 
         public void Uninitialize()
         {
-            _instantiateInitialPiecesPhase.Uninitialize();
-            _lockPlayerPiecePhase.Uninitialize();
-            _lineClearPhase.Uninitialize();
-            _instantiatePlayerPiecePhase.Uninitialize();
+            foreach (IPhase phase in _phases)
+            {
+                phase.Uninitialize();
+            }
         }
 
         public void Resolve(ResolveContext resolveContext)
