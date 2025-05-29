@@ -32,5 +32,12 @@ namespace Game.Gameplay.EventEnqueueing
 
             return new LockPlayerPieceEvent(piece, lockSourceCoordinate);
         }
+
+        public IEvent GetDamagePieceEvent([NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            return new DamagePieceEvent(piece);
+        }
     }
 }

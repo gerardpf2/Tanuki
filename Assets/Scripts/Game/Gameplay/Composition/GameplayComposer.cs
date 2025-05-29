@@ -123,7 +123,14 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<ILineClearPhase>(_ => new LineClearPhase()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ILineClearPhase>(r =>
+                    new LineClearPhase(
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILockPlayerPiecePhase>(r =>

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
+using Game.Gameplay.EventEnqueueing;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -9,9 +10,19 @@ namespace Game.Gameplay.PhaseResolution.Phases
 {
     public class LineClearPhase : Phase, ILineClearPhase
     {
+        [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
+        [NotNull] private readonly IEventFactory _eventFactory;
+
         private IBoard _board;
 
-        public LineClearPhase() : base(-1, -1) { }
+        public LineClearPhase([NotNull] IEventEnqueuer eventEnqueuer, [NotNull] IEventFactory eventFactory) : base(-1, -1)
+        {
+            ArgumentNullException.ThrowIfNull(eventEnqueuer);
+            ArgumentNullException.ThrowIfNull(eventFactory);
+
+            _eventEnqueuer = eventEnqueuer;
+            _eventFactory = eventFactory;
+        }
 
         public void Initialize([NotNull] IBoard board)
         {
@@ -62,13 +73,15 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             foreach (PiecePlacement piecePlacement in rowPieces)
             {
-                if (piecePlacement.Piece is not IPieceUpdater pieceUpdater)
+                IPiece piece = piecePlacement.Piece;
+
+                if (piece is not IPieceUpdater pieceUpdater)
                 {
                     continue;
                 }
 
                 _board.GetPieceRowColumnOffset(
-                    piecePlacement.Piece,
+                    piece,
                     piecePlacement.Row,
                     piecePlacement.Column,
                     out int rowOffset,
@@ -77,7 +90,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
                 pieceUpdater.Damage(rowOffset, columnOffset);
 
-                // TODO: EventEnqueuer
+                _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece));
 
                 anyDamaged = true;
             }
