@@ -42,7 +42,10 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
-            pieceViewEventNotifier.OnMoved(_movePieceReason, OnComplete);
+            // TODO: Tween
+
+            pieceViewEventNotifier.OnStartMove(_movePieceReason);
+            pieceViewEventNotifier.OnEndMove(OnComplete);
 
             return;
 
