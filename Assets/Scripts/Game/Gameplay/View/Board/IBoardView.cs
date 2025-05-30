@@ -13,5 +13,7 @@ namespace Game.Gameplay.View.Board
         void InstantiatePiece(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
 
         void DestroyPiece(IPiece piece);
+
+        void MovePiece(IPiece piece, int rowOffset, int columnOffset);
     }
 }
