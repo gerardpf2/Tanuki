@@ -56,6 +56,19 @@ namespace Game.Gameplay.Board.Utils
             return true;
         }
 
+        public static Coordinate GetPieceSourceCoordinate([NotNull] this IReadonlyBoard board, [NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            if (!board.PieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
+            {
+                InvalidOperationException.Throw("Piece cannot be found");
+            }
+
+            return sourceCoordinate;
+        }
+
         public static void GetPieceRowColumnOffset(
             [NotNull] this IReadonlyBoard board,
             [NotNull] IPiece piece,
@@ -124,19 +137,6 @@ namespace Game.Gameplay.Board.Utils
                     yield return piecePlacement;
                 }
             }
-        }
-
-        private static Coordinate GetPieceSourceCoordinate([NotNull] this IReadonlyBoard board, [NotNull] IPiece piece)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-            ArgumentNullException.ThrowIfNull(piece);
-
-            if (!board.PieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
-            {
-                InvalidOperationException.Throw("Piece cannot be found");
-            }
-
-            return sourceCoordinate;
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]

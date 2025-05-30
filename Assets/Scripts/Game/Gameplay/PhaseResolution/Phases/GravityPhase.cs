@@ -1,4 +1,6 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -39,7 +41,39 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override bool ResolveImpl(ResolveContext _)
         {
-            return false;
+            InvalidOperationException.ThrowIfNull(_board);
+
+            bool resolved = false;
+
+            foreach (PiecePlacement piecePlacement in _board.GetAllPieces())
+            {
+                IPiece piece = piecePlacement.Piece;
+
+                InvalidOperationException.ThrowIfNull(piece);
+
+                resolved = TryMovePiece(piece) || resolved;
+            }
+
+            return resolved;
+        }
+
+        private bool TryMovePiece([NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
+            int fall = _board.ComputePieceFall(piece, sourceCoordinate);
+
+            if (fall == 0)
+            {
+                return false;
+            }
+
+            _board.Move(piece, -fall, 0);
+
+            // TODO: EventEnqueuer
+
+            return true;
         }
     }
 }
