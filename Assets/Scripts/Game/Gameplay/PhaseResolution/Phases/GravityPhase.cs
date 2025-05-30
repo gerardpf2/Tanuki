@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -69,9 +70,14 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 return false;
             }
 
-            _board.Move(piece, -fall, 0);
+            int rowOffset = -fall;
+            const int columnOffset = 0;
 
-            // TODO: EventEnqueuer
+            _board.Move(piece, rowOffset, columnOffset);
+
+            Coordinate newSourceCoordinate = sourceCoordinate.WithOffset(rowOffset, columnOffset);
+
+            _eventEnqueuer.Enqueue(_eventFactory.GetMovePieceEvent(piece, newSourceCoordinate, MovePieceReason.Gravity));
 
             return true;
         }
