@@ -42,6 +42,13 @@ namespace Game.Gameplay.View.Board.Pieces
             onComplete?.Invoke();
         }
 
+        public void OnMoved(MovePieceReason movePieceReason, Action onComplete)
+        {
+            // TODO
+
+            onComplete?.Invoke();
+        }
+
         protected virtual void SyncState() { }
     }
 }

@@ -2,8 +2,11 @@ using System;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Board.Pieces;
 using JetBrains.Annotations;
+using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
@@ -33,11 +36,22 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
         public void Resolve(Action onComplete)
         {
-            // TODO
+            GameObject pieceInstance = _boardView.GetPieceInstance(_piece);
 
-            _boardView.MovePiece(_piece, _rowOffset, _columnOffset);
+            IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
 
-            onComplete?.Invoke();
+            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+
+            pieceViewEventNotifier.OnMoved(_movePieceReason, OnComplete);
+
+            return;
+
+            void OnComplete()
+            {
+                _boardView.MovePiece(_piece, _rowOffset, _columnOffset);
+
+                onComplete?.Invoke();
+            }
         }
     }
 }
