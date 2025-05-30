@@ -28,6 +28,6 @@ namespace Game.Gameplay.EventEnqueueing
         IEvent GetDestroyPieceEvent(IPiece piece, DestroyPieceReason destroyPieceReason);
 
         [NotNull]
-        IEvent GetMovePieceEvent(IPiece piece, Coordinate newSourceCoordinate, MovePieceReason movePieceReason);
+        IEvent GetMovePieceEvent(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.View.Board;
@@ -12,25 +11,32 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     {
         [NotNull] private readonly IBoardView _boardView;
         private readonly IPiece _piece;
-        private readonly Coordinate _newSourceCoordinate;
+        private readonly int _rowOffset;
+        private readonly int _columnOffset;
         private readonly MovePieceReason _movePieceReason;
 
         public MovePieceAction(
             [NotNull] IBoardView boardView,
             IPiece piece,
-            Coordinate newSourceCoordinate,
+            int rowOffset,
+            int columnOffset,
             MovePieceReason movePieceReason)
         {
             ArgumentNullException.ThrowIfNull(boardView);
 
             _boardView = boardView;
             _piece = piece;
-            _newSourceCoordinate = newSourceCoordinate;
+            _rowOffset = rowOffset;
+            _columnOffset = columnOffset;
             _movePieceReason = movePieceReason;
         }
 
         public void Resolve(Action onComplete)
         {
+            // TODO
+
+            _boardView.MovePiece(_piece, _rowOffset, _columnOffset);
+
             onComplete?.Invoke();
         }
     }

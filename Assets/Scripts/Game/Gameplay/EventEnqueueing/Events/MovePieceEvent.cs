@@ -1,4 +1,3 @@
-using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 
@@ -7,13 +6,15 @@ namespace Game.Gameplay.EventEnqueueing.Events
     public class MovePieceEvent : IEvent
     {
         public readonly IPiece Piece;
-        public readonly Coordinate NewSourceCoordinate;
+        public readonly int RowOffset;
+        public readonly int ColumnOffset;
         public readonly MovePieceReason MovePieceReason;
 
-        public MovePieceEvent(IPiece piece, Coordinate newSourceCoordinate, MovePieceReason movePieceReason)
+        public MovePieceEvent(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
             Piece = piece;
-            NewSourceCoordinate = newSourceCoordinate;
+            RowOffset = rowOffset;
+            ColumnOffset = columnOffset;
             MovePieceReason = movePieceReason;
         }
     }

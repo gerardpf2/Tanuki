@@ -28,6 +28,6 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         IAction GetDestroyPieceAction(IPiece piece, DestroyPieceReason destroyPieceReason);
 
         [NotNull]
-        IAction GetMovePieceAction(IPiece piece, Coordinate newSourceCoordinate, MovePieceReason movePieceReason);
+        IAction GetMovePieceAction(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
     }
 }

@@ -75,9 +75,14 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             _board.Move(piece, rowOffset, columnOffset);
 
-            Coordinate newSourceCoordinate = sourceCoordinate.WithOffset(rowOffset, columnOffset);
-
-            _eventEnqueuer.Enqueue(_eventFactory.GetMovePieceEvent(piece, newSourceCoordinate, MovePieceReason.Gravity));
+            _eventEnqueuer.Enqueue(
+                _eventFactory.GetMovePieceEvent(
+                    piece,
+                    rowOffset,
+                    columnOffset,
+                    MovePieceReason.Gravity
+                )
+            );
 
             return true;
         }
