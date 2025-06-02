@@ -14,7 +14,7 @@ namespace Game.Gameplay.Board
     {
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
 
-        [NotNull] private readonly SortedList<int, int> _piecesPerRowSorted = new();
+        [NotNull] private readonly SortedList<int, int> _piecesPerRowSorted = new(); // TODO: Rename
         private IPiece[,] _pieces;
 
         private int _highestNonEmptyRow;

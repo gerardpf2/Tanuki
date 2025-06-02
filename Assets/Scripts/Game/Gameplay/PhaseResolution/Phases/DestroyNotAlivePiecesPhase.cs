@@ -46,11 +46,9 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             bool resolved = false;
 
-            foreach (PiecePlacement piecePlacement in _board.GetAllPieces())
+            foreach (IPiece piece in _board.GetPiecesSortedByRowThenByColumn())
             {
-                InvalidOperationException.ThrowIfNull(piecePlacement.Piece);
-
-                resolved = TryDestroyPiece(piecePlacement.Piece) || resolved;
+                resolved = TryDestroyPiece(piece) || resolved;
             }
 
             return resolved;

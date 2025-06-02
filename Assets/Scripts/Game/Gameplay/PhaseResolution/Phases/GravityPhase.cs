@@ -46,12 +46,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             bool resolved = false;
 
-            foreach (PiecePlacement piecePlacement in _board.GetAllPieces())
+            foreach (IPiece piece in _board.GetPiecesSortedByRowThenByColumn())
             {
-                IPiece piece = piecePlacement.Piece;
-
-                InvalidOperationException.ThrowIfNull(piece);
-
                 resolved = TryMovePiece(piece) || resolved;
             }
 
@@ -61,6 +57,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         private bool TryMovePiece([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
+            InvalidOperationException.ThrowIfNull(_board);
 
             Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
             int fall = _board.ComputePieceFall(piece, sourceCoordinate);

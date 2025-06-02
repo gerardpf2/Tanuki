@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
@@ -59,29 +60,23 @@ namespace Game.Gameplay.PhaseResolution.Phases
         {
             InvalidOperationException.ThrowIfNull(_board);
 
-            if (!_board.IsRowFull(row))
+            IReadOnlyCollection<KeyValuePair<IPiece, int>> pieces = new List<KeyValuePair<IPiece, int>>(_board.GetPiecesInRow(row));
+
+            if (pieces.Count < _board.Columns)
             {
                 return false;
             }
 
             bool anyDamaged = false;
 
-            foreach (PiecePlacement piecePlacement in _board.GetPiecesInRow(row))
+            foreach ((IPiece piece, int column) in pieces)
             {
-                IPiece piece = piecePlacement.Piece;
-
                 if (piece is not IPieceUpdater pieceUpdater)
                 {
                     continue;
                 }
 
-                _board.GetPieceRowColumnOffset(
-                    piece,
-                    piecePlacement.Row,
-                    piecePlacement.Column,
-                    out int rowOffset,
-                    out int columnOffset
-                );
+                _board.GetPieceRowColumnOffset(piece, row, column, out int rowOffset, out int columnOffset);
 
                 pieceUpdater.Damage(rowOffset, columnOffset);
 

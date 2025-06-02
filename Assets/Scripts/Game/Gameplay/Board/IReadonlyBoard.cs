@@ -19,7 +19,7 @@ namespace Game.Gameplay.Board
         int HighestNonEmptyRow { get; }
 
         [NotNull]
-        IDictionary<IPiece, Coordinate> PieceSourceCoordinates { get; } // TODO: Sorted by row, then column ¿?
+        IDictionary<IPiece, Coordinate> PieceSourceCoordinates { get; }
 
         IPiece Get(Coordinate coordinate);
     }
