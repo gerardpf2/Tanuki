@@ -20,7 +20,7 @@ namespace Game.Gameplay.Board.Utils
                 coordinate.Column >= 0 && coordinate.Column < board.Columns;
         }
 
-        [NotNull, ItemNotNull]
+        [NotNull, ItemNotNull] // Distinct pieces
         public static IEnumerable<IPiece> GetPiecesSortedByRowThenByColumn([NotNull] this IReadonlyBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);

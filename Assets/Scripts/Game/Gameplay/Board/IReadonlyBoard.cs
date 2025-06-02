@@ -18,7 +18,7 @@ namespace Game.Gameplay.Board
 
         int HighestNonEmptyRow { get; }
 
-        [NotNull]
+        [NotNull] // Distinct pieces
         IDictionary<IPiece, Coordinate> PieceSourceCoordinates { get; }
 
         IPiece Get(Coordinate coordinate);
