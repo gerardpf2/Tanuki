@@ -62,19 +62,19 @@ namespace Game.Gameplay.UseCases
             _screenLoader = screenLoader;
         }
 
-        public void Resolve(string boardId)
+        public void Resolve(string id)
         {
             _unloadGameplayUseCase.Resolve();
 
-            IReadonlyBoard board = PrepareModel(boardId);
+            IReadonlyBoard board = PrepareModel(id);
             GameplayViewData gameplayViewData = PrepareView(board);
 
             LoadScreen(gameplayViewData);
         }
 
-        private IReadonlyBoard PrepareModel(string boardId)
+        private IReadonlyBoard PrepareModel(string id)
         {
-            IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(boardId); // TODO: Rename boardId
+            IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
             IBoardDefinition boardDefinition = gameplayDefinition.BoardDefinition;
 
             _boardParser.Deserialize(
