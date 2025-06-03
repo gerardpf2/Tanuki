@@ -1,8 +1,20 @@
+using Game.Gameplay.Goals;
+using Game.Gameplay.Goals.Utils;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
+
 namespace Game.Gameplay.PhaseResolution.Phases
 {
     public class GoalsCompletedPhase : Phase, IGoalsCompletedPhase
     {
-        public GoalsCompletedPhase() : base(1, -1) { }
+        [NotNull] private readonly IGoalsStateContainer _goalsStateContainer;
+
+        public GoalsCompletedPhase([NotNull] IGoalsStateContainer goalsStateContainer) : base(1, -1)
+        {
+            ArgumentNullException.ThrowIfNull(goalsStateContainer);
+
+            _goalsStateContainer = goalsStateContainer;
+        }
 
         public void Initialize()
         {
@@ -20,9 +32,15 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override bool ResolveImpl(ResolveContext _)
         {
-            // TODO
+            if (!_goalsStateContainer.AreAllCompleted())
+            {
+                return false;
+            }
 
-            return false;
+            // TODO: Stop PhaseResolver
+            // TODO: EventEnqueuer
+
+            return true;
         }
     }
 }

@@ -117,7 +117,13 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsCompletedPhase>(_ => new GoalsCompletedPhase()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IGoalsCompletedPhase>(r =>
+                    new GoalsCompletedPhase(
+                        r.Resolve<IGoalsStateContainer>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IGravityPhase>(r =>
