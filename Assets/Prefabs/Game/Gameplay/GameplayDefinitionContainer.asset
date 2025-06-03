@@ -15,5 +15,4 @@ MonoBehaviour:
   _gameplayDefinitions:
   - _id: Test
     _boardDefinition:
-      _id: Test
       _serializedData: '{"R":5,"C":3,"P":[{"P":{"P":"Test"}},{"R":2,"C":2,"P":{"P":"Test"}},{"R":1,"C":1,"P":{"P":"PlayerBlock11"}}]}'
