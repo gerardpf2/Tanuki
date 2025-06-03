@@ -111,7 +111,8 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IDestroyNotAlivePiecesPhase>(r =>
                     new DestroyNotAlivePiecesPhase(
                         r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>()
+                        r.Resolve<IEventFactory>(),
+                        r.Resolve<IGoalsStateContainer>()
                     )
                 )
             );
