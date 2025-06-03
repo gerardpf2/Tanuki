@@ -86,12 +86,33 @@ namespace Game.Gameplay.PhaseResolution
             {
                 IPhase phase = _phases[index];
 
-                bool resolved = phase.Resolve(resolveContext);
-
-                index = resolved ? 0 : index + 1;
+                ResolvePhase(phase, resolveContext, ref index);
             }
 
             NotifyEndIteration();
+        }
+
+        private static void ResolvePhase([NotNull] IPhase phase, ResolveContext resolveContext, ref int index)
+        {
+            ArgumentNullException.ThrowIfNull(phase);
+
+            ResolveResult resolveResult = phase.Resolve(resolveContext);
+
+            switch (resolveResult)
+            {
+                case ResolveResult.Updated:
+                    index = 0;
+                    break;
+                case ResolveResult.NotUpdated:
+                    ++index;
+                    break;
+                case ResolveResult.Stop:
+                    index = int.MaxValue;
+                    break;
+                default:
+                    ArgumentOutOfRangeException.Throw(resolveResult);
+                    return;
+            }
         }
 
         private void NotifyBeginIteration()

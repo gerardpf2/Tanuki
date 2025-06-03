@@ -21,20 +21,25 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         public virtual void OnBeginIteration() { }
 
-        public bool Resolve(ResolveContext resolveContext)
+        public ResolveResult Resolve(ResolveContext resolveContext)
         {
-            bool resolved = CanResolve() && ResolveImpl(resolveContext);
+            if (!CanResolve())
+            {
+                return ResolveResult.NotUpdated;
+            }
 
-            if (resolved)
+            ResolveResult resolveResult = ResolveImpl(resolveContext);
+
+            if (resolveResult is ResolveResult.Updated)
             {
                 ++_resolveTimes;
                 ++_resolveTimesPerIteration;
             }
 
-            return resolved;
+            return resolveResult;
         }
 
-        protected abstract bool ResolveImpl(ResolveContext resolveContext);
+        protected abstract ResolveResult ResolveImpl(ResolveContext resolveContext);
 
         public virtual void OnEndIteration()
         {

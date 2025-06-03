@@ -47,7 +47,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _board = null;
         }
 
-        protected override bool ResolveImpl(ResolveContext _)
+        protected override ResolveResult ResolveImpl(ResolveContext _)
         {
             InvalidOperationException.ThrowIfNull(_board);
 
@@ -58,7 +58,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 resolved = TryDestroyPiece(piece) || resolved;
             }
 
-            return resolved;
+            return resolved ? ResolveResult.Updated : ResolveResult.NotUpdated;
         }
 
         private bool TryDestroyPiece([NotNull] IPiece piece)

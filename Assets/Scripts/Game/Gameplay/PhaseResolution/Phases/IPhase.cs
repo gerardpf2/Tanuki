@@ -6,7 +6,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         void OnBeginIteration();
 
-        bool Resolve(ResolveContext resolveContext);
+        ResolveResult Resolve(ResolveContext resolveContext);
 
         void OnEndIteration();
     }
