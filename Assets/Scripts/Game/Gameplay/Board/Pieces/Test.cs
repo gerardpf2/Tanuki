@@ -15,8 +15,8 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
-        private const string CustomDataEyeMovementDirectionUpKey = "EyeMovementDirectionUp";
-        private const string CustomDataEyeRowOffsetKey = "EyeRowOffset";
+        private const string CustomDataEyeMovementDirectionUpKey = "EyeMovementDirectionUp"; // TODO: Use shorter key
+        private const string CustomDataEyeRowOffsetKey = "EyeRowOffset"; // TODO: Use shorter key
 
         [NotNull] private readonly IConverter _converter;
 
