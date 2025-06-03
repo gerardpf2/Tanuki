@@ -117,6 +117,8 @@ namespace Game.Gameplay.Composition
                 )
             );
 
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsCompletedPhase>(_ => new GoalsCompletedPhase()));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IGravityPhase>(r =>
                     new GravityPhase(
@@ -167,6 +169,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseResolver>(r =>
                     new PhaseResolver(
+                        r.Resolve<IGoalsCompletedPhase>(),
                         r.Resolve<IInstantiateInitialPiecesPhase>(),
                         r.Resolve<ILockPlayerPiecePhase>(),
                         r.Resolve<IDestroyNotAlivePiecesPhase>(),

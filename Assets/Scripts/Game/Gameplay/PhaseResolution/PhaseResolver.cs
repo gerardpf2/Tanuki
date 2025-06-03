@@ -8,6 +8,7 @@ namespace Game.Gameplay.PhaseResolution
 {
     public class PhaseResolver : IPhaseResolver
     {
+        [NotNull] private readonly IGoalsCompletedPhase _goalsCompletedPhase;
         [NotNull] private readonly IInstantiateInitialPiecesPhase _instantiateInitialPiecesPhase;
         [NotNull] private readonly ILockPlayerPiecePhase _lockPlayerPiecePhase;
         [NotNull] private readonly IDestroyNotAlivePiecesPhase _destroyNotAlivePiecesPhase;
@@ -18,6 +19,7 @@ namespace Game.Gameplay.PhaseResolution
         [NotNull, ItemNotNull] private readonly IReadOnlyList<IPhase> _phases;
 
         public PhaseResolver(
+            [NotNull] IGoalsCompletedPhase goalsCompletedPhase,
             [NotNull] IInstantiateInitialPiecesPhase instantiateInitialPiecesPhase,
             [NotNull] ILockPlayerPiecePhase lockPlayerPiecePhase,
             [NotNull] IDestroyNotAlivePiecesPhase destroyNotAlivePiecesPhase,
@@ -25,6 +27,7 @@ namespace Game.Gameplay.PhaseResolution
             [NotNull] ILineClearPhase lineClearPhase,
             [NotNull] IInstantiatePlayerPiecePhase instantiatePlayerPiecePhase)
         {
+            ArgumentNullException.ThrowIfNull(goalsCompletedPhase);
             ArgumentNullException.ThrowIfNull(instantiateInitialPiecesPhase);
             ArgumentNullException.ThrowIfNull(lockPlayerPiecePhase);
             ArgumentNullException.ThrowIfNull(destroyNotAlivePiecesPhase);
@@ -32,6 +35,7 @@ namespace Game.Gameplay.PhaseResolution
             ArgumentNullException.ThrowIfNull(lineClearPhase);
             ArgumentNullException.ThrowIfNull(instantiatePlayerPiecePhase);
 
+            _goalsCompletedPhase = goalsCompletedPhase;
             _instantiateInitialPiecesPhase = instantiateInitialPiecesPhase;
             _lockPlayerPiecePhase = lockPlayerPiecePhase;
             _destroyNotAlivePiecesPhase = destroyNotAlivePiecesPhase;
@@ -41,6 +45,7 @@ namespace Game.Gameplay.PhaseResolution
 
             _phases = new List<IPhase>
             {
+                _goalsCompletedPhase,
                 _instantiateInitialPiecesPhase,
                 _lockPlayerPiecePhase,
                 _destroyNotAlivePiecesPhase,
@@ -54,6 +59,7 @@ namespace Game.Gameplay.PhaseResolution
         {
             Uninitialize();
 
+            _goalsCompletedPhase.Initialize();
             _instantiateInitialPiecesPhase.Initialize(board, piecePlacements);
             _lockPlayerPiecePhase.Initialize(board);
             _destroyNotAlivePiecesPhase.Initialize(board);
