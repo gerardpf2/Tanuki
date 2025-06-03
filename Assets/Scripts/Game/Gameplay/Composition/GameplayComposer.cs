@@ -1,6 +1,7 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.Goals;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.Player;
@@ -104,6 +105,8 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsStateContainer>(_ => new GoalsStateContainer()));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IDestroyNotAlivePiecesPhase>(r =>
                     new DestroyNotAlivePiecesPhase(
@@ -185,6 +188,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
+                        r.Resolve<IGoalsStateContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
@@ -286,6 +290,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IUnloadGameplayUseCase>(),
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IGameplayDefinitionGetter>(),
+                        r.Resolve<IGoalsStateContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
