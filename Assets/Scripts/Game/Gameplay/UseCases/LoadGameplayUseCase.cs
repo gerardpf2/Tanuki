@@ -8,6 +8,7 @@ using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
+using Game.Gameplay.View.Header;
 using Game.Gameplay.View.Player;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -102,8 +103,9 @@ namespace Game.Gameplay.UseCases
             _playerView.Initialize();
             _cameraController.Initialize();
 
+            HeaderViewData headerViewData = new();
             BoardViewData boardViewData = new(_eventListener.Initialize);
-            GameplayViewData gameplayViewData = new(boardViewData);
+            GameplayViewData gameplayViewData = new(headerViewData, boardViewData);
 
             return gameplayViewData;
         }
