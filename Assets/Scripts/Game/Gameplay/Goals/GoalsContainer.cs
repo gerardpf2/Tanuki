@@ -51,6 +51,8 @@ namespace Game.Gameplay.Goals
             }
 
             ++_currentAmounts[pieceType];
+
+            HandleCurrentUpdated(pieceType);
         }
 
         private static int GetAmount(PieceType pieceType, IDictionary<PieceType, int> amounts)
@@ -64,5 +66,7 @@ namespace Game.Gameplay.Goals
 
             return amount;
         }
+
+        protected virtual void HandleCurrentUpdated(PieceType pieceType) { }
     }
 }

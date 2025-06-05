@@ -7,7 +7,14 @@ namespace Game.Gameplay.Goals.Utils
 {
     public static class GoalsContainerUtils
     {
-        public static bool IsCompleted([NotNull] this IGoalsContainer goalsContainer, PieceType pieceType)
+        public static bool AreAllCompleted([NotNull] this IGoalsContainer goalsContainer)
+        {
+            ArgumentNullException.ThrowIfNull(goalsContainer);
+
+            return goalsContainer.PieceTypes.All(goalsContainer.IsCompleted);
+        }
+
+        private static bool IsCompleted([NotNull] this IGoalsContainer goalsContainer, PieceType pieceType)
         {
             ArgumentNullException.ThrowIfNull(goalsContainer);
 
@@ -15,13 +22,6 @@ namespace Game.Gameplay.Goals.Utils
             int currentAmount = goalsContainer.GetCurrentAmount(pieceType);
 
             return initialAmount <= currentAmount;
-        }
-
-        public static bool AreAllCompleted([NotNull] this IGoalsContainer goalsContainer)
-        {
-            ArgumentNullException.ThrowIfNull(goalsContainer);
-
-            return goalsContainer.PieceTypes.All(goalsContainer.IsCompleted);
         }
     }
 }
