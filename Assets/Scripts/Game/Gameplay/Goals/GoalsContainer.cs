@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Goals
 {
-    public class GoalsStateContainer : IGoalsStateContainer
+    public class GoalsContainer : IGoalsContainer
     {
         [NotNull] private readonly IDictionary<PieceType, int> _initialAmounts = new Dictionary<PieceType, int>();
         [NotNull] private readonly IDictionary<PieceType, int> _currentAmounts = new Dictionary<PieceType, int>();

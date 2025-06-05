@@ -7,13 +7,13 @@ namespace Game.Gameplay.PhaseResolution.Phases
 {
     public class GoalsCompletedPhase : Phase, IGoalsCompletedPhase
     {
-        [NotNull] private readonly IGoalsStateContainer _goalsStateContainer;
+        [NotNull] private readonly IGoalsContainer _goalsContainer;
 
-        public GoalsCompletedPhase([NotNull] IGoalsStateContainer goalsStateContainer) : base(-1, -1)
+        public GoalsCompletedPhase([NotNull] IGoalsContainer goalsContainer) : base(-1, -1)
         {
-            ArgumentNullException.ThrowIfNull(goalsStateContainer);
+            ArgumentNullException.ThrowIfNull(goalsContainer);
 
-            _goalsStateContainer = goalsStateContainer;
+            _goalsContainer = goalsContainer;
         }
 
         public void Initialize()
@@ -32,7 +32,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            if (!_goalsStateContainer.AreAllCompleted())
+            if (!_goalsContainer.AreAllCompleted())
             {
                 return ResolveResult.NotUpdated;
             }

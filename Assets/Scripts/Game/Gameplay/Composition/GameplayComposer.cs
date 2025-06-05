@@ -105,14 +105,14 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsStateContainer>(_ => new GoalsStateContainer()));
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IDestroyNotAlivePiecesPhase>(r =>
                     new DestroyNotAlivePiecesPhase(
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
-                        r.Resolve<IGoalsStateContainer>()
+                        r.Resolve<IGoalsContainer>()
                     )
                 )
             );
@@ -120,7 +120,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IGoalsCompletedPhase>(r =>
                     new GoalsCompletedPhase(
-                        r.Resolve<IGoalsStateContainer>()
+                        r.Resolve<IGoalsContainer>()
                     )
                 )
             );
@@ -198,7 +198,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
-                        r.Resolve<IGoalsStateContainer>(),
+                        r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
@@ -300,7 +300,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IUnloadGameplayUseCase>(),
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IGameplayDefinitionGetter>(),
-                        r.Resolve<IGoalsStateContainer>(),
+                        r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),

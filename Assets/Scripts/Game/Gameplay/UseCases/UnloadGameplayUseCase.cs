@@ -13,7 +13,7 @@ namespace Game.Gameplay.UseCases
 {
     public class UnloadGameplayUseCase : IUnloadGameplayUseCase
     {
-        [NotNull] private readonly IGoalsStateContainer _goalsStateContainer;
+        [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
@@ -23,7 +23,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IScreenLoader _screenLoader;
 
         public UnloadGameplayUseCase(
-            [NotNull] IGoalsStateContainer goalsStateContainer,
+            [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
@@ -32,7 +32,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IEventListener eventListener,
             [NotNull] IScreenLoader screenLoader)
         {
-            ArgumentNullException.ThrowIfNull(goalsStateContainer);
+            ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
@@ -41,7 +41,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(eventListener);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
-            _goalsStateContainer = goalsStateContainer;
+            _goalsContainer = goalsContainer;
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
@@ -60,7 +60,7 @@ namespace Game.Gameplay.UseCases
 
         private void PrepareModel()
         {
-            _goalsStateContainer.Uninitialize();
+            _goalsContainer.Uninitialize();
             _phaseResolver.Uninitialize();
             _playerPiecesBag.Uninitialize();
         }
