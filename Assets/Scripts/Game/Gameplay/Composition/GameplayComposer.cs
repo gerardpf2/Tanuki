@@ -11,6 +11,7 @@ using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.EventResolution.EventResolvers;
+using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
@@ -266,6 +267,8 @@ namespace Game.Gameplay.Composition
                 )
             );
 
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsViewContainer>(_ => new GoalsViewContainer()));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerView>(r =>
                     new PlayerView(
@@ -317,6 +320,14 @@ namespace Game.Gameplay.Composition
                     vm.Inject(
                         r.Resolve<ICameraBoardViewPropertiesSetter>(),
                         r.Resolve<ICoroutineRunnerHelper>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<GoalsViewModel>((r, vm) =>
+                    vm.Inject(
+                        r.Resolve<IGoalsViewContainer>()
                     )
                 )
             );
