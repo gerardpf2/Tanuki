@@ -238,6 +238,7 @@ namespace Game.Gameplay.Composition
                     new ActionFactory(
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<IGoalsViewContainer>(),
                         r.Resolve<IPlayerView>()
                     )
                 )
