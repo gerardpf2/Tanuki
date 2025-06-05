@@ -8,7 +8,6 @@ using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
-using Game.Gameplay.View.Header;
 using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
 using Infrastructure.ScreenLoading;
@@ -26,6 +25,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
+        [NotNull] private readonly IGoalsViewContainer _goalsViewContainer;
         [NotNull] private readonly IPlayerView _playerView;
         [NotNull] private readonly ICameraController _cameraController;
         [NotNull] private readonly IEventListener _eventListener;
@@ -39,6 +39,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
+            [NotNull] IGoalsViewContainer goalsViewContainer,
             [NotNull] IPlayerView playerView,
             [NotNull] ICameraController cameraController,
             [NotNull] IEventListener eventListener,
@@ -51,6 +52,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
+            ArgumentNullException.ThrowIfNull(goalsViewContainer);
             ArgumentNullException.ThrowIfNull(playerView);
             ArgumentNullException.ThrowIfNull(cameraController);
             ArgumentNullException.ThrowIfNull(eventListener);
@@ -63,6 +65,7 @@ namespace Game.Gameplay.UseCases
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
+            _goalsViewContainer = goalsViewContainer;
             _playerView = playerView;
             _cameraController = cameraController;
             _eventListener = eventListener;
@@ -73,13 +76,13 @@ namespace Game.Gameplay.UseCases
         {
             _unloadGameplayUseCase.Resolve();
 
-            IReadonlyBoard board = PrepareModel(id);
-            GameplayViewData gameplayViewData = PrepareView(board);
+            (IReadonlyBoard board, IEnumerable<IGoalDefinition> initialGoalDefinitions) = PrepareModel(id);
+            GameplayViewData gameplayViewData = PrepareView(board, initialGoalDefinitions);
 
             LoadScreen(gameplayViewData);
         }
 
-        private IReadonlyBoard PrepareModel(string id)
+        private (IReadonlyBoard, IEnumerable<IGoalDefinition>) PrepareModel(string id)
         {
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
@@ -95,19 +98,17 @@ namespace Game.Gameplay.UseCases
 
             _phaseResolver.Resolve(new ResolveContext(null));
 
-            return board;
+            return (board,gameplayDefinition.GoalDefinitions);
         }
 
-        private GameplayViewData PrepareView(IReadonlyBoard board)
+        private GameplayViewData PrepareView(IReadonlyBoard board, IEnumerable<IGoalDefinition> initialGoalDefinitions)
         {
             _boardView.Initialize(board);
+            _goalsViewContainer.Initialize(initialGoalDefinitions);
             _playerView.Initialize();
             _cameraController.Initialize();
 
-            GoalsViewData goalsViewData = new();
-            HeaderViewData headerViewData = new(goalsViewData);
-            BoardViewData boardViewData = new(_eventListener.Initialize);
-            GameplayViewData gameplayViewData = new(headerViewData, boardViewData);
+            GameplayViewData gameplayViewData = new(_eventListener.Initialize);
 
             return gameplayViewData;
         }

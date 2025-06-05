@@ -1,6 +1,5 @@
 using Game.Gameplay.View.Header.Goals;
 using Infrastructure.ModelViewViewModel;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Header
@@ -16,11 +15,9 @@ namespace Game.Gameplay.View.Header
             Add(_goalsViewData);
         }
 
-        public void SetData([NotNull] HeaderViewData data)
+        public void SetData(HeaderViewData _)
         {
-            ArgumentNullException.ThrowIfNull(data);
-
-            _goalsViewData.Value = data.GoalsViewData;
+            _goalsViewData.Value = new GoalsViewData();
         }
     }
 }

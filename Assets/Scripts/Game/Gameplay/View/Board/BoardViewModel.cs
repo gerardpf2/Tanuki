@@ -46,7 +46,7 @@ namespace Game.Gameplay.View.Board
                 {
                     Initialize();
 
-                    data.OnViewReady?.Invoke();
+                    data.OnReady?.Invoke();
                 }
             );
         }

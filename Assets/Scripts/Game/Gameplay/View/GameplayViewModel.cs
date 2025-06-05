@@ -23,8 +23,8 @@ namespace Game.Gameplay.View
         {
             ArgumentNullException.ThrowIfNull(data);
 
-            _headerViewData.Value = data.HeaderViewData;
-            _boardViewData.Value = data.BoardViewData;
+            _headerViewData.Value = new HeaderViewData();
+            _boardViewData.Value = new BoardViewData(data.OnReady);
         }
     }
 }
