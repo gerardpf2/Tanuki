@@ -8,8 +8,8 @@ namespace Game.Gameplay.View.Header.Goals
     {
         // TODO: PieceType
 
-        [NotNull] private readonly IBoundProperty<int> _initialAmount = new BoundProperty<int>("InitialAmount", 0);
-        [NotNull] private readonly IBoundProperty<int> _currentAmount = new BoundProperty<int>("CurrentAmount", 0);
+        [NotNull] private readonly IBoundProperty<string> _initialAmount = new BoundProperty<string>("InitialAmount", null);
+        [NotNull] private readonly IBoundProperty<string> _currentAmount = new BoundProperty<string>("CurrentAmount", null);
 
         protected override void Awake()
         {
@@ -23,8 +23,8 @@ namespace Game.Gameplay.View.Header.Goals
         {
             ArgumentNullException.ThrowIfNull(data);
 
-            _initialAmount.Value = data.InitialAmount;
-            _currentAmount.Value = data.CurrentAmount;
+            _initialAmount.Value = data.InitialAmount.ToString();
+            _currentAmount.Value = data.CurrentAmount.ToString();
         }
     }
 }
