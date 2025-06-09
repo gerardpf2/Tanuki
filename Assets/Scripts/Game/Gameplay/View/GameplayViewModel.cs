@@ -8,8 +8,8 @@ namespace Game.Gameplay.View
 {
     public class GameplayViewModel : ViewModel, IDataSettable<GameplayViewData>
     {
-        [NotNull] private readonly IBoundProperty<HeaderViewData> _headerViewData = new BoundProperty<HeaderViewData>("HeaderViewData", null);
-        [NotNull] private readonly IBoundProperty<BoardViewData> _boardViewData = new BoundProperty<BoardViewData>("BoardViewData", null);
+        [NotNull] private readonly IBoundProperty<HeaderViewData> _headerViewData = new BoundProperty<HeaderViewData>("HeaderViewData");
+        [NotNull] private readonly IBoundProperty<BoardViewData> _boardViewData = new BoundProperty<BoardViewData>("BoardViewData");
 
         protected override void Awake()
         {

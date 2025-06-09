@@ -8,8 +8,8 @@ namespace Game.Gameplay.View.Header.Goals
     {
         // TODO: PieceType
 
-        [NotNull] private readonly IBoundProperty<string> _initialAmount = new BoundProperty<string>("InitialAmount", null);
-        [NotNull] private readonly IBoundProperty<string> _currentAmount = new BoundProperty<string>("CurrentAmount", null);
+        [NotNull] private readonly IBoundProperty<string> _initialAmount = new BoundProperty<string>("InitialAmount");
+        [NotNull] private readonly IBoundProperty<string> _currentAmount = new BoundProperty<string>("CurrentAmount");
 
         protected override void Awake()
         {

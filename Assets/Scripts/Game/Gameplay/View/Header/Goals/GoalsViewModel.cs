@@ -11,7 +11,7 @@ namespace Game.Gameplay.View.Header.Goals
     {
         private IGoalsViewContainer _goalsViewContainer;
 
-        [NotNull] private readonly IBoundProperty<IEnumerable<GoalViewData>> _goalsViewData = new BoundProperty<IEnumerable<GoalViewData>>("GoalsViewData", null);
+        [NotNull] private readonly IBoundProperty<IEnumerable<GoalViewData>> _goalsViewData = new BoundProperty<IEnumerable<GoalViewData>>("GoalsViewData");
 
         protected override void Awake()
         {

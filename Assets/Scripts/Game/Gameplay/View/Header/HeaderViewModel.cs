@@ -6,7 +6,7 @@ namespace Game.Gameplay.View.Header
 {
     public class HeaderViewModel : ViewModel, IDataSettable<HeaderViewData>
     {
-        [NotNull] private readonly IBoundProperty<GoalsViewData> _goalsViewData = new BoundProperty<GoalsViewData>("GoalsViewData", null);
+        [NotNull] private readonly IBoundProperty<GoalsViewData> _goalsViewData = new BoundProperty<GoalsViewData>("GoalsViewData");
 
         protected override void Awake()
         {

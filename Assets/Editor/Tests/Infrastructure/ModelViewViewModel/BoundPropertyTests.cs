@@ -11,7 +11,7 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel
         public void Key_ReturnsExpectedValue()
         {
             string expectedKey = string.Empty;
-            BoundProperty<object> boundProperty = new(expectedKey, null);
+            BoundProperty<object> boundProperty = new(expectedKey);
 
             string key = boundProperty.Key;
 
@@ -33,7 +33,7 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel
         public void GetValue_ReturnsExpectedValue()
         {
             object expectedValue = new();
-            BoundProperty<object> boundProperty = new(null, null) { Value = expectedValue };
+            BoundProperty<object> boundProperty = new(null) { Value = expectedValue };
 
             object value = boundProperty.Value;
 
@@ -44,7 +44,7 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel
         public void SetValue_Different_AllListenersCalledWithValidParams()
         {
             object value = new();
-            BoundProperty<object> boundProperty = new(null, null);
+            BoundProperty<object> boundProperty = new(null);
             Action<object> listener1 = Substitute.For<Action<object>>();
             Action<object> listener2 = Substitute.For<Action<object>>();
             boundProperty.Add(listener1);
@@ -102,7 +102,7 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel
         public void Remove_ListenerNotCalled()
         {
             object value = new();
-            BoundProperty<object> boundProperty = new(null, null);
+            BoundProperty<object> boundProperty = new(null);
             Action<object> listener = Substitute.For<Action<object>>();
             boundProperty.Add(listener);
 
