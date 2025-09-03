@@ -2,6 +2,6 @@ namespace Game.Gameplay.UseCases
 {
     public interface ILoadGameplay
     {
-        void Resolve();
+        void Resolve(string boardId);
     }
 }

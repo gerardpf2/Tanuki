@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Composition;
+using Game.Gameplay.Board;
+using Game.Gameplay.View.Board;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
@@ -22,22 +24,30 @@ namespace Game.Root.Composition
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
         [NotNull] private readonly IConfigValueGetter _configValueGetter;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
+        [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
 
         public RootComposer(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacement rootScreenPlacement,
             [NotNull] IConfigValueGetter configValueGetter,
-            [NotNull] ICoroutineRunner coroutineRunner)
+            [NotNull] ICoroutineRunner coroutineRunner,
+            [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
+            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
         {
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(configValueGetter);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
+            ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
             _configValueGetter = configValueGetter;
             _coroutineRunner = coroutineRunner;
+            _boardDefinitionGetter = boardDefinitionGetter;
+            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
         }
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
@@ -56,7 +66,7 @@ namespace Game.Root.Composition
             return base
                 .GetChildScopeComposers()
                 .Append(new ModelViewViewModelComposer())
-                .Append(new GameComposer());
+                .Append(new GameComposer(_boardDefinitionGetter, _pieceViewDefinitionGetter));
         }
     }
 }
