@@ -37,7 +37,7 @@ namespace Game.Gameplay.View.Board
 
         public void Uninitialize()
         {
-            // TODO: TryDestroyPiece
+            DestroyAllPieces();
 
             _board = null;
 
@@ -87,6 +87,33 @@ namespace Game.Gameplay.View.Board
             );
 
             _pieceInstances.Add(piece, pieceInstance);
+        }
+
+        public void DestroyPiece([NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            _board.Remove(piece);
+
+            GameObject pieceInstance = GetPieceInstance(piece);
+
+            Object.Destroy(pieceInstance);
+
+            _pieceInstances.Remove(piece);
+        }
+
+        private void DestroyAllPieces()
+        {
+            foreach (KeyValuePair<IPiece, GameObject> pieceInstance in _pieceInstances)
+            {
+                InvalidOperationException.ThrowIfNull(pieceInstance.Value);
+
+                _board.Remove(pieceInstance.Key);
+
+                Object.Destroy(pieceInstance.Value);
+            }
+
+            _pieceInstances.Clear();
         }
 
         private static Vector3 GetWorldPosition(Coordinate sourceCoordinate)

@@ -20,11 +20,40 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull, ItemNotNull]
-        public static ICollection<PiecePlacement> GetPiecesInRow([NotNull] this IReadonlyBoard board, int row)
+        public static IEnumerable<PiecePlacement> GetAllPieces([NotNull] this IReadonlyBoard board)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            return board.GetPiecesInRange(0, board.Rows - 1, 0, board.Columns - 1);
+        }
+
+        [NotNull, ItemNotNull]
+        public static IEnumerable<PiecePlacement> GetPiecesInRow([NotNull] this IReadonlyBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
             return board.GetPiecesInRange(row, row, 0, board.Columns - 1);
+        }
+
+        public static bool IsRowFull([NotNull] this IReadonlyBoard board, int row)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            int columns = board.Columns;
+
+            for (int column = 0; column < columns; ++column)
+            {
+                Coordinate coordinate = new(row, column);
+
+                IPiece piece = board.Get(coordinate);
+
+                if (piece is null)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public static void GetPieceRowColumnOffset(
@@ -64,7 +93,7 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull, ItemNotNull]
-        private static ICollection<PiecePlacement> GetPiecesInRange(
+        private static IEnumerable<PiecePlacement> GetPiecesInRange(
             [NotNull] this IReadonlyBoard board,
             int rowStart,
             int rowEnd,
@@ -73,7 +102,7 @@ namespace Game.Gameplay.Board.Utils
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            IDictionary<IPiece, PiecePlacement> pieces = new Dictionary<IPiece, PiecePlacement>();
+            ICollection<IPiece> visitedPieces = new HashSet<IPiece>();
 
             for (int row = rowStart; row <= rowEnd; ++row)
             {
@@ -83,18 +112,18 @@ namespace Game.Gameplay.Board.Utils
 
                     IPiece piece = board.Get(coordinate);
 
-                    if (piece is null || pieces.ContainsKey(piece))
+                    if (piece is null || visitedPieces.Contains(piece))
                     {
                         continue;
                     }
 
+                    visitedPieces.Add(piece);
+
                     PiecePlacement piecePlacement = new(row, column, piece);
 
-                    pieces.Add(piece, piecePlacement);
+                    yield return piecePlacement;
                 }
             }
-
-            return pieces.Values;
         }
 
         private static Coordinate GetPieceSourceCoordinate([NotNull] this IReadonlyBoard board, [NotNull] IPiece piece)
