@@ -57,7 +57,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _piecePlacements = null;
         }
 
-        protected override bool ResolveImpl(ResolveContext _)
+        protected override ResolveResult ResolveImpl(ResolveContext _)
         {
             InvalidOperationException.ThrowIfNull(_board);
             InvalidOperationException.ThrowIfNull(_piecePlacements);
@@ -80,7 +80,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 );
             }
 
-            return true;
+            return ResolveResult.Updated;
         }
     }
 }

@@ -40,11 +40,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
             base.Uninitialize();
         }
 
-        protected override bool ResolveImpl(ResolveContext _)
+        protected override ResolveResult ResolveImpl(ResolveContext _)
         {
             if (_playerPiecesBag.Current is not null)
             {
-                return false;
+                return ResolveResult.NotUpdated;
             }
 
             _playerPiecesBag.PrepareNext();
@@ -53,7 +53,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece));
 
-            return true;
+            return ResolveResult.Updated;
         }
     }
 }

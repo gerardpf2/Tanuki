@@ -54,14 +54,14 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _targetPiece = _playerPiecesBag.Current;
         }
 
-        protected override bool ResolveImpl([NotNull] ResolveContext resolveContext)
+        protected override ResolveResult ResolveImpl([NotNull] ResolveContext resolveContext)
         {
             ArgumentNullException.ThrowIfNull(resolveContext);
             InvalidOperationException.ThrowIfNull(_board);
 
             if (_targetPiece is null || _playerPiecesBag.Current != _targetPiece || !resolveContext.Column.HasValue)
             {
-                return false;
+                return ResolveResult.NotUpdated;
             }
 
             _playerPiecesBag.ConsumeCurrent();
@@ -72,7 +72,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(_targetPiece, lockSourceCoordinate));
 
-            return true;
+            return ResolveResult.Updated;
         }
 
         public override void OnEndIteration()
