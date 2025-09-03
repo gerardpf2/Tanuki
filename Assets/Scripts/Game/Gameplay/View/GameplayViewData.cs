@@ -1,14 +1,14 @@
-using Game.Gameplay.View.Board;
+using System;
 
 namespace Game.Gameplay.View
 {
     public class GameplayViewData
     {
-        public readonly BoardViewData BoardViewData;
+        public readonly Action OnReady;
 
-        public GameplayViewData(BoardViewData boardViewData)
+        public GameplayViewData(Action onReady)
         {
-            BoardViewData = boardViewData;
+            OnReady = onReady;
         }
     }
 }

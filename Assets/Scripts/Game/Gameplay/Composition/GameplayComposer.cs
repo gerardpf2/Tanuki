@@ -11,6 +11,7 @@ using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.EventResolution.EventResolvers;
+using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
@@ -105,14 +106,14 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsStateContainer>(_ => new GoalsStateContainer()));
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IDestroyNotAlivePiecesPhase>(r =>
                     new DestroyNotAlivePiecesPhase(
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
-                        r.Resolve<IGoalsStateContainer>()
+                        r.Resolve<IGoalsContainer>()
                     )
                 )
             );
@@ -120,7 +121,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IGoalsCompletedPhase>(r =>
                     new GoalsCompletedPhase(
-                        r.Resolve<IGoalsStateContainer>()
+                        r.Resolve<IGoalsContainer>()
                     )
                 )
             );
@@ -198,10 +199,11 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
-                        r.Resolve<IGoalsStateContainer>(),
+                        r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<IGoalsViewContainer>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
@@ -236,6 +238,7 @@ namespace Game.Gameplay.Composition
                     new ActionFactory(
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<IGoalsViewContainer>(),
                         r.Resolve<IPlayerView>()
                     )
                 )
@@ -265,6 +268,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsViewContainer>(_ => new GoalsViewContainer()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerView>(r =>
@@ -300,10 +305,11 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IUnloadGameplayUseCase>(),
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IGameplayDefinitionGetter>(),
-                        r.Resolve<IGoalsStateContainer>(),
+                        r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<IGoalsViewContainer>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
@@ -317,6 +323,14 @@ namespace Game.Gameplay.Composition
                     vm.Inject(
                         r.Resolve<ICameraBoardViewPropertiesSetter>(),
                         r.Resolve<ICoroutineRunnerHelper>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<GoalsViewModel>((r, vm) =>
+                    vm.Inject(
+                        r.Resolve<IGoalsViewContainer>()
                     )
                 )
             );

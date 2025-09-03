@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Goals
 {
-    public interface IGoalsStateContainer
+    public interface IGoalsContainer
     {
         [NotNull]
         IEnumerable<PieceType> PieceTypes { get; }

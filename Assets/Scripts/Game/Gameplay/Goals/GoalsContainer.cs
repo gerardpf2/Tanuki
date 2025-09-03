@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Goals
 {
-    public class GoalsStateContainer : IGoalsStateContainer
+    public class GoalsContainer : IGoalsContainer
     {
         [NotNull] private readonly IDictionary<PieceType, int> _initialAmounts = new Dictionary<PieceType, int>();
         [NotNull] private readonly IDictionary<PieceType, int> _currentAmounts = new Dictionary<PieceType, int>();
@@ -51,6 +51,8 @@ namespace Game.Gameplay.Goals
             }
 
             ++_currentAmounts[pieceType];
+
+            HandleCurrentUpdated();
         }
 
         private static int GetAmount(PieceType pieceType, IDictionary<PieceType, int> amounts)
@@ -64,5 +66,7 @@ namespace Game.Gameplay.Goals
 
             return amount;
         }
+
+        protected virtual void HandleCurrentUpdated() { }
     }
 }

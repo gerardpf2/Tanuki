@@ -13,22 +13,22 @@ namespace Game.Gameplay.PhaseResolution.Phases
     {
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
-        [NotNull] private readonly IGoalsStateContainer _goalsStateContainer;
+        [NotNull] private readonly IGoalsContainer _goalsContainer;
 
         private IBoard _board;
 
         public DestroyNotAlivePiecesPhase(
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
-            [NotNull] IGoalsStateContainer goalsStateContainer) : base(-1, -1)
+            [NotNull] IGoalsContainer goalsContainer) : base(-1, -1)
         {
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
-            ArgumentNullException.ThrowIfNull(goalsStateContainer);
+            ArgumentNullException.ThrowIfNull(goalsContainer);
 
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
-            _goalsStateContainer = goalsStateContainer;
+            _goalsContainer = goalsContainer;
         }
 
         public void Initialize([NotNull] IBoard board)
@@ -73,7 +73,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             _board.Remove(piece);
 
-            _goalsStateContainer.TryRegisterDestroyed(piece.Type);
+            _goalsContainer.TryRegisterDestroyed(piece.Type);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(piece, DestroyPieceReason.NotAlive));
 

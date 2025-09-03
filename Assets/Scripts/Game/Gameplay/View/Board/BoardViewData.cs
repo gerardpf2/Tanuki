@@ -4,11 +4,11 @@ namespace Game.Gameplay.View.Board
 {
     public class BoardViewData
     {
-        public readonly Action OnViewReady;
+        public readonly Action OnReady;
 
-        public BoardViewData(Action onViewReady)
+        public BoardViewData(Action onReady)
         {
-            OnViewReady = onViewReady;
+            OnReady = onReady;
         }
     }
 }
