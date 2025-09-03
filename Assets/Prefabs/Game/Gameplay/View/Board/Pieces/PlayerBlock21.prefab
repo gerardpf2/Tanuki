@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 586585799
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c9533d203c5abf6458097b7eaf53a371, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e16cf8aabd6e00843826e9b3c7a7070d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -96,9 +96,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1070835727361169376}
-  - component: {fileID: 5805735492612493918}
+  - component: {fileID: 3209040088352875747}
   m_Layer: 0
-  m_Name: PlayerBlock
+  m_Name: PlayerBlock21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,7 +120,7 @@ Transform:
   - {fileID: 2382537397673491627}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5805735492612493918
+--- !u!114 &3209040088352875747
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,6 +129,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6451969163346834527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e5db75c642c485396faf4fb3e4c93ae, type: 3}
+  m_Script: {fileID: 11500000, guid: c2c0cc70e5f740f692779563217513a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -11,9 +11,19 @@ namespace Game.Gameplay.Board
             return new Test(true, 0);
         }
 
-        public IPiece GetPlayerBlock()
+        public IPiece GetPlayerBlock11()
         {
-            return new PlayerBlock();
+            return new PlayerBlock11();
+        }
+
+        public IPiece GetPlayerBlock12()
+        {
+            return new PlayerBlock12();
+        }
+
+        public IPiece GetPlayerBlock21()
+        {
+            return new PlayerBlock21();
         }
     }
 }

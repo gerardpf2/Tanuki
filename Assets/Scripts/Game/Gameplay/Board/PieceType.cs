@@ -3,6 +3,8 @@ namespace Game.Gameplay.Board
     public enum PieceType
     {
         Test,
-        PlayerBlock
+        PlayerBlock11,
+        PlayerBlock12,
+        PlayerBlock21
     }
 }

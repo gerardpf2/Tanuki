@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using Game.Gameplay.Board.Utils;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 
 namespace Game.Gameplay.Board.Pieces
 {
-    public class Test : ITest, ITestUpdater
+    public class Test : RectangularPiece, ITest, ITestUpdater
     {
         /*
          *
@@ -17,10 +15,6 @@ namespace Game.Gameplay.Board.Pieces
          */
 
         private int _eyeRowOffset;
-
-        public PieceType Type => PieceType.Test;
-
-        public bool Alive { get; private set; } = true;
 
         public bool EyeMovementDirectionUp { get; private set; }
 
@@ -45,37 +39,13 @@ namespace Game.Gameplay.Board.Pieces
 
         public Test(
             bool eyeMovementDirectionUp,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0), Is(ComparisonOperator.LessThan, ITest.Rows)] int eyeRowOffset)
+            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0), Is(ComparisonOperator.LessThan, ITest.Rows)] int eyeRowOffset) : base(PieceType.Test, ITest.Rows, 1)
         {
             ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.LessThan, ITest.Rows);
 
             EyeMovementDirectionUp = eyeMovementDirectionUp;
             EyeRowOffset = eyeRowOffset;
-        }
-
-        public IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate)
-        {
-            for (int rowOffset = 0; rowOffset < ITest.Rows; ++rowOffset)
-            {
-                yield return sourceCoordinate.WithOffset(rowOffset, 0);
-            }
-        }
-
-        public void Damage(
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0), Is(ComparisonOperator.LessThan, ITest.Rows)] int rowOffset,
-            [Is(ComparisonOperator.EqualTo, 0)] int columnOffset)
-        {
-            ArgumentOutOfRangeException.ThrowIfNot(rowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
-            ArgumentOutOfRangeException.ThrowIfNot(rowOffset, ComparisonOperator.LessThan, ITest.Rows);
-            ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.EqualTo, 0);
-
-            if (EyeRowOffset != rowOffset)
-            {
-                return;
-            }
-
-            Alive = false;
         }
 
         public void MoveEye()
@@ -95,6 +65,16 @@ namespace Game.Gameplay.Board.Pieces
             {
                 --EyeRowOffset;
             }
+        }
+
+        protected override void HandleDamaged(int rowOffset, int columnOffset)
+        {
+            if (EyeRowOffset != rowOffset)
+            {
+                return;
+            }
+
+            base.HandleDamaged(rowOffset, columnOffset);
         }
     }
 }
