@@ -1,4 +1,5 @@
 using System;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.View.Board.Pieces;
 using Game.Gameplay.View.Player;
 using JetBrains.Annotations;
@@ -10,12 +11,14 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class DestroyPlayerPieceAction : IAction
     {
+        private readonly DestroyPieceReason _destroyPieceReason;
         [NotNull] private readonly IPlayerView _playerView;
 
-        public DestroyPlayerPieceAction([NotNull] IPlayerView playerView)
+        public DestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason, [NotNull] IPlayerView playerView)
         {
             ArgumentNullException.ThrowIfNull(playerView);
 
+            _destroyPieceReason = destroyPieceReason;
             _playerView = playerView;
         }
 
@@ -29,7 +32,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
-            pieceViewEventNotifier.OnDestroyed(OnComplete);
+            pieceViewEventNotifier.OnDestroyed(_destroyPieceReason, OnComplete);
 
             return;
 

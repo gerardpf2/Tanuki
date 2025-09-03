@@ -61,9 +61,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
                 );
         }
 
-        public IAction GetDestroyPlayerPieceAction()
+        public IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPlayerPieceAction(_playerView);
+            return new DestroyPlayerPieceAction(destroyPieceReason, _playerView);
         }
     }
 }

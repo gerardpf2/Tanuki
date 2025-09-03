@@ -26,7 +26,7 @@ namespace Game.Gameplay.View.EventResolution
 
             if (Resolving)
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Resolve is already in progress");
             }
 
             Resolving = true;

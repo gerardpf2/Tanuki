@@ -19,6 +19,6 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         IAction GetInstantiatePlayerPieceAction(IPiece piece, InstantiatePieceReason instantiatePieceReason);
 
         [NotNull]
-        IAction GetDestroyPlayerPieceAction();
+        IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason);
     }
 }

@@ -45,7 +45,7 @@ namespace Game.Gameplay.Board
 
             if (!_pieceProperties.TryGetValue(piece.Type, out PieceProperties pieceProperties))
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw($"Piece properties for {piece.Type} cannot be found");
             }
 
             InvalidOperationException.ThrowIfNull(pieceProperties);
@@ -75,7 +75,7 @@ namespace Game.Gameplay.Board
 
             if (!_pieceProperties.TryAdd(piece.Type, pieceProperties))
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw($"Piece properties for {piece.Type} cannot be added");
             }
         }
     }

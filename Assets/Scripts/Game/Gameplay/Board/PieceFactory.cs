@@ -6,7 +6,7 @@ namespace Game.Gameplay.Board
     {
         public IPiece GetTest()
         {
-            // TODO
+            // TODO: Add support for custom initial params
 
             return new Test(true, 0);
         }

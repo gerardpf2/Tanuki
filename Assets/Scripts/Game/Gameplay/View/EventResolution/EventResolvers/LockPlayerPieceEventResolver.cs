@@ -29,7 +29,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
             void DestroyPlayerPieceStep(Action onStepComplete)
             {
-                _actionFactory.GetDestroyPlayerPieceAction().Resolve(onStepComplete);
+                _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.Lock).Resolve(onStepComplete);
             }
 
             void InstantiatePieceStep(Action onStepComplete)
