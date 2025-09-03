@@ -48,6 +48,9 @@ namespace Game.Gameplay.View.EventResolution
                 case DestroyPieceEvent destroyPieceEvent:
                     _eventResolverFactory.GetDestroyPieceEventResolver().Resolve(destroyPieceEvent, OnComplete);
                     break;
+                case MovePieceEvent movePieceEvent:
+                    _eventResolverFactory.GetMovePieceEventResolver().Resolve(movePieceEvent, OnComplete);
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);
                     return;

@@ -34,5 +34,10 @@ namespace Game.Gameplay.EventEnqueueing
         {
             return new DestroyPieceEvent(piece, destroyPieceReason);
         }
+
+        public IEvent GetMovePieceEvent(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        {
+            return new MovePieceEvent(piece, rowOffset, columnOffset, movePieceReason);
+        }
     }
 }

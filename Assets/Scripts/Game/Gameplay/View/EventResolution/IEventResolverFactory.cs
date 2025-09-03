@@ -20,5 +20,8 @@ namespace Game.Gameplay.View.EventResolution
 
         [NotNull]
         IEventResolver<DestroyPieceEvent> GetDestroyPieceEventResolver();
+
+        [NotNull]
+        IEventResolver<MovePieceEvent> GetMovePieceEventResolver();
     }
 }

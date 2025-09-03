@@ -114,6 +114,15 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IGravityPhase>(r =>
+                    new GravityPhase(
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IInstantiateInitialPiecesPhase>(r =>
                     new InstantiateInitialPiecesPhase(
                         r.Resolve<IEventEnqueuer>(),
@@ -157,6 +166,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IInstantiateInitialPiecesPhase>(),
                         r.Resolve<ILockPlayerPiecePhase>(),
                         r.Resolve<IDestroyNotAlivePiecesPhase>(),
+                        r.Resolve<IGravityPhase>(),
                         r.Resolve<ILineClearPhase>(),
                         r.Resolve<IInstantiatePlayerPiecePhase>()
                     )

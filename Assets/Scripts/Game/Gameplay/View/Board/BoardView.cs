@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -100,6 +101,22 @@ namespace Game.Gameplay.View.Board
             Object.Destroy(pieceInstance);
 
             _pieceInstances.Remove(piece);
+        }
+
+        public void MovePiece([NotNull] IPiece piece, int rowOffset, int columnOffset)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            _board.Move(piece, rowOffset, columnOffset);
+
+            // Piece instance position should have already been updated externally (using tweens, etc), but it can be
+            // set in here too just in case
+
+            GameObject pieceInstance = GetPieceInstance(piece);
+
+            Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
+
+            pieceInstance.transform.position = GetWorldPosition(sourceCoordinate);
         }
 
         private void DestroyAllPieces()

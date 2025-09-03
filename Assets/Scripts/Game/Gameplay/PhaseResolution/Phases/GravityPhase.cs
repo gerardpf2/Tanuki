@@ -8,14 +8,14 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class DestroyNotAlivePiecesPhase : Phase, IDestroyNotAlivePiecesPhase
+    public class GravityPhase : Phase, IGravityPhase
     {
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
         private IBoard _board;
 
-        public DestroyNotAlivePiecesPhase([NotNull] IEventEnqueuer eventEnqueuer, [NotNull] IEventFactory eventFactory) : base(-1, -1)
+        public GravityPhase([NotNull] IEventEnqueuer eventEnqueuer, [NotNull] IEventFactory eventFactory) : base(-1, -1)
         {
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
@@ -48,25 +48,38 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             foreach (IPiece piece in _board.GetPiecesSortedByRowThenByColumn())
             {
-                resolved = TryDestroyPiece(piece) || resolved;
+                resolved = TryMovePiece(piece) || resolved;
             }
 
             return resolved;
         }
 
-        private bool TryDestroyPiece([NotNull] IPiece piece)
+        private bool TryMovePiece([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
             InvalidOperationException.ThrowIfNull(_board);
 
-            if (piece.Alive)
+            Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
+            int fall = _board.ComputePieceFall(piece, sourceCoordinate);
+
+            if (fall == 0)
             {
                 return false;
             }
 
-            _board.Remove(piece);
+            int rowOffset = -fall;
+            const int columnOffset = 0;
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(piece, DestroyPieceReason.NotAlive));
+            _board.Move(piece, rowOffset, columnOffset);
+
+            _eventEnqueuer.Enqueue(
+                _eventFactory.GetMovePieceEvent(
+                    piece,
+                    rowOffset,
+                    columnOffset,
+                    MovePieceReason.Gravity
+                )
+            );
 
             return true;
         }

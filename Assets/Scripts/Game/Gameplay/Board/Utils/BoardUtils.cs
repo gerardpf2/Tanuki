@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Gameplay.Board.Pieces;
 using Infrastructure.System;
 using JetBrains.Annotations;
@@ -19,23 +20,36 @@ namespace Game.Gameplay.Board.Utils
                 coordinate.Column >= 0 && coordinate.Column < board.Columns;
         }
 
-        [NotNull, ItemNotNull]
-        public static IEnumerable<PiecePlacement> GetAllPieces([NotNull] this IReadonlyBoard board)
+        [NotNull, ItemNotNull] // Distinct pieces
+        public static IEnumerable<IPiece> GetPiecesSortedByRowThenByColumn([NotNull] this IReadonlyBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            return board.GetPiecesInRange(0, board.Rows - 1, 0, board.Columns - 1);
+            return board.PieceSourceCoordinates.OrderBy(SelectRow).ThenBy(SelectColumn).Select(SelectPiece);
+
+            int SelectRow(KeyValuePair<IPiece, Coordinate> pieceSourceCoordinate)
+            {
+                return pieceSourceCoordinate.Value.Row;
+            }
+
+            int SelectColumn(KeyValuePair<IPiece, Coordinate> pieceSourceCoordinate)
+            {
+                return pieceSourceCoordinate.Value.Column;
+            }
+
+            [NotNull]
+            IPiece SelectPiece(KeyValuePair<IPiece, Coordinate> pieceSourceCoordinate)
+            {
+                IPiece piece = pieceSourceCoordinate.Key;
+
+                InvalidOperationException.ThrowIfNull(piece);
+
+                return piece;
+            }
         }
 
-        [NotNull, ItemNotNull]
-        public static IEnumerable<PiecePlacement> GetPiecesInRow([NotNull] this IReadonlyBoard board, int row)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-
-            return board.GetPiecesInRange(row, row, 0, board.Columns - 1);
-        }
-
-        public static bool IsRowFull([NotNull] this IReadonlyBoard board, int row)
+        [NotNull]
+        public static IEnumerable<KeyValuePair<IPiece, int>> GetPiecesInRow([NotNull] this IReadonlyBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -49,11 +63,24 @@ namespace Game.Gameplay.Board.Utils
 
                 if (piece is null)
                 {
-                    return false;
+                    continue;
                 }
+
+                yield return new KeyValuePair<IPiece, int>(piece, column);
+            }
+        }
+
+        public static Coordinate GetPieceSourceCoordinate([NotNull] this IReadonlyBoard board, [NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            if (!board.PieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
+            {
+                InvalidOperationException.Throw("Piece cannot be found");
             }
 
-            return true;
+            return sourceCoordinate;
         }
 
         public static void GetPieceRowColumnOffset(
@@ -92,53 +119,6 @@ namespace Game.Gameplay.Board.Utils
             return fall;
         }
 
-        [NotNull, ItemNotNull]
-        private static IEnumerable<PiecePlacement> GetPiecesInRange(
-            [NotNull] this IReadonlyBoard board,
-            int rowStart,
-            int rowEnd,
-            int columnStart,
-            int columnEnd)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-
-            ICollection<IPiece> visitedPieces = new HashSet<IPiece>();
-
-            for (int row = rowStart; row <= rowEnd; ++row)
-            {
-                for (int column = columnStart; column <= columnEnd; ++column)
-                {
-                    Coordinate coordinate = new(row, column);
-
-                    IPiece piece = board.Get(coordinate);
-
-                    if (piece is null || visitedPieces.Contains(piece))
-                    {
-                        continue;
-                    }
-
-                    visitedPieces.Add(piece);
-
-                    PiecePlacement piecePlacement = new(row, column, piece);
-
-                    yield return piecePlacement;
-                }
-            }
-        }
-
-        private static Coordinate GetPieceSourceCoordinate([NotNull] this IReadonlyBoard board, [NotNull] IPiece piece)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-            ArgumentNullException.ThrowIfNull(piece);
-
-            if (!board.PieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
-            {
-                InvalidOperationException.Throw("Piece cannot be found");
-            }
-
-            return sourceCoordinate;
-        }
-
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         private static int ComputePieceFallImpl(
             [NotNull] this IReadonlyBoard board,
@@ -152,7 +132,9 @@ namespace Game.Gameplay.Board.Utils
 
             for (int row = coordinate.Row - rowsAboveBoard - 1; row >= 0; --row)
             {
-                IPiece piece = board.Get(new Coordinate(row, coordinate.Column));
+                Coordinate coordinateBelow = new(row, coordinate.Column);
+
+                IPiece piece = board.Get(coordinateBelow);
 
                 if (piece is not null && piece != ignorePiece)
                 {

@@ -75,5 +75,10 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             return new DestroyPieceAction(destroyPieceReason, piece, _boardView);
         }
+
+        public IAction GetMovePieceAction(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        {
+            return new MovePieceAction(_boardView, piece, rowOffset, columnOffset, movePieceReason);
+        }
     }
 }
