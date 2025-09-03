@@ -14,5 +14,8 @@ namespace Game.Gameplay.View.EventResolution
 
         [NotNull]
         IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver();
+
+        [NotNull]
+        IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver();
     }
 }

@@ -1,6 +1,5 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Board
@@ -11,7 +10,6 @@ namespace Game.Gameplay.View.Board
 
         void Uninitialize();
 
-        [NotNull]
-        GameObject InstantiatePiece(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
+        void InstantiatePiece(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
     }
 }

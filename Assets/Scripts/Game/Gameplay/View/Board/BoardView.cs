@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Infrastructure.System.Exceptions;
@@ -9,6 +10,8 @@ namespace Game.Gameplay.View.Board
     public class BoardView : IBoardView
     {
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
+
+        [NotNull] private readonly IDictionary<IPiece, GameObject> _pieceInstances = new Dictionary<IPiece, GameObject>();
 
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
@@ -48,24 +51,42 @@ namespace Game.Gameplay.View.Board
             _piecesParent = null;
         }
 
-        public GameObject InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
+        public GameObject GetPieceInstance([NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            if (!_pieceInstances.TryGetValue(piece, out GameObject pieceInstance))
+            {
+                InvalidOperationException.Throw("Piece cannot be found");
+            }
+
+            InvalidOperationException.ThrowIfNull(pieceInstance);
+
+            return pieceInstance;
+        }
+
+        public void InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
         {
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_board);
-            InvalidOperationException.ThrowIfNull(_piecesParent);
+
+            if (_pieceInstances.ContainsKey(piece))
+            {
+                InvalidOperationException.Throw("Piece has already been added");
+            }
 
             _board.Add(piece, sourceCoordinate);
 
             Vector3 position = GetWorldPosition(sourceCoordinate);
-            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
+            GameObject pieceInstance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
-                instance,
+                pieceInstance,
                 $"Cannot instantiate piece with Prefab: {prefab.name}"
             );
 
-            return instance;
+            _pieceInstances.Add(piece, pieceInstance);
         }
 
         private static Vector3 GetWorldPosition(Coordinate sourceCoordinate)

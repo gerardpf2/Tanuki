@@ -88,7 +88,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             InvalidOperationException.ThrowIfNull(_targetPiece);
 
             Coordinate sourceCoordinate = new(_board.Rows, column);
-            int fall = _board.ComputeFall(_targetPiece, sourceCoordinate);
+            int fall = _board.ComputePieceFall(_targetPiece, sourceCoordinate);
             Coordinate lockSourceCoordinate = new(sourceCoordinate.Row - fall, sourceCoordinate.Column);
 
             return lockSourceCoordinate;

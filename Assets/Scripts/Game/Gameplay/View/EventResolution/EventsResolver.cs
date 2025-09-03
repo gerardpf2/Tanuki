@@ -42,6 +42,9 @@ namespace Game.Gameplay.View.EventResolution
                 case LockPlayerPieceEvent lockPlayerPieceEvent:
                     _eventResolverFactory.GetLockPlayerPieceEventResolver().Resolve(lockPlayerPieceEvent, OnComplete);
                     break;
+                case DamagePieceEvent damagePieceEvent:
+                    _eventResolverFactory.GetDamagePieceEventResolver().Resolve(damagePieceEvent, OnComplete);
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);
                     return;

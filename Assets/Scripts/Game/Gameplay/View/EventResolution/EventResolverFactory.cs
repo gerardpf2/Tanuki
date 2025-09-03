@@ -30,5 +30,10 @@ namespace Game.Gameplay.View.EventResolution
         {
             return new LockPlayerPieceEventResolver(_actionFactory);
         }
+
+        public IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver()
+        {
+            return new DamagePieceEventResolver(_actionFactory);
+        }
     }
 }

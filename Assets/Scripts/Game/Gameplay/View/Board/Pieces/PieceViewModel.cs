@@ -35,6 +35,13 @@ namespace Game.Gameplay.View.Board.Pieces
             onComplete?.Invoke();
         }
 
+        public void OnDamaged(Action onComplete)
+        {
+            // TODO
+
+            onComplete?.Invoke();
+        }
+
         protected virtual void SyncState() { }
     }
 }

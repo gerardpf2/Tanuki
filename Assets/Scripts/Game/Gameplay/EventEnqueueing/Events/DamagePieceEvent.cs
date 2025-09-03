@@ -2,11 +2,11 @@ using Game.Gameplay.Board.Pieces;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {
-    public class InstantiatePlayerPieceEvent : IEvent
+    public class DamagePieceEvent : IEvent
     {
         public readonly IPiece Piece;
 
-        public InstantiatePlayerPieceEvent(IPiece piece)
+        public DamagePieceEvent(IPiece piece)
         {
             Piece = piece;
         }

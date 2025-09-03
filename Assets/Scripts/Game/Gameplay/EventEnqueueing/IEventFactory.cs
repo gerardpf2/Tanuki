@@ -20,5 +20,8 @@ namespace Game.Gameplay.EventEnqueueing
 
         [NotNull]
         IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate);
+
+        [NotNull]
+        IEvent GetDamagePieceEvent(IPiece piece);
     }
 }
