@@ -1,5 +1,6 @@
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Pieces
 {
@@ -13,6 +14,11 @@ namespace Game.Gameplay.Board.Pieces
          * Can only be damaged if the eye is hit
          *
          */
+
+        private const string CustomDataEyeMovementDirectionUpKey = "EyeMovementDirectionUp";
+        private const string CustomDataEyeRowOffsetKey = "EyeRowOffset";
+
+        [NotNull] private readonly IConverter _converter;
 
         private int _eyeRowOffset;
 
@@ -37,15 +43,11 @@ namespace Game.Gameplay.Board.Pieces
             }
         }
 
-        public Test(
-            bool eyeMovementDirectionUp,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0), Is(ComparisonOperator.LessThan, ITest.Rows)] int eyeRowOffset) : base(PieceType.Test, ITest.Rows, 1)
+        public Test([NotNull] IConverter converter) : base(converter, PieceType.Test, ITest.Rows, 1)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
-            ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.LessThan, ITest.Rows);
+            ArgumentNullException.ThrowIfNull(converter);
 
-            EyeMovementDirectionUp = eyeMovementDirectionUp;
-            EyeRowOffset = eyeRowOffset;
+            _converter = converter;
         }
 
         public void MoveEye()
@@ -64,6 +66,40 @@ namespace Game.Gameplay.Board.Pieces
             else
             {
                 --EyeRowOffset;
+            }
+        }
+
+        protected override void AddCustomDataEntries()
+        {
+            base.AddCustomDataEntries();
+
+            AddCustomDataEntry(CustomDataEyeMovementDirectionUpKey, EyeMovementDirectionUp);
+            AddCustomDataEntry(CustomDataEyeRowOffsetKey, EyeRowOffset);
+        }
+
+        protected override bool ProcessCustomDataEntry(string key, string value)
+        {
+            switch (key)
+            {
+                case CustomDataEyeMovementDirectionUpKey:
+                {
+                    EyeMovementDirectionUp = _converter.Convert<bool>(value);
+
+                    return true;
+                }
+                case CustomDataEyeRowOffsetKey:
+                {
+                    int eyeRowOffset = _converter.Convert<int>(value);
+
+                    ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
+                    ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.LessThan, ITest.Rows);
+
+                    EyeRowOffset = eyeRowOffset;
+
+                    return true;
+                }
+                default:
+                    return base.ProcessCustomDataEntry(key, value);
             }
         }
 

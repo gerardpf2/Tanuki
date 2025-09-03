@@ -136,7 +136,8 @@ namespace Game.Root.UseCases
                         r.Resolve<IConfigValueGetter>(),
                         r.Resolve<ICoroutineRunner>(),
                         r.Resolve<IBoardDefinitionGetter>(),
-                        r.Resolve<IPieceViewDefinitionGetter>()
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IConverter>()
                     )
                 )
             );

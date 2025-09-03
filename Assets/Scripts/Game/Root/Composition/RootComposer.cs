@@ -10,7 +10,9 @@ using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
+using Infrastructure.System;
 using Infrastructure.System.Exceptions;
+using Infrastructure.System.Parsing;
 using Infrastructure.Tweening.Composition;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Composition;
@@ -26,6 +28,7 @@ namespace Game.Root.Composition
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
+        [NotNull] private readonly IConverter _converter;
 
         public RootComposer(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
@@ -33,7 +36,8 @@ namespace Game.Root.Composition
             [NotNull] IConfigValueGetter configValueGetter,
             [NotNull] ICoroutineRunner coroutineRunner,
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
+            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
+            [NotNull] IConverter converter)
         {
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
@@ -41,6 +45,7 @@ namespace Game.Root.Composition
             ArgumentNullException.ThrowIfNull(coroutineRunner);
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(converter);
 
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
@@ -48,6 +53,21 @@ namespace Game.Root.Composition
             _coroutineRunner = coroutineRunner;
             _boardDefinitionGetter = boardDefinitionGetter;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
+            _converter = converter;
+        }
+
+        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddRules(ruleAdder, ruleFactory);
+
+            // System services need to be registered in here because it cannot have a composer (because of assembly circular dependencies)
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IParser>(_ => new JsonParser()));
+
+            ruleAdder.Add(ruleFactory.GetInstance(_converter));
         }
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()

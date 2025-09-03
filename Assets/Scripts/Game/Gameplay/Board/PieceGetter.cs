@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
+using Infrastructure.System;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
@@ -16,21 +19,57 @@ namespace Game.Gameplay.Board
             _pieceFactory = pieceFactory;
         }
 
-        public IPiece Get(PieceType pieceType)
+        public IPiece Get(PieceType pieceType, IEnumerable<KeyValuePair<string, string>> customData)
         {
+            IPiece piece;
+
             switch (pieceType)
             {
                 case PieceType.Test:
-                    return _pieceFactory.GetTest();
+                {
+                    piece = _pieceFactory.GetTest(customData);
+
+                    break;
+                }
                 case PieceType.PlayerBlock11:
-                    return _pieceFactory.GetPlayerBlock11();
+                {
+                    ThrowExceptionIfCustomDataIsNotNull();
+
+                    piece = _pieceFactory.GetPlayerBlock11();
+
+                    break;
+                }
                 case PieceType.PlayerBlock12:
-                    return _pieceFactory.GetPlayerBlock12();
+                {
+                    ThrowExceptionIfCustomDataIsNotNull();
+
+                    piece = _pieceFactory.GetPlayerBlock12();
+
+                    break;
+                }
                 case PieceType.PlayerBlock21:
-                    return _pieceFactory.GetPlayerBlock21();
+                {
+                    ThrowExceptionIfCustomDataIsNotNull();
+
+                    piece = _pieceFactory.GetPlayerBlock21();
+
+                    break;
+                }
                 default:
                     ArgumentOutOfRangeException.Throw(pieceType);
                     return null;
+            }
+
+            InvalidOperationException.ThrowIfNot(piece.Type, ComparisonOperator.EqualTo, pieceType);
+
+            return piece;
+
+            void ThrowExceptionIfCustomDataIsNotNull()
+            {
+                if (customData is not null)
+                {
+                    ArgumentException.Throw($"Null expected. {pieceType} does not support it", nameof(customData));
+                }
             }
         }
     }
