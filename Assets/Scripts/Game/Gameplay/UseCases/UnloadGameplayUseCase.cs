@@ -69,7 +69,7 @@ namespace Game.Gameplay.UseCases
 
         private void UnloadScreen()
         {
-            _screenLoader.Unload("Gameplay"); // TODO: Key const
+            _screenLoader.Unload(GameplayConstants.ScreenKey);
         }
     }
 }

@@ -104,7 +104,7 @@ namespace Game.Gameplay.UseCases
 
         private void LoadScreen(GameplayViewData gameplayViewData)
         {
-            _screenLoader.Load("Gameplay", gameplayViewData); // TODO: Key const
+            _screenLoader.Load(GameplayConstants.ScreenKey, gameplayViewData);
         }
     }
 }

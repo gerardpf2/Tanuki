@@ -6,13 +6,13 @@ using Game.Gameplay.View.Board;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
+using Infrastructure.DependencyInjection.Composition;
 using Infrastructure.Logging.Composition;
 using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
-using Infrastructure.System.Parsing;
 using Infrastructure.Tweening.Composition;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Composition;
@@ -56,20 +56,6 @@ namespace Game.Root.Composition
             _converter = converter;
         }
 
-        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
-        {
-            ArgumentNullException.ThrowIfNull(ruleAdder);
-            ArgumentNullException.ThrowIfNull(ruleFactory);
-
-            base.AddRules(ruleAdder, ruleFactory);
-
-            // TODO: Add SystemComposer (inside DependencyInjection assembly to avoid circular dependency)
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IParser>(_ => new JsonParser()));
-
-            ruleAdder.Add(ruleFactory.GetInstance(_converter));
-        }
-
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
             return base
@@ -78,7 +64,8 @@ namespace Game.Root.Composition
                 .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement))
                 .Append(new ConfiguringComposer(_configValueGetter))
                 .Append(new TweeningComposer())
-                .Append(new UnityComposer(_coroutineRunner));
+                .Append(new UnityComposer(_coroutineRunner))
+                .Append(new SystemComposer(_converter));
         }
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
