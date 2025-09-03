@@ -2,15 +2,9 @@ using Game.Gameplay.Board.Pieces;
 
 namespace Game.Gameplay.Board
 {
-    public interface IBoard
+    public interface IBoard : IReadonlyBoard
     {
-        int Rows { get; }
-
-        int Columns { get; }
-
         void Add(IPiece piece, Coordinate sourceCoordinate);
-
-        IPiece Get(Coordinate coordinate);
 
         void Remove(IPiece piece);
 

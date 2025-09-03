@@ -1,12 +1,11 @@
+using JetBrains.Annotations;
+
 namespace Game.Gameplay.Board
 {
     public interface IBoardController
     {
-        int Rows { get; }
-
-        int Columns { get; }
-
-        void Initialize(string boardId);
+        [NotNull]
+        IReadonlyBoard Initialize(string boardId);
 
         void ResolveInstantiateInitialAndCascade();
     }

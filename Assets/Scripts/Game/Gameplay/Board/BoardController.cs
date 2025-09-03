@@ -13,26 +13,6 @@ namespace Game.Gameplay.Board
         private Board _board;
         private IEnumerable<IPiecePlacement> _piecePlacements;
 
-        public int Rows
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_board);
-
-                return _board.Rows;
-            }
-        }
-
-        public int Columns
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_board);
-
-                return _board.Columns;
-            }
-        }
-
         public BoardController(
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
             [NotNull] IPhaseResolver phaseResolver)
@@ -44,12 +24,16 @@ namespace Game.Gameplay.Board
             _phaseResolver = phaseResolver;
         }
 
-        public void Initialize(string boardId)
+        public IReadonlyBoard Initialize(string boardId)
         {
+            // TODO: Check allow multiple Initialize. Add Clear ¿?
+
             IBoardDefinition boardDefinition = _boardDefinitionGetter.Get(boardId);
 
             _board = new Board(boardDefinition.Rows, boardDefinition.Columns);
             _piecePlacements = boardDefinition.PiecePlacements;
+
+            return _board;
         }
 
         public void ResolveInstantiateInitialAndCascade()

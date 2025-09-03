@@ -10,11 +10,16 @@ namespace Game.Gameplay.Board
     public class Board : IBoard
     {
         [NotNull] private readonly IDictionary<IPiece, Coordinate> _pieceSourceCoordinates = new Dictionary<IPiece, Coordinate>();
+        [NotNull] private readonly SortedList<int, int> _piecesPerRowSorted = new();
         [NotNull] private readonly IPiece[,] _pieces;
 
+        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Rows { get; }
 
+        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Columns { get; }
+
+        public int HighestNonEmptyRow => _piecesPerRowSorted.Count > 0 ? _piecesPerRowSorted.Keys[^1] : 0;
 
         public Board(
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
@@ -27,6 +32,16 @@ namespace Game.Gameplay.Board
             Columns = columns;
 
             _pieces = new IPiece[rows, columns];
+        }
+
+        public IPiece Get(Coordinate coordinate)
+        {
+            if (!this.IsInside(coordinate))
+            {
+                InvalidOperationException.Throw(); // TODO
+            }
+
+            return _pieces[coordinate.Row, coordinate.Column];
         }
 
         public void Add([NotNull] IPiece piece, Coordinate sourceCoordinate)
@@ -49,16 +64,6 @@ namespace Game.Gameplay.Board
 
                 Set(piece, coordinate);
             }
-        }
-
-        public IPiece Get(Coordinate coordinate)
-        {
-            if (!this.IsInside(coordinate))
-            {
-                InvalidOperationException.Throw(); // TODO
-            }
-
-            return _pieces[coordinate.Row, coordinate.Column];
         }
 
         public void Remove([NotNull] IPiece piece)
@@ -107,6 +112,42 @@ namespace Game.Gameplay.Board
             }
 
             _pieces[coordinate.Row, coordinate.Column] = piece;
+
+            UpdatePiecesPerRowSorted(coordinate.Row, piece is not null);
+        }
+
+        private void UpdatePiecesPerRowSorted(int updatedRow, bool pieceAdded)
+        {
+            if (pieceAdded)
+            {
+                if (!_piecesPerRowSorted.TryAdd(updatedRow, 1))
+                {
+                    ++_piecesPerRowSorted[updatedRow];
+                }
+            }
+            else
+            {
+                if (!_piecesPerRowSorted.ContainsKey(updatedRow))
+                {
+                    InvalidOperationException.Throw(); // TODO
+                }
+
+                int piecesRow = _piecesPerRowSorted[updatedRow];
+
+                if (piecesRow <= 0)
+                {
+                    InvalidOperationException.Throw(); // TODO
+                }
+
+                if (piecesRow == 1)
+                {
+                    _piecesPerRowSorted.Remove(updatedRow);
+                }
+                else
+                {
+                    _piecesPerRowSorted[updatedRow] = piecesRow - 1;
+                }
+            }
         }
     }
 }
