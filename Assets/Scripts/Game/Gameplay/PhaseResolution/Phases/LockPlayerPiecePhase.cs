@@ -61,7 +61,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             Coordinate lockSourceCoordinate = GetLockSourceCoordinate(resolveContext.Column.Value);
 
-            _board.Add(_targetPiece, lockSourceCoordinate); // TODO: Resize if needed
+            _board.Add(_targetPiece, lockSourceCoordinate);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(_targetPiece, lockSourceCoordinate));
 

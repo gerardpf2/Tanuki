@@ -15,6 +15,7 @@ namespace Game.Gameplay.UseCases
     public class LoadGameplay : ILoadGameplay
     {
         [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+        [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
@@ -25,6 +26,7 @@ namespace Game.Gameplay.UseCases
 
         public LoadGameplay(
             [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
+            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
@@ -34,6 +36,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
@@ -43,6 +46,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(screenLoader);
 
             _boardDefinitionGetter = boardDefinitionGetter;
+            _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
@@ -63,7 +67,7 @@ namespace Game.Gameplay.UseCases
         private IReadonlyBoard PrepareModel(string boardId)
         {
             IBoardDefinition boardDefinition = _boardDefinitionGetter.Get(boardId);
-            IBoard board = new Board.Board(boardDefinition.Rows, boardDefinition.Columns);
+            IBoard board = new Board.Board(_pieceCachedPropertiesGetter, boardDefinition.Rows, boardDefinition.Columns);
 
             _phaseResolver.Initialize(board, boardDefinition.PiecePlacements);
             _playerPiecesBag.Initialize();

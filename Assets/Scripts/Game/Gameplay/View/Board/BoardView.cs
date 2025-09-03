@@ -8,6 +8,8 @@ namespace Game.Gameplay.View.Board
 {
     public class BoardView : IBoardView
     {
+        [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
+
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
 
@@ -21,13 +23,20 @@ namespace Game.Gameplay.View.Board
             }
         }
 
+        public BoardView([NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter)
+        {
+            ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
+
+            _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
+        }
+
         public void Initialize([NotNull] IReadonlyBoard board)
         {
             // TODO: Check allow multiple Initialize. Add Clear ¿?
 
             ArgumentNullException.ThrowIfNull(board);
 
-            _board = new Gameplay.Board.Board(board.Rows, board.Columns);
+            _board = new Gameplay.Board.Board(_pieceCachedPropertiesGetter, board.Rows, board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 
