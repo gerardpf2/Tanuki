@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public interface IBoardViewController
+    public interface IBoardView : IReadonlyBoardView
     {
         void Initialize(IReadonlyBoard board);
 
         [NotNull]
-        GameObject Instantiate(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
+        GameObject InstantiatePiece(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
     }
 }

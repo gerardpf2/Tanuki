@@ -7,6 +7,12 @@ namespace Game.Gameplay.View.EventResolution
     public interface IEventResolverFactory
     {
         [NotNull]
-        IEventResolver<InstantiateEvent> GetInstantiate();
+        IEventResolver<InstantiatePieceEvent> GetInstantiatePieceEventResolver();
+
+        [NotNull]
+        IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPieceEventResolver();
+
+        [NotNull]
+        IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver();
     }
 }

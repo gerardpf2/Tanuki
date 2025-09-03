@@ -19,13 +19,20 @@ namespace Game.Gameplay.View.Board.Pieces
             SyncState();
         }
 
-        public void OnInstantiated(InstantiateReason instantiateReason, Action onComplete)
+        public void OnInstantiated(InstantiatePieceReason instantiatePieceReason, Action onComplete)
         {
             // TODO
 
             onComplete?.Invoke();
         }
 
-        protected abstract void SyncState();
+        public void OnDestroyed(Action onComplete)
+        {
+            // TODO
+
+            onComplete?.Invoke();
+        }
+
+        protected virtual void SyncState() { }
     }
 }

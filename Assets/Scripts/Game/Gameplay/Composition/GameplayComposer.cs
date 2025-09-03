@@ -2,10 +2,13 @@ using Game.Gameplay.Board;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
+using Game.Gameplay.Player;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
+using Game.Gameplay.View.EventResolution.EventResolvers;
+using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -37,15 +40,6 @@ namespace Game.Gameplay.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IBoardController>(r =>
-                    new BoardController(
-                        r.Resolve<IBoardDefinitionGetter>(),
-                        r.Resolve<IPhaseResolver>()
-                    )
-                )
-            );
-
             ruleAdder.Add(ruleFactory.GetInstance(_boardDefinitionGetter));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceFactory>(_ => new PieceFactory()));
@@ -65,8 +59,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IInstantiateInitial>(r =>
-                    new InstantiateInitial(
+                ruleFactory.GetSingleton<IInstantiateInitialPiecesPhase>(r =>
+                    new InstantiateInitialPiecesPhase(
                         r.Resolve<IPieceGetter>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
@@ -75,21 +69,65 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IPhaseResolver>(r =>
-                    new PhaseResolver(
-                        r.Resolve<IInstantiateInitial>()
+                ruleFactory.GetSingleton<IInstantiatePlayerPiecePhase>(r =>
+                    new InstantiatePlayerPiecePhase(
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>(),
+                        r.Resolve<IPlayerPiecesBag>()
                     )
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IBoardViewController>(_ => new BoardViewController()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ILockPlayerPiecePhase>(r =>
+                    new LockPlayerPiecePhase(
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>(),
+                        r.Resolve<IPlayerPiecesBag>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhaseResolver>(r =>
+                    new PhaseResolver(
+                        r.Resolve<IInstantiateInitialPiecesPhase>(),
+                        r.Resolve<ILockPlayerPiecePhase>(),
+                        r.Resolve<IInstantiatePlayerPiecePhase>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerPiecesBag>(r =>
+                    new PlayerPiecesBag(
+                        r.Resolve<IPieceGetter>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoardView>(_ => new BoardView()));
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ICameraController>(r =>
+                ruleFactory.GetSingleton(r =>
                     new CameraController(
+                        r.Resolve<IBoardView>(),
                         r.Resolve<ICameraGetter>()
+                    )
+                )
+            );
+            ruleAdder.Add(ruleFactory.GetTo<ICameraController, CameraController>());
+            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewPropertiesGetter, CameraController>());
+            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewPropertiesSetter, CameraController>());
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IActionFactory>(r =>
+                    new ActionFactory(
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<IPlayerView>()
                     )
                 )
             );
@@ -106,8 +144,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventResolverFactory>(r =>
                     new EventResolverFactory(
-                        r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IBoardViewController>()
+                        r.Resolve<IActionFactory>()
                     )
                 )
             );
@@ -115,7 +152,17 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventsResolver>(r =>
                     new EventsResolver(
-                        r.Resolve<IEventResolverFactory>())
+                        r.Resolve<IEventResolverFactory>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerView>(r =>
+                    new PlayerView(
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraBoardViewPropertiesGetter>()
+                    )
                 )
             );
         }
@@ -130,6 +177,13 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplay>(r =>
                     new LoadGameplay(
+                        r.Resolve<IBoardDefinitionGetter>(),
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPlayerPiecesBag>(),
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<IPlayerView>(),
+                        r.Resolve<ICameraController>(),
+                        r.Resolve<IEventListener>(),
                         r.Resolve<IScreenLoader>()
                     )
                 )
@@ -138,10 +192,18 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IBoardController>(),
-                        r.Resolve<IBoardViewController>(),
-                        r.Resolve<ICameraController>(),
-                        r.Resolve<IEventListener>()
+                        r.Resolve<ICameraBoardViewPropertiesSetter>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<PlayerInputHandler>((r, vm) =>
+                    vm.Inject(
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerView>(),
+                        r.Resolve<IScreenPropertiesGetter>()
                     )
                 )
             );

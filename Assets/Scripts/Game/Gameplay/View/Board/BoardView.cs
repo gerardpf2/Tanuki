@@ -6,10 +6,20 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public class BoardViewController : IBoardViewController
+    public class BoardView : IBoardView
     {
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
+
+        public IReadonlyBoard Board
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_board);
+
+                return _board;
+            }
+        }
 
         public void Initialize([NotNull] IReadonlyBoard board)
         {
@@ -21,7 +31,7 @@ namespace Game.Gameplay.View.Board
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 
-        public GameObject Instantiate([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
+        public GameObject InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
         {
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
@@ -30,7 +40,7 @@ namespace Game.Gameplay.View.Board
 
             _board.Add(piece, sourceCoordinate);
 
-            Vector3 position = new(sourceCoordinate.Column, sourceCoordinate.Row);
+            Vector3 position = GetWorldPosition(sourceCoordinate);
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
@@ -39,6 +49,11 @@ namespace Game.Gameplay.View.Board
             );
 
             return instance;
+        }
+
+        private static Vector3 GetWorldPosition(Coordinate sourceCoordinate)
+        {
+            return new Vector3(sourceCoordinate.Column, sourceCoordinate.Row);
         }
     }
 }

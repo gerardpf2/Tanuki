@@ -27,6 +27,8 @@ namespace Infrastructure.Unity.Composition
             ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IDeltaTimeGetter>(_ => new DeltaTimeGetter()));
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IScreenPropertiesGetter>(_ => new ScreenPropertiesGetter()));
         }
     }
 }

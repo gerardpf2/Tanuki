@@ -6,6 +6,8 @@ namespace Game.Gameplay.View.Board.Pieces
     {
         protected override void SyncState()
         {
+            base.SyncState();
+
             // TODO: Eye row offset, etc
         }
     }

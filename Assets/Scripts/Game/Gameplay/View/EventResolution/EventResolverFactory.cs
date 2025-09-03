@@ -1,5 +1,4 @@
 using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.View.Board;
 using Game.Gameplay.View.EventResolution.EventResolvers;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -10,23 +9,28 @@ namespace Game.Gameplay.View.EventResolution
     {
         // TODO: Reuse instead of new ¿?
 
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
-        [NotNull] private readonly IBoardViewController _boardViewController;
+        [NotNull] private readonly IActionFactory _actionFactory;
 
-        public EventResolverFactory(
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] IBoardViewController boardViewController)
+        public EventResolverFactory([NotNull] IActionFactory actionFactory)
         {
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(boardViewController);
+            ArgumentNullException.ThrowIfNull(actionFactory);
 
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
-            _boardViewController = boardViewController;
+            _actionFactory = actionFactory;
         }
 
-        public IEventResolver<InstantiateEvent> GetInstantiate()
+        public IEventResolver<InstantiatePieceEvent> GetInstantiatePieceEventResolver()
         {
-            return new InstantiateEventResolver(_pieceViewDefinitionGetter, _boardViewController);
+            return new InstantiatePieceEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPieceEventResolver()
+        {
+            return new InstantiatePlayerPieceEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver()
+        {
+            return new LockPlayerPieceEventResolver(_actionFactory);
         }
     }
 }

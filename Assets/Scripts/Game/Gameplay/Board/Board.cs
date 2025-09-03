@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Infrastructure.System;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board
 {
@@ -13,13 +16,31 @@ namespace Game.Gameplay.Board
         [NotNull] private readonly SortedList<int, int> _piecesPerRowSorted = new();
         [NotNull] private readonly IPiece[,] _pieces;
 
+        private int _highestNonEmptyRow;
+
+        public event Action OnHighestNonEmptyRowUpdated;
+
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Rows { get; }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Columns { get; }
 
-        public int HighestNonEmptyRow => _piecesPerRowSorted.Count > 0 ? _piecesPerRowSorted.Keys[^1] : 0;
+        public int HighestNonEmptyRow
+        {
+            get => _highestNonEmptyRow;
+            private set
+            {
+                if (HighestNonEmptyRow == value)
+                {
+                    return;
+                }
+
+                _highestNonEmptyRow = value;
+
+                OnHighestNonEmptyRowUpdated?.Invoke();
+            }
+        }
 
         public Board(
             [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
@@ -114,6 +135,8 @@ namespace Game.Gameplay.Board
             _pieces[coordinate.Row, coordinate.Column] = piece;
 
             UpdatePiecesPerRowSorted(coordinate.Row, piece is not null);
+
+            HighestNonEmptyRow = _piecesPerRowSorted.Count > 0 ? _piecesPerRowSorted.Keys[^1] : 0;
         }
 
         private void UpdatePiecesPerRowSorted(int updatedRow, bool pieceAdded)

@@ -8,16 +8,19 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class InstantiateInitial : IInstantiateInitial
+    public class InstantiateInitialPiecesPhase : Phase, IInstantiateInitialPiecesPhase
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        public InstantiateInitial(
+        private IBoard _board;
+        private IEnumerable<IPiecePlacement> _piecePlacements;
+
+        public InstantiateInitialPiecesPhase(
             [NotNull] IPieceGetter pieceGetter,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory)
+            [NotNull] IEventFactory eventFactory) : base(1, -1)
         {
             ArgumentNullException.ThrowIfNull(pieceGetter);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
@@ -28,29 +31,52 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _eventFactory = eventFactory;
         }
 
-        public void Resolve([NotNull] IBoard board, [NotNull, ItemNotNull] IEnumerable<IPiecePlacement> piecePlacements)
+        public void Initialize(
+            [NotNull] IBoard board,
+            [NotNull, ItemNotNull] IEnumerable<IPiecePlacement> piecePlacements)
         {
+            // TODO: Check allow multiple Initialize. Add Clear ¿?
+
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(piecePlacements);
+
+            ICollection<IPiecePlacement> piecePlacementsCopy = new List<IPiecePlacement>();
 
             foreach (IPiecePlacement piecePlacement in piecePlacements)
             {
                 ArgumentNullException.ThrowIfNull(piecePlacement);
 
+                piecePlacementsCopy.Add(piecePlacement);
+            }
+
+            _board = board;
+            _piecePlacements = piecePlacementsCopy;
+        }
+
+        protected override bool ResolveImpl(ResolveContext _)
+        {
+            InvalidOperationException.ThrowIfNull(_board);
+            InvalidOperationException.ThrowIfNull(_piecePlacements);
+
+            foreach (IPiecePlacement piecePlacement in _piecePlacements)
+            {
+                InvalidOperationException.ThrowIfNull(piecePlacement);
+
                 IPiece piece = _pieceGetter.Get(piecePlacement.PieceType);
                 Coordinate sourceCoordinate = new(piecePlacement.Row, piecePlacement.Column);
 
-                board.Add(piece, sourceCoordinate);
+                _board.Add(piece, sourceCoordinate);
 
                 _eventEnqueuer.Enqueue(
-                    _eventFactory.GetInstantiate(
+                    _eventFactory.GetInstantiatePieceEvent(
                         piece,
-                        piecePlacement.PieceType,
                         sourceCoordinate,
-                        InstantiateReason.Initialize
+                        InstantiatePieceReason.Initial
                     )
                 );
             }
+
+            return true;
         }
     }
 }

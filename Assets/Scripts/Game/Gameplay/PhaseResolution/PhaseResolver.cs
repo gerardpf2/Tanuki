@@ -8,22 +8,74 @@ namespace Game.Gameplay.PhaseResolution
 {
     public class PhaseResolver : IPhaseResolver
     {
-        [NotNull] private readonly IInstantiateInitial _instantiateInitial;
+        [NotNull] private readonly IInstantiateInitialPiecesPhase _instantiateInitialPiecesPhase;
+        [NotNull] private readonly ILockPlayerPiecePhase _lockPlayerPiecePhase;
+        [NotNull] private readonly IInstantiatePlayerPiecePhase _instantiatePlayerPiecePhase;
 
-        public PhaseResolver([NotNull] IInstantiateInitial instantiateInitial)
+        [NotNull, ItemNotNull] private readonly IReadOnlyList<IPhase> _phases;
+
+        public PhaseResolver(
+            [NotNull] IInstantiateInitialPiecesPhase instantiateInitialPiecesPhase,
+            [NotNull] ILockPlayerPiecePhase lockPlayerPiecePhase,
+            [NotNull] IInstantiatePlayerPiecePhase instantiatePlayerPiecePhase)
         {
-            ArgumentNullException.ThrowIfNull(instantiateInitial);
+            ArgumentNullException.ThrowIfNull(instantiateInitialPiecesPhase);
+            ArgumentNullException.ThrowIfNull(lockPlayerPiecePhase);
+            ArgumentNullException.ThrowIfNull(instantiatePlayerPiecePhase);
 
-            _instantiateInitial = instantiateInitial;
+            _instantiateInitialPiecesPhase = instantiateInitialPiecesPhase;
+            _lockPlayerPiecePhase = lockPlayerPiecePhase;
+            _instantiatePlayerPiecePhase = instantiatePlayerPiecePhase;
+
+            _phases = new List<IPhase>
+            {
+                _instantiateInitialPiecesPhase,
+                _lockPlayerPiecePhase,
+                _instantiatePlayerPiecePhase
+            };
         }
 
-        public void ResolveInstantiateInitialAndCascade(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
+        public void Initialize(IBoard board, IEnumerable<IPiecePlacement> piecePlacements)
         {
-            _instantiateInitial.Resolve(board, piecePlacements);
+            // TODO: Check allow multiple Initialize. Add Clear ¿?
 
-            ResolveCascade(board);
+            _instantiateInitialPiecesPhase.Initialize(board, piecePlacements);
+            _lockPlayerPiecePhase.Initialize(board);
+            _instantiatePlayerPiecePhase.Initialize();
         }
 
-        public void ResolveCascade(IBoard board) { }
+        public void Resolve(ResolveContext resolveContext)
+        {
+            NotifyBeginIteration();
+
+            int index = 0;
+
+            while (index < _phases.Count)
+            {
+                IPhase phase = _phases[index];
+
+                bool resolved = phase.Resolve(resolveContext);
+
+                index = resolved ? 0 : index + 1;
+            }
+
+            NotifyEndIteration();
+        }
+
+        private void NotifyBeginIteration()
+        {
+            foreach (IPhase phase in _phases)
+            {
+                phase.OnBeginIteration();
+            }
+        }
+
+        private void NotifyEndIteration()
+        {
+            foreach (IPhase phase in _phases)
+            {
+                phase.OnEndIteration();
+            }
+        }
     }
 }
