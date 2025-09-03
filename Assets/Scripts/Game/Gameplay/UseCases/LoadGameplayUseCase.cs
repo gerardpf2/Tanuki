@@ -18,7 +18,7 @@ namespace Game.Gameplay.UseCases
     {
         [NotNull] private readonly IUnloadGameplayUseCase _unloadGameplayUseCase;
         [NotNull] private readonly IBoardParser _boardParser;
-        [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+        [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
@@ -30,7 +30,7 @@ namespace Game.Gameplay.UseCases
         public LoadGameplayUseCase(
             [NotNull] IUnloadGameplayUseCase unloadGameplayUseCase,
             [NotNull] IBoardParser boardParser,
-            [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
+            [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
@@ -41,7 +41,7 @@ namespace Game.Gameplay.UseCases
         {
             ArgumentNullException.ThrowIfNull(unloadGameplayUseCase);
             ArgumentNullException.ThrowIfNull(boardParser);
-            ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
@@ -52,7 +52,7 @@ namespace Game.Gameplay.UseCases
 
             _unloadGameplayUseCase = unloadGameplayUseCase;
             _boardParser = boardParser;
-            _boardDefinitionGetter = boardDefinitionGetter;
+            _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
@@ -62,19 +62,20 @@ namespace Game.Gameplay.UseCases
             _screenLoader = screenLoader;
         }
 
-        public void Resolve(string boardId)
+        public void Resolve(string id)
         {
             _unloadGameplayUseCase.Resolve();
 
-            IReadonlyBoard board = PrepareModel(boardId);
+            IReadonlyBoard board = PrepareModel(id);
             GameplayViewData gameplayViewData = PrepareView(board);
 
             LoadScreen(gameplayViewData);
         }
 
-        private IReadonlyBoard PrepareModel(string boardId)
+        private IReadonlyBoard PrepareModel(string id)
         {
-            IBoardDefinition boardDefinition = _boardDefinitionGetter.Get(boardId);
+            IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
+            IBoardDefinition boardDefinition = gameplayDefinition.BoardDefinition;
 
             _boardParser.Deserialize(
                 boardDefinition.SerializedData,

@@ -23,17 +23,17 @@ namespace Game.Gameplay.Composition
 {
     public class GameplayComposer : ScopeComposer
     {
-        [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+        [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
 
         public GameplayComposer(
-            [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
+            [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
         {
-            ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
-            _boardDefinitionGetter = boardDefinitionGetter;
+            _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
         }
 
@@ -78,7 +78,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetInstance(_boardDefinitionGetter));
+            ruleAdder.Add(ruleFactory.GetInstance(_gameplayDefinitionGetter));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceCachedPropertiesGetter>(_ => new PieceCachedPropertiesGetter()));
 
@@ -285,7 +285,7 @@ namespace Game.Gameplay.Composition
                     new LoadGameplayUseCase(
                         r.Resolve<IUnloadGameplayUseCase>(),
                         r.Resolve<IBoardParser>(),
-                        r.Resolve<IBoardDefinitionGetter>(),
+                        r.Resolve<IGameplayDefinitionGetter>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),

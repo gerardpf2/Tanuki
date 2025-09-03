@@ -1,4 +1,4 @@
-using Game.Gameplay.Board;
+using Game.Gameplay;
 using Game.Gameplay.View.Board;
 using Game.Root.Composition;
 using Infrastructure.Configuring;
@@ -20,7 +20,7 @@ namespace Game.Root.UseCases
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
-        [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+        [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
 
         public BuildAndInitializeRootScopeUseCase(
@@ -29,7 +29,7 @@ namespace Game.Root.UseCases
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacement rootScreenPlacement,
             [NotNull] ICoroutineRunner coroutineRunner,
-            [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
+            [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
@@ -37,7 +37,7 @@ namespace Game.Root.UseCases
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
-            ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
             _gateDefinitionGetter = gateDefinitionGetter;
@@ -45,7 +45,7 @@ namespace Game.Root.UseCases
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
             _coroutineRunner = coroutineRunner;
-            _boardDefinitionGetter = boardDefinitionGetter;
+            _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
         }
 
@@ -75,7 +75,7 @@ namespace Game.Root.UseCases
 
             ruleAdder.Add(new InstanceRule<ICoroutineRunner>(_coroutineRunner));
 
-            ruleAdder.Add(new InstanceRule<IBoardDefinitionGetter>(_boardDefinitionGetter));
+            ruleAdder.Add(new InstanceRule<IGameplayDefinitionGetter>(_gameplayDefinitionGetter));
 
             ruleAdder.Add(new InstanceRule<IPieceViewDefinitionGetter>(_pieceViewDefinitionGetter));
 
@@ -135,7 +135,7 @@ namespace Game.Root.UseCases
                         r.Resolve<IScreenPlacement>(),
                         r.Resolve<IConfigValueGetter>(),
                         r.Resolve<ICoroutineRunner>(),
-                        r.Resolve<IBoardDefinitionGetter>(),
+                        r.Resolve<IGameplayDefinitionGetter>(),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IConverter>()
                     )

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Composition;
-using Game.Gameplay.Board;
+using Game.Gameplay;
 using Game.Gameplay.View.Board;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
@@ -26,7 +26,7 @@ namespace Game.Root.Composition
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
         [NotNull] private readonly IConfigValueGetter _configValueGetter;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
-        [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+        [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IConverter _converter;
 
@@ -35,7 +35,7 @@ namespace Game.Root.Composition
             [NotNull] IScreenPlacement rootScreenPlacement,
             [NotNull] IConfigValueGetter configValueGetter,
             [NotNull] ICoroutineRunner coroutineRunner,
-            [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
+            [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IConverter converter)
         {
@@ -43,7 +43,7 @@ namespace Game.Root.Composition
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(configValueGetter);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
-            ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(converter);
 
@@ -51,7 +51,7 @@ namespace Game.Root.Composition
             _rootScreenPlacement = rootScreenPlacement;
             _configValueGetter = configValueGetter;
             _coroutineRunner = coroutineRunner;
-            _boardDefinitionGetter = boardDefinitionGetter;
+            _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _converter = converter;
         }
@@ -73,7 +73,7 @@ namespace Game.Root.Composition
             return base
                 .GetChildScopeComposers()
                 .Append(new ModelViewViewModelComposer())
-                .Append(new GameComposer(_boardDefinitionGetter, _pieceViewDefinitionGetter));
+                .Append(new GameComposer(_gameplayDefinitionGetter, _pieceViewDefinitionGetter));
         }
     }
 }

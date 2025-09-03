@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Gameplay.Board;
+using Game.Gameplay;
 using Game.Gameplay.Composition;
 using Game.Gameplay.View.Board;
 using Infrastructure.DependencyInjection;
@@ -11,17 +11,17 @@ namespace Game.Composition
 {
     public class GameComposer : ScopeComposer
     {
-        [NotNull] private readonly IBoardDefinitionGetter _boardDefinitionGetter;
+        [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
 
         public GameComposer(
-            [NotNull] IBoardDefinitionGetter boardDefinitionGetter,
+            [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
         {
-            ArgumentNullException.ThrowIfNull(boardDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
-            _boardDefinitionGetter = boardDefinitionGetter;
+            _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
         }
 
@@ -29,7 +29,7 @@ namespace Game.Composition
         {
             return base
                 .GetChildScopeComposers()
-                .Append(new GameplayComposer(_boardDefinitionGetter, _pieceViewDefinitionGetter));
+                .Append(new GameplayComposer(_gameplayDefinitionGetter, _pieceViewDefinitionGetter));
         }
     }
 }

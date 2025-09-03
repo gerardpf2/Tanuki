@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Composition;
-using Game.Gameplay.Board;
+using Game.Gameplay;
 using Game.Gameplay.View.Board;
 using Game.Root.Composition;
 using Infrastructure.Configuring;
@@ -27,7 +27,7 @@ namespace Editor.Tests.Game.Root.Composition
 
         private IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         private IScreenDefinitionGetter _screenDefinitionGetter;
-        private IBoardDefinitionGetter _boardDefinitionGetter;
+        private IGameplayDefinitionGetter _gameplayDefinitionGetter;
         private ScopeBuildingContext _scopeBuildingContext;
         private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
@@ -41,7 +41,7 @@ namespace Editor.Tests.Game.Root.Composition
         {
             _pieceViewDefinitionGetter = Substitute.For<IPieceViewDefinitionGetter>();
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
-            _boardDefinitionGetter = Substitute.For<IBoardDefinitionGetter>();
+            _gameplayDefinitionGetter = Substitute.For<IGameplayDefinitionGetter>();
             _configValueGetter = Substitute.For<IConfigValueGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
@@ -54,7 +54,7 @@ namespace Editor.Tests.Game.Root.Composition
                     _screenPlacement,
                     _configValueGetter,
                     _coroutineRunner,
-                    _boardDefinitionGetter,
+                    _gameplayDefinitionGetter,
                     _pieceViewDefinitionGetter,
                     _converter
                 );
