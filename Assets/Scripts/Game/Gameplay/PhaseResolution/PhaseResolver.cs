@@ -37,11 +37,18 @@ namespace Game.Gameplay.PhaseResolution
 
         public void Initialize(IBoard board, IEnumerable<PiecePlacement> piecePlacements)
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
+            Uninitialize();
 
             _instantiateInitialPiecesPhase.Initialize(board, piecePlacements);
             _lockPlayerPiecePhase.Initialize(board);
             _instantiatePlayerPiecePhase.Initialize();
+        }
+
+        public void Uninitialize()
+        {
+            _instantiateInitialPiecesPhase.Uninitialize();
+            _lockPlayerPiecePhase.Uninitialize();
+            _instantiatePlayerPiecePhase.Uninitialize();
         }
 
         public void Resolve(ResolveContext resolveContext)

@@ -38,9 +38,21 @@ namespace Game.Gameplay.View.Camera
 
         public void Initialize()
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
+            Uninitialize();
+
+            SetInitialPosition();
 
             RegisterToEvents();
+        }
+
+        public void Uninitialize()
+        {
+            UnregisterFromEvents();
+
+            SetInitialPosition();
+
+            _topPositionY = null;
+            _bottomPositionY = null;
         }
 
         public void SetBoardViewLimits(float topPositionY, float bottomPositionY)
@@ -55,16 +67,27 @@ namespace Game.Gameplay.View.Camera
         {
             UnregisterFromEvents();
 
+            InvalidOperationException.ThrowIfNull(_boardView.Board);
+
             _boardView.Board.OnHighestNonEmptyRowUpdated += UpdatePosition;
         }
 
         private void UnregisterFromEvents()
         {
-            _boardView.Board.OnHighestNonEmptyRowUpdated -= UpdatePosition;
+            if (_boardView.Board is not null)
+            {
+                _boardView.Board.OnHighestNonEmptyRowUpdated -= UpdatePosition;
+            }
+        }
+
+        private void SetInitialPosition()
+        {
+            _cameraTransform.position = _cameraTransform.position.WithX(0.0f).WithY(0.0f);
         }
 
         private void UpdatePosition()
         {
+            InvalidOperationException.ThrowIfNull(_boardView.Board);
             InvalidOperationException.ThrowIfNull(_topPositionY);
             InvalidOperationException.ThrowIfNull(_bottomPositionY);
 

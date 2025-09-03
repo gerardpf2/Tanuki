@@ -10,6 +10,7 @@ namespace Game.Gameplay.Player
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
 
+        // TODO: Remove
         [NotNull] private readonly IReadOnlyList<PieceType> _pieceTypes =
             new List<PieceType>
             {
@@ -20,6 +21,7 @@ namespace Game.Gameplay.Player
 
         public IPiece Current { get; private set; }
 
+        // TODO: Remove
         private int _pieceTypeIndex = -1;
 
         public PlayerPiecesBag([NotNull] IPieceGetter pieceGetter)
@@ -31,7 +33,16 @@ namespace Game.Gameplay.Player
 
         public void Initialize()
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
+            // TODO: Remove if not needed
+
+            Uninitialize();
+        }
+
+        public void Uninitialize()
+        {
+            Current = null;
+
+            _pieceTypeIndex = -1;
         }
 
         public void ConsumeCurrent()

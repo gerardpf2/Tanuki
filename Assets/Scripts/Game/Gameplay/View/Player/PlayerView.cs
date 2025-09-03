@@ -72,9 +72,23 @@ namespace Game.Gameplay.View.Player
 
         public void Initialize()
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
+            Uninitialize();
 
             _playerPieceParent = new GameObject("PlayerPieceParent").transform; // New game object outside canvas, etc
+        }
+
+        public void Uninitialize()
+        {
+            TryDestroyPiece();
+
+            if (_playerPieceParent == null)
+            {
+                return;
+            }
+
+            Object.Destroy(_playerPieceParent.gameObject);
+
+            _playerPieceParent = null;
         }
 
         public void InstantiatePiece(IPiece piece, [NotNull] GameObject prefab)
@@ -120,8 +134,19 @@ namespace Game.Gameplay.View.Player
             pieceInstanceTransform.position = pieceInstanceTransform.position.WithX(Mathf.RoundToInt(_pieceData.X));
         }
 
+        private void TryDestroyPiece()
+        {
+            if (_pieceData is null || PieceInstance == null)
+            {
+                return;
+            }
+
+            DestroyPiece();
+        }
+
         private Vector3 GetInitialPosition()
         {
+            InvalidOperationException.ThrowIfNull(_boardView.Board);
             InvalidOperationException.ThrowIfNull(_pieceData);
 
             int x = (_boardView.Board.Columns - _pieceData.RightMostColumnOffset) / 2;
@@ -132,6 +157,7 @@ namespace Game.Gameplay.View.Player
 
         private float ClampX(float x)
         {
+            InvalidOperationException.ThrowIfNull(_boardView.Board);
             InvalidOperationException.ThrowIfNull(_pieceData);
 
             const int minX = 0;

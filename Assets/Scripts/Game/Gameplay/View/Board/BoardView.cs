@@ -13,15 +13,7 @@ namespace Game.Gameplay.View.Board
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
 
-        public IReadonlyBoard Board
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_board);
-
-                return _board;
-            }
-        }
+        public IReadonlyBoard Board => _board;
 
         public BoardView([NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter)
         {
@@ -32,12 +24,28 @@ namespace Game.Gameplay.View.Board
 
         public void Initialize([NotNull] IReadonlyBoard board)
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
-
             ArgumentNullException.ThrowIfNull(board);
+
+            Uninitialize();
 
             _board = new Gameplay.Board.Board(_pieceCachedPropertiesGetter, board.Rows, board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
+        }
+
+        public void Uninitialize()
+        {
+            // TODO: TryDestroyPiece
+
+            _board = null;
+
+            if (_piecesParent == null)
+            {
+                return;
+            }
+
+            Object.Destroy(_piecesParent.gameObject);
+
+            _piecesParent = null;
         }
 
         public GameObject InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)

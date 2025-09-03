@@ -23,9 +23,14 @@ namespace Game.Gameplay.View.EventResolution
 
         public void Initialize()
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
+            Uninitialize();
 
             ResolveOrStartListening();
+        }
+
+        public void Uninitialize()
+        {
+            StopListening();
         }
 
         private void ResolveOrStartListening()

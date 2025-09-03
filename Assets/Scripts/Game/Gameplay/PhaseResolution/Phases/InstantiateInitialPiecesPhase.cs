@@ -31,8 +31,6 @@ namespace Game.Gameplay.PhaseResolution.Phases
             [NotNull] IBoard board,
             [NotNull, ItemNotNull] IEnumerable<PiecePlacement> piecePlacements)
         {
-            // TODO: Check allow multiple Initialize. Add Clear ¿?
-
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(piecePlacements);
 
@@ -45,8 +43,18 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 piecePlacementsCopy.Add(piecePlacement);
             }
 
+            Uninitialize();
+
             _board = board;
             _piecePlacements = piecePlacementsCopy;
+        }
+
+        public override void Uninitialize()
+        {
+            base.Uninitialize();
+
+            _board = null;
+            _piecePlacements = null;
         }
 
         protected override bool ResolveImpl(ResolveContext _)

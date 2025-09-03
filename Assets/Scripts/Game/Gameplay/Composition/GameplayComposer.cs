@@ -4,6 +4,7 @@ using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.Player;
+using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -150,6 +151,21 @@ namespace Game.Gameplay.Composition
                 )
             );
 
+            // Not shared so it can only be unloaded from here
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
+                    new UnloadGameplayUseCase(
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPlayerPiecesBag>(),
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<IPlayerView>(),
+                        r.Resolve<ICameraController>(),
+                        r.Resolve<IEventListener>(),
+                        r.Resolve<IScreenLoader>()
+                    )
+                )
+            );
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
@@ -225,8 +241,19 @@ namespace Game.Gameplay.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ILoadGameplay>(r =>
-                    new LoadGameplay(
+                ruleFactory.GetInject<LoadUnloadGameplay>((r, s) =>
+                    s.Inject(
+                        r.Resolve<ILoadGameplayUseCase>(),
+                        r.Resolve<IUnloadGameplayUseCase>()
+                    )
+                )
+            );
+
+            // Shared so it can be loaded from anywhere
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
+                    new LoadGameplayUseCase(
+                        r.Resolve<IUnloadGameplayUseCase>(),
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IBoardDefinitionGetter>(),
                         r.Resolve<IPhaseResolver>(),
@@ -243,14 +270,15 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<ICameraBoardViewPropertiesSetter>()
+                        r.Resolve<ICameraBoardViewPropertiesSetter>(),
+                        r.Resolve<ICoroutineRunner>()
                     )
                 )
             );
 
             ruleAdder.Add(
-                ruleFactory.GetInject<PlayerInputHandler>((r, vm) =>
-                    vm.Inject(
+                ruleFactory.GetInject<PlayerInputHandler>((r, s) =>
+                    s.Inject(
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerView>(),
