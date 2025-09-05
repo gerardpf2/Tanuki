@@ -23,10 +23,25 @@ namespace Infrastructure.System.Exceptions
             }
         }
 
+        [ContractAnnotation("param:notnull => halt")]
+        public static void ThrowIfNotNullWithMessage(object param, string message)
+        {
+            if (param != null) // "!=" instead of "is not" because of Unity's operator overloads
+            {
+                Throw(message);
+            }
+        }
+
         [ContractAnnotation("param:null => halt")]
         public static void ThrowIfNull(object param, [CallerArgumentExpression("param")] string paramName = null)
         {
             ThrowIfNullWithMessage(param, $"{paramName} cannot be null");
+        }
+
+        [ContractAnnotation("param:notnull => halt")]
+        public static void ThrowIfNotNull(object param, [CallerArgumentExpression("param")] string paramName = null)
+        {
+            ThrowIfNotNullWithMessage(param, $"{paramName} must be null");
         }
 
         public static void ThrowIfNot<T>(
