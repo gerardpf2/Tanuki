@@ -7,7 +7,7 @@ namespace Infrastructure.DependencyInjection.Composition
 {
     public class SystemComposer : ScopeComposer
     {
-        // SystemComposer should be inside System assembly, but it is not possible because of a circular dependency
+        // TODO: SystemComposer should be inside System assembly, but it is not possible because of a circular dependency
 
         [NotNull] private readonly IConverter _converter;
 
