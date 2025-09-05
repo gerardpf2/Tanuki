@@ -12,7 +12,8 @@
         "ScreenLoading",
         "Configuring",
         "Unity",
-        "Tweening"
+        "Tweening",
+        "System_"
     ],
     "includePlatforms": [
         "Editor"
