@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Composition;
-using Game.Gameplay;
-using Game.Gameplay.View.Board;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
@@ -26,8 +23,6 @@ namespace Game.Root.Composition
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
         [NotNull] private readonly IConfigValueGetter _configValueGetter;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
-        [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IConverter _converter;
 
         public RootComposer(
@@ -35,24 +30,18 @@ namespace Game.Root.Composition
             [NotNull] IScreenPlacement rootScreenPlacement,
             [NotNull] IConfigValueGetter configValueGetter,
             [NotNull] ICoroutineRunner coroutineRunner,
-            [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IConverter converter)
         {
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(configValueGetter);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
-            ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(converter);
 
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
             _configValueGetter = configValueGetter;
             _coroutineRunner = coroutineRunner;
-            _gameplayDefinitionGetter = gameplayDefinitionGetter;
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _converter = converter;
         }
 
@@ -70,10 +59,7 @@ namespace Game.Root.Composition
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
-            return base
-                .GetChildScopeComposers()
-                .Append(new ModelViewViewModelComposer())
-                .Append(new GameComposer(_gameplayDefinitionGetter, _pieceViewDefinitionGetter));
+            return base.GetChildScopeComposers().Append(new ModelViewViewModelComposer());
         }
     }
 }

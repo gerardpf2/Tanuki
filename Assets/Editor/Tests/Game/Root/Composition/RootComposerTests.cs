@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Composition;
-using Game.Gameplay;
-using Game.Gameplay.View.Board;
 using Game.Root.Composition;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
@@ -25,9 +22,7 @@ namespace Editor.Tests.Game.Root.Composition
     {
         // Tested behaviours that differ from ScopeComposer
 
-        private IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         private IScreenDefinitionGetter _screenDefinitionGetter;
-        private IGameplayDefinitionGetter _gameplayDefinitionGetter;
         private ScopeBuildingContext _scopeBuildingContext;
         private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
@@ -39,9 +34,7 @@ namespace Editor.Tests.Game.Root.Composition
         [SetUp]
         public void SetUp()
         {
-            _pieceViewDefinitionGetter = Substitute.For<IPieceViewDefinitionGetter>();
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
-            _gameplayDefinitionGetter = Substitute.For<IGameplayDefinitionGetter>();
             _configValueGetter = Substitute.For<IConfigValueGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
@@ -54,8 +47,6 @@ namespace Editor.Tests.Game.Root.Composition
                     _screenPlacement,
                     _configValueGetter,
                     _coroutineRunner,
-                    _gameplayDefinitionGetter,
-                    _pieceViewDefinitionGetter,
                     _converter
                 );
         }
@@ -83,9 +74,8 @@ namespace Editor.Tests.Game.Root.Composition
 
             List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers().ToList();
 
-            Assert.IsTrue(childScopeComposers.Count == 2);
+            Assert.IsTrue(childScopeComposers.Count == 1);
             Assert.NotNull(childScopeComposers.Find(childScopeComposer => childScopeComposer is ModelViewViewModelComposer));
-            Assert.NotNull(childScopeComposers.Find(childScopeComposer => childScopeComposer is GameComposer));
         }
     }
 }
