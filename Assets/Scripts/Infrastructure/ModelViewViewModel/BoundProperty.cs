@@ -21,7 +21,7 @@ namespace Infrastructure.ModelViewViewModel
             }
         }
 
-        public BoundProperty(string key, T value)
+        public BoundProperty(string key, T value = default)
         {
             Key = key;
             _value = value;

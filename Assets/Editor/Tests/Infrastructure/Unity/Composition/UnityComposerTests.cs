@@ -33,16 +33,25 @@ namespace Editor.Tests.Infrastructure.Unity.Composition
         [Test]
         public void AddRules_AddExpected()
         {
+            IRule<ICameraGetter> cameraGetterRule = Substitute.For<IRule<ICameraGetter>>();
             IRule<ICoroutineRunner> coroutineRunnerRule = Substitute.For<IRule<ICoroutineRunner>>();
+            IRule<ICoroutineRunnerHelper> coroutineRunnerHelperRule = Substitute.For<IRule<ICoroutineRunnerHelper>>();
             IRule<IDeltaTimeGetter> deltaTimeGetterRule = Substitute.For<IRule<IDeltaTimeGetter>>();
+            IRule<IScreenPropertiesGetter> screenPropertiesGetterRule = Substitute.For<IRule<IScreenPropertiesGetter>>();
+            _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, ICameraGetter>>()).Returns(cameraGetterRule);
             _ruleFactory.GetInstance(_coroutineRunner).Returns(coroutineRunnerRule);
+            _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, ICoroutineRunnerHelper>>()).Returns(coroutineRunnerHelperRule);
             _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, IDeltaTimeGetter>>()).Returns(deltaTimeGetterRule);
+            _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, IScreenPropertiesGetter>>()).Returns(screenPropertiesGetterRule);
             _unityComposer.Compose(_scopeBuildingContext);
 
             _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
 
+            _ruleAdder.Received(1).Add(cameraGetterRule);
             _ruleAdder.Received(1).Add(coroutineRunnerRule);
+            _ruleAdder.Received(1).Add(coroutineRunnerHelperRule);
             _ruleAdder.Received(1).Add(deltaTimeGetterRule);
+            _ruleAdder.Received(1).Add(screenPropertiesGetterRule);
         }
     }
 }

@@ -5,5 +5,7 @@ namespace Infrastructure.ScreenLoading
         void Load(string key);
 
         void Load<T>(string key, T data);
+
+        void Unload(string key);
     }
 }

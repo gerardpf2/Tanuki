@@ -53,8 +53,8 @@ namespace Infrastructure.ScreenLoading.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetInject<ScreenPlacement>((r, sp) =>
-                    sp.Inject(
+                ruleFactory.GetInject<ScreenPlacement>((r, s) =>
+                    s.Inject(
                         r.Resolve<IScreenPlacementAdder>()
                     )
                 )

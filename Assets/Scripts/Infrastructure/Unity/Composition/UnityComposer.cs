@@ -22,9 +22,21 @@ namespace Infrastructure.Unity.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
+            ruleAdder.Add(ruleFactory.GetSingleton<ICameraGetter>(_ => new CameraGetter()));
+
             ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
 
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ICoroutineRunnerHelper>(r =>
+                    new CoroutineRunnerHelper(
+                        r.Resolve<ICoroutineRunner>()
+                    )
+                )
+            );
+
             ruleAdder.Add(ruleFactory.GetSingleton<IDeltaTimeGetter>(_ => new DeltaTimeGetter()));
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IScreenPropertiesGetter>(_ => new ScreenPropertiesGetter()));
         }
     }
 }
