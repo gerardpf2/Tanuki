@@ -120,7 +120,8 @@ namespace Game.Root.UseCases
                         r.Resolve<IScreenDefinitionGetter>(),
                         r.Resolve<IScreenPlacement>(),
                         r.Resolve<IConfigValueGetter>(),
-                        r.Resolve<ICoroutineRunner>()
+                        r.Resolve<ICoroutineRunner>(),
+                        r.Resolve<IConverter>()
                     )
                 )
             );
