@@ -7,13 +7,13 @@ namespace Infrastructure.DependencyInjection
 {
     public class Scope
     {
-        [NotNull, ItemNotNull]
+        [NotNull, ItemNotNull] // TODO: Check ItemNotNull ¿?
         public virtual IEnumerable<PartialScope> GetPartialScopes()
         {
             return _partialScopes;
         }
 
-        [NotNull, ItemNotNull]
+        [NotNull, ItemNotNull] // TODO: Check ItemNotNull ¿?
         public virtual IEnumerable<Scope> GetChildScopes()
         {
             return _childScopes;
