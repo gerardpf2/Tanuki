@@ -29,7 +29,12 @@ namespace Infrastructure.Tweening.Builders
 
                 return _durationS;
             }
-            private set => _durationS = value;
+            private set
+            {
+                ArgumentOutOfRangeException.ThrowIfNot(value, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
+
+                _durationS = value;
+            }
         }
 
         public EasingType EasingType { get; private set; } = TweenBuilderConstants.EasingType;

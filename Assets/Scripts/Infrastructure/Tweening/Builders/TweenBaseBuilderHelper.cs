@@ -23,7 +23,12 @@ namespace Infrastructure.Tweening.Builders
 
                 return _delayBeforeS;
             }
-            private set => _delayBeforeS = value;
+            private set
+            {
+                ArgumentOutOfRangeException.ThrowIfNot(value, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
+
+                _delayBeforeS = value;
+            }
         }
 
         [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
@@ -35,7 +40,12 @@ namespace Infrastructure.Tweening.Builders
 
                 return _delayAfterS;
             }
-            private set => _delayAfterS = value;
+            private set
+            {
+                ArgumentOutOfRangeException.ThrowIfNot(value, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
+
+                _delayAfterS = value;
+            }
         }
 
         public int Repetitions { get; private set; }

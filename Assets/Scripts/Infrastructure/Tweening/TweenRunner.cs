@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Infrastructure.System;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Infrastructure.Tweening
 {
@@ -80,9 +82,12 @@ namespace Infrastructure.Tweening
             _updateCoroutine = null;
         }
 
-        private static bool Update([NotNull] TweenWrapper tweenWrapper, float deltaTimeS)
+        private static bool Update(
+            [NotNull] TweenWrapper tweenWrapper,
+            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float deltaTimeS)
         {
             ArgumentNullException.ThrowIfNull(tweenWrapper);
+            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
 
             tweenWrapper.Tween.Update(deltaTimeS);
 
