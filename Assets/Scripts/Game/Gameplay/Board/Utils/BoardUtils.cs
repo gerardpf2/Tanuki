@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Gameplay.Board.Pieces;
-using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
@@ -100,7 +99,6 @@ namespace Game.Gameplay.Board.Utils
             columnOffset = column - sourceCoordinate.Column;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public static int ComputePieceFall(
             [NotNull] this IReadonlyBoard board,
             [NotNull] IPiece piece,
@@ -119,7 +117,6 @@ namespace Game.Gameplay.Board.Utils
             return fall;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         private static int ComputePieceFallImpl(
             [NotNull] this IReadonlyBoard board,
             IPiece ignorePiece,

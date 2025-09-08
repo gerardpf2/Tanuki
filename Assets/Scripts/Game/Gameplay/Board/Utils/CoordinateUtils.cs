@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Infrastructure.System;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Utils
@@ -13,14 +11,8 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull]
-        public static IEnumerable<Coordinate> Rect(
-            this Coordinate coordinate,
-            [Is(ComparisonOperator.GreaterThan, 0)] int rows,
-            [Is(ComparisonOperator.GreaterThan, 0)] int columns)
+        public static IEnumerable<Coordinate> Rect(this Coordinate coordinate, int rows, int columns)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThan, 0);
-            ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThan, 0);
-
             for (int rowOffset = 0; rowOffset < rows; ++rowOffset)
             {
                 for (int columnOffset = 0; columnOffset < columns; ++columnOffset)

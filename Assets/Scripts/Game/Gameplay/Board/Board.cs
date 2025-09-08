@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
-using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
@@ -21,33 +20,23 @@ namespace Game.Gameplay.Board
 
         public event Action OnHighestNonEmptyRowUpdated;
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Rows
         {
             get
             {
                 InvalidOperationException.ThrowIfNull(_pieces);
 
-                int rows = _pieces.GetLength(0);
-
-                InvalidOperationException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
-
-                return rows;
+                return _pieces.GetLength(0);
             }
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         public int Columns
         {
             get
             {
                 InvalidOperationException.ThrowIfNull(_pieces);
 
-                int columns = _pieces.GetLength(1);
-
-                InvalidOperationException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
-
-                return columns;
+                return _pieces.GetLength(1);
             }
         }
 
@@ -69,14 +58,9 @@ namespace Game.Gameplay.Board
 
         public IDictionary<IPiece, Coordinate> PieceSourceCoordinates { get; } = new Dictionary<IPiece, Coordinate>();
 
-        public Board(
-            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int rows,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)] int columns)
+        public Board([NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter, int rows, int columns)
         {
             ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
-            ArgumentOutOfRangeException.ThrowIfNot(rows, ComparisonOperator.GreaterThanOrEqualTo, 0);
-            ArgumentOutOfRangeException.ThrowIfNot(columns, ComparisonOperator.GreaterThanOrEqualTo, 0);
 
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
 
@@ -173,7 +157,6 @@ namespace Game.Gameplay.Board
 
         private void ExpandRows(int newRows)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(newRows, ComparisonOperator.GreaterThan, Rows);
             InvalidOperationException.ThrowIfNull(_pieces);
 
             int rows = Rows;

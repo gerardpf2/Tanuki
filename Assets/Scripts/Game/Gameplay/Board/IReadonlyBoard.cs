@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
-using Infrastructure.System;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board
@@ -10,10 +9,8 @@ namespace Game.Gameplay.Board
     {
         event Action OnHighestNonEmptyRowUpdated;
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         int Rows { get; }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0)]
         int Columns { get; }
 
         int HighestNonEmptyRow { get; }

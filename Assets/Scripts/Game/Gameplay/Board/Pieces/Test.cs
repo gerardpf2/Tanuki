@@ -20,28 +20,9 @@ namespace Game.Gameplay.Board.Pieces
 
         [NotNull] private readonly IConverter _converter;
 
-        private int _eyeRowOffset;
-
         public bool EyeMovementDirectionUp { get; private set; }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0), Is(ComparisonOperator.LessThan, ITest.Rows)]
-        public int EyeRowOffset
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNot(_eyeRowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
-                InvalidOperationException.ThrowIfNot(_eyeRowOffset, ComparisonOperator.LessThan, ITest.Rows);
-
-                return _eyeRowOffset;
-            }
-            private set
-            {
-                ArgumentOutOfRangeException.ThrowIfNot(value, ComparisonOperator.GreaterThanOrEqualTo, 0);
-                ArgumentOutOfRangeException.ThrowIfNot(value, ComparisonOperator.LessThan, ITest.Rows);
-
-                _eyeRowOffset = value;
-            }
-        }
+        public int EyeRowOffset { get; private set; }
 
         public Test([NotNull] IConverter converter) : base(converter, PieceType.Test, ITest.Rows, 1)
         {
@@ -89,12 +70,7 @@ namespace Game.Gameplay.Board.Pieces
                 }
                 case CustomDataEyeRowOffsetKey:
                 {
-                    int eyeRowOffset = _converter.Convert<int>(value);
-
-                    ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
-                    ArgumentOutOfRangeException.ThrowIfNot(eyeRowOffset, ComparisonOperator.LessThan, ITest.Rows);
-
-                    EyeRowOffset = eyeRowOffset;
+                    EyeRowOffset = _converter.Convert<int>(value);
 
                     return true;
                 }

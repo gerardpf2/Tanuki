@@ -1,5 +1,3 @@
-using Infrastructure.System;
-
 namespace Game.Gameplay.Board.Pieces
 {
     public interface ITest : IPiece
@@ -8,7 +6,6 @@ namespace Game.Gameplay.Board.Pieces
 
         bool EyeMovementDirectionUp { get; }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0), Is(ComparisonOperator.LessThan, Rows)]
         int EyeRowOffset { get; }
     }
 }
