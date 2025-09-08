@@ -10,7 +10,7 @@ namespace Infrastructure.Tweening
     public abstract class SequenceBase : TweenBase
     {
         [NotNull, ItemNotNull] private readonly IReadOnlyList<ITween> _tweens;
-        private readonly IEnumerable<ITween> _ctorTweens;
+        private readonly IEnumerable<ITween> _ctorTweens; // TODO: Remove this and check _tweens instead in both Equals and GetHashCode
 
         protected SequenceBase(
             bool autoPlay,
