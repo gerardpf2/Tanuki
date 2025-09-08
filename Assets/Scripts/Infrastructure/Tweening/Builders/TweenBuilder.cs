@@ -20,7 +20,6 @@ namespace Infrastructure.Tweening.Builders
 
         public T End { get; private set; }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
         public float DurationS
         {
             get
@@ -71,7 +70,7 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public ITweenBuilder<T> WithDurationS([Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float durationS)
+        public ITweenBuilder<T> WithDurationS(float durationS)
         {
             ArgumentOutOfRangeException.ThrowIfNot(durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
 

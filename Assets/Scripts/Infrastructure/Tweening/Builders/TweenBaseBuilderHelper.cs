@@ -14,7 +14,6 @@ namespace Infrastructure.Tweening.Builders
 
         public bool AutoPlay { get; private set; } = TweenBaseBuilderConstants.AutoPlay;
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
         public float DelayBeforeS
         {
             get
@@ -31,7 +30,6 @@ namespace Infrastructure.Tweening.Builders
             }
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
         public float DelayAfterS
         {
             get
@@ -82,7 +80,7 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public TBuilder WithDelayBeforeS([Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayBeforeS)
+        public TBuilder WithDelayBeforeS(float delayBeforeS)
         {
             ArgumentOutOfRangeException.ThrowIfNot(delayBeforeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
 
@@ -91,7 +89,7 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public TBuilder WithDelayAfterS([Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayAfterS)
+        public TBuilder WithDelayAfterS(float delayAfterS)
         {
             ArgumentOutOfRangeException.ThrowIfNot(delayAfterS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
 

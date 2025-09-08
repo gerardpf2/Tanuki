@@ -10,7 +10,6 @@ namespace Infrastructure.Tweening
         bool Paused { get; }
 
         // Returns remaining deltaTimeS
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         float Step(float deltaTimeS, bool backwards = false);
 
         void Pause();
@@ -20,8 +19,7 @@ namespace Infrastructure.Tweening
         void Restart();
 
         // Returns remaining deltaTimeS
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        public float Update([Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float deltaTimeS, bool backwards = false)
+        public float Update(float deltaTimeS, bool backwards = false)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
 

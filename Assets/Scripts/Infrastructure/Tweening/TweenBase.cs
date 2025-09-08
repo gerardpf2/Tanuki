@@ -11,8 +11,8 @@ namespace Infrastructure.Tweening
     public abstract class TweenBase : ITween
     {
         private readonly bool _autoPlay;
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] private readonly float _delayBeforeS;
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] private readonly float _delayAfterS;
+        private readonly float _delayBeforeS;
+        private readonly float _delayAfterS;
         private readonly int _repetitions;
         private readonly RepetitionType _repetitionType;
         private readonly DelayManagement _delayManagementRepetition;
@@ -75,8 +75,8 @@ namespace Infrastructure.Tweening
 
         protected TweenBase(
             bool autoPlay,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayBeforeS,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayAfterS,
+            float delayBeforeS,
+            float delayAfterS,
             int repetitions,
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
@@ -110,8 +110,7 @@ namespace Infrastructure.Tweening
             _onComplete = onComplete;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        public float Step([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards = false)
+        public float Step(float deltaTimeS, bool backwards = false)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
@@ -236,8 +235,7 @@ namespace Infrastructure.Tweening
                 TweenState.StartPlay;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        private float ProcessWaitBefore([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS)
+        private float ProcessWaitBefore(float deltaTimeS)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
@@ -249,8 +247,7 @@ namespace Infrastructure.Tweening
             State = TweenState.Play;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        private float ProcessPlay([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards)
+        private float ProcessPlay(float deltaTimeS, bool backwards)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
@@ -271,8 +268,7 @@ namespace Infrastructure.Tweening
                 TweenState.EndIteration;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        private float ProcessWaitAfter([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS)
+        private float ProcessWaitAfter(float deltaTimeS)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
@@ -307,11 +303,7 @@ namespace Infrastructure.Tweening
             OnPrepareRepetition();
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        private float ProcessWait(
-            [Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS,
-            float delayS,
-            TweenState nextState)
+        private float ProcessWait(float deltaTimeS, float delayS, TweenState nextState)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
@@ -336,8 +328,7 @@ namespace Infrastructure.Tweening
             return remainingDeltaTimeS;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        protected abstract float Play([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards);
+        protected abstract float Play(float deltaTimeS, bool backwards);
 
         protected virtual void OnPrepareRepetition() { }
 

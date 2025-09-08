@@ -81,9 +81,7 @@ namespace Infrastructure.Tweening
             _updateCoroutine = null;
         }
 
-        private static bool Update(
-            [NotNull] TweenWrapper tweenWrapper,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float deltaTimeS)
+        private static bool Update([NotNull] TweenWrapper tweenWrapper, float deltaTimeS)
         {
             ArgumentNullException.ThrowIfNull(tweenWrapper);
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);

@@ -14,8 +14,8 @@ namespace Infrastructure.Tweening
 
         protected SequenceBase(
             bool autoPlay,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayBeforeS,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayAfterS,
+            float delayBeforeS,
+            float delayAfterS,
             int repetitions,
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
@@ -46,8 +46,7 @@ namespace Infrastructure.Tweening
             _tweens = tweensCopy;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        protected override float Play([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards)
+        protected override float Play(float deltaTimeS, bool backwards)
         {
             ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
 
@@ -68,9 +67,8 @@ namespace Infrastructure.Tweening
             RestartTweens();
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         protected abstract float Play(
-            [Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS,
+            float deltaTimeS,
             bool backwards,
             [NotNull, ItemNotNull] IReadOnlyList<ITween> tweens
         );
