@@ -8,7 +8,7 @@ namespace Game.Gameplay.EventEnqueueing
 {
     public class EventContainer : IEventEnqueuer, IEventDequeuer
     {
-        [NotNull, ItemNotNull] private readonly Queue<IEvent> _events = new();
+        [NotNull, ItemNotNull] private readonly Queue<IEvent> _events = new(); // ItemNotNull as long as all Add check for null
 
         public event Action OnEventToDequeue;
 

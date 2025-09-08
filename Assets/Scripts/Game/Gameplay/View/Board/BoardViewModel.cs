@@ -37,6 +37,7 @@ namespace Game.Gameplay.View.Board
         public void SetData([NotNull] BoardViewData data)
         {
             ArgumentNullException.ThrowIfNull(data);
+            InvalidOperationException.ThrowIfNull(_coroutineRunnerHelper);
 
             // Wait for end of frame so UI stuff has been properly updated
             // For example, CameraController will move camera to (0, 0) but UI refreshes later

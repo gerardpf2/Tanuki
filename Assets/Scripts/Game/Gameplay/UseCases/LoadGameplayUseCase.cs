@@ -98,7 +98,7 @@ namespace Game.Gameplay.UseCases
 
             _phaseResolver.Resolve(new ResolveContext(null));
 
-            return (board,gameplayDefinition.GoalDefinitions);
+            return (board, gameplayDefinition.GoalDefinitions);
         }
 
         private GameplayViewData PrepareView(IReadonlyBoard board, IEnumerable<IGoalDefinition> initialGoalDefinitions)
