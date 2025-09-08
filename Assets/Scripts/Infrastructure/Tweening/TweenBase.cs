@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
@@ -11,8 +10,8 @@ namespace Infrastructure.Tweening
     public abstract class TweenBase : ITween
     {
         private readonly bool _autoPlay;
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] private readonly float _delayBeforeS;
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] private readonly float _delayAfterS;
+        private readonly float _delayBeforeS;
+        private readonly float _delayAfterS;
         private readonly int _repetitions;
         private readonly RepetitionType _repetitionType;
         private readonly DelayManagement _delayManagementRepetition;
@@ -75,8 +74,8 @@ namespace Infrastructure.Tweening
 
         protected TweenBase(
             bool autoPlay,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayBeforeS,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayAfterS,
+            float delayBeforeS,
+            float delayAfterS,
             int repetitions,
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
@@ -90,9 +89,6 @@ namespace Infrastructure.Tweening
             Action onRestart,
             Action onComplete)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(delayBeforeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-            ArgumentOutOfRangeException.ThrowIfNot(delayAfterS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
             _autoPlay = autoPlay;
             _delayBeforeS = delayBeforeS;
             _delayAfterS = delayAfterS;
@@ -110,11 +106,8 @@ namespace Infrastructure.Tweening
             _onComplete = onComplete;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        public float Step([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards = false)
+        public float Step(float deltaTimeS, bool backwards = false)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             if (Paused)
             {
                 return 0.0f;
@@ -236,11 +229,8 @@ namespace Infrastructure.Tweening
                 TweenState.StartPlay;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        private float ProcessWaitBefore([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS)
+        private float ProcessWaitBefore(float deltaTimeS)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             return ProcessWait(deltaTimeS, _delayBeforeS, TweenState.StartPlay);
         }
 
@@ -249,11 +239,8 @@ namespace Infrastructure.Tweening
             State = TweenState.Play;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        private float ProcessPlay([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards)
+        private float ProcessPlay(float deltaTimeS, bool backwards)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             deltaTimeS = Play(deltaTimeS, backwards);
 
             if (deltaTimeS > 0.0f)
@@ -271,11 +258,8 @@ namespace Infrastructure.Tweening
                 TweenState.EndIteration;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        private float ProcessWaitAfter([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS)
+        private float ProcessWaitAfter(float deltaTimeS)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             return ProcessWait(deltaTimeS, _delayAfterS, TweenState.EndIteration);
         }
 
@@ -307,14 +291,8 @@ namespace Infrastructure.Tweening
             OnPrepareRepetition();
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        private float ProcessWait(
-            [Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS,
-            float delayS,
-            TweenState nextState)
+        private float ProcessWait(float deltaTimeS, float delayS, TweenState nextState)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             _waitTimeS += deltaTimeS;
 
             if (_waitTimeS < delayS)
@@ -336,8 +314,7 @@ namespace Infrastructure.Tweening
             return remainingDeltaTimeS;
         }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        protected abstract float Play([Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS, bool backwards);
+        protected abstract float Play(float deltaTimeS, bool backwards);
 
         protected virtual void OnPrepareRepetition() { }
 

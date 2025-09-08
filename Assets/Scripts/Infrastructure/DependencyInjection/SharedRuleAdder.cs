@@ -30,7 +30,7 @@ namespace Infrastructure.DependencyInjection
             _ruleAdder.Add(_ruleFactory.GetTarget<T>(_targetRuleResolver, key), key);
         }
 
-        public void SetTarget([NotNull] IRuleAdder ruleAdder, IRuleResolver ruleResolver)
+        public void SetTarget([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleResolver ruleResolver)
         {
             ArgumentNullException.ThrowIfNull(ruleAdder);
             ArgumentNullException.ThrowIfNull(ruleResolver);

@@ -1,5 +1,3 @@
-using Infrastructure.System;
-
 namespace Infrastructure.Tweening
 {
     public interface ITween
@@ -9,7 +7,6 @@ namespace Infrastructure.Tweening
         bool Paused { get; }
 
         // Returns remaining deltaTimeS
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         float Step(float deltaTimeS, bool backwards = false);
 
         void Pause();
@@ -19,7 +16,6 @@ namespace Infrastructure.Tweening
         void Restart();
 
         // Returns remaining deltaTimeS
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
         public float Update(float deltaTimeS, bool backwards = false)
         {
             while (deltaTimeS > 0.0f && State is not TweenState.Complete)

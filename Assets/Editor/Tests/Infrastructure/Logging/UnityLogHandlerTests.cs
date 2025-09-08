@@ -2,12 +2,13 @@ using Infrastructure.Logging;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using ILogger = UnityEngine.ILogger;
 
 namespace Editor.Tests.Infrastructure.Logging
 {
     public class UnityLogHandlerTests
     {
-        private UnityEngine.ILogger _logger;
+        private ILogger _logger;
         private string _message;
 
         private UnityLogHandler _unityLogHandler;
@@ -15,7 +16,7 @@ namespace Editor.Tests.Infrastructure.Logging
         [SetUp]
         public void SetUp()
         {
-            _logger = Substitute.For<UnityEngine.ILogger>();
+            _logger = Substitute.For<ILogger>();
             _message = nameof(_message);
 
             _unityLogHandler = new UnityLogHandler(_logger);

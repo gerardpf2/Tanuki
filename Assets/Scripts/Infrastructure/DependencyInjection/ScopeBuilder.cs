@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Infrastructure.Gating;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.DependencyInjection
 {
@@ -111,6 +112,8 @@ namespace Infrastructure.DependencyInjection
 
             foreach (IScopeComposer partialScopeComposer in partialScopeComposers)
             {
+                InvalidOperationException.ThrowIfNull(partialScopeComposer);
+
                 BuildPartial(mainScope, partialScopeComposer);
             }
         }
@@ -128,6 +131,8 @@ namespace Infrastructure.DependencyInjection
 
             foreach (IScopeComposer childScopeComposer in childScopeComposers)
             {
+                InvalidOperationException.ThrowIfNull(childScopeComposer);
+
                 Build(parentScope, childScopeComposer);
             }
         }

@@ -24,7 +24,6 @@ namespace Infrastructure.Unity
             return _coroutineRunner.Run(GetWaitForEndOfFrame(action));
         }
 
-        [NotNull]
         private static IEnumerator GetWaitForEndOfFrame(Action action)
         {
             yield return WaitForEndOfFrame;

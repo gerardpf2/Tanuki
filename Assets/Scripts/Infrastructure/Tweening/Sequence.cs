@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Infrastructure.Tweening
 {
@@ -11,8 +9,8 @@ namespace Infrastructure.Tweening
     {
         public Sequence(
             bool autoPlay,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayBeforeS,
-            [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float delayAfterS,
+            float delayBeforeS,
+            float delayAfterS,
             int repetitions,
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
@@ -25,15 +23,10 @@ namespace Infrastructure.Tweening
             Action onResume,
             Action onRestart,
             Action onComplete,
-            [NotNull] [ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete, tweens) { }
+            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete, tweens) { }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f), Is(ComparisonOperator.LessThanOrEqualTo, "deltaTimeS")]
-        protected override float Play(
-            [Is(ComparisonOperator.GreaterThan, 0.0f)] float deltaTimeS,
-            bool backwards,
-            IReadOnlyList<ITween> tweens)
+        protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITween> tweens)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
             ArgumentNullException.ThrowIfNull(tweens);
 
             backwards ^= Backwards;

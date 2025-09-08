@@ -1,10 +1,7 @@
 using System;
-using Infrastructure.System;
 using Infrastructure.Tweening.EasingFunctions;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening.Builders
 {
@@ -14,23 +11,11 @@ namespace Infrastructure.Tweening.Builders
         [NotNull] private readonly IEasingFunctionGetter _easingFunctionGetter;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
-        private float _durationS;
-
         public T Start { get; private set; }
 
         public T End { get; private set; }
 
-        [Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)]
-        public float DurationS
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNot(_durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
-                return _durationS;
-            }
-            private set => _durationS = value;
-        }
+        public float DurationS { get; private set; }
 
         public EasingType EasingType { get; private set; } = TweenBuilderConstants.EasingType;
 
@@ -66,10 +51,8 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public ITweenBuilder<T> WithDurationS([Is(ComparisonOperator.GreaterThanOrEqualTo, 0.0f)] float durationS)
+        public ITweenBuilder<T> WithDurationS(float durationS)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
             DurationS = durationS;
 
             return This;

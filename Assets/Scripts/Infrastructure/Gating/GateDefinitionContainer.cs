@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Infrastructure.System.Exceptions;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Infrastructure.Gating
@@ -8,11 +6,27 @@ namespace Infrastructure.Gating
     [CreateAssetMenu(fileName = nameof(GateDefinitionContainer), menuName = "Tanuki/Infrastructure/Gating/" + nameof(GateDefinitionContainer))]
     public class GateDefinitionContainer : ScriptableObject, IGateDefinitionGetter
     {
-        [NotNull, SerializeField] private List<GateDefinition> _gateDefinitions = new();
+        [SerializeField] private GateDefinition[] _gateDefinitions;
 
         public IGateDefinition Get(string gateKey)
         {
-            IGateDefinition gateDefinition = _gateDefinitions.Find(gateDefinition => gateDefinition.GateKey == gateKey);
+            InvalidOperationException.ThrowIfNull(_gateDefinitions);
+
+            IGateDefinition gateDefinition = null;
+
+            foreach (GateDefinition gateDefinitionCandidate in _gateDefinitions)
+            {
+                InvalidOperationException.ThrowIfNull(gateDefinitionCandidate);
+
+                if (gateDefinitionCandidate.GateKey != gateKey)
+                {
+                    continue;
+                }
+
+                gateDefinition = gateDefinitionCandidate;
+
+                break;
+            }
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 gateDefinition,

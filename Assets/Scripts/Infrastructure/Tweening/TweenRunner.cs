@@ -29,8 +29,8 @@ namespace Infrastructure.Tweening
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
         [NotNull] private readonly IDeltaTimeGetter _deltaTimeGetter;
 
-        [NotNull, ItemNotNull] private readonly ICollection<TweenWrapper> _tweenToRunWrappers = new List<TweenWrapper>();
-        [NotNull, ItemNotNull] private readonly List<TweenWrapper> _tweenWrappers = new();
+        [NotNull, ItemNotNull] private readonly ICollection<TweenWrapper> _tweenToRunWrappers = new List<TweenWrapper>(); // ItemNotNull as long as all Add check for null
+        [NotNull, ItemNotNull] private readonly List<TweenWrapper> _tweenWrappers = new(); // ItemNotNull as long as all Add check for null
 
         private Coroutine _updateCoroutine;
         private bool _running;
@@ -60,7 +60,6 @@ namespace Infrastructure.Tweening
             _updateCoroutine = _coroutineRunner.Run(Update());
         }
 
-        [NotNull]
         private IEnumerator Update()
         {
             while (_tweenToRunWrappers.Count > 0 || _tweenWrappers.Count > 0)
