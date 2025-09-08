@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Infrastructure.Tweening
 {
@@ -29,7 +27,6 @@ namespace Infrastructure.Tweening
 
         protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITween> tweens)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
             ArgumentNullException.ThrowIfNull(tweens);
 
             backwards ^= Backwards;

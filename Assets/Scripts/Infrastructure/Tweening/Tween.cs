@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Infrastructure.System;
 using Infrastructure.Tweening.EasingFunctions;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening
@@ -45,7 +43,6 @@ namespace Infrastructure.Tweening
             [NotNull] IEasingFunction easingFunctionBackwards,
             [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(durationS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(easingFunction);
             ArgumentNullException.ThrowIfNull(easingFunctionBackwards);
@@ -62,8 +59,6 @@ namespace Infrastructure.Tweening
 
         protected override float Play(float deltaTimeS, bool backwards)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             backwards ^= Backwards;
 
             _playTimeS += deltaTimeS;

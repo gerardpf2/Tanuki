@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
@@ -90,9 +89,6 @@ namespace Infrastructure.Tweening
             Action onRestart,
             Action onComplete)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(delayBeforeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-            ArgumentOutOfRangeException.ThrowIfNot(delayAfterS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
             _autoPlay = autoPlay;
             _delayBeforeS = delayBeforeS;
             _delayAfterS = delayAfterS;
@@ -112,8 +108,6 @@ namespace Infrastructure.Tweening
 
         public float Step(float deltaTimeS, bool backwards = false)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             if (Paused)
             {
                 return 0.0f;
@@ -237,8 +231,6 @@ namespace Infrastructure.Tweening
 
         private float ProcessWaitBefore(float deltaTimeS)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             return ProcessWait(deltaTimeS, _delayBeforeS, TweenState.StartPlay);
         }
 
@@ -249,8 +241,6 @@ namespace Infrastructure.Tweening
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             deltaTimeS = Play(deltaTimeS, backwards);
 
             if (deltaTimeS > 0.0f)
@@ -270,8 +260,6 @@ namespace Infrastructure.Tweening
 
         private float ProcessWaitAfter(float deltaTimeS)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             return ProcessWait(deltaTimeS, _delayAfterS, TweenState.EndIteration);
         }
 
@@ -305,8 +293,6 @@ namespace Infrastructure.Tweening
 
         private float ProcessWait(float deltaTimeS, float delayS, TweenState nextState)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThan, 0.0f);
-
             _waitTimeS += deltaTimeS;
 
             if (_waitTimeS < delayS)

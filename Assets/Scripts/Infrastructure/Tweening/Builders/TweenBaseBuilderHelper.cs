@@ -1,50 +1,18 @@
 using System;
-using Infrastructure.System;
 using JetBrains.Annotations;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Infrastructure.Tweening.Builders
 {
     public abstract class TweenBaseBuilderHelper<TBuilder> : ITweenBaseBuilderHelper<TBuilder>
     {
-        private float _delayBeforeS;
-        private float _delayAfterS;
         private bool _built;
 
         public bool AutoPlay { get; private set; } = TweenBaseBuilderConstants.AutoPlay;
 
-        public float DelayBeforeS
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNot(_delayBeforeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
+        public float DelayBeforeS { get; private set; }
 
-                return _delayBeforeS;
-            }
-            private set
-            {
-                ArgumentOutOfRangeException.ThrowIfNot(value, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
-                _delayBeforeS = value;
-            }
-        }
-
-        public float DelayAfterS
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNot(_delayAfterS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
-                return _delayAfterS;
-            }
-            private set
-            {
-                ArgumentOutOfRangeException.ThrowIfNot(value, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
-                _delayAfterS = value;
-            }
-        }
+        public float DelayAfterS { get; private set; }
 
         public int Repetitions { get; private set; }
 
@@ -82,8 +50,6 @@ namespace Infrastructure.Tweening.Builders
 
         public TBuilder WithDelayBeforeS(float delayBeforeS)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(delayBeforeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
             DelayBeforeS = delayBeforeS;
 
             return This;
@@ -91,8 +57,6 @@ namespace Infrastructure.Tweening.Builders
 
         public TBuilder WithDelayAfterS(float delayAfterS)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(delayAfterS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
             DelayAfterS = delayAfterS;
 
             return This;

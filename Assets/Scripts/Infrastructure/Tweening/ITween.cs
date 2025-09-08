@@ -1,6 +1,3 @@
-using Infrastructure.System;
-using Infrastructure.System.Exceptions;
-
 namespace Infrastructure.Tweening
 {
     public interface ITween
@@ -21,8 +18,6 @@ namespace Infrastructure.Tweening
         // Returns remaining deltaTimeS
         public float Update(float deltaTimeS, bool backwards = false)
         {
-            ArgumentOutOfRangeException.ThrowIfNot(deltaTimeS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
-
             while (deltaTimeS > 0.0f && State is not TweenState.Complete)
             {
                 deltaTimeS = Step(deltaTimeS, backwards);
