@@ -10,7 +10,13 @@ namespace Infrastructure.ModelViewViewModel
 
         public string Key { get; }
 
-        public BoundMethod([NotNull] Action method) : this(method.Method.Name, method) { }
+        public BoundMethod([NotNull] Action method)
+        {
+            ArgumentNullException.ThrowIfNull(method);
+
+            Key = method.Method.Name;
+            _method = method;
+        }
 
         public BoundMethod(string key, [NotNull] Action method)
         {

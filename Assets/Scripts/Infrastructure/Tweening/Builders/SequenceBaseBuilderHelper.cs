@@ -6,7 +6,7 @@ namespace Infrastructure.Tweening.Builders
 {
     public abstract class SequenceBaseBuilderHelper<TBuilder> : TweenBaseBuilderHelper<TBuilder>, ISequenceBaseBuilderHelper<TBuilder>
     {
-        [NotNull, ItemNotNull] private readonly ICollection<ITween> _tweens = new List<ITween>();
+        [NotNull, ItemNotNull] private readonly ICollection<ITween> _tweens = new List<ITween>(); // ItemNotNull as long as all Add check for null
 
         [NotNull, ItemNotNull] public IEnumerable<ITween> Tweens => _tweens;
 

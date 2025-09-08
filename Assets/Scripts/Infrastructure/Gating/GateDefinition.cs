@@ -15,7 +15,7 @@ namespace Infrastructure.Gating
         [SerializeField, ShowInInspectorIf(nameof(_useConfig))] private string _configKey;
 
         [SerializeField] private bool _useVersion;
-        [SerializeField, ShowInInspectorIf(nameof(_useVersion))] private string _version = string.Empty;
+        [SerializeField, ShowInInspectorIf(nameof(_useVersion))] private string _version;
         [SerializeField, ShowInInspectorIf(nameof(_useVersion))] private ComparisonOperator _versionComparisonOperator;
 
         public string GateKey => _gateKey;
