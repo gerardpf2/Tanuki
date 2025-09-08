@@ -15,6 +15,7 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
+        public const int Rows = 3;
         private const string CustomDataEyeMovementDirectionUpKey = "EyeMovementDirectionUp"; // TODO: Use shorter key
         private const string CustomDataEyeRowOffsetKey = "EyeRowOffset"; // TODO: Use shorter key
 
@@ -24,7 +25,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public int EyeRowOffset { get; private set; }
 
-        public Test([NotNull] IConverter converter) : base(converter, PieceType.Test, ITest.Rows, 1)
+        public Test([NotNull] IConverter converter) : base(converter, PieceType.Test, Rows, 1)
         {
             ArgumentNullException.ThrowIfNull(converter);
 
@@ -35,7 +36,7 @@ namespace Game.Gameplay.Board.Pieces
         {
             EyeMovementDirectionUp = EyeRowOffset switch
             {
-                ITest.Rows - 1 when EyeMovementDirectionUp => false,
+                Rows - 1 when EyeMovementDirectionUp => false,
                 0 when !EyeMovementDirectionUp => true,
                 _ => EyeMovementDirectionUp
             };
