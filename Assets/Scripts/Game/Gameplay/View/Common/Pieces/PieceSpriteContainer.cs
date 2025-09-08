@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Game.Gameplay.Board;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace Game.Gameplay.View.Common.Pieces
     public class PieceSpriteContainer : ScriptableObject
     {
         [Serializable]
-        private struct PieceTypeSpritePair
+        private class PieceTypeSpritePair
         {
             [SerializeField] private PieceType _pieceType;
             [SerializeField] private Sprite _sprite;
@@ -21,15 +20,31 @@ namespace Game.Gameplay.View.Common.Pieces
             public Sprite Sprite => _sprite;
         }
 
-        [NotNull, SerializeField] private List<PieceTypeSpritePair> _pieceTypeSpritePairs = new();
+        [SerializeField] private PieceTypeSpritePair[] _pieceTypeSpritePairs;
 
         [NotNull]
         public Sprite Get(PieceType pieceType)
         {
-            PieceTypeSpritePair pieceTypeSpritePair = _pieceTypeSpritePairs.Find(pieceTypeSpritePair => pieceTypeSpritePair.PieceType == pieceType);
+            InvalidOperationException.ThrowIfNull(_pieceTypeSpritePairs);
+
+            PieceTypeSpritePair pieceTypeSpritePair = null;
+
+            foreach (PieceTypeSpritePair pieceTypeSpritePairCandidate in _pieceTypeSpritePairs)
+            {
+                InvalidOperationException.ThrowIfNull(pieceTypeSpritePairCandidate);
+
+                if (pieceTypeSpritePairCandidate.PieceType != pieceType)
+                {
+                    continue;
+                }
+
+                pieceTypeSpritePair = pieceTypeSpritePairCandidate;
+
+                break;
+            }
 
             InvalidOperationException.ThrowIfNullWithMessage(
-                pieceTypeSpritePair.Sprite,
+                pieceTypeSpritePair?.Sprite,
                 $"Cannot get piece sprite with PieceType: {pieceType}"
             );
 
