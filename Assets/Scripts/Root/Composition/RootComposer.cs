@@ -15,7 +15,7 @@ using Infrastructure.Unity;
 using Infrastructure.Unity.Composition;
 using JetBrains.Annotations;
 
-namespace Game.Root.Composition
+namespace Root.Composition
 {
     public class RootComposer : ScopeComposer
     {

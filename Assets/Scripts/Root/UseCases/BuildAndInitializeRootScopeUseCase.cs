@@ -1,4 +1,3 @@
-using Game.Root.Composition;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
@@ -8,8 +7,9 @@ using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
+using Root.Composition;
 
-namespace Game.Root.UseCases
+namespace Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {

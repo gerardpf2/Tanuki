@@ -1,13 +1,13 @@
-using Game.Root.UseCases;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
+using Root.UseCases;
 using UnityEngine;
 
-namespace Game.Root
+namespace Root
 {
     public class Root : MonoBehaviour
     {
