@@ -3,17 +3,7 @@
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "Game",
-        "DependencyInjection",
-        "ModelViewViewModel",
-        "Gating",
-        "Logging",
-        "ScreenLoading",
-        "Configuring",
-        "Unity",
-        "Tweening",
-        "System_"
+        "UnityEditor.TestRunner"
     ],
     "includePlatforms": [
         "Editor"
@@ -22,8 +12,7 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll",
-        "NSubstitute.dll"
+        "nunit.framework.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
