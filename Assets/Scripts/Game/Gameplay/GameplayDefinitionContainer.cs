@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Infrastructure.System.Exceptions;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Game.Gameplay
@@ -8,11 +6,27 @@ namespace Game.Gameplay
     [CreateAssetMenu(fileName = nameof(GameplayDefinitionContainer), menuName = "Tanuki/Game/Gameplay/" + nameof(GameplayDefinitionContainer))]
     public class GameplayDefinitionContainer : ScriptableObject, IGameplayDefinitionGetter
     {
-        [NotNull, ItemNotNull, SerializeField] private List<GameplayDefinition> _gameplayDefinitions = new();
+        [SerializeField] private GameplayDefinition[] _gameplayDefinitions;
 
         public IGameplayDefinition Get(string id)
         {
-            IGameplayDefinition gameplayDefinition = _gameplayDefinitions.Find(gameplayDefinition => gameplayDefinition.Id == id);
+            InvalidOperationException.ThrowIfNull(_gameplayDefinitions);
+
+            IGameplayDefinition gameplayDefinition = null;
+
+            foreach (GameplayDefinition gameplayDefinitionCandidate in _gameplayDefinitions)
+            {
+                InvalidOperationException.ThrowIfNull(gameplayDefinitionCandidate);
+
+                if (gameplayDefinitionCandidate.Id != id)
+                {
+                    continue;
+                }
+
+                gameplayDefinition = gameplayDefinitionCandidate;
+
+                break;
+            }
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 gameplayDefinition,

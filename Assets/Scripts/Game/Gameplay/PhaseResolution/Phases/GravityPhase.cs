@@ -62,7 +62,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
             int fall = _board.ComputePieceFall(piece, sourceCoordinate);
 
-            if (fall == 0)
+            if (fall <= 0)
             {
                 return false;
             }

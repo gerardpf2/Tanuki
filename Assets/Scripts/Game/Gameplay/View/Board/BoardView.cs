@@ -26,7 +26,7 @@ namespace Game.Gameplay.View.Board
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
         }
 
-        public void Initialize([NotNull] IReadonlyBoard board)
+        public void Initialize([NotNull] IReadonlyBoard board) // TODO: Use rows and columns instead ¿?
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -74,7 +74,7 @@ namespace Game.Gameplay.View.Board
 
             if (_pieceInstances.ContainsKey(piece))
             {
-                InvalidOperationException.Throw("Piece has already been added");
+                InvalidOperationException.Throw("Piece has already been instantiated");
             }
 
             _board.Add(piece, sourceCoordinate);

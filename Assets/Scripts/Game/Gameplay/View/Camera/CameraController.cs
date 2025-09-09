@@ -40,6 +40,8 @@ namespace Game.Gameplay.View.Camera
         {
             Uninitialize();
 
+            // TODO: Cache board ref and use it to register, unregister and update position
+
             SetInitialPosition();
 
             RegisterToEvents();
