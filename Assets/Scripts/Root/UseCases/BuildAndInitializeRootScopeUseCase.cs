@@ -1,4 +1,4 @@
-using Game.Root.Composition;
+using Game;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
@@ -8,8 +8,9 @@ using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
+using Root.Composition;
 
-namespace Game.Root.UseCases
+namespace Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCase : IBuildAndInitializeRootScopeUseCase
     {
@@ -18,25 +19,29 @@ namespace Game.Root.UseCases
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
+        [NotNull] private readonly IGameScopeComposerBuilder _gameScopeComposerBuilder;
 
         public BuildAndInitializeRootScopeUseCase(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] IConfigDefinitionGetter configDefinitionGetter,
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacement rootScreenPlacement,
-            [NotNull] ICoroutineRunner coroutineRunner)
+            [NotNull] ICoroutineRunner coroutineRunner,
+            [NotNull] IGameScopeComposerBuilder gameScopeComposerBuilder)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
             ArgumentNullException.ThrowIfNull(configDefinitionGetter);
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
+            ArgumentNullException.ThrowIfNull(gameScopeComposerBuilder);
 
             _gateDefinitionGetter = gateDefinitionGetter;
             _configDefinitionGetter = configDefinitionGetter;
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
             _coroutineRunner = coroutineRunner;
+            _gameScopeComposerBuilder = gameScopeComposerBuilder;
         }
 
         public Scope Resolve()
@@ -64,6 +69,8 @@ namespace Game.Root.UseCases
             ruleAdder.Add(new InstanceRule<IScreenPlacement>(_rootScreenPlacement));
 
             ruleAdder.Add(new InstanceRule<ICoroutineRunner>(_coroutineRunner));
+
+            ruleAdder.Add(new InstanceRule<IGameScopeComposerBuilder>(_gameScopeComposerBuilder));
 
             ruleAdder.Add(
                 new SingletonRule<IConfigValueGetter>(r =>
@@ -121,7 +128,8 @@ namespace Game.Root.UseCases
                         r.Resolve<IScreenPlacement>(),
                         r.Resolve<IConfigValueGetter>(),
                         r.Resolve<ICoroutineRunner>(),
-                        r.Resolve<IConverter>()
+                        r.Resolve<IConverter>(),
+                        r.Resolve<IGameScopeComposerBuilder>()
                     )
                 )
             );

@@ -1,19 +1,20 @@
 {
-    "name": "GameTests",
+    "name": "RootTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Game",
-        "DependencyInjection",
-        "ModelViewViewModel",
-        "Gating",
-        "Logging",
         "ScreenLoading",
         "Configuring",
+        "Gating",
         "Unity",
+        "Root",
+        "DependencyInjection",
+        "System_",
+        "Logging",
         "Tweening",
-        "System_"
+        "ModelViewViewModel",
+        "Game"
     ],
     "includePlatforms": [
         "Editor"

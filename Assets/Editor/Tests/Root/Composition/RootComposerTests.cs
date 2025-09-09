@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Root.Composition;
+using Game;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
@@ -15,18 +15,21 @@ using Infrastructure.Unity;
 using Infrastructure.Unity.Composition;
 using NSubstitute;
 using NUnit.Framework;
+using Root.Composition;
 
-namespace Editor.Tests.Game.Root.Composition
+namespace Editor.Tests.Root.Composition
 {
     public class RootComposerTests
     {
         // Tested behaviours that differ from ScopeComposer
 
+        private IGameScopeComposerBuilder _gameScopeComposerBuilder;
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private ScopeBuildingContext _scopeBuildingContext;
         private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
         private ICoroutineRunner _coroutineRunner;
+        private IScopeComposer _gameComposer;
         private IConverter _converter;
 
         private RootComposer _rootComposer;
@@ -34,11 +37,13 @@ namespace Editor.Tests.Game.Root.Composition
         [SetUp]
         public void SetUp()
         {
+            _gameScopeComposerBuilder = Substitute.For<IGameScopeComposerBuilder>();
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _configValueGetter = Substitute.For<IConfigValueGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
             _scopeBuildingContext = new ScopeBuildingContext();
+            _gameComposer = Substitute.For<IScopeComposer>();
             _converter = Substitute.For<IConverter>();
 
             _rootComposer =
@@ -47,8 +52,11 @@ namespace Editor.Tests.Game.Root.Composition
                     _screenPlacement,
                     _configValueGetter,
                     _coroutineRunner,
-                    _converter
+                    _converter,
+                    _gameScopeComposerBuilder
                 );
+
+            _gameScopeComposerBuilder.Build().Returns(_gameComposer);
         }
 
         [Test]
@@ -74,8 +82,9 @@ namespace Editor.Tests.Game.Root.Composition
 
             List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers().ToList();
 
-            Assert.IsTrue(childScopeComposers.Count == 1);
+            Assert.IsTrue(childScopeComposers.Count == 2);
             Assert.NotNull(childScopeComposers.Find(childScopeComposer => childScopeComposer is ModelViewViewModelComposer));
+            Assert.IsTrue(childScopeComposers.Contains(_gameComposer));
         }
     }
 }
