@@ -1,3 +1,4 @@
+using Game;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Gating;
@@ -11,6 +12,7 @@ namespace Editor.Tests.Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCaseTests
     {
+        private IGameScopeComposerBuilder _gameScopeComposerBuilder;
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private IConfigDefinitionGetter _configDefinitionGetter;
         private IGateDefinitionGetter _gateDefinitionGetter;
@@ -22,6 +24,7 @@ namespace Editor.Tests.Root.UseCases
         [SetUp]
         public void SetUp()
         {
+            _gameScopeComposerBuilder = Substitute.For<IGameScopeComposerBuilder>();
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _configDefinitionGetter = Substitute.For<IConfigDefinitionGetter>();
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
@@ -34,7 +37,8 @@ namespace Editor.Tests.Root.UseCases
                     _configDefinitionGetter,
                     _screenDefinitionGetter,
                     _screenPlacement,
-                    _coroutineRunner
+                    _coroutineRunner,
+                    _gameScopeComposerBuilder
                 );
         }
 

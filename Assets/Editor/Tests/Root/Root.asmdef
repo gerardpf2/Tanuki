@@ -13,7 +13,8 @@
         "System_",
         "Logging",
         "Tweening",
-        "ModelViewViewModel"
+        "ModelViewViewModel",
+        "Game"
     ],
     "includePlatforms": [
         "Editor"
