@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
@@ -24,25 +25,29 @@ namespace Root.Composition
         [NotNull] private readonly IConfigValueGetter _configValueGetter;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
         [NotNull] private readonly IConverter _converter;
+        [NotNull] private readonly IGameScopeComposerBuilder _gameScopeComposerBuilder;
 
         public RootComposer(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
             [NotNull] IScreenPlacement rootScreenPlacement,
             [NotNull] IConfigValueGetter configValueGetter,
             [NotNull] ICoroutineRunner coroutineRunner,
-            [NotNull] IConverter converter)
+            [NotNull] IConverter converter,
+            [NotNull] IGameScopeComposerBuilder gameScopeComposerBuilder)
         {
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(configValueGetter);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
             ArgumentNullException.ThrowIfNull(converter);
+            ArgumentNullException.ThrowIfNull(gameScopeComposerBuilder);
 
             _screenDefinitionGetter = screenDefinitionGetter;
             _rootScreenPlacement = rootScreenPlacement;
             _configValueGetter = configValueGetter;
             _coroutineRunner = coroutineRunner;
             _converter = converter;
+            _gameScopeComposerBuilder = gameScopeComposerBuilder;
         }
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
@@ -59,7 +64,10 @@ namespace Root.Composition
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
         {
-            return base.GetChildScopeComposers().Append(new ModelViewViewModelComposer());
+            return base
+                .GetChildScopeComposers()
+                .Append(new ModelViewViewModelComposer())
+                .Append(_gameScopeComposerBuilder.Build());
         }
     }
 }
