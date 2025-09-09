@@ -1,4 +1,3 @@
-using Game.Root.UseCases;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Gating;
@@ -6,8 +5,9 @@ using Infrastructure.ScreenLoading;
 using Infrastructure.Unity;
 using NSubstitute;
 using NUnit.Framework;
+using Root.UseCases;
 
-namespace Editor.Tests.Game.Root.UseCases
+namespace Editor.Tests.Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCaseTests
     {

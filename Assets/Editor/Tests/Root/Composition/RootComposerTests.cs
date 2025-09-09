@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Root.Composition;
 using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
@@ -15,8 +14,9 @@ using Infrastructure.Unity;
 using Infrastructure.Unity.Composition;
 using NSubstitute;
 using NUnit.Framework;
+using Root.Composition;
 
-namespace Editor.Tests.Game.Root.Composition
+namespace Editor.Tests.Root.Composition
 {
     public class RootComposerTests
     {
