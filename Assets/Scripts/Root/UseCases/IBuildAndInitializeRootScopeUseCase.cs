@@ -1,6 +1,6 @@
 using Infrastructure.DependencyInjection;
 
-namespace Game.Root.UseCases
+namespace Root.UseCases
 {
     public interface IBuildAndInitializeRootScopeUseCase
     {

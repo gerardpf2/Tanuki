@@ -1,6 +1,4 @@
-using Game.Gameplay;
-using Game.Gameplay.View.Board;
-using Game.Root.UseCases;
+using Game;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Gating;
@@ -8,15 +6,15 @@ using Infrastructure.ScreenLoading;
 using Infrastructure.Unity;
 using NSubstitute;
 using NUnit.Framework;
+using Root.UseCases;
 
-namespace Editor.Tests.Game.Root.UseCases
+namespace Editor.Tests.Root.UseCases
 {
     public class BuildAndInitializeRootScopeUseCaseTests
     {
-        private IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
+        private IGameScopeComposerBuilder _gameScopeComposerBuilder;
         private IScreenDefinitionGetter _screenDefinitionGetter;
         private IConfigDefinitionGetter _configDefinitionGetter;
-        private IGameplayDefinitionGetter _gameplayDefinitionGetter;
         private IGateDefinitionGetter _gateDefinitionGetter;
         private IScreenPlacement _screenPlacement;
         private ICoroutineRunner _coroutineRunner;
@@ -26,10 +24,9 @@ namespace Editor.Tests.Game.Root.UseCases
         [SetUp]
         public void SetUp()
         {
-            _pieceViewDefinitionGetter = Substitute.For<IPieceViewDefinitionGetter>();
+            _gameScopeComposerBuilder = Substitute.For<IGameScopeComposerBuilder>();
             _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
             _configDefinitionGetter = Substitute.For<IConfigDefinitionGetter>();
-            _gameplayDefinitionGetter = Substitute.For<IGameplayDefinitionGetter>();
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
@@ -41,8 +38,7 @@ namespace Editor.Tests.Game.Root.UseCases
                     _screenDefinitionGetter,
                     _screenPlacement,
                     _coroutineRunner,
-                    _gameplayDefinitionGetter,
-                    _pieceViewDefinitionGetter
+                    _gameScopeComposerBuilder
                 );
         }
 

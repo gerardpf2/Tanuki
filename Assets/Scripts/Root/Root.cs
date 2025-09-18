@@ -1,15 +1,14 @@
-using Game.Gameplay;
-using Game.Gameplay.View.Board;
-using Game.Root.UseCases;
+using Game;
 using Infrastructure.Configuring;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Gating;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
+using Root.UseCases;
 using UnityEngine;
 
-namespace Game.Root
+namespace Root
 {
     public class Root : MonoBehaviour
     {
@@ -18,8 +17,7 @@ namespace Game.Root
         [SerializeField] private ScreenDefinitionContainer _screenDefinitionContainer;
         [SerializeField] private RootScreenPlacement _rootScreenPlacement;
         [SerializeField] private CoroutineRunner _coroutineRunner;
-        [SerializeField] private GameplayDefinitionContainer _gameplayDefinitionContainer;
-        [SerializeField] private PieceViewDefinitionContainer _pieceViewDefinitionContainer;
+        [SerializeField] private GameScopeComposerBuilder _gameScopeComposerBuilder;
 
         private Scope _root; // TODO: Check if storing ref is needed
 
@@ -30,8 +28,7 @@ namespace Game.Root
             InvalidOperationException.ThrowIfNull(_screenDefinitionContainer);
             InvalidOperationException.ThrowIfNull(_rootScreenPlacement);
             InvalidOperationException.ThrowIfNull(_coroutineRunner);
-            InvalidOperationException.ThrowIfNull(_gameplayDefinitionContainer);
-            InvalidOperationException.ThrowIfNull(_pieceViewDefinitionContainer);
+            InvalidOperationException.ThrowIfNull(_gameScopeComposerBuilder);
 
             IBuildAndInitializeRootScopeUseCase buildAndInitializeRootScopeUseCase =
                 new BuildAndInitializeRootScopeUseCase(
@@ -40,8 +37,7 @@ namespace Game.Root
                     _screenDefinitionContainer,
                     _rootScreenPlacement,
                     _coroutineRunner,
-                    _gameplayDefinitionContainer,
-                    _pieceViewDefinitionContainer
+                    _gameScopeComposerBuilder
                 );
 
             _root = buildAndInitializeRootScopeUseCase.Resolve();
