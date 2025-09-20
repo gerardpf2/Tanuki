@@ -8,7 +8,6 @@ namespace Infrastructure.Tweening
     public abstract class SequenceBase : TweenBase
     {
         [NotNull, ItemNotNull] private readonly IReadOnlyList<ITween> _tweens;
-        private readonly IEnumerable<ITween> _ctorTweens; // TODO: Remove this and check _tweens instead in both Equals and GetHashCode
 
         protected SequenceBase(
             bool autoPlay,
@@ -30,11 +29,9 @@ namespace Infrastructure.Tweening
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
-            _ctorTweens = tweens;
-
             List<ITween> tweensCopy = new();
 
-            foreach (ITween tween in _ctorTweens)
+            foreach (ITween tween in tweens)
             {
                 ArgumentNullException.ThrowIfNull(tween);
 
@@ -94,14 +91,36 @@ namespace Infrastructure.Tweening
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(base.GetHashCode(), _ctorTweens);
+            HashCode hashCode = new();
+
+            hashCode.Add(base.GetHashCode());
+
+            foreach (ITween tween in _tweens)
+            {
+                hashCode.Add(tween.GetHashCode());
+            }
+
+            return hashCode.ToHashCode();
         }
 
         private bool Equals([NotNull] SequenceBase other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
-            return Equals(_ctorTweens, other._ctorTweens);
+            if (_tweens.Count != other._tweens.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < _tweens.Count; ++i)
+            {
+                if (!_tweens[i].Equals(other._tweens[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
