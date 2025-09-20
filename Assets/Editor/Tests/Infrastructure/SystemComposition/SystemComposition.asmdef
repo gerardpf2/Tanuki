@@ -1,21 +1,12 @@
 {
-    "name": "RootTests",
+    "name": "SystemCompositionTests",
     "rootNamespace": "",
     "references": [
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "ScreenLoading",
-        "Configuring",
-        "Gating",
-        "Unity",
-        "Root",
-        "DependencyInjection",
-        "System_",
-        "Logging",
-        "Tweening",
-        "ModelViewViewModel",
-        "Game",
-        "SystemComposition"
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:835c81149e7e52b49bc807078b8ba1cb",
+        "GUID:f494683be324d2d40986fd190775fea9",
+        "GUID:9c27e7836fbcebd4db6332d402e38c01"
     ],
     "includePlatforms": [
         "Editor"
