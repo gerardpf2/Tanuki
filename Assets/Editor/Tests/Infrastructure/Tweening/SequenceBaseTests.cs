@@ -72,18 +72,38 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_OtherSameParams_ReturnsTrue()
         {
-            SequenceBase sequenceBase = Build();
-            SequenceBase other = Build();
+            ITween tweenA = Substitute.For<ITween>();
+            ITween tweenB = Substitute.For<ITween>();
+            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
+            IEnumerable<ITween> otherTweens = new List<ITween> { tweenA, tweenB };
+            SequenceBase sequenceBase = Build(tweens);
+            SequenceBase other = Build(otherTweens);
 
             Assert.AreEqual(sequenceBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams_ReturnsFalse()
+        public void Equals_OtherDifferentParamsCount_ReturnsFalse()
         {
-            IEnumerable<ITween> otherTweens = new List<ITween>();
-            SequenceBase sequenceBase = Build();
-            SequenceBase other = Build(tweens: otherTweens);
+            ITween tweenA = Substitute.For<ITween>();
+            ITween tweenB = Substitute.For<ITween>();
+            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
+            IEnumerable<ITween> otherTweens = new List<ITween> { tweenA };
+            SequenceBase sequenceBase = Build(tweens);
+            SequenceBase other = Build(otherTweens);
+
+            Assert.AreNotEqual(sequenceBase, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParamsOrder_ReturnsFalse()
+        {
+            ITween tweenA = Substitute.For<ITween>();
+            ITween tweenB = Substitute.For<ITween>();
+            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
+            IEnumerable<ITween> otherTweens = new List<ITween> { tweenB, tweenA };
+            SequenceBase sequenceBase = Build(tweens);
+            SequenceBase other = Build(otherTweens);
 
             Assert.AreNotEqual(sequenceBase, other);
         }
@@ -91,18 +111,38 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void GetHashCode_OtherSameParams_SameReturnedValue()
         {
-            SequenceBase sequenceBase = Build();
-            SequenceBase other = Build();
+            ITween tweenA = Substitute.For<ITween>();
+            ITween tweenB = Substitute.For<ITween>();
+            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
+            IEnumerable<ITween> otherTweens = new List<ITween> { tweenA, tweenB };
+            SequenceBase sequenceBase = Build(tweens);
+            SequenceBase other = Build(otherTweens);
 
             Assert.AreEqual(sequenceBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParamsCount_DifferentReturnedValue()
         {
-            IEnumerable<ITween> otherTweens = new List<ITween>();
-            SequenceBase sequenceBase = Build();
-            SequenceBase other = Build(tweens: otherTweens);
+            ITween tweenA = Substitute.For<ITween>();
+            ITween tweenB = Substitute.For<ITween>();
+            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
+            IEnumerable<ITween> otherTweens = new List<ITween> { tweenA };
+            SequenceBase sequenceBase = Build(tweens);
+            SequenceBase other = Build(otherTweens);
+
+            Assert.AreNotEqual(sequenceBase.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParamsOrder_DifferentReturnedValue()
+        {
+            ITween tweenA = Substitute.For<ITween>();
+            ITween tweenB = Substitute.For<ITween>();
+            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
+            IEnumerable<ITween> otherTweens = new List<ITween> { tweenB, tweenA };
+            SequenceBase sequenceBase = Build(tweens);
+            SequenceBase other = Build(otherTweens);
 
             Assert.AreNotEqual(sequenceBase.GetHashCode(), other.GetHashCode());
         }

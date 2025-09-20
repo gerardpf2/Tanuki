@@ -1,13 +1,14 @@
+using Infrastructure.DependencyInjection;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
 using JetBrains.Annotations;
 
-namespace Infrastructure.DependencyInjection.Composition
+namespace Infrastructure.SystemComposition.Composition
 {
     public class SystemComposer : ScopeComposer
     {
-        // TODO: SystemComposer should be inside System assembly, but it is not possible because of a circular dependency
+        // SystemComposer should be inside System assembly, but it is not possible because of a circular dependency
 
         [NotNull] private readonly IConverter _converter;
 

@@ -1,13 +1,13 @@
 using System;
 using Infrastructure.DependencyInjection;
-using Infrastructure.DependencyInjection.Composition;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.System;
 using Infrastructure.System.Parsing;
+using Infrastructure.SystemComposition.Composition;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Editor.Tests.Infrastructure.DependencyInjection.Composition
+namespace Editor.Tests.Infrastructure.SystemComposition.Composition
 {
     public class SystemComposerTests
     {
