@@ -80,7 +80,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetInstance(_gameplayDefinitionGetter));
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoardContainer>(_ => new BoardContainer()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceCachedPropertiesGetter>(_ => new PieceCachedPropertiesGetter()));
 
@@ -199,6 +199,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
@@ -280,6 +281,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetInstance(_gameplayDefinitionGetter));
         }
 
         protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
@@ -305,6 +308,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IUnloadGameplayUseCase>(),
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IGameplayDefinitionGetter>(),
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),

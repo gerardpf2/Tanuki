@@ -21,6 +21,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IUnloadGameplayUseCase _unloadGameplayUseCase;
         [NotNull] private readonly IBoardParser _boardParser;
         [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
+        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
@@ -35,6 +36,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IUnloadGameplayUseCase unloadGameplayUseCase,
             [NotNull] IBoardParser boardParser,
             [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
+            [NotNull] IBoardContainer boardContainer,
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
@@ -48,6 +50,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(unloadGameplayUseCase);
             ArgumentNullException.ThrowIfNull(boardParser);
             ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
@@ -61,6 +64,7 @@ namespace Game.Gameplay.UseCases
             _unloadGameplayUseCase = unloadGameplayUseCase;
             _boardParser = boardParser;
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
+            _boardContainer = boardContainer;
             _goalsContainer = goalsContainer;
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
@@ -92,6 +96,7 @@ namespace Game.Gameplay.UseCases
                 out IEnumerable<PiecePlacement> piecePlacements
             );
 
+            _boardContainer.Initialize(board, piecePlacements);
             _goalsContainer.Initialize(gameplayDefinition.GoalDefinitions);
             _phaseResolver.Initialize(board, piecePlacements);
             _playerPiecesBag.Initialize();
