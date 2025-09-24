@@ -80,13 +80,13 @@ namespace Game.Gameplay.UseCases
         {
             _unloadGameplayUseCase.Resolve();
 
-            (IReadonlyBoard board, IEnumerable<IGoalDefinition> initialGoalDefinitions) = PrepareModel(id);
-            GameplayViewData gameplayViewData = PrepareView(board, initialGoalDefinitions);
+            IEnumerable<IGoalDefinition> initialGoalDefinitions = PrepareModel(id);
+            GameplayViewData gameplayViewData = PrepareView(initialGoalDefinitions);
 
             LoadScreen(gameplayViewData);
         }
 
-        private (IReadonlyBoard, IEnumerable<IGoalDefinition>) PrepareModel(string id)
+        private IEnumerable<IGoalDefinition> PrepareModel(string id)
         {
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
@@ -103,12 +103,12 @@ namespace Game.Gameplay.UseCases
 
             _phaseResolver.Resolve(new ResolveContext(null));
 
-            return (board, gameplayDefinition.GoalDefinitions);
+            return gameplayDefinition.GoalDefinitions;
         }
 
-        private GameplayViewData PrepareView(IReadonlyBoard board, IEnumerable<IGoalDefinition> initialGoalDefinitions)
+        private GameplayViewData PrepareView(IEnumerable<IGoalDefinition> initialGoalDefinitions)
         {
-            _boardView.Initialize(board);
+            _boardView.Initialize();
             _goalsViewContainer.Initialize(initialGoalDefinitions);
             _playerView.Initialize();
             _cameraController.Initialize();

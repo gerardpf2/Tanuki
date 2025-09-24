@@ -10,6 +10,7 @@ namespace Game.Gameplay.View.Board
 {
     public class BoardView : IBoardView
     {
+        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
 
         [NotNull] private readonly IDictionary<IPiece, GameObject> _pieceInstances = new Dictionary<IPiece, GameObject>();
@@ -19,16 +20,22 @@ namespace Game.Gameplay.View.Board
 
         public IReadonlyBoard Board => _board;
 
-        public BoardView([NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter)
+        public BoardView(
+            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter)
         {
+            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
 
+            _boardContainer = boardContainer;
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
         }
 
-        public void Initialize([NotNull] IReadonlyBoard board) // TODO: Use rows and columns instead ¿?
+        public void Initialize()
         {
-            ArgumentNullException.ThrowIfNull(board);
+            IReadonlyBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
 
             Uninitialize();
 

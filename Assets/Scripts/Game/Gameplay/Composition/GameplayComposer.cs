@@ -228,7 +228,9 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
-                        r.Resolve<IPieceCachedPropertiesGetter>())
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IPieceCachedPropertiesGetter>()
+                    )
                 )
             );
 
