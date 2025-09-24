@@ -1,5 +1,4 @@
-using Infrastructure.System.Exceptions;
-using JetBrains.Annotations;
+using System.Collections.Generic;
 
 namespace Game.Gameplay.Board
 {
@@ -7,18 +6,20 @@ namespace Game.Gameplay.Board
     {
         public IBoard Board { get; private set; }
 
-        public void Initialize([NotNull] IBoard board)
-        {
-            ArgumentNullException.ThrowIfNull(board);
+        public IEnumerable<PiecePlacement> PiecePlacements { get; private set; }
 
+        public void Initialize(IBoard board, IEnumerable<PiecePlacement> piecePlacements)
+        {
             Uninitialize();
 
             Board = board;
+            PiecePlacements = piecePlacements;
         }
 
         public void Uninitialize()
         {
             Board = null;
+            PiecePlacements = null;
         }
     }
 }
