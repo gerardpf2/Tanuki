@@ -8,43 +8,30 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class LockPlayerPiecePhase : Phase, ILockPlayerPiecePhase
+    public class LockPlayerPiecePhase : Phase
     {
+        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
 
-        private IBoard _board;
         private IPiece _targetPiece;
 
         public LockPlayerPiecePhase(
+            [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
             [NotNull] IPlayerPiecesBag playerPiecesBag) : base(-1, 1)
         {
+            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
 
+            _boardContainer = boardContainer;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
             _playerPiecesBag = playerPiecesBag;
-        }
-
-        public void Initialize([NotNull] IBoard board)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-
-            Uninitialize();
-
-            _board = board;
-        }
-
-        public override void Uninitialize()
-        {
-            base.Uninitialize();
-
-            _board = null;
         }
 
         public override void OnBeginIteration()
@@ -57,7 +44,10 @@ namespace Game.Gameplay.PhaseResolution.Phases
         protected override ResolveResult ResolveImpl([NotNull] ResolveContext resolveContext)
         {
             ArgumentNullException.ThrowIfNull(resolveContext);
-            InvalidOperationException.ThrowIfNull(_board);
+
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
 
             if (_targetPiece is null || _playerPiecesBag.Current != _targetPiece || !resolveContext.Column.HasValue)
             {
@@ -68,7 +58,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             Coordinate lockSourceCoordinate = GetLockSourceCoordinate(resolveContext.Column.Value);
 
-            _board.Add(_targetPiece, lockSourceCoordinate);
+            board.Add(_targetPiece, lockSourceCoordinate);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(_targetPiece, lockSourceCoordinate));
 
@@ -84,11 +74,13 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         private Coordinate GetLockSourceCoordinate(int column)
         {
-            InvalidOperationException.ThrowIfNull(_board);
+            IReadonlyBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
             InvalidOperationException.ThrowIfNull(_targetPiece);
 
-            Coordinate sourceCoordinate = new(_board.Rows, column);
-            int fall = _board.ComputePieceFall(_targetPiece, sourceCoordinate);
+            Coordinate sourceCoordinate = new(board.Rows, column);
+            int fall = board.ComputePieceFall(_targetPiece, sourceCoordinate);
             Coordinate lockSourceCoordinate = new(sourceCoordinate.Row - fall, sourceCoordinate.Column);
 
             return lockSourceCoordinate;

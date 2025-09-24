@@ -8,68 +8,42 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class InstantiateInitialPiecesPhase : Phase, IInstantiateInitialPiecesPhase
+    public class InstantiateInitialPiecesPhase : Phase
     {
+        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        private IBoard _board;
-        private IEnumerable<PiecePlacement> _piecePlacements;
-
         public InstantiateInitialPiecesPhase(
+            [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory) : base(1, -1)
         {
+            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
+            _boardContainer = boardContainer;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
 
-        public void Initialize(
-            [NotNull] IBoard board,
-            [NotNull, ItemNotNull] IEnumerable<PiecePlacement> piecePlacements)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-            ArgumentNullException.ThrowIfNull(piecePlacements);
-
-            ICollection<PiecePlacement> piecePlacementsCopy = new List<PiecePlacement>();
-
-            foreach (PiecePlacement piecePlacement in piecePlacements)
-            {
-                ArgumentNullException.ThrowIfNull(piecePlacement);
-
-                piecePlacementsCopy.Add(piecePlacement);
-            }
-
-            Uninitialize();
-
-            _board = board;
-            _piecePlacements = piecePlacementsCopy;
-        }
-
-        public override void Uninitialize()
-        {
-            base.Uninitialize();
-
-            _board = null;
-            _piecePlacements = null;
-        }
-
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            InvalidOperationException.ThrowIfNull(_board);
-            InvalidOperationException.ThrowIfNull(_piecePlacements);
+            IBoard board = _boardContainer.Board;
+            IEnumerable<PiecePlacement> piecePlacements = _boardContainer.PiecePlacements;
 
-            foreach (PiecePlacement piecePlacement in _piecePlacements)
+            InvalidOperationException.ThrowIfNull(board);
+            InvalidOperationException.ThrowIfNull(piecePlacements);
+
+            foreach (PiecePlacement piecePlacement in piecePlacements)
             {
                 InvalidOperationException.ThrowIfNull(piecePlacement);
 
                 IPiece piece = piecePlacement.Piece;
                 Coordinate sourceCoordinate = new(piecePlacement.Row, piecePlacement.Column);
 
-                _board.Add(piece, sourceCoordinate);
+                board.Add(piece, sourceCoordinate);
 
                 _eventEnqueuer.Enqueue(
                     _eventFactory.GetInstantiatePieceEvent(

@@ -14,6 +14,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _maxResolveTimesPerIteration = maxResolveTimesPerIteration;
         }
 
+        public virtual void Initialize()
+        {
+            Uninitialize();
+        }
+
         public virtual void Uninitialize()
         {
             _resolveTimes = 0;

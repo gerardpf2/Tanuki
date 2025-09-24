@@ -8,45 +8,35 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class LineClearPhase : Phase, ILineClearPhase
+    public class LineClearPhase : Phase
     {
+        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        private IReadonlyBoard _board;
-
-        public LineClearPhase([NotNull] IEventEnqueuer eventEnqueuer, [NotNull] IEventFactory eventFactory) : base(-1, -1)
+        public LineClearPhase(
+            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IEventEnqueuer eventEnqueuer,
+            [NotNull] IEventFactory eventFactory) : base(-1, -1)
         {
+            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
+            _boardContainer = boardContainer;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
 
-        public void Initialize([NotNull] IReadonlyBoard board)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-
-            Uninitialize();
-
-            _board = board;
-        }
-
-        public override void Uninitialize()
-        {
-            base.Uninitialize();
-
-            _board = null;
-        }
-
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            InvalidOperationException.ThrowIfNull(_board);
+            IReadonlyBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
 
             bool resolved = false;
 
-            int rows = _board.Rows;
+            int rows = board.Rows;
 
             for (int row = 0; row < rows; ++row)
             {
@@ -58,11 +48,13 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         private bool TryDamageRow(int row)
         {
-            InvalidOperationException.ThrowIfNull(_board);
+            IReadonlyBoard board = _boardContainer.Board;
 
-            IReadOnlyCollection<KeyValuePair<IPiece, int>> pieces = new List<KeyValuePair<IPiece, int>>(_board.GetPiecesInRow(row));
+            InvalidOperationException.ThrowIfNull(board);
 
-            if (pieces.Count < _board.Columns)
+            IReadOnlyCollection<KeyValuePair<IPiece, int>> pieces = new List<KeyValuePair<IPiece, int>>(board.GetPiecesInRow(row));
+
+            if (pieces.Count < board.Columns)
             {
                 return false;
             }
@@ -76,7 +68,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
                     continue;
                 }
 
-                _board.GetPieceRowColumnOffset(piece, row, column, out int rowOffset, out int columnOffset);
+                board.GetPieceRowColumnOffset(piece, row, column, out int rowOffset, out int columnOffset);
 
                 pieceUpdater.Damage(rowOffset, columnOffset);
 

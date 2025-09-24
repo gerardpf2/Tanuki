@@ -8,45 +8,35 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class GravityPhase : Phase, IGravityPhase
+    public class GravityPhase : Phase
     {
+        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        private IBoard _board;
-
-        public GravityPhase([NotNull] IEventEnqueuer eventEnqueuer, [NotNull] IEventFactory eventFactory) : base(-1, -1)
+        public GravityPhase(
+            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IEventEnqueuer eventEnqueuer,
+            [NotNull] IEventFactory eventFactory) : base(-1, -1)
         {
+            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
+            _boardContainer = boardContainer;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
 
-        public void Initialize([NotNull] IBoard board)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-
-            Uninitialize();
-
-            _board = board;
-        }
-
-        public override void Uninitialize()
-        {
-            base.Uninitialize();
-
-            _board = null;
-        }
-
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            InvalidOperationException.ThrowIfNull(_board);
+            IReadonlyBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
 
             bool resolved = false;
 
-            foreach (IPiece piece in _board.GetPiecesSortedByRowThenByColumn())
+            foreach (IPiece piece in board.GetPiecesSortedByRowThenByColumn())
             {
                 resolved = TryMovePiece(piece) || resolved;
             }
@@ -57,10 +47,13 @@ namespace Game.Gameplay.PhaseResolution.Phases
         private bool TryMovePiece([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            InvalidOperationException.ThrowIfNull(_board);
 
-            Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
-            int fall = _board.ComputePieceFall(piece, sourceCoordinate);
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
+
+            Coordinate sourceCoordinate = board.GetPieceSourceCoordinate(piece);
+            int fall = board.ComputePieceFall(piece, sourceCoordinate);
 
             if (fall <= 0)
             {
@@ -70,7 +63,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             int rowOffset = -fall;
             const int columnOffset = 0;
 
-            _board.Move(piece, rowOffset, columnOffset);
+            board.Move(piece, rowOffset, columnOffset);
 
             _eventEnqueuer.Enqueue(
                 _eventFactory.GetMovePieceEvent(

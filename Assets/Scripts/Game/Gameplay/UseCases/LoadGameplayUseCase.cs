@@ -98,7 +98,7 @@ namespace Game.Gameplay.UseCases
 
             _boardContainer.Initialize(board, piecePlacements);
             _goalsContainer.Initialize(gameplayDefinition.GoalDefinitions);
-            _phaseResolver.Initialize(board, piecePlacements);
+            _phaseResolver.Initialize();
             _playerPiecesBag.Initialize();
 
             _phaseResolver.Resolve(new ResolveContext(null));
