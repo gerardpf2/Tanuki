@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Camera
 {
-    public class CameraController : ICameraController, ICameraBoardViewPropertiesGetter, ICameraBoardViewPropertiesSetter
+    public class CameraController : ICameraController
     {
         private const int ExtraRowsOnTop = 5; // TODO: Scriptable object for this and other camera params
 

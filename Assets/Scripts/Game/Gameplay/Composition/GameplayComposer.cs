@@ -237,16 +237,13 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton(r =>
+                ruleFactory.GetSingleton<ICameraController>(r =>
                     new CameraController(
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraGetter>()
                     )
                 )
             );
-            ruleAdder.Add(ruleFactory.GetTo<ICameraController, CameraController>());
-            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewPropertiesGetter, CameraController>());
-            ruleAdder.Add(ruleFactory.GetTo<ICameraBoardViewPropertiesSetter, CameraController>());
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IActionFactory>(r =>
@@ -291,7 +288,7 @@ namespace Game.Gameplay.Composition
                     new PlayerView(
                         r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IBoardView>(),
-                        r.Resolve<ICameraBoardViewPropertiesGetter>()
+                        r.Resolve<ICameraController>()
                     )
                 )
             );
@@ -339,7 +336,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<ICameraBoardViewPropertiesSetter>(),
+                        r.Resolve<ICameraController>(),
                         r.Resolve<ICoroutineRunnerHelper>()
                     )
                 )
