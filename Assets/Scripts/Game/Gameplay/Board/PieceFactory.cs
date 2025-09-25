@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -19,7 +20,7 @@ namespace Game.Gameplay.Board
 
         public IPiece GetTest(IEnumerable<KeyValuePair<string, string>> customData)
         {
-            return ProcessCustomData(new Test(_converter), customData);
+            return new Test(_converter).WithCustomData(customData);
         }
 
         public IPiece GetPlayerBlock11()
@@ -35,18 +36,6 @@ namespace Game.Gameplay.Board
         public IPiece GetPlayerBlock21()
         {
             return new PlayerBlock21(_converter);
-        }
-
-        [NotNull]
-        private static IPiece ProcessCustomData(
-            [NotNull] IPiece piece,
-            IEnumerable<KeyValuePair<string, string>> customData)
-        {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            piece.ProcessCustomData(customData);
-
-            return piece;
         }
     }
 }
