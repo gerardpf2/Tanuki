@@ -12,6 +12,7 @@ namespace Game.Gameplay
     {
         [SerializeField] private string _id;
         [SerializeField] private BoardDefinition _boardDefinition;
+        [SerializeField] private GoalsDefinition _goalsDefinition;
         [SerializeField] private GoalDefinition[] _goalDefinitions;
 
         public string Id => _id;
@@ -23,6 +24,16 @@ namespace Game.Gameplay
                 InvalidOperationException.ThrowIfNull(_boardDefinition);
 
                 return _boardDefinition;
+            }
+        }
+
+        public IGoalsDefinition GoalsDefinition
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_goalsDefinition);
+
+                return _goalsDefinition;
             }
         }
 

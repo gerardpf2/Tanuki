@@ -12,6 +12,9 @@ namespace Game.Gameplay
         [NotNull]
         IBoardDefinition BoardDefinition { get; }
 
+        [NotNull]
+        IGoalsDefinition GoalsDefinition { get; }
+
         [NotNull, ItemNotNull]
         IEnumerable<IGoalDefinition> GoalDefinitions { get; }
     }
