@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Goals.Parsing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.Player;
@@ -105,6 +106,25 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetTo<IEventEnqueuer, EventContainer>());
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoalSerializedDataConverter>(_ => new GoalSerializedDataConverter()));
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IGoalsParser>(r =>
+                    new GoalsParser(
+                        r.Resolve<IGoalsSerializedDataConverter>(),
+                        r.Resolve<IParser>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IGoalsSerializedDataConverter>(r =>
+                    new GoalsSerializedDataConverter(
+                        r.Resolve<IGoalSerializedDataConverter>()
+                    )
+                )
+            );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
 
@@ -320,6 +340,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IGameplayDefinitionGetter>(),
                         r.Resolve<IBoardContainer>(),
+                        r.Resolve<IGoalsParser>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
