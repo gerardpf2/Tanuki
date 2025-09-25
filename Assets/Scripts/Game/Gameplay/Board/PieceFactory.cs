@@ -37,12 +37,14 @@ namespace Game.Gameplay.Board
             return new PlayerBlock21(_converter);
         }
 
-        private static IPiece ProcessCustomData(IPiece piece, IEnumerable<KeyValuePair<string, string>> customData)
+        [NotNull]
+        private static IPiece ProcessCustomData(
+            [NotNull] IPiece piece,
+            IEnumerable<KeyValuePair<string, string>> customData)
         {
-            if (piece is IPieceUpdater pieceUpdater)
-            {
-                pieceUpdater.ProcessCustomData(customData);
-            }
+            ArgumentNullException.ThrowIfNull(piece);
+
+            piece.ProcessCustomData(customData);
 
             return piece;
         }

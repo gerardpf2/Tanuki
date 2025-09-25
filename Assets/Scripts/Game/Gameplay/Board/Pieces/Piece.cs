@@ -7,7 +7,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.Board.Pieces
 {
-    public abstract class Piece : IPiece, IPieceUpdater
+    public abstract class Piece : IPiece
     {
         public PieceType Type { get; }
 

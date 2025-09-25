@@ -63,14 +63,9 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             foreach ((IPiece piece, int column) in pieces)
             {
-                if (piece is not IPieceUpdater pieceUpdater)
-                {
-                    continue;
-                }
-
                 board.GetPieceRowColumnOffset(piece, row, column, out int rowOffset, out int columnOffset);
 
-                pieceUpdater.Damage(rowOffset, columnOffset);
+                piece.Damage(rowOffset, columnOffset);
 
                 _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece));
 

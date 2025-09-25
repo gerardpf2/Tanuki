@@ -5,5 +5,7 @@ namespace Game.Gameplay.Board.Pieces
         bool EyeMovementDirectionUp { get; }
 
         int EyeRowOffset { get; }
+
+        void MoveEye();
     }
 }
