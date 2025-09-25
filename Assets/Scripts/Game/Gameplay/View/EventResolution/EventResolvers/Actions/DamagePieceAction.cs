@@ -12,9 +12,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     public class DamagePieceAction : IAction
     {
         private readonly IPiece _piece;
-        [NotNull] private readonly IReadonlyBoardView _boardView;
+        [NotNull] private readonly IBoardView _boardView;
 
-        public DamagePieceAction(IPiece piece, [NotNull] IReadonlyBoardView boardView)
+        public DamagePieceAction(IPiece piece, [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(boardView);
 

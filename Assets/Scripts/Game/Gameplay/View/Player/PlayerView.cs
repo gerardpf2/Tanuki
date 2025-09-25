@@ -33,7 +33,7 @@ namespace Game.Gameplay.View.Player
         }
 
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
-        [NotNull] private readonly IReadonlyBoardView _boardView;
+        [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraBoardViewPropertiesGetter _cameraBoardViewPropertiesGetter;
 
         private Transform _playerPieceParent;
@@ -58,7 +58,7 @@ namespace Game.Gameplay.View.Player
 
         public PlayerView(
             [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
-            [NotNull] IReadonlyBoardView boardView,
+            [NotNull] IBoardView boardView,
             [NotNull] ICameraBoardViewPropertiesGetter cameraBoardViewPropertiesGetter)
         {
             ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
