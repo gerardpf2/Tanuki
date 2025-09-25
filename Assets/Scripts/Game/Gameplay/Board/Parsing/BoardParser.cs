@@ -21,7 +21,7 @@ namespace Game.Gameplay.Board.Parsing
             _parser = parser;
         }
 
-        public string Serialize(IReadonlyBoard board)
+        public string Serialize(IBoard board)
         {
             BoardSerializedData boardSerializedData = _boardSerializedDataConverter.From(board);
 

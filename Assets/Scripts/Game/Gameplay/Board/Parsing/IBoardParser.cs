@@ -5,7 +5,7 @@ namespace Game.Gameplay.Board.Parsing
 {
     public interface IBoardParser
     {
-        string Serialize(IReadonlyBoard board);
+        string Serialize(IBoard board);
 
         void Deserialize(
             string value,

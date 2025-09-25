@@ -7,7 +7,7 @@ namespace Game.Gameplay.View.Board
 {
     public interface IReadonlyBoardView
     {
-        IReadonlyBoard Board { get; }
+        IBoard Board { get; }
 
         [NotNull]
         GameObject GetPieceInstance(IPiece piece);

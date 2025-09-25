@@ -10,7 +10,7 @@ namespace Game.Gameplay.Board.Utils
 {
     public static class BoardUtils
     {
-        public static bool IsInside([NotNull] this IReadonlyBoard board, Coordinate coordinate)
+        public static bool IsInside([NotNull] this IBoard board, Coordinate coordinate)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -20,7 +20,7 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull, ItemNotNull] // Distinct pieces
-        public static IEnumerable<IPiece> GetPiecesSortedByRowThenByColumn([NotNull] this IReadonlyBoard board)
+        public static IEnumerable<IPiece> GetPiecesSortedByRowThenByColumn([NotNull] this IBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -48,7 +48,7 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull]
-        public static IEnumerable<KeyValuePair<IPiece, int>> GetPiecesInRow([NotNull] this IReadonlyBoard board, int row)
+        public static IEnumerable<KeyValuePair<IPiece, int>> GetPiecesInRow([NotNull] this IBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -69,7 +69,7 @@ namespace Game.Gameplay.Board.Utils
             }
         }
 
-        public static Coordinate GetPieceSourceCoordinate([NotNull] this IReadonlyBoard board, [NotNull] IPiece piece)
+        public static Coordinate GetPieceSourceCoordinate([NotNull] this IBoard board, [NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(piece);
@@ -83,7 +83,7 @@ namespace Game.Gameplay.Board.Utils
         }
 
         public static void GetPieceRowColumnOffset(
-            [NotNull] this IReadonlyBoard board,
+            [NotNull] this IBoard board,
             [NotNull] IPiece piece,
             int row,
             int column,
@@ -100,7 +100,7 @@ namespace Game.Gameplay.Board.Utils
         }
 
         public static int ComputePieceFall(
-            [NotNull] this IReadonlyBoard board,
+            [NotNull] this IBoard board,
             [NotNull] IPiece piece,
             Coordinate sourceCoordinate)
         {
@@ -117,10 +117,7 @@ namespace Game.Gameplay.Board.Utils
             return fall;
         }
 
-        private static int ComputePieceFallImpl(
-            [NotNull] this IReadonlyBoard board,
-            IPiece ignorePiece,
-            Coordinate coordinate)
+        private static int ComputePieceFallImpl([NotNull] this IBoard board, IPiece ignorePiece, Coordinate coordinate)
         {
             ArgumentNullException.ThrowIfNull(board);
 

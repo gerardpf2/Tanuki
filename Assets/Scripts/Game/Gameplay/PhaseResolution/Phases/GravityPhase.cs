@@ -30,7 +30,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            IReadonlyBoard board = _boardContainer.Board;
+            IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 

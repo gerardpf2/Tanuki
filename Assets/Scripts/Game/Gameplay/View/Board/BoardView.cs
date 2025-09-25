@@ -18,7 +18,7 @@ namespace Game.Gameplay.View.Board
         private Gameplay.Board.Board _board;
         private Transform _piecesParent;
 
-        public IReadonlyBoard Board => _board;
+        public IBoard Board => _board;
 
         public BoardView(
             [NotNull] IBoardContainer boardContainer,
@@ -33,7 +33,7 @@ namespace Game.Gameplay.View.Board
 
         public void Initialize()
         {
-            IReadonlyBoard board = _boardContainer.Board;
+            IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 

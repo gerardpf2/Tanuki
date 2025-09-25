@@ -12,6 +12,6 @@ namespace Game.Gameplay.Board.Parsing
         );
 
         [NotNull]
-        BoardSerializedData From(IReadonlyBoard board);
+        BoardSerializedData From(IBoard board);
     }
 }

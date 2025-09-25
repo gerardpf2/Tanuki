@@ -41,7 +41,7 @@ namespace Game.Gameplay.Board.Parsing
                     .ToList();
         }
 
-        public BoardSerializedData From([NotNull] IReadonlyBoard board)
+        public BoardSerializedData From([NotNull] IBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);
 
