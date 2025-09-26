@@ -6,10 +6,10 @@ namespace Game.Gameplay.Goals
     {
         PieceType PieceType { get; }
 
-        int Amount { get; }
+        int InitialAmount { get; }
 
-        int Current { get; }
+        int CurrentAmount { get; }
 
-        void IncreaseCurrent();
+        void IncreaseCurrentAmount();
     }
 }

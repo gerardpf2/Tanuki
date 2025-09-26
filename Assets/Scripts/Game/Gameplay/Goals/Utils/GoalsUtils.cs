@@ -21,7 +21,7 @@ namespace Game.Gameplay.Goals.Utils
             return true;
         }
 
-        public static bool TryIncreaseCurrent([NotNull] this IGoals goals, PieceType pieceType)
+        public static bool TryIncreaseCurrentAmount([NotNull] this IGoals goals, PieceType pieceType)
         {
             ArgumentNullException.ThrowIfNull(goals);
 
@@ -30,7 +30,7 @@ namespace Game.Gameplay.Goals.Utils
                 return false;
             }
 
-            goal.IncreaseCurrent();
+            goal.IncreaseCurrentAmount();
 
             return true;
         }

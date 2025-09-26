@@ -6,19 +6,19 @@ namespace Game.Gameplay.Goals
     {
         public PieceType PieceType { get; }
 
-        public int Amount { get; }
+        public int InitialAmount { get; }
 
-        public int Current { get; private set; }
+        public int CurrentAmount { get; private set; }
 
-        public void IncreaseCurrent()
+        public void IncreaseCurrentAmount()
         {
-            ++Current;
+            ++CurrentAmount;
         }
 
-        public Goal(PieceType pieceType, int amount)
+        public Goal(PieceType pieceType, int initialAmount)
         {
             PieceType = pieceType;
-            Amount = amount;
+            InitialAmount = initialAmount;
         }
     }
 }

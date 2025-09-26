@@ -9,7 +9,7 @@ namespace Game.Gameplay.Goals.Utils
         {
             ArgumentNullException.ThrowIfNull(goal);
 
-            return goal.Amount <= goal.Current;
+            return goal.InitialAmount <= goal.CurrentAmount;
         }
     }
 }
