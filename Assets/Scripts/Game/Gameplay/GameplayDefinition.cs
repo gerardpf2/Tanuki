@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
@@ -11,31 +10,15 @@ namespace Game.Gameplay
     public class GameplayDefinition : IGameplayDefinition
     {
         [SerializeField] private string _id;
-        [SerializeField] private BoardDefinition _boardDefinition;
-        [SerializeField] private GoalsDefinition _goalsDefinition;
+        [SerializeField] private string _board;
+        [SerializeField] private string _goals;
         [SerializeField] private GoalDefinition[] _goalDefinitions;
 
         public string Id => _id;
 
-        public IBoardDefinition BoardDefinition
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_boardDefinition);
+        public string Board => _board;
 
-                return _boardDefinition;
-            }
-        }
-
-        public IGoalsDefinition GoalsDefinition
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_goalsDefinition);
-
-                return _goalsDefinition;
-            }
-        }
+        public string Goals => _goals;
 
         public IEnumerable<IGoalDefinition> GoalDefinitions
         {

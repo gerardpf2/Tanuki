@@ -96,12 +96,12 @@ namespace Game.Gameplay.UseCases
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
             _boardParser.Deserialize(
-                gameplayDefinition.BoardDefinition.SerializedData,
+                gameplayDefinition.Board,
                 out IBoard board,
                 out IEnumerable<PiecePlacement> piecePlacements
             );
 
-            IGoals goals = _goalsParser.Deserialize(gameplayDefinition.GoalsDefinition.SerializedData);
+            IGoals goals = _goalsParser.Deserialize(gameplayDefinition.Goals); // TODO
 
             _boardContainer.Initialize(board, piecePlacements);
             _goalsContainer.Initialize(gameplayDefinition.GoalDefinitions);
