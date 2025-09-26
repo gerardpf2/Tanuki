@@ -3,7 +3,6 @@ using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
-using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -14,23 +13,19 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
     {
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IBoardView _boardView;
-        [NotNull] private readonly IGoalsViewContainer _goalsViewContainer;
         [NotNull] private readonly IPlayerView _playerView;
 
         public ActionFactory(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IBoardView boardView,
-            [NotNull] IGoalsViewContainer goalsViewContainer,
             [NotNull] IPlayerView playerView)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardView);
-            ArgumentNullException.ThrowIfNull(goalsViewContainer);
             ArgumentNullException.ThrowIfNull(playerView);
 
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _boardView = boardView;
-            _goalsViewContainer = goalsViewContainer;
             _playerView = playerView;
         }
 
@@ -80,7 +75,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return new DestroyPieceAction(destroyPieceReason, piece, _boardView, _goalsViewContainer);
+            return new DestroyPieceAction(destroyPieceReason, piece, _boardView);
         }
 
         public IAction GetMovePieceAction(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason)

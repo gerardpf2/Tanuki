@@ -4,6 +4,7 @@ using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Goals.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -54,8 +55,10 @@ namespace Game.Gameplay.PhaseResolution.Phases
             ArgumentNullException.ThrowIfNull(piece);
 
             IBoard board = _boardContainer.Board;
+            IGoals goals = _goalsContainer.Goals;
 
             InvalidOperationException.ThrowIfNull(board);
+            InvalidOperationException.ThrowIfNull(goals);
 
             if (piece.Alive)
             {
@@ -63,8 +66,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             }
 
             board.Remove(piece);
-
-            _goalsContainer.TryRegisterDestroyed(piece.Type);
+            goals.TryIncreaseCurrent(piece.Type);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(piece, DestroyPieceReason.NotAlive));
 

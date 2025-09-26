@@ -1,3 +1,4 @@
+using Game.Gameplay.Board;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -16,6 +17,20 @@ namespace Game.Gameplay.Goals.Utils
                     return false;
                 }
             }
+
+            return true;
+        }
+
+        public static bool TryIncreaseCurrent([NotNull] this IGoals goals, PieceType pieceType)
+        {
+            ArgumentNullException.ThrowIfNull(goals);
+
+            if (!goals.TryGet(pieceType, out IGoal goal))
+            {
+                return false;
+            }
+
+            goal.IncreaseCurrent();
 
             return true;
         }

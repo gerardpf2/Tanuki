@@ -12,7 +12,6 @@ using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.EventResolution.EventResolvers;
-using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
@@ -236,7 +235,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
-                        r.Resolve<IGoalsViewContainer>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
@@ -270,7 +268,6 @@ namespace Game.Gameplay.Composition
                     new ActionFactory(
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IBoardView>(),
-                        r.Resolve<IGoalsViewContainer>(),
                         r.Resolve<IPlayerView>()
                     )
                 )
@@ -300,8 +297,6 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsViewContainer>(_ => new GoalsViewContainer()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerView>(r =>
@@ -345,7 +340,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
-                        r.Resolve<IGoalsViewContainer>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
@@ -363,13 +357,14 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(
+            // TODO: GoalsView
+            /* ruleAdder.Add(
                 ruleFactory.GetInject<GoalsViewModel>((r, vm) =>
                     vm.Inject(
                         r.Resolve<IGoalsViewContainer>()
                     )
                 )
-            );
+            ); */
 
             ruleAdder.Add(
                 ruleFactory.GetInject<PlayerInputHandler>((r, s) =>

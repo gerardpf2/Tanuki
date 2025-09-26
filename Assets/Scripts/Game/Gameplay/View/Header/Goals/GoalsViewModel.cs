@@ -7,9 +7,10 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Header.Goals
 {
+    // TODO: GoalsView
     public class GoalsViewModel : ViewModel, IDataSettable<GoalsViewData>
     {
-        private IGoalsViewContainer _goalsViewContainer;
+        /* private IGoalsViewContainer _goalsViewContainer;
 
         [NotNull] private readonly IBoundProperty<IEnumerable<GoalViewData>> _goalsViewData = new BoundProperty<IEnumerable<GoalViewData>>("GoalsViewData");
 
@@ -74,6 +75,8 @@ namespace Game.Gameplay.View.Header.Goals
             }
 
             _goalsViewData.Value = goalsViewData;
-        }
+        } */
+
+        public void SetData(GoalsViewData _) { }
     }
 }

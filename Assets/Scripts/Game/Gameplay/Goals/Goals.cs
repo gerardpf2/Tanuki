@@ -29,5 +29,10 @@ namespace Game.Gameplay.Goals
 
             _goals = goalsCopy;
         }
+
+        public bool TryGet(PieceType pieceType, out IGoal goal)
+        {
+            return _goals.TryGetValue(pieceType, out goal);
+        }
     }
 }
