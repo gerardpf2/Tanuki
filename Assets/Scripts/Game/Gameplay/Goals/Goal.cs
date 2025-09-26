@@ -8,6 +8,13 @@ namespace Game.Gameplay.Goals
 
         public int Amount { get; }
 
+        public int Current { get; private set; }
+
+        public void IncreaseCurrent()
+        {
+            ++Current;
+        }
+
         public Goal(PieceType pieceType, int amount)
         {
             PieceType = pieceType;

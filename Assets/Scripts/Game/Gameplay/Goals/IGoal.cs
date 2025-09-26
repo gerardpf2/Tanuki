@@ -7,5 +7,9 @@ namespace Game.Gameplay.Goals
         PieceType PieceType { get; }
 
         int Amount { get; }
+
+        int Current { get; }
+
+        void IncreaseCurrent();
     }
 }
