@@ -13,9 +13,9 @@ namespace Game.Gameplay.View.Header.Goals
     {
         [NotNull] private readonly IGoalsContainer _goalsContainer;
 
-        private IGoals _goals;
-
         public event Action OnUpdated;
+
+        public IGoals Goals { get; private set; }
 
         public GoalsView([NotNull] IGoalsContainer goalsContainer)
         {
@@ -32,19 +32,29 @@ namespace Game.Gameplay.View.Header.Goals
 
             Uninitialize();
 
-            _goals = new Gameplay.Goals.Goals(goals.Targets.Select(goal => goal.Clone()));
+            Goals = new Gameplay.Goals.Goals(goals.Targets.Select(Clone));
+
+            return;
+
+            [NotNull]
+            IGoal Clone([NotNull] IGoal goal)
+            {
+                ArgumentNullException.ThrowIfNull(goal);
+
+                return new Goal(goal.PieceType, goal.InitialAmount);
+            }
         }
 
         public void Uninitialize()
         {
-            _goals = null;
+            Goals = null;
         }
 
         public void TryIncreaseCurrentAmount(PieceType pieceType)
         {
-            InvalidOperationException.ThrowIfNull(_goals);
+            InvalidOperationException.ThrowIfNull(Goals);
 
-            if (_goals.TryIncreaseCurrentAmount(pieceType))
+            if (Goals.TryIncreaseCurrentAmount(pieceType))
             {
                 OnUpdated?.Invoke();
             }

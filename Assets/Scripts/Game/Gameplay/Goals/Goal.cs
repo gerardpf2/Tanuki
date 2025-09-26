@@ -20,10 +20,5 @@ namespace Game.Gameplay.Goals
             PieceType = pieceType;
             InitialAmount = initialAmount;
         }
-
-        public IGoal Clone()
-        {
-            return new Goal(PieceType, InitialAmount) { CurrentAmount = CurrentAmount };
-        }
     }
 }

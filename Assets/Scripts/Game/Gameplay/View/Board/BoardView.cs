@@ -15,10 +15,9 @@ namespace Game.Gameplay.View.Board
 
         [NotNull] private readonly IDictionary<IPiece, GameObject> _pieceInstances = new Dictionary<IPiece, GameObject>();
 
-        private Gameplay.Board.Board _board;
         private Transform _piecesParent;
 
-        public IBoard Board => _board;
+        public IBoard Board { get; private set; }
 
         public BoardView(
             [NotNull] IBoardContainer boardContainer,
@@ -39,7 +38,7 @@ namespace Game.Gameplay.View.Board
 
             Uninitialize();
 
-            _board = new Gameplay.Board.Board(_pieceCachedPropertiesGetter, board.Rows, board.Columns);
+            Board = new Gameplay.Board.Board(_pieceCachedPropertiesGetter, board.Rows, board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 
@@ -47,7 +46,7 @@ namespace Game.Gameplay.View.Board
         {
             DestroyAllPieces();
 
-            _board = null;
+            Board = null;
 
             if (_piecesParent == null)
             {
@@ -77,14 +76,14 @@ namespace Game.Gameplay.View.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
-            InvalidOperationException.ThrowIfNull(_board);
+            InvalidOperationException.ThrowIfNull(Board);
 
             if (_pieceInstances.ContainsKey(piece))
             {
                 InvalidOperationException.Throw("Piece has already been instantiated");
             }
 
-            _board.Add(piece, sourceCoordinate);
+            Board.Add(piece, sourceCoordinate);
 
             Vector3 position = GetWorldPosition(sourceCoordinate);
             GameObject pieceInstance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
@@ -101,7 +100,7 @@ namespace Game.Gameplay.View.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            _board.Remove(piece);
+            Board.Remove(piece);
 
             GameObject pieceInstance = GetPieceInstance(piece);
 
@@ -114,14 +113,14 @@ namespace Game.Gameplay.View.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            _board.Move(piece, rowOffset, columnOffset);
+            Board.Move(piece, rowOffset, columnOffset);
 
             // Piece instance position should have already been updated externally (using tweens, etc), but it can be
             // set in here too just in case
 
             GameObject pieceInstance = GetPieceInstance(piece);
 
-            Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
+            Coordinate sourceCoordinate = Board.GetPieceSourceCoordinate(piece);
 
             pieceInstance.transform.position = GetWorldPosition(sourceCoordinate);
         }
@@ -132,7 +131,7 @@ namespace Game.Gameplay.View.Board
             {
                 InvalidOperationException.ThrowIfNull(pieceInstance.Value);
 
-                _board.Remove(pieceInstance.Key);
+                Board.Remove(pieceInstance.Key);
 
                 Object.Destroy(pieceInstance.Value);
             }
