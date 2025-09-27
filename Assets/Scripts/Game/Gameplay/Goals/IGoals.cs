@@ -11,5 +11,8 @@ namespace Game.Gameplay.Goals
 
         [ContractAnnotation("=> true, goal:notnull; => false, goal:null")]
         bool TryGet(PieceType pieceType, out IGoal goal);
+
+        [NotNull]
+        IGoals Clone();
     }
 }

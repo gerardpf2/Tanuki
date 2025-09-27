@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Utils;
@@ -32,17 +31,7 @@ namespace Game.Gameplay.View.Header.Goals
 
             Uninitialize();
 
-            Goals = new Gameplay.Goals.Goals(goals.Targets.Select(Clone));
-
-            return;
-
-            [NotNull]
-            IGoal Clone([NotNull] IGoal goal)
-            {
-                ArgumentNullException.ThrowIfNull(goal);
-
-                return new Goal(goal.PieceType, goal.InitialAmount);
-            }
+            Goals = goals.Clone();
         }
 
         public void Uninitialize()
