@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
@@ -12,8 +13,8 @@ using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
 using Infrastructure.ScreenLoading;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.UseCases
 {
@@ -86,10 +87,17 @@ namespace Game.Gameplay.UseCases
             _unloadGameplayUseCase.Resolve();
 
             PrepareModel(id);
+            PrepareView();
+            LoadScreen(OnReady);
 
-            GameplayViewData gameplayViewData = PrepareView();
+            return;
 
-            LoadScreen(gameplayViewData);
+            void OnReady()
+            {
+                _eventListener.Initialize();
+
+                _phaseResolver.Resolve(new ResolveContext(null));
+            }
         }
 
         private void PrepareModel(string id)
@@ -108,24 +116,20 @@ namespace Game.Gameplay.UseCases
             _goalsContainer.Initialize(goals);
             _phaseResolver.Initialize();
             _playerPiecesBag.Initialize();
-
-            _phaseResolver.Resolve(new ResolveContext(null));
         }
 
-        private GameplayViewData PrepareView()
+        private void PrepareView()
         {
             _boardView.Initialize();
             _goalsView.Initialize();
             _playerView.Initialize();
             _cameraController.Initialize();
-
-            GameplayViewData gameplayViewData = new(_eventListener.Initialize);
-
-            return gameplayViewData;
         }
 
-        private void LoadScreen(GameplayViewData gameplayViewData)
+        private void LoadScreen(Action onReady)
         {
+            GameplayViewData gameplayViewData = new(onReady);
+
             _screenLoader.Load(GameplayConstants.ScreenKey, gameplayViewData);
         }
     }
