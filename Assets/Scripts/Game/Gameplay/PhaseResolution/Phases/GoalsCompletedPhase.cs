@@ -9,7 +9,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
     {
         [NotNull] private readonly IGoalsContainer _goalsContainer;
 
-        public GoalsCompletedPhase([NotNull] IGoalsContainer goalsContainer) : base(-1, -1)
+        public GoalsCompletedPhase([NotNull] IGoalsContainer goalsContainer)
         {
             ArgumentNullException.ThrowIfNull(goalsContainer);
 

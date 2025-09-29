@@ -12,10 +12,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
         [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
 
+        protected override int? MaxResolveTimesPerIteration => 1;
+
         public InstantiatePlayerPiecePhase(
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
-            [NotNull] IPlayerPiecesBag playerPiecesBag) : base(-1, 1)
+            [NotNull] IPlayerPiecesBag playerPiecesBag)
         {
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);

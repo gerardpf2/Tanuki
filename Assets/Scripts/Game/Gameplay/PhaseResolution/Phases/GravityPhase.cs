@@ -17,7 +17,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         public GravityPhase(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory) : base(-1, -1)
+            [NotNull] IEventFactory eventFactory)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);

@@ -17,11 +17,13 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         private IPiece _targetPiece;
 
+        protected override int? MaxResolveTimesPerIteration => 1;
+
         public LockPlayerPiecePhase(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
-            [NotNull] IPlayerPiecesBag playerPiecesBag) : base(-1, 1)
+            [NotNull] IPlayerPiecesBag playerPiecesBag)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);

@@ -14,10 +14,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
+        protected override int? MaxResolveTimes => 1;
+
         public InstantiateInitialPiecesPhase(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory) : base(1, -1)
+            [NotNull] IEventFactory eventFactory)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
