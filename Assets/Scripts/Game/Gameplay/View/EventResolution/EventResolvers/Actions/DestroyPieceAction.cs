@@ -12,21 +12,21 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     {
         [NotNull] private readonly IPiece _piece;
         [NotNull] private readonly IBoardView _boardView;
-        [NotNull] private readonly IGoalsViewContainer _goalsViewContainer;
+        [NotNull] private readonly IGoalsView _goalsView;
 
         public DestroyPieceAction(
             DestroyPieceReason destroyPieceReason,
             [NotNull] IPiece piece,
             [NotNull] IBoardView boardView,
-            [NotNull] IGoalsViewContainer goalsViewContainer) : base(destroyPieceReason)
+            [NotNull] IGoalsView goalsView) : base(destroyPieceReason)
         {
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(boardView);
-            ArgumentNullException.ThrowIfNull(goalsViewContainer);
+            ArgumentNullException.ThrowIfNull(goalsView);
 
             _piece = piece;
             _boardView = boardView;
-            _goalsViewContainer = goalsViewContainer;
+            _goalsView = goalsView;
         }
 
         protected override GameObject GetPieceInstance()
@@ -37,7 +37,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
         protected override void DestroyPiece()
         {
             _boardView.DestroyPiece(_piece);
-            _goalsViewContainer.TryRegisterDestroyed(_piece.Type);
+            _goalsView.TryIncreaseCurrentAmount(_piece.Type);
         }
     }
 }

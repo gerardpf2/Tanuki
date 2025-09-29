@@ -6,12 +6,24 @@ namespace Game.Gameplay.Goals
     {
         public PieceType PieceType { get; }
 
-        public int Amount { get; }
+        public int InitialAmount { get; }
 
-        public Goal(PieceType pieceType, int amount)
+        public int CurrentAmount { get; private set; }
+
+        public void IncreaseCurrentAmount()
+        {
+            ++CurrentAmount;
+        }
+
+        public Goal(PieceType pieceType, int initialAmount)
         {
             PieceType = pieceType;
-            Amount = amount;
+            InitialAmount = initialAmount;
+        }
+
+        public IGoal Clone()
+        {
+            return new Goal(PieceType, InitialAmount) { CurrentAmount = CurrentAmount };
         }
     }
 }

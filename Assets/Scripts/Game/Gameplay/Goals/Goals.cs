@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game.Gameplay.Board;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -28,6 +29,16 @@ namespace Game.Gameplay.Goals
             }
 
             _goals = goalsCopy;
+        }
+
+        public bool TryGet(PieceType pieceType, out IGoal goal)
+        {
+            return _goals.TryGetValue(pieceType, out goal);
+        }
+
+        public IGoals Clone()
+        {
+            return new Goals(Targets.Select(goal => goal.Clone()));
         }
     }
 }

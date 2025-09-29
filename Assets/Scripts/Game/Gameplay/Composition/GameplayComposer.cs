@@ -236,7 +236,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
-                        r.Resolve<IGoalsViewContainer>(),
+                        r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
@@ -270,7 +270,7 @@ namespace Game.Gameplay.Composition
                     new ActionFactory(
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IBoardView>(),
-                        r.Resolve<IGoalsViewContainer>(),
+                        r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>()
                     )
                 )
@@ -301,7 +301,13 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsViewContainer>(_ => new GoalsViewContainer()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IGoalsView>(r =>
+                    new GoalsView(
+                        r.Resolve<IGoalsContainer>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerView>(r =>
@@ -345,7 +351,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
-                        r.Resolve<IGoalsViewContainer>(),
+                        r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<IEventListener>(),
@@ -366,7 +372,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<GoalsViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IGoalsViewContainer>()
+                        r.Resolve<IGoalsView>()
                     )
                 )
             );

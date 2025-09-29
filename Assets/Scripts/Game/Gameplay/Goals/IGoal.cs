@@ -1,4 +1,5 @@
 using Game.Gameplay.Board;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.Goals
 {
@@ -6,6 +7,13 @@ namespace Game.Gameplay.Goals
     {
         PieceType PieceType { get; }
 
-        int Amount { get; }
+        int InitialAmount { get; }
+
+        int CurrentAmount { get; }
+
+        void IncreaseCurrentAmount();
+
+        [NotNull]
+        IGoal Clone();
     }
 }

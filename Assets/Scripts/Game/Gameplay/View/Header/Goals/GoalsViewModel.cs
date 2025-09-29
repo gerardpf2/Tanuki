@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Game.Gameplay.Board;
+using Game.Gameplay.Goals;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
@@ -9,7 +9,7 @@ namespace Game.Gameplay.View.Header.Goals
 {
     public class GoalsViewModel : ViewModel, IDataSettable<GoalsViewData>
     {
-        private IGoalsViewContainer _goalsViewContainer;
+        private IGoalsView _goalsView;
 
         [NotNull] private readonly IBoundProperty<IEnumerable<GoalViewData>> _goalsViewData = new BoundProperty<IEnumerable<GoalViewData>>("GoalsViewData");
 
@@ -27,11 +27,11 @@ namespace Game.Gameplay.View.Header.Goals
             UnsubscribeFromEvents();
         }
 
-        public void Inject([NotNull] IGoalsViewContainer goalsViewContainer)
+        public void Inject([NotNull] IGoalsView goalsView)
         {
-            ArgumentNullException.ThrowIfNull(goalsViewContainer);
+            ArgumentNullException.ThrowIfNull(goalsView);
 
-            _goalsViewContainer = goalsViewContainer;
+            _goalsView = goalsView;
         }
 
         public void SetData(GoalsViewData _)
@@ -44,31 +44,28 @@ namespace Game.Gameplay.View.Header.Goals
         {
             UnsubscribeFromEvents();
 
-            InvalidOperationException.ThrowIfNull(_goalsViewContainer);
+            InvalidOperationException.ThrowIfNull(_goalsView);
 
-            _goalsViewContainer.OnUpdated += UpdateGoals;
+            _goalsView.OnUpdated += UpdateGoals;
         }
 
         private void UnsubscribeFromEvents()
         {
-            InvalidOperationException.ThrowIfNull(_goalsViewContainer);
+            InvalidOperationException.ThrowIfNull(_goalsView);
 
-            _goalsViewContainer.OnUpdated -= UpdateGoals;
+            _goalsView.OnUpdated -= UpdateGoals;
         }
 
         private void UpdateGoals()
         {
-            InvalidOperationException.ThrowIfNull(_goalsViewContainer);
+            InvalidOperationException.ThrowIfNull(_goalsView);
+            InvalidOperationException.ThrowIfNull(_goalsView.Goals);
 
             ICollection<GoalViewData> goalsViewData = new List<GoalViewData>();
 
-            foreach (PieceType pieceType in _goalsViewContainer.PieceTypes)
+            foreach (IGoal goal in _goalsView.Goals.Targets)
             {
-                GoalViewData goalViewData = new(
-                    pieceType,
-                    _goalsViewContainer.GetInitialAmount(pieceType),
-                    _goalsViewContainer.GetCurrentAmount(pieceType)
-                );
+                GoalViewData goalViewData = new(goal.PieceType, goal.InitialAmount, goal.CurrentAmount);
 
                 goalsViewData.Add(goalViewData);
             }

@@ -1,22 +1,11 @@
-using System.Collections.Generic;
-using Game.Gameplay.Board;
-using JetBrains.Annotations;
-
 namespace Game.Gameplay.Goals
 {
     public interface IGoalsContainer
     {
-        [NotNull]
-        IEnumerable<PieceType> PieceTypes { get; }
+        IGoals Goals { get; }
 
-        void Initialize(IEnumerable<IGoalDefinition> initialGoalDefinitions);
+        void Initialize(IGoals goals);
 
         void Uninitialize();
-
-        int GetInitialAmount(PieceType pieceType);
-
-        int GetCurrentAmount(PieceType pieceType);
-
-        void TryRegisterDestroyed(PieceType pieceType);
     }
 }

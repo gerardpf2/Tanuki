@@ -18,7 +18,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            if (!_goalsContainer.AreAllCompleted())
+            IGoals goals = _goalsContainer.Goals;
+
+            InvalidOperationException.ThrowIfNull(goals);
+
+            if (!goals.AreCompleted())
             {
                 return ResolveResult.NotUpdated;
             }
