@@ -277,6 +277,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventListener>(r =>
                     new EventListener(
+                        r.Resolve<IPhaseResolver>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventsResolver>()
                     )

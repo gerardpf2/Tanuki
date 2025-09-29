@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Game.Gameplay.EventEnqueueing.Events;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.EventEnqueueing
 {
@@ -10,29 +9,16 @@ namespace Game.Gameplay.EventEnqueueing
     {
         [NotNull, ItemNotNull] private readonly Queue<IEvent> _events = new(); // ItemNotNull as long as all Add check for null
 
-        public event Action OnEventToDequeue;
-
         public void Enqueue([NotNull] IEvent evt)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
             _events.Enqueue(evt);
-
-            OnEventToDequeue?.Invoke();
         }
 
         public bool TryDequeue(out IEvent evt)
         {
-            if (_events.Count > 0)
-            {
-                evt = _events.Dequeue();
-
-                return true;
-            }
-
-            evt = null;
-
-            return false;
+            return _events.TryDequeue(out evt);
         }
     }
 }

@@ -1,5 +1,6 @@
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.PhaseResolution;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -7,16 +8,20 @@ namespace Game.Gameplay.View.EventResolution
 {
     public class EventListener : IEventListener
     {
+        [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventsResolver _eventsResolver;
 
-        private bool _resolving;
-
-        public EventListener([NotNull] IEventEnqueuer eventEnqueuer, [NotNull] IEventsResolver eventsResolver)
+        public EventListener(
+            [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IEventEnqueuer eventEnqueuer,
+            [NotNull] IEventsResolver eventsResolver)
         {
+            ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventsResolver);
 
+            _phaseResolver = phaseResolver;
             _eventEnqueuer = eventEnqueuer;
             _eventsResolver = eventsResolver;
         }
@@ -25,58 +30,39 @@ namespace Game.Gameplay.View.EventResolution
         {
             Uninitialize();
 
-            ResolveOrStartListening();
+            SubscribeToEvents();
         }
 
         public void Uninitialize()
         {
-            StopListening();
+            UnsubscribeFromEvents();
         }
 
-        private void ResolveOrStartListening()
+        private void SubscribeToEvents()
         {
-            if (_eventEnqueuer.TryDequeue(out IEvent evt))
+            UnsubscribeFromEvents();
+
+            _phaseResolver.OnEndIteration += HandleEndIteration;
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            _phaseResolver.OnEndIteration -= HandleEndIteration;
+        }
+
+        private void HandleEndIteration()
+        {
+            ResolveNextEvent();
+        }
+
+        private void ResolveNextEvent()
+        {
+            if (!_eventEnqueuer.TryDequeue(out IEvent evt))
             {
-                Resolve(evt);
-            }
-            else
-            {
-                StartListening();
-            }
-        }
-
-        private void Resolve(IEvent evt)
-        {
-            StopListening();
-
-            if (_resolving)
-            {
-                InvalidOperationException.Throw("Resolve is already in progress");
+                return;
             }
 
-            _resolving = true;
-
-            _eventsResolver.Resolve(
-                evt,
-                () =>
-                {
-                    _resolving = false;
-
-                    ResolveOrStartListening();
-                }
-            );
-        }
-
-        private void StartListening()
-        {
-            StopListening();
-
-            _eventEnqueuer.OnEventToDequeue += ResolveOrStartListening;
-        }
-
-        private void StopListening()
-        {
-            _eventEnqueuer.OnEventToDequeue -= ResolveOrStartListening;
+            _eventsResolver.Resolve(evt, ResolveNextEvent);
         }
     }
 }
