@@ -33,8 +33,8 @@ namespace Game.Gameplay.View.Player
         }
 
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
-        [NotNull] private readonly IReadonlyBoardView _boardView;
-        [NotNull] private readonly ICameraBoardViewPropertiesGetter _cameraBoardViewPropertiesGetter;
+        [NotNull] private readonly IBoardView _boardView;
+        [NotNull] private readonly ICameraController _cameraController;
 
         private Transform _playerPieceParent;
         private PieceData _pieceData;
@@ -58,16 +58,16 @@ namespace Game.Gameplay.View.Player
 
         public PlayerView(
             [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
-            [NotNull] IReadonlyBoardView boardView,
-            [NotNull] ICameraBoardViewPropertiesGetter cameraBoardViewPropertiesGetter)
+            [NotNull] IBoardView boardView,
+            [NotNull] ICameraController cameraController)
         {
             ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
             ArgumentNullException.ThrowIfNull(boardView);
-            ArgumentNullException.ThrowIfNull(cameraBoardViewPropertiesGetter);
+            ArgumentNullException.ThrowIfNull(cameraController);
 
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
             _boardView = boardView;
-            _cameraBoardViewPropertiesGetter = cameraBoardViewPropertiesGetter;
+            _cameraController = cameraController;
         }
 
         public void Initialize()
@@ -150,7 +150,7 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(_pieceData);
 
             int x = (_boardView.Board.Columns - _pieceData.RightMostColumnOffset) / 2;
-            int y = _cameraBoardViewPropertiesGetter.VisibleTopRow - _pieceData.TopMostRowOffset;
+            int y = _cameraController.VisibleTopRow - _pieceData.TopMostRowOffset;
 
             return new Vector3(ClampX(x), y);
         }

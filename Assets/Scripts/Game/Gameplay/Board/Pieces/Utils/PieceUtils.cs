@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
@@ -26,6 +27,18 @@ namespace Game.Gameplay.Board.Pieces.Utils
 
             topMostRowOffset = topMostRow - sourceCoordinate.Row;
             rightMostColumnOffset = rightMostColumn - sourceCoordinate.Column;
+        }
+
+        [NotNull]
+        public static IPiece WithCustomData(
+            [NotNull] this IPiece piece,
+            IEnumerable<KeyValuePair<string, string>> customData)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            piece.ProcessCustomData(customData);
+
+            return piece;
         }
     }
 }

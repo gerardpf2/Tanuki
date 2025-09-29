@@ -14,7 +14,7 @@ namespace Game.Gameplay.View.Player
         private const float LockPieceDeltaY = -0.5f; // TODO: Scriptable object for this and other input params
 
         private IPhaseResolver _phaseResolver;
-        private IReadonlyEventsResolver _eventsResolver;
+        private IEventsResolver _eventsResolver;
         private IPlayerView _playerView;
         private IScreenPropertiesGetter _screenPropertiesGetter;
 
@@ -29,7 +29,7 @@ namespace Game.Gameplay.View.Player
 
         public void Inject(
             [NotNull] IPhaseResolver phaseResolver,
-            [NotNull] IReadonlyEventsResolver eventsResolver,
+            [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerView playerView,
             [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
         {

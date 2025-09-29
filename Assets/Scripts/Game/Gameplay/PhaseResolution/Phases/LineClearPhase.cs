@@ -30,7 +30,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            IReadonlyBoard board = _boardContainer.Board;
+            IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 
@@ -48,7 +48,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         private bool TryDamageRow(int row)
         {
-            IReadonlyBoard board = _boardContainer.Board;
+            IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 
@@ -63,14 +63,9 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             foreach ((IPiece piece, int column) in pieces)
             {
-                if (piece is not IPieceUpdater pieceUpdater)
-                {
-                    continue;
-                }
-
                 board.GetPieceRowColumnOffset(piece, row, column, out int rowOffset, out int columnOffset);
 
-                pieceUpdater.Damage(rowOffset, columnOffset);
+                piece.Damage(rowOffset, columnOffset);
 
                 _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece));
 

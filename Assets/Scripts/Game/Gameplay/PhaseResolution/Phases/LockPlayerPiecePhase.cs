@@ -74,7 +74,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         private Coordinate GetLockSourceCoordinate(int column)
         {
-            IReadonlyBoard board = _boardContainer.Board;
+            IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
             InvalidOperationException.ThrowIfNull(_targetPiece);

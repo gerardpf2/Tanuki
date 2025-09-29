@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Camera
 {
-    public class CameraController : ICameraController, ICameraBoardViewPropertiesGetter, ICameraBoardViewPropertiesSetter
+    public class CameraController : ICameraController
     {
         private const int ExtraRowsOnTop = 5; // TODO: Scriptable object for this and other camera params
 
-        [NotNull] private readonly IReadonlyBoardView _boardView;
+        [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly Transform _cameraTransform;
 
         private float? _topPositionY;
@@ -27,7 +27,7 @@ namespace Game.Gameplay.View.Camera
             }
         }
 
-        public CameraController([NotNull] IReadonlyBoardView boardView, [NotNull] ICameraGetter cameraGetter)
+        public CameraController([NotNull] IBoardView boardView, [NotNull] ICameraGetter cameraGetter)
         {
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraGetter);

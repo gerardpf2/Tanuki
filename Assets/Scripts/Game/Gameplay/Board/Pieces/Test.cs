@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Pieces
 {
-    public class Test : RectangularPiece, ITest, ITestUpdater
+    public class Test : RectangularPiece, ITest
     {
         /*
          *

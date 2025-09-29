@@ -13,5 +13,9 @@ namespace Game.Gameplay.Board.Pieces
 
         [NotNull]
         IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
+
+        void ProcessCustomData(IEnumerable<KeyValuePair<string, string>> customData);
+
+        void Damage(int rowOffset, int columnOffset);
     }
 }
