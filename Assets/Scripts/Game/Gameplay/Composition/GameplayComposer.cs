@@ -101,9 +101,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton(_ => new EventContainer()));
-            ruleAdder.Add(ruleFactory.GetTo<IEventDequeuer, EventContainer>());
-            ruleAdder.Add(ruleFactory.GetTo<IEventEnqueuer, EventContainer>());
+            ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventContainer()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
@@ -279,7 +277,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventListener>(r =>
                     new EventListener(
-                        r.Resolve<IEventDequeuer>(),
+                        r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventsResolver>()
                     )
                 )

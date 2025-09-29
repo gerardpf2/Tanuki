@@ -6,7 +6,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Game.Gameplay.EventEnqueueing
 {
-    public class EventContainer : IEventEnqueuer, IEventDequeuer
+    public class EventContainer : IEventEnqueuer
     {
         [NotNull, ItemNotNull] private readonly Queue<IEvent> _events = new(); // ItemNotNull as long as all Add check for null
 

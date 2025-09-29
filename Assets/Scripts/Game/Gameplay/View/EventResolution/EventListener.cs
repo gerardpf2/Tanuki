@@ -7,17 +7,17 @@ namespace Game.Gameplay.View.EventResolution
 {
     public class EventListener : IEventListener
     {
-        [NotNull] private readonly IEventDequeuer _eventDequeuer;
+        [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventsResolver _eventsResolver;
 
         private bool _resolving;
 
-        public EventListener([NotNull] IEventDequeuer eventDequeuer, [NotNull] IEventsResolver eventsResolver)
+        public EventListener([NotNull] IEventEnqueuer eventEnqueuer, [NotNull] IEventsResolver eventsResolver)
         {
-            ArgumentNullException.ThrowIfNull(eventDequeuer);
+            ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventsResolver);
 
-            _eventDequeuer = eventDequeuer;
+            _eventEnqueuer = eventEnqueuer;
             _eventsResolver = eventsResolver;
         }
 
@@ -35,7 +35,7 @@ namespace Game.Gameplay.View.EventResolution
 
         private void ResolveOrStartListening()
         {
-            if (_eventDequeuer.TryDequeue(out IEvent evt))
+            if (_eventEnqueuer.TryDequeue(out IEvent evt))
             {
                 Resolve(evt);
             }
@@ -71,12 +71,12 @@ namespace Game.Gameplay.View.EventResolution
         {
             StopListening();
 
-            _eventDequeuer.OnEventToDequeue += ResolveOrStartListening;
+            _eventEnqueuer.OnEventToDequeue += ResolveOrStartListening;
         }
 
         private void StopListening()
         {
-            _eventDequeuer.OnEventToDequeue -= ResolveOrStartListening;
+            _eventEnqueuer.OnEventToDequeue -= ResolveOrStartListening;
         }
     }
 }
