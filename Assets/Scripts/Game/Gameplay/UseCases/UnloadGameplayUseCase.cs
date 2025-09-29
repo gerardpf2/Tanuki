@@ -23,7 +23,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IPlayerView _playerView;
         [NotNull] private readonly ICameraController _cameraController;
-        [NotNull] private readonly IEventListener _eventListener;
+        [NotNull] private readonly IEventsResolver _eventsResolver;
         [NotNull] private readonly IScreenLoader _screenLoader;
 
         public UnloadGameplayUseCase(
@@ -35,7 +35,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IGoalsView goalsView,
             [NotNull] IPlayerView playerView,
             [NotNull] ICameraController cameraController,
-            [NotNull] IEventListener eventListener,
+            [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
@@ -46,7 +46,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(playerView);
             ArgumentNullException.ThrowIfNull(cameraController);
-            ArgumentNullException.ThrowIfNull(eventListener);
+            ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
             _boardContainer = boardContainer;
@@ -57,7 +57,7 @@ namespace Game.Gameplay.UseCases
             _goalsView = goalsView;
             _playerView = playerView;
             _cameraController = cameraController;
-            _eventListener = eventListener;
+            _eventsResolver = eventsResolver;
             _screenLoader = screenLoader;
         }
 
@@ -82,7 +82,7 @@ namespace Game.Gameplay.UseCases
             _goalsView.Uninitialize();
             _playerView.Uninitialize();
             _cameraController.Uninitialize();
-            _eventListener.Uninitialize();
+            _eventsResolver.Uninitialize();
         }
 
         private void UnloadScreen()

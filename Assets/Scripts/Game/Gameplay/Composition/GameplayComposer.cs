@@ -237,7 +237,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
-                        r.Resolve<IEventListener>(),
+                        r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
                 )
@@ -275,8 +275,8 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IEventListener>(r =>
-                    new EventListener(
+                ruleFactory.GetSingleton<IEventsResolver>(r =>
+                    new EventsResolver(
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IEventResolverFactory>()
@@ -345,7 +345,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
-                        r.Resolve<IEventListener>(),
+                        r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
                 )
@@ -372,7 +372,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetInject<PlayerInputHandler>((r, s) =>
                     s.Inject(
                         r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IEventListener>(),
+                        r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<IScreenPropertiesGetter>()
                     )

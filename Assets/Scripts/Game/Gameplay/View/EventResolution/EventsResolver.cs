@@ -9,7 +9,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.View.EventResolution
 {
-    public class EventListener : IEventListener
+    public class EventsResolver : IEventsResolver
     {
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
@@ -17,7 +17,7 @@ namespace Game.Gameplay.View.EventResolution
 
         public bool Resolving { get; private set; }
 
-        public EventListener(
+        public EventsResolver(
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IEventResolverFactory eventResolverFactory)

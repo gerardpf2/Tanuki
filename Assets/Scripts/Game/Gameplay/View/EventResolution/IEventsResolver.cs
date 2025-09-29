@@ -1,6 +1,6 @@
 namespace Game.Gameplay.View.EventResolution
 {
-    public interface IEventListener
+    public interface IEventsResolver
     {
         bool Resolving { get; }
 
