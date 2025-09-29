@@ -1,11 +1,8 @@
-using System;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.EventEnqueueing.Events;
 using Game.Gameplay.PhaseResolution;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.EventResolution
 {
@@ -13,22 +10,22 @@ namespace Game.Gameplay.View.EventResolution
     {
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
-        [NotNull] private readonly IEventResolverFactory _eventResolverFactory;
+        [NotNull] private readonly IEventsResolverSingle _eventsResolverSingle;
 
         public bool Resolving { get; private set; }
 
         public EventsResolver(
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IPhaseResolver phaseResolver,
-            [NotNull] IEventResolverFactory eventResolverFactory)
+            [NotNull] IEventsResolverSingle eventsResolverSingle)
         {
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(phaseResolver);
-            ArgumentNullException.ThrowIfNull(eventResolverFactory);
+            ArgumentNullException.ThrowIfNull(eventsResolverSingle);
 
             _eventEnqueuer = eventEnqueuer;
             _phaseResolver = phaseResolver;
-            _eventResolverFactory = eventResolverFactory;
+            _eventsResolverSingle = eventsResolverSingle;
         }
 
         public void Initialize()
@@ -76,37 +73,7 @@ namespace Game.Gameplay.View.EventResolution
                 return;
             }
 
-            Resolve(evt, ResolveNext);
-        }
-
-        private void Resolve([NotNull] IEvent evt, Action onComplete)
-        {
-            ArgumentNullException.ThrowIfNull(evt);
-
-            switch (evt)
-            {
-                case InstantiatePieceEvent instantiateEvent:
-                    _eventResolverFactory.GetInstantiatePieceEventResolver().Resolve(instantiateEvent, onComplete);
-                    break;
-                case InstantiatePlayerPieceEvent instantiatePlayerPieceEvent:
-                    _eventResolverFactory.GetInstantiatePlayerPieceEventResolver().Resolve(instantiatePlayerPieceEvent, onComplete);
-                    break;
-                case LockPlayerPieceEvent lockPlayerPieceEvent:
-                    _eventResolverFactory.GetLockPlayerPieceEventResolver().Resolve(lockPlayerPieceEvent, onComplete);
-                    break;
-                case DamagePieceEvent damagePieceEvent:
-                    _eventResolverFactory.GetDamagePieceEventResolver().Resolve(damagePieceEvent, onComplete);
-                    break;
-                case DestroyPieceEvent destroyPieceEvent:
-                    _eventResolverFactory.GetDestroyPieceEventResolver().Resolve(destroyPieceEvent, onComplete);
-                    break;
-                case MovePieceEvent movePieceEvent:
-                    _eventResolverFactory.GetMovePieceEventResolver().Resolve(movePieceEvent, onComplete);
-                    break;
-                default:
-                    ArgumentOutOfRangeException.Throw(evt);
-                    return;
-            }
+            _eventsResolverSingle.Resolve(evt, ResolveNext);
         }
     }
 }

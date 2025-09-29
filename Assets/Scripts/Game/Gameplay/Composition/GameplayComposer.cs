@@ -275,19 +275,27 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IEventsResolver>(r =>
-                    new EventsResolver(
-                        r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IEventResolverFactory>()
+                ruleFactory.GetSingleton<IEventResolverFactory>(r =>
+                    new EventResolverFactory(
+                        r.Resolve<IActionFactory>()
                     )
                 )
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IEventResolverFactory>(r =>
-                    new EventResolverFactory(
-                        r.Resolve<IActionFactory>()
+                ruleFactory.GetSingleton<IEventsResolver>(r =>
+                    new EventsResolver(
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventsResolverSingle>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IEventsResolverSingle>(r =>
+                    new EventsResolverSingle(
+                        r.Resolve<IEventResolverFactory>()
                     )
                 )
             );
