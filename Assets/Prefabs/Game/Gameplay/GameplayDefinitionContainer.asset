@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameplayDefinitions:
   - _id: Test
-    _boardDefinition:
-      _serializedData: '{"R":5,"C":3,"P":[{"P":{"P":"Test"}},{"R":2,"C":2,"P":{"P":"Test"}},{"R":1,"C":1,"P":{"P":"PlayerBlock11"}}]}'
+    _board: '{"R":5,"C":3,"P":[{"P":{"P":"Test"}},{"R":2,"C":2,"P":{"P":"Test"}},{"R":1,"C":1,"P":{"P":"PlayerBlock11"}}]}'
+    _goals: '{"G":[{"P":"Test","A":2},{"P":"PlayerBlock21","A":3}]}'
     _goalDefinitions:
     - _pieceType: 0
       _amount: 2
