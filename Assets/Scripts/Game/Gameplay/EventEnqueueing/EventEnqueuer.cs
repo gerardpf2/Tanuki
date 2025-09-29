@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.EventEnqueueing
 {
-    public class EventContainer : IEventEnqueuer
+    public class EventEnqueuer : IEventEnqueuer
     {
         [NotNull, ItemNotNull] private readonly Queue<IEvent> _events = new(); // ItemNotNull as long as all Add check for null
 
