@@ -9,51 +9,39 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class DestroyNotAlivePiecesPhase : Phase, IDestroyNotAlivePiecesPhase
+    public class DestroyNotAlivePiecesPhase : Phase
     {
+        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
 
-        private IBoard _board;
-
         public DestroyNotAlivePiecesPhase(
+            [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
             [NotNull] IGoalsContainer goalsContainer) : base(-1, -1)
         {
+            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(goalsContainer);
 
+            _boardContainer = boardContainer;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
             _goalsContainer = goalsContainer;
         }
 
-        public void Initialize([NotNull] IBoard board)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-
-            Uninitialize();
-
-            _board = board;
-        }
-
-        public override void Uninitialize()
-        {
-            base.Uninitialize();
-
-            _board = null;
-        }
-
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            InvalidOperationException.ThrowIfNull(_board);
+            IReadonlyBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
 
             bool resolved = false;
 
-            foreach (IPiece piece in _board.GetPiecesSortedByRowThenByColumn())
+            foreach (IPiece piece in board.GetPiecesSortedByRowThenByColumn())
             {
                 resolved = TryDestroyPiece(piece) || resolved;
             }
@@ -64,14 +52,17 @@ namespace Game.Gameplay.PhaseResolution.Phases
         private bool TryDestroyPiece([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            InvalidOperationException.ThrowIfNull(_board);
+
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
 
             if (piece.Alive)
             {
                 return false;
             }
 
-            _board.Remove(piece);
+            board.Remove(piece);
 
             _goalsContainer.TryRegisterDestroyed(piece.Type);
 

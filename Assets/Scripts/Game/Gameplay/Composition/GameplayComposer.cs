@@ -80,7 +80,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetInstance(_gameplayDefinitionGetter));
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoardContainer>(_ => new BoardContainer()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceCachedPropertiesGetter>(_ => new PieceCachedPropertiesGetter()));
 
@@ -109,80 +109,92 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IDestroyNotAlivePiecesPhase>(r =>
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new DestroyNotAlivePiecesPhase(
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
                         r.Resolve<IGoalsContainer>()
                     )
-                )
+                ),
+                "DestroyNotAlivePiecesPhase"
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IGoalsCompletedPhase>(r =>
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new GoalsCompletedPhase(
                         r.Resolve<IGoalsContainer>()
                     )
-                )
+                ),
+                "GoalsCompletedPhase"
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IGravityPhase>(r =>
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new GravityPhase(
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )
-                )
+                ),
+                "GravityPhase"
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IInstantiateInitialPiecesPhase>(r =>
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new InstantiateInitialPiecesPhase(
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )
-                )
+                ),
+                "InstantiateInitialPiecesPhase"
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IInstantiatePlayerPiecePhase>(r =>
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new InstantiatePlayerPiecePhase(
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
                         r.Resolve<IPlayerPiecesBag>()
                     )
-                )
+                ),
+                "InstantiatePlayerPiecePhase"
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ILineClearPhase>(r =>
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new LineClearPhase(
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )
-                )
+                ),
+                "LineClearPhase"
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ILockPlayerPiecePhase>(r =>
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new LockPlayerPiecePhase(
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
                         r.Resolve<IPlayerPiecesBag>()
                     )
-                )
+                ),
+                "LockPlayerPiecePhase"
             );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseResolver>(r =>
                     new PhaseResolver(
-                        r.Resolve<IGoalsCompletedPhase>(),
-                        r.Resolve<IInstantiateInitialPiecesPhase>(),
-                        r.Resolve<ILockPlayerPiecePhase>(),
-                        r.Resolve<IDestroyNotAlivePiecesPhase>(),
-                        r.Resolve<IGravityPhase>(),
-                        r.Resolve<ILineClearPhase>(),
-                        r.Resolve<IInstantiatePlayerPiecePhase>()
+                        r.Resolve<IPhase>("GoalsCompletedPhase"),
+                        r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
+                        r.Resolve<IPhase>("LockPlayerPiecePhase"),
+                        r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
+                        r.Resolve<IPhase>("GravityPhase"),
+                        r.Resolve<IPhase>("LineClearPhase"),
+                        r.Resolve<IPhase>("InstantiatePlayerPiecePhase")
                     )
                 )
             );
@@ -199,6 +211,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
@@ -215,7 +228,9 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
-                        r.Resolve<IPieceCachedPropertiesGetter>())
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IPieceCachedPropertiesGetter>()
+                    )
                 )
             );
 
@@ -280,6 +295,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetInstance(_gameplayDefinitionGetter));
         }
 
         protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
@@ -305,6 +322,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IUnloadGameplayUseCase>(),
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IGameplayDefinitionGetter>(),
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),

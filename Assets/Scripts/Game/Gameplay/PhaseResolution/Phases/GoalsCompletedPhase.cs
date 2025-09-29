@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class GoalsCompletedPhase : Phase, IGoalsCompletedPhase
+    public class GoalsCompletedPhase : Phase
     {
         [NotNull] private readonly IGoalsContainer _goalsContainer;
 
@@ -14,20 +14,6 @@ namespace Game.Gameplay.PhaseResolution.Phases
             ArgumentNullException.ThrowIfNull(goalsContainer);
 
             _goalsContainer = goalsContainer;
-        }
-
-        public void Initialize()
-        {
-            // TODO: Remove if not needed
-
-            Uninitialize();
-        }
-
-        public override void Uninitialize()
-        {
-            // TODO: Remove if not needed
-
-            base.Uninitialize();
         }
 
         protected override ResolveResult ResolveImpl(ResolveContext _)

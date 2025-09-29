@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
-    public class InstantiatePlayerPiecePhase : Phase, IInstantiatePlayerPiecePhase
+    public class InstantiatePlayerPiecePhase : Phase
     {
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
@@ -24,20 +24,6 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
             _playerPiecesBag = playerPiecesBag;
-        }
-
-        public void Initialize()
-        {
-            // TODO: Remove if not needed
-
-            Uninitialize();
-        }
-
-        public override void Uninitialize()
-        {
-            // TODO: Remove if not needed
-
-            base.Uninitialize();
         }
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
