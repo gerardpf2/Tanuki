@@ -12,6 +12,8 @@ namespace Game.Gameplay.View.EventResolution
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventsResolver _eventsResolver;
 
+        public bool Resolving { get; private set; }
+
         public EventListener(
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IEventEnqueuer eventEnqueuer,
@@ -52,6 +54,13 @@ namespace Game.Gameplay.View.EventResolution
 
         private void HandleEndIteration()
         {
+            if (Resolving)
+            {
+                InvalidOperationException.Throw("Resolve is already in progress");
+            }
+
+            Resolving = true;
+
             ResolveNextEvent();
         }
 
@@ -59,6 +68,8 @@ namespace Game.Gameplay.View.EventResolution
         {
             if (!_eventEnqueuer.TryDequeue(out IEvent evt))
             {
+                Resolving = false;
+
                 return;
             }
 
