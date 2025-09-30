@@ -101,9 +101,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton(_ => new EventContainer()));
-            ruleAdder.Add(ruleFactory.GetTo<IEventDequeuer, EventContainer>());
-            ruleAdder.Add(ruleFactory.GetTo<IEventEnqueuer, EventContainer>());
+            ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
 
@@ -239,7 +237,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
-                        r.Resolve<IEventListener>(),
+                        r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
                 )
@@ -277,15 +275,6 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IEventListener>(r =>
-                    new EventListener(
-                        r.Resolve<IEventDequeuer>(),
-                        r.Resolve<IEventsResolver>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventResolverFactory>(r =>
                     new EventResolverFactory(
                         r.Resolve<IActionFactory>()
@@ -296,6 +285,16 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventsResolver>(r =>
                     new EventsResolver(
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventsResolverSingle>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IEventsResolverSingle>(r =>
+                    new EventsResolverSingle(
                         r.Resolve<IEventResolverFactory>()
                     )
                 )
@@ -354,7 +353,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
-                        r.Resolve<IEventListener>(),
+                        r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
                 )

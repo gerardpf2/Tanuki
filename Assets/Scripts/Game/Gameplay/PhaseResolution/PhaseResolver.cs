@@ -1,13 +1,17 @@
+using System;
 using System.Collections.Generic;
 using Game.Gameplay.PhaseResolution.Phases;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Game.Gameplay.PhaseResolution
 {
     public class PhaseResolver : IPhaseResolver
     {
         [NotNull, ItemNotNull] private readonly IReadOnlyList<IPhase> _phases;
+
+        public event Action OnEndIteration;
 
         public PhaseResolver([NotNull, ItemNotNull] params IPhase[] phases)
         {
@@ -96,6 +100,8 @@ namespace Game.Gameplay.PhaseResolution
             {
                 phase.OnEndIteration();
             }
+
+            OnEndIteration?.Invoke();
         }
     }
 }
