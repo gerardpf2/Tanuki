@@ -1,3 +1,4 @@
+using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System;
 using JetBrains.Annotations;
 
@@ -26,7 +27,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public override IPiece Clone()
         {
-            return new Test(Converter, Id);
+            return new Test(Converter, Id).WithCustomData(CustomData);
         }
 
         public void MoveEye()

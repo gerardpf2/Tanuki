@@ -1,3 +1,4 @@
+using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System;
 using JetBrains.Annotations;
 
@@ -17,7 +18,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public override IPiece Clone()
         {
-            return new PlayerBlock21(Converter, Id);
+            return new PlayerBlock21(Converter, Id).WithCustomData(CustomData);
         }
     }
 }

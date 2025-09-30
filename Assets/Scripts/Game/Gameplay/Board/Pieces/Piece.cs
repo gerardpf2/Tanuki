@@ -13,7 +13,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public PieceType Type { get; }
 
-        public bool Alive { get; protected set; } = true;
+        public bool Alive { get; private set; } = true;
 
         public IEnumerable<KeyValuePair<string, string>> CustomData => GetCustomData();
 
