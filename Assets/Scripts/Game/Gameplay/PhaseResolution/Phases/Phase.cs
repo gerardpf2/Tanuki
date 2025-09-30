@@ -2,17 +2,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
 {
     public abstract class Phase : IPhase
     {
-        private readonly int _maxResolveTimes;
-        private readonly int _maxResolveTimesPerIteration;
-
         private int _resolveTimes;
         private int _resolveTimesPerIteration;
 
-        protected Phase(int maxResolveTimes, int maxResolveTimesPerIteration)
-        {
-            _maxResolveTimes = maxResolveTimes;
-            _maxResolveTimesPerIteration = maxResolveTimesPerIteration;
-        }
+        protected virtual int? MaxResolveTimes => null;
+
+        protected virtual int? MaxResolveTimesPerIteration => null;
 
         public virtual void Initialize()
         {
@@ -54,8 +49,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
         private bool CanResolve()
         {
             return
-                (_maxResolveTimes < 0 || _resolveTimes < _maxResolveTimes) &&
-                (_maxResolveTimesPerIteration < 0 || _resolveTimesPerIteration < _maxResolveTimesPerIteration);
+                (!MaxResolveTimes.HasValue || _resolveTimes < MaxResolveTimes.Value) &&
+                (!MaxResolveTimesPerIteration.HasValue || _resolveTimesPerIteration < MaxResolveTimesPerIteration.Value);
         }
     }
 }

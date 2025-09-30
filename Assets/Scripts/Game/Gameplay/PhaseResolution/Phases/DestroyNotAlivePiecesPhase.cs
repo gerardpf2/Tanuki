@@ -21,7 +21,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
-            [NotNull] IGoalsContainer goalsContainer) : base(-1, -1)
+            [NotNull] IGoalsContainer goalsContainer)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
