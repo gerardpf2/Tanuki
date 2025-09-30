@@ -11,12 +11,12 @@ namespace Game.Gameplay.Board.Pieces
 
         bool Alive { get; }
 
-        IEnumerable<KeyValuePair<string, string>> CustomData { get; }
+        IEnumerable<KeyValuePair<string, string>> State { get; }
 
         [NotNull]
         IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
 
-        void ProcessCustomData(IEnumerable<KeyValuePair<string, string>> customData);
+        void ProcessState(IEnumerable<KeyValuePair<string, string>> state);
 
         void Damage(int rowOffset, int columnOffset);
 

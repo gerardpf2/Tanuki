@@ -20,7 +20,7 @@ namespace Game.Gameplay.Board.Parsing
         {
             ArgumentNullException.ThrowIfNull(pieceSerializedData);
 
-            return _pieceGetter.Get(pieceSerializedData.PieceType, pieceSerializedData.CustomData);
+            return _pieceGetter.Get(pieceSerializedData.PieceType, pieceSerializedData.State);
         }
 
         public PieceSerializedData From([NotNull] IPiece piece)
@@ -31,7 +31,7 @@ namespace Game.Gameplay.Board.Parsing
                 new PieceSerializedData
                 {
                     PieceType = piece.Type,
-                    CustomData = piece.CustomData is null ? null : new Dictionary<string, string>(piece.CustomData)
+                    State = piece.State is null ? null : new Dictionary<string, string>(piece.State)
                 };
         }
     }

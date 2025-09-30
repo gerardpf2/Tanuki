@@ -19,7 +19,7 @@ namespace Game.Gameplay.Board
             _pieceFactory = pieceFactory;
         }
 
-        public IPiece Get(PieceType pieceType, IEnumerable<KeyValuePair<string, string>> customData)
+        public IPiece Get(PieceType pieceType, IEnumerable<KeyValuePair<string, string>> state)
         {
             IPiece piece;
 
@@ -27,13 +27,13 @@ namespace Game.Gameplay.Board
             {
                 case PieceType.Test:
                 {
-                    piece = _pieceFactory.GetTest(customData);
+                    piece = _pieceFactory.GetTest(state);
 
                     break;
                 }
                 case PieceType.PlayerBlock11:
                 {
-                    ThrowExceptionIfCustomDataIsNotNull();
+                    ThrowExceptionIfStateIsNotNull();
 
                     piece = _pieceFactory.GetPlayerBlock11();
 
@@ -41,7 +41,7 @@ namespace Game.Gameplay.Board
                 }
                 case PieceType.PlayerBlock12:
                 {
-                    ThrowExceptionIfCustomDataIsNotNull();
+                    ThrowExceptionIfStateIsNotNull();
 
                     piece = _pieceFactory.GetPlayerBlock12();
 
@@ -49,7 +49,7 @@ namespace Game.Gameplay.Board
                 }
                 case PieceType.PlayerBlock21:
                 {
-                    ThrowExceptionIfCustomDataIsNotNull();
+                    ThrowExceptionIfStateIsNotNull();
 
                     piece = _pieceFactory.GetPlayerBlock21();
 
@@ -64,11 +64,11 @@ namespace Game.Gameplay.Board
 
             return piece;
 
-            void ThrowExceptionIfCustomDataIsNotNull()
+            void ThrowExceptionIfStateIsNotNull()
             {
-                if (customData is not null)
+                if (state is not null)
                 {
-                    ArgumentException.Throw($"Null expected. {pieceType} does not support it", nameof(customData));
+                    ArgumentException.Throw($"Null expected. {pieceType} does not support it", nameof(state));
                 }
             }
         }

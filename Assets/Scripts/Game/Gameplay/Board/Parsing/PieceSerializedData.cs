@@ -9,7 +9,7 @@ namespace Game.Gameplay.Board.Parsing
         [JsonProperty("P"), JsonConverter(typeof(StringEnumConverter))]
         public PieceType PieceType { get; set; }
 
-        [JsonProperty("C", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public Dictionary<string, string> CustomData { get; set; }
+        [JsonProperty("S", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public Dictionary<string, string> State { get; set; }
     }
 }

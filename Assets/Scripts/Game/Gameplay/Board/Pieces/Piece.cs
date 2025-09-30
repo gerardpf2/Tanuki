@@ -15,11 +15,11 @@ namespace Game.Gameplay.Board.Pieces
 
         public bool Alive { get; private set; } = true;
 
-        public IEnumerable<KeyValuePair<string, string>> CustomData => GetCustomData();
+        public IEnumerable<KeyValuePair<string, string>> State => GetState();
 
         [NotNull] protected readonly IConverter Converter;
 
-        [NotNull] private readonly IDictionary<string, string> _temporaryCustomDataEntries = new Dictionary<string, string>();
+        [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
 
         protected Piece([NotNull] IConverter converter, uint id, PieceType type)
         {
@@ -33,16 +33,16 @@ namespace Game.Gameplay.Board.Pieces
 
         public abstract IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
 
-        public void ProcessCustomData(IEnumerable<KeyValuePair<string, string>> customData)
+        public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)
         {
-            if (customData is null)
+            if (state is null)
             {
                 return;
             }
 
-            foreach ((string key, string value) in customData)
+            foreach ((string key, string value) in state)
             {
-                bool processed = ProcessCustomDataEntry(key, value);
+                bool processed = ProcessStateEntry(key, value);
 
                 if (!processed)
                 {
@@ -63,21 +63,21 @@ namespace Game.Gameplay.Board.Pieces
 
         public abstract IPiece Clone();
 
-        private IEnumerable<KeyValuePair<string, string>> GetCustomData()
+        private IEnumerable<KeyValuePair<string, string>> GetState()
         {
-            _temporaryCustomDataEntries.Clear();
+            _temporaryStateEntries.Clear();
 
-            AddCustomDataEntries();
+            AddStateEntries();
 
             return
-                _temporaryCustomDataEntries.Count > 0 ?
-                    new Dictionary<string, string>(_temporaryCustomDataEntries) :
+                _temporaryStateEntries.Count > 0 ?
+                    new Dictionary<string, string>(_temporaryStateEntries) :
                     null; // Avoid serialize when empty
         }
 
-        protected virtual void AddCustomDataEntries() { }
+        protected virtual void AddStateEntries() { }
 
-        protected void AddCustomDataEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
+        protected void AddStateEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
         {
             ArgumentNullException.ThrowIfNull(key);
 
@@ -86,10 +86,10 @@ namespace Game.Gameplay.Board.Pieces
                 return; // Avoid serialize when null or default
             }
 
-            _temporaryCustomDataEntries.Add(key, Converter.Convert<string>(value));
+            _temporaryStateEntries.Add(key, Converter.Convert<string>(value));
         }
 
-        protected virtual bool ProcessCustomDataEntry(string key, string value)
+        protected virtual bool ProcessStateEntry(string key, string value)
         {
             return false;
         }

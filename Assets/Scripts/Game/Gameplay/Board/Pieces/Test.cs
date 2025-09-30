@@ -16,8 +16,8 @@ namespace Game.Gameplay.Board.Pieces
          */
 
         public const int Rows = 3;
-        private const string CustomDataEyeMovementDirectionUpKey = "EyeMovementDirectionUp"; // TODO: Use shorter key
-        private const string CustomDataEyeRowOffsetKey = "EyeRowOffset"; // TODO: Use shorter key
+        private const string EyeMovementDirectionUpKey = "EyeMovementDirectionUp"; // TODO: Use shorter key
+        private const string EyeRowOffsetKey = "EyeRowOffset"; // TODO: Use shorter key
 
         public bool EyeMovementDirectionUp { get; private set; }
 
@@ -27,7 +27,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public override IPiece Clone()
         {
-            return new Test(Converter, Id).WithCustomData(CustomData);
+            return new Test(Converter, Id).WithState(State);
         }
 
         public void MoveEye()
@@ -49,32 +49,32 @@ namespace Game.Gameplay.Board.Pieces
             }
         }
 
-        protected override void AddCustomDataEntries()
+        protected override void AddStateEntries()
         {
-            base.AddCustomDataEntries();
+            base.AddStateEntries();
 
-            AddCustomDataEntry(CustomDataEyeMovementDirectionUpKey, EyeMovementDirectionUp);
-            AddCustomDataEntry(CustomDataEyeRowOffsetKey, EyeRowOffset);
+            AddStateEntry(EyeMovementDirectionUpKey, EyeMovementDirectionUp);
+            AddStateEntry(EyeRowOffsetKey, EyeRowOffset);
         }
 
-        protected override bool ProcessCustomDataEntry(string key, string value)
+        protected override bool ProcessStateEntry(string key, string value)
         {
             switch (key)
             {
-                case CustomDataEyeMovementDirectionUpKey:
+                case EyeMovementDirectionUpKey:
                 {
                     EyeMovementDirectionUp = Converter.Convert<bool>(value);
 
                     return true;
                 }
-                case CustomDataEyeRowOffsetKey:
+                case EyeRowOffsetKey:
                 {
                     EyeRowOffset = Converter.Convert<int>(value);
 
                     return true;
                 }
                 default:
-                    return base.ProcessCustomDataEntry(key, value);
+                    return base.ProcessStateEntry(key, value);
             }
         }
 

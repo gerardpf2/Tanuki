@@ -30,13 +30,11 @@ namespace Game.Gameplay.Board.Pieces.Utils
         }
 
         [NotNull]
-        public static IPiece WithCustomData(
-            [NotNull] this IPiece piece,
-            IEnumerable<KeyValuePair<string, string>> customData)
+        public static IPiece WithState([NotNull] this IPiece piece, IEnumerable<KeyValuePair<string, string>> state)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            piece.ProcessCustomData(customData);
+            piece.ProcessState(state);
 
             return piece;
         }

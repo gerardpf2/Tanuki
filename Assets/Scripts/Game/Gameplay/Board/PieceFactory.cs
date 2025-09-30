@@ -20,9 +20,9 @@ namespace Game.Gameplay.Board
             _converter = converter;
         }
 
-        public IPiece GetTest(IEnumerable<KeyValuePair<string, string>> customData)
+        public IPiece GetTest(IEnumerable<KeyValuePair<string, string>> state)
         {
-            return new Test(_converter, GetNewId()).WithCustomData(customData);
+            return new Test(_converter, GetNewId()).WithState(state);
         }
 
         public IPiece GetPlayerBlock11()

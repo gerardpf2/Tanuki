@@ -18,7 +18,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public override IPiece Clone()
         {
-            return new PlayerBlock11(Converter, Id).WithCustomData(CustomData);
+            return new PlayerBlock11(Converter, Id).WithState(State);
         }
     }
 }
