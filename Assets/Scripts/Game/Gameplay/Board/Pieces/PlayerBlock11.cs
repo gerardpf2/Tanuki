@@ -14,5 +14,10 @@ namespace Game.Gameplay.Board.Pieces
          */
 
         public PlayerBlock11([NotNull] IConverter converter, uint id) : base(converter, id, PieceType.PlayerBlock11, 1, 1) { }
+
+        public override IPiece Clone()
+        {
+            return new PlayerBlock11(Converter, Id);
+        }
     }
 }

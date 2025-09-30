@@ -17,7 +17,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public IEnumerable<KeyValuePair<string, string>> CustomData => GetCustomData();
 
-        [NotNull] private readonly IConverter _converter;
+        [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryCustomDataEntries = new Dictionary<string, string>();
 
@@ -25,7 +25,7 @@ namespace Game.Gameplay.Board.Pieces
         {
             ArgumentNullException.ThrowIfNull(converter);
 
-            _converter = converter;
+            Converter = converter;
 
             Id = id;
             Type = type;
@@ -61,6 +61,8 @@ namespace Game.Gameplay.Board.Pieces
             HandleDamaged(rowOffset, columnOffset);
         }
 
+        public abstract IPiece Clone();
+
         private IEnumerable<KeyValuePair<string, string>> GetCustomData()
         {
             _temporaryCustomDataEntries.Clear();
@@ -84,7 +86,7 @@ namespace Game.Gameplay.Board.Pieces
                 return; // Avoid serialize when null or default
             }
 
-            _temporaryCustomDataEntries.Add(key, _converter.Convert<string>(value));
+            _temporaryCustomDataEntries.Add(key, Converter.Convert<string>(value));
         }
 
         protected virtual bool ProcessCustomDataEntry(string key, string value)

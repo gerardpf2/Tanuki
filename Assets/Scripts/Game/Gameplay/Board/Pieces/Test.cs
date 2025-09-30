@@ -1,5 +1,4 @@
 using Infrastructure.System;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Pieces
@@ -19,17 +18,15 @@ namespace Game.Gameplay.Board.Pieces
         private const string CustomDataEyeMovementDirectionUpKey = "EyeMovementDirectionUp"; // TODO: Use shorter key
         private const string CustomDataEyeRowOffsetKey = "EyeRowOffset"; // TODO: Use shorter key
 
-        [NotNull] private readonly IConverter _converter;
-
         public bool EyeMovementDirectionUp { get; private set; }
 
         public int EyeRowOffset { get; private set; }
 
-        public Test([NotNull] IConverter converter, uint id) : base(converter, id, PieceType.Test, Rows, 1)
-        {
-            ArgumentNullException.ThrowIfNull(converter);
+        public Test([NotNull] IConverter converter, uint id) : base(converter, id, PieceType.Test, Rows, 1) { }
 
-            _converter = converter;
+        public override IPiece Clone()
+        {
+            return new Test(Converter, Id);
         }
 
         public void MoveEye()
@@ -65,13 +62,13 @@ namespace Game.Gameplay.Board.Pieces
             {
                 case CustomDataEyeMovementDirectionUpKey:
                 {
-                    EyeMovementDirectionUp = _converter.Convert<bool>(value);
+                    EyeMovementDirectionUp = Converter.Convert<bool>(value);
 
                     return true;
                 }
                 case CustomDataEyeRowOffsetKey:
                 {
-                    EyeRowOffset = _converter.Convert<int>(value);
+                    EyeRowOffset = Converter.Convert<int>(value);
 
                     return true;
                 }
