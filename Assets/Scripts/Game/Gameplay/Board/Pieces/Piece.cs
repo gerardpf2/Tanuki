@@ -9,6 +9,8 @@ namespace Game.Gameplay.Board.Pieces
 {
     public abstract class Piece : IPiece
     {
+        public uint Id { get; }
+
         public PieceType Type { get; }
 
         public bool Alive { get; protected set; } = true;
@@ -19,12 +21,13 @@ namespace Game.Gameplay.Board.Pieces
 
         [NotNull] private readonly IDictionary<string, string> _temporaryCustomDataEntries = new Dictionary<string, string>();
 
-        protected Piece([NotNull] IConverter converter, PieceType type)
+        protected Piece([NotNull] IConverter converter, uint id, PieceType type)
         {
             ArgumentNullException.ThrowIfNull(converter);
 
             _converter = converter;
 
+            Id = id;
             Type = type;
         }
 

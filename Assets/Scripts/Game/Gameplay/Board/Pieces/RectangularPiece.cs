@@ -10,7 +10,7 @@ namespace Game.Gameplay.Board.Pieces
         private readonly int _rows;
         private readonly int _columns;
 
-        protected RectangularPiece([NotNull] IConverter converter, PieceType type, int rows, int columns) : base(converter, type)
+        protected RectangularPiece([NotNull] IConverter converter, uint id, PieceType type, int rows, int columns) : base(converter, id, type)
         {
             _rows = rows;
             _columns = columns;

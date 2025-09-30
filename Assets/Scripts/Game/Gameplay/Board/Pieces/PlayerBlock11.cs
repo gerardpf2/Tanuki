@@ -13,6 +13,6 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
-        public PlayerBlock11([NotNull] IConverter converter) : base(converter, PieceType.PlayerBlock11, 1, 1) { }
+        public PlayerBlock11([NotNull] IConverter converter, uint id) : base(converter, id, PieceType.PlayerBlock11, 1, 1) { }
     }
 }

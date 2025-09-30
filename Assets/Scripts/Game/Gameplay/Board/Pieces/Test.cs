@@ -25,7 +25,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public int EyeRowOffset { get; private set; }
 
-        public Test([NotNull] IConverter converter) : base(converter, PieceType.Test, Rows, 1)
+        public Test([NotNull] IConverter converter, uint id) : base(converter, id, PieceType.Test, Rows, 1)
         {
             ArgumentNullException.ThrowIfNull(converter);
 
