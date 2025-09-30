@@ -9,6 +9,8 @@ namespace Game.Gameplay.Board.Pieces
 {
     public abstract class Piece : IPiece
     {
+        private const string AliveKey = "A";
+
         public uint Id { get; }
 
         public PieceType Type { get; }
@@ -75,7 +77,10 @@ namespace Game.Gameplay.Board.Pieces
                     null; // Avoid serialize when empty
         }
 
-        protected virtual void AddStateEntries() { }
+        protected virtual void AddStateEntries()
+        {
+            AddStateEntry(AliveKey, Alive);
+        }
 
         protected void AddStateEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
         {
@@ -91,6 +96,16 @@ namespace Game.Gameplay.Board.Pieces
 
         protected virtual bool ProcessStateEntry(string key, string value)
         {
+            switch (key)
+            {
+                case AliveKey:
+                {
+                    Alive = Converter.Convert<bool>(value);
+
+                    return true;
+                }
+            }
+
             return false;
         }
 
