@@ -9,7 +9,7 @@ namespace Game.Gameplay.Board.Pieces
 {
     public abstract class Piece : IPiece
     {
-        private const string AliveKey = "ALIVE";
+        [NotNull] private const string AliveKey = "ALIVE";
 
         public uint Id { get; }
 
@@ -48,7 +48,7 @@ namespace Game.Gameplay.Board.Pieces
 
                 if (!processed)
                 {
-                    InvalidOperationException.Throw($"Custom data entry with Key: {key} and Value: {value} cannot be processed");
+                    InvalidOperationException.Throw($"State entry with Key: {key} and Value: {value} cannot be processed");
                 }
             }
         }
@@ -83,7 +83,10 @@ namespace Game.Gameplay.Board.Pieces
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            _temporaryStateEntries.Add(key, Converter.Convert<string>(value));
+            if (!_temporaryStateEntries.TryAdd(key, Converter.Convert<string>(value)))
+            {
+                InvalidOperationException.Throw($"State entry with Key: {key} and Value: {value} cannot be added");
+            }
         }
 
         protected virtual bool ProcessStateEntry(string key, string value)

@@ -16,8 +16,8 @@ namespace Game.Gameplay.Board.Pieces
          */
 
         public const int Rows = 3;
-        private const string EyeMovementDirectionUpKey = "DIRECTION_UP";
-        private const string EyeRowOffsetKey = "ROW_OFFSET";
+        [NotNull] private const string EyeMovementDirectionUpKey = "DIRECTION_UP";
+        [NotNull] private const string EyeRowOffsetKey = "ROW_OFFSET";
 
         public bool EyeMovementDirectionUp { get; private set; }
 
