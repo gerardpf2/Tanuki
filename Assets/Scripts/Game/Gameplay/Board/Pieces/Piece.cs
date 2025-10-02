@@ -9,7 +9,7 @@ namespace Game.Gameplay.Board.Pieces
 {
     public abstract class Piece : IPiece
     {
-        private const string AliveKey = "A";
+        private const string AliveKey = "ALIVE";
 
         public uint Id { get; }
 
