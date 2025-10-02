@@ -71,10 +71,7 @@ namespace Game.Gameplay.Board.Pieces
 
             AddStateEntries();
 
-            return
-                _temporaryStateEntries.Count > 0 ?
-                    new Dictionary<string, string>(_temporaryStateEntries) :
-                    null; // Avoid serialize when empty
+            return new Dictionary<string, string>(_temporaryStateEntries);
         }
 
         protected virtual void AddStateEntries()
@@ -85,11 +82,6 @@ namespace Game.Gameplay.Board.Pieces
         protected void AddStateEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
         {
             ArgumentNullException.ThrowIfNull(key);
-
-            if (value is null || value.Equals(default))
-            {
-                return; // Avoid serialize when null or default
-            }
 
             _temporaryStateEntries.Add(key, Converter.Convert<string>(value));
         }
