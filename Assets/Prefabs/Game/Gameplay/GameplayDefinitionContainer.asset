@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameplayDefinitions:
   - _id: Test
-    _board: '{"R":5,"C":3,"P":[{"P":{"P":"Test"}},{"R":2,"C":2,"P":{"P":"Test"}},{"R":1,"C":1,"P":{"P":"PlayerBlock11"}}]}'
-    _goals: '{"G":[{"P":"Test","I":2},{"P":"PlayerBlock21","I":3}]}'
+    _board: '{"ROWS":5,"COLUMNS":3,"PIECES":[{"PIECE":{"TYPE":"Test"}},{"ROW":2,"COLUMN":2,"PIECE":{"TYPE":"Test"}},{"ROW":1,"COLUMN":1,"PIECE":{"TYPE":"PlayerBlock11"}}]}'
+    _goals: '{"GOALS":[{"TYPE":"Test","AMOUNT":2},{"TYPE":"PlayerBlock21","AMOUNT":3}]}'

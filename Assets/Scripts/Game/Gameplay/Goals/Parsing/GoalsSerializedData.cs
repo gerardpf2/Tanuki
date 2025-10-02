@@ -5,7 +5,7 @@ namespace Game.Gameplay.Goals.Parsing
 {
     public class GoalsSerializedData
     {
-        [JsonProperty("G", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty("GOALS", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public List<GoalSerializedData> GoalSerializedData { get; set; }
     }
 }
