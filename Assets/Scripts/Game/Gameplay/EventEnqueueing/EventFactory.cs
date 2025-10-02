@@ -2,6 +2,8 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.EventEnqueueing
 {
@@ -29,9 +31,11 @@ namespace Game.Gameplay.EventEnqueueing
             return new LockPlayerPieceEvent(pieceClone, lockSourceCoordinate);
         }
 
-        public IEvent GetDamagePieceEvent(uint id)
+        public IEvent GetDamagePieceEvent([NotNull] IPiece piece)
         {
-            return new DamagePieceEvent(id);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            return new DamagePieceEvent(piece.Id, piece.State);
         }
 
         public IEvent GetDestroyPieceEvent(uint id, DestroyPieceReason destroyPieceReason)
