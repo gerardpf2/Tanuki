@@ -67,7 +67,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
                 piece.Damage(rowOffset, columnOffset);
 
-                _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece));
+                _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece.Id));
 
                 anyDamaged = true;
             }

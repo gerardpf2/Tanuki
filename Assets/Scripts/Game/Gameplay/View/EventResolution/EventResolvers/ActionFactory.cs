@@ -71,21 +71,19 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new DestroyPlayerPieceAction(destroyPieceReason, _playerView);
         }
 
-        public IAction GetDamagePieceAction(IPiece piece)
+        public IAction GetDamagePieceAction(uint id)
         {
-            return new DamagePieceAction(piece, _boardView);
+            return new DamagePieceAction(id, _boardView);
         }
 
-        public IAction GetDestroyPieceAction([NotNull] IPiece piece, DestroyPieceReason destroyPieceReason)
+        public IAction GetDestroyPieceAction(uint id, DestroyPieceReason destroyPieceReason)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            return new DestroyPieceAction(destroyPieceReason, piece, _boardView, _goalsView);
+            return new DestroyPieceAction(destroyPieceReason, id, _boardView, _goalsView);
         }
 
-        public IAction GetMovePieceAction(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        public IAction GetMovePieceAction(uint id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceAction(_boardView, piece, rowOffset, columnOffset, movePieceReason);
+            return new MovePieceAction(_boardView, id, rowOffset, columnOffset, movePieceReason);
         }
     }
 }

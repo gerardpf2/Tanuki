@@ -22,12 +22,12 @@ namespace Game.Gameplay.EventEnqueueing
         IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate);
 
         [NotNull]
-        IEvent GetDamagePieceEvent(IPiece piece);
+        IEvent GetDamagePieceEvent(uint id);
 
         [NotNull]
-        IEvent GetDestroyPieceEvent(IPiece piece, DestroyPieceReason destroyPieceReason);
+        IEvent GetDestroyPieceEvent(uint id, DestroyPieceReason destroyPieceReason);
 
         [NotNull]
-        IEvent GetMovePieceEvent(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
+        IEvent GetMovePieceEvent(uint id, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Board.Pieces;
 using JetBrains.Annotations;
@@ -11,20 +10,20 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class DamagePieceAction : IAction
     {
-        private readonly IPiece _piece;
+        private readonly uint _id;
         [NotNull] private readonly IBoardView _boardView;
 
-        public DamagePieceAction(IPiece piece, [NotNull] IBoardView boardView)
+        public DamagePieceAction(uint id, [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(boardView);
 
-            _piece = piece;
+            _id = id;
             _boardView = boardView;
         }
 
         public void Resolve(Action onComplete)
         {
-            GameObject pieceInstance = _boardView.GetPieceInstance(_piece);
+            GameObject pieceInstance = _boardView.GetPieceInstance(_id);
 
             IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
 

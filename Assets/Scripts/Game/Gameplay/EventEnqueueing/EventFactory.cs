@@ -12,7 +12,9 @@ namespace Game.Gameplay.EventEnqueueing
             Coordinate sourceCoordinate,
             InstantiatePieceReason instantiatePieceReason)
         {
-            return new InstantiatePieceEvent(piece, sourceCoordinate, instantiatePieceReason);
+            IPiece pieceClone = piece.Clone(); // Clone needed so model and view boards have different piece refs
+
+            return new InstantiatePieceEvent(pieceClone, sourceCoordinate, instantiatePieceReason);
         }
 
         public IEvent GetInstantiatePlayerPieceEvent(IPiece piece)
@@ -22,22 +24,24 @@ namespace Game.Gameplay.EventEnqueueing
 
         public IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate)
         {
-            return new LockPlayerPieceEvent(piece, lockSourceCoordinate);
+            IPiece pieceClone = piece.Clone(); // Clone needed so model and view boards have different piece refs
+
+            return new LockPlayerPieceEvent(pieceClone, lockSourceCoordinate);
         }
 
-        public IEvent GetDamagePieceEvent(IPiece piece)
+        public IEvent GetDamagePieceEvent(uint id)
         {
-            return new DamagePieceEvent(piece);
+            return new DamagePieceEvent(id);
         }
 
-        public IEvent GetDestroyPieceEvent(IPiece piece, DestroyPieceReason destroyPieceReason)
+        public IEvent GetDestroyPieceEvent(uint id, DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPieceEvent(piece, destroyPieceReason);
+            return new DestroyPieceEvent(id, destroyPieceReason);
         }
 
-        public IEvent GetMovePieceEvent(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        public IEvent GetMovePieceEvent(uint id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceEvent(piece, rowOffset, columnOffset, movePieceReason);
+            return new MovePieceEvent(id, rowOffset, columnOffset, movePieceReason);
         }
     }
 }

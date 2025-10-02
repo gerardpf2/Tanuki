@@ -14,12 +14,15 @@ namespace Game.Gameplay.View.Board
         void Uninitialize();
 
         [NotNull]
-        GameObject GetPieceInstance(IPiece piece);
+        IPiece GetPiece(uint id);
+
+        [NotNull]
+        GameObject GetPieceInstance(uint id);
 
         void InstantiatePiece(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
 
-        void DestroyPiece(IPiece piece);
+        void DestroyPiece(uint id);
 
-        void MovePiece(IPiece piece, int rowOffset, int columnOffset);
+        void MovePiece(uint id, int rowOffset, int columnOffset);
     }
 }

@@ -1,16 +1,15 @@
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {
     public class DestroyPieceEvent : IEvent
     {
-        public readonly IPiece Piece;
+        public readonly uint Id;
         public readonly DestroyPieceReason DestroyPieceReason;
 
-        public DestroyPieceEvent(IPiece piece, DestroyPieceReason destroyPieceReason)
+        public DestroyPieceEvent(uint id, DestroyPieceReason destroyPieceReason)
         {
-            Piece = piece;
+            Id = id;
             DestroyPieceReason = destroyPieceReason;
         }
     }
