@@ -38,12 +38,12 @@ namespace Game.Gameplay.EventEnqueueing
             return new DamagePieceEvent(piece.Id, piece.State);
         }
 
-        public IEvent GetDestroyPieceEvent(uint id, DestroyPieceReason destroyPieceReason)
+        public IEvent GetDestroyPieceEvent(int id, DestroyPieceReason destroyPieceReason)
         {
             return new DestroyPieceEvent(id, destroyPieceReason);
         }
 
-        public IEvent GetMovePieceEvent(uint id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        public IEvent GetMovePieceEvent(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
             return new MovePieceEvent(id, rowOffset, columnOffset, movePieceReason);
         }

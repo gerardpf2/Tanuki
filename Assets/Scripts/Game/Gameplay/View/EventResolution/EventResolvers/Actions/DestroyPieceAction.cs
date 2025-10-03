@@ -10,13 +10,13 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class DestroyPieceAction : BaseDestroyPieceAction
     {
-        private readonly uint _id;
+        private readonly int _id;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly IGoalsView _goalsView;
 
         public DestroyPieceAction(
             DestroyPieceReason destroyPieceReason,
-            uint id,
+            int id,
             [NotNull] IBoardView boardView,
             [NotNull] IGoalsView goalsView) : base(destroyPieceReason)
         {

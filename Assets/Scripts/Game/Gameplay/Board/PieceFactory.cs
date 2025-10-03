@@ -11,7 +11,7 @@ namespace Game.Gameplay.Board
     {
         [NotNull] private readonly IConverter _converter;
 
-        private uint _id;
+        private int _id;
 
         public PieceFactory([NotNull] IConverter converter)
         {
@@ -40,7 +40,7 @@ namespace Game.Gameplay.Board
             return new PlayerBlock21(_converter, GetNewId());
         }
 
-        private uint GetNewId()
+        private int GetNewId()
         {
             return _id++;
         }

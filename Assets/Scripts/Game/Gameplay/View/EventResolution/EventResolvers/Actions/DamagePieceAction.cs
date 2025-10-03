@@ -12,12 +12,12 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class DamagePieceAction : IAction
     {
-        private readonly uint _id;
+        private readonly int _id;
         private readonly IEnumerable<KeyValuePair<string, string>> _state;
         [NotNull] private readonly IBoardView _boardView;
 
         public DamagePieceAction(
-            uint id,
+            int id,
             IEnumerable<KeyValuePair<string, string>> state,
             [NotNull] IBoardView boardView)
         {

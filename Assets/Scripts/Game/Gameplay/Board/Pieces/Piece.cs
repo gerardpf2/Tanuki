@@ -11,7 +11,7 @@ namespace Game.Gameplay.Board.Pieces
     {
         [NotNull] private const string AliveKey = "ALIVE";
 
-        public uint Id { get; }
+        public int Id { get; }
 
         public PieceType Type { get; }
 
@@ -23,7 +23,7 @@ namespace Game.Gameplay.Board.Pieces
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
 
-        protected Piece([NotNull] IConverter converter, uint id, PieceType type)
+        protected Piece([NotNull] IConverter converter, int id, PieceType type)
         {
             ArgumentNullException.ThrowIfNull(converter);
 

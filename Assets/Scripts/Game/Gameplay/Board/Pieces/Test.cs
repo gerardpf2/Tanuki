@@ -23,7 +23,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public int EyeRowOffset { get; private set; }
 
-        public Test([NotNull] IConverter converter, uint id) : base(converter, id, PieceType.Test, Rows, 1) { }
+        public Test([NotNull] IConverter converter, int id) : base(converter, id, PieceType.Test, Rows, 1) { }
 
         public override IPiece Clone()
         {

@@ -5,7 +5,7 @@ namespace Game.Gameplay.Board.Pieces
 {
     public interface IPiece
     {
-        uint Id { get; }
+        int Id { get; }
 
         PieceType Type { get; }
 

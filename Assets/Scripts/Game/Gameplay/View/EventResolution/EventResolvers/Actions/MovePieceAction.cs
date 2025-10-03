@@ -12,14 +12,14 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     public class MovePieceAction : IAction
     {
         [NotNull] private readonly IBoardView _boardView;
-        private readonly uint _id;
+        private readonly int _id;
         private readonly int _rowOffset;
         private readonly int _columnOffset;
         private readonly MovePieceReason _movePieceReason;
 
         public MovePieceAction(
             [NotNull] IBoardView boardView,
-            uint id,
+            int id,
             int rowOffset,
             int columnOffset,
             MovePieceReason movePieceReason)

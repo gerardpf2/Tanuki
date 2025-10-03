@@ -72,17 +72,17 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new DestroyPlayerPieceAction(destroyPieceReason, _playerView);
         }
 
-        public IAction GetDamagePieceAction(uint id, IEnumerable<KeyValuePair<string, string>> state)
+        public IAction GetDamagePieceAction(int id, IEnumerable<KeyValuePair<string, string>> state)
         {
             return new DamagePieceAction(id, state, _boardView);
         }
 
-        public IAction GetDestroyPieceAction(uint id, DestroyPieceReason destroyPieceReason)
+        public IAction GetDestroyPieceAction(int id, DestroyPieceReason destroyPieceReason)
         {
             return new DestroyPieceAction(destroyPieceReason, id, _boardView, _goalsView);
         }
 
-        public IAction GetMovePieceAction(uint id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        public IAction GetMovePieceAction(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
             return new MovePieceAction(_boardView, id, rowOffset, columnOffset, movePieceReason);
         }

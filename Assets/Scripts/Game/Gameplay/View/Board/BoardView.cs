@@ -13,8 +13,8 @@ namespace Game.Gameplay.View.Board
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
 
-        [NotNull] private readonly IDictionary<uint, IPiece> _pieces = new Dictionary<uint, IPiece>();
-        [NotNull] private readonly IDictionary<uint, GameObject> _pieceInstances = new Dictionary<uint, GameObject>();
+        [NotNull] private readonly IDictionary<int, IPiece> _pieces = new Dictionary<int, IPiece>();
+        [NotNull] private readonly IDictionary<int, GameObject> _pieceInstances = new Dictionary<int, GameObject>();
 
         private Transform _piecesParent;
 
@@ -59,7 +59,7 @@ namespace Game.Gameplay.View.Board
             _piecesParent = null;
         }
 
-        public IPiece GetPiece(uint id)
+        public IPiece GetPiece(int id)
         {
             if (!_pieces.TryGetValue(id, out IPiece piece))
             {
@@ -71,7 +71,7 @@ namespace Game.Gameplay.View.Board
             return piece;
         }
 
-        public GameObject GetPieceInstance(uint id)
+        public GameObject GetPieceInstance(int id)
         {
             if (!_pieceInstances.TryGetValue(id, out GameObject pieceInstance))
             {
@@ -89,7 +89,7 @@ namespace Game.Gameplay.View.Board
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(Board);
 
-            uint id = piece.Id;
+            int id = piece.Id;
 
             if (_pieces.ContainsKey(id) || _pieceInstances.ContainsKey(id))
             {
@@ -110,7 +110,7 @@ namespace Game.Gameplay.View.Board
             _pieceInstances.Add(id, pieceInstance);
         }
 
-        public void DestroyPiece(uint id)
+        public void DestroyPiece(int id)
         {
             IPiece piece = GetPiece(id);
 
@@ -124,7 +124,7 @@ namespace Game.Gameplay.View.Board
             _pieceInstances.Remove(id);
         }
 
-        public void MovePiece(uint id, int rowOffset, int columnOffset)
+        public void MovePiece(int id, int rowOffset, int columnOffset)
         {
             IPiece piece = GetPiece(id);
 
@@ -142,9 +142,9 @@ namespace Game.Gameplay.View.Board
 
         private void DestroyAllPieces()
         {
-            IEnumerable<uint> idsCopy = new List<uint>(_pieces.Keys);
+            IEnumerable<int> idsCopy = new List<int>(_pieces.Keys);
 
-            foreach (uint id in idsCopy)
+            foreach (int id in idsCopy)
             {
                 DestroyPiece(id);
             }
