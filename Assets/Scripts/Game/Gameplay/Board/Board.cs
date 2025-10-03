@@ -18,7 +18,7 @@ namespace Game.Gameplay.Board
 
         private int _highestNonEmptyRow;
 
-        public event Action OnHighestNonEmptyRowUpdated;
+        public event Action OnHighestNonEmptyRowUpdated; // TODO: Remove
 
         public int Rows
         {

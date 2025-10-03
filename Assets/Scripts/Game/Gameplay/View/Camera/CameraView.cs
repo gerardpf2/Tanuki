@@ -1,6 +1,7 @@
 using Game.Gameplay.Camera;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
+using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -40,12 +41,24 @@ namespace Game.Gameplay.View.Camera
 
         public void UpdatePosition(int topRow, int bottomRow)
         {
-            // TODO
+            // TODO: Update position x
+
+            float y = 0.5f * (topRow - bottomRow + 1);
+
+            _unityCameraTransform.position = _unityCameraTransform.position.WithY(y);
         }
 
         private void UpdateSize(float topPositionY, float bottomPositionY)
         {
-            // TODO
+            // Assumes orthographic camera, etc If other game modes modify camera params other than size, this class should be reviewed
+            // Top and bottom board view positions are based on orthographic camera size
+
+            float defaultSize = _unityCamera.orthographicSize;
+            float defaultVisibleRows = topPositionY - bottomPositionY;
+
+            int visibleRows = _camera.TopRow - _camera.BottomRow + 1;
+
+            _unityCamera.orthographicSize = defaultSize * visibleRows / defaultVisibleRows;
         }
     }
 }
