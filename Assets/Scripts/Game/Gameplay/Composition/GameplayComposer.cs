@@ -233,6 +233,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
                         r.Resolve<IBoardContainer>(),
+                        r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
@@ -348,6 +349,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IGameplayDefinitionGetter>(),
                         r.Resolve<IBoardContainer>(),
+                        r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IGoalsParser>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
