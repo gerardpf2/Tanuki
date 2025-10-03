@@ -24,7 +24,7 @@ namespace Game.Gameplay.Camera
             _boardContainer = boardContainer;
         }
 
-        public bool Update()
+        public bool UpdatePosition()
         {
             IBoard board = _boardContainer.Board;
 

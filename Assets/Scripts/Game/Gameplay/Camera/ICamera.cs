@@ -6,6 +6,6 @@ namespace Game.Gameplay.Camera
 
         int BottomRow { get; }
 
-        bool Update();
+        bool UpdatePosition();
     }
 }
