@@ -1,4 +1,8 @@
 using System;
+using Game.Gameplay.Board;
+using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Camera
 {
@@ -7,13 +11,26 @@ namespace Game.Gameplay.Camera
         private const int ExtraRowsOnTop = 5; // TODO: ScriptableObject
         private const int VisibleRows = 10; // TODO: ScriptableObject
 
+        [NotNull] private readonly IBoardContainer _boardContainer;
+
         public int TopRow { get; private set; } = VisibleRows - 1;
 
         public int BottomRow => TopRow - VisibleRows + 1;
 
-        public bool Update(int highestNonEmptyRow)
+        public Camera([NotNull] IBoardContainer boardContainer)
         {
-            int newTopRow = Math.Max(highestNonEmptyRow + ExtraRowsOnTop, VisibleRows) - 1;
+            ArgumentNullException.ThrowIfNull(boardContainer);
+
+            _boardContainer = boardContainer;
+        }
+
+        public bool Update()
+        {
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
+
+            int newTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, VisibleRows) - 1;
 
             if (TopRow == newTopRow)
             {
@@ -23,11 +40,6 @@ namespace Game.Gameplay.Camera
             TopRow = newTopRow;
 
             return true;
-        }
-
-        public ICamera Clone()
-        {
-            return new Camera { TopRow = TopRow };
         }
     }
 }
