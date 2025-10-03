@@ -96,6 +96,8 @@ namespace Game.Gameplay.UseCases
 
         private void PrepareModel(string id)
         {
+            _pieceIdGetter.Initialize();
+
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
             _boardParser.Deserialize(
@@ -107,7 +109,6 @@ namespace Game.Gameplay.UseCases
             IGoals goals = _goalsParser.Deserialize(gameplayDefinition.Goals);
 
             _boardContainer.Initialize(board, piecePlacements);
-            _pieceIdGetter.Initialize();
             _goalsContainer.Initialize(goals);
             _phaseResolver.Initialize();
             _playerPiecesBag.Initialize();
