@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+
 namespace Game.Gameplay.Camera
 {
     public interface ICamera
@@ -7,5 +9,8 @@ namespace Game.Gameplay.Camera
         int BottomRow { get; }
 
         bool Update(int highestNonEmptyRow);
+
+        [NotNull]
+        ICamera Clone();
     }
 }

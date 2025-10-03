@@ -24,5 +24,10 @@ namespace Game.Gameplay.Camera
 
             return true;
         }
+
+        public ICamera Clone()
+        {
+            return new Camera { TopRow = TopRow };
+        }
     }
 }
