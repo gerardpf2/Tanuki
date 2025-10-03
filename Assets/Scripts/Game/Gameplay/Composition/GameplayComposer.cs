@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
+using Game.Gameplay.Camera;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
@@ -103,6 +104,14 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceIdGetter>(_ => new PieceIdGetter()));
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ICamera>(r =>
+                    new Camera.Camera(
+                        r.Resolve<IBoardContainer>()
+                    )
+                )
+            );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
@@ -238,6 +247,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
@@ -257,6 +267,15 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ICameraView>(r =>
+                    new CameraView(
+                        r.Resolve<ICamera>(),
+                        r.Resolve<ICameraGetter>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ICameraController>(r =>
@@ -355,6 +374,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
                         r.Resolve<ICameraController>(),
@@ -367,6 +387,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
+                        r.Resolve<ICameraView>(),
                         r.Resolve<ICameraController>(),
                         r.Resolve<ICoroutineRunnerHelper>()
                     )

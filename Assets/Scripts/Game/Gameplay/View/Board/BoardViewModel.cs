@@ -13,6 +13,7 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private Transform _top;
         [SerializeField] private Transform _bottom;
 
+        private ICameraView _cameraView;
         private ICameraController _cameraController;
         private ICoroutineRunnerHelper _coroutineRunnerHelper;
 
@@ -24,12 +25,15 @@ namespace Game.Gameplay.View.Board
         }
 
         public void Inject(
+            [NotNull] ICameraView cameraView,
             [NotNull] ICameraController cameraController,
             [NotNull] ICoroutineRunnerHelper coroutineRunnerHelper)
         {
+            ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(cameraController);
             ArgumentNullException.ThrowIfNull(coroutineRunnerHelper);
 
+            _cameraView = cameraView;
             _cameraController = cameraController;
             _coroutineRunnerHelper = coroutineRunnerHelper;
         }
@@ -56,8 +60,10 @@ namespace Game.Gameplay.View.Board
         {
             InvalidOperationException.ThrowIfNull(_top);
             InvalidOperationException.ThrowIfNull(_bottom);
+            InvalidOperationException.ThrowIfNull(_cameraView);
             InvalidOperationException.ThrowIfNull(_cameraController);
 
+            _cameraView.SetBoardViewLimits(_top.position.y, _bottom.position.y);
             _cameraController.SetBoardViewLimits(_top.position.y, _bottom.position.y);
         }
     }
