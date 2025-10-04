@@ -1,3 +1,4 @@
+using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
@@ -9,15 +10,21 @@ namespace Game.Gameplay.View.Camera
 {
     public class CameraView : ICameraView
     {
+        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly UnityEngine.Camera _unityCamera;
         [NotNull] private readonly Transform _unityCameraTransform;
 
-        public CameraView([NotNull] ICamera camera, [NotNull] ICameraGetter cameraGetter)
+        public CameraView(
+            [NotNull] IBoardContainer boardContainer,
+            [NotNull] ICamera camera,
+            [NotNull] ICameraGetter cameraGetter)
         {
+            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(cameraGetter);
 
+            _boardContainer = boardContainer;
             _camera = camera;
             _unityCamera = cameraGetter.GetMain();
             _unityCameraTransform = _unityCamera.transform;
@@ -41,11 +48,14 @@ namespace Game.Gameplay.View.Camera
 
         public void UpdatePosition(int topRow, int bottomRow)
         {
-            // TODO: Update position x
+            IBoard board = _boardContainer.Board;
 
+            InvalidOperationException.ThrowIfNull(board);
+
+            float x = Mathf.Floor(0.5f * board.Columns);
             float y = 0.5f * (topRow - bottomRow + 1);
 
-            _unityCameraTransform.position = _unityCameraTransform.position.WithY(y);
+            _unityCameraTransform.position = _unityCameraTransform.position.WithX(x).WithY(y);
         }
 
         private void UpdateSize(float topPositionY, float bottomPositionY)
