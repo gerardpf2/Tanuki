@@ -1,8 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
-using Game.Gameplay.View.Board;
-using Game.Gameplay.View.Camera;
+using Game.Gameplay.Camera;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Utils;
 using UnityEngine;
@@ -33,8 +32,8 @@ namespace Game.Gameplay.View.Player
         }
 
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
-        [NotNull] private readonly IBoardView _boardView;
-        [NotNull] private readonly ICameraController _cameraController;
+        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly ICamera _camera;
 
         private Transform _playerPieceParent;
         private PieceData _pieceData;
@@ -58,16 +57,16 @@ namespace Game.Gameplay.View.Player
 
         public PlayerView(
             [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
-            [NotNull] IBoardView boardView,
-            [NotNull] ICameraController cameraController)
+            [NotNull] IBoardContainer boardContainer,
+            [NotNull] ICamera camera)
         {
             ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
-            ArgumentNullException.ThrowIfNull(boardView);
-            ArgumentNullException.ThrowIfNull(cameraController);
+            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(camera);
 
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
-            _boardView = boardView;
-            _cameraController = cameraController;
+            _boardContainer = boardContainer;
+            _camera = camera;
         }
 
         public void Initialize()
@@ -146,22 +145,26 @@ namespace Game.Gameplay.View.Player
 
         private Vector3 GetInitialPosition()
         {
-            InvalidOperationException.ThrowIfNull(_boardView.Board);
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
             InvalidOperationException.ThrowIfNull(_pieceData);
 
-            int x = (_boardView.Board.Columns - _pieceData.RightMostColumnOffset) / 2;
-            int y = _cameraController.VisibleTopRow - _pieceData.TopMostRowOffset;
+            int x = (board.Columns - _pieceData.RightMostColumnOffset) / 2;
+            int y = _camera.TopRow - _pieceData.TopMostRowOffset;
 
             return new Vector3(ClampX(x), y);
         }
 
         private float ClampX(float x)
         {
-            InvalidOperationException.ThrowIfNull(_boardView.Board);
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
             InvalidOperationException.ThrowIfNull(_pieceData);
 
             const int minX = 0;
-            int maxX = Mathf.Max(_boardView.Board.Columns - 1 - _pieceData.RightMostColumnOffset, minX);
+            int maxX = Mathf.Max(board.Columns - 1 - _pieceData.RightMostColumnOffset, minX);
 
             return Mathf.Clamp(x, minX, maxX);
         }

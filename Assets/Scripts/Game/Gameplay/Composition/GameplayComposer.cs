@@ -263,7 +263,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
-                        r.Resolve<ICameraController>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
@@ -285,15 +284,6 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<ICameraView>(r =>
                     new CameraView(
                         r.Resolve<ICamera>(),
-                        r.Resolve<ICameraGetter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<ICameraController>(r =>
-                    new CameraController(
-                        r.Resolve<IBoardView>(),
                         r.Resolve<ICameraGetter>()
                     )
                 )
@@ -349,8 +339,8 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IPlayerView>(r =>
                     new PlayerView(
                         r.Resolve<IPieceCachedPropertiesGetter>(),
-                        r.Resolve<IBoardView>(),
-                        r.Resolve<ICameraController>()
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>()
                     )
                 )
             );
@@ -391,7 +381,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
-                        r.Resolve<ICameraController>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
@@ -402,7 +391,6 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
                         r.Resolve<ICameraView>(),
-                        r.Resolve<ICameraController>(),
                         r.Resolve<ICoroutineRunnerHelper>()
                     )
                 )
