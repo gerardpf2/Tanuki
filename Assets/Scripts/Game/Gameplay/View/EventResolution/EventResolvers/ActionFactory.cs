@@ -3,6 +3,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
 using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
@@ -15,22 +16,26 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
     {
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IBoardView _boardView;
+        [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IPlayerView _playerView;
 
         public ActionFactory(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IBoardView boardView,
+            [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
             [NotNull] IPlayerView playerView)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardView);
+            ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(playerView);
 
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _boardView = boardView;
+            _cameraView = cameraView;
             _goalsView = goalsView;
             _playerView = playerView;
         }
@@ -85,6 +90,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         public IAction GetMovePieceAction(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
             return new MovePieceAction(_boardView, id, rowOffset, columnOffset, movePieceReason);
+        }
+
+        public IAction GetSetCameraPositionAction(int topRow, int bottomRow)
+        {
+            return new SetCameraPositionAction(_cameraView, topRow, bottomRow);
         }
     }
 }
