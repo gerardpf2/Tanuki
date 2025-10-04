@@ -47,13 +47,12 @@ namespace Game.Gameplay.View.Camera
         public void SetBoardViewLimits(float topPositionY, float bottomPositionY)
         {
             UpdateSize(topPositionY, bottomPositionY);
-            UpdatePosition(_camera.TopRow, _camera.BottomRow);
+            UpdatePositionY(_camera.TopRow);
         }
 
-        public void UpdatePosition(int topRow, int bottomRow)
+        public void UpdatePositionY(int topRow)
         {
-            int visibleRows = topRow - bottomRow + 1;
-            float y = -_bottomPositionYAfterResize + topRow - visibleRows + 1;
+            float y = -_bottomPositionYAfterResize + topRow + 1 - _camera.VisibleRows;
 
             _unityCameraTransform.position = _unityCameraTransform.position.WithY(y);
         }
@@ -80,7 +79,7 @@ namespace Game.Gameplay.View.Camera
             float initialSize = _unityCamera.orthographicSize;
             float initialVisibleRows = topPositionY - bottomPositionY;
 
-            int newVisibleRows = _camera.TopRow - _camera.BottomRow + 1;
+            int newVisibleRows = _camera.VisibleRows;
             float newSize = initialSize / initialVisibleRows * newVisibleRows;
 
             _unityCamera.orthographicSize = newSize;

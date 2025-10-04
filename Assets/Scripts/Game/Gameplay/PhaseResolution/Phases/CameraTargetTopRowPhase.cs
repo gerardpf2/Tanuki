@@ -27,12 +27,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            if (!_camera.UpdatePosition())
+            if (!_camera.UpdatePositionY())
             {
                 return ResolveResult.NotUpdated;
             }
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetSetCameraPositionEvent(_camera.TopRow, _camera.BottomRow));
+            _eventEnqueuer.Enqueue(_eventFactory.GetSetCameraPositionEvent(_camera.TopRow));
 
             return ResolveResult.Updated;
         }

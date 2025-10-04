@@ -20,7 +20,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            _actionFactory.GetSetCameraPositionAction(evt.TopRow, evt.BottomRow).Resolve(onComplete);
+            _actionFactory.GetSetCameraPositionAction(evt.TopRow).Resolve(onComplete);
         }
     }
 }

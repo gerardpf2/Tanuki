@@ -9,20 +9,18 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     {
         [NotNull] private readonly ICameraView _cameraView;
         private readonly int _topRow;
-        private readonly int _bottomRow;
 
-        public SetCameraPositionAction([NotNull] ICameraView cameraView, int topRow, int bottomRow)
+        public SetCameraPositionAction([NotNull] ICameraView cameraView, int topRow)
         {
             ArgumentNullException.ThrowIfNull(cameraView);
 
             _cameraView = cameraView;
             _topRow = topRow;
-            _bottomRow = bottomRow;
         }
 
         public void Resolve(Action onComplete)
         {
-            _cameraView.UpdatePosition(_topRow, _bottomRow);
+            _cameraView.UpdatePositionY(_topRow);
 
             onComplete?.Invoke(); // TODO: UpdatePosition param ¿?
         }

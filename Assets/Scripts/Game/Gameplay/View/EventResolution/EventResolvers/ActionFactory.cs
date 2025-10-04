@@ -92,9 +92,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new MovePieceAction(_boardView, id, rowOffset, columnOffset, movePieceReason);
         }
 
-        public IAction GetSetCameraPositionAction(int topRow, int bottomRow)
+        public IAction GetSetCameraPositionAction(int topRow)
         {
-            return new SetCameraPositionAction(_cameraView, topRow, bottomRow);
+            return new SetCameraPositionAction(_cameraView, topRow);
         }
     }
 }

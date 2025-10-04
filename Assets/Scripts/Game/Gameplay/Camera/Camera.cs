@@ -9,22 +9,25 @@ namespace Game.Gameplay.Camera
     public class Camera : ICamera
     {
         private const int ExtraRowsOnTop = 5; // TODO: ScriptableObject
-        private const int VisibleRows = 10; // TODO: ScriptableObject
 
         [NotNull] private readonly IBoardContainer _boardContainer;
 
-        public int TopRow { get; private set; } = VisibleRows - 1;
+        public int TopRow { get; private set; }
 
         public int BottomRow => TopRow - VisibleRows + 1;
+
+        public int VisibleRows => 12; // TODO: ScriptableObject
 
         public Camera([NotNull] IBoardContainer boardContainer)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
 
             _boardContainer = boardContainer;
+
+            TopRow = VisibleRows - 1;
         }
 
-        public bool UpdatePosition()
+        public bool UpdatePositionY()
         {
             IBoard board = _boardContainer.Board;
 

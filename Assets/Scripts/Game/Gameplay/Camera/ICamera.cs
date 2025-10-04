@@ -6,6 +6,8 @@ namespace Game.Gameplay.Camera
 
         int BottomRow { get; }
 
-        bool UpdatePosition();
+        int VisibleRows { get; }
+
+        bool UpdatePositionY();
     }
 }

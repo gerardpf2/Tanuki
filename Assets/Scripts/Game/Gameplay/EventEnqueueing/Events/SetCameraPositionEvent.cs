@@ -3,12 +3,10 @@ namespace Game.Gameplay.EventEnqueueing.Events
     public class SetCameraPositionEvent : IEvent
     {
         public readonly int TopRow;
-        public readonly int BottomRow;
 
-        public SetCameraPositionEvent(int topRow, int bottomRow)
+        public SetCameraPositionEvent(int topRow)
         {
             TopRow = topRow;
-            BottomRow = bottomRow;
         }
     }
 }
