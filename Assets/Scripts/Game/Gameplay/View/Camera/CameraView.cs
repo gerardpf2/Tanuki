@@ -15,6 +15,8 @@ namespace Game.Gameplay.View.Camera
         [NotNull] private readonly UnityEngine.Camera _unityCamera;
         [NotNull] private readonly Transform _unityCameraTransform;
 
+        private float _bottomPositionYAfterResize;
+
         public CameraView(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera,
@@ -32,12 +34,14 @@ namespace Game.Gameplay.View.Camera
 
         public void Initialize()
         {
-            // TODO: Cache prev unity camera values
+            // TODO: Cache prev unity camera values, position, etc
+
+            SetInitialPosition();
         }
 
         public void Uninitialize()
         {
-            // TODO: Restore prev unity camera values
+            // TODO: Restore prev unity camera values, position, etc
         }
 
         public void SetBoardViewLimits(float topPositionY, float bottomPositionY)
@@ -48,27 +52,39 @@ namespace Game.Gameplay.View.Camera
 
         public void UpdatePosition(int topRow, int bottomRow)
         {
-            IBoard board = _boardContainer.Board;
+            int visibleRows = topRow - bottomRow + 1;
+            float y = -_bottomPositionYAfterResize + topRow - visibleRows + 1;
 
-            InvalidOperationException.ThrowIfNull(board);
+            _unityCameraTransform.position = _unityCameraTransform.position.WithY(y);
+        }
 
-            float x = Mathf.Floor(0.5f * board.Columns);
-            float y = 0.5f * (topRow - bottomRow + 1);
+        private void SetInitialPosition()
+        {
+            float x = ComputePositionX();
+            const float y = 0.0f;
 
             _unityCameraTransform.position = _unityCameraTransform.position.WithX(x).WithY(y);
         }
 
+        private float ComputePositionX()
+        {
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
+
+            return Mathf.Floor(0.5f * board.Columns);
+        }
+
         private void UpdateSize(float topPositionY, float bottomPositionY)
         {
-            // Assumes orthographic camera, etc If other game modes modify camera params other than size, this class should be reviewed
-            // Top and bottom board view positions are based on orthographic camera size
+            float initialSize = _unityCamera.orthographicSize;
+            float initialVisibleRows = topPositionY - bottomPositionY;
 
-            float defaultSize = _unityCamera.orthographicSize;
-            float defaultVisibleRows = topPositionY - bottomPositionY;
+            int newVisibleRows = _camera.TopRow - _camera.BottomRow + 1;
+            float newSize = initialSize / initialVisibleRows * newVisibleRows;
 
-            int visibleRows = _camera.TopRow - _camera.BottomRow + 1;
-
-            _unityCamera.orthographicSize = defaultSize * visibleRows / defaultVisibleRows;
+            _unityCamera.orthographicSize = newSize;
+            _bottomPositionYAfterResize = bottomPositionY * newSize / initialSize;
         }
     }
 }
