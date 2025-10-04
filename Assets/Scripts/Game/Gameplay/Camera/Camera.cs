@@ -30,7 +30,7 @@ namespace Game.Gameplay.Camera
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int newTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, VisibleRows) - 1;
+            int newTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, VisibleRows - 1);
 
             if (TopRow == newTopRow)
             {
