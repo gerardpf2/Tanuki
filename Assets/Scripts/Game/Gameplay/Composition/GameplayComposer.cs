@@ -140,6 +140,17 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
+                    new CameraTargetTopRowPhase(
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>()
+                    )
+                ),
+                "CameraTargetTopRowPhase"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new DestroyNotAlivePiecesPhase(
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IEventEnqueuer>(),
@@ -215,11 +226,13 @@ namespace Game.Gameplay.Composition
                 "LockPlayerPiecePhase"
             );
 
+            // TODO: Review phases order
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseResolver>(r =>
                     new PhaseResolver(
                         r.Resolve<IPhase>("GoalsCompletedPhase"),
                         r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
+                        r.Resolve<IPhase>("CameraTargetTopRowPhase"),
                         r.Resolve<IPhase>("LockPlayerPiecePhase"),
                         r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("GravityPhase"),
