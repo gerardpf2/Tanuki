@@ -23,5 +23,8 @@ namespace Game.Gameplay.View.EventResolution
 
         [NotNull]
         IEventResolver<MovePieceEvent> GetMovePieceEventResolver();
+
+        [NotNull]
+        IEventResolver<SetCameraPositionEvent> GetSetCameraPositionEventResolver();
     }
 }

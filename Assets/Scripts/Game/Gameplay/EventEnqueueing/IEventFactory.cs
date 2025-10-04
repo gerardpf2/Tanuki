@@ -29,5 +29,8 @@ namespace Game.Gameplay.EventEnqueueing
 
         [NotNull]
         IEvent GetMovePieceEvent(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
+
+        [NotNull]
+        IEvent GetSetCameraPositionEvent(int topRow, int bottomRow);
     }
 }

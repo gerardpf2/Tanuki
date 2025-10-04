@@ -47,5 +47,10 @@ namespace Game.Gameplay.EventEnqueueing
         {
             return new MovePieceEvent(id, rowOffset, columnOffset, movePieceReason);
         }
+
+        public IEvent GetSetCameraPositionEvent(int topRow, int bottomRow)
+        {
+            return new SetCameraPositionEvent(topRow, bottomRow);
+        }
     }
 }
