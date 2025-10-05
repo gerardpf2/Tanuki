@@ -7,5 +7,7 @@ namespace Game.Gameplay
         string Board { get; }
 
         string Goals { get; }
+
+        string Data { get; }
     }
 }

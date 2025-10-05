@@ -16,3 +16,4 @@ MonoBehaviour:
   - _id: Test
     _board: '{"ROWS":5,"COLUMNS":3,"PIECES":[{"PIECE":{"TYPE":"Test"}},{"ROW":2,"COLUMN":2,"PIECE":{"TYPE":"Test"}},{"ROW":1,"COLUMN":1,"PIECE":{"TYPE":"PlayerBlock11"}}]}'
     _goals: '{"GOALS":[{"TYPE":"Test","AMOUNT":2},{"TYPE":"PlayerBlock21","AMOUNT":3}]}'
+    _data: '{"BOARD":{"ROWS":5,"COLUMNS":3,"PIECES":[{"PIECE":{"TYPE":"Test"}},{"ROW":2,"COLUMN":2,"PIECE":{"TYPE":"Test"}},{"ROW":1,"COLUMN":1,"PIECE":{"TYPE":"PlayerBlock11"}}]},"GOALS":{"GOALS":[{"TYPE":"Test","AMOUNT":2},{"TYPE":"PlayerBlock21","AMOUNT":3}]}}'
