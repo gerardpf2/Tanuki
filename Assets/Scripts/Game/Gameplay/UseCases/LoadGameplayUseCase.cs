@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Goals;
-using Game.Gameplay.Goals.Parsing;
+using Game.Gameplay.Parsing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.Player;
 using Game.Gameplay.View;
@@ -20,12 +19,11 @@ namespace Game.Gameplay.UseCases
     public class LoadGameplayUseCase : ILoadGameplayUseCase
     {
         [NotNull] private readonly IUnloadGameplayUseCase _unloadGameplayUseCase;
-        [NotNull] private readonly IBoardParser _boardParser;
         [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
-        [NotNull] private readonly IGoalsParser _goalsParser;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
+        [NotNull] private readonly IGameplayParser _gameplayParser;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
@@ -37,12 +35,11 @@ namespace Game.Gameplay.UseCases
 
         public LoadGameplayUseCase(
             [NotNull] IUnloadGameplayUseCase unloadGameplayUseCase,
-            [NotNull] IBoardParser boardParser,
             [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
-            [NotNull] IGoalsParser goalsParser,
             [NotNull] IGoalsContainer goalsContainer,
+            [NotNull] IGameplayParser gameplayParser,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
@@ -53,12 +50,11 @@ namespace Game.Gameplay.UseCases
             [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(unloadGameplayUseCase);
-            ArgumentNullException.ThrowIfNull(boardParser);
             ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
-            ArgumentNullException.ThrowIfNull(goalsParser);
             ArgumentNullException.ThrowIfNull(goalsContainer);
+            ArgumentNullException.ThrowIfNull(gameplayParser);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
@@ -69,12 +65,11 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(screenLoader);
 
             _unloadGameplayUseCase = unloadGameplayUseCase;
-            _boardParser = boardParser;
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
-            _goalsParser = goalsParser;
             _goalsContainer = goalsContainer;
+            _gameplayParser = gameplayParser;
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
@@ -100,13 +95,12 @@ namespace Game.Gameplay.UseCases
 
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
-            _boardParser.Deserialize(
-                gameplayDefinition.Board,
+            _gameplayParser.Deserialize(
+                gameplayDefinition.Data,
                 out IBoard board,
-                out IEnumerable<PiecePlacement> piecePlacements
+                out IEnumerable<PiecePlacement> piecePlacements,
+                out IGoals goals
             );
-
-            IGoals goals = _goalsParser.Deserialize(gameplayDefinition.Goals);
 
             _boardContainer.Initialize(board, piecePlacements);
             _goalsContainer.Initialize(goals);
