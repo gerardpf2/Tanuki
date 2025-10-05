@@ -4,10 +4,6 @@ namespace Game.Gameplay
     {
         string Id { get; }
 
-        string Board { get; }
-
-        string Goals { get; }
-
         string Data { get; }
     }
 }
