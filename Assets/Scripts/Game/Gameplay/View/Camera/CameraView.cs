@@ -42,6 +42,8 @@ namespace Game.Gameplay.View.Camera
         public void Uninitialize()
         {
             // TODO: Restore prev unity camera values, position, etc
+
+            _bottomPositionYAfterResize = 0.0f;
         }
 
         public void SetBoardViewLimits(float topPositionY, float bottomPositionY)
