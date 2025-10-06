@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Player
 {
+    // TODO: InitializeLabel
     public class PlayerPiecesBag : IPlayerPiecesBag
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
