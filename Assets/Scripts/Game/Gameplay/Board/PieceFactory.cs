@@ -9,14 +9,15 @@ namespace Game.Gameplay.Board
 {
     public class PieceFactory : IPieceFactory
     {
+        [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly IConverter _converter;
 
-        private int _id;
-
-        public PieceFactory([NotNull] IConverter converter)
+        public PieceFactory([NotNull] IPieceIdGetter pieceIdGetter, [NotNull] IConverter converter)
         {
+            ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(converter);
 
+            _pieceIdGetter = pieceIdGetter;
             _converter = converter;
         }
 
@@ -42,7 +43,7 @@ namespace Game.Gameplay.Board
 
         private int GetNewId()
         {
-            return _id++;
+            return _pieceIdGetter.GetNew();
         }
     }
 }

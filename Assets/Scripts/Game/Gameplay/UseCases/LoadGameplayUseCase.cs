@@ -23,6 +23,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBoardParser _boardParser;
         [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly IGoalsParser _goalsParser;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
@@ -39,6 +40,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBoardParser boardParser,
             [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IBoardContainer boardContainer,
+            [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] IGoalsParser goalsParser,
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IPhaseResolver phaseResolver,
@@ -54,6 +56,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(boardParser);
             ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(goalsParser);
             ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(phaseResolver);
@@ -69,6 +72,7 @@ namespace Game.Gameplay.UseCases
             _boardParser = boardParser;
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _boardContainer = boardContainer;
+            _pieceIdGetter = pieceIdGetter;
             _goalsParser = goalsParser;
             _goalsContainer = goalsContainer;
             _phaseResolver = phaseResolver;
@@ -92,6 +96,8 @@ namespace Game.Gameplay.UseCases
 
         private void PrepareModel(string id)
         {
+            _pieceIdGetter.Initialize();
+
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
             _boardParser.Deserialize(

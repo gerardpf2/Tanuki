@@ -88,6 +88,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceFactory>(r =>
                     new PieceFactory(
+                        r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IConverter>()
                     )
                 )
@@ -100,6 +101,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IPieceIdGetter>(_ => new PieceIdGetter()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
@@ -230,6 +233,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
                         r.Resolve<IBoardContainer>(),
+                        r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
@@ -345,6 +349,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardParser>(),
                         r.Resolve<IGameplayDefinitionGetter>(),
                         r.Resolve<IBoardContainer>(),
+                        r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IGoalsParser>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IPhaseResolver>(),
