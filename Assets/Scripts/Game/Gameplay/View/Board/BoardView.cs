@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
@@ -15,6 +16,8 @@ namespace Game.Gameplay.View.Board
 
         [NotNull] private readonly IDictionary<int, IPiece> _pieces = new Dictionary<int, IPiece>();
         [NotNull] private readonly IDictionary<int, GameObject> _pieceInstances = new Dictionary<int, GameObject>();
+
+        private InitializedLabel _initializedLabel;
 
         private Transform _piecesParent;
 
@@ -33,11 +36,11 @@ namespace Game.Gameplay.View.Board
 
         public void Initialize()
         {
+            _initializedLabel.SetInitialized();
+
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
-
-            Uninitialize();
 
             Board = new Gameplay.Board.Board(_pieceCachedPropertiesGetter, board.Rows, board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
@@ -45,6 +48,10 @@ namespace Game.Gameplay.View.Board
 
         public void Uninitialize()
         {
+            _initializedLabel.SetUninitialized();
+
+            // TODO: Optimize
+
             DestroyAllPieces();
 
             Board = null;

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Camera;
@@ -34,6 +35,8 @@ namespace Game.Gameplay.View.Player
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
+
+        private InitializedLabel _initializedLabel;
 
         private Transform _playerPieceParent;
         private PieceData _pieceData;
@@ -71,13 +74,17 @@ namespace Game.Gameplay.View.Player
 
         public void Initialize()
         {
-            Uninitialize();
+            _initializedLabel.SetInitialized();
 
             _playerPieceParent = new GameObject("PlayerPieceParent").transform; // New game object outside canvas, etc
         }
 
         public void Uninitialize()
         {
+            _initializedLabel.SetUninitialized();
+
+            // TODO: Optimize
+
             TryDestroyPiece();
 
             if (_playerPieceParent == null)

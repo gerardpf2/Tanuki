@@ -1,3 +1,4 @@
+using Game.Common;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.EventEnqueueing.Events;
 using Game.Gameplay.PhaseResolution;
@@ -11,6 +12,8 @@ namespace Game.Gameplay.View.EventResolution
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IEventsResolverSingle _eventsResolverSingle;
+
+        private InitializedLabel _initializedLabel;
 
         public bool Resolving { get; private set; }
 
@@ -30,14 +33,18 @@ namespace Game.Gameplay.View.EventResolution
 
         public void Initialize()
         {
-            Uninitialize();
+            _initializedLabel.SetInitialized();
 
             SubscribeToEvents();
         }
 
         public void Uninitialize()
         {
+            _initializedLabel.SetUninitialized();
+
             UnsubscribeFromEvents();
+
+            // TODO: Check Resolving and throw exception if needed
         }
 
         private void SubscribeToEvents()
