@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
+using Game.Gameplay.Camera;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
@@ -104,6 +105,14 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceIdGetter>(_ => new PieceIdGetter()));
 
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ICamera>(r =>
+                    new Camera.Camera(
+                        r.Resolve<IBoardContainer>()
+                    )
+                )
+            );
+
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
@@ -128,6 +137,17 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhase>(r =>
+                    new CameraTargetTopRowPhase(
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>()
+                    )
+                ),
+                "CameraTargetTopRowPhase"
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
@@ -206,11 +226,13 @@ namespace Game.Gameplay.Composition
                 "LockPlayerPiecePhase"
             );
 
+            // TODO: Review phases order
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseResolver>(r =>
                     new PhaseResolver(
                         r.Resolve<IPhase>("GoalsCompletedPhase"),
                         r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
+                        r.Resolve<IPhase>("CameraTargetTopRowPhase"),
                         r.Resolve<IPhase>("LockPlayerPiecePhase"),
                         r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("GravityPhase"),
@@ -238,9 +260,9 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
-                        r.Resolve<ICameraController>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
@@ -259,9 +281,10 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ICameraController>(r =>
-                    new CameraController(
-                        r.Resolve<IBoardView>(),
+                ruleFactory.GetSingleton<ICameraView>(r =>
+                    new CameraView(
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>(),
                         r.Resolve<ICameraGetter>()
                     )
                 )
@@ -272,6 +295,7 @@ namespace Game.Gameplay.Composition
                     new ActionFactory(
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>()
                     )
@@ -316,8 +340,8 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IPlayerView>(r =>
                     new PlayerView(
                         r.Resolve<IPieceCachedPropertiesGetter>(),
-                        r.Resolve<IBoardView>(),
-                        r.Resolve<ICameraController>()
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>()
                     )
                 )
             );
@@ -355,9 +379,9 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IPlayerView>(),
-                        r.Resolve<ICameraController>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
@@ -367,7 +391,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<ICameraController>(),
+                        r.Resolve<ICameraView>(),
                         r.Resolve<ICoroutineRunnerHelper>()
                     )
                 )

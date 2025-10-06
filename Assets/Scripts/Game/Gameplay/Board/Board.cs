@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board
 {
@@ -15,10 +12,6 @@ namespace Game.Gameplay.Board
 
         [NotNull] private readonly SortedList<int, int> _piecesPerRowSorted = new();
         private IPiece[,] _pieces;
-
-        private int _highestNonEmptyRow;
-
-        public event Action OnHighestNonEmptyRowUpdated;
 
         public int Rows
         {
@@ -40,21 +33,7 @@ namespace Game.Gameplay.Board
             }
         }
 
-        public int HighestNonEmptyRow
-        {
-            get => _highestNonEmptyRow;
-            private set
-            {
-                if (HighestNonEmptyRow == value)
-                {
-                    return;
-                }
-
-                _highestNonEmptyRow = value;
-
-                OnHighestNonEmptyRowUpdated?.Invoke();
-            }
-        }
+        public int HighestNonEmptyRow { get; private set; }
 
         public IDictionary<IPiece, Coordinate> PieceSourceCoordinates { get; } = new Dictionary<IPiece, Coordinate>();
 

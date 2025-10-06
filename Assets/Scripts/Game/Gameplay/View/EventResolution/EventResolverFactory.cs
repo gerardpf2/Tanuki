@@ -45,5 +45,10 @@ namespace Game.Gameplay.View.EventResolution
         {
             return new MovePieceEventResolver(_actionFactory);
         }
+
+        public IEventResolver<SetCameraPositionEvent> GetSetCameraPositionEventResolver()
+        {
+            return new SetCameraPositionEventResolver(_actionFactory);
+        }
     }
 }

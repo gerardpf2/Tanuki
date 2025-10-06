@@ -41,6 +41,9 @@ namespace Game.Gameplay.View.EventResolution
                 case MovePieceEvent movePieceEvent:
                     _eventResolverFactory.GetMovePieceEventResolver().Resolve(movePieceEvent, onComplete);
                     break;
+                case SetCameraPositionEvent setCameraPositionEvent:
+                    _eventResolverFactory.GetSetCameraPositionEventResolver().Resolve(setCameraPositionEvent, onComplete);
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);
                     return;

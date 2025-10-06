@@ -21,9 +21,9 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
+        [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IPlayerView _playerView;
-        [NotNull] private readonly ICameraController _cameraController;
         [NotNull] private readonly IEventsResolver _eventsResolver;
         [NotNull] private readonly IScreenLoader _screenLoader;
 
@@ -34,9 +34,9 @@ namespace Game.Gameplay.UseCases
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
+            [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
             [NotNull] IPlayerView playerView,
-            [NotNull] ICameraController cameraController,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
         {
@@ -46,9 +46,9 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
+            ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(playerView);
-            ArgumentNullException.ThrowIfNull(cameraController);
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
@@ -58,9 +58,9 @@ namespace Game.Gameplay.UseCases
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
+            _cameraView = cameraView;
             _goalsView = goalsView;
             _playerView = playerView;
-            _cameraController = cameraController;
             _eventsResolver = eventsResolver;
             _screenLoader = screenLoader;
         }
@@ -84,9 +84,9 @@ namespace Game.Gameplay.UseCases
         private void PrepareView()
         {
             _boardView.Uninitialize();
+            _cameraView.Uninitialize();
             _goalsView.Uninitialize();
             _playerView.Uninitialize();
-            _cameraController.Uninitialize();
             _eventsResolver.Uninitialize();
         }
 

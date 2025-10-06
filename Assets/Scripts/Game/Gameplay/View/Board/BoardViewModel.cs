@@ -13,7 +13,7 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private Transform _top;
         [SerializeField] private Transform _bottom;
 
-        private ICameraController _cameraController;
+        private ICameraView _cameraView;
         private ICoroutineRunnerHelper _coroutineRunnerHelper;
 
         protected override void Awake()
@@ -23,14 +23,12 @@ namespace Game.Gameplay.View.Board
             InjectResolver.Resolve(this);
         }
 
-        public void Inject(
-            [NotNull] ICameraController cameraController,
-            [NotNull] ICoroutineRunnerHelper coroutineRunnerHelper)
+        public void Inject([NotNull] ICameraView cameraView, [NotNull] ICoroutineRunnerHelper coroutineRunnerHelper)
         {
-            ArgumentNullException.ThrowIfNull(cameraController);
+            ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(coroutineRunnerHelper);
 
-            _cameraController = cameraController;
+            _cameraView = cameraView;
             _coroutineRunnerHelper = coroutineRunnerHelper;
         }
 
@@ -40,7 +38,7 @@ namespace Game.Gameplay.View.Board
             InvalidOperationException.ThrowIfNull(_coroutineRunnerHelper);
 
             // Wait for end of frame so UI stuff has been properly updated
-            // For example, CameraController will move camera to (0, 0) but UI refreshes later
+            // For example, CameraView will move camera to (0, 0) but UI refreshes later
 
             _coroutineRunnerHelper.RunWaitForEndOfFrame(
                 () =>
@@ -56,9 +54,9 @@ namespace Game.Gameplay.View.Board
         {
             InvalidOperationException.ThrowIfNull(_top);
             InvalidOperationException.ThrowIfNull(_bottom);
-            InvalidOperationException.ThrowIfNull(_cameraController);
+            InvalidOperationException.ThrowIfNull(_cameraView);
 
-            _cameraController.SetBoardViewLimits(_top.position.y, _bottom.position.y);
+            _cameraView.SetBoardViewLimits(_top.position.y, _bottom.position.y);
         }
     }
 }

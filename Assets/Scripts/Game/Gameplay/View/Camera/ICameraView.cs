@@ -1,13 +1,13 @@
 namespace Game.Gameplay.View.Camera
 {
-    public interface ICameraController
+    public interface ICameraView
     {
-        int VisibleTopRow { get; }
-
         void Initialize();
 
         void Uninitialize();
 
         void SetBoardViewLimits(float topPositionY, float bottomPositionY);
+
+        void UpdatePositionY(int topRow);
     }
 }
