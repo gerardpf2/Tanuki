@@ -52,9 +52,9 @@ namespace Game.Gameplay.View.Camera
             UpdatePositionY(_camera.TopRow);
         }
 
-        public void UpdatePositionY(int topRow)
+        public void UpdatePositionY(int row)
         {
-            float y = -_bottomPositionYAfterResize + topRow + 1 - _camera.VisibleRows;
+            float y = -_bottomPositionYAfterResize + row + 1 - _camera.VisibleRows;
 
             _unityCameraTransform.position = _unityCameraTransform.position.WithY(y);
         }
