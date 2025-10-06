@@ -32,7 +32,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             _boardView.InstantiatePiece(piece, _sourceCoordinate, pieceViewDefinition.Prefab);
 
-            return _boardView.GetPieceInstance(piece);
+            return _boardView.GetPieceInstance(piece.Id);
         }
     }
 }

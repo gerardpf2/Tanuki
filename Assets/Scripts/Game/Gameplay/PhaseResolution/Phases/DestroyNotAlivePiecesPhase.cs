@@ -68,7 +68,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             board.Remove(piece);
             goals.TryIncreaseCurrentAmount(piece.Type);
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(piece, DestroyPieceReason.NotAlive));
+            _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(piece.Id, DestroyPieceReason.NotAlive));
 
             return true;
         }

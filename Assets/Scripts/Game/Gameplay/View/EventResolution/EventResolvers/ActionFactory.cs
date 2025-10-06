@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
@@ -71,21 +72,19 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new DestroyPlayerPieceAction(destroyPieceReason, _playerView);
         }
 
-        public IAction GetDamagePieceAction(IPiece piece)
+        public IAction GetDamagePieceAction(int id, IEnumerable<KeyValuePair<string, string>> state)
         {
-            return new DamagePieceAction(piece, _boardView);
+            return new DamagePieceAction(id, state, _boardView);
         }
 
-        public IAction GetDestroyPieceAction([NotNull] IPiece piece, DestroyPieceReason destroyPieceReason)
+        public IAction GetDestroyPieceAction(int id, DestroyPieceReason destroyPieceReason)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            return new DestroyPieceAction(destroyPieceReason, piece, _boardView, _goalsView);
+            return new DestroyPieceAction(destroyPieceReason, id, _boardView, _goalsView);
         }
 
-        public IAction GetMovePieceAction(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        public IAction GetMovePieceAction(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceAction(_boardView, piece, rowOffset, columnOffset, movePieceReason);
+            return new MovePieceAction(_boardView, id, rowOffset, columnOffset, movePieceReason);
         }
     }
 }

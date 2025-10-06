@@ -7,6 +7,6 @@ namespace Game.Gameplay.Board
     public interface IPieceGetter
     {
         [NotNull]
-        IPiece Get(PieceType pieceType, IEnumerable<KeyValuePair<string, string>> customData);
+        IPiece Get(PieceType pieceType, IEnumerable<KeyValuePair<string, string>> state);
     }
 }

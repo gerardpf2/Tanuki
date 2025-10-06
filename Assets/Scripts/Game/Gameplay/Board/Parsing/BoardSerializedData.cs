@@ -5,13 +5,13 @@ namespace Game.Gameplay.Board.Parsing
 {
     public class BoardSerializedData
     {
-        [JsonProperty("R", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty("ROWS", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int Rows { get; set; }
 
-        [JsonProperty("C", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty("COLUMNS", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int Columns { get; set; }
 
-        [JsonProperty("P", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty("PIECES", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public List<PiecePlacementSerializedData> PiecePlacementSerializedData { get; set; }
     }
 }

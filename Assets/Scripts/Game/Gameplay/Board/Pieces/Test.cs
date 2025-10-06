@@ -1,5 +1,5 @@
+using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Pieces
@@ -16,20 +16,18 @@ namespace Game.Gameplay.Board.Pieces
          */
 
         public const int Rows = 3;
-        private const string CustomDataEyeMovementDirectionUpKey = "EyeMovementDirectionUp"; // TODO: Use shorter key
-        private const string CustomDataEyeRowOffsetKey = "EyeRowOffset"; // TODO: Use shorter key
-
-        [NotNull] private readonly IConverter _converter;
+        [NotNull] private const string EyeMovementDirectionUpKey = "DIRECTION_UP";
+        [NotNull] private const string EyeRowOffsetKey = "ROW_OFFSET";
 
         public bool EyeMovementDirectionUp { get; private set; }
 
         public int EyeRowOffset { get; private set; }
 
-        public Test([NotNull] IConverter converter) : base(converter, PieceType.Test, Rows, 1)
-        {
-            ArgumentNullException.ThrowIfNull(converter);
+        public Test([NotNull] IConverter converter, int id) : base(converter, id, PieceType.Test, Rows, 1) { }
 
-            _converter = converter;
+        public override IPiece Clone()
+        {
+            return new Test(Converter, Id).WithState(State);
         }
 
         public void MoveEye()
@@ -51,32 +49,32 @@ namespace Game.Gameplay.Board.Pieces
             }
         }
 
-        protected override void AddCustomDataEntries()
+        protected override void AddStateEntries()
         {
-            base.AddCustomDataEntries();
+            base.AddStateEntries();
 
-            AddCustomDataEntry(CustomDataEyeMovementDirectionUpKey, EyeMovementDirectionUp);
-            AddCustomDataEntry(CustomDataEyeRowOffsetKey, EyeRowOffset);
+            AddStateEntry(EyeMovementDirectionUpKey, EyeMovementDirectionUp);
+            AddStateEntry(EyeRowOffsetKey, EyeRowOffset);
         }
 
-        protected override bool ProcessCustomDataEntry(string key, string value)
+        protected override bool ProcessStateEntry(string key, string value)
         {
             switch (key)
             {
-                case CustomDataEyeMovementDirectionUpKey:
+                case EyeMovementDirectionUpKey:
                 {
-                    EyeMovementDirectionUp = _converter.Convert<bool>(value);
+                    EyeMovementDirectionUp = Converter.Convert<bool>(value);
 
                     return true;
                 }
-                case CustomDataEyeRowOffsetKey:
+                case EyeRowOffsetKey:
                 {
-                    EyeRowOffset = _converter.Convert<int>(value);
+                    EyeRowOffset = Converter.Convert<int>(value);
 
                     return true;
                 }
                 default:
-                    return base.ProcessCustomDataEntry(key, value);
+                    return base.ProcessStateEntry(key, value);
             }
         }
 

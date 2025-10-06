@@ -9,41 +9,46 @@ namespace Game.Gameplay.Board.Pieces
 {
     public abstract class Piece : IPiece
     {
+        [NotNull] private const string AliveKey = "ALIVE";
+
+        public int Id { get; }
+
         public PieceType Type { get; }
 
-        public bool Alive { get; protected set; } = true;
+        public bool Alive { get; private set; } = true;
 
-        public IEnumerable<KeyValuePair<string, string>> CustomData => GetCustomData();
+        public IEnumerable<KeyValuePair<string, string>> State => GetState();
 
-        [NotNull] private readonly IConverter _converter;
+        [NotNull] protected readonly IConverter Converter;
 
-        [NotNull] private readonly IDictionary<string, string> _temporaryCustomDataEntries = new Dictionary<string, string>();
+        [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
 
-        protected Piece([NotNull] IConverter converter, PieceType type)
+        protected Piece([NotNull] IConverter converter, int id, PieceType type)
         {
             ArgumentNullException.ThrowIfNull(converter);
 
-            _converter = converter;
+            Converter = converter;
 
+            Id = id;
             Type = type;
         }
 
         public abstract IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
 
-        public void ProcessCustomData(IEnumerable<KeyValuePair<string, string>> customData)
+        public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)
         {
-            if (customData is null)
+            if (state is null)
             {
                 return;
             }
 
-            foreach ((string key, string value) in customData)
+            foreach ((string key, string value) in state)
             {
-                bool processed = ProcessCustomDataEntry(key, value);
+                bool processed = ProcessStateEntry(key, value);
 
                 if (!processed)
                 {
-                    InvalidOperationException.Throw($"Custom data entry with Key: {key} and Value: {value} cannot be processed");
+                    InvalidOperationException.Throw($"State entry with Key: {key} and Value: {value} cannot be processed");
                 }
             }
         }
@@ -58,34 +63,44 @@ namespace Game.Gameplay.Board.Pieces
             HandleDamaged(rowOffset, columnOffset);
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetCustomData()
+        public abstract IPiece Clone();
+
+        private IEnumerable<KeyValuePair<string, string>> GetState()
         {
-            _temporaryCustomDataEntries.Clear();
+            _temporaryStateEntries.Clear();
 
-            AddCustomDataEntries();
+            AddStateEntries();
 
-            return
-                _temporaryCustomDataEntries.Count > 0 ?
-                    new Dictionary<string, string>(_temporaryCustomDataEntries) :
-                    null; // Avoid serialize when empty
+            return new Dictionary<string, string>(_temporaryStateEntries);
         }
 
-        protected virtual void AddCustomDataEntries() { }
+        protected virtual void AddStateEntries()
+        {
+            AddStateEntry(AliveKey, Alive);
+        }
 
-        protected void AddCustomDataEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
+        protected void AddStateEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            if (value is null || value.Equals(default))
+            if (!_temporaryStateEntries.TryAdd(key, Converter.Convert<string>(value)))
             {
-                return; // Avoid serialize when null or default
+                InvalidOperationException.Throw($"State entry with Key: {key} and Value: {value} cannot be added");
             }
-
-            _temporaryCustomDataEntries.Add(key, _converter.Convert<string>(value));
         }
 
-        protected virtual bool ProcessCustomDataEntry(string key, string value)
+        protected virtual bool ProcessStateEntry(string key, string value)
         {
+            switch (key)
+            {
+                case AliveKey:
+                {
+                    Alive = Converter.Convert<bool>(value);
+
+                    return true;
+                }
+            }
+
             return false;
         }
 

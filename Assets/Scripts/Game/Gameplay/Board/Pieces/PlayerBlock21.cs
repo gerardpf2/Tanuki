@@ -1,3 +1,4 @@
+using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System;
 using JetBrains.Annotations;
 
@@ -13,6 +14,11 @@ namespace Game.Gameplay.Board.Pieces
          *
          */
 
-        public PlayerBlock21([NotNull] IConverter converter) : base(converter, PieceType.PlayerBlock21, 2, 1) { }
+        public PlayerBlock21([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerBlock21, 2, 1) { }
+
+        public override IPiece Clone()
+        {
+            return new PlayerBlock21(Converter, Id).WithState(State);
+        }
     }
 }

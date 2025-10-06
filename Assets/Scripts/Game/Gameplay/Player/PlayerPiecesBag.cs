@@ -60,7 +60,7 @@ namespace Game.Gameplay.Player
 
             _pieceTypeIndex = (_pieceTypeIndex + 1) % _pieceTypes.Count;
 
-            Current = _pieceGetter.Get(_pieceTypes[_pieceTypeIndex], null); // No custom data
+            Current = _pieceGetter.Get(_pieceTypes[_pieceTypeIndex], null); // No state
         }
     }
 }

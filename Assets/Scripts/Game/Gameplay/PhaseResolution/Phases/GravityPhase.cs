@@ -67,7 +67,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             _eventEnqueuer.Enqueue(
                 _eventFactory.GetMovePieceEvent(
-                    piece,
+                    piece.Id,
                     rowOffset,
                     columnOffset,
                     MovePieceReason.Gravity

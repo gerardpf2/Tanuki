@@ -11,6 +11,8 @@ namespace Game.Gameplay.Board
     {
         [NotNull] private readonly IConverter _converter;
 
+        private int _id;
+
         public PieceFactory([NotNull] IConverter converter)
         {
             ArgumentNullException.ThrowIfNull(converter);
@@ -18,24 +20,29 @@ namespace Game.Gameplay.Board
             _converter = converter;
         }
 
-        public IPiece GetTest(IEnumerable<KeyValuePair<string, string>> customData)
+        public IPiece GetTest(IEnumerable<KeyValuePair<string, string>> state)
         {
-            return new Test(_converter).WithCustomData(customData);
+            return new Test(_converter, GetNewId()).WithState(state);
         }
 
         public IPiece GetPlayerBlock11()
         {
-            return new PlayerBlock11(_converter);
+            return new PlayerBlock11(_converter, GetNewId());
         }
 
         public IPiece GetPlayerBlock12()
         {
-            return new PlayerBlock12(_converter);
+            return new PlayerBlock12(_converter, GetNewId());
         }
 
         public IPiece GetPlayerBlock21()
         {
-            return new PlayerBlock21(_converter);
+            return new PlayerBlock21(_converter, GetNewId());
+        }
+
+        private int GetNewId()
+        {
+            return _id++;
         }
     }
 }

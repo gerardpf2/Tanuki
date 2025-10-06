@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
@@ -22,12 +23,12 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason);
 
         [NotNull]
-        IAction GetDamagePieceAction(IPiece piece);
+        IAction GetDamagePieceAction(int id, IEnumerable<KeyValuePair<string, string>> state);
 
         [NotNull]
-        IAction GetDestroyPieceAction(IPiece piece, DestroyPieceReason destroyPieceReason);
+        IAction GetDestroyPieceAction(int id, DestroyPieceReason destroyPieceReason);
 
         [NotNull]
-        IAction GetMovePieceAction(IPiece piece, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
+        IAction GetMovePieceAction(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
     }
 }

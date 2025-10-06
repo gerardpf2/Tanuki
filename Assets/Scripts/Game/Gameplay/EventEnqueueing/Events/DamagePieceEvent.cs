@@ -1,14 +1,16 @@
-using Game.Gameplay.Board.Pieces;
+using System.Collections.Generic;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {
     public class DamagePieceEvent : IEvent
     {
-        public readonly IPiece Piece;
+        public readonly int Id;
+        public readonly IEnumerable<KeyValuePair<string, string>> State;
 
-        public DamagePieceEvent(IPiece piece)
+        public DamagePieceEvent(int id, IEnumerable<KeyValuePair<string, string>> state)
         {
-            Piece = piece;
+            Id = id;
+            State = state;
         }
     }
 }

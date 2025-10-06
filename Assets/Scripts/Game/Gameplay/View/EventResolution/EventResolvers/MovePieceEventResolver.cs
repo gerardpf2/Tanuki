@@ -21,7 +21,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             ArgumentNullException.ThrowIfNull(evt);
 
             _actionFactory
-                .GetMovePieceAction(evt.Piece, evt.RowOffset, evt.ColumnOffset, evt.MovePieceReason)
+                .GetMovePieceAction(evt.Id, evt.RowOffset, evt.ColumnOffset, evt.MovePieceReason)
                 .Resolve(onComplete);
         }
     }

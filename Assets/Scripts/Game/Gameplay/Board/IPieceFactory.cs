@@ -7,7 +7,7 @@ namespace Game.Gameplay.Board
     public interface IPieceFactory
     {
         [NotNull]
-        IPiece GetTest(IEnumerable<KeyValuePair<string, string>> customData);
+        IPiece GetTest(IEnumerable<KeyValuePair<string, string>> state);
 
         [NotNull]
         IPiece GetPlayerBlock11();

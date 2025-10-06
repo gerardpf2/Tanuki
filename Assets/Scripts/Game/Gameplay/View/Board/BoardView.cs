@@ -13,7 +13,8 @@ namespace Game.Gameplay.View.Board
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
 
-        [NotNull] private readonly IDictionary<IPiece, GameObject> _pieceInstances = new Dictionary<IPiece, GameObject>();
+        [NotNull] private readonly IDictionary<int, IPiece> _pieces = new Dictionary<int, IPiece>();
+        [NotNull] private readonly IDictionary<int, GameObject> _pieceInstances = new Dictionary<int, GameObject>();
 
         private Transform _piecesParent;
 
@@ -58,13 +59,23 @@ namespace Game.Gameplay.View.Board
             _piecesParent = null;
         }
 
-        public GameObject GetPieceInstance([NotNull] IPiece piece)
+        public IPiece GetPiece(int id)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            if (!_pieceInstances.TryGetValue(piece, out GameObject pieceInstance))
+            if (!_pieces.TryGetValue(id, out IPiece piece))
             {
-                InvalidOperationException.Throw("Piece cannot be found");
+                InvalidOperationException.Throw($"Piece with Id: {id} cannot be found");
+            }
+
+            InvalidOperationException.ThrowIfNull(piece);
+
+            return piece;
+        }
+
+        public GameObject GetPieceInstance(int id)
+        {
+            if (!_pieceInstances.TryGetValue(id, out GameObject pieceInstance))
+            {
+                InvalidOperationException.Throw($"Piece with Id: {id} cannot be found");
             }
 
             InvalidOperationException.ThrowIfNull(pieceInstance);
@@ -78,9 +89,11 @@ namespace Game.Gameplay.View.Board
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(Board);
 
-            if (_pieceInstances.ContainsKey(piece))
+            int id = piece.Id;
+
+            if (_pieces.ContainsKey(id) || _pieceInstances.ContainsKey(id))
             {
-                InvalidOperationException.Throw("Piece has already been instantiated");
+                InvalidOperationException.Throw($"Piece with Id: {id} has already been instantiated");
             }
 
             Board.Add(piece, sourceCoordinate);
@@ -93,32 +106,34 @@ namespace Game.Gameplay.View.Board
                 $"Cannot instantiate piece with Prefab: {prefab.name}"
             );
 
-            _pieceInstances.Add(piece, pieceInstance);
+            _pieces.Add(id, piece);
+            _pieceInstances.Add(id, pieceInstance);
         }
 
-        public void DestroyPiece([NotNull] IPiece piece)
+        public void DestroyPiece(int id)
         {
-            ArgumentNullException.ThrowIfNull(piece);
+            IPiece piece = GetPiece(id);
 
             Board.Remove(piece);
 
-            GameObject pieceInstance = GetPieceInstance(piece);
+            GameObject pieceInstance = GetPieceInstance(id);
 
             Object.Destroy(pieceInstance);
 
-            _pieceInstances.Remove(piece);
+            _pieces.Remove(id);
+            _pieceInstances.Remove(id);
         }
 
-        public void MovePiece([NotNull] IPiece piece, int rowOffset, int columnOffset)
+        public void MovePiece(int id, int rowOffset, int columnOffset)
         {
-            ArgumentNullException.ThrowIfNull(piece);
+            IPiece piece = GetPiece(id);
 
             Board.Move(piece, rowOffset, columnOffset);
 
             // Piece instance position should have already been updated externally (using tweens, etc), but it can be
             // set in here too just in case
 
-            GameObject pieceInstance = GetPieceInstance(piece);
+            GameObject pieceInstance = GetPieceInstance(id);
 
             Coordinate sourceCoordinate = Board.GetPieceSourceCoordinate(piece);
 
@@ -127,16 +142,12 @@ namespace Game.Gameplay.View.Board
 
         private void DestroyAllPieces()
         {
-            foreach (KeyValuePair<IPiece, GameObject> pieceInstance in _pieceInstances)
+            IEnumerable<int> idsCopy = new List<int>(_pieces.Keys);
+
+            foreach (int id in idsCopy)
             {
-                InvalidOperationException.ThrowIfNull(pieceInstance.Value);
-
-                Board.Remove(pieceInstance.Key);
-
-                Object.Destroy(pieceInstance.Value);
+                DestroyPiece(id);
             }
-
-            _pieceInstances.Clear();
         }
 
         private static Vector3 GetWorldPosition(Coordinate sourceCoordinate)

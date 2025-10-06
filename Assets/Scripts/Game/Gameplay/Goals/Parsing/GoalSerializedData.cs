@@ -6,10 +6,10 @@ namespace Game.Gameplay.Goals.Parsing
 {
     public class GoalSerializedData
     {
-        [JsonProperty("P"), JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty("TYPE"), JsonConverter(typeof(StringEnumConverter))]
         public PieceType PieceType { get; set; }
 
-        [JsonProperty("I", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty("AMOUNT", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int InitialAmount { get; set; }
     }
 }
