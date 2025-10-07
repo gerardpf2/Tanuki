@@ -31,11 +31,11 @@ namespace Game.Gameplay.EventEnqueueing
             return new LockPlayerPieceEvent(pieceClone, lockSourceCoordinate);
         }
 
-        public IEvent GetDamagePieceEvent([NotNull] IPiece piece)
+        public IEvent GetDamagePieceEvent([NotNull] IPiece piece, DamagePieceReason damagePieceReason)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return new DamagePieceEvent(piece.Id, piece.State);
+            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason);
         }
 
         public IEvent GetDestroyPieceEvent(int id, DestroyPieceReason destroyPieceReason)

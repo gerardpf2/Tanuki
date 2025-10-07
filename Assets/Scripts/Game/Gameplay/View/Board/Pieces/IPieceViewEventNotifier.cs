@@ -9,7 +9,7 @@ namespace Game.Gameplay.View.Board.Pieces
 
         void OnDestroyed(DestroyPieceReason destroyPieceReason, Action onComplete);
 
-        void OnDamaged(Action onComplete); // TODO: Add reason
+        void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete);
 
         void OnStartMove(MovePieceReason movePieceReason);
 

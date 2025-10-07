@@ -3,6 +3,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -67,7 +68,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
                 piece.Damage(rowOffset, columnOffset);
 
-                _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece));
+                _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece, DamagePieceReason.LineClear));
 
                 anyDamaged = true;
             }

@@ -22,7 +22,7 @@ namespace Game.Gameplay.EventEnqueueing
         IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate);
 
         [NotNull]
-        IEvent GetDamagePieceEvent(IPiece piece);
+        IEvent GetDamagePieceEvent(IPiece piece, DamagePieceReason damagePieceReason);
 
         [NotNull]
         IEvent GetDestroyPieceEvent(int id, DestroyPieceReason destroyPieceReason);

@@ -35,7 +35,7 @@ namespace Game.Gameplay.View.Board.Pieces
             onComplete?.Invoke();
         }
 
-        public void OnDamaged(Action onComplete)
+        public void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete)
         {
             // TODO
 

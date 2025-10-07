@@ -23,7 +23,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason);
 
         [NotNull]
-        IAction GetDamagePieceAction(int id, IEnumerable<KeyValuePair<string, string>> state);
+        IAction GetDamagePieceAction(
+            int id,
+            IEnumerable<KeyValuePair<string, string>> state,
+            DamagePieceReason damagePieceReason
+        );
 
         [NotNull]
         IAction GetDestroyPieceAction(int id, DestroyPieceReason destroyPieceReason);

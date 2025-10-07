@@ -20,7 +20,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            _actionFactory.GetDamagePieceAction(evt.Id, evt.State).Resolve(onComplete);
+            _actionFactory.GetDamagePieceAction(evt.Id, evt.State, evt.DamagePieceReason).Resolve(onComplete);
         }
     }
 }
