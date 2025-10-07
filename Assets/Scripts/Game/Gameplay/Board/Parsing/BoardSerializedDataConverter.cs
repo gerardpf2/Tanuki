@@ -58,7 +58,7 @@ namespace Game.Gameplay.Board.Parsing
                 IPiece piece = pieceSourceCoordinate.Key;
                 Coordinate sourceCoordinate = pieceSourceCoordinate.Value;
 
-                PiecePlacement piecePlacement = new(sourceCoordinate.Row, sourceCoordinate.Column, piece);
+                PiecePlacement piecePlacement = new(piece, sourceCoordinate);
 
                 return _piecePlacementSerializedDataConverter.From(piecePlacement);
             }

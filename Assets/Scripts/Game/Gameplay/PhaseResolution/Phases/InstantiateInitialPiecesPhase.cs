@@ -43,7 +43,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 InvalidOperationException.ThrowIfNull(piecePlacement);
 
                 IPiece piece = piecePlacement.Piece;
-                Coordinate sourceCoordinate = new(piecePlacement.Row, piecePlacement.Column);
+                Coordinate sourceCoordinate = piecePlacement.Coordinate;
 
                 board.Add(piece, sourceCoordinate);
 

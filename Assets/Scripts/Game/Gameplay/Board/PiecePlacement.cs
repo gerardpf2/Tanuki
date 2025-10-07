@@ -4,15 +4,13 @@ namespace Game.Gameplay.Board
 {
     public class PiecePlacement
     {
-        public readonly int Row;
-        public readonly int Column;
         public readonly IPiece Piece;
+        public readonly Coordinate Coordinate;
 
-        public PiecePlacement(int row, int column, IPiece piece)
+        public PiecePlacement(IPiece piece, Coordinate coordinate)
         {
-            Row = row;
-            Column = column;
             Piece = piece;
+            Coordinate = coordinate;
         }
     }
 }
