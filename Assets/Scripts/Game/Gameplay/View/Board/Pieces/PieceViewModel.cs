@@ -42,12 +42,14 @@ namespace Game.Gameplay.View.Board.Pieces
             onComplete?.Invoke();
         }
 
-        public void OnStartMove(MovePieceReason movePieceReason)
+        public void OnStartMove(MovePieceReason movePieceReason, Action onComplete)
         {
             // TODO
+
+            onComplete?.Invoke();
         }
 
-        public void OnEndMove(Action onComplete)
+        public void OnEndMove(MovePieceReason movePieceReason, Action onComplete)
         {
             // TODO
 

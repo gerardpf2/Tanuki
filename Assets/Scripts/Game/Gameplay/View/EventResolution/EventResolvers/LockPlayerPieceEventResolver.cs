@@ -21,11 +21,16 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            // TODO: Move to board position
-
-            DestroyPlayerPieceStep(() => InstantiatePieceStep(onComplete));
+            MovePlayerPieceStep(() => DestroyPlayerPieceStep(() => InstantiatePieceStep(onComplete)));
 
             return;
+
+            void MovePlayerPieceStep(Action onStepComplete)
+            {
+                // TODO: Action
+
+                onStepComplete?.Invoke();
+            }
 
             void DestroyPlayerPieceStep(Action onStepComplete)
             {
