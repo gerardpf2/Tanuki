@@ -308,6 +308,7 @@ namespace Game.Gameplay.Composition
                     new CameraView(
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
+                        r.Resolve<IWorldPositionGetter>(),
                         r.Resolve<ICameraGetter>()
                     )
                 )

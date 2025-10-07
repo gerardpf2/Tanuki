@@ -1,6 +1,7 @@
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
+using Game.Gameplay.Common;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Utils;
@@ -11,8 +12,11 @@ namespace Game.Gameplay.View.Camera
 {
     public class CameraView : ICameraView
     {
+        private const int InitialRow = 0;
+
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
+        [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
         [NotNull] private readonly UnityEngine.Camera _unityCamera;
         [NotNull] private readonly Transform _unityCameraTransform;
 
@@ -23,14 +27,17 @@ namespace Game.Gameplay.View.Camera
         public CameraView(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera,
+            [NotNull] IWorldPositionGetter worldPositionGetter,
             [NotNull] ICameraGetter cameraGetter)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(camera);
+            ArgumentNullException.ThrowIfNull(worldPositionGetter);
             ArgumentNullException.ThrowIfNull(cameraGetter);
 
             _boardContainer = boardContainer;
             _camera = camera;
+            _worldPositionGetter = worldPositionGetter;
             _unityCamera = cameraGetter.GetMain();
             _unityCameraTransform = _unityCamera.transform;
         }
@@ -61,30 +68,37 @@ namespace Game.Gameplay.View.Camera
 
         public void UpdatePositionY(int row)
         {
-            float y = -_bottomPositionYAfterResize + row + 1 - _camera.VisibleRows;
+            float y = _worldPositionGetter.GetY(row + 1 - _camera.VisibleRows) - _bottomPositionYAfterResize;
 
             _unityCameraTransform.position = _unityCameraTransform.position.WithY(y);
         }
 
         private void SetInitialPosition()
         {
-            float x = ComputePositionX();
-            const float y = 0.0f;
+            int initialColumn = ComputeInitialColumn();
+
+            float x = _worldPositionGetter.GetX(initialColumn);
+            float y = _worldPositionGetter.GetY(InitialRow);
 
             _unityCameraTransform.position = _unityCameraTransform.position.WithX(x).WithY(y);
         }
 
-        private float ComputePositionX()
+        private int ComputeInitialColumn()
         {
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 
-            return Mathf.Floor(0.5f * board.Columns);
+            return Mathf.FloorToInt(0.5f * board.Columns);
         }
 
         private void UpdateSize(float topPositionY, float bottomPositionY)
         {
+            float initialY = _worldPositionGetter.GetY(InitialRow);
+
+            topPositionY -= initialY;
+            bottomPositionY -= initialY;
+
             float initialSize = _unityCamera.orthographicSize;
             float initialVisibleRows = topPositionY - bottomPositionY;
 
