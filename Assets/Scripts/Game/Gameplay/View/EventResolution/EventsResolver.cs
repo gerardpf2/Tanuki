@@ -42,9 +42,12 @@ namespace Game.Gameplay.View.EventResolution
         {
             _initializedLabel.SetUninitialized();
 
-            UnsubscribeFromEvents();
+            if (Resolving)
+            {
+                InvalidOperationException.Throw("Resolve is still in progress");
+            }
 
-            // TODO: Check Resolving and throw exception if needed
+            UnsubscribeFromEvents();
         }
 
         private void SubscribeToEvents()
