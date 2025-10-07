@@ -3,6 +3,7 @@ using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Camera;
+using Game.Gameplay.Common;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Utils;
 using UnityEngine;
@@ -35,6 +36,7 @@ namespace Game.Gameplay.View.Player
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
+        [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
 
         private InitializedLabel _initializedLabel;
 
@@ -49,8 +51,11 @@ namespace Game.Gameplay.View.Player
 
                 Transform pieceInstanceTransform = PieceInstance.transform;
 
-                int row = Mathf.FloorToInt(pieceInstanceTransform.position.y);
-                int column = Mathf.FloorToInt(pieceInstanceTransform.position.x);
+                float originX = _worldPositionGetter.GetX(0);
+                float originY = _worldPositionGetter.GetY(0);
+
+                int row = Mathf.FloorToInt(pieceInstanceTransform.position.y - originY);
+                int column = Mathf.FloorToInt(pieceInstanceTransform.position.x - originX);
 
                 return new Coordinate(row, column);
             }
@@ -61,15 +66,18 @@ namespace Game.Gameplay.View.Player
         public PlayerView(
             [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [NotNull] IBoardContainer boardContainer,
-            [NotNull] ICamera camera)
+            [NotNull] ICamera camera,
+            [NotNull] IWorldPositionGetter worldPositionGetter)
         {
             ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(camera);
+            ArgumentNullException.ThrowIfNull(worldPositionGetter);
 
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
             _boardContainer = boardContainer;
             _camera = camera;
+            _worldPositionGetter = worldPositionGetter;
         }
 
         public void Initialize()
@@ -141,8 +149,11 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(board);
             InvalidOperationException.ThrowIfNull(_pieceData);
 
-            int x = (board.Columns - _pieceData.RightMostColumnOffset) / 2;
-            int y = _camera.TopRow - _pieceData.TopMostRowOffset;
+            int row = _camera.TopRow - _pieceData.TopMostRowOffset;
+            int column = (board.Columns - _pieceData.RightMostColumnOffset) / 2;
+
+            float x = _worldPositionGetter.GetX(column);
+            float y = _worldPositionGetter.GetY(row);
 
             return new Vector3(ClampX(x), y);
         }
@@ -154,8 +165,11 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(board);
             InvalidOperationException.ThrowIfNull(_pieceData);
 
-            const int minX = 0;
-            int maxX = Mathf.Max(board.Columns - 1 - _pieceData.RightMostColumnOffset, minX);
+            const int minColumn = 0;
+            int maxColumn = Mathf.Max(board.Columns - 1 - _pieceData.RightMostColumnOffset, minColumn);
+
+            float minX = _worldPositionGetter.GetX(minColumn);
+            float maxX = _worldPositionGetter.GetX(maxColumn);
 
             return Mathf.Clamp(x, minX, maxX);
         }

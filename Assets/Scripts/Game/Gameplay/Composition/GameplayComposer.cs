@@ -365,7 +365,8 @@ namespace Game.Gameplay.Composition
                     new PlayerView(
                         r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>()
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IWorldPositionGetter>()
                     )
                 )
             );
