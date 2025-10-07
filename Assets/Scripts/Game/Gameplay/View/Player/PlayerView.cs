@@ -83,18 +83,12 @@ namespace Game.Gameplay.View.Player
         {
             _initializedLabel.SetUninitialized();
 
-            // TODO: Optimize
-
-            TryDestroyPiece();
-
-            if (_playerPieceParent == null)
-            {
-                return;
-            }
+            InvalidOperationException.ThrowIfNull(_playerPieceParent);
 
             Object.Destroy(_playerPieceParent.gameObject);
 
             _playerPieceParent = null;
+            _pieceData = null;
         }
 
         public void InstantiatePiece(IPiece piece, [NotNull] GameObject prefab)
@@ -138,16 +132,6 @@ namespace Game.Gameplay.View.Player
             Transform pieceInstanceTransform = PieceInstance.transform;
 
             pieceInstanceTransform.position = pieceInstanceTransform.position.WithX(Mathf.RoundToInt(_pieceData.X));
-        }
-
-        private void TryDestroyPiece()
-        {
-            if (_pieceData is null || PieceInstance == null)
-            {
-                return;
-            }
-
-            DestroyPiece();
         }
 
         private Vector3 GetInitialPosition()

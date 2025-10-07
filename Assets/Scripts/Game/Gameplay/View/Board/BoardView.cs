@@ -19,9 +19,8 @@ namespace Game.Gameplay.View.Board
 
         private InitializedLabel _initializedLabel;
 
+        private IBoard _board;
         private Transform _piecesParent;
-
-        public IBoard Board { get; private set; }
 
         public BoardView(
             [NotNull] IBoardContainer boardContainer,
@@ -42,7 +41,7 @@ namespace Game.Gameplay.View.Board
 
             InvalidOperationException.ThrowIfNull(board);
 
-            Board = new Gameplay.Board.Board(_pieceCachedPropertiesGetter, board.Rows, board.Columns);
+            _board = new Gameplay.Board.Board(_pieceCachedPropertiesGetter, board.Rows, board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 
@@ -50,19 +49,14 @@ namespace Game.Gameplay.View.Board
         {
             _initializedLabel.SetUninitialized();
 
-            // TODO: Optimize
-
-            DestroyAllPieces();
-
-            Board = null;
-
-            if (_piecesParent == null)
-            {
-                return;
-            }
+            InvalidOperationException.ThrowIfNull(_piecesParent);
 
             Object.Destroy(_piecesParent.gameObject);
 
+            _pieces.Clear();
+            _pieceInstances.Clear();
+
+            _board = null;
             _piecesParent = null;
         }
 
@@ -94,7 +88,7 @@ namespace Game.Gameplay.View.Board
         {
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
-            InvalidOperationException.ThrowIfNull(Board);
+            InvalidOperationException.ThrowIfNull(_board);
 
             int id = piece.Id;
 
@@ -103,7 +97,7 @@ namespace Game.Gameplay.View.Board
                 InvalidOperationException.Throw($"Piece with Id: {id} has already been instantiated");
             }
 
-            Board.Add(piece, sourceCoordinate);
+            _board.Add(piece, sourceCoordinate);
 
             Vector3 position = GetWorldPosition(sourceCoordinate);
             GameObject pieceInstance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
@@ -121,7 +115,7 @@ namespace Game.Gameplay.View.Board
         {
             IPiece piece = GetPiece(id);
 
-            Board.Remove(piece);
+            _board.Remove(piece);
 
             GameObject pieceInstance = GetPieceInstance(id);
 
@@ -135,26 +129,16 @@ namespace Game.Gameplay.View.Board
         {
             IPiece piece = GetPiece(id);
 
-            Board.Move(piece, rowOffset, columnOffset);
+            _board.Move(piece, rowOffset, columnOffset);
 
             // Piece instance position should have already been updated externally (using tweens, etc), but it can be
             // set in here too just in case
 
             GameObject pieceInstance = GetPieceInstance(id);
 
-            Coordinate sourceCoordinate = Board.GetPieceSourceCoordinate(piece);
+            Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
 
             pieceInstance.transform.position = GetWorldPosition(sourceCoordinate);
-        }
-
-        private void DestroyAllPieces()
-        {
-            IEnumerable<int> idsCopy = new List<int>(_pieces.Keys);
-
-            foreach (int id in idsCopy)
-            {
-                DestroyPiece(id);
-            }
         }
 
         private static Vector3 GetWorldPosition(Coordinate sourceCoordinate)

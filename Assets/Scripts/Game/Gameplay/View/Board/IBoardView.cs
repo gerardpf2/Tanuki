@@ -7,8 +7,6 @@ namespace Game.Gameplay.View.Board
 {
     public interface IBoardView
     {
-        IBoard Board { get; } // TODO: Remove ¿?
-
         void Initialize();
 
         void Uninitialize();
