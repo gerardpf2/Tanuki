@@ -1,12 +1,13 @@
-using System;
+using System.Collections.Generic;
 using Game.Gameplay.EventEnqueueing.Events;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
-    public class LockPlayerPieceEventResolver : IEventResolver<LockPlayerPieceEvent>
+    public class LockPlayerPieceEventResolver : EventResolver<LockPlayerPieceEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
 
@@ -17,32 +18,20 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             _actionFactory = actionFactory;
         }
 
-        public void Resolve([NotNull] LockPlayerPieceEvent evt, Action onComplete)
+        protected override IEnumerable<IAction> GetActions([NotNull] LockPlayerPieceEvent evt)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            MovePlayerPieceStep(() => DestroyPlayerPieceStep(() => InstantiatePieceStep(onComplete)));
+            // TODO: Move player piece action
 
-            return;
+            yield return _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.Lock);
 
-            void MovePlayerPieceStep(Action onStepComplete)
-            {
-                // TODO: Action
-
-                onStepComplete?.Invoke();
-            }
-
-            void DestroyPlayerPieceStep(Action onStepComplete)
-            {
-                _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.Lock).Resolve(onStepComplete);
-            }
-
-            void InstantiatePieceStep(Action onStepComplete)
-            {
-                _actionFactory
-                    .GetInstantiatePieceAction(evt.Piece, InstantiatePieceReason.Lock, evt.LockSourceCoordinate)
-                    .Resolve(onStepComplete);
-            }
+            yield return
+                _actionFactory.GetInstantiatePieceAction(
+                    evt.Piece,
+                    InstantiatePieceReason.Lock,
+                    evt.LockSourceCoordinate
+                );
         }
     }
 }

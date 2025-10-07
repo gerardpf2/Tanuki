@@ -1,11 +1,12 @@
-using System;
+using System.Collections.Generic;
 using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
-    public class DestroyPieceEventResolver : IEventResolver<DestroyPieceEvent>
+    public class DestroyPieceEventResolver : EventResolver<DestroyPieceEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
 
@@ -16,11 +17,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             _actionFactory = actionFactory;
         }
 
-        public void Resolve([NotNull] DestroyPieceEvent evt, Action onComplete)
+        protected override IEnumerable<IAction> GetActions([NotNull] DestroyPieceEvent evt)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            _actionFactory.GetDestroyPieceAction(evt.Id, evt.DestroyPieceReason).Resolve(onComplete);
+            yield return _actionFactory.GetDestroyPieceAction(evt.Id, evt.DestroyPieceReason);
         }
     }
 }
