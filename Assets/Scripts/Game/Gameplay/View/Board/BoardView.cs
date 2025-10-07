@@ -3,6 +3,8 @@ using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
+using Game.Gameplay.Common;
+using Game.Gameplay.Common.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -13,6 +15,7 @@ namespace Game.Gameplay.View.Board
     {
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
+        [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
 
         [NotNull] private readonly IDictionary<int, IPiece> _pieces = new Dictionary<int, IPiece>();
         [NotNull] private readonly IDictionary<int, GameObject> _pieceInstances = new Dictionary<int, GameObject>();
@@ -24,13 +27,16 @@ namespace Game.Gameplay.View.Board
 
         public BoardView(
             [NotNull] IBoardContainer boardContainer,
-            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter)
+            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
+            [NotNull] IWorldPositionGetter worldPositionGetter)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
+            ArgumentNullException.ThrowIfNull(worldPositionGetter);
 
             _boardContainer = boardContainer;
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
+            _worldPositionGetter = worldPositionGetter;
         }
 
         public void Initialize()
@@ -141,9 +147,9 @@ namespace Game.Gameplay.View.Board
             pieceInstance.transform.position = GetWorldPosition(sourceCoordinate);
         }
 
-        private static Vector3 GetWorldPosition(Coordinate sourceCoordinate)
+        private Vector3 GetWorldPosition(Coordinate coordinate)
         {
-            return new Vector3(sourceCoordinate.Column, sourceCoordinate.Row);
+            return _worldPositionGetter.Get(coordinate);
         }
     }
 }

@@ -1,6 +1,7 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
+using Game.Gameplay.Common;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
@@ -113,6 +114,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IWorldPositionGetter>(_ => new WorldPositionGetter()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
@@ -292,7 +295,8 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<IPieceCachedPropertiesGetter>()
+                        r.Resolve<IPieceCachedPropertiesGetter>(),
+                        r.Resolve<IWorldPositionGetter>()
                     )
                 )
             );
