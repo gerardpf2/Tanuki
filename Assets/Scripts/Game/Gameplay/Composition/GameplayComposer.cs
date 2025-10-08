@@ -18,6 +18,7 @@ using Game.Gameplay.View.EventResolution.EventResolvers;
 using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
+using Infrastructure.Logging;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
@@ -296,7 +297,8 @@ namespace Game.Gameplay.Composition
                     new BoardView(
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IPieceCachedPropertiesGetter>(),
-                        r.Resolve<IWorldPositionGetter>()
+                        r.Resolve<IWorldPositionGetter>(),
+                        r.Resolve<ILogger>()
                     )
                 )
             );
