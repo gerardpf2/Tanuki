@@ -6,6 +6,7 @@ using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.Header.Goals;
+using Game.Gameplay.View.Input;
 using Game.Gameplay.View.Player;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -23,6 +24,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
+        [NotNull] private readonly IInputHandler _inputHandler;
         [NotNull] private readonly IPlayerView _playerView;
         [NotNull] private readonly IEventsResolver _eventsResolver;
         [NotNull] private readonly IScreenLoader _screenLoader;
@@ -36,6 +38,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
+            [NotNull] IInputHandler inputHandler,
             [NotNull] IPlayerView playerView,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
@@ -48,6 +51,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
+            ArgumentNullException.ThrowIfNull(inputHandler);
             ArgumentNullException.ThrowIfNull(playerView);
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
@@ -60,6 +64,7 @@ namespace Game.Gameplay.UseCases
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
+            _inputHandler = inputHandler;
             _playerView = playerView;
             _eventsResolver = eventsResolver;
             _screenLoader = screenLoader;
@@ -86,6 +91,7 @@ namespace Game.Gameplay.UseCases
             _boardView.Uninitialize();
             _cameraView.Uninitialize();
             _goalsView.Uninitialize();
+            _inputHandler.Uninitialize();
             _playerView.Uninitialize();
             _eventsResolver.Uninitialize();
         }
