@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Player
 {
-    public interface IPiecePlayerView
+    public interface IPlayerPieceView
     {
         Coordinate Coordinate { get; }
 

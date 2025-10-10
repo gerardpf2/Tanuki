@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Player
 {
-    public class PiecePlayerView : IPiecePlayerView
+    public class PlayerPieceView : IPlayerPieceView
     {
         private sealed class PieceData
         {
@@ -60,7 +60,7 @@ namespace Game.Gameplay.View.Player
 
         public GameObject Instance => _pieceData?.Instance;
 
-        public PiecePlayerView(
+        public PlayerPieceView(
             [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera,

@@ -30,7 +30,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IInputHandler _inputHandler;
-        [NotNull] private readonly IPiecePlayerView _piecePlayerView;
+        [NotNull] private readonly IPlayerPieceView _playerPieceView;
         [NotNull] private readonly IEventsResolver _eventsResolver;
         [NotNull] private readonly IScreenLoader _screenLoader;
 
@@ -46,7 +46,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
             [NotNull] IInputHandler inputHandler,
-            [NotNull] IPiecePlayerView piecePlayerView,
+            [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
         {
@@ -61,7 +61,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(inputHandler);
-            ArgumentNullException.ThrowIfNull(piecePlayerView);
+            ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
@@ -76,7 +76,7 @@ namespace Game.Gameplay.UseCases
             _cameraView = cameraView;
             _goalsView = goalsView;
             _inputHandler = inputHandler;
-            _piecePlayerView = piecePlayerView;
+            _playerPieceView = playerPieceView;
             _eventsResolver = eventsResolver;
             _screenLoader = screenLoader;
         }
@@ -114,7 +114,7 @@ namespace Game.Gameplay.UseCases
             _eventsResolver.Initialize();
             _goalsView.Initialize();
             _inputHandler.Initialize();
-            _piecePlayerView.Initialize();
+            _playerPieceView.Initialize();
         }
 
         private void LoadScreen()

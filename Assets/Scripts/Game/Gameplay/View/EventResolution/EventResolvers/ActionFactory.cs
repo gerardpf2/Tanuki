@@ -18,26 +18,26 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
-        [NotNull] private readonly IPiecePlayerView _piecePlayerView;
+        [NotNull] private readonly IPlayerPieceView _playerPieceView;
 
         public ActionFactory(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
-            [NotNull] IPiecePlayerView piecePlayerView)
+            [NotNull] IPlayerPieceView playerPieceView)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
-            ArgumentNullException.ThrowIfNull(piecePlayerView);
+            ArgumentNullException.ThrowIfNull(playerPieceView);
 
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
-            _piecePlayerView = piecePlayerView;
+            _playerPieceView = playerPieceView;
         }
 
         public IAction GetInstantiatePieceAction(
@@ -68,13 +68,13 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
                     _pieceViewDefinitionGetter,
                     piece,
                     instantiatePieceReason,
-                    _piecePlayerView
+                    _playerPieceView
                 );
         }
 
         public IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPlayerPieceAction(destroyPieceReason, _piecePlayerView);
+            return new DestroyPlayerPieceAction(destroyPieceReason, _playerPieceView);
         }
 
         public IAction GetDamagePieceAction(
