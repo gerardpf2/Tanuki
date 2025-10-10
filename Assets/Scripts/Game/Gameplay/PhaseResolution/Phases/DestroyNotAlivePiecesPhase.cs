@@ -42,33 +42,33 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             bool resolved = false;
 
-            foreach (IPiece piece in board.GetPiecesSortedByRowThenByColumn())
+            foreach (int id in board.GetIdsSortedByRowThenByColumn())
             {
-                resolved = TryDestroyPiece(piece) || resolved;
+                resolved = TryDestroyPiece(id) || resolved;
             }
 
             return resolved ? ResolveResult.Updated : ResolveResult.NotUpdated;
         }
 
-        private bool TryDestroyPiece([NotNull] IPiece piece)
+        private bool TryDestroyPiece(int id)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
             IBoard board = _boardContainer.Board;
             IGoals goals = _goalsContainer.Goals;
 
             InvalidOperationException.ThrowIfNull(board);
             InvalidOperationException.ThrowIfNull(goals);
 
+            IPiece piece = board.Get(id);
+
             if (piece.Alive)
             {
                 return false;
             }
 
-            board.Remove(piece);
+            board.Remove(id);
             goals.TryIncreaseCurrentAmount(piece.Type);
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(piece.Id, DestroyPieceReason.NotAlive));
+            _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(id, DestroyPieceReason.NotAlive));
 
             return true;
         }

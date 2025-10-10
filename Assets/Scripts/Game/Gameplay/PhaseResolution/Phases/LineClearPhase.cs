@@ -53,18 +53,20 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             InvalidOperationException.ThrowIfNull(board);
 
-            IReadOnlyCollection<KeyValuePair<IPiece, int>> pieces = new List<KeyValuePair<IPiece, int>>(board.GetPiecesInRow(row));
+            IReadOnlyCollection<KeyValuePair<int, int>> idsInRow = new List<KeyValuePair<int, int>>(board.GetIdsInRow(row));
 
-            if (pieces.Count < board.Columns)
+            if (idsInRow.Count < board.Columns)
             {
                 return false;
             }
 
             bool anyDamaged = false;
 
-            foreach ((IPiece piece, int column) in pieces)
+            foreach ((int id, int column) in idsInRow)
             {
-                board.GetPieceRowColumnOffset(piece, row, column, out int rowOffset, out int columnOffset);
+                IPiece piece = board.Get(id);
+
+                board.GetPieceRowColumnOffset(id, row, column, out int rowOffset, out int columnOffset);
 
                 piece.Damage(rowOffset, columnOffset);
 

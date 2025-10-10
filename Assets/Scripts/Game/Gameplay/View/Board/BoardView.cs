@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
-using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Common;
 using Game.Gameplay.Common.Utils;
 using Infrastructure.System.Exceptions;
@@ -19,7 +18,6 @@ namespace Game.Gameplay.View.Board
         [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
         [NotNull] private readonly ILogger _logger;
 
-        [NotNull] private readonly IDictionary<int, IPiece> _pieces = new Dictionary<int, IPiece>();
         [NotNull] private readonly IDictionary<int, GameObject> _pieceInstances = new Dictionary<int, GameObject>();
 
         private InitializedLabel _initializedLabel;
@@ -64,7 +62,6 @@ namespace Game.Gameplay.View.Board
 
             Object.Destroy(_piecesParent.gameObject);
 
-            _pieces.Clear();
             _pieceInstances.Clear();
 
             _board = null;
@@ -73,14 +70,7 @@ namespace Game.Gameplay.View.Board
 
         public IPiece GetPiece(int id)
         {
-            if (!_pieces.TryGetValue(id, out IPiece piece))
-            {
-                InvalidOperationException.Throw($"Piece with Id: {id} cannot be found");
-            }
-
-            InvalidOperationException.ThrowIfNull(piece);
-
-            return piece;
+            return _board.Get(id);
         }
 
         public GameObject GetPieceInstance(int id)
@@ -103,7 +93,7 @@ namespace Game.Gameplay.View.Board
 
             int id = piece.Id;
 
-            if (_pieces.ContainsKey(id) || _pieceInstances.ContainsKey(id))
+            if (_pieceInstances.ContainsKey(id))
             {
                 InvalidOperationException.Throw($"Piece with Id: {id} has already been instantiated");
             }
@@ -115,32 +105,26 @@ namespace Game.Gameplay.View.Board
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 pieceInstance,
-                $"Cannot instantiate piece with Prefab: {prefab.name}"
+                $"Cannot instantiate piece with Id: {id} and Prefab: {prefab.name}"
             );
 
-            _pieces.Add(id, piece);
             _pieceInstances.Add(id, pieceInstance);
         }
 
         public void DestroyPiece(int id)
         {
-            IPiece piece = GetPiece(id);
-
-            _board.Remove(piece);
+            _board.Remove(id);
 
             GameObject pieceInstance = GetPieceInstance(id);
 
             Object.Destroy(pieceInstance);
 
-            _pieces.Remove(id);
             _pieceInstances.Remove(id);
         }
 
         public void MovePiece(int id, int rowOffset, int columnOffset)
         {
-            IPiece piece = GetPiece(id);
-
-            _board.Move(piece, rowOffset, columnOffset);
+            _board.Move(id, rowOffset, columnOffset);
 
             EnsurePiecePositionIsExpected(id);
         }
@@ -152,10 +136,9 @@ namespace Game.Gameplay.View.Board
 
         private void EnsurePiecePositionIsExpected(int id)
         {
-            IPiece piece = GetPiece(id);
             GameObject pieceInstance = GetPieceInstance(id);
 
-            Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
+            Coordinate sourceCoordinate = _board.GetSourceCoordinate(id);
 
             Vector3 expectedWorldPosition = GetWorldPosition(sourceCoordinate);
             Vector3 worldPosition = pieceInstance.transform.position;

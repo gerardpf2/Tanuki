@@ -50,13 +50,13 @@ namespace Game.Gameplay.Board.Parsing
                 {
                     Rows = board.Rows,
                     Columns = board.Columns,
-                    PiecePlacementSerializedData = board.PieceSourceCoordinates.Select(Convert).ToList()
+                    PiecePlacementSerializedData = board.Ids.Select(GetPiecePlacementSerializedData).ToList()
                 };
 
-            PiecePlacementSerializedData Convert(KeyValuePair<IPiece, Coordinate> pieceSourceCoordinate)
+            PiecePlacementSerializedData GetPiecePlacementSerializedData(int id)
             {
-                IPiece piece = pieceSourceCoordinate.Key;
-                Coordinate sourceCoordinate = pieceSourceCoordinate.Value;
+                IPiece piece = board.Get(id);
+                Coordinate sourceCoordinate = board.GetSourceCoordinate(id);
 
                 PiecePlacement piecePlacement = new(piece, sourceCoordinate);
 
