@@ -23,7 +23,7 @@ namespace Game.Gameplay.View.Input
         private InitializedLabel _initializedLabel;
 
         private Vector2 _previousWorldPosition;
-        private bool _waitingDragEnd;
+        private bool _waitingEndDrag;
 
         public InputHandler(
             [NotNull] IPhaseResolver phaseResolver,
@@ -101,14 +101,18 @@ namespace Game.Gameplay.View.Input
 
         private void HandleEndDrag(PointerEventData _)
         {
-            _waitingDragEnd = false;
+            _waitingEndDrag = false;
         }
 
         private bool CanDrag([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
-            return !_eventsResolver.Resolving && !_waitingDragEnd && IsInsideScreen(eventData.position);
+            return
+                !_waitingEndDrag &&
+                !_eventsResolver.Resolving &&
+                _playerPieceView.Instance != null &&
+                IsInsideScreen(eventData.position);
         }
 
         private bool IsInsideScreen(Vector2 position)
@@ -129,7 +133,7 @@ namespace Game.Gameplay.View.Input
 
             _phaseResolver.Resolve(new ResolveContext(_playerPieceView.Coordinate.Column));
 
-            _waitingDragEnd = true;
+            _waitingEndDrag = true;
         }
     }
 }
