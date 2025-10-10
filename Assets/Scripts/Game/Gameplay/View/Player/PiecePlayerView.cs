@@ -14,22 +14,19 @@ namespace Game.Gameplay.View.Player
     {
         private sealed class PieceData
         {
-            public readonly int TopMostRowOffset;
-            public readonly int RightMostColumnOffset;
+            public readonly IPiece Piece;
             public readonly GameObject Instance;
 
             public float X { get; set; }
 
-            public PieceData(
-                [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
-                IPiece piece,
-                GameObject instance)
+            public PieceData(IPiece piece, [NotNull] GameObject instance)
             {
-                ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
+                ArgumentNullException.ThrowIfNull(instance);
 
-                TopMostRowOffset = pieceCachedPropertiesGetter.GetTopMostRowOffset(piece);
-                RightMostColumnOffset = pieceCachedPropertiesGetter.GetRightMostColumnOffset(piece);
+                Piece = piece;
                 Instance = instance;
+
+                X = Instance.transform.position.x;
             }
         }
 
@@ -40,7 +37,7 @@ namespace Game.Gameplay.View.Player
 
         private InitializedLabel _initializedLabel;
 
-        private Transform _playerPieceParent;
+        private Transform _parent;
         private PieceData _pieceData;
 
         public Coordinate Coordinate
@@ -84,18 +81,18 @@ namespace Game.Gameplay.View.Player
         {
             _initializedLabel.SetInitialized();
 
-            _playerPieceParent = new GameObject("PlayerPieceParent").transform; // New game object outside canvas, etc
+            _parent = new GameObject("PlayerPieceParent").transform; // New game object outside canvas, etc
         }
 
         public void Uninitialize()
         {
             _initializedLabel.SetUninitialized();
 
-            InvalidOperationException.ThrowIfNull(_playerPieceParent);
+            InvalidOperationException.ThrowIfNull(_parent);
 
-            Object.Destroy(_playerPieceParent.gameObject);
+            Object.Destroy(_parent.gameObject);
 
-            _playerPieceParent = null;
+            _parent = null;
             _pieceData = null;
         }
 
@@ -104,20 +101,14 @@ namespace Game.Gameplay.View.Player
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
-            GameObject instance = Object.Instantiate(prefab, _playerPieceParent);
+            GameObject instance = Object.Instantiate(prefab, GetInitialPosition(piece), Quaternion.identity, _parent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 instance,
                 $"Cannot instantiate player piece with Prefab: {prefab.name}"
             );
 
-            _pieceData = new PieceData(_pieceCachedPropertiesGetter, piece, instance);
-
-            Transform transform = Instance.transform;
-
-            transform.position = GetInitialPosition();
-
-            _pieceData.X = transform.position.x;
+            _pieceData = new PieceData(piece, instance);
         }
 
         public void Destroy()
@@ -135,38 +126,41 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(_pieceData);
             InvalidOperationException.ThrowIfNull(Instance);
 
-            _pieceData.X = ClampX(_pieceData.X + deltaX);
+            _pieceData.X = ClampX(_pieceData.Piece, _pieceData.X + deltaX);
 
             Transform transform = Instance.transform;
 
             transform.position = transform.position.WithX(Mathf.RoundToInt(_pieceData.X));
         }
 
-        private Vector3 GetInitialPosition()
+        private Vector3 GetInitialPosition(IPiece piece)
         {
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
-            InvalidOperationException.ThrowIfNull(_pieceData);
 
-            int row = _camera.TopRow - _pieceData.TopMostRowOffset;
-            int column = (board.Columns - _pieceData.RightMostColumnOffset) / 2;
+            int topMostRowOffset = _pieceCachedPropertiesGetter.GetTopMostRowOffset(piece);
+            int rightMostColumnOffset = _pieceCachedPropertiesGetter.GetRightMostColumnOffset(piece);
+
+            int row = _camera.TopRow - topMostRowOffset;
+            int column = (board.Columns - rightMostColumnOffset) / 2;
 
             float x = _worldPositionGetter.GetX(column);
             float y = _worldPositionGetter.GetY(row);
 
-            return new Vector3(ClampX(x), y);
+            return new Vector3(ClampX(piece, x), y);
         }
 
-        private float ClampX(float x)
+        private float ClampX(IPiece piece, float x)
         {
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
-            InvalidOperationException.ThrowIfNull(_pieceData);
+
+            int rightMostColumnOffset = _pieceCachedPropertiesGetter.GetRightMostColumnOffset(piece);
 
             const int minColumn = 0;
-            int maxColumn = Mathf.Max(board.Columns - 1 - _pieceData.RightMostColumnOffset, minColumn);
+            int maxColumn = Mathf.Max(board.Columns - 1 - rightMostColumnOffset, minColumn);
 
             float minX = _worldPositionGetter.GetX(minColumn);
             float maxX = _worldPositionGetter.GetX(maxColumn);
