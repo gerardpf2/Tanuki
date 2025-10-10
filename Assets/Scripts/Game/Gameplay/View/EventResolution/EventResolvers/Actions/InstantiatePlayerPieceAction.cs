@@ -10,30 +10,30 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class InstantiatePlayerPieceAction : BaseInstantiatePieceAction
     {
-        [NotNull] private readonly IPlayerView _playerView;
+        [NotNull] private readonly IPiecePlayerView _piecePlayerView;
 
         public InstantiatePlayerPieceAction(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IPiece piece,
             InstantiatePieceReason instantiatePieceReason,
-            [NotNull] IPlayerView playerView) : base(pieceViewDefinitionGetter, piece, instantiatePieceReason)
+            [NotNull] IPiecePlayerView piecePlayerView) : base(pieceViewDefinitionGetter, piece, instantiatePieceReason)
         {
-            ArgumentNullException.ThrowIfNull(playerView);
+            ArgumentNullException.ThrowIfNull(piecePlayerView);
 
-            _playerView = playerView;
+            _piecePlayerView = piecePlayerView;
         }
 
         protected override GameObject InstantiatePiece(IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinition);
 
-            _playerView.InstantiatePiece(piece, pieceViewDefinition.Prefab);
+            _piecePlayerView.Instantiate(piece, pieceViewDefinition.Prefab);
 
-            GameObject pieceInstance = _playerView.PieceInstance;
+            GameObject instance = _piecePlayerView.Instance;
 
-            InvalidOperationException.ThrowIfNull(pieceInstance);
+            InvalidOperationException.ThrowIfNull(instance);
 
-            return pieceInstance;
+            return instance;
         }
     }
 }

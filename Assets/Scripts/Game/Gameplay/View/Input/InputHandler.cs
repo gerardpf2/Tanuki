@@ -17,7 +17,7 @@ namespace Game.Gameplay.View.Input
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IEventsResolver _eventsResolver;
         [NotNull] private readonly IInputListener _inputListener;
-        [NotNull] private readonly IPlayerView _playerView;
+        [NotNull] private readonly IPiecePlayerView _piecePlayerView;
         [NotNull] private readonly IScreenPropertiesGetter _screenPropertiesGetter;
 
         private InitializedLabel _initializedLabel;
@@ -29,19 +29,19 @@ namespace Game.Gameplay.View.Input
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IInputListener inputListener,
-            [NotNull] IPlayerView playerView,
+            [NotNull] IPiecePlayerView piecePlayerView,
             [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
         {
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(inputListener);
-            ArgumentNullException.ThrowIfNull(playerView);
+            ArgumentNullException.ThrowIfNull(piecePlayerView);
             ArgumentNullException.ThrowIfNull(screenPropertiesGetter);
 
             _phaseResolver = phaseResolver;
             _eventsResolver = eventsResolver;
             _inputListener = inputListener;
-            _playerView = playerView;
+            _piecePlayerView = piecePlayerView;
             _screenPropertiesGetter = screenPropertiesGetter;
         }
 
@@ -120,14 +120,14 @@ namespace Game.Gameplay.View.Input
 
         private void HandleDrag(Vector2 worldPositionDelta)
         {
-            _playerView.MovePiece(worldPositionDelta.x);
+            _piecePlayerView.Move(worldPositionDelta.x);
 
             if (worldPositionDelta.y > LockPieceDeltaY)
             {
                 return;
             }
 
-            _phaseResolver.Resolve(new ResolveContext(_playerView.PieceCoordinate.Column));
+            _phaseResolver.Resolve(new ResolveContext(_piecePlayerView.Coordinate.Column));
 
             _waitingDragEnd = true;
         }

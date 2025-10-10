@@ -25,7 +25,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IInputHandler _inputHandler;
-        [NotNull] private readonly IPlayerView _playerView;
+        [NotNull] private readonly IPiecePlayerView _piecePlayerView;
         [NotNull] private readonly IEventsResolver _eventsResolver;
         [NotNull] private readonly IScreenLoader _screenLoader;
 
@@ -39,7 +39,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
             [NotNull] IInputHandler inputHandler,
-            [NotNull] IPlayerView playerView,
+            [NotNull] IPiecePlayerView piecePlayerView,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
         {
@@ -52,7 +52,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(inputHandler);
-            ArgumentNullException.ThrowIfNull(playerView);
+            ArgumentNullException.ThrowIfNull(piecePlayerView);
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
@@ -65,7 +65,7 @@ namespace Game.Gameplay.UseCases
             _cameraView = cameraView;
             _goalsView = goalsView;
             _inputHandler = inputHandler;
-            _playerView = playerView;
+            _piecePlayerView = piecePlayerView;
             _eventsResolver = eventsResolver;
             _screenLoader = screenLoader;
         }
@@ -92,7 +92,7 @@ namespace Game.Gameplay.UseCases
             _cameraView.Uninitialize();
             _goalsView.Uninitialize();
             _inputHandler.Uninitialize();
-            _playerView.Uninitialize();
+            _piecePlayerView.Uninitialize();
             _eventsResolver.Uninitialize();
         }
 

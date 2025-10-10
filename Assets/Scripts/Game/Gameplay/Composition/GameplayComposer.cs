@@ -287,7 +287,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IInputHandler>(),
-                        r.Resolve<IPlayerView>(),
+                        r.Resolve<IPiecePlayerView>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
@@ -325,7 +325,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
-                        r.Resolve<IPlayerView>()
+                        r.Resolve<IPiecePlayerView>()
                     )
                 )
             );
@@ -370,7 +370,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IInputListener>(),
-                        r.Resolve<IPlayerView>(),
+                        r.Resolve<IPiecePlayerView>(),
                         r.Resolve<IScreenPropertiesGetter>()
                     )
                 )
@@ -381,8 +381,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetTo<IInputNotifier, InputEventsHandler>());
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IPlayerView>(r =>
-                    new PlayerView(
+                ruleFactory.GetSingleton<IPiecePlayerView>(r =>
+                    new PiecePlayerView(
                         r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
@@ -425,7 +425,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IInputHandler>(),
-                        r.Resolve<IPlayerView>(),
+                        r.Resolve<IPiecePlayerView>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )

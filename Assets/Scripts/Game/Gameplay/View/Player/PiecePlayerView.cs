@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Player
 {
-    public class PlayerView : IPlayerView
+    public class PiecePlayerView : IPiecePlayerView
     {
         private sealed class PieceData
         {
@@ -43,27 +43,27 @@ namespace Game.Gameplay.View.Player
         private Transform _playerPieceParent;
         private PieceData _pieceData;
 
-        public Coordinate PieceCoordinate
+        public Coordinate Coordinate
         {
             get
             {
-                InvalidOperationException.ThrowIfNull(PieceInstance);
+                InvalidOperationException.ThrowIfNull(Instance);
 
-                Transform pieceInstanceTransform = PieceInstance.transform;
+                Transform transform = Instance.transform;
 
                 float originX = _worldPositionGetter.GetX(0);
                 float originY = _worldPositionGetter.GetY(0);
 
-                int row = Mathf.FloorToInt(pieceInstanceTransform.position.y - originY);
-                int column = Mathf.FloorToInt(pieceInstanceTransform.position.x - originX);
+                int row = Mathf.FloorToInt(transform.position.y - originY);
+                int column = Mathf.FloorToInt(transform.position.x - originX);
 
                 return new Coordinate(row, column);
             }
         }
 
-        public GameObject PieceInstance => _pieceData?.Instance;
+        public GameObject Instance => _pieceData?.Instance;
 
-        public PlayerView(
+        public PiecePlayerView(
             [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera,
@@ -99,7 +99,7 @@ namespace Game.Gameplay.View.Player
             _pieceData = null;
         }
 
-        public void InstantiatePiece(IPiece piece, [NotNull] GameObject prefab)
+        public void Instantiate(IPiece piece, [NotNull] GameObject prefab)
         {
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
@@ -113,33 +113,33 @@ namespace Game.Gameplay.View.Player
 
             _pieceData = new PieceData(_pieceCachedPropertiesGetter, piece, instance);
 
-            Transform pieceInstanceTransform = PieceInstance.transform;
+            Transform transform = Instance.transform;
 
-            pieceInstanceTransform.position = GetInitialPosition();
+            transform.position = GetInitialPosition();
 
-            _pieceData.X = pieceInstanceTransform.position.x;
+            _pieceData.X = transform.position.x;
         }
 
-        public void DestroyPiece()
+        public void Destroy()
         {
             InvalidOperationException.ThrowIfNull(_pieceData);
-            InvalidOperationException.ThrowIfNull(PieceInstance);
+            InvalidOperationException.ThrowIfNull(Instance);
 
-            Object.Destroy(PieceInstance);
+            Object.Destroy(Instance);
 
             _pieceData = null;
         }
 
-        public void MovePiece(float deltaX)
+        public void Move(float deltaX)
         {
             InvalidOperationException.ThrowIfNull(_pieceData);
-            InvalidOperationException.ThrowIfNull(PieceInstance);
+            InvalidOperationException.ThrowIfNull(Instance);
 
             _pieceData.X = ClampX(_pieceData.X + deltaX);
 
-            Transform pieceInstanceTransform = PieceInstance.transform;
+            Transform transform = Instance.transform;
 
-            pieceInstanceTransform.position = pieceInstanceTransform.position.WithX(Mathf.RoundToInt(_pieceData.X));
+            transform.position = transform.position.WithX(Mathf.RoundToInt(_pieceData.X));
         }
 
         private Vector3 GetInitialPosition()
