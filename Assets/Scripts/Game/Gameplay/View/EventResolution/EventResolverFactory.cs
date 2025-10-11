@@ -50,5 +50,10 @@ namespace Game.Gameplay.View.EventResolution
         {
             return new SetCameraRowEventResolver(_actionFactory);
         }
+
+        public IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver()
+        {
+            return new SetGoalCurrentAmountEventResolver(_actionFactory);
+        }
     }
 }

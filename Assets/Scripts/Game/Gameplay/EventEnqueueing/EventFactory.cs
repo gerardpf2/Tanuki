@@ -52,5 +52,10 @@ namespace Game.Gameplay.EventEnqueueing
         {
             return new SetCameraRowEvent(topRow);
         }
+
+        public IEvent GetSetGoalCurrentAmountEvent(PieceType pieceType, int currentAmount)
+        {
+            return new SetGoalCurrentAmountEvent(pieceType, currentAmount);
+        }
     }
 }
