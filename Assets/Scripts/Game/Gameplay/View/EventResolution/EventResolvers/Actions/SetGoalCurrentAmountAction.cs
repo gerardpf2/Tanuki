@@ -6,12 +6,12 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
-    public class IncreaseGoalAmountAction : IAction
+    public class SetGoalCurrentAmountAction : IAction
     {
         [NotNull] private readonly IGoalsView _goalsView;
         private readonly PieceType _pieceType;
 
-        public IncreaseGoalAmountAction([NotNull] IGoalsView goalsView, PieceType pieceType)
+        public SetGoalCurrentAmountAction([NotNull] IGoalsView goalsView, PieceType pieceType)
         {
             ArgumentNullException.ThrowIfNull(goalsView);
 
