@@ -9,6 +9,9 @@ namespace Game.Gameplay.Goals
         [NotNull, ItemNotNull]
         IEnumerable<IGoal> Targets { get; }
 
+        [NotNull]
+        IGoal Get(PieceType pieceType);
+
         [ContractAnnotation("=> true, goal:notnull; => false, goal:null")]
         bool TryGet(PieceType pieceType, out IGoal goal);
 

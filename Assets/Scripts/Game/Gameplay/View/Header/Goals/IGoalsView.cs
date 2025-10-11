@@ -14,6 +14,6 @@ namespace Game.Gameplay.View.Header.Goals
 
         void Uninitialize();
 
-        void TryIncreaseCurrentAmount(PieceType pieceType);
+        void SetCurrentAmount(PieceType pieceType, int currentAmount);
     }
 }

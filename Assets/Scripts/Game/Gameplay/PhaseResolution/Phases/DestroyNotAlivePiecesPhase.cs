@@ -53,10 +53,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
         private bool TryDestroyPiece(int pieceId)
         {
             IBoard board = _boardContainer.Board;
-            IGoals goals = _goalsContainer.Goals;
 
             InvalidOperationException.ThrowIfNull(board);
-            InvalidOperationException.ThrowIfNull(goals);
 
             IPiece piece = board.GetPiece(pieceId);
 
@@ -66,11 +64,26 @@ namespace Game.Gameplay.PhaseResolution.Phases
             }
 
             board.RemovePiece(pieceId);
-            goals.TryIncreaseCurrentAmount(piece.Type);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(pieceId, DestroyPieceReason.NotAlive));
 
+            TryIncreaseGoalCurrentAmount(piece.Type);
+
             return true;
+        }
+
+        private void TryIncreaseGoalCurrentAmount(PieceType pieceType)
+        {
+            IGoals goals = _goalsContainer.Goals;
+
+            InvalidOperationException.ThrowIfNull(goals);
+
+            if (!goals.TryIncreaseCurrentAmount(pieceType, out int currentAmount))
+            {
+                return;
+            }
+
+            _eventEnqueuer.Enqueue(_eventFactory.GetSetGoalCurrentAmountEvent(pieceType, currentAmount));
         }
     }
 }

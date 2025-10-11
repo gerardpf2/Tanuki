@@ -2,7 +2,6 @@ using System;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
-using Game.Gameplay.Goals.Utils;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
@@ -44,14 +43,20 @@ namespace Game.Gameplay.View.Header.Goals
             Goals = null;
         }
 
-        public void TryIncreaseCurrentAmount(PieceType pieceType)
+        public void SetCurrentAmount(PieceType pieceType, int currentAmount)
         {
             InvalidOperationException.ThrowIfNull(Goals);
 
-            if (Goals.TryIncreaseCurrentAmount(pieceType))
+            IGoal goal = Goals.Get(pieceType);
+
+            if (goal.CurrentAmount == currentAmount)
             {
-                OnUpdated?.Invoke();
+                return;
             }
+
+            goal.CurrentAmount = currentAmount;
+
+            OnUpdated?.Invoke();
         }
     }
 }

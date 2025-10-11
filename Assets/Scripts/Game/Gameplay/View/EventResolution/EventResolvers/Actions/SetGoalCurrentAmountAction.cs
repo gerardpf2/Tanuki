@@ -23,7 +23,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
         public void Resolve(Action onComplete)
         {
-            // TODO
+            // TODO: Tween, etc
+
+            _goalsView.SetCurrentAmount(_pieceType, _currentAmount);
 
             onComplete?.Invoke();
         }
