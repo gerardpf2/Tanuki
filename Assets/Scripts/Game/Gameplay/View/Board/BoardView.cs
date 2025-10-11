@@ -70,6 +70,8 @@ namespace Game.Gameplay.View.Board
 
         public IPiece GetPiece(int pieceId)
         {
+            InvalidOperationException.ThrowIfNull(_board);
+
             return _board.GetPiece(pieceId);
         }
 
@@ -90,6 +92,7 @@ namespace Game.Gameplay.View.Board
             ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_board);
+            InvalidOperationException.ThrowIfNull(_piecesParent);
 
             int pieceId = piece.Id;
 
@@ -113,6 +116,8 @@ namespace Game.Gameplay.View.Board
 
         public void DestroyPiece(int pieceId)
         {
+            InvalidOperationException.ThrowIfNull(_board);
+
             _board.RemovePiece(pieceId);
 
             GameObject pieceInstance = GetPieceInstance(pieceId);
@@ -124,6 +129,8 @@ namespace Game.Gameplay.View.Board
 
         public void MovePiece(int pieceId, int rowOffset, int columnOffset)
         {
+            InvalidOperationException.ThrowIfNull(_board);
+
             _board.MovePiece(pieceId, rowOffset, columnOffset);
 
             EnsurePiecePositionIsExpected(pieceId);
@@ -136,6 +143,8 @@ namespace Game.Gameplay.View.Board
 
         private void EnsurePiecePositionIsExpected(int pieceId)
         {
+            InvalidOperationException.ThrowIfNull(_board);
+
             GameObject pieceInstance = GetPieceInstance(pieceId);
 
             Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);

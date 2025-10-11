@@ -10,8 +10,10 @@ namespace Game.Gameplay.Goals.Utils
         {
             ArgumentNullException.ThrowIfNull(goals);
 
-            foreach (IGoal goal in goals.Targets)
+            foreach (PieceType pieceType in goals.PieceTypes)
             {
+                IGoal goal = goals.Get(pieceType);
+
                 if (!goal.IsCompleted())
                 {
                     return false;

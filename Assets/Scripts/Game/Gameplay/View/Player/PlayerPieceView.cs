@@ -99,6 +99,7 @@ namespace Game.Gameplay.View.Player
         public void Instantiate(IPiece piece, [NotNull] GameObject prefab)
         {
             ArgumentNullException.ThrowIfNull(prefab);
+            InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
             GameObject instance = Object.Instantiate(prefab, GetInitialPosition(piece), Quaternion.identity, _parent);

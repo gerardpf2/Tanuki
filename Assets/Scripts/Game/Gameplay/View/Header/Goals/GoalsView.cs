@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
@@ -14,9 +15,11 @@ namespace Game.Gameplay.View.Header.Goals
 
         private InitializedLabel _initializedLabel;
 
+        private IGoals _goals;
+
         public event Action OnUpdated;
 
-        public IGoals Goals { get; private set; }
+        public IEnumerable<PieceType> PieceTypes => _goals?.PieceTypes;
 
         public GoalsView([NotNull] IGoalsContainer goalsContainer)
         {
@@ -33,21 +36,26 @@ namespace Game.Gameplay.View.Header.Goals
 
             InvalidOperationException.ThrowIfNull(goals);
 
-            Goals = goals.Clone();
+            _goals = goals.Clone();
         }
 
         public void Uninitialize()
         {
             _initializedLabel.SetUninitialized();
 
-            Goals = null;
+            _goals = null;
+        }
+
+        public IGoal Get(PieceType pieceType)
+        {
+            InvalidOperationException.ThrowIfNull(_goals);
+
+            return _goals.Get(pieceType);
         }
 
         public void SetCurrentAmount(PieceType pieceType, int currentAmount)
         {
-            InvalidOperationException.ThrowIfNull(Goals);
-
-            IGoal goal = Goals.Get(pieceType);
+            IGoal goal = Get(pieceType);
 
             if (goal.CurrentAmount == currentAmount)
             {
