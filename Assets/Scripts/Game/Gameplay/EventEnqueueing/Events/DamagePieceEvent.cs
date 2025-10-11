@@ -5,16 +5,16 @@ namespace Game.Gameplay.EventEnqueueing.Events
 {
     public class DamagePieceEvent : IEvent
     {
-        public readonly int Id;
+        public readonly int PieceId;
         public readonly IEnumerable<KeyValuePair<string, string>> State;
         public readonly DamagePieceReason DamagePieceReason;
 
         public DamagePieceEvent(
-            int id,
+            int pieceId,
             IEnumerable<KeyValuePair<string, string>> state,
             DamagePieceReason damagePieceReason)
         {
-            Id = id;
+            PieceId = pieceId;
             State = state;
             DamagePieceReason = damagePieceReason;
         }

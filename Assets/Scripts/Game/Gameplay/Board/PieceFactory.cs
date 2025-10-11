@@ -23,25 +23,25 @@ namespace Game.Gameplay.Board
 
         public IPiece GetTest(IEnumerable<KeyValuePair<string, string>> state)
         {
-            return new Test(_converter, GetNewId()).WithState(state);
+            return new Test(_converter, GetNewPieceId()).WithState(state);
         }
 
         public IPiece GetPlayerBlock11()
         {
-            return new PlayerBlock11(_converter, GetNewId());
+            return new PlayerBlock11(_converter, GetNewPieceId());
         }
 
         public IPiece GetPlayerBlock12()
         {
-            return new PlayerBlock12(_converter, GetNewId());
+            return new PlayerBlock12(_converter, GetNewPieceId());
         }
 
         public IPiece GetPlayerBlock21()
         {
-            return new PlayerBlock21(_converter, GetNewId());
+            return new PlayerBlock21(_converter, GetNewPieceId());
         }
 
-        private int GetNewId()
+        private int GetNewPieceId()
         {
             return _pieceIdGetter.GetNew();
         }

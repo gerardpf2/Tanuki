@@ -19,40 +19,40 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull]
-        public static IEnumerable<int> GetIdsSortedByRowThenByColumn([NotNull] this IBoard board)
+        public static IEnumerable<int> GetPieceIdsSortedByRowThenByColumn([NotNull] this IBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);
 
             return
-                board.Ids
-                    .Select(SelectIdSourceCoordinate)
+                board.PieceIds
+                    .Select(SelectPieceIdSourceCoordinate)
                     .OrderBy(SelectRow)
                     .ThenBy(SelectColumn)
-                    .Select(SelectId);
+                    .Select(SelectPieceId);
 
-            (int, Coordinate) SelectIdSourceCoordinate(int id)
+            (int, Coordinate) SelectPieceIdSourceCoordinate(int pieceId)
             {
-                return (id, board.GetSourceCoordinate(id));
+                return (pieceId, board.GetSourceCoordinate(pieceId));
             }
 
-            int SelectRow((int _, Coordinate sourceCoordinate) idSourceCoordinate)
+            int SelectRow((int _, Coordinate sourceCoordinate) pieceIdSourceCoordinate)
             {
-                return idSourceCoordinate.sourceCoordinate.Row;
+                return pieceIdSourceCoordinate.sourceCoordinate.Row;
             }
 
-            int SelectColumn((int _, Coordinate sourceCoordinate) idSourceCoordinate)
+            int SelectColumn((int _, Coordinate sourceCoordinate) pieceIdSourceCoordinate)
             {
-                return idSourceCoordinate.sourceCoordinate.Column;
+                return pieceIdSourceCoordinate.sourceCoordinate.Column;
             }
 
-            int SelectId((int id, Coordinate _) idSourceCoordinate)
+            int SelectPieceId((int pieceId, Coordinate _) pieceIdSourceCoordinate)
             {
-                return idSourceCoordinate.id;
+                return pieceIdSourceCoordinate.pieceId;
             }
         }
 
         [NotNull]
-        public static IEnumerable<KeyValuePair<int, int>> GetIdsInRow([NotNull] this IBoard board, int row)
+        public static IEnumerable<KeyValuePair<int, int>> GetPieceIdsInRow([NotNull] this IBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -62,20 +62,20 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinate = new(row, column);
 
-                int? id = board.Get(coordinate);
+                int? pieceId = board.GetPieceId(coordinate);
 
-                if (!id.HasValue)
+                if (!pieceId.HasValue)
                 {
                     continue;
                 }
 
-                yield return new KeyValuePair<int, int>(id.Value, column);
+                yield return new KeyValuePair<int, int>(pieceId.Value, column);
             }
         }
 
         public static void GetPieceRowColumnOffset(
             [NotNull] this IBoard board,
-            int id,
+            int pieceId,
             int row,
             int column,
             out int rowOffset,
@@ -83,7 +83,7 @@ namespace Game.Gameplay.Board.Utils
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            Coordinate sourceCoordinate = board.GetSourceCoordinate(id);
+            Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
 
             rowOffset = row - sourceCoordinate.Row;
             columnOffset = column - sourceCoordinate.Column;
@@ -107,7 +107,7 @@ namespace Game.Gameplay.Board.Utils
             return fall;
         }
 
-        private static int ComputePieceFallImpl([NotNull] this IBoard board, int ignoreId, Coordinate coordinate)
+        private static int ComputePieceFallImpl([NotNull] this IBoard board, int ignorePieceId, Coordinate coordinate)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -118,9 +118,9 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinateBelow = new(row, coordinate.Column);
 
-                int? id = board.Get(coordinateBelow);
+                int? pieceId = board.GetPieceId(coordinateBelow);
 
-                if (id.HasValue && id != ignoreId)
+                if (pieceId.HasValue && pieceId != ignorePieceId)
                 {
                     break;
                 }

@@ -13,20 +13,20 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class DamagePieceAction : IAction
     {
-        private readonly int _id;
+        private readonly int _pieceId;
         private readonly IEnumerable<KeyValuePair<string, string>> _state;
         private readonly DamagePieceReason _damagePieceReason;
         [NotNull] private readonly IBoardView _boardView;
 
         public DamagePieceAction(
-            int id,
+            int pieceId,
             IEnumerable<KeyValuePair<string, string>> state,
             DamagePieceReason damagePieceReason,
             [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(boardView);
 
-            _id = id;
+            _pieceId = pieceId;
             _state = state;
             _damagePieceReason = damagePieceReason;
             _boardView = boardView;
@@ -34,11 +34,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
         public void Resolve(Action onComplete)
         {
-            IPiece piece = _boardView.GetPiece(_id);
+            IPiece piece = _boardView.GetPiece(_pieceId);
 
             piece.ProcessState(_state);
 
-            GameObject pieceInstance = _boardView.GetPieceInstance(_id);
+            GameObject pieceInstance = _boardView.GetPieceInstance(_pieceId);
 
             IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
 

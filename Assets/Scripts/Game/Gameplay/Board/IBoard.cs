@@ -13,19 +13,19 @@ namespace Game.Gameplay.Board
         int HighestNonEmptyRow { get; }
 
         [NotNull]
-        IEnumerable<int> Ids { get; }
+        IEnumerable<int> PieceIds { get; }
 
         [NotNull]
-        IPiece Get(int id);
+        IPiece GetPiece(int pieceId);
 
-        Coordinate GetSourceCoordinate(int id);
+        Coordinate GetSourceCoordinate(int pieceId);
 
-        int? Get(Coordinate coordinate);
+        int? GetPieceId(Coordinate coordinate);
 
-        void Add(IPiece piece, Coordinate sourceCoordinate);
+        void AddPiece(IPiece piece, Coordinate sourceCoordinate);
 
-        void Remove(int id);
+        void RemovePiece(int pieceId);
 
-        void Move(int id, int rowOffset, int columnOffset);
+        void MovePiece(int pieceId, int rowOffset, int columnOffset);
     }
 }

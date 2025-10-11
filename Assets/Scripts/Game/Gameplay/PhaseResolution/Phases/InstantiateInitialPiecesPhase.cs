@@ -45,7 +45,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 IPiece piece = piecePlacement.Piece;
                 Coordinate sourceCoordinate = piecePlacement.Coordinate;
 
-                board.Add(piece, sourceCoordinate);
+                board.AddPiece(piece, sourceCoordinate);
 
                 _eventEnqueuer.Enqueue(
                     _eventFactory.GetInstantiatePieceEvent(

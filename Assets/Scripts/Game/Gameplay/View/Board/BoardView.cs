@@ -68,16 +68,16 @@ namespace Game.Gameplay.View.Board
             _piecesParent = null;
         }
 
-        public IPiece GetPiece(int id)
+        public IPiece GetPiece(int pieceId)
         {
-            return _board.Get(id);
+            return _board.GetPiece(pieceId);
         }
 
-        public GameObject GetPieceInstance(int id)
+        public GameObject GetPieceInstance(int pieceId)
         {
-            if (!_pieceInstances.TryGetValue(id, out GameObject pieceInstance))
+            if (!_pieceInstances.TryGetValue(pieceId, out GameObject pieceInstance))
             {
-                InvalidOperationException.Throw($"Piece with Id: {id} cannot be found");
+                InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be found");
             }
 
             InvalidOperationException.ThrowIfNull(pieceInstance);
@@ -91,42 +91,42 @@ namespace Game.Gameplay.View.Board
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_board);
 
-            int id = piece.Id;
+            int pieceId = piece.Id;
 
-            if (_pieceInstances.ContainsKey(id))
+            if (_pieceInstances.ContainsKey(pieceId))
             {
-                InvalidOperationException.Throw($"Piece with Id: {id} has already been instantiated");
+                InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been instantiated");
             }
 
-            _board.Add(piece, sourceCoordinate);
+            _board.AddPiece(piece, sourceCoordinate);
 
             Vector3 position = GetWorldPosition(sourceCoordinate);
             GameObject pieceInstance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 pieceInstance,
-                $"Cannot instantiate piece with Id: {id} and Prefab: {prefab.name}"
+                $"Cannot instantiate piece with Id: {pieceId} and Prefab: {prefab.name}"
             );
 
-            _pieceInstances.Add(id, pieceInstance);
+            _pieceInstances.Add(pieceId, pieceInstance);
         }
 
-        public void DestroyPiece(int id)
+        public void DestroyPiece(int pieceId)
         {
-            _board.Remove(id);
+            _board.RemovePiece(pieceId);
 
-            GameObject pieceInstance = GetPieceInstance(id);
+            GameObject pieceInstance = GetPieceInstance(pieceId);
 
             Object.Destroy(pieceInstance);
 
-            _pieceInstances.Remove(id);
+            _pieceInstances.Remove(pieceId);
         }
 
-        public void MovePiece(int id, int rowOffset, int columnOffset)
+        public void MovePiece(int pieceId, int rowOffset, int columnOffset)
         {
-            _board.Move(id, rowOffset, columnOffset);
+            _board.MovePiece(pieceId, rowOffset, columnOffset);
 
-            EnsurePiecePositionIsExpected(id);
+            EnsurePiecePositionIsExpected(pieceId);
         }
 
         private Vector3 GetWorldPosition(Coordinate coordinate)
@@ -134,11 +134,11 @@ namespace Game.Gameplay.View.Board
             return _worldPositionGetter.Get(coordinate);
         }
 
-        private void EnsurePiecePositionIsExpected(int id)
+        private void EnsurePiecePositionIsExpected(int pieceId)
         {
-            GameObject pieceInstance = GetPieceInstance(id);
+            GameObject pieceInstance = GetPieceInstance(pieceId);
 
-            Coordinate sourceCoordinate = _board.GetSourceCoordinate(id);
+            Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
 
             Vector3 expectedWorldPosition = GetWorldPosition(sourceCoordinate);
             Vector3 worldPosition = pieceInstance.transform.position;
@@ -149,7 +149,7 @@ namespace Game.Gameplay.View.Board
             }
 
             // TODO: Exception
-            _logger.Warning($"Piece with Id: {id} position is not the expected one. Its coordinates are {sourceCoordinate} and its world position should be {expectedWorldPosition}, but instead it is {worldPosition}");
+            _logger.Warning($"Piece with Id: {pieceId} position is not the expected one. Its coordinates are {sourceCoordinate} and its world position should be {expectedWorldPosition}, but instead it is {worldPosition}");
 
             // TODO: Remove
             pieceInstance.transform.position = expectedWorldPosition;

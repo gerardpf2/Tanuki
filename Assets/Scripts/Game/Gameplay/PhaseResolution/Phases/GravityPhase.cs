@@ -36,22 +36,22 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             bool resolved = false;
 
-            foreach (int id in board.GetIdsSortedByRowThenByColumn())
+            foreach (int pieceId in board.GetPieceIdsSortedByRowThenByColumn())
             {
-                resolved = TryMovePiece(id) || resolved;
+                resolved = TryMovePiece(pieceId) || resolved;
             }
 
             return resolved ? ResolveResult.Updated : ResolveResult.NotUpdated;
         }
 
-        private bool TryMovePiece(int id)
+        private bool TryMovePiece(int pieceId)
         {
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 
-            IPiece piece = board.Get(id);
-            Coordinate sourceCoordinate = board.GetSourceCoordinate(id);
+            IPiece piece = board.GetPiece(pieceId);
+            Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
 
             int fall = board.ComputePieceFall(piece, sourceCoordinate);
 
@@ -63,11 +63,11 @@ namespace Game.Gameplay.PhaseResolution.Phases
             int rowOffset = -fall;
             const int columnOffset = 0;
 
-            board.Move(id, rowOffset, columnOffset);
+            board.MovePiece(pieceId, rowOffset, columnOffset);
 
             _eventEnqueuer.Enqueue(
                 _eventFactory.GetMovePieceEvent(
-                    id,
+                    pieceId,
                     rowOffset,
                     columnOffset,
                     MovePieceReason.Gravity

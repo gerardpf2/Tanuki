@@ -25,10 +25,10 @@ namespace Game.Gameplay.EventEnqueueing
         IEvent GetDamagePieceEvent(IPiece piece, DamagePieceReason damagePieceReason);
 
         [NotNull]
-        IEvent GetDestroyPieceEvent(int id, DestroyPieceReason destroyPieceReason);
+        IEvent GetDestroyPieceEvent(int pieceId, DestroyPieceReason destroyPieceReason);
 
         [NotNull]
-        IEvent GetMovePieceEvent(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
+        IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
 
         [NotNull]
         IEvent GetSetCameraRowEvent(int topRow);

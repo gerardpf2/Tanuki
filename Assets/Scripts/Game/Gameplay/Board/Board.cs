@@ -10,18 +10,18 @@ namespace Game.Gameplay.Board
     {
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
 
-        [NotNull] private readonly IDictionary<int, IPiece> _piecesByIds = new Dictionary<int, IPiece>();
-        [NotNull] private readonly IDictionary<int, Coordinate> _sourceCoordinatesByIds = new Dictionary<int, Coordinate>();
+        [NotNull] private readonly IDictionary<int, IPiece> _piecesByPieceIds = new Dictionary<int, IPiece>();
+        [NotNull] private readonly IDictionary<int, Coordinate> _sourceCoordinatesByPieceIds = new Dictionary<int, Coordinate>();
         [NotNull] private readonly SortedList<int, int> _piecesAmountByRows = new();
-        private int?[,] _ids;
+        private int?[,] _pieceIds;
 
         public int Rows
         {
             get
             {
-                InvalidOperationException.ThrowIfNull(_ids);
+                InvalidOperationException.ThrowIfNull(_pieceIds);
 
-                return _ids.GetLength(0);
+                return _pieceIds.GetLength(0);
             }
         }
 
@@ -29,15 +29,15 @@ namespace Game.Gameplay.Board
         {
             get
             {
-                InvalidOperationException.ThrowIfNull(_ids);
+                InvalidOperationException.ThrowIfNull(_pieceIds);
 
-                return _ids.GetLength(1);
+                return _pieceIds.GetLength(1);
             }
         }
 
         public int HighestNonEmptyRow => _piecesAmountByRows.Count > 0 ? _piecesAmountByRows.Keys[^1] : 0;
 
-        public IEnumerable<int> Ids => _piecesByIds.Keys;
+        public IEnumerable<int> PieceIds => _piecesByPieceIds.Keys;
 
         public Board([NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter, int rows, int columns)
         {
@@ -45,14 +45,14 @@ namespace Game.Gameplay.Board
 
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
 
-            _ids = new int?[rows, columns];
+            _pieceIds = new int?[rows, columns];
         }
 
-        public IPiece Get(int id)
+        public IPiece GetPiece(int pieceId)
         {
-            if (!_piecesByIds.TryGetValue(id, out IPiece piece))
+            if (!_piecesByPieceIds.TryGetValue(pieceId, out IPiece piece))
             {
-                InvalidOperationException.Throw($"Piece with Id: {id} cannot be found");
+                InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be found");
             }
 
             InvalidOperationException.ThrowIfNull(piece);
@@ -60,37 +60,37 @@ namespace Game.Gameplay.Board
             return piece;
         }
 
-        public Coordinate GetSourceCoordinate(int id)
+        public Coordinate GetSourceCoordinate(int pieceId)
         {
-            if (!_sourceCoordinatesByIds.TryGetValue(id, out Coordinate sourceCoordinate))
+            if (!_sourceCoordinatesByPieceIds.TryGetValue(pieceId, out Coordinate sourceCoordinate))
             {
-                InvalidOperationException.Throw($"Piece with Id: {id} cannot be found");
+                InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be found");
             }
 
             return sourceCoordinate;
         }
 
-        public int? Get(Coordinate coordinate)
+        public int? GetPieceId(Coordinate coordinate)
         {
             if (!this.IsInside(coordinate))
             {
                 ArgumentOutOfRangeException.Throw(coordinate);
             }
 
-            InvalidOperationException.ThrowIfNull(_ids);
+            InvalidOperationException.ThrowIfNull(_pieceIds);
 
-            return _ids[coordinate.Row, coordinate.Column];
+            return _pieceIds[coordinate.Row, coordinate.Column];
         }
 
-        public void Add([NotNull] IPiece piece, Coordinate sourceCoordinate)
+        public void AddPiece([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            int id = piece.Id;
+            int pieceId = piece.Id;
 
-            if (_piecesByIds.ContainsKey(id))
+            if (_piecesByPieceIds.ContainsKey(pieceId))
             {
-                InvalidOperationException.Throw($"Piece with Id: {id} has already been added");
+                InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been added");
             }
 
             int newRows = sourceCoordinate.Row + _pieceCachedPropertiesGetter.GetTopMostRowOffset(piece) + 1;
@@ -99,51 +99,51 @@ namespace Game.Gameplay.Board
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                int? otherId = Get(coordinate);
+                int? ptherPieceId = GetPieceId(coordinate);
 
-                if (otherId.HasValue)
+                if (ptherPieceId.HasValue)
                 {
-                    InvalidOperationException.Throw($"Coordinate {coordinate} is not empty. It contains piece with Id: {otherId}");
+                    InvalidOperationException.Throw($"Coordinate {coordinate} is not empty. It contains piece with Id: {ptherPieceId}");
                 }
 
-                Set(id, coordinate);
+                Set(pieceId, coordinate);
             }
 
-            _piecesByIds.Add(id, piece);
-            _sourceCoordinatesByIds.Add(id, sourceCoordinate);
+            _piecesByPieceIds.Add(pieceId, piece);
+            _sourceCoordinatesByPieceIds.Add(pieceId, sourceCoordinate);
         }
 
-        public void Remove(int id)
+        public void RemovePiece(int pieceId)
         {
-            IPiece piece = Get(id);
-            Coordinate sourceCoordinate = GetSourceCoordinate(id);
+            IPiece piece = GetPiece(pieceId);
+            Coordinate sourceCoordinate = GetSourceCoordinate(pieceId);
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                int? otherId = Get(coordinate);
+                int? ptherPieceId = GetPieceId(coordinate);
 
-                if (otherId != id)
+                if (ptherPieceId != pieceId)
                 {
-                    InvalidOperationException.Throw($"Coordinate {coordinate} does not contain the expected piece. It should contain piece with Id: {id} but instead it contains piece with Id: {otherId}");
+                    InvalidOperationException.Throw($"Coordinate {coordinate} does not contain the expected piece. It should contain piece with Id: {pieceId} but instead it contains piece with Id: {ptherPieceId}");
                 }
 
                 Set(null, coordinate);
             }
 
-            _piecesByIds.Remove(id);
-            _sourceCoordinatesByIds.Remove(id);
+            _piecesByPieceIds.Remove(pieceId);
+            _sourceCoordinatesByPieceIds.Remove(pieceId);
         }
 
-        public void Move(int id, int rowOffset, int columnOffset)
+        public void MovePiece(int pieceId, int rowOffset, int columnOffset)
         {
-            IPiece piece = Get(id);
-            Coordinate sourceCoordinate = GetSourceCoordinate(id);
+            IPiece piece = GetPiece(pieceId);
+            Coordinate sourceCoordinate = GetSourceCoordinate(pieceId);
 
-            Remove(id);
+            RemovePiece(pieceId);
 
             Coordinate newSourceCoordinate = sourceCoordinate.WithOffset(rowOffset, columnOffset);
 
-            Add(piece, newSourceCoordinate);
+            AddPiece(piece, newSourceCoordinate);
         }
 
         private void ExpandRowsIfNeeded(int newRows)
@@ -158,36 +158,36 @@ namespace Game.Gameplay.Board
 
         private void ExpandRows(int newRows)
         {
-            InvalidOperationException.ThrowIfNull(_ids);
+            InvalidOperationException.ThrowIfNull(_pieceIds);
 
             int rows = Rows;
             int columns = Columns;
 
-            int?[,] newIds = new int?[newRows, columns];
+            int?[,] newPieceIds = new int?[newRows, columns];
 
             for (int row = 0; row < rows; ++row)
             {
                 for (int column = 0; column < columns; ++column)
                 {
-                    newIds[row, column] = _ids[row, column];
+                    newPieceIds[row, column] = _pieceIds[row, column];
                 }
             }
 
-            _ids = newIds;
+            _pieceIds = newPieceIds;
         }
 
-        private void Set(int? id, Coordinate coordinate)
+        private void Set(int? pieceId, Coordinate coordinate)
         {
             if (!this.IsInside(coordinate))
             {
                 ArgumentOutOfRangeException.Throw(coordinate);
             }
 
-            InvalidOperationException.ThrowIfNull(_ids);
+            InvalidOperationException.ThrowIfNull(_pieceIds);
 
-            UpdatePiecesAmountByRows(coordinate.Row, id.HasValue);
+            UpdatePiecesAmountByRows(coordinate.Row, pieceId.HasValue);
 
-            _ids[coordinate.Row, coordinate.Column] = id;
+            _pieceIds[coordinate.Row, coordinate.Column] = pieceId;
         }
 
         private void UpdatePiecesAmountByRows(int updatedRow, bool pieceAdded)
