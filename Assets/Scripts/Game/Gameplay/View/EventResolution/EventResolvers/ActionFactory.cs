@@ -87,7 +87,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         public IAction GetDestroyPieceAction(int pieceId, DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPieceAction(destroyPieceReason, pieceId, _boardView, _goalsView);
+            return new DestroyPieceAction(destroyPieceReason, pieceId, _boardView);
         }
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
