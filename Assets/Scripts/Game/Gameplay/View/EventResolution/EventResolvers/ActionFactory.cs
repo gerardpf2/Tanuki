@@ -100,9 +100,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new SetCameraRowAction(_cameraView, topRow);
         }
 
-        public IAction GetSetGoalCurrentAmountAction(PieceType pieceType)
+        public IAction GetSetGoalCurrentAmountAction(PieceType pieceType, int currentAmount)
         {
-            return new SetGoalCurrentAmountAction(_goalsView, pieceType);
+            return new SetGoalCurrentAmountAction(_goalsView, pieceType, currentAmount);
         }
     }
 }

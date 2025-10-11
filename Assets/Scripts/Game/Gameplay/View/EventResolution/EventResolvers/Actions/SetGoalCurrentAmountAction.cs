@@ -10,20 +10,20 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     {
         [NotNull] private readonly IGoalsView _goalsView;
         private readonly PieceType _pieceType;
+        private readonly int _currentAmount;
 
-        public SetGoalCurrentAmountAction([NotNull] IGoalsView goalsView, PieceType pieceType)
+        public SetGoalCurrentAmountAction([NotNull] IGoalsView goalsView, PieceType pieceType, int currentAmount)
         {
             ArgumentNullException.ThrowIfNull(goalsView);
 
             _goalsView = goalsView;
             _pieceType = pieceType;
+            _currentAmount = currentAmount;
         }
 
         public void Resolve(Action onComplete)
         {
-            // TODO: Tween, etc
-
-            _goalsView.TryIncreaseCurrentAmount(_pieceType);
+            // TODO
 
             onComplete?.Invoke();
         }
