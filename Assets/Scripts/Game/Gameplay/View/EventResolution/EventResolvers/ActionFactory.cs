@@ -99,5 +99,10 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             return new SetCameraRowAction(_cameraView, topRow);
         }
+
+        public IAction GetIncreaseGoalAmountAction(PieceType pieceType)
+        {
+            return new IncreaseGoalAmountAction(_goalsView, pieceType);
+        }
     }
 }

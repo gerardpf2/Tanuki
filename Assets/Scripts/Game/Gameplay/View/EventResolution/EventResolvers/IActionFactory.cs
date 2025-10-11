@@ -37,5 +37,8 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         [NotNull]
         IAction GetSetCameraRowAction(int topRow);
+
+        [NotNull]
+        IAction GetIncreaseGoalAmountAction(PieceType pieceType);
     }
 }
