@@ -38,11 +38,9 @@ namespace Game.Gameplay.EventEnqueueing
             return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason);
         }
 
-        public IEvent GetDestroyPieceEvent([NotNull] IPiece piece, DestroyPieceReason destroyPieceReason)
+        public IEvent GetDestroyPieceEvent(int pieceId, DestroyPieceReason destroyPieceReason)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            return new DestroyPieceEvent(piece.Id, piece.Type, destroyPieceReason);
+            return new DestroyPieceEvent(pieceId, destroyPieceReason);
         }
 
         public IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
