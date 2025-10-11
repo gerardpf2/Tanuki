@@ -25,7 +25,7 @@ namespace Game.Gameplay.EventEnqueueing
         IEvent GetDamagePieceEvent(IPiece piece, DamagePieceReason damagePieceReason);
 
         [NotNull]
-        IEvent GetDestroyPieceEvent(int pieceId, DestroyPieceReason destroyPieceReason);
+        IEvent GetDestroyPieceEvent(IPiece piece, DestroyPieceReason destroyPieceReason);
 
         [NotNull]
         IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
