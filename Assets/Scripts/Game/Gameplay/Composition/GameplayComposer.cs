@@ -54,15 +54,6 @@ namespace Game.Gameplay.Composition
             base.AddRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IBoardParser>(r =>
-                    new BoardParser(
-                        r.Resolve<IBoardSerializedDataConverter>(),
-                        r.Resolve<IParser>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardSerializedDataConverter>(r =>
                     new BoardSerializedDataConverter(
                         r.Resolve<IPieceCachedPropertiesGetter>(),
@@ -127,15 +118,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IGoalSerializedDataConverter>(_ => new GoalSerializedDataConverter()));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IGoalsParser>(r =>
-                    new GoalsParser(
-                        r.Resolve<IGoalsSerializedDataConverter>(),
-                        r.Resolve<IParser>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetSingleton<IGoalsSerializedDataConverter>(r =>
                     new GoalsSerializedDataConverter(
                         r.Resolve<IGoalSerializedDataConverter>()
@@ -144,15 +126,6 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IMovesParser>(r =>
-                    new MovesParser(
-                        r.Resolve<IMovesSerializedDataConverter>(),
-                        r.Resolve<IParser>()
-                    )
-                )
-            );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IMovesSerializedDataConverter>(_ => new MovesSerializedDataConverter()));
 
