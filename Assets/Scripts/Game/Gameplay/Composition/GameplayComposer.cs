@@ -16,6 +16,7 @@ using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.EventResolution.EventResolvers;
 using Game.Gameplay.View.Header.Goals;
+using Game.Gameplay.View.Input;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging;
@@ -285,7 +286,8 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
-                        r.Resolve<IPlayerView>(),
+                        r.Resolve<IInputHandler>(),
+                        r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
@@ -323,7 +325,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
-                        r.Resolve<IPlayerView>()
+                        r.Resolve<IPlayerPieceView>()
                     )
                 )
             );
@@ -363,8 +365,24 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IPlayerView>(r =>
-                    new PlayerView(
+                ruleFactory.GetSingleton<IInputHandler>(r =>
+                    new InputHandler(
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IInputListener>(),
+                        r.Resolve<IPlayerPieceView>(),
+                        r.Resolve<IScreenPropertiesGetter>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(ruleFactory.GetSingleton(_ => new InputEventsHandler()));
+            ruleAdder.Add(ruleFactory.GetTo<IInputListener, InputEventsHandler>());
+            ruleAdder.Add(ruleFactory.GetTo<IInputNotifier, InputEventsHandler>());
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerPieceView>(r =>
+                    new PlayerPieceView(
                         r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
@@ -406,7 +424,8 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
-                        r.Resolve<IPlayerView>(),
+                        r.Resolve<IInputHandler>(),
+                        r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
@@ -431,12 +450,9 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetInject<PlayerInputHandler>((r, s) =>
+                ruleFactory.GetInject<InputCatcher>((r, s) =>
                     s.Inject(
-                        r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IEventsResolver>(),
-                        r.Resolve<IPlayerView>(),
-                        r.Resolve<IScreenPropertiesGetter>()
+                        r.Resolve<IInputNotifier>()
                     )
                 )
             );

@@ -18,26 +18,26 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
-        [NotNull] private readonly IPlayerView _playerView;
+        [NotNull] private readonly IPlayerPieceView _playerPieceView;
 
         public ActionFactory(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
-            [NotNull] IPlayerView playerView)
+            [NotNull] IPlayerPieceView playerPieceView)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
-            ArgumentNullException.ThrowIfNull(playerView);
+            ArgumentNullException.ThrowIfNull(playerPieceView);
 
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
-            _playerView = playerView;
+            _playerPieceView = playerPieceView;
         }
 
         public IAction GetInstantiatePieceAction(
@@ -68,13 +68,13 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
                     _pieceViewDefinitionGetter,
                     piece,
                     instantiatePieceReason,
-                    _playerView
+                    _playerPieceView
                 );
         }
 
         public IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPlayerPieceAction(destroyPieceReason, _playerView);
+            return new DestroyPlayerPieceAction(destroyPieceReason, _playerPieceView);
         }
 
         public IAction GetDamagePieceAction(

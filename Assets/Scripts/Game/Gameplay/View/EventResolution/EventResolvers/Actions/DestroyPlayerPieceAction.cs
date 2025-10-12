@@ -8,27 +8,27 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class DestroyPlayerPieceAction : BaseDestroyPieceAction
     {
-        [NotNull] private readonly IPlayerView _playerView;
+        [NotNull] private readonly IPlayerPieceView _playerPieceView;
 
-        public DestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason, [NotNull] IPlayerView playerView) : base(destroyPieceReason)
+        public DestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason, [NotNull] IPlayerPieceView playerPieceView) : base(destroyPieceReason)
         {
-            ArgumentNullException.ThrowIfNull(playerView);
+            ArgumentNullException.ThrowIfNull(playerPieceView);
 
-            _playerView = playerView;
+            _playerPieceView = playerPieceView;
         }
 
         protected override GameObject GetPieceInstance()
         {
-            GameObject pieceInstance = _playerView.PieceInstance;
+            GameObject instance = _playerPieceView.Instance;
 
-            InvalidOperationException.ThrowIfNull(pieceInstance);
+            InvalidOperationException.ThrowIfNull(instance);
 
-            return pieceInstance;
+            return instance;
         }
 
         protected override void DestroyPiece()
         {
-            _playerView.DestroyPiece();
+            _playerPieceView.Destroy();
         }
     }
 }
