@@ -5,22 +5,22 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
-    public class SetCameraPositionEventResolver : IEventResolver<SetCameraPositionEvent>
+    public class SetCameraRowEventResolver : IEventResolver<SetCameraRowEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
 
-        public SetCameraPositionEventResolver([NotNull] IActionFactory actionFactory)
+        public SetCameraRowEventResolver([NotNull] IActionFactory actionFactory)
         {
             ArgumentNullException.ThrowIfNull(actionFactory);
 
             _actionFactory = actionFactory;
         }
 
-        public void Resolve([NotNull] SetCameraPositionEvent evt, Action onComplete)
+        public void Resolve([NotNull] SetCameraRowEvent evt, Action onComplete)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            _actionFactory.GetSetCameraPositionAction(evt.TopRow).Resolve(onComplete);
+            _actionFactory.GetSetCameraRowAction(evt.Row).Resolve(onComplete);
         }
     }
 }

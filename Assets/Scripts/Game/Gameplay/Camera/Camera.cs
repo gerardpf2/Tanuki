@@ -27,7 +27,7 @@ namespace Game.Gameplay.Camera
             TopRow = VisibleRows - 1;
         }
 
-        public bool UpdatePositionY()
+        public bool UpdateRow()
         {
             IBoard board = _boardContainer.Board;
 

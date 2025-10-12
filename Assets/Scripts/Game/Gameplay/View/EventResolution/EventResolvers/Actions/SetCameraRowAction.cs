@@ -5,22 +5,22 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
-    public class SetCameraPositionAction : IAction
+    public class SetCameraRowAction : IAction
     {
         [NotNull] private readonly ICameraView _cameraView;
-        private readonly int _topRow;
+        private readonly int _row;
 
-        public SetCameraPositionAction([NotNull] ICameraView cameraView, int topRow)
+        public SetCameraRowAction([NotNull] ICameraView cameraView, int row)
         {
             ArgumentNullException.ThrowIfNull(cameraView);
 
             _cameraView = cameraView;
-            _topRow = topRow;
+            _row = row;
         }
 
         public void Resolve(Action onComplete)
         {
-            _cameraView.UpdatePositionY(_topRow);
+            _cameraView.UpdatePositionY(_row);
 
             onComplete?.Invoke(); // TODO: UpdatePosition param ¿?
         }
