@@ -38,14 +38,14 @@ namespace Game.Gameplay.EventEnqueueing
             return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason);
         }
 
-        public IEvent GetDestroyPieceEvent(int id, DestroyPieceReason destroyPieceReason)
+        public IEvent GetDestroyPieceEvent(int pieceId, DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPieceEvent(id, destroyPieceReason);
+            return new DestroyPieceEvent(pieceId, destroyPieceReason);
         }
 
-        public IEvent GetMovePieceEvent(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        public IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceEvent(id, rowOffset, columnOffset, movePieceReason);
+            return new MovePieceEvent(pieceId, rowOffset, columnOffset, movePieceReason);
         }
 
         public IEvent GetSetCameraRowEvent(int topRow)

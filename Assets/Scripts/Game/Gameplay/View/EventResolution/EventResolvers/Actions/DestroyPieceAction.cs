@@ -10,34 +10,34 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
     public class DestroyPieceAction : BaseDestroyPieceAction
     {
-        private readonly int _id;
+        private readonly int _pieceId;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly IGoalsView _goalsView;
 
         public DestroyPieceAction(
             DestroyPieceReason destroyPieceReason,
-            int id,
+            int pieceId,
             [NotNull] IBoardView boardView,
             [NotNull] IGoalsView goalsView) : base(destroyPieceReason)
         {
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(goalsView);
 
-            _id = id;
+            _pieceId = pieceId;
             _boardView = boardView;
             _goalsView = goalsView;
         }
 
         protected override GameObject GetPieceInstance()
         {
-            return _boardView.GetPieceInstance(_id);
+            return _boardView.GetPieceInstance(_pieceId);
         }
 
         protected override void DestroyPiece()
         {
-            IPiece piece = _boardView.GetPiece(_id);
+            IPiece piece = _boardView.GetPiece(_pieceId);
 
-            _boardView.DestroyPiece(_id);
+            _boardView.DestroyPiece(_pieceId);
             _goalsView.TryIncreaseCurrentAmount(piece.Type);
         }
     }

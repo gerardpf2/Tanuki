@@ -12,15 +12,20 @@ namespace Game.Gameplay.Board
 
         int HighestNonEmptyRow { get; }
 
-        [NotNull] // Distinct pieces
-        IDictionary<IPiece, Coordinate> PieceSourceCoordinates { get; }
+        [NotNull]
+        IEnumerable<int> PieceIds { get; }
 
-        IPiece Get(Coordinate coordinate);
+        [NotNull]
+        IPiece GetPiece(int pieceId);
 
-        void Add(IPiece piece, Coordinate sourceCoordinate);
+        Coordinate GetSourceCoordinate(int pieceId);
 
-        void Remove(IPiece piece);
+        int? GetPieceId(Coordinate coordinate);
 
-        void Move(IPiece piece, int rowOffset, int columnOffset);
+        void AddPiece(IPiece piece, Coordinate sourceCoordinate);
+
+        void RemovePiece(int pieceId);
+
+        void MovePiece(int pieceId, int rowOffset, int columnOffset);
     }
 }

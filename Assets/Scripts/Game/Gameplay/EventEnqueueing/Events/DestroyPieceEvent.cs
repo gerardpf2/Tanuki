@@ -4,12 +4,12 @@ namespace Game.Gameplay.EventEnqueueing.Events
 {
     public class DestroyPieceEvent : IEvent
     {
-        public readonly int Id;
+        public readonly int PieceId;
         public readonly DestroyPieceReason DestroyPieceReason;
 
-        public DestroyPieceEvent(int id, DestroyPieceReason destroyPieceReason)
+        public DestroyPieceEvent(int pieceId, DestroyPieceReason destroyPieceReason)
         {
-            Id = id;
+            PieceId = pieceId;
             DestroyPieceReason = destroyPieceReason;
         }
     }

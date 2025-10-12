@@ -21,7 +21,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            yield return _actionFactory.GetDestroyPieceAction(evt.Id, evt.DestroyPieceReason);
+            yield return _actionFactory.GetDestroyPieceAction(evt.PieceId, evt.DestroyPieceReason);
         }
     }
 }

@@ -12,14 +12,14 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     public class MovePieceAction : IAction
     {
         [NotNull] private readonly IBoardView _boardView;
-        private readonly int _id;
+        private readonly int _pieceId;
         private readonly int _rowOffset;
         private readonly int _columnOffset;
         private readonly MovePieceReason _movePieceReason;
 
         public MovePieceAction(
             [NotNull] IBoardView boardView,
-            int id,
+            int pieceId,
             int rowOffset,
             int columnOffset,
             MovePieceReason movePieceReason)
@@ -27,7 +27,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
             ArgumentNullException.ThrowIfNull(boardView);
 
             _boardView = boardView;
-            _id = id;
+            _pieceId = pieceId;
             _rowOffset = rowOffset;
             _columnOffset = columnOffset;
             _movePieceReason = movePieceReason;
@@ -35,7 +35,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
         public void Resolve(Action onComplete)
         {
-            GameObject pieceInstance = _boardView.GetPieceInstance(_id);
+            GameObject pieceInstance = _boardView.GetPieceInstance(_pieceId);
 
             IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
 
@@ -54,7 +54,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             void OnMovementComplete()
             {
-                _boardView.MovePiece(_id, _rowOffset, _columnOffset);
+                _boardView.MovePiece(_pieceId, _rowOffset, _columnOffset);
 
                 pieceViewEventNotifier.OnEndMove(_movePieceReason, onComplete);
             }

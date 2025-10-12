@@ -78,21 +78,21 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         }
 
         public IAction GetDamagePieceAction(
-            int id,
+            int pieceId,
             IEnumerable<KeyValuePair<string, string>> state,
             DamagePieceReason damagePieceReason)
         {
-            return new DamagePieceAction(id, state, damagePieceReason, _boardView);
+            return new DamagePieceAction(pieceId, state, damagePieceReason, _boardView);
         }
 
-        public IAction GetDestroyPieceAction(int id, DestroyPieceReason destroyPieceReason)
+        public IAction GetDestroyPieceAction(int pieceId, DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPieceAction(destroyPieceReason, id, _boardView, _goalsView);
+            return new DestroyPieceAction(destroyPieceReason, pieceId, _boardView, _goalsView);
         }
 
-        public IAction GetMovePieceAction(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceAction(_boardView, id, rowOffset, columnOffset, movePieceReason);
+            return new MovePieceAction(_boardView, pieceId, rowOffset, columnOffset, movePieceReason);
         }
 
         public IAction GetSetCameraRowAction(int topRow)

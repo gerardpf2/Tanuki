@@ -24,16 +24,16 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         [NotNull]
         IAction GetDamagePieceAction(
-            int id,
+            int pieceId,
             IEnumerable<KeyValuePair<string, string>> state,
             DamagePieceReason damagePieceReason
         );
 
         [NotNull]
-        IAction GetDestroyPieceAction(int id, DestroyPieceReason destroyPieceReason);
+        IAction GetDestroyPieceAction(int pieceId, DestroyPieceReason destroyPieceReason);
 
         [NotNull]
-        IAction GetMovePieceAction(int id, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
+        IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
 
         [NotNull]
         IAction GetSetCameraRowAction(int topRow);

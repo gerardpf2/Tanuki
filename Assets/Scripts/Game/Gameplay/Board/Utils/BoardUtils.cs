@@ -4,7 +4,6 @@ using System.Linq;
 using Game.Gameplay.Board.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board.Utils
 {
@@ -19,36 +18,41 @@ namespace Game.Gameplay.Board.Utils
                 coordinate.Column >= 0 && coordinate.Column < board.Columns;
         }
 
-        [NotNull, ItemNotNull] // Distinct pieces
-        public static IEnumerable<IPiece> GetPiecesSortedByRowThenByColumn([NotNull] this IBoard board)
+        [NotNull]
+        public static IEnumerable<int> GetPieceIdsSortedByRowThenByColumn([NotNull] this IBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            return board.PieceSourceCoordinates.OrderBy(SelectRow).ThenBy(SelectColumn).Select(SelectPiece);
+            return
+                board.PieceIds
+                    .Select(SelectPieceIdSourceCoordinate)
+                    .OrderBy(SelectRow)
+                    .ThenBy(SelectColumn)
+                    .Select(SelectPieceId);
 
-            int SelectRow(KeyValuePair<IPiece, Coordinate> pieceSourceCoordinate)
+            (int, Coordinate) SelectPieceIdSourceCoordinate(int pieceId)
             {
-                return pieceSourceCoordinate.Value.Row;
+                return (pieceId, board.GetSourceCoordinate(pieceId));
             }
 
-            int SelectColumn(KeyValuePair<IPiece, Coordinate> pieceSourceCoordinate)
+            int SelectRow((int _, Coordinate sourceCoordinate) pieceIdSourceCoordinate)
             {
-                return pieceSourceCoordinate.Value.Column;
+                return pieceIdSourceCoordinate.sourceCoordinate.Row;
             }
 
-            [NotNull]
-            IPiece SelectPiece(KeyValuePair<IPiece, Coordinate> pieceSourceCoordinate)
+            int SelectColumn((int _, Coordinate sourceCoordinate) pieceIdSourceCoordinate)
             {
-                IPiece piece = pieceSourceCoordinate.Key;
+                return pieceIdSourceCoordinate.sourceCoordinate.Column;
+            }
 
-                InvalidOperationException.ThrowIfNull(piece);
-
-                return piece;
+            int SelectPieceId((int pieceId, Coordinate _) pieceIdSourceCoordinate)
+            {
+                return pieceIdSourceCoordinate.pieceId;
             }
         }
 
         [NotNull]
-        public static IEnumerable<KeyValuePair<IPiece, int>> GetPiecesInRow([NotNull] this IBoard board, int row)
+        public static IEnumerable<KeyValuePair<int, int>> GetPieceIdsInRow([NotNull] this IBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -58,42 +62,28 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinate = new(row, column);
 
-                IPiece piece = board.Get(coordinate);
+                int? pieceId = board.GetPieceId(coordinate);
 
-                if (piece is null)
+                if (!pieceId.HasValue)
                 {
                     continue;
                 }
 
-                yield return new KeyValuePair<IPiece, int>(piece, column);
+                yield return new KeyValuePair<int, int>(pieceId.Value, column);
             }
-        }
-
-        public static Coordinate GetPieceSourceCoordinate([NotNull] this IBoard board, [NotNull] IPiece piece)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-            ArgumentNullException.ThrowIfNull(piece);
-
-            if (!board.PieceSourceCoordinates.TryGetValue(piece, out Coordinate sourceCoordinate))
-            {
-                InvalidOperationException.Throw("Piece cannot be found");
-            }
-
-            return sourceCoordinate;
         }
 
         public static void GetPieceRowColumnOffset(
             [NotNull] this IBoard board,
-            [NotNull] IPiece piece,
+            int pieceId,
             int row,
             int column,
             out int rowOffset,
             out int columnOffset)
         {
             ArgumentNullException.ThrowIfNull(board);
-            ArgumentNullException.ThrowIfNull(piece);
 
-            Coordinate sourceCoordinate = board.GetPieceSourceCoordinate(piece);
+            Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
 
             rowOffset = row - sourceCoordinate.Row;
             columnOffset = column - sourceCoordinate.Column;
@@ -111,13 +101,13 @@ namespace Game.Gameplay.Board.Utils
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                fall = Math.Min(board.ComputePieceFallImpl(piece, coordinate), fall);
+                fall = Math.Min(board.ComputePieceFallImpl(piece.Id, coordinate), fall);
             }
 
             return fall;
         }
 
-        private static int ComputePieceFallImpl([NotNull] this IBoard board, IPiece ignorePiece, Coordinate coordinate)
+        private static int ComputePieceFallImpl([NotNull] this IBoard board, int ignorePieceId, Coordinate coordinate)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -128,9 +118,9 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinateBelow = new(row, coordinate.Column);
 
-                IPiece piece = board.Get(coordinateBelow);
+                int? pieceId = board.GetPieceId(coordinateBelow);
 
-                if (piece is not null && piece != ignorePiece)
+                if (pieceId.HasValue && pieceId != ignorePieceId)
                 {
                     break;
                 }
