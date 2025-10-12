@@ -1,6 +1,7 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
+using Game.Gameplay.Common;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
@@ -17,6 +18,7 @@ using Game.Gameplay.View.EventResolution.EventResolvers;
 using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
+using Infrastructure.Logging;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
@@ -113,6 +115,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IWorldPositionGetter>(_ => new WorldPositionGetter()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
@@ -292,7 +296,9 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<IPieceCachedPropertiesGetter>()
+                        r.Resolve<IPieceCachedPropertiesGetter>(),
+                        r.Resolve<IWorldPositionGetter>(),
+                        r.Resolve<ILogger>()
                     )
                 )
             );
@@ -304,6 +310,7 @@ namespace Game.Gameplay.Composition
                     new CameraView(
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
+                        r.Resolve<IWorldPositionGetter>(),
                         r.Resolve<ICameraGetter>()
                     )
                 )
@@ -360,7 +367,8 @@ namespace Game.Gameplay.Composition
                     new PlayerView(
                         r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>()
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IWorldPositionGetter>()
                     )
                 )
             );

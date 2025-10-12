@@ -3,9 +3,12 @@ using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
+using Game.Gameplay.Common;
+using Game.Gameplay.Common.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
+using ILogger = Infrastructure.Logging.ILogger;
 
 namespace Game.Gameplay.View.Board
 {
@@ -13,6 +16,8 @@ namespace Game.Gameplay.View.Board
     {
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
+        [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
+        [NotNull] private readonly ILogger _logger;
 
         [NotNull] private readonly IDictionary<int, IPiece> _pieces = new Dictionary<int, IPiece>();
         [NotNull] private readonly IDictionary<int, GameObject> _pieceInstances = new Dictionary<int, GameObject>();
@@ -24,13 +29,19 @@ namespace Game.Gameplay.View.Board
 
         public BoardView(
             [NotNull] IBoardContainer boardContainer,
-            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter)
+            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
+            [NotNull] IWorldPositionGetter worldPositionGetter,
+            [NotNull] ILogger logger)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
+            ArgumentNullException.ThrowIfNull(worldPositionGetter);
+            ArgumentNullException.ThrowIfNull(logger);
 
             _boardContainer = boardContainer;
             _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
+            _worldPositionGetter = worldPositionGetter;
+            _logger = logger;
         }
 
         public void Initialize()
@@ -131,19 +142,34 @@ namespace Game.Gameplay.View.Board
 
             _board.Move(piece, rowOffset, columnOffset);
 
-            // Piece instance position should have already been updated externally (using tweens, etc), but it can be
-            // set in here too just in case
+            EnsurePiecePositionIsExpected(id);
+        }
 
+        private Vector3 GetWorldPosition(Coordinate coordinate)
+        {
+            return _worldPositionGetter.Get(coordinate);
+        }
+
+        private void EnsurePiecePositionIsExpected(int id)
+        {
+            IPiece piece = GetPiece(id);
             GameObject pieceInstance = GetPieceInstance(id);
 
             Coordinate sourceCoordinate = _board.GetPieceSourceCoordinate(piece);
 
-            pieceInstance.transform.position = GetWorldPosition(sourceCoordinate);
-        }
+            Vector3 expectedWorldPosition = GetWorldPosition(sourceCoordinate);
+            Vector3 worldPosition = pieceInstance.transform.position;
 
-        private static Vector3 GetWorldPosition(Coordinate sourceCoordinate)
-        {
-            return new Vector3(sourceCoordinate.Column, sourceCoordinate.Row);
+            if (expectedWorldPosition == worldPosition) // Vector3 == means approximate equality
+            {
+                return;
+            }
+
+            // TODO: Exception
+            _logger.Warning($"Piece with Id: {id} position is not the expected one. Its coordinates are {sourceCoordinate} and its world position should be {expectedWorldPosition}, but instead it is {worldPosition}");
+
+            // TODO: Remove
+            pieceInstance.transform.position = expectedWorldPosition;
         }
     }
 }
