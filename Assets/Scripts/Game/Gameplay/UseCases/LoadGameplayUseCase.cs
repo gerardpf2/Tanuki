@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.Player;
@@ -98,7 +99,8 @@ namespace Game.Gameplay.UseCases
                 gameplayDefinition.Data,
                 out IBoard board,
                 out IEnumerable<PiecePlacement> piecePlacements,
-                out IGoals goals
+                out IGoals goals,
+                out IMoves moves
             );
 
             _boardContainer.Initialize(board, piecePlacements);

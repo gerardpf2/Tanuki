@@ -5,6 +5,7 @@ using Game.Gameplay.Common;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
+using Game.Gameplay.Moves.Parsing;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
@@ -145,6 +146,17 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IMovesParser>(r =>
+                    new MovesParser(
+                        r.Resolve<IMovesSerializedDataConverter>(),
+                        r.Resolve<IParser>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IMovesSerializedDataConverter>(_ => new MovesSerializedDataConverter()));
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IGameplayParser>(r =>
                     new GameplayParser(
                         r.Resolve<IGameplaySerializedDataConverter>(),
@@ -157,7 +169,8 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IGameplaySerializedDataConverter>(r =>
                     new GameplaySerializedDataConverter(
                         r.Resolve<IBoardSerializedDataConverter>(),
-                        r.Resolve<IGoalsSerializedDataConverter>()
+                        r.Resolve<IGoalsSerializedDataConverter>(),
+                        r.Resolve<IMovesSerializedDataConverter>()
                     )
                 )
             );

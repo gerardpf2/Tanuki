@@ -3,6 +3,8 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
+using Game.Gameplay.Moves;
+using Game.Gameplay.Moves.Parsing;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -12,37 +14,44 @@ namespace Game.Gameplay.Parsing
     {
         [NotNull] private readonly IBoardSerializedDataConverter _boardSerializedDataConverter;
         [NotNull] private readonly IGoalsSerializedDataConverter _goalsSerializedDataConverter;
+        [NotNull] private readonly IMovesSerializedDataConverter _movesSerializedDataConverter;
 
         public GameplaySerializedDataConverter(
             [NotNull] IBoardSerializedDataConverter boardSerializedDataConverter,
-            [NotNull] IGoalsSerializedDataConverter goalsSerializedDataConverter)
+            [NotNull] IGoalsSerializedDataConverter goalsSerializedDataConverter,
+            [NotNull] IMovesSerializedDataConverter movesSerializedDataConverter)
         {
             ArgumentNullException.ThrowIfNull(boardSerializedDataConverter);
             ArgumentNullException.ThrowIfNull(goalsSerializedDataConverter);
+            ArgumentNullException.ThrowIfNull(movesSerializedDataConverter);
 
             _boardSerializedDataConverter = boardSerializedDataConverter;
             _goalsSerializedDataConverter = goalsSerializedDataConverter;
+            _movesSerializedDataConverter = movesSerializedDataConverter;
         }
 
         public void To(
             [NotNull] GameplaySerializedData gameplaySerializedData,
             out IBoard board,
             out IEnumerable<PiecePlacement> piecePlacements,
-            out IGoals goals)
+            out IGoals goals,
+            out IMoves moves)
         {
             ArgumentNullException.ThrowIfNull(gameplaySerializedData);
 
             _boardSerializedDataConverter.To(gameplaySerializedData.BoardSerializedData, out board, out piecePlacements);
             goals = _goalsSerializedDataConverter.To(gameplaySerializedData.GoalsSerializedData);
+            moves = _movesSerializedDataConverter.To(gameplaySerializedData.MovesSerializedData);
         }
 
-        public GameplaySerializedData From(IBoard board, IGoals goals)
+        public GameplaySerializedData From(IBoard board, IGoals goals, IMoves moves)
         {
             return
                 new GameplaySerializedData
                 {
                     BoardSerializedData = _boardSerializedDataConverter.From(board),
-                    GoalsSerializedData = _goalsSerializedDataConverter.From(goals)
+                    GoalsSerializedData = _goalsSerializedDataConverter.From(goals),
+                    MovesSerializedData = _movesSerializedDataConverter.From(moves)
                 };
         }
     }
