@@ -18,7 +18,6 @@ namespace Game.Gameplay.UseCases
 {
     public class LoadGameplayUseCase : ILoadGameplayUseCase
     {
-        [NotNull] private readonly IUnloadGameplayUseCase _unloadGameplayUseCase;
         [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
@@ -34,7 +33,6 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IScreenLoader _screenLoader;
 
         public LoadGameplayUseCase(
-            [NotNull] IUnloadGameplayUseCase unloadGameplayUseCase,
             [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
@@ -49,7 +47,6 @@ namespace Game.Gameplay.UseCases
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
         {
-            ArgumentNullException.ThrowIfNull(unloadGameplayUseCase);
             ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
@@ -64,7 +61,6 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
-            _unloadGameplayUseCase = unloadGameplayUseCase;
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
@@ -82,8 +78,6 @@ namespace Game.Gameplay.UseCases
 
         public void Resolve(string id)
         {
-            _unloadGameplayUseCase.Resolve();
-
             PrepareModel(id);
             PrepareView();
             LoadScreen();

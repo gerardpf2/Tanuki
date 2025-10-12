@@ -1,7 +1,11 @@
+using Game.Common;
+
 namespace Game.Gameplay.PhaseResolution.Phases
 {
     public abstract class Phase : IPhase
     {
+        private InitializedLabel _initializedLabel;
+
         private int _resolveTimes;
         private int _resolveTimesPerIteration;
 
@@ -9,13 +13,15 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected virtual int? MaxResolveTimesPerIteration => null;
 
-        public virtual void Initialize()
+        public void Initialize()
         {
-            Uninitialize();
+            _initializedLabel.SetInitialized();
         }
 
-        public virtual void Uninitialize()
+        public void Uninitialize()
         {
+            _initializedLabel.SetUninitialized();
+
             _resolveTimes = 0;
         }
 

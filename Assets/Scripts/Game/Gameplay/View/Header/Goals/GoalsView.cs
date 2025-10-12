@@ -1,4 +1,5 @@
 using System;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Utils;
@@ -11,6 +12,8 @@ namespace Game.Gameplay.View.Header.Goals
     public class GoalsView : IGoalsView
     {
         [NotNull] private readonly IGoalsContainer _goalsContainer;
+
+        private InitializedLabel _initializedLabel;
 
         public event Action OnUpdated;
 
@@ -25,17 +28,19 @@ namespace Game.Gameplay.View.Header.Goals
 
         public void Initialize()
         {
+            _initializedLabel.SetInitialized();
+
             IGoals goals = _goalsContainer.Goals;
 
             InvalidOperationException.ThrowIfNull(goals);
-
-            Uninitialize();
 
             Goals = goals.Clone();
         }
 
         public void Uninitialize()
         {
+            _initializedLabel.SetUninitialized();
+
             Goals = null;
         }
 

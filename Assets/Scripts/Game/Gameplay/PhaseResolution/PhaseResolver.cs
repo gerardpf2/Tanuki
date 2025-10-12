@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.PhaseResolution.Phases;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -10,6 +11,8 @@ namespace Game.Gameplay.PhaseResolution
     public class PhaseResolver : IPhaseResolver
     {
         [NotNull, ItemNotNull] private readonly IReadOnlyList<IPhase> _phases;
+
+        private InitializedLabel _initializedLabel;
 
         public event Action OnEndIteration;
 
@@ -31,7 +34,7 @@ namespace Game.Gameplay.PhaseResolution
 
         public void Initialize()
         {
-            Uninitialize();
+            _initializedLabel.SetInitialized();
 
             foreach (IPhase phase in _phases)
             {
@@ -41,6 +44,8 @@ namespace Game.Gameplay.PhaseResolution
 
         public void Uninitialize()
         {
+            _initializedLabel.SetUninitialized();
+
             foreach (IPhase phase in _phases)
             {
                 phase.Uninitialize();

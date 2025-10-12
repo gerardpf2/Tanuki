@@ -1,29 +1,28 @@
+using Game.Common;
+
 namespace Game.Gameplay.Board
 {
     public class PieceIdGetter : IPieceIdGetter
     {
+        private InitializedLabel _initializedLabel;
+
         private int _id;
 
         public void Initialize()
         {
-            Uninitialize();
-
-            Reset();
+            _initializedLabel.SetInitialized();
         }
 
         public void Uninitialize()
         {
-            Reset();
+            _initializedLabel.SetUninitialized();
+
+            _id = 0;
         }
 
         public int GetNew()
         {
             return _id++;
-        }
-
-        private void Reset()
-        {
-            _id = 0;
         }
     }
 }

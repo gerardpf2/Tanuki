@@ -1,3 +1,4 @@
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Infrastructure.System.Exceptions;
@@ -14,6 +15,8 @@ namespace Game.Gameplay.View.Camera
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly UnityEngine.Camera _unityCamera;
         [NotNull] private readonly Transform _unityCameraTransform;
+
+        private InitializedLabel _initializedLabel;
 
         private float _bottomPositionYAfterResize;
 
@@ -34,6 +37,8 @@ namespace Game.Gameplay.View.Camera
 
         public void Initialize()
         {
+            _initializedLabel.SetInitialized();
+
             // TODO: Cache prev unity camera values, position, etc
 
             SetInitialPosition();
@@ -41,6 +46,8 @@ namespace Game.Gameplay.View.Camera
 
         public void Uninitialize()
         {
+            _initializedLabel.SetUninitialized();
+
             // TODO: Restore prev unity camera values, position, etc
 
             _bottomPositionYAfterResize = 0.0f;
