@@ -26,5 +26,8 @@ namespace Game.Gameplay.View.EventResolution
 
         [NotNull]
         IEventResolver<SetCameraRowEvent> GetSetCameraRowEventResolver();
+
+        [NotNull]
+        IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver();
     }
 }

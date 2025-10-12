@@ -87,7 +87,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         public IAction GetDestroyPieceAction(int pieceId, DestroyPieceReason destroyPieceReason)
         {
-            return new DestroyPieceAction(destroyPieceReason, pieceId, _boardView, _goalsView);
+            return new DestroyPieceAction(destroyPieceReason, pieceId, _boardView);
         }
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
@@ -98,6 +98,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         public IAction GetSetCameraRowAction(int topRow)
         {
             return new SetCameraRowAction(_cameraView, topRow);
+        }
+
+        public IAction GetSetGoalCurrentAmountAction(PieceType pieceType, int currentAmount, Coordinate coordinate)
+        {
+            return new SetGoalCurrentAmountAction(_goalsView, pieceType, currentAmount, coordinate);
         }
     }
 }

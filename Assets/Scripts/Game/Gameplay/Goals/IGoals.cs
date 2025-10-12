@@ -6,8 +6,11 @@ namespace Game.Gameplay.Goals
 {
     public interface IGoals
     {
-        [NotNull, ItemNotNull]
-        IEnumerable<IGoal> Targets { get; }
+        [NotNull]
+        IEnumerable<PieceType> PieceTypes { get; }
+
+        [NotNull]
+        IGoal Get(PieceType pieceType);
 
         [ContractAnnotation("=> true, goal:notnull; => false, goal:null")]
         bool TryGet(PieceType pieceType, out IGoal goal);

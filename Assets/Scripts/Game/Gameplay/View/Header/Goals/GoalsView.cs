@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
-using Game.Gameplay.Goals.Utils;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
@@ -15,9 +15,11 @@ namespace Game.Gameplay.View.Header.Goals
 
         private InitializedLabel _initializedLabel;
 
+        private IGoals _goals;
+
         public event Action OnUpdated;
 
-        public IGoals Goals { get; private set; }
+        public IEnumerable<PieceType> PieceTypes => _goals?.PieceTypes;
 
         public GoalsView([NotNull] IGoalsContainer goalsContainer)
         {
@@ -34,24 +36,35 @@ namespace Game.Gameplay.View.Header.Goals
 
             InvalidOperationException.ThrowIfNull(goals);
 
-            Goals = goals.Clone();
+            _goals = goals.Clone();
         }
 
         public void Uninitialize()
         {
             _initializedLabel.SetUninitialized();
 
-            Goals = null;
+            _goals = null;
         }
 
-        public void TryIncreaseCurrentAmount(PieceType pieceType)
+        public IGoal Get(PieceType pieceType)
         {
-            InvalidOperationException.ThrowIfNull(Goals);
+            InvalidOperationException.ThrowIfNull(_goals);
 
-            if (Goals.TryIncreaseCurrentAmount(pieceType))
+            return _goals.Get(pieceType);
+        }
+
+        public void SetCurrentAmount(PieceType pieceType, int currentAmount)
+        {
+            IGoal goal = Get(pieceType);
+
+            if (goal.CurrentAmount == currentAmount)
             {
-                OnUpdated?.Invoke();
+                return;
             }
+
+            goal.CurrentAmount = currentAmount;
+
+            OnUpdated?.Invoke();
         }
     }
 }

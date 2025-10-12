@@ -9,9 +9,7 @@ namespace Game.Gameplay.Goals
 
         int InitialAmount { get; }
 
-        int CurrentAmount { get; }
-
-        void IncreaseCurrentAmount();
+        int CurrentAmount { get; set; }
 
         [NotNull]
         IGoal Clone();

@@ -53,10 +53,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
         private bool TryDestroyPiece(int pieceId)
         {
             IBoard board = _boardContainer.Board;
-            IGoals goals = _goalsContainer.Goals;
 
             InvalidOperationException.ThrowIfNull(board);
-            InvalidOperationException.ThrowIfNull(goals);
 
             IPiece piece = board.GetPiece(pieceId);
 
@@ -65,12 +63,29 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 return false;
             }
 
+            Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
+
             board.RemovePiece(pieceId);
-            goals.TryIncreaseCurrentAmount(piece.Type);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(pieceId, DestroyPieceReason.NotAlive));
 
+            TryIncreaseGoalCurrentAmount(piece.Type, sourceCoordinate); // TODO: Use center coordinate instead ¿?
+
             return true;
+        }
+
+        private void TryIncreaseGoalCurrentAmount(PieceType pieceType, Coordinate coordinate)
+        {
+            IGoals goals = _goalsContainer.Goals;
+
+            InvalidOperationException.ThrowIfNull(goals);
+
+            if (!goals.TryIncreaseCurrentAmount(pieceType, out int currentAmount))
+            {
+                return;
+            }
+
+            _eventEnqueuer.Enqueue(_eventFactory.GetSetGoalCurrentAmountEvent(pieceType, currentAmount, coordinate));
         }
     }
 }

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Header.Goals
 {
@@ -8,12 +10,15 @@ namespace Game.Gameplay.View.Header.Goals
     {
         event Action OnUpdated;
 
-        IGoals Goals { get; }
+        IEnumerable<PieceType> PieceTypes { get; }
 
         void Initialize();
 
         void Uninitialize();
 
-        void TryIncreaseCurrentAmount(PieceType pieceType);
+        [NotNull]
+        IGoal Get(PieceType pieceType);
+
+        void SetCurrentAmount(PieceType pieceType, int currentAmount);
     }
 }

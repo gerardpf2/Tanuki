@@ -10,7 +10,7 @@ namespace Game.Gameplay.Goals
     {
         [NotNull] private readonly IReadOnlyDictionary<PieceType, IGoal> _goals;
 
-        public IEnumerable<IGoal> Targets => _goals.Values;
+        public IEnumerable<PieceType> PieceTypes => _goals.Keys;
 
         public Goals([NotNull, ItemNotNull] IEnumerable<IGoal> goals)
         {
@@ -31,6 +31,16 @@ namespace Game.Gameplay.Goals
             _goals = goalsCopy;
         }
 
+        public IGoal Get(PieceType pieceType)
+        {
+            if (!TryGet(pieceType, out IGoal goal))
+            {
+                InvalidOperationException.Throw($"Cannot find goal with PieceType: {pieceType}");
+            }
+
+            return goal;
+        }
+
         public bool TryGet(PieceType pieceType, out IGoal goal)
         {
             return _goals.TryGetValue(pieceType, out goal);
@@ -38,7 +48,7 @@ namespace Game.Gameplay.Goals
 
         public IGoals Clone()
         {
-            return new Goals(Targets.Select(goal => goal.Clone()));
+            return new Goals(PieceTypes.Select(pieceType => Get(pieceType).Clone()));
         }
     }
 }

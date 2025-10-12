@@ -10,8 +10,10 @@ namespace Game.Gameplay.Goals.Utils
         {
             ArgumentNullException.ThrowIfNull(goals);
 
-            foreach (IGoal goal in goals.Targets)
+            foreach (PieceType pieceType in goals.PieceTypes)
             {
+                IGoal goal = goals.Get(pieceType);
+
                 if (!goal.IsCompleted())
                 {
                     return false;
@@ -21,16 +23,21 @@ namespace Game.Gameplay.Goals.Utils
             return true;
         }
 
-        public static bool TryIncreaseCurrentAmount([NotNull] this IGoals goals, PieceType pieceType)
+        public static bool TryIncreaseCurrentAmount(
+            [NotNull] this IGoals goals,
+            PieceType pieceType,
+            out int currentAmount)
         {
             ArgumentNullException.ThrowIfNull(goals);
 
             if (!goals.TryGet(pieceType, out IGoal goal))
             {
+                currentAmount = -1;
+
                 return false;
             }
 
-            goal.IncreaseCurrentAmount();
+            currentAmount = ++goal.CurrentAmount;
 
             return true;
         }

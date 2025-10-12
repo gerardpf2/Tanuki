@@ -29,7 +29,7 @@ namespace Game.Gameplay.Goals.Parsing
             return
                 new GoalsSerializedData
                 {
-                    GoalSerializedData = goals.Targets.Select(_goalSerializedDataConverter.From).ToList()
+                    GoalSerializedData = goals.PieceTypes.Select(pieceType => _goalSerializedDataConverter.From(goals.Get(pieceType))).ToList()
                 };
         }
     }
