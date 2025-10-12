@@ -233,6 +233,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
+                        r.Resolve<IMovesContainer>(),
                         r.Resolve<IPlayerPiecesBag>()
                     )
                 ),
