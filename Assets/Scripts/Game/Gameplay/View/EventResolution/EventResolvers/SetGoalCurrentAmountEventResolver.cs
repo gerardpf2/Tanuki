@@ -21,7 +21,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            yield return _actionFactory.GetSetGoalCurrentAmountAction(evt.PieceType, evt.CurrentAmount);
+            yield return _actionFactory.GetSetGoalCurrentAmountAction(evt.PieceType, evt.CurrentAmount, evt.Coordinate);
         }
     }
 }

@@ -11,14 +11,20 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
         [NotNull] private readonly IGoalsView _goalsView;
         private readonly PieceType _pieceType;
         private readonly int _currentAmount;
+        private readonly Coordinate _coordinate;
 
-        public SetGoalCurrentAmountAction([NotNull] IGoalsView goalsView, PieceType pieceType, int currentAmount)
+        public SetGoalCurrentAmountAction(
+            [NotNull] IGoalsView goalsView,
+            PieceType pieceType,
+            int currentAmount,
+            Coordinate coordinate)
         {
             ArgumentNullException.ThrowIfNull(goalsView);
 
             _goalsView = goalsView;
             _pieceType = pieceType;
             _currentAmount = currentAmount;
+            _coordinate = coordinate;
         }
 
         public void Resolve(Action onComplete)

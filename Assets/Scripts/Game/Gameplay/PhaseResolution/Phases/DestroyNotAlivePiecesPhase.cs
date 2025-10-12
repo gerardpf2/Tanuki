@@ -63,16 +63,18 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 return false;
             }
 
+            Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
+
             board.RemovePiece(pieceId);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(pieceId, DestroyPieceReason.NotAlive));
 
-            TryIncreaseGoalCurrentAmount(piece.Type);
+            TryIncreaseGoalCurrentAmount(piece.Type, sourceCoordinate); // TODO: Use center coordinate instead ¿?
 
             return true;
         }
 
-        private void TryIncreaseGoalCurrentAmount(PieceType pieceType)
+        private void TryIncreaseGoalCurrentAmount(PieceType pieceType, Coordinate coordinate)
         {
             IGoals goals = _goalsContainer.Goals;
 
@@ -83,7 +85,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 return;
             }
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetSetGoalCurrentAmountEvent(pieceType, currentAmount));
+            _eventEnqueuer.Enqueue(_eventFactory.GetSetGoalCurrentAmountEvent(pieceType, currentAmount, coordinate));
         }
     }
 }
