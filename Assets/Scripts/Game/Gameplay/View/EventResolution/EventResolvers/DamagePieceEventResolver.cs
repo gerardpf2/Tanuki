@@ -1,11 +1,12 @@
-using System;
+using System.Collections.Generic;
 using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
-    public class DamagePieceEventResolver : IEventResolver<DamagePieceEvent>
+    public class DamagePieceEventResolver : EventResolver<DamagePieceEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
 
@@ -16,11 +17,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             _actionFactory = actionFactory;
         }
 
-        public void Resolve([NotNull] DamagePieceEvent evt, Action onComplete)
+        protected override IEnumerable<IAction> GetActions([NotNull] DamagePieceEvent evt)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            _actionFactory.GetDamagePieceAction(evt.Id, evt.State, evt.DamagePieceReason).Resolve(onComplete);
+            yield return _actionFactory.GetDamagePieceAction(evt.Id, evt.State, evt.DamagePieceReason);
         }
     }
 }
