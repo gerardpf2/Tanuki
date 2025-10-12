@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {
@@ -6,11 +7,16 @@ namespace Game.Gameplay.EventEnqueueing.Events
     {
         public readonly int Id;
         public readonly IEnumerable<KeyValuePair<string, string>> State;
+        public readonly DamagePieceReason DamagePieceReason;
 
-        public DamagePieceEvent(int id, IEnumerable<KeyValuePair<string, string>> state)
+        public DamagePieceEvent(
+            int id,
+            IEnumerable<KeyValuePair<string, string>> state,
+            DamagePieceReason damagePieceReason)
         {
             Id = id;
             State = state;
+            DamagePieceReason = damagePieceReason;
         }
     }
 }

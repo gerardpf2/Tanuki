@@ -20,9 +20,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
         public void Resolve(Action onComplete)
         {
+            // TODO: Tween
+
             _cameraView.UpdatePositionY(_row);
 
-            onComplete?.Invoke(); // TODO: UpdatePosition param ¿?
+            onComplete?.Invoke();
         }
     }
 }

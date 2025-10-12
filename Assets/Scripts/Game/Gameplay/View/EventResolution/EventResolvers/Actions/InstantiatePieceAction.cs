@@ -26,8 +26,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
             _sourceCoordinate = sourceCoordinate;
         }
 
-        protected override GameObject InstantiatePiece(IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
+        protected override GameObject InstantiatePiece([NotNull] IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
         {
+            ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(pieceViewDefinition);
 
             _boardView.InstantiatePiece(piece, _sourceCoordinate, pieceViewDefinition.Prefab);

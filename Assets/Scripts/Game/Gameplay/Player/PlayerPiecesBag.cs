@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Infrastructure.System.Exceptions;
@@ -6,13 +7,10 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Player
 {
-    // TODO: InitializeLabel
     public class PlayerPiecesBag : IPlayerPiecesBag
     {
-        [NotNull] private readonly IPieceGetter _pieceGetter;
-
         // TODO: Remove
-        [NotNull] private readonly IReadOnlyList<PieceType> _pieceTypes =
+        [NotNull] private static readonly IReadOnlyList<PieceType> PieceTypes =
             new List<PieceType>
             {
                 PieceType.PlayerBlock11,
@@ -20,10 +18,14 @@ namespace Game.Gameplay.Player
                 PieceType.PlayerBlock21
             };
 
-        public IPiece Current { get; private set; }
+        [NotNull] private readonly IPieceGetter _pieceGetter;
+
+        private InitializedLabel _initializedLabel;
 
         // TODO: Remove
         private int _pieceTypeIndex = -1;
+
+        public IPiece Current { get; private set; }
 
         public PlayerPiecesBag([NotNull] IPieceGetter pieceGetter)
         {
@@ -34,16 +36,16 @@ namespace Game.Gameplay.Player
 
         public void Initialize()
         {
-            // TODO: Remove if not needed
-
-            Uninitialize();
+            _initializedLabel.SetInitialized();
         }
 
         public void Uninitialize()
         {
-            Current = null;
+            _initializedLabel.SetUninitialized();
 
             _pieceTypeIndex = -1;
+
+            Current = null;
         }
 
         public void ConsumeCurrent()
@@ -59,9 +61,9 @@ namespace Game.Gameplay.Player
 
             InvalidOperationException.ThrowIfNotNull(Current);
 
-            _pieceTypeIndex = (_pieceTypeIndex + 1) % _pieceTypes.Count;
+            _pieceTypeIndex = (_pieceTypeIndex + 1) % PieceTypes.Count;
 
-            Current = _pieceGetter.Get(_pieceTypes[_pieceTypeIndex], null); // No state
+            Current = _pieceGetter.Get(PieceTypes[_pieceTypeIndex], null); // No state
         }
     }
 }

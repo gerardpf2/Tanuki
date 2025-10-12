@@ -41,18 +41,22 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
-            // TODO: Tween
-
-            pieceViewEventNotifier.OnStartMove(_movePieceReason);
-            pieceViewEventNotifier.OnEndMove(OnComplete);
+            pieceViewEventNotifier.OnStartMove(_movePieceReason, OnStartMoveComplete);
 
             return;
 
-            void OnComplete()
+            void OnStartMoveComplete()
+            {
+                // TODO: Tween / other depending on the reason (gravity, teleport, etc)
+
+                OnMovementComplete();
+            }
+
+            void OnMovementComplete()
             {
                 _boardView.MovePiece(_id, _rowOffset, _columnOffset);
 
-                onComplete?.Invoke();
+                pieceViewEventNotifier.OnEndMove(_movePieceReason, onComplete);
             }
         }
     }

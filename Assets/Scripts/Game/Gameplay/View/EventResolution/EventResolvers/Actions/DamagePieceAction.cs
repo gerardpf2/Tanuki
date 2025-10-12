@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Board.Pieces;
 using JetBrains.Annotations;
@@ -14,17 +15,20 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     {
         private readonly int _id;
         private readonly IEnumerable<KeyValuePair<string, string>> _state;
+        private readonly DamagePieceReason _damagePieceReason;
         [NotNull] private readonly IBoardView _boardView;
 
         public DamagePieceAction(
             int id,
             IEnumerable<KeyValuePair<string, string>> state,
+            DamagePieceReason damagePieceReason,
             [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(boardView);
 
             _id = id;
             _state = state;
+            _damagePieceReason = damagePieceReason;
             _boardView = boardView;
         }
 
@@ -40,7 +44,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
-            pieceViewEventNotifier.OnDamaged(onComplete);
+            pieceViewEventNotifier.OnDamaged(_damagePieceReason, onComplete);
         }
     }
 }

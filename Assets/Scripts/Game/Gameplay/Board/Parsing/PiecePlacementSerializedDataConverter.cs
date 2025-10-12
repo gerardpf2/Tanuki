@@ -20,9 +20,8 @@ namespace Game.Gameplay.Board.Parsing
 
             return
                 new PiecePlacement(
-                    piecePlacementSerializedData.Row,
-                    piecePlacementSerializedData.Column,
-                    _pieceSerializedDataConverter.To(piecePlacementSerializedData.PieceSerializedData)
+                    _pieceSerializedDataConverter.To(piecePlacementSerializedData.PieceSerializedData),
+                    new Coordinate(piecePlacementSerializedData.Row, piecePlacementSerializedData.Column)
                 );
         }
 
@@ -33,8 +32,8 @@ namespace Game.Gameplay.Board.Parsing
             return
                 new PiecePlacementSerializedData
                 {
-                    Row = piecePlacement.Row,
-                    Column = piecePlacement.Column,
+                    Row = piecePlacement.Coordinate.Row,
+                    Column = piecePlacement.Coordinate.Column,
                     PieceSerializedData = _pieceSerializedDataConverter.From(piecePlacement.Piece)
                 };
         }
