@@ -131,7 +131,7 @@ namespace Game.Gameplay.View.Input
                 return;
             }
 
-            _phaseResolver.Resolve(new ResolveContext(_playerPieceView.Coordinate.Column));
+            _phaseResolver.Resolve(new ResolveContext(_playerPieceView.Coordinate));
 
             _waitingEndDrag = true;
         }

@@ -56,14 +56,16 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             InvalidOperationException.ThrowIfNull(board);
 
-            if (_targetPiece is null || _playerPiecesBag.Current != _targetPiece || !resolveContext.Column.HasValue)
+            if (_targetPiece is null ||
+                _playerPiecesBag.Current != _targetPiece ||
+                !resolveContext.PieceSourceCoordinate.HasValue)
             {
                 return ResolveResult.NotUpdated;
             }
 
             _playerPiecesBag.ConsumeCurrent();
 
-            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(resolveContext.Column.Value);
+            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(resolveContext.PieceSourceCoordinate.Value);
 
             board.AddPiece(_targetPiece, lockSourceCoordinate);
 
@@ -87,16 +89,15 @@ namespace Game.Gameplay.PhaseResolution.Phases
             _targetPiece = null;
         }
 
-        private Coordinate GetLockSourceCoordinate(int column)
+        private Coordinate GetLockSourceCoordinate(Coordinate sourceCoordinate)
         {
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
             InvalidOperationException.ThrowIfNull(_targetPiece);
 
-            Coordinate sourceCoordinate = new(board.Rows, column);
             int fall = board.ComputePieceFall(_targetPiece, sourceCoordinate);
-            Coordinate lockSourceCoordinate = new(sourceCoordinate.Row - fall, sourceCoordinate.Column);
+            Coordinate lockSourceCoordinate = sourceCoordinate.WithOffset(-fall, 0);
 
             return lockSourceCoordinate;
         }

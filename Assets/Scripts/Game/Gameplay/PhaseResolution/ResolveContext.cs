@@ -1,12 +1,14 @@
+using Game.Gameplay.Board;
+
 namespace Game.Gameplay.PhaseResolution
 {
     public class ResolveContext
     {
-        public readonly int? Column;
+        public readonly Coordinate? PieceSourceCoordinate;
 
-        public ResolveContext(int? column)
+        public ResolveContext(Coordinate? pieceSourceCoordinate)
         {
-            Column = column;
+            PieceSourceCoordinate = pieceSourceCoordinate;
         }
     }
 }
