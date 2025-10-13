@@ -103,7 +103,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             --moves.Amount;
 
-            // TODO: Event, etc
+            _eventEnqueuer.Enqueue(_eventFactory.GetSetMovesAmountEvent(moves.Amount));
         }
     }
 }
