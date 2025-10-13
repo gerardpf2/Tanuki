@@ -2,6 +2,7 @@ using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Game.Gameplay.PhaseResolution.Phases
 {
@@ -28,6 +29,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
             }
 
             // TODO: EventEnqueuer
+
+            Debug.Log("YOU WIN"); // TODO: Remove
 
             return ResolveResult.Stop;
         }
