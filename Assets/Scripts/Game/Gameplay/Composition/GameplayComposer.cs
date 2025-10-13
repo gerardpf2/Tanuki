@@ -18,6 +18,7 @@ using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.EventResolution.EventResolvers;
 using Game.Gameplay.View.Header.Goals;
+using Game.Gameplay.View.Header.Moves;
 using Game.Gameplay.View.Input;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
@@ -277,6 +278,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
+                        r.Resolve<IMovesView>(),
                         r.Resolve<IInputHandler>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
@@ -356,6 +358,14 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IMovesView>(r =>
+                    new MovesView(
+                        r.Resolve<IMovesContainer>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IInputHandler>(r =>
                     new InputHandler(
                         r.Resolve<IPhaseResolver>(),
@@ -416,6 +426,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
+                        r.Resolve<IMovesView>(),
                         r.Resolve<IInputHandler>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
@@ -437,6 +448,14 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetInject<GoalsViewModel>((r, vm) =>
                     vm.Inject(
                         r.Resolve<IGoalsView>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<MovesViewModel>((r, vm) =>
+                    vm.Inject(
+                        r.Resolve<IMovesView>()
                     )
                 )
             );
