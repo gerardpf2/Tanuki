@@ -40,5 +40,8 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         [NotNull]
         IAction GetSetGoalCurrentAmountAction(PieceType pieceType, int currentAmount, Coordinate coordinate);
+
+        [NotNull]
+        IAction GetSetMovesAmountAction(int amount);
     }
 }

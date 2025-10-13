@@ -10,6 +10,7 @@ using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.Header.Goals;
+using Game.Gameplay.View.Header.Moves;
 using Game.Gameplay.View.Input;
 using Game.Gameplay.View.Player;
 using Infrastructure.ScreenLoading;
@@ -31,6 +32,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
+        [NotNull] private readonly IMovesView _movesView;
         [NotNull] private readonly IInputHandler _inputHandler;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
         [NotNull] private readonly IEventsResolver _eventsResolver;
@@ -48,6 +50,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
+            [NotNull] IMovesView movesView,
             [NotNull] IInputHandler inputHandler,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IEventsResolver eventsResolver,
@@ -64,6 +67,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
+            ArgumentNullException.ThrowIfNull(movesView);
             ArgumentNullException.ThrowIfNull(inputHandler);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(eventsResolver);
@@ -80,6 +84,7 @@ namespace Game.Gameplay.UseCases
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
+            _movesView = movesView;
             _inputHandler = inputHandler;
             _playerPieceView = playerPieceView;
             _eventsResolver = eventsResolver;
@@ -120,6 +125,7 @@ namespace Game.Gameplay.UseCases
             _cameraView.Initialize();
             _eventsResolver.Initialize();
             _goalsView.Initialize();
+            _movesView.Initialize();
             _inputHandler.Initialize();
             _playerPieceView.Initialize();
         }

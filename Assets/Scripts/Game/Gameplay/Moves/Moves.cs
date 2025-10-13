@@ -8,5 +8,10 @@ namespace Game.Gameplay.Moves
         {
             Amount = amount;
         }
+
+        public IMoves Clone()
+        {
+            return new Moves(Amount);
+        }
     }
 }

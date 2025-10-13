@@ -55,5 +55,10 @@ namespace Game.Gameplay.View.EventResolution
         {
             return new SetGoalCurrentAmountEventResolver(_actionFactory);
         }
+
+        public IEventResolver<SetMovesAmountEvent> GetSetMovesAmountEventResolver()
+        {
+            return new SetMovesAmountEventResolver(_actionFactory);
+        }
     }
 }

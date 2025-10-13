@@ -6,6 +6,7 @@ using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
 using Game.Gameplay.View.Header.Goals;
+using Game.Gameplay.View.Header.Moves;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -18,6 +19,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
+        [NotNull] private readonly IMovesView _movesView;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
 
         public ActionFactory(
@@ -25,18 +27,21 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
+            [NotNull] IMovesView movesView,
             [NotNull] IPlayerPieceView playerPieceView)
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
+            ArgumentNullException.ThrowIfNull(movesView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
 
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
+            _movesView = movesView;
             _playerPieceView = playerPieceView;
         }
 
@@ -103,6 +108,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         public IAction GetSetGoalCurrentAmountAction(PieceType pieceType, int currentAmount, Coordinate coordinate)
         {
             return new SetGoalCurrentAmountAction(_goalsView, pieceType, currentAmount, coordinate);
+        }
+
+        public IAction GetSetMovesAmountAction(int amount)
+        {
+            return new SetMovesAmountAction(_movesView, amount);
         }
     }
 }
