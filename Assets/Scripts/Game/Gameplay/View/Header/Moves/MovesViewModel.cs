@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Header.Moves
 {
-    public class MovesViewModel : ViewModel
+    public class MovesViewModel : ViewModel, IDataSettable<MovesViewData>
     {
         private IMovesView _movesView;
 
@@ -18,9 +18,6 @@ namespace Game.Gameplay.View.Header.Moves
             InjectResolver.Resolve(this);
 
             Add(_amount);
-
-            SubscribeToEvents();
-            UpdateAmount();
         }
 
         private void OnDestroy()
@@ -33,6 +30,12 @@ namespace Game.Gameplay.View.Header.Moves
             ArgumentNullException.ThrowIfNull(movesView);
 
             _movesView = movesView;
+        }
+
+        public void SetData(MovesViewData _)
+        {
+            SubscribeToEvents();
+            UpdateAmount();
         }
 
         private void SubscribeToEvents()
