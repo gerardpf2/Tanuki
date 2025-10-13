@@ -44,9 +44,6 @@ namespace Game.Gameplay.View.EventResolution
                 case SetCameraRowEvent setCameraRowEvent:
                     _eventResolverFactory.GetSetCameraRowEventResolver().Resolve(setCameraRowEvent, onComplete);
                     break;
-                case SetGoalCurrentAmountEvent setGoalCurrentAmountEvent:
-                    _eventResolverFactory.GetSetGoalCurrentAmountEventResolver().Resolve(setGoalCurrentAmountEvent, onComplete);
-                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);
                     return;

@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.EventEnqueueing.Events;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Utils;
@@ -63,29 +64,33 @@ namespace Game.Gameplay.PhaseResolution.Phases
                 return false;
             }
 
-            Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
+            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData = null;
+
+            if (TryIncreaseGoalCurrentAmount(piece.Type, out int goalCurrentAmount))
+            {
+                Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
+
+                goalData = new DestroyPieceEvent.GoalCurrentAmountUpdatedData(
+                    piece.Type,
+                    goalCurrentAmount,
+                    sourceCoordinate // TODO: Use center coordinate instead ¿?
+                );
+            }
 
             board.RemovePiece(pieceId);
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(pieceId, DestroyPieceReason.NotAlive));
-
-            TryIncreaseGoalCurrentAmount(piece.Type, sourceCoordinate); // TODO: Use center coordinate instead ¿?
+            _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(pieceId, DestroyPieceReason.NotAlive, goalData));
 
             return true;
         }
 
-        private void TryIncreaseGoalCurrentAmount(PieceType pieceType, Coordinate coordinate)
+        private bool TryIncreaseGoalCurrentAmount(PieceType pieceType, out int goalCurrentAmount)
         {
             IGoals goals = _goalsContainer.Goals;
 
             InvalidOperationException.ThrowIfNull(goals);
 
-            if (!goals.TryIncreaseCurrentAmount(pieceType, out int currentAmount))
-            {
-                return;
-            }
-
-            _eventEnqueuer.Enqueue(_eventFactory.GetSetGoalCurrentAmountEvent(pieceType, currentAmount, coordinate));
+            return goals.TryIncreaseCurrentAmount(pieceType, out goalCurrentAmount);
         }
     }
 }

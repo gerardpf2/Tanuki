@@ -38,9 +38,12 @@ namespace Game.Gameplay.EventEnqueueing
             return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason);
         }
 
-        public IEvent GetDestroyPieceEvent(int pieceId, DestroyPieceReason destroyPieceReason)
+        public IEvent GetDestroyPieceEvent(
+            int pieceId,
+            DestroyPieceReason destroyPieceReason,
+            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData)
         {
-            return new DestroyPieceEvent(pieceId, destroyPieceReason);
+            return new DestroyPieceEvent(pieceId, destroyPieceReason, goalData);
         }
 
         public IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
@@ -51,11 +54,6 @@ namespace Game.Gameplay.EventEnqueueing
         public IEvent GetSetCameraRowEvent(int topRow)
         {
             return new SetCameraRowEvent(topRow);
-        }
-
-        public IEvent GetSetGoalCurrentAmountEvent(PieceType pieceType, int currentAmount, Coordinate coordinate)
-        {
-            return new SetGoalCurrentAmountEvent(pieceType, currentAmount, coordinate);
         }
     }
 }
