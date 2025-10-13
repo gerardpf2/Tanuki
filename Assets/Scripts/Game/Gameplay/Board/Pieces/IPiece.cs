@@ -16,6 +16,8 @@ namespace Game.Gameplay.Board.Pieces
         [NotNull]
         bool[,] Grid { get; }
 
+        int Rotation { get; set; } // Rotation steps 0, 1, 2, 3 -> 0, 90, 180, 270
+
         void ProcessState(IEnumerable<KeyValuePair<string, string>> state);
 
         void Damage(int rowOffset, int columnOffset);

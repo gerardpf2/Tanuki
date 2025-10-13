@@ -8,6 +8,8 @@ namespace Game.Gameplay.Board
 {
     public class PieceCachedPropertiesGetter : IPieceCachedPropertiesGetter
     {
+        // TODO: Add rotation support
+
         private sealed class PieceProperties
         {
             public readonly int TopMostRowOffset;

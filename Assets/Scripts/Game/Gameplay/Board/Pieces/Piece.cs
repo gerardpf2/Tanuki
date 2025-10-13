@@ -22,6 +22,8 @@ namespace Game.Gameplay.Board.Pieces
 
         public bool[,] Grid => GetRotatedGrid();
 
+        public int Rotation { get; set; } // TODO: Add parsing support
+
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
@@ -60,6 +62,8 @@ namespace Game.Gameplay.Board.Pieces
             {
                 InvalidOperationException.Throw($"Piece is not filled at offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset})");
             }
+
+            // TODO: Provide non rotated offsets ¿?
 
             HandleDamaged(rowOffset, columnOffset);
         }
@@ -113,12 +117,48 @@ namespace Game.Gameplay.Board.Pieces
         [NotNull]
         private bool[,] GetRotatedGrid()
         {
-            // TODO
+            // TODO: Cache
 
-            return GetGrid();
+            return RotateClockwise(GetGrid(), Rotation);
         }
 
         [NotNull]
         protected abstract bool[,] GetGrid();
+
+        // TODO: Infrastructure ¿?
+
+        [NotNull]
+        private static T[,] RotateClockwise<T>([NotNull] T[,] grid, int steps)
+        {
+            ArgumentNullException.ThrowIfNull(grid);
+
+            for (int step = 0; step < steps; ++step)
+            {
+                grid = RotateClockwise(grid);
+            }
+
+            return grid;
+        }
+
+        [NotNull]
+        private static T[,] RotateClockwise<T>([NotNull] T[,] grid)
+        {
+            ArgumentNullException.ThrowIfNull(grid);
+
+            int rows = grid.GetLength(0);
+            int columns = grid.GetLength(1);
+
+            T[,] newGrid = new T[columns, rows];
+
+            for (int row = 0; row < rows; ++row)
+            {
+                for (int column = 0; column < columns; ++column)
+                {
+                    newGrid[columns - column - 1, row] = grid[row, column];
+                }
+            }
+
+            return newGrid;
+        }
     }
 }

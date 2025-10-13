@@ -61,8 +61,6 @@ namespace Game.Gameplay.Board.Pieces.Utils
             out int topMostRowOffset,
             out int rightMostColumnOffset)
         {
-            // TODO: Review
-
             ArgumentNullException.ThrowIfNull(piece);
 
             Coordinate sourceCoordinate = new(0, 0);
