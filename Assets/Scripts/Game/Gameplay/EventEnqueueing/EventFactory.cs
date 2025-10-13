@@ -24,11 +24,11 @@ namespace Game.Gameplay.EventEnqueueing
             return new InstantiatePlayerPieceEvent(piece);
         }
 
-        public IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate)
+        public IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate, int movesAmount)
         {
             IPiece pieceClone = piece.Clone(); // Clone needed so model and view boards have different piece refs
 
-            return new LockPlayerPieceEvent(pieceClone, lockSourceCoordinate);
+            return new LockPlayerPieceEvent(pieceClone, lockSourceCoordinate, movesAmount);
         }
 
         public IEvent GetDamagePieceEvent([NotNull] IPiece piece, DamagePieceReason damagePieceReason)
@@ -38,9 +38,12 @@ namespace Game.Gameplay.EventEnqueueing
             return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason);
         }
 
-        public IEvent GetDestroyPieceEvent(int pieceId, DestroyPieceReason destroyPieceReason)
+        public IEvent GetDestroyPieceEvent(
+            int pieceId,
+            DestroyPieceReason destroyPieceReason,
+            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData)
         {
-            return new DestroyPieceEvent(pieceId, destroyPieceReason);
+            return new DestroyPieceEvent(pieceId, destroyPieceReason, goalData);
         }
 
         public IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
@@ -51,16 +54,6 @@ namespace Game.Gameplay.EventEnqueueing
         public IEvent GetSetCameraRowEvent(int topRow)
         {
             return new SetCameraRowEvent(topRow);
-        }
-
-        public IEvent GetSetGoalCurrentAmountEvent(PieceType pieceType, int currentAmount, Coordinate coordinate)
-        {
-            return new SetGoalCurrentAmountEvent(pieceType, currentAmount, coordinate);
-        }
-
-        public IEvent GetSetMovesAmountEvent(int amount)
-        {
-            return new SetMovesAmountEvent(amount);
         }
     }
 }

@@ -67,9 +67,15 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             board.AddPiece(_targetPiece, lockSourceCoordinate);
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(_targetPiece, lockSourceCoordinate));
+            int movesAmount = DecreaseMovesAmount();
 
-            DecreaseMovesAmount();
+            _eventEnqueuer.Enqueue(
+                _eventFactory.GetLockPlayerPieceEvent(
+                    _targetPiece,
+                    lockSourceCoordinate,
+                    movesAmount
+                )
+            );
 
             return ResolveResult.Updated;
         }
@@ -95,15 +101,13 @@ namespace Game.Gameplay.PhaseResolution.Phases
             return lockSourceCoordinate;
         }
 
-        private void DecreaseMovesAmount()
+        private int DecreaseMovesAmount()
         {
             IMoves moves = _movesContainer.Moves;
 
             InvalidOperationException.ThrowIfNull(moves);
 
-            --moves.Amount;
-
-            _eventEnqueuer.Enqueue(_eventFactory.GetSetMovesAmountEvent(moves.Amount));
+            return --moves.Amount;
         }
     }
 }

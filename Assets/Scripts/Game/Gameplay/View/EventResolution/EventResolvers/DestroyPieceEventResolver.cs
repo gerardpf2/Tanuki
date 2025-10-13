@@ -22,6 +22,18 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             ArgumentNullException.ThrowIfNull(evt);
 
             yield return _actionFactory.GetDestroyPieceAction(evt.PieceId, evt.DestroyPieceReason);
+
+            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData = evt.GoalData;
+
+            if (goalData is not null)
+            {
+                yield return
+                    _actionFactory.GetSetGoalCurrentAmountAction(
+                        goalData.PieceType,
+                        goalData.CurrentAmount,
+                        goalData.Coordinate
+                    );
+            }
         }
     }
 }
