@@ -14,6 +14,9 @@ namespace Game.Gameplay.Board.Pieces
         IEnumerable<KeyValuePair<string, string>> State { get; }
 
         [NotNull]
+        bool[,] Grid { get; }
+
+        [NotNull]
         IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
 
         void ProcessState(IEnumerable<KeyValuePair<string, string>> state);
