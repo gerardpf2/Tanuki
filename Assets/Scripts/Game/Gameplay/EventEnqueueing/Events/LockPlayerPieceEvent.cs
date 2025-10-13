@@ -7,11 +7,13 @@ namespace Game.Gameplay.EventEnqueueing.Events
     {
         public readonly IPiece Piece;
         public readonly Coordinate LockSourceCoordinate;
+        public readonly int MovesAmount;
 
-        public LockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate)
+        public LockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate, int movesAmount)
         {
             Piece = piece;
             LockSourceCoordinate = lockSourceCoordinate;
+            MovesAmount = movesAmount;
         }
     }
 }

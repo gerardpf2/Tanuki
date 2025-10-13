@@ -19,7 +19,7 @@ namespace Game.Gameplay.EventEnqueueing
         IEvent GetInstantiatePlayerPieceEvent(IPiece piece);
 
         [NotNull]
-        IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate);
+        IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate, int movesAmount);
 
         [NotNull]
         IEvent GetDamagePieceEvent(IPiece piece, DamagePieceReason damagePieceReason);
@@ -35,8 +35,5 @@ namespace Game.Gameplay.EventEnqueueing
 
         [NotNull]
         IEvent GetSetGoalCurrentAmountEvent(PieceType pieceType, int currentAmount, Coordinate coordinate);
-
-        [NotNull]
-        IEvent GetSetMovesAmountEvent(int amount);
     }
 }

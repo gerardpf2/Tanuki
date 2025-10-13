@@ -32,6 +32,8 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
                     InstantiatePieceReason.Lock,
                     evt.LockSourceCoordinate
                 );
+
+            yield return _actionFactory.GetSetMovesAmountAction(evt.MovesAmount);
         }
     }
 }
