@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Pieces.Utils;
 using Game.Gameplay.Board.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;

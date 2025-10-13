@@ -16,9 +16,6 @@ namespace Game.Gameplay.Board.Pieces
         [NotNull]
         bool[,] Grid { get; }
 
-        [NotNull]
-        IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
-
         void ProcessState(IEnumerable<KeyValuePair<string, string>> state);
 
         void Damage(int rowOffset, int columnOffset);

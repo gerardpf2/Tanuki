@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.Gameplay.Board.Utils;
 using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -36,27 +35,6 @@ namespace Game.Gameplay.Board.Pieces
 
             Id = id;
             Type = type;
-        }
-
-        public IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate)
-        {
-            bool[,] grid = GetGrid();
-
-            int rows = grid.GetLength(0);
-            int columns = grid.GetLength(1);
-
-            for (int rowOffset = 0; rowOffset < rows; ++rowOffset)
-            {
-                for (int columnOffset = 0; columnOffset < columns; ++columnOffset)
-                {
-                    if (!grid[rowOffset, columnOffset])
-                    {
-                        continue;
-                    }
-
-                    yield return sourceCoordinate.WithOffset(rowOffset, columnOffset);
-                }
-            }
         }
 
         public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)
