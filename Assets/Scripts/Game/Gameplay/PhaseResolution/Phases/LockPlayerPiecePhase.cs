@@ -97,7 +97,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             InvalidOperationException.ThrowIfNull(_targetPiece);
 
             int fall = board.ComputePieceFall(_targetPiece, sourceCoordinate);
-            Coordinate lockSourceCoordinate = sourceCoordinate.WithOffset(-fall, 0);
+            Coordinate lockSourceCoordinate = sourceCoordinate.Down(fall);
 
             return lockSourceCoordinate;
         }
