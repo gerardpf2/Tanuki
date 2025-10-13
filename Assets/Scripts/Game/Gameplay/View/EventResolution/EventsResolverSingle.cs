@@ -47,6 +47,9 @@ namespace Game.Gameplay.View.EventResolution
                 case SetGoalCurrentAmountEvent setGoalCurrentAmountEvent:
                     _eventResolverFactory.GetSetGoalCurrentAmountEventResolver().Resolve(setGoalCurrentAmountEvent, onComplete);
                     break;
+                case SetMovesAmountEvent setMovesAmountEvent:
+                    _eventResolverFactory.GetSetMovesAmountEventResolver().Resolve(setMovesAmountEvent, onComplete);
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);
                     return;

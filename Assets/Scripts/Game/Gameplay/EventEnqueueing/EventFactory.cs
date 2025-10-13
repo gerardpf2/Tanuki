@@ -57,5 +57,10 @@ namespace Game.Gameplay.EventEnqueueing
         {
             return new SetGoalCurrentAmountEvent(pieceType, currentAmount, coordinate);
         }
+
+        public IEvent GetSetMovesAmountEvent(int amount)
+        {
+            return new SetMovesAmountEvent(amount);
+        }
     }
 }

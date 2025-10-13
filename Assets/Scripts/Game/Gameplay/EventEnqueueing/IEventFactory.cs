@@ -35,5 +35,8 @@ namespace Game.Gameplay.EventEnqueueing
 
         [NotNull]
         IEvent GetSetGoalCurrentAmountEvent(PieceType pieceType, int currentAmount, Coordinate coordinate);
+
+        [NotNull]
+        IEvent GetSetMovesAmountEvent(int amount);
     }
 }

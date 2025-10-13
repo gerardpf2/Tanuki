@@ -29,5 +29,8 @@ namespace Game.Gameplay.View.EventResolution
 
         [NotNull]
         IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver();
+
+        [NotNull]
+        IEventResolver<SetMovesAmountEvent> GetSetMovesAmountEventResolver();
     }
 }
