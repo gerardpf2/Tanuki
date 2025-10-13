@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.Moves;
 using Game.Gameplay.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -13,6 +14,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
+        [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
 
         private IPiece _targetPiece;
@@ -23,16 +25,19 @@ namespace Game.Gameplay.PhaseResolution.Phases
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
+            [NotNull] IMovesContainer movesContainer,
             [NotNull] IPlayerPiecesBag playerPiecesBag)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
+            ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
 
             _boardContainer = boardContainer;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
+            _movesContainer = movesContainer;
             _playerPiecesBag = playerPiecesBag;
         }
 
@@ -64,6 +69,8 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             _eventEnqueuer.Enqueue(_eventFactory.GetLockPlayerPieceEvent(_targetPiece, lockSourceCoordinate));
 
+            DecreaseMovesAmount();
+
             return ResolveResult.Updated;
         }
 
@@ -86,6 +93,17 @@ namespace Game.Gameplay.PhaseResolution.Phases
             Coordinate lockSourceCoordinate = new(sourceCoordinate.Row - fall, sourceCoordinate.Column);
 
             return lockSourceCoordinate;
+        }
+
+        private void DecreaseMovesAmount()
+        {
+            IMoves moves = _movesContainer.Moves;
+
+            InvalidOperationException.ThrowIfNull(moves);
+
+            --moves.Amount;
+
+            // TODO: Event, etc
         }
     }
 }

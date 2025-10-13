@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Moves;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.Player;
 using Game.Gameplay.View.Board;
@@ -19,6 +20,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
+        [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
@@ -33,6 +35,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] IGoalsContainer goalsContainer,
+            [NotNull] IMovesContainer movesContainer,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
@@ -46,6 +49,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(goalsContainer);
+            ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
@@ -59,6 +63,7 @@ namespace Game.Gameplay.UseCases
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
             _goalsContainer = goalsContainer;
+            _movesContainer = movesContainer;
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
@@ -82,6 +87,7 @@ namespace Game.Gameplay.UseCases
             _boardContainer.Uninitialize();
             _pieceIdGetter.Uninitialize();
             _goalsContainer.Uninitialize();
+            _movesContainer.Uninitialize();
             _phaseResolver.Uninitialize();
             _playerPiecesBag.Uninitialize();
         }

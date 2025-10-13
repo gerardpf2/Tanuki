@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Moves;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
 using JetBrains.Annotations;
@@ -23,9 +24,9 @@ namespace Game.Gameplay.Parsing
             _parser = parser;
         }
 
-        public string Serialize(IBoard board, IGoals goals)
+        public string Serialize(IBoard board, IGoals goals, IMoves moves)
         {
-            GameplaySerializedData gameplaySerializedData = _gameplaySerializedDataConverter.From(board, goals);
+            GameplaySerializedData gameplaySerializedData = _gameplaySerializedDataConverter.From(board, goals, moves);
 
             return _parser.Serialize(gameplaySerializedData);
         }
@@ -34,11 +35,18 @@ namespace Game.Gameplay.Parsing
             string value,
             out IBoard board,
             out IEnumerable<PiecePlacement> piecePlacements,
-            out IGoals goals)
+            out IGoals goals,
+            out IMoves moves)
         {
             GameplaySerializedData gameplaySerializedData = _parser.Deserialize<GameplaySerializedData>(value);
 
-            _gameplaySerializedDataConverter.To(gameplaySerializedData, out board, out piecePlacements, out goals);
+            _gameplaySerializedDataConverter.To(
+                gameplaySerializedData,
+                out board,
+                out piecePlacements,
+                out goals,
+                out moves
+            );
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.Player;
@@ -23,6 +24,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
+        [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IGameplayParser _gameplayParser;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
@@ -39,6 +41,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] IGoalsContainer goalsContainer,
+            [NotNull] IMovesContainer movesContainer,
             [NotNull] IGameplayParser gameplayParser,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IPlayerPiecesBag playerPiecesBag,
@@ -54,6 +57,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(goalsContainer);
+            ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(gameplayParser);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(playerPiecesBag);
@@ -69,6 +73,7 @@ namespace Game.Gameplay.UseCases
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
             _goalsContainer = goalsContainer;
+            _movesContainer = movesContainer;
             _gameplayParser = gameplayParser;
             _phaseResolver = phaseResolver;
             _playerPiecesBag = playerPiecesBag;
@@ -98,11 +103,13 @@ namespace Game.Gameplay.UseCases
                 gameplayDefinition.Data,
                 out IBoard board,
                 out IEnumerable<PiecePlacement> piecePlacements,
-                out IGoals goals
+                out IGoals goals,
+                out IMoves moves
             );
 
             _boardContainer.Initialize(board, piecePlacements);
             _goalsContainer.Initialize(goals);
+            _movesContainer.Initialize(moves);
             _phaseResolver.Initialize();
             _playerPiecesBag.Initialize();
         }
