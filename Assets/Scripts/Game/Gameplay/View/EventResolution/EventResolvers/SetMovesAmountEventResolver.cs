@@ -21,9 +21,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            // TODO
-
-            yield break;
+            yield return _actionFactory.GetSetMovesAmountAction(evt.Amount);
         }
     }
 }

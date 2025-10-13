@@ -318,6 +318,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
+                        r.Resolve<IMovesView>(),
                         r.Resolve<IPlayerPieceView>()
                     )
                 )
