@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3529864345860708484}
+  - component: {fileID: 217287102200448330}
   m_Layer: 0
   m_Name: MovesHolder
   m_TagString: Untagged
@@ -36,6 +37,21 @@ RectTransform:
   m_AnchoredPosition: {x: 5, y: 0}
   m_SizeDelta: {x: -30, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &217287102200448330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2661655399141605675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f36f412e6784d449118d4719c61742b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 3741067798309236772}
+  _key: MovesViewData
+  _gameObject: {fileID: 2096298825559082270}
 --- !u!1 &5549565147677149767
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +438,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9b178dde3fb2004cbca0c99f8e25b48, type: 3}
+--- !u!1 &2096298825559082270 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5994171322557371377, guid: d9b178dde3fb2004cbca0c99f8e25b48, type: 3}
+  m_PrefabInstance: {fileID: 5636289722542790383}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4771666733477640752 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 864763967613086943, guid: d9b178dde3fb2004cbca0c99f8e25b48, type: 3}
