@@ -14,11 +14,6 @@ namespace Game.Gameplay.Board.Pieces
             _columns = columns;
         }
 
-        protected override bool IsInside(int rowOffset, int columnOffset)
-        {
-            return rowOffset >= 0 && rowOffset < _rows && columnOffset >= 0 && columnOffset < _columns;
-        }
-
         protected override bool[,] GetGrid()
         {
             bool[,] grid = new bool[_rows, _columns];

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -19,13 +20,11 @@ namespace Game.Gameplay.Board.Pieces
 
         public IEnumerable<KeyValuePair<string, string>> State => GetState();
 
-        public bool[,] Grid => _grid ??= GetGrid();
+        public bool[,] Grid => GetRotatedGrid();
 
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
-
-        private bool[,] _grid;
 
         protected Piece([NotNull] IConverter converter, int id, PieceType type)
         {
@@ -57,9 +56,9 @@ namespace Game.Gameplay.Board.Pieces
 
         public void Damage(int rowOffset, int columnOffset)
         {
-            if (!IsInside(rowOffset, columnOffset))
+            if (!this.IsFilled(rowOffset, columnOffset))
             {
-                InvalidOperationException.Throw($"Offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset}) are not inside");
+                InvalidOperationException.Throw($"Piece is not filled at offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset})");
             }
 
             HandleDamaged(rowOffset, columnOffset);
@@ -106,11 +105,17 @@ namespace Game.Gameplay.Board.Pieces
             return false;
         }
 
-        protected abstract bool IsInside(int rowOffset, int columnOffset);
-
         protected virtual void HandleDamaged(int rowOffset, int columnOffset)
         {
             Alive = false;
+        }
+
+        [NotNull]
+        private bool[,] GetRotatedGrid()
+        {
+            // TODO
+
+            return GetGrid();
         }
 
         [NotNull]
