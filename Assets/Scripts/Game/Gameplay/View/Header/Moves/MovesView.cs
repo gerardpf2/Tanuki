@@ -55,7 +55,7 @@ namespace Game.Gameplay.View.Header.Moves
 
             InvalidOperationException.ThrowIfNull(moves);
 
-            _moves = moves; // TODO: Clone
+            _moves = moves.Clone();
         }
 
         public void Uninitialize()
