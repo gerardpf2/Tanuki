@@ -58,7 +58,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardSerializedDataConverter>(r =>
                     new BoardSerializedDataConverter(
-                        r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IPiecePlacementSerializedDataConverter>()
                     )
                 )
@@ -81,8 +80,6 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IBoardContainer>(_ => new BoardContainer()));
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IPieceCachedPropertiesGetter>(_ => new PieceCachedPropertiesGetter()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceFactory>(r =>
@@ -301,7 +298,6 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IWorldPositionGetter>(),
                         r.Resolve<ILogger>()
                     )
@@ -395,7 +391,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
-                        r.Resolve<IPieceCachedPropertiesGetter>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IWorldPositionGetter>()

@@ -8,17 +8,13 @@ namespace Game.Gameplay.Board.Parsing
 {
     public class BoardSerializedDataConverter : IBoardSerializedDataConverter
     {
-        [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
         [NotNull] private readonly IPiecePlacementSerializedDataConverter _piecePlacementSerializedDataConverter;
 
         public BoardSerializedDataConverter(
-            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [NotNull] IPiecePlacementSerializedDataConverter piecePlacementSerializedDataConverter)
         {
-            ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
             ArgumentNullException.ThrowIfNull(piecePlacementSerializedDataConverter);
 
-            _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
             _piecePlacementSerializedDataConverter = piecePlacementSerializedDataConverter;
         }
 
@@ -33,7 +29,7 @@ namespace Game.Gameplay.Board.Parsing
             int rows = boardSerializedData.Rows;
             int columns = boardSerializedData.Columns;
 
-            board = new Board(_pieceCachedPropertiesGetter, rows, columns);
+            board = new Board(rows, columns);
 
             piecePlacements =
                 boardSerializedData.PiecePlacementSerializedData

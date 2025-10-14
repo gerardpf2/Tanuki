@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Pieces.Utils;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Common;
 using Infrastructure.System.Exceptions;
@@ -14,13 +15,14 @@ namespace Game.Gameplay.View.Player
     {
         private sealed class PieceData
         {
-            public readonly IPiece Piece;
-            public readonly GameObject Instance;
+            [NotNull] public readonly IPiece Piece;
+            [NotNull] public readonly GameObject Instance;
 
             public float X { get; set; }
 
-            public PieceData(IPiece piece, [NotNull] GameObject instance)
+            public PieceData([NotNull] IPiece piece, [NotNull] GameObject instance)
             {
+                ArgumentNullException.ThrowIfNull(piece);
                 ArgumentNullException.ThrowIfNull(instance);
 
                 Piece = piece;
@@ -30,7 +32,6 @@ namespace Game.Gameplay.View.Player
             }
         }
 
-        [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
@@ -61,17 +62,14 @@ namespace Game.Gameplay.View.Player
         public GameObject Instance => _pieceData?.Instance;
 
         public PlayerPieceView(
-            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera,
             [NotNull] IWorldPositionGetter worldPositionGetter)
         {
-            ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(worldPositionGetter);
 
-            _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
             _boardContainer = boardContainer;
             _camera = camera;
             _worldPositionGetter = worldPositionGetter;
@@ -96,8 +94,9 @@ namespace Game.Gameplay.View.Player
             _pieceData = null;
         }
 
-        public void Instantiate(IPiece piece, [NotNull] GameObject prefab)
+        public void Instantiate([NotNull] IPiece piece, [NotNull] GameObject prefab)
         {
+            ArgumentNullException.ThrowIfNull(piece);
             ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
@@ -134,17 +133,19 @@ namespace Game.Gameplay.View.Player
             transform.position = transform.position.WithX(Mathf.RoundToInt(_pieceData.X));
         }
 
-        private Vector3 GetInitialPosition(IPiece piece)
+        private Vector3 GetInitialPosition([NotNull] IPiece piece)
         {
+            ArgumentNullException.ThrowIfNull(piece);
+
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int topMostRowOffset = _pieceCachedPropertiesGetter.GetTopMostRowOffset(piece);
-            int rightMostColumnOffset = _pieceCachedPropertiesGetter.GetRightMostColumnOffset(piece);
+            int width = piece.GetWidth();
+            int height = piece.GetHeight();
 
-            int row = _camera.TopRow - topMostRowOffset;
-            int column = (board.Columns - rightMostColumnOffset) / 2;
+            int row = _camera.TopRow - height + 1;
+            int column = (board.Columns - width + 1) / 2;
 
             float x = _worldPositionGetter.GetX(column);
             float y = _worldPositionGetter.GetY(row);
@@ -152,16 +153,18 @@ namespace Game.Gameplay.View.Player
             return new Vector3(ClampX(piece, x), y);
         }
 
-        private float ClampX(IPiece piece, float x)
+        private float ClampX([NotNull] IPiece piece, float x)
         {
+            ArgumentNullException.ThrowIfNull(piece);
+
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int rightMostColumnOffset = _pieceCachedPropertiesGetter.GetRightMostColumnOffset(piece);
+            int width = piece.GetWidth();
 
             const int minColumn = 0;
-            int maxColumn = Mathf.Max(board.Columns - 1 - rightMostColumnOffset, minColumn);
+            int maxColumn = Mathf.Max(board.Columns - width, minColumn);
 
             float minX = _worldPositionGetter.GetX(minColumn);
             float maxX = _worldPositionGetter.GetX(maxColumn);

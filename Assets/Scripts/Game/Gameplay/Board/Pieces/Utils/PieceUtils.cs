@@ -1,13 +1,34 @@
-using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board.Utils;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.Board.Pieces.Utils
 {
     public static class PieceUtils
     {
+        public static int GetWidth([NotNull] this IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            bool[,] grid = piece.Grid;
+
+            int columns = grid.GetLength(1);
+
+            return columns; // Assumes piece grid has no empty column
+        }
+
+        public static int GetHeight([NotNull] this IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            bool[,] grid = piece.Grid;
+
+            int rows = grid.GetLength(0);
+
+            return rows; // Assumes piece grid has no empty row
+        }
+
         [NotNull]
         public static IEnumerable<Coordinate> GetCoordinates([NotNull] this IPiece piece, Coordinate sourceCoordinate)
         {
@@ -54,28 +75,6 @@ namespace Game.Gameplay.Board.Pieces.Utils
             bool isFilled = grid[rowOffset, columnOffset];
 
             return isFilled;
-        }
-
-        public static void GetTopMostRowAndRightMostColumnOffsets(
-            [NotNull] this IPiece piece,
-            out int topMostRowOffset,
-            out int rightMostColumnOffset)
-        {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            Coordinate sourceCoordinate = new(0, 0);
-
-            int topMostRow = sourceCoordinate.Row;
-            int rightMostColumn = sourceCoordinate.Column;
-
-            foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
-            {
-                topMostRow = Math.Max(coordinate.Row, topMostRow);
-                rightMostColumn = Math.Max(coordinate.Column, rightMostColumn);
-            }
-
-            topMostRowOffset = topMostRow - sourceCoordinate.Row;
-            rightMostColumnOffset = rightMostColumn - sourceCoordinate.Column;
         }
 
         [NotNull]
