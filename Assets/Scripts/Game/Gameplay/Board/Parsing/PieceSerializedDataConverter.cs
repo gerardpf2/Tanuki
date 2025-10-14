@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -20,7 +21,7 @@ namespace Game.Gameplay.Board.Parsing
         {
             ArgumentNullException.ThrowIfNull(pieceSerializedData);
 
-            return _pieceGetter.Get(pieceSerializedData.PieceType, pieceSerializedData.State);
+            return _pieceGetter.Get(pieceSerializedData.PieceType).WithState(pieceSerializedData.State);
         }
 
         public PieceSerializedData From([NotNull] IPiece piece)

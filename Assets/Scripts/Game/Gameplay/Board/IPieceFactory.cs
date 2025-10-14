@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
 using JetBrains.Annotations;
 
@@ -7,7 +6,7 @@ namespace Game.Gameplay.Board
     public interface IPieceFactory
     {
         [NotNull]
-        IPiece GetTest(IEnumerable<KeyValuePair<string, string>> state);
+        IPiece GetTest();
 
         [NotNull]
         IPiece GetPlayerBlock11();
