@@ -89,9 +89,25 @@ namespace Game.Gameplay.Board.Pieces
                 InvalidOperationException.Throw($"Piece is not filled at offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset})");
             }
 
-            // TODO: Provide non rotated offsets ¿?
+            // Undo clockwise rotation (by using counter clockwise rotation) in order to provide non rotated offsets
 
-            HandleDamaged(rowOffset, columnOffset);
+            bool[,] grid = Grid;
+
+            int rows = grid.GetLength(0);
+            int columns = grid.GetLength(1);
+            int steps = Rotation;
+
+            GetCounterClockwiseRotatedIndices(
+                rows,
+                columns,
+                rowOffset,
+                columnOffset,
+                out int rotatedRowOffset,
+                out int rotatedColumnOffset,
+                steps
+            );
+
+            HandleDamaged(rotatedRowOffset, rotatedColumnOffset);
         }
 
         public abstract IPiece Clone();
@@ -142,7 +158,7 @@ namespace Game.Gameplay.Board.Pieces
             return false;
         }
 
-        protected virtual void HandleDamaged(int rowOffset, int columnOffset)
+        protected virtual void HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
         {
             Alive = false;
         }
@@ -187,11 +203,60 @@ namespace Game.Gameplay.Board.Pieces
             {
                 for (int column = 0; column < columns; ++column)
                 {
-                    newGrid[columns - column - 1, row] = grid[row, column];
+                    GetClockwiseRotatedIndices(columns, row, column, out int rotatedRow, out int rotatedColumn);
+
+                    newGrid[rotatedRow, rotatedColumn] = grid[row, column];
                 }
             }
 
             return newGrid;
+        }
+
+        private static void GetClockwiseRotatedIndices(
+            int columns,
+            int row,
+            int column,
+            out int rotatedRow,
+            out int rotatedColumn)
+        {
+            rotatedRow = columns - column - 1;
+            rotatedColumn = row;
+        }
+
+        private static void GetCounterClockwiseRotatedIndices(
+            int rows,
+            int columns,
+            int row,
+            int column,
+            out int rotatedRow,
+            out int rotatedColumn,
+            int steps)
+        {
+            rotatedRow = row;
+            rotatedColumn = column;
+
+            steps %= 4; // TODO: Const
+
+            for (int step = 0; step < steps; ++step)
+            {
+                int rowsTarget = step % 2 == 0 ? rows : columns;
+
+                GetCounterClockwiseRotatedIndices(rowsTarget, row, column, out rotatedRow, out rotatedColumn);
+
+                row = rotatedRow;
+                column = rotatedColumn;
+            }
+        }
+
+        private static void GetCounterClockwiseRotatedIndices(
+            int rows,
+            int row,
+            int column,
+            out int rotatedRow,
+            out int rotatedColumn)
+        {
+            rotatedRow = column;
+            rotatedColumn = rows - row - 1;
         }
     }
 }

@@ -78,14 +78,14 @@ namespace Game.Gameplay.Board.Pieces
             }
         }
 
-        protected override void HandleDamaged(int rowOffset, int columnOffset)
+        protected override void HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
         {
-            if (EyeRowOffset != rowOffset)
+            if (EyeRowOffset != nonRotatedRowOffset)
             {
                 return;
             }
 
-            base.HandleDamaged(rowOffset, columnOffset);
+            base.HandleDamaged(nonRotatedRowOffset, nonRotatedColumnOffset);
         }
     }
 }
