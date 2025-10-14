@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board.Pieces
@@ -17,11 +17,13 @@ namespace Game.Gameplay.Board.Pieces
 
         public PieceType Type { get; }
 
+        public int Width => Grid.GetLength(1);
+
+        public int Height => Grid.GetLength(0);
+
         public bool Alive { get; private set; } = true;
 
         public IEnumerable<KeyValuePair<string, string>> State => GetState();
-
-        public bool[,] Grid => _rotatedGrid ??= GetRotatedGrid();
 
         public int Rotation
         {
@@ -47,6 +49,9 @@ namespace Game.Gameplay.Board.Pieces
 
         protected virtual bool CanRotate => true;
 
+        [NotNull]
+        private bool[,] Grid => _rotatedGrid ??= GetRotatedGrid();
+
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
@@ -62,6 +67,16 @@ namespace Game.Gameplay.Board.Pieces
 
             Id = id;
             Type = type;
+        }
+
+        public bool IsFilled(int rowOffset, int columnOffset)
+        {
+            ArgumentOutOfRangeException.ThrowIfNot(rowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
+            ArgumentOutOfRangeException.ThrowIfNot(rowOffset, ComparisonOperator.LessThan, Height);
+            ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
+            ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.LessThan, Width);
+
+            return Grid[rowOffset, columnOffset];
         }
 
         public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)
@@ -84,27 +99,21 @@ namespace Game.Gameplay.Board.Pieces
 
         public void Damage(int rowOffset, int columnOffset)
         {
-            if (!this.IsFilled(rowOffset, columnOffset))
+            if (!IsFilled(rowOffset, columnOffset))
             {
                 InvalidOperationException.Throw($"Piece is not filled at offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset})");
             }
 
             // Undo clockwise rotation (by using counter clockwise rotation) in order to provide non rotated offsets
 
-            bool[,] grid = Grid;
-
-            int rows = grid.GetLength(0);
-            int columns = grid.GetLength(1);
-            int steps = Rotation;
-
             GetCounterClockwiseRotatedIndices(
-                rows,
-                columns,
+                Height,
+                Width,
                 rowOffset,
                 columnOffset,
                 out int rotatedRowOffset,
                 out int rotatedColumnOffset,
-                steps
+                Rotation
             );
 
             HandleDamaged(rotatedRowOffset, rotatedColumnOffset);

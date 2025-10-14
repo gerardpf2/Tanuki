@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
-using Game.Gameplay.Board.Pieces.Utils;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Common;
 using Infrastructure.System.Exceptions;
@@ -141,11 +140,8 @@ namespace Game.Gameplay.View.Player
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int width = piece.GetWidth();
-            int height = piece.GetHeight();
-
-            int row = _camera.TopRow - height + 1;
-            int column = (board.Columns - width + 1) / 2;
+            int row = _camera.TopRow - piece.Height + 1;
+            int column = (board.Columns - piece.Width + 1) / 2;
 
             float x = _worldPositionGetter.GetX(column);
             float y = _worldPositionGetter.GetY(row);
@@ -161,10 +157,8 @@ namespace Game.Gameplay.View.Player
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int width = piece.GetWidth();
-
             const int minColumn = 0;
-            int maxColumn = Mathf.Max(board.Columns - width, minColumn);
+            int maxColumn = Mathf.Max(board.Columns - piece.Width, minColumn);
 
             float minX = _worldPositionGetter.GetX(minColumn);
             float maxX = _worldPositionGetter.GetX(maxColumn);

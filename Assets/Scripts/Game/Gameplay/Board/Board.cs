@@ -88,9 +88,7 @@ namespace Game.Gameplay.Board
                 InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been added");
             }
 
-            int pieceHeight = piece.GetHeight();
-
-            int newRows = sourceCoordinate.Row + pieceHeight;
+            int newRows = sourceCoordinate.Row + piece.Height;
 
             ExpandRowsIfNeeded(newRows);
 
