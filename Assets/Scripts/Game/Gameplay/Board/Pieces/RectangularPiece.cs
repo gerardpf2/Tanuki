@@ -16,6 +16,8 @@ namespace Game.Gameplay.Board.Pieces
 
         protected override bool[,] GetGrid()
         {
+            // TODO: Move to infrastructure matrix utils ¿?
+
             bool[,] grid = new bool[_rows, _columns];
 
             for (int row = 0; row < _rows; ++row)

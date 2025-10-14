@@ -21,18 +21,26 @@ namespace Game.Gameplay.Board.Pieces
 
         public IEnumerable<KeyValuePair<string, string>> State => GetState();
 
-        public bool[,] Grid => GetRotatedGrid();
+        public bool[,] Grid => _rotatedGrid ??= GetRotatedGrid();
 
         public int Rotation
         {
             get => _rotation;
             set
             {
-                if (!CanRotate || Rotation == value)
+                if (!CanRotate)
                 {
                     return;
                 }
 
+                value %= 4; // TODO: Const
+
+                if (Rotation == value)
+                {
+                    return;
+                }
+
+                _rotatedGrid = null;
                 _rotation = value;
             }
         }
@@ -43,6 +51,7 @@ namespace Game.Gameplay.Board.Pieces
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
 
+        private bool[,] _rotatedGrid;
         private int _rotation;
 
         protected Piece([NotNull] IConverter converter, int id, PieceType type)
@@ -141,20 +150,20 @@ namespace Game.Gameplay.Board.Pieces
         [NotNull]
         private bool[,] GetRotatedGrid()
         {
-            // TODO: Cache
-
             return RotateClockwise(GetGrid(), Rotation);
         }
 
         [NotNull]
         protected abstract bool[,] GetGrid();
 
-        // TODO: Infrastructure ¿?
+        // TODO: Move to infrastructure matrix utils ¿?
 
         [NotNull]
         private static T[,] RotateClockwise<T>([NotNull] T[,] grid, int steps)
         {
             ArgumentNullException.ThrowIfNull(grid);
+
+            steps %= 4; // TODO: Const
 
             for (int step = 0; step < steps; ++step)
             {
