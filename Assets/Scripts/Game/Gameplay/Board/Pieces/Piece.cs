@@ -22,11 +22,28 @@ namespace Game.Gameplay.Board.Pieces
 
         public bool[,] Grid => GetRotatedGrid();
 
-        public int Rotation { get; set; } // TODO: Add parsing support
+        // TODO: Add parsing support
+        public int Rotation
+        {
+            get => _rotation;
+            set
+            {
+                if (!CanRotate || Rotation == value)
+                {
+                    return;
+                }
+
+                _rotation = value;
+            }
+        }
+
+        protected virtual bool CanRotate => true;
 
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
+
+        private int _rotation;
 
         protected Piece([NotNull] IConverter converter, int id, PieceType type)
         {
