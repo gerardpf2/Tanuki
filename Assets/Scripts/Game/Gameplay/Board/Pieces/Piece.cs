@@ -11,6 +11,7 @@ namespace Game.Gameplay.Board.Pieces
     public abstract class Piece : IPiece
     {
         [NotNull] private const string AliveKey = "ALIVE";
+        [NotNull] private const string RotationKey = "ROTATION";
 
         public int Id { get; }
 
@@ -22,7 +23,6 @@ namespace Game.Gameplay.Board.Pieces
 
         public bool[,] Grid => GetRotatedGrid();
 
-        // TODO: Add parsing support
         public int Rotation
         {
             get => _rotation;
@@ -99,6 +99,7 @@ namespace Game.Gameplay.Board.Pieces
         protected virtual void AddStateEntries()
         {
             AddStateEntry(AliveKey, Alive);
+            AddStateEntry(RotationKey, Rotation);
         }
 
         protected void AddStateEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
@@ -118,6 +119,12 @@ namespace Game.Gameplay.Board.Pieces
                 case AliveKey:
                 {
                     Alive = Converter.Convert<bool>(value);
+
+                    return true;
+                }
+                case RotationKey:
+                {
+                    Rotation = Converter.Convert<int>(value);
 
                     return true;
                 }
