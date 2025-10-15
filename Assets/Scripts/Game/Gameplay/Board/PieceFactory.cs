@@ -29,11 +29,6 @@ namespace Game.Gameplay.Board
             return new PlayerBlock11(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerBlock12()
-        {
-            return new PlayerBlock12(_converter, GetNewPieceId());
-        }
-
         public IPiece GetPlayerBlock21()
         {
             return new PlayerBlock21(_converter, GetNewPieceId());
