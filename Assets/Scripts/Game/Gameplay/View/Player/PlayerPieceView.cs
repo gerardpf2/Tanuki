@@ -132,6 +132,11 @@ namespace Game.Gameplay.View.Player
             transform.position = transform.position.WithX(Mathf.RoundToInt(_pieceData.X));
         }
 
+        public void Rotate()
+        {
+            // TODO
+        }
+
         private Vector3 GetInitialPosition([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);

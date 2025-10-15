@@ -110,23 +110,31 @@ namespace Game.Gameplay.View.Input
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
-            if (eventData.dragging)
+            if (!CanClick(eventData))
             {
                 return;
             }
 
-            // TODO
+            HandlePointerClick();
         }
 
         private bool CanDrag([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
-            return
-                !_waitingEndDrag &&
-                !_eventsResolver.Resolving &&
-                _playerPieceView.Instance != null &&
-                IsInsideScreen(eventData.position);
+            return CanPerformAnyAction() && !_waitingEndDrag && IsInsideScreen(eventData.position);
+        }
+
+        private bool CanClick([NotNull] PointerEventData eventData)
+        {
+            ArgumentNullException.ThrowIfNull(eventData);
+
+            return CanPerformAnyAction() && !eventData.dragging;
+        }
+
+        private bool CanPerformAnyAction()
+        {
+            return !_eventsResolver.Resolving && _playerPieceView.Instance != null;
         }
 
         private bool IsInsideScreen(Vector2 position)
@@ -148,6 +156,11 @@ namespace Game.Gameplay.View.Input
             _phaseResolver.Resolve(new ResolveContext(_playerPieceView.Coordinate));
 
             _waitingEndDrag = true;
+        }
+
+        private void HandlePointerClick()
+        {
+            _playerPieceView.Rotate();
         }
     }
 }
