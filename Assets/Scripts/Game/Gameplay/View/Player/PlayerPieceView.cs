@@ -100,7 +100,9 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
-            GameObject instance = Object.Instantiate(prefab, GetInitialPosition(piece), Quaternion.identity, _parent);
+            Vector3 position = new(GetInitialX(piece), GetInitialY(piece));
+
+            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _parent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 instance,
@@ -134,10 +136,39 @@ namespace Game.Gameplay.View.Player
 
         public void Rotate()
         {
-            // TODO
+            // TODO: Rotate transform, etc
+
+            InvalidOperationException.ThrowIfNull(_pieceData);
+            InvalidOperationException.ThrowIfNull(Instance);
+
+            IPiece piece = _pieceData.Piece;
+
+            ++piece.Rotation;
+
+            Transform transform = Instance.transform;
+
+            float x = ClampX(piece, transform.position.x);
+            float y = GetInitialY(piece);
+
+            transform.position = transform.position.WithX(x).WithY(y);
+
+            _pieceData.X = x;
         }
 
-        private Vector3 GetInitialPosition([NotNull] IPiece piece)
+        private float GetInitialX([NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
+
+            int column = (board.Columns - piece.Width + 1) / 2;
+
+            return _worldPositionGetter.GetX(column);
+        }
+
+        private float GetInitialY([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
@@ -146,12 +177,8 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(board);
 
             int row = _camera.TopRow - piece.Height + 1;
-            int column = (board.Columns - piece.Width + 1) / 2;
 
-            float x = _worldPositionGetter.GetX(column);
-            float y = _worldPositionGetter.GetY(row);
-
-            return new Vector3(ClampX(piece, x), y);
+            return _worldPositionGetter.GetY(row);
         }
 
         private float ClampX([NotNull] IPiece piece, float x)
