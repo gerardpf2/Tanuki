@@ -17,9 +17,9 @@ namespace Game.Gameplay.Board.Pieces
 
         public PieceType Type { get; }
 
-        public int Width => Grid.GetLength(1);
+        public int Width => GetRotatedGrid().GetLength(1);
 
-        public int Height => Grid.GetLength(0);
+        public int Height => GetRotatedGrid().GetLength(0);
 
         public bool Alive { get; private set; } = true;
 
@@ -49,9 +49,6 @@ namespace Game.Gameplay.Board.Pieces
 
         protected virtual bool CanRotate => true;
 
-        [NotNull]
-        private bool[,] Grid => _rotatedGrid ??= GetRotatedGrid();
-
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
@@ -76,7 +73,7 @@ namespace Game.Gameplay.Board.Pieces
             ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.LessThan, Width);
 
-            return Grid[rowOffset, columnOffset];
+            return GetRotatedGrid()[rowOffset, columnOffset];
         }
 
         public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)
@@ -104,7 +101,7 @@ namespace Game.Gameplay.Board.Pieces
                 InvalidOperationException.Throw($"Piece is not filled at offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset})");
             }
 
-            // Undo clockwise rotation (by using counter clockwise rotation) in order to provide non rotated offsets
+            // Undo clockwise rotation (by using counterclockwise rotation) in order to provide non-rotated offsets
 
             GetCounterClockwiseRotatedIndices(
                 Height,
@@ -175,7 +172,7 @@ namespace Game.Gameplay.Board.Pieces
         [NotNull]
         private bool[,] GetRotatedGrid()
         {
-            return RotateClockwise(GetGrid(), Rotation);
+            return _rotatedGrid ??= RotateClockwise(GetGrid(), Rotation);
         }
 
         [NotNull]
