@@ -10,5 +10,7 @@ namespace Game.Gameplay.View.Input
         event Action<PointerEventData> OnDrag;
 
         event Action<PointerEventData> OnEndDrag;
+
+        event Action<PointerEventData> OnPointerClick;
     }
 }

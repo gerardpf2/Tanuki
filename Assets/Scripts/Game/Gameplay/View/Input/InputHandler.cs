@@ -66,6 +66,7 @@ namespace Game.Gameplay.View.Input
             _inputListener.OnBeginDrag += HandleBeginDrag;
             _inputListener.OnDrag += HandleDrag;
             _inputListener.OnEndDrag += HandleEndDrag;
+            _inputListener.OnPointerClick += HandlePointerClick;
         }
 
         private void UnsubscribeFromEvents()
@@ -73,6 +74,7 @@ namespace Game.Gameplay.View.Input
             _inputListener.OnBeginDrag -= HandleBeginDrag;
             _inputListener.OnDrag -= HandleDrag;
             _inputListener.OnEndDrag -= HandleEndDrag;
+            _inputListener.OnPointerClick -= HandlePointerClick;
         }
 
         private void HandleBeginDrag([NotNull] PointerEventData eventData)
@@ -102,6 +104,18 @@ namespace Game.Gameplay.View.Input
         private void HandleEndDrag(PointerEventData _)
         {
             _waitingEndDrag = false;
+        }
+
+        private void HandlePointerClick([NotNull] PointerEventData eventData)
+        {
+            ArgumentNullException.ThrowIfNull(eventData);
+
+            if (eventData.dragging)
+            {
+                return;
+            }
+
+            // TODO
         }
 
         private bool CanDrag([NotNull] PointerEventData eventData)
