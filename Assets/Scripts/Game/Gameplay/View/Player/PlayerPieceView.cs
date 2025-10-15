@@ -4,6 +4,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Common;
+using Game.Gameplay.View.Board.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Utils;
 using UnityEngine;
@@ -136,8 +137,6 @@ namespace Game.Gameplay.View.Player
 
         public void Rotate()
         {
-            // TODO: Rotate transform, etc
-
             InvalidOperationException.ThrowIfNull(_pieceData);
             InvalidOperationException.ThrowIfNull(Instance);
 
@@ -153,6 +152,12 @@ namespace Game.Gameplay.View.Player
             transform.position = transform.position.WithX(x).WithY(y);
 
             _pieceData.X = x;
+
+            IPieceViewEventNotifier pieceViewEventNotifier = Instance.GetComponent<IPieceViewEventNotifier>();
+
+            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+
+            pieceViewEventNotifier.OnRotated();
         }
 
         private float GetInitialX([NotNull] IPiece piece)

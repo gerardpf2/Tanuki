@@ -14,5 +14,7 @@ namespace Game.Gameplay.View.Board.Pieces
         void OnStartMove(MovePieceReason movePieceReason, Action onComplete);
 
         void OnEndMove(MovePieceReason movePieceReason, Action onComplete);
+
+        void OnRotated();
     }
 }

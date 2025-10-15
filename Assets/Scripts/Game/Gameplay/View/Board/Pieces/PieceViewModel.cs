@@ -2,7 +2,10 @@ using System;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
 using Infrastructure.ModelViewViewModel;
+using Infrastructure.Unity.Utils;
+using UnityEngine;
 using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.Board.Pieces
 {
@@ -10,6 +13,8 @@ namespace Game.Gameplay.View.Board.Pieces
 
     public abstract class PieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier where T : IPiece
     {
+        [SerializeField] private Transform _content;
+
         protected T Piece;
 
         public void SetData(IPiece data)
@@ -56,6 +61,23 @@ namespace Game.Gameplay.View.Board.Pieces
             onComplete?.Invoke();
         }
 
-        protected virtual void SyncState() { }
+        public void OnRotated()
+        {
+            SyncRotation();
+        }
+
+        protected virtual void SyncState()
+        {
+            SyncRotation();
+        }
+
+        private void SyncRotation()
+        {
+            InvalidOperationException.ThrowIfNull(_content);
+            InvalidOperationException.ThrowIfNull(Piece);
+
+            _content.localPosition = _content.localPosition.WithX(0.5f * (Piece.Width - 1)).WithY(0.5f * Piece.Height);
+            _content.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation);
+        }
     }
 }
