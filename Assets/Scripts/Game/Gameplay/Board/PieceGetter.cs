@@ -24,9 +24,9 @@ namespace Game.Gameplay.Board
 
             switch (pieceType)
             {
-                case PieceType.Test:
+                case PieceType.PlayerI:
                 {
-                    piece = _pieceFactory.GetTest();
+                    piece = _pieceFactory.GetPlayerI();
 
                     break;
                 }
@@ -36,9 +36,16 @@ namespace Game.Gameplay.Board
 
                     break;
                 }
-                case PieceType.PlayerI:
+                case PieceType.PlayerT:
+                case PieceType.PlayerJ:
+                case PieceType.PlayerL:
+                case PieceType.PlayerS:
+                case PieceType.PlayerZ:
+                    InvalidOperationException.Throw("TODO");
+                    return null;
+                case PieceType.Test:
                 {
-                    piece = _pieceFactory.GetPlayerI();
+                    piece = _pieceFactory.GetTest();
 
                     break;
                 }

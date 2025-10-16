@@ -13,9 +13,19 @@ MonoBehaviour:
   m_Name: PieceViewDefinitionContainer
   m_EditorClassIdentifier: 
   _pieceViewDefinitions:
-  - _pieceType: 0
-    _prefab: {fileID: 6451969163346834527, guid: 8c89310b2782a15488919f493a7f7130, type: 3}
-  - _pieceType: 1
-    _prefab: {fileID: 6451969163346834527, guid: 5d9c659e424c2184a975f8529597358c, type: 3}
-  - _pieceType: 2
+  - _pieceType: 10
     _prefab: {fileID: 6451969163346834527, guid: cfd054a7f151c37418b946e903ec150d, type: 3}
+  - _pieceType: 11
+    _prefab: {fileID: 6451969163346834527, guid: 5d9c659e424c2184a975f8529597358c, type: 3}
+  - _pieceType: 12
+    _prefab: {fileID: 0}
+  - _pieceType: 13
+    _prefab: {fileID: 0}
+  - _pieceType: 14
+    _prefab: {fileID: 0}
+  - _pieceType: 15
+    _prefab: {fileID: 0}
+  - _pieceType: 16
+    _prefab: {fileID: 0}
+  - _pieceType: 30
+    _prefab: {fileID: 6451969163346834527, guid: 8c89310b2782a15488919f493a7f7130, type: 3}
