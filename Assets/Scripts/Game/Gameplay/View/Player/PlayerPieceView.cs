@@ -142,11 +142,15 @@ namespace Game.Gameplay.View.Player
 
             IPiece piece = _pieceData.Piece;
 
+            int width = piece.Width;
+            int withAfterRotate = piece.Height;
+            int offsetX = (width - withAfterRotate) / 2;
+
             ++piece.Rotation;
 
             Transform transform = Instance.transform;
 
-            float x = ClampX(piece, transform.position.x);
+            float x = ClampX(piece, transform.position.x + offsetX);
             float y = GetInitialY(piece);
 
             transform.position = transform.position.WithX(x).WithY(y);

@@ -77,7 +77,7 @@ namespace Game.Gameplay.View.Board.Pieces
             InvalidOperationException.ThrowIfNull(Piece);
 
             _content.localPosition = _content.localPosition.WithX(0.5f * (Piece.Width - 1)).WithY(0.5f * Piece.Height);
-            _content.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation);
+            _content.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation); // Clockwise rotation
         }
     }
 }
