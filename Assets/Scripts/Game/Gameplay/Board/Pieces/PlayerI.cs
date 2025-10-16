@@ -8,13 +8,13 @@ namespace Game.Gameplay.Board.Pieces
     {
         /*
          *
-         * 2 Row x 1 Column
+         * 4 Row x 1 Column
          *
          * Has no special behaviour
          *
          */
 
-        public PlayerI([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerI, 2, 1) { }
+        public PlayerI([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerI, 4, 1) { }
 
         public override IPiece Clone()
         {
