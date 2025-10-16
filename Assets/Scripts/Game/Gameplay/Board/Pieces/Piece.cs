@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Infrastructure.System;
+using Infrastructure.System.Matrix.Utils;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
@@ -35,7 +36,7 @@ namespace Game.Gameplay.Board.Pieces
                     return;
                 }
 
-                value %= 4; // TODO: Const
+                value %= MatrixUtils.MaxRotationSteps;
 
                 if (Rotation == value)
                 {
@@ -103,7 +104,7 @@ namespace Game.Gameplay.Board.Pieces
 
             // Undo clockwise rotation (by using counterclockwise rotation) in order to provide non-rotated offsets
 
-            GetCounterClockwiseRotatedIndices(
+            MatrixUtils.GetCounterClockwiseRotatedIndices(
                 Height,
                 Width,
                 rowOffset,
@@ -172,97 +173,10 @@ namespace Game.Gameplay.Board.Pieces
         [NotNull]
         private bool[,] GetRotatedGrid()
         {
-            return _rotatedGrid ??= RotateClockwise(GetGrid(), Rotation);
+            return _rotatedGrid ??= GetGrid().RotateClockwise(Rotation);
         }
 
         [NotNull]
         protected abstract bool[,] GetGrid();
-
-        // TODO: Move to infrastructure matrix utils ¿?
-
-        [NotNull]
-        private static T[,] RotateClockwise<T>([NotNull] T[,] grid, int steps)
-        {
-            ArgumentNullException.ThrowIfNull(grid);
-
-            steps %= 4; // TODO: Const
-
-            for (int step = 0; step < steps; ++step)
-            {
-                grid = RotateClockwise(grid);
-            }
-
-            return grid;
-        }
-
-        [NotNull]
-        private static T[,] RotateClockwise<T>([NotNull] T[,] grid)
-        {
-            ArgumentNullException.ThrowIfNull(grid);
-
-            int rows = grid.GetLength(0);
-            int columns = grid.GetLength(1);
-
-            T[,] newGrid = new T[columns, rows];
-
-            for (int row = 0; row < rows; ++row)
-            {
-                for (int column = 0; column < columns; ++column)
-                {
-                    GetClockwiseRotatedIndices(columns, row, column, out int rotatedRow, out int rotatedColumn);
-
-                    newGrid[rotatedRow, rotatedColumn] = grid[row, column];
-                }
-            }
-
-            return newGrid;
-        }
-
-        private static void GetClockwiseRotatedIndices(
-            int columns,
-            int row,
-            int column,
-            out int rotatedRow,
-            out int rotatedColumn)
-        {
-            rotatedRow = columns - column - 1;
-            rotatedColumn = row;
-        }
-
-        private static void GetCounterClockwiseRotatedIndices(
-            int rows,
-            int columns,
-            int row,
-            int column,
-            out int rotatedRow,
-            out int rotatedColumn,
-            int steps)
-        {
-            rotatedRow = row;
-            rotatedColumn = column;
-
-            steps %= 4; // TODO: Const
-
-            for (int step = 0; step < steps; ++step)
-            {
-                int rowsTarget = step % 2 == 0 ? rows : columns;
-
-                GetCounterClockwiseRotatedIndices(rowsTarget, row, column, out rotatedRow, out rotatedColumn);
-
-                row = rotatedRow;
-                column = rotatedColumn;
-            }
-        }
-
-        private static void GetCounterClockwiseRotatedIndices(
-            int rows,
-            int row,
-            int column,
-            out int rotatedRow,
-            out int rotatedColumn)
-        {
-            rotatedRow = column;
-            rotatedColumn = rows - row - 1;
-        }
     }
 }

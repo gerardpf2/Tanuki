@@ -1,4 +1,5 @@
 using Infrastructure.System;
+using Infrastructure.System.Matrix.Utils;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Pieces
@@ -16,17 +17,9 @@ namespace Game.Gameplay.Board.Pieces
 
         protected override bool[,] GetGrid()
         {
-            // TODO: Move to infrastructure matrix utils ¿?
-
             bool[,] grid = new bool[_rows, _columns];
 
-            for (int row = 0; row < _rows; ++row)
-            {
-                for (int column = 0; column < _columns; ++column)
-                {
-                    grid[row, column] = true;
-                }
-            }
+            grid.Fill(true);
 
             return grid;
         }
