@@ -9,9 +9,9 @@ namespace Game.Gameplay.Board
         IPiece GetTest();
 
         [NotNull]
-        IPiece GetPlayerBlock11();
+        IPiece GetPlayerO1();
 
         [NotNull]
-        IPiece GetPlayerBlock21();
+        IPiece GetPlayerI1();
     }
 }

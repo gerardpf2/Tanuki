@@ -32,13 +32,13 @@ namespace Game.Gameplay.Board
                 }
                 case PieceType.PlayerBlock11:
                 {
-                    piece = _pieceFactory.GetPlayerBlock11();
+                    piece = _pieceFactory.GetPlayerO1();
 
                     break;
                 }
                 case PieceType.PlayerBlock21:
                 {
-                    piece = _pieceFactory.GetPlayerBlock21();
+                    piece = _pieceFactory.GetPlayerI1();
 
                     break;
                 }
