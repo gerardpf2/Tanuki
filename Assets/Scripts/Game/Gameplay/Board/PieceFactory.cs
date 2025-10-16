@@ -29,6 +29,16 @@ namespace Game.Gameplay.Board
             return new PlayerO(_converter, GetNewPieceId());
         }
 
+        public IPiece GetPlayerJ()
+        {
+            return new PlayerJ(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerL()
+        {
+            return new PlayerL(_converter, GetNewPieceId());
+        }
+
         public IPiece GetTest()
         {
             return new Test(_converter, GetNewPieceId());

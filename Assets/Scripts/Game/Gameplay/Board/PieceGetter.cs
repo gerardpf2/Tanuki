@@ -37,8 +37,20 @@ namespace Game.Gameplay.Board
                     break;
                 }
                 case PieceType.PlayerT:
+                    InvalidOperationException.Throw("TODO");
+                    return null;
                 case PieceType.PlayerJ:
+                {
+                    piece = _pieceFactory.GetPlayerJ();
+
+                    break;
+                }
                 case PieceType.PlayerL:
+                {
+                    piece = _pieceFactory.GetPlayerL();
+
+                    break;
+                }
                 case PieceType.PlayerS:
                 case PieceType.PlayerZ:
                     InvalidOperationException.Throw("TODO");
