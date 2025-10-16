@@ -24,14 +24,14 @@ namespace Game.Gameplay.Board
             return new Test(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerO1()
+        public IPiece GetPlayerO()
         {
-            return new PlayerO1(_converter, GetNewPieceId());
+            return new PlayerO(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerI1()
+        public IPiece GetPlayerI()
         {
-            return new PlayerI1(_converter, GetNewPieceId());
+            return new PlayerI(_converter, GetNewPieceId());
         }
 
         private int GetNewPieceId()

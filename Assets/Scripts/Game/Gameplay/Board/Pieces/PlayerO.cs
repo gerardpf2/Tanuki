@@ -4,21 +4,21 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Pieces
 {
-    public class PlayerI1 : RectangularPiece
+    public class PlayerO : RectangularPiece
     {
         /*
          *
-         * 2 Row x 1 Column
+         * 1 Row x 1 Column
          *
          * Has no special behaviour
          *
          */
 
-        public PlayerI1([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerBlock21, 2, 1) { }
+        public PlayerO([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerO, 1, 1) { }
 
         public override IPiece Clone()
         {
-            return new PlayerI1(Converter, Id).WithState(State);
+            return new PlayerO(Converter, Id).WithState(State);
         }
     }
 }
