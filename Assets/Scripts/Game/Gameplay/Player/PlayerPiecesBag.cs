@@ -15,8 +15,11 @@ namespace Game.Gameplay.Player
             {
                 PieceType.PlayerI,
                 PieceType.PlayerO,
+                PieceType.PlayerT,
                 PieceType.PlayerJ,
                 PieceType.PlayerL,
+                PieceType.PlayerS,
+                PieceType.PlayerZ,
                 PieceType.Test
             };
 

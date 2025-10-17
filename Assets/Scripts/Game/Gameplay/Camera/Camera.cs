@@ -16,7 +16,7 @@ namespace Game.Gameplay.Camera
 
         public int BottomRow => TopRow - VisibleRows + 1;
 
-        public int VisibleRows => 12; // TODO: ScriptableObject
+        public int VisibleRows => 15; // TODO: ScriptableObject
 
         public Camera([NotNull] IBoardContainer boardContainer)
         {
