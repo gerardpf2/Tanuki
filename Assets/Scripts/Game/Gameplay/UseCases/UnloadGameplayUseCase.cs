@@ -3,7 +3,6 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.PhaseResolution;
-using Game.Gameplay.Player;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
@@ -25,7 +24,6 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
-        [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
@@ -42,7 +40,6 @@ namespace Game.Gameplay.UseCases
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IMovesContainer movesContainer,
             [NotNull] IPhaseResolver phaseResolver,
-            [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
@@ -58,7 +55,6 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(phaseResolver);
-            ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
@@ -74,7 +70,6 @@ namespace Game.Gameplay.UseCases
             _goalsContainer = goalsContainer;
             _movesContainer = movesContainer;
             _phaseResolver = phaseResolver;
-            _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
@@ -100,7 +95,6 @@ namespace Game.Gameplay.UseCases
             _goalsContainer.Uninitialize();
             _movesContainer.Uninitialize();
             _phaseResolver.Uninitialize();
-            _playerPiecesBag.Uninitialize();
         }
 
         private void PrepareView()

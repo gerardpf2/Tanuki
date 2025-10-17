@@ -1,9 +1,9 @@
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Moves;
-using Game.Gameplay.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -11,69 +11,67 @@ namespace Game.Gameplay.PhaseResolution.Phases
 {
     public class LockPlayerPiecePhase : Phase
     {
+        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IMovesContainer _movesContainer;
-        [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
-
-        private IPiece _targetPiece;
 
         protected override int? MaxResolveTimesPerIteration => 1;
 
         public LockPlayerPiecePhase(
+            [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
-            [NotNull] IMovesContainer movesContainer,
-            [NotNull] IPlayerPiecesBag playerPiecesBag)
+            [NotNull] IMovesContainer movesContainer)
         {
+            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(movesContainer);
-            ArgumentNullException.ThrowIfNull(playerPiecesBag);
 
+            _bagContainer = bagContainer;
             _boardContainer = boardContainer;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
             _movesContainer = movesContainer;
-            _playerPiecesBag = playerPiecesBag;
-        }
-
-        public override void OnBeginIteration()
-        {
-            base.OnBeginIteration();
-
-            _targetPiece = _playerPiecesBag.Current;
         }
 
         protected override ResolveResult ResolveImpl([NotNull] ResolveContext resolveContext)
         {
             ArgumentNullException.ThrowIfNull(resolveContext);
 
+            IBag bag = _bagContainer.Bag;
             IBoard board = _boardContainer.Board;
 
+            InvalidOperationException.ThrowIfNull(bag);
             InvalidOperationException.ThrowIfNull(board);
 
-            if (_targetPiece is null ||
-                _playerPiecesBag.Current != _targetPiece ||
-                !resolveContext.PieceSourceCoordinate.HasValue)
+            if (!resolveContext.PieceSourceCoordinate.HasValue)
             {
                 return ResolveResult.NotUpdated;
             }
 
-            _playerPiecesBag.ConsumeCurrent();
+            IPiece piece = bag.Current;
 
-            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(resolveContext.PieceSourceCoordinate.Value);
+            bag.ConsumeCurrent();
 
-            board.AddPiece(_targetPiece, lockSourceCoordinate);
+            Coordinate lockSourceCoordinate =
+                GetLockSourceCoordinate(
+                    piece,
+                    board,
+                    resolveContext.PieceSourceCoordinate.Value
+                );
+
+            board.AddPiece(piece, lockSourceCoordinate);
 
             int movesAmount = DecreaseMovesAmount();
 
             _eventEnqueuer.Enqueue(
                 _eventFactory.GetLockPlayerPieceEvent(
-                    _targetPiece,
+                    piece,
                     lockSourceCoordinate,
                     movesAmount
                 )
@@ -82,21 +80,15 @@ namespace Game.Gameplay.PhaseResolution.Phases
             return ResolveResult.Updated;
         }
 
-        public override void OnEndIteration()
+        private static Coordinate GetLockSourceCoordinate(
+            [NotNull] IPiece piece,
+            [NotNull] IBoard board,
+            Coordinate sourceCoordinate)
         {
-            base.OnEndIteration();
+            ArgumentNullException.ThrowIfNull(piece);
+            ArgumentNullException.ThrowIfNull(board);
 
-            _targetPiece = null;
-        }
-
-        private Coordinate GetLockSourceCoordinate(Coordinate sourceCoordinate)
-        {
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-            InvalidOperationException.ThrowIfNull(_targetPiece);
-
-            int fall = board.ComputePieceFall(_targetPiece, sourceCoordinate);
+            int fall = board.ComputePieceFall(piece, sourceCoordinate);
             Coordinate lockSourceCoordinate = sourceCoordinate.Down(fall);
 
             return lockSourceCoordinate;
