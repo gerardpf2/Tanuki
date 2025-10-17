@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Game.Gameplay.Bag;
+using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Goals;
@@ -15,19 +17,23 @@ namespace Game.Gameplay.Parsing
         [NotNull] private readonly IBoardSerializedDataConverter _boardSerializedDataConverter;
         [NotNull] private readonly IGoalsSerializedDataConverter _goalsSerializedDataConverter;
         [NotNull] private readonly IMovesSerializedDataConverter _movesSerializedDataConverter;
+        [NotNull] private readonly IBagSerializedDataConverter _bagSerializedDataConverter;
 
         public GameplaySerializedDataConverter(
             [NotNull] IBoardSerializedDataConverter boardSerializedDataConverter,
             [NotNull] IGoalsSerializedDataConverter goalsSerializedDataConverter,
-            [NotNull] IMovesSerializedDataConverter movesSerializedDataConverter)
+            [NotNull] IMovesSerializedDataConverter movesSerializedDataConverter,
+            [NotNull] IBagSerializedDataConverter bagSerializedDataConverter)
         {
             ArgumentNullException.ThrowIfNull(boardSerializedDataConverter);
             ArgumentNullException.ThrowIfNull(goalsSerializedDataConverter);
             ArgumentNullException.ThrowIfNull(movesSerializedDataConverter);
+            ArgumentNullException.ThrowIfNull(bagSerializedDataConverter);
 
             _boardSerializedDataConverter = boardSerializedDataConverter;
             _goalsSerializedDataConverter = goalsSerializedDataConverter;
             _movesSerializedDataConverter = movesSerializedDataConverter;
+            _bagSerializedDataConverter = bagSerializedDataConverter;
         }
 
         public void To(
@@ -35,23 +41,26 @@ namespace Game.Gameplay.Parsing
             out IBoard board,
             out IEnumerable<PiecePlacement> piecePlacements,
             out IGoals goals,
-            out IMoves moves)
+            out IMoves moves,
+            out IBag bag)
         {
             ArgumentNullException.ThrowIfNull(gameplaySerializedData);
 
             _boardSerializedDataConverter.To(gameplaySerializedData.BoardSerializedData, out board, out piecePlacements);
             goals = _goalsSerializedDataConverter.To(gameplaySerializedData.GoalsSerializedData);
             moves = _movesSerializedDataConverter.To(gameplaySerializedData.MovesSerializedData);
+            bag = _bagSerializedDataConverter.To(gameplaySerializedData.BagSerializedData);
         }
 
-        public GameplaySerializedData From(IBoard board, IGoals goals, IMoves moves)
+        public GameplaySerializedData From(IBoard board, IGoals goals, IMoves moves, IBag bag)
         {
             return
                 new GameplaySerializedData
                 {
                     BoardSerializedData = _boardSerializedDataConverter.From(board),
                     GoalsSerializedData = _goalsSerializedDataConverter.From(goals),
-                    MovesSerializedData = _movesSerializedDataConverter.From(moves)
+                    MovesSerializedData = _movesSerializedDataConverter.From(moves),
+                    BagSerializedData = _bagSerializedDataConverter.From(bag)
                 };
         }
     }

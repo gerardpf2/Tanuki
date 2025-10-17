@@ -1,3 +1,4 @@
+using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
@@ -54,6 +55,16 @@ namespace Game.Gameplay.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IBagPieceEntrySerializedDataConverter>(_ => new BagPieceEntrySerializedDataConverter()));
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IBagSerializedDataConverter>(r =>
+                    new BagSerializedDataConverter(
+                        r.Resolve<IBagPieceEntrySerializedDataConverter>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardSerializedDataConverter>(r =>
@@ -144,7 +155,8 @@ namespace Game.Gameplay.Composition
                     new GameplaySerializedDataConverter(
                         r.Resolve<IBoardSerializedDataConverter>(),
                         r.Resolve<IGoalsSerializedDataConverter>(),
-                        r.Resolve<IMovesSerializedDataConverter>()
+                        r.Resolve<IMovesSerializedDataConverter>(),
+                        r.Resolve<IBagSerializedDataConverter>()
                     )
                 )
             );

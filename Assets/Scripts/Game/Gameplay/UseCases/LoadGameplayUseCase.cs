@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
@@ -109,7 +110,8 @@ namespace Game.Gameplay.UseCases
                 out IBoard board,
                 out IEnumerable<PiecePlacement> piecePlacements,
                 out IGoals goals,
-                out IMoves moves
+                out IMoves moves,
+                out IBag bag
             );
 
             _boardContainer.Initialize(board, piecePlacements);

@@ -1,3 +1,4 @@
+using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Goals.Parsing;
 using Game.Gameplay.Moves.Parsing;
@@ -15,5 +16,8 @@ namespace Game.Gameplay.Parsing
 
         [JsonProperty("MOVES", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public MovesSerializedData MovesSerializedData { get; set; }
+
+        [JsonProperty("BAG", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public BagSerializedData BagSerializedData { get; set; }
     }
 }
