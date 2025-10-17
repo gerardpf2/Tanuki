@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Game.Gameplay.Board;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -9,13 +8,32 @@ namespace Game.Gameplay.Bag
     public class Bag : IBag
     {
         [NotNull, ItemNotNull] private readonly IReadOnlyCollection<BagPieceEntry> _bagPieceEntries;
-        [NotNull] private readonly List<PieceType> _pieceTypes = new(); // Reverse order because add / remove last should be more efficient than first
+        [NotNull] private readonly IReadOnlyList<PieceType> _initialPieceTypes;
+        [NotNull] private readonly IList<PieceType> _pieceTypes = new List<PieceType>(); // Reverse order because add / remove last should be more efficient than first
+
+        public IEnumerable<BagPieceEntry> BagPieceEntries => _bagPieceEntries;
+
+        public IEnumerable<PieceType> InitialPieceTypes => _initialPieceTypes;
+
+        public PieceType Current
+        {
+            get
+            {
+                if (_pieceTypes.Count == 0)
+                {
+                    InvalidOperationException.Throw("Cannot be empty");
+                }
+
+                return _pieceTypes[^1];
+            }
+        }
 
         public Bag(
             [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries,
-            IEnumerable<PieceType> initialPieceTypes)
+            [NotNull] IEnumerable<PieceType> initialPieceTypes)
         {
             ArgumentNullException.ThrowIfNull(bagPieceEntries);
+            ArgumentNullException.ThrowIfNull(initialPieceTypes);
 
             List<BagPieceEntry> bagPieceEntriesCopy = new();
 
@@ -27,23 +45,14 @@ namespace Game.Gameplay.Bag
             }
 
             _bagPieceEntries = bagPieceEntriesCopy;
+            _initialPieceTypes = new List<PieceType>(initialPieceTypes);
 
             Refill();
 
-            if (initialPieceTypes is not null)
+            for (int i = _initialPieceTypes.Count - 1; i >= 0; --i)
             {
-                _pieceTypes.AddRange(initialPieceTypes.Reverse());
+                _pieceTypes.Add(_initialPieceTypes[i]);
             }
-        }
-
-        public PieceType GetCurrent()
-        {
-            if (_pieceTypes.Count == 0)
-            {
-                InvalidOperationException.Throw("Cannot be empty");
-            }
-
-            return _pieceTypes[^1];
         }
 
         public void ConsumeCurrent()
