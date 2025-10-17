@@ -29,6 +29,11 @@ namespace Game.Gameplay.Board
             return new PlayerO(_converter, GetNewPieceId());
         }
 
+        public IPiece GetPlayerT()
+        {
+            return new PlayerT(_converter, GetNewPieceId());
+        }
+
         public IPiece GetPlayerJ()
         {
             return new PlayerJ(_converter, GetNewPieceId());
@@ -37,6 +42,16 @@ namespace Game.Gameplay.Board
         public IPiece GetPlayerL()
         {
             return new PlayerL(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerS()
+        {
+            return new PlayerS(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerZ()
+        {
+            return new PlayerZ(_converter, GetNewPieceId());
         }
 
         public IPiece GetTest()

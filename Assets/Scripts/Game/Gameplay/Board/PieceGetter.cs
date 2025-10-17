@@ -25,42 +25,29 @@ namespace Game.Gameplay.Board
             switch (pieceType)
             {
                 case PieceType.PlayerI:
-                {
                     piece = _pieceFactory.GetPlayerI();
-
                     break;
-                }
                 case PieceType.PlayerO:
-                {
                     piece = _pieceFactory.GetPlayerO();
-
                     break;
-                }
                 case PieceType.PlayerT:
-                    InvalidOperationException.Throw("TODO");
-                    return null;
+                    piece = _pieceFactory.GetPlayerT();
+                    break;
                 case PieceType.PlayerJ:
-                {
                     piece = _pieceFactory.GetPlayerJ();
-
                     break;
-                }
                 case PieceType.PlayerL:
-                {
                     piece = _pieceFactory.GetPlayerL();
-
                     break;
-                }
                 case PieceType.PlayerS:
-                case PieceType.PlayerZ:
-                    InvalidOperationException.Throw("TODO");
-                    return null;
-                case PieceType.Test:
-                {
-                    piece = _pieceFactory.GetTest();
-
+                    piece = _pieceFactory.GetPlayerS();
                     break;
-                }
+                case PieceType.PlayerZ:
+                    piece = _pieceFactory.GetPlayerZ();
+                    break;
+                case PieceType.Test:
+                    piece = _pieceFactory.GetTest();
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(pieceType);
                     return null;

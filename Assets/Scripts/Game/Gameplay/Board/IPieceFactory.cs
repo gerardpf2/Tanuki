@@ -12,10 +12,19 @@ namespace Game.Gameplay.Board
         IPiece GetPlayerO();
 
         [NotNull]
+        IPiece GetPlayerT();
+
+        [NotNull]
         IPiece GetPlayerJ();
 
         [NotNull]
         IPiece GetPlayerL();
+
+        [NotNull]
+        IPiece GetPlayerS();
+
+        [NotNull]
+        IPiece GetPlayerZ();
 
         [NotNull]
         IPiece GetTest();
