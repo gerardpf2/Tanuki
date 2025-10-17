@@ -1,3 +1,4 @@
+using Game.Gameplay.Bag;
 using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
@@ -65,6 +66,8 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IBagContainer>(_ => new BagContainer()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardSerializedDataConverter>(r =>
@@ -288,6 +291,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
+                        r.Resolve<IBagContainer>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IGoalsContainer>(),
@@ -434,6 +438,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
                     new LoadGameplayUseCase(
                         r.Resolve<IGameplayDefinitionGetter>(),
+                        r.Resolve<IBagContainer>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IGoalsContainer>(),

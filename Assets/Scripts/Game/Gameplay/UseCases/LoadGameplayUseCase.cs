@@ -23,6 +23,7 @@ namespace Game.Gameplay.UseCases
     public class LoadGameplayUseCase : ILoadGameplayUseCase
     {
         [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
+        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
@@ -41,6 +42,7 @@ namespace Game.Gameplay.UseCases
 
         public LoadGameplayUseCase(
             [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
+            [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] IGoalsContainer goalsContainer,
@@ -58,6 +60,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(goalsContainer);
@@ -75,6 +78,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(screenLoader);
 
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
+            _bagContainer = bagContainer;
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
             _goalsContainer = goalsContainer;
@@ -114,6 +118,7 @@ namespace Game.Gameplay.UseCases
                 out IBag bag
             );
 
+            _bagContainer.Initialize(bag);
             _boardContainer.Initialize(board, piecePlacements);
             _goalsContainer.Initialize(goals);
             _movesContainer.Initialize(moves);

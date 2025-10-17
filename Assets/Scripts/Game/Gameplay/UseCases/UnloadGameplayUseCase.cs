@@ -1,3 +1,4 @@
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
@@ -18,6 +19,7 @@ namespace Game.Gameplay.UseCases
 {
     public class UnloadGameplayUseCase : IUnloadGameplayUseCase
     {
+        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
@@ -34,6 +36,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IScreenLoader _screenLoader;
 
         public UnloadGameplayUseCase(
+            [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] IGoalsContainer goalsContainer,
@@ -49,6 +52,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
         {
+            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(goalsContainer);
@@ -64,6 +68,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
+            _bagContainer = bagContainer;
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
             _goalsContainer = goalsContainer;
@@ -89,6 +94,7 @@ namespace Game.Gameplay.UseCases
 
         private void PrepareModel()
         {
+            _bagContainer.Uninitialize();
             _boardContainer.Uninitialize();
             _pieceIdGetter.Uninitialize();
             _goalsContainer.Uninitialize();
