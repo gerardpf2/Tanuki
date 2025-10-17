@@ -62,7 +62,8 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBagSerializedDataConverter>(r =>
                     new BagSerializedDataConverter(
-                        r.Resolve<IBagPieceEntrySerializedDataConverter>()
+                        r.Resolve<IBagPieceEntrySerializedDataConverter>(),
+                        r.Resolve<IPieceGetter>()
                     )
                 )
             );

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -7,31 +8,41 @@ namespace Game.Gameplay.Bag
 {
     public class Bag : IBag
     {
+        [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull, ItemNotNull] private readonly IReadOnlyCollection<BagPieceEntry> _bagPieceEntries;
         [NotNull] private readonly IReadOnlyList<PieceType> _initialPieceTypes;
-        [NotNull] private readonly IList<PieceType> _pieceTypes = new List<PieceType>(); // Reverse order because add / remove last should be more efficient than first
+
+        /*
+         *
+         * ItemNotNull as long as added items come from piece getter
+         * Reverse order because add / remove last should be more efficient than first
+         *
+         */
+        [NotNull, ItemNotNull] private readonly IList<IPiece> _pieces = new List<IPiece>();
 
         public IEnumerable<BagPieceEntry> BagPieceEntries => _bagPieceEntries;
 
         public IEnumerable<PieceType> InitialPieceTypes => _initialPieceTypes;
 
-        public PieceType Current
+        public IPiece Current
         {
             get
             {
-                if (_pieceTypes.Count == 0)
+                if (_pieces.Count == 0)
                 {
                     InvalidOperationException.Throw("Cannot be empty");
                 }
 
-                return _pieceTypes[^1];
+                return _pieces[^1];
             }
         }
 
         public Bag(
+            [NotNull] IPieceGetter pieceGetter,
             [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries,
             [NotNull] IEnumerable<PieceType> initialPieceTypes)
         {
+            ArgumentNullException.ThrowIfNull(pieceGetter);
             ArgumentNullException.ThrowIfNull(bagPieceEntries);
             ArgumentNullException.ThrowIfNull(initialPieceTypes);
 
@@ -44,6 +55,7 @@ namespace Game.Gameplay.Bag
                 bagPieceEntriesCopy.Add(bagPieceEntry);
             }
 
+            _pieceGetter = pieceGetter;
             _bagPieceEntries = bagPieceEntriesCopy;
             _initialPieceTypes = new List<PieceType>(initialPieceTypes);
 
@@ -51,20 +63,22 @@ namespace Game.Gameplay.Bag
 
             for (int i = _initialPieceTypes.Count - 1; i >= 0; --i)
             {
-                _pieceTypes.Add(_initialPieceTypes[i]);
+                IPiece piece = GetPiece(_initialPieceTypes[i]);
+
+                _pieces.Add(piece);
             }
         }
 
         public void ConsumeCurrent()
         {
-            if (_pieceTypes.Count == 0)
+            if (_pieces.Count == 0)
             {
                 InvalidOperationException.Throw("Cannot be empty");
             }
 
-            _pieceTypes.RemoveAt(_pieceTypes.Count - 1);
+            _pieces.RemoveAt(_pieces.Count - 1);
 
-            if (_pieceTypes.Count == 0)
+            if (_pieces.Count == 0)
             {
                 Refill();
             }
@@ -76,7 +90,9 @@ namespace Game.Gameplay.Bag
             {
                 for (int i = 0; i < bagPieceEntry.Amount; ++i)
                 {
-                    _pieceTypes.Add(bagPieceEntry.PieceType);
+                    IPiece piece = GetPiece(bagPieceEntry.PieceType);
+
+                    _pieces.Add(piece);
                 }
             }
 
@@ -86,6 +102,12 @@ namespace Game.Gameplay.Bag
         private void Shuffle()
         {
             // TODO
+        }
+
+        [NotNull]
+        private IPiece GetPiece(PieceType pieceType)
+        {
+            return _pieceGetter.Get(pieceType);
         }
     }
 }
