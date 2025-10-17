@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameplayDefinitions:
   - _id: Test
-    _data: '{"BOARD":{"COLUMNS":9,"PIECES":[]},"GOALS":{"GOALS":[{"TYPE":"Test","AMOUNT":3}]},"MOVES":{"AMOUNT":1000}}'
+    _data: '{"BOARD":{"COLUMNS":9,"PIECES":[]},"GOALS":{"GOALS":[{"TYPE":"Test","AMOUNT":3}]},"MOVES":{"AMOUNT":1000},"BAG":{"ENTRIES":[{"TYPE":"PlayerI","AMOUNT":1},{"TYPE":"PlayerO","AMOUNT":1},{"TYPE":"PlayerT","AMOUNT":1},{"TYPE":"PlayerJ","AMOUNT":1},{"TYPE":"PlayerL","AMOUNT":1},{"TYPE":"PlayerS","AMOUNT":1},{"TYPE":"PlayerZ","AMOUNT":1}],"INITIAL":["PlayerI","PlayerZ","PlayerO"]}}'
