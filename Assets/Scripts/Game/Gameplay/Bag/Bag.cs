@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
-using Infrastructure.System.Exceptions;
+using Infrastructure.System.List.Utils;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Bag
 {
@@ -11,6 +14,7 @@ namespace Game.Gameplay.Bag
         [NotNull] private readonly IPieceGetter _pieceGetter;
         [NotNull, ItemNotNull] private readonly IReadOnlyCollection<BagPieceEntry> _bagPieceEntries;
         [NotNull] private readonly IReadOnlyList<PieceType> _initialPieceTypes;
+        [NotNull] private readonly Random _random = new();
 
         /*
          *
@@ -101,7 +105,7 @@ namespace Game.Gameplay.Bag
 
         private void Shuffle()
         {
-            // TODO
+            _pieces.Shuffle(_random);
         }
 
         [NotNull]
