@@ -1,6 +1,6 @@
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing;
-using Game.Gameplay.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -8,36 +8,33 @@ namespace Game.Gameplay.PhaseResolution.Phases
 {
     public class InstantiatePlayerPiecePhase : Phase
     {
+        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
-        [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
 
         protected override int? MaxResolveTimesPerIteration => 1;
 
         public InstantiatePlayerPiecePhase(
+            [NotNull] IBagContainer bagContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory,
-            [NotNull] IPlayerPiecesBag playerPiecesBag)
+            [NotNull] IEventFactory eventFactory)
         {
+            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
-            ArgumentNullException.ThrowIfNull(playerPiecesBag);
 
+            _bagContainer = bagContainer;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
-            _playerPiecesBag = playerPiecesBag;
         }
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            if (_playerPiecesBag.Current is not null)
-            {
-                return ResolveResult.NotUpdated;
-            }
+            IBag bag = _bagContainer.Bag;
 
-            _playerPiecesBag.PrepareNext();
+            InvalidOperationException.ThrowIfNull(bag);
 
-            IPiece piece = _playerPiecesBag.Current;
+            IPiece piece = bag.Current;
 
             _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece));
 

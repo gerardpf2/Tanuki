@@ -1,3 +1,5 @@
+using Game.Gameplay.Bag;
+using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
@@ -10,7 +12,6 @@ using Game.Gameplay.Moves.Parsing;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
-using Game.Gameplay.Player;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Board;
@@ -54,6 +55,19 @@ namespace Game.Gameplay.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IBagPieceEntrySerializedDataConverter>(_ => new BagPieceEntrySerializedDataConverter()));
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IBagSerializedDataConverter>(r =>
+                    new BagSerializedDataConverter(
+                        r.Resolve<IBagPieceEntrySerializedDataConverter>(),
+                        r.Resolve<IPieceGetter>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IBagContainer>(_ => new BagContainer()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardSerializedDataConverter>(r =>
@@ -144,7 +158,8 @@ namespace Game.Gameplay.Composition
                     new GameplaySerializedDataConverter(
                         r.Resolve<IBoardSerializedDataConverter>(),
                         r.Resolve<IGoalsSerializedDataConverter>(),
-                        r.Resolve<IMovesSerializedDataConverter>()
+                        r.Resolve<IMovesSerializedDataConverter>(),
+                        r.Resolve<IBagSerializedDataConverter>()
                     )
                 )
             );
@@ -206,9 +221,9 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new InstantiatePlayerPiecePhase(
+                        r.Resolve<IBagContainer>(),
                         r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>(),
-                        r.Resolve<IPlayerPiecesBag>()
+                        r.Resolve<IEventFactory>()
                     )
                 ),
                 "InstantiatePlayerPiecePhase"
@@ -228,11 +243,11 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new LockPlayerPiecePhase(
+                        r.Resolve<IBagContainer>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
-                        r.Resolve<IMovesContainer>(),
-                        r.Resolve<IPlayerPiecesBag>()
+                        r.Resolve<IMovesContainer>()
                     )
                 ),
                 "LockPlayerPiecePhase"
@@ -264,24 +279,16 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IPlayerPiecesBag>(r =>
-                    new PlayerPiecesBag(
-                        r.Resolve<IPieceGetter>()
-                    )
-                )
-            );
-
             // Not shared so it can only be unloaded from here
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
+                        r.Resolve<IBagContainer>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IMovesContainer>(),
                         r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
@@ -422,13 +429,13 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
                     new LoadGameplayUseCase(
                         r.Resolve<IGameplayDefinitionGetter>(),
+                        r.Resolve<IBagContainer>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IMovesContainer>(),
                         r.Resolve<IGameplayParser>(),
                         r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IPlayerPiecesBag>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),

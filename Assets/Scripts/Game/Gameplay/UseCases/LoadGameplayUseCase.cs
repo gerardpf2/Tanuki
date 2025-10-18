@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.PhaseResolution;
-using Game.Gameplay.Player;
 using Game.Gameplay.View;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -22,13 +22,13 @@ namespace Game.Gameplay.UseCases
     public class LoadGameplayUseCase : ILoadGameplayUseCase
     {
         [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
+        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IGameplayParser _gameplayParser;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
-        [NotNull] private readonly IPlayerPiecesBag _playerPiecesBag;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
@@ -40,13 +40,13 @@ namespace Game.Gameplay.UseCases
 
         public LoadGameplayUseCase(
             [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
+            [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IMovesContainer movesContainer,
             [NotNull] IGameplayParser gameplayParser,
             [NotNull] IPhaseResolver phaseResolver,
-            [NotNull] IPlayerPiecesBag playerPiecesBag,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
@@ -57,13 +57,13 @@ namespace Game.Gameplay.UseCases
             [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(gameplayParser);
             ArgumentNullException.ThrowIfNull(phaseResolver);
-            ArgumentNullException.ThrowIfNull(playerPiecesBag);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
@@ -74,13 +74,13 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(screenLoader);
 
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
+            _bagContainer = bagContainer;
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
             _goalsContainer = goalsContainer;
             _movesContainer = movesContainer;
             _gameplayParser = gameplayParser;
             _phaseResolver = phaseResolver;
-            _playerPiecesBag = playerPiecesBag;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
@@ -109,14 +109,15 @@ namespace Game.Gameplay.UseCases
                 out IBoard board,
                 out IEnumerable<PiecePlacement> piecePlacements,
                 out IGoals goals,
-                out IMoves moves
+                out IMoves moves,
+                out IBag bag
             );
 
+            _bagContainer.Initialize(bag);
             _boardContainer.Initialize(board, piecePlacements);
             _goalsContainer.Initialize(goals);
             _movesContainer.Initialize(moves);
             _phaseResolver.Initialize();
-            _playerPiecesBag.Initialize();
         }
 
         private void PrepareView()

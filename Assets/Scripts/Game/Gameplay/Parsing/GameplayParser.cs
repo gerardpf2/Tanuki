@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
@@ -24,9 +25,15 @@ namespace Game.Gameplay.Parsing
             _parser = parser;
         }
 
-        public string Serialize(IBoard board, IGoals goals, IMoves moves)
+        public string Serialize(IBoard board, IGoals goals, IMoves moves, IBag bag)
         {
-            GameplaySerializedData gameplaySerializedData = _gameplaySerializedDataConverter.From(board, goals, moves);
+            GameplaySerializedData gameplaySerializedData =
+                _gameplaySerializedDataConverter.From(
+                    board,
+                    goals,
+                    moves,
+                    bag
+                );
 
             return _parser.Serialize(gameplaySerializedData);
         }
@@ -36,7 +43,8 @@ namespace Game.Gameplay.Parsing
             out IBoard board,
             out IEnumerable<PiecePlacement> piecePlacements,
             out IGoals goals,
-            out IMoves moves)
+            out IMoves moves,
+            out IBag bag)
         {
             GameplaySerializedData gameplaySerializedData = _parser.Deserialize<GameplaySerializedData>(value);
 
@@ -45,7 +53,8 @@ namespace Game.Gameplay.Parsing
                 out board,
                 out piecePlacements,
                 out goals,
-                out moves
+                out moves,
+                out bag
             );
         }
     }
