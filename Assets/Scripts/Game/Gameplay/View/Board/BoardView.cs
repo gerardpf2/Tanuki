@@ -14,7 +14,6 @@ namespace Game.Gameplay.View.Board
     public class BoardView : IBoardView
     {
         [NotNull] private readonly IBoardContainer _boardContainer;
-        [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
         [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
         [NotNull] private readonly ILogger _logger;
 
@@ -27,17 +26,14 @@ namespace Game.Gameplay.View.Board
 
         public BoardView(
             [NotNull] IBoardContainer boardContainer,
-            [NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter,
             [NotNull] IWorldPositionGetter worldPositionGetter,
             [NotNull] ILogger logger)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
-            ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
             ArgumentNullException.ThrowIfNull(worldPositionGetter);
             ArgumentNullException.ThrowIfNull(logger);
 
             _boardContainer = boardContainer;
-            _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
             _worldPositionGetter = worldPositionGetter;
             _logger = logger;
         }
@@ -50,7 +46,7 @@ namespace Game.Gameplay.View.Board
 
             InvalidOperationException.ThrowIfNull(board);
 
-            _board = new Gameplay.Board.Board(_pieceCachedPropertiesGetter, board.Rows, board.Columns);
+            _board = new Gameplay.Board.Board(board.Rows, board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 

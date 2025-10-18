@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Infrastructure.System;
+using Infrastructure.System.Matrix.Utils;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board.Pieces
@@ -10,18 +12,50 @@ namespace Game.Gameplay.Board.Pieces
     public abstract class Piece : IPiece
     {
         [NotNull] private const string AliveKey = "ALIVE";
+        [NotNull] private const string RotationKey = "ROTATION";
 
         public int Id { get; }
 
         public PieceType Type { get; }
 
+        public int Width => GetRotatedGrid().GetLength(1);
+
+        public int Height => GetRotatedGrid().GetLength(0);
+
         public bool Alive { get; private set; } = true;
 
         public IEnumerable<KeyValuePair<string, string>> State => GetState();
 
+        public int Rotation
+        {
+            get => _rotation;
+            set
+            {
+                if (!CanRotate)
+                {
+                    return;
+                }
+
+                value %= MatrixUtils.MaxRotationSteps;
+
+                if (Rotation == value)
+                {
+                    return;
+                }
+
+                _rotatedGrid = null;
+                _rotation = value;
+            }
+        }
+
+        protected virtual bool CanRotate => true;
+
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
+
+        private bool[,] _rotatedGrid;
+        private int _rotation;
 
         protected Piece([NotNull] IConverter converter, int id, PieceType type)
         {
@@ -33,7 +67,15 @@ namespace Game.Gameplay.Board.Pieces
             Type = type;
         }
 
-        public abstract IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
+        public bool IsFilled(int rowOffset, int columnOffset)
+        {
+            ArgumentOutOfRangeException.ThrowIfNot(rowOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
+            ArgumentOutOfRangeException.ThrowIfNot(rowOffset, ComparisonOperator.LessThan, Height);
+            ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
+            ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.LessThan, Width);
+
+            return GetRotatedGrid()[rowOffset, columnOffset];
+        }
 
         public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)
         {
@@ -55,12 +97,24 @@ namespace Game.Gameplay.Board.Pieces
 
         public void Damage(int rowOffset, int columnOffset)
         {
-            if (!IsInside(rowOffset, columnOffset))
+            if (!IsFilled(rowOffset, columnOffset))
             {
-                InvalidOperationException.Throw($"Offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset}) are not inside");
+                InvalidOperationException.Throw($"Piece is not filled at offsets (RowOffset: {rowOffset}, ColumnOffset: {columnOffset})");
             }
 
-            HandleDamaged(rowOffset, columnOffset);
+            // Undo clockwise rotation (by using counterclockwise rotation) in order to provide non-rotated offsets
+
+            MatrixUtils.GetCounterClockwiseRotatedIndices(
+                Height,
+                Width,
+                rowOffset,
+                columnOffset,
+                out int rotatedRowOffset,
+                out int rotatedColumnOffset,
+                Rotation
+            );
+
+            HandleDamaged(rotatedRowOffset, rotatedColumnOffset);
         }
 
         public abstract IPiece Clone();
@@ -77,6 +131,7 @@ namespace Game.Gameplay.Board.Pieces
         protected virtual void AddStateEntries()
         {
             AddStateEntry(AliveKey, Alive);
+            AddStateEntry(RotationKey, Rotation);
         }
 
         protected void AddStateEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
@@ -99,16 +154,29 @@ namespace Game.Gameplay.Board.Pieces
 
                     return true;
                 }
+                case RotationKey:
+                {
+                    Rotation = Converter.Convert<int>(value);
+
+                    return true;
+                }
             }
 
             return false;
         }
 
-        protected abstract bool IsInside(int rowOffset, int columnOffset);
-
-        protected virtual void HandleDamaged(int rowOffset, int columnOffset)
+        protected virtual void HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
         {
             Alive = false;
         }
+
+        [NotNull]
+        private bool[,] GetRotatedGrid()
+        {
+            return _rotatedGrid ??= GetGrid().RotateClockwise(Rotation);
+        }
+
+        [NotNull]
+        protected abstract bool[,] GetGrid();
     }
 }

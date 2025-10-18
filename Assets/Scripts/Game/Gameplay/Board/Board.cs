@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Pieces.Utils;
 using Game.Gameplay.Board.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -8,8 +9,6 @@ namespace Game.Gameplay.Board
 {
     public class Board : IBoard
     {
-        [NotNull] private readonly IPieceCachedPropertiesGetter _pieceCachedPropertiesGetter;
-
         [NotNull] private readonly IDictionary<int, IPiece> _piecesByPieceIds = new Dictionary<int, IPiece>();
         [NotNull] private readonly IDictionary<int, Coordinate> _sourceCoordinatesByPieceIds = new Dictionary<int, Coordinate>();
         [NotNull] private readonly SortedList<int, int> _piecesAmountByRows = new();
@@ -39,12 +38,8 @@ namespace Game.Gameplay.Board
 
         public IEnumerable<int> PieceIds => _piecesByPieceIds.Keys;
 
-        public Board([NotNull] IPieceCachedPropertiesGetter pieceCachedPropertiesGetter, int rows, int columns)
+        public Board(int rows, int columns)
         {
-            ArgumentNullException.ThrowIfNull(pieceCachedPropertiesGetter);
-
-            _pieceCachedPropertiesGetter = pieceCachedPropertiesGetter;
-
             _pieceIds = new int?[rows, columns];
         }
 
@@ -93,7 +88,7 @@ namespace Game.Gameplay.Board
                 InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been added");
             }
 
-            int newRows = sourceCoordinate.Row + _pieceCachedPropertiesGetter.GetTopMostRowOffset(piece) + 1;
+            int newRows = sourceCoordinate.Row + piece.Height;
 
             ExpandRowsIfNeeded(newRows);
 

@@ -9,12 +9,17 @@ namespace Game.Gameplay.Board.Pieces
 
         PieceType Type { get; }
 
+        int Width { get; }
+
+        int Height { get; }
+
         bool Alive { get; }
 
         IEnumerable<KeyValuePair<string, string>> State { get; }
 
-        [NotNull]
-        IEnumerable<Coordinate> GetCoordinates(Coordinate sourceCoordinate);
+        int Rotation { get; set; } // Rotation steps 0, 1, 2, 3 -> 0, 90, 180, 270
+
+        bool IsFilled(int rowOffset, int columnOffset);
 
         void ProcessState(IEnumerable<KeyValuePair<string, string>> state);
 

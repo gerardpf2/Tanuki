@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Game.Gameplay.Board.Pieces;
-using Game.Gameplay.Board.Pieces.Utils;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -21,9 +19,9 @@ namespace Game.Gameplay.Board
             _converter = converter;
         }
 
-        public IPiece GetTest(IEnumerable<KeyValuePair<string, string>> state)
+        public IPiece GetTest()
         {
-            return new Test(_converter, GetNewPieceId()).WithState(state);
+            return new Test(_converter, GetNewPieceId());
         }
 
         public IPiece GetPlayerBlock11()

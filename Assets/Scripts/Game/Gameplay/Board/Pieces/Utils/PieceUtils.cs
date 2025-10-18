@@ -1,32 +1,30 @@
-using System;
 using System.Collections.Generic;
+using Game.Gameplay.Board.Utils;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.Board.Pieces.Utils
 {
     public static class PieceUtils
     {
-        public static void GetTopMostRowAndRightMostColumnOffsets(
-            [NotNull] this IPiece piece,
-            out int topMostRowOffset,
-            out int rightMostColumnOffset)
+        [NotNull]
+        public static IEnumerable<Coordinate> GetCoordinates([NotNull] this IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            Coordinate sourceCoordinate = new(0, 0);
+            int height = piece.Height;
+            int width = piece.Width;
 
-            int topMostRow = sourceCoordinate.Row;
-            int rightMostColumn = sourceCoordinate.Column;
-
-            foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
+            for (int rowOffset = 0; rowOffset < height; ++rowOffset)
             {
-                topMostRow = Math.Max(coordinate.Row, topMostRow);
-                rightMostColumn = Math.Max(coordinate.Column, rightMostColumn);
+                for (int columnOffset = 0; columnOffset < width; ++columnOffset)
+                {
+                    if (piece.IsFilled(rowOffset, columnOffset))
+                    {
+                        yield return sourceCoordinate.WithOffset(rowOffset, columnOffset);
+                    }
+                }
             }
-
-            topMostRowOffset = topMostRow - sourceCoordinate.Row;
-            rightMostColumnOffset = rightMostColumn - sourceCoordinate.Column;
         }
 
         [NotNull]
