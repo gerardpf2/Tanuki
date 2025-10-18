@@ -43,29 +43,14 @@ namespace Game.Gameplay.PhaseResolution.Phases
         {
             ArgumentNullException.ThrowIfNull(resolveContext);
 
-            IBag bag = _bagContainer.Bag;
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(bag);
-            InvalidOperationException.ThrowIfNull(board);
-
             if (!resolveContext.PieceSourceCoordinate.HasValue)
             {
                 return ResolveResult.NotUpdated;
             }
 
-            IPiece piece = bag.Current;
+            IPiece piece = ConsumeCurrentBagPiece();
 
-            bag.ConsumeCurrent();
-
-            Coordinate lockSourceCoordinate =
-                GetLockSourceCoordinate(
-                    piece,
-                    board,
-                    resolveContext.PieceSourceCoordinate.Value
-                );
-
-            board.AddPiece(piece, lockSourceCoordinate);
+            Coordinate lockSourceCoordinate = AddPieceToBoard(piece, resolveContext.PieceSourceCoordinate.Value);
 
             int movesAmount = DecreaseMovesAmount();
 
@@ -80,6 +65,35 @@ namespace Game.Gameplay.PhaseResolution.Phases
             return ResolveResult.Updated;
         }
 
+        [NotNull]
+        private IPiece ConsumeCurrentBagPiece()
+        {
+            IBag bag = _bagContainer.Bag;
+
+            InvalidOperationException.ThrowIfNull(bag);
+
+            IPiece piece = bag.Current;
+
+            bag.ConsumeCurrent();
+
+            return piece;
+        }
+
+        private Coordinate AddPieceToBoard([NotNull] IPiece piece, Coordinate sourceCoordinate)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
+
+            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(piece, board, sourceCoordinate);
+
+            board.AddPiece(piece, lockSourceCoordinate);
+
+            return lockSourceCoordinate;
+        }
+
         private static Coordinate GetLockSourceCoordinate(
             [NotNull] IPiece piece,
             [NotNull] IBoard board,
@@ -89,6 +103,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             ArgumentNullException.ThrowIfNull(board);
 
             int fall = board.ComputePieceFall(piece, sourceCoordinate);
+
             Coordinate lockSourceCoordinate = sourceCoordinate.Down(fall);
 
             return lockSourceCoordinate;
