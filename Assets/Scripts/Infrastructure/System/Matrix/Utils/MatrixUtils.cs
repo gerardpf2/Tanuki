@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 namespace Infrastructure.System.Matrix.Utils
 {
     // TODO: Test
-
     public static class MatrixUtils
     {
         public const int MaxRotationSteps = 4;
