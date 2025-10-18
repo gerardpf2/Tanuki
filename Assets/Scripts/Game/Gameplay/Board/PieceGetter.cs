@@ -24,24 +24,30 @@ namespace Game.Gameplay.Board
 
             switch (pieceType)
             {
+                case PieceType.PlayerI:
+                    piece = _pieceFactory.GetPlayerI();
+                    break;
+                case PieceType.PlayerO:
+                    piece = _pieceFactory.GetPlayerO();
+                    break;
+                case PieceType.PlayerT:
+                    piece = _pieceFactory.GetPlayerT();
+                    break;
+                case PieceType.PlayerJ:
+                    piece = _pieceFactory.GetPlayerJ();
+                    break;
+                case PieceType.PlayerL:
+                    piece = _pieceFactory.GetPlayerL();
+                    break;
+                case PieceType.PlayerS:
+                    piece = _pieceFactory.GetPlayerS();
+                    break;
+                case PieceType.PlayerZ:
+                    piece = _pieceFactory.GetPlayerZ();
+                    break;
                 case PieceType.Test:
-                {
                     piece = _pieceFactory.GetTest();
-
                     break;
-                }
-                case PieceType.PlayerBlock11:
-                {
-                    piece = _pieceFactory.GetPlayerBlock11();
-
-                    break;
-                }
-                case PieceType.PlayerBlock21:
-                {
-                    piece = _pieceFactory.GetPlayerBlock21();
-
-                    break;
-                }
                 default:
                     ArgumentOutOfRangeException.Throw(pieceType);
                     return null;

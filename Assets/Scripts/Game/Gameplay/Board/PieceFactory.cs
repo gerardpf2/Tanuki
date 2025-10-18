@@ -19,19 +19,44 @@ namespace Game.Gameplay.Board
             _converter = converter;
         }
 
+        public IPiece GetPlayerI()
+        {
+            return new PlayerI(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerO()
+        {
+            return new PlayerO(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerT()
+        {
+            return new PlayerT(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerJ()
+        {
+            return new PlayerJ(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerL()
+        {
+            return new PlayerL(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerS()
+        {
+            return new PlayerS(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetPlayerZ()
+        {
+            return new PlayerZ(_converter, GetNewPieceId());
+        }
+
         public IPiece GetTest()
         {
             return new Test(_converter, GetNewPieceId());
-        }
-
-        public IPiece GetPlayerBlock11()
-        {
-            return new PlayerBlock11(_converter, GetNewPieceId());
-        }
-
-        public IPiece GetPlayerBlock21()
-        {
-            return new PlayerBlock21(_converter, GetNewPieceId());
         }
 
         private int GetNewPieceId()

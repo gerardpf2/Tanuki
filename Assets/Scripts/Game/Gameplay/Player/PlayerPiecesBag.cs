@@ -13,8 +13,14 @@ namespace Game.Gameplay.Player
         [NotNull] private static readonly IReadOnlyList<PieceType> PieceTypes =
             new List<PieceType>
             {
-                PieceType.PlayerBlock11,
-                PieceType.PlayerBlock21
+                PieceType.PlayerI,
+                PieceType.PlayerO,
+                PieceType.PlayerT,
+                PieceType.PlayerJ,
+                PieceType.PlayerL,
+                PieceType.PlayerS,
+                PieceType.PlayerZ,
+                PieceType.Test
             };
 
         [NotNull] private readonly IPieceGetter _pieceGetter;

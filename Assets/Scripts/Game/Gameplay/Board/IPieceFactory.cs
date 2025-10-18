@@ -6,12 +6,27 @@ namespace Game.Gameplay.Board
     public interface IPieceFactory
     {
         [NotNull]
+        IPiece GetPlayerI();
+
+        [NotNull]
+        IPiece GetPlayerO();
+
+        [NotNull]
+        IPiece GetPlayerT();
+
+        [NotNull]
+        IPiece GetPlayerJ();
+
+        [NotNull]
+        IPiece GetPlayerL();
+
+        [NotNull]
+        IPiece GetPlayerS();
+
+        [NotNull]
+        IPiece GetPlayerZ();
+
+        [NotNull]
         IPiece GetTest();
-
-        [NotNull]
-        IPiece GetPlayerBlock11();
-
-        [NotNull]
-        IPiece GetPlayerBlock21();
     }
 }
