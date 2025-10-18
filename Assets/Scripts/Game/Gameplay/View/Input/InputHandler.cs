@@ -66,6 +66,7 @@ namespace Game.Gameplay.View.Input
             _inputListener.OnBeginDrag += HandleBeginDrag;
             _inputListener.OnDrag += HandleDrag;
             _inputListener.OnEndDrag += HandleEndDrag;
+            _inputListener.OnPointerClick += HandlePointerClick;
         }
 
         private void UnsubscribeFromEvents()
@@ -73,6 +74,7 @@ namespace Game.Gameplay.View.Input
             _inputListener.OnBeginDrag -= HandleBeginDrag;
             _inputListener.OnDrag -= HandleDrag;
             _inputListener.OnEndDrag -= HandleEndDrag;
+            _inputListener.OnPointerClick -= HandlePointerClick;
         }
 
         private void HandleBeginDrag([NotNull] PointerEventData eventData)
@@ -104,15 +106,35 @@ namespace Game.Gameplay.View.Input
             _waitingEndDrag = false;
         }
 
+        private void HandlePointerClick([NotNull] PointerEventData eventData)
+        {
+            ArgumentNullException.ThrowIfNull(eventData);
+
+            if (!CanClick(eventData))
+            {
+                return;
+            }
+
+            HandlePointerClick();
+        }
+
         private bool CanDrag([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
-            return
-                !_waitingEndDrag &&
-                !_eventsResolver.Resolving &&
-                _playerPieceView.Instance != null &&
-                IsInsideScreen(eventData.position);
+            return CanPerformAnyAction() && !_waitingEndDrag && IsInsideScreen(eventData.position);
+        }
+
+        private bool CanClick([NotNull] PointerEventData eventData)
+        {
+            ArgumentNullException.ThrowIfNull(eventData);
+
+            return CanPerformAnyAction() && !eventData.dragging;
+        }
+
+        private bool CanPerformAnyAction()
+        {
+            return !_eventsResolver.Resolving && _playerPieceView.Instance != null;
         }
 
         private bool IsInsideScreen(Vector2 position)
@@ -134,6 +156,11 @@ namespace Game.Gameplay.View.Input
             _phaseResolver.Resolve(new ResolveContext(_playerPieceView.Coordinate));
 
             _waitingEndDrag = true;
+        }
+
+        private void HandlePointerClick()
+        {
+            _playerPieceView.Rotate();
         }
     }
 }

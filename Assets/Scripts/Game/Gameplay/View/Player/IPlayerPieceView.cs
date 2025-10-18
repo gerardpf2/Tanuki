@@ -19,5 +19,7 @@ namespace Game.Gameplay.View.Player
         void Destroy();
 
         void Move(float deltaX);
+
+        void Rotate();
     }
 }

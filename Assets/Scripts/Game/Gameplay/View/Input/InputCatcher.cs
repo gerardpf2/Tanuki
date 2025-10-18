@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace Game.Gameplay.View.Input
 {
-    public class InputCatcher : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class InputCatcher : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
         private IInputNotifier _inputNotifier;
 
@@ -41,6 +41,13 @@ namespace Game.Gameplay.View.Input
             InvalidOperationException.ThrowIfNull(_inputNotifier);
 
             _inputNotifier.NotifyEndDrag(eventData);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            InvalidOperationException.ThrowIfNull(_inputNotifier);
+
+            _inputNotifier.NotifyPointerClick(eventData);
         }
     }
 }

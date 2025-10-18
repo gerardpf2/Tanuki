@@ -14,7 +14,6 @@ namespace Game.Gameplay.Player
             new List<PieceType>
             {
                 PieceType.PlayerBlock11,
-                PieceType.PlayerBlock12,
                 PieceType.PlayerBlock21
             };
 

@@ -11,6 +11,8 @@ namespace Game.Gameplay.View.Input
 
         public event Action<PointerEventData> OnEndDrag;
 
+        public event Action<PointerEventData> OnPointerClick;
+
         public void NotifyBeginDrag(PointerEventData eventData)
         {
             OnBeginDrag?.Invoke(eventData);
@@ -24,6 +26,11 @@ namespace Game.Gameplay.View.Input
         public void NotifyEndDrag(PointerEventData eventData)
         {
             OnEndDrag?.Invoke(eventData);
+        }
+
+        public void NotifyPointerClick(PointerEventData eventData)
+        {
+            OnPointerClick?.Invoke(eventData);
         }
     }
 }

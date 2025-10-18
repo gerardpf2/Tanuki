@@ -18,6 +18,4 @@ MonoBehaviour:
   - _pieceType: 1
     _prefab: {fileID: 6451969163346834527, guid: 5d9c659e424c2184a975f8529597358c, type: 3}
   - _pieceType: 2
-    _prefab: {fileID: 6451969163346834527, guid: d2e4e7481618bfd4e80c132088781b0f, type: 3}
-  - _pieceType: 3
     _prefab: {fileID: 6451969163346834527, guid: cfd054a7f151c37418b946e903ec150d, type: 3}

@@ -4,6 +4,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Common;
+using Game.Gameplay.View.Board.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Utils;
 using UnityEngine;
@@ -100,7 +101,9 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
-            GameObject instance = Object.Instantiate(prefab, GetInitialPosition(piece), Quaternion.identity, _parent);
+            Vector3 position = new(GetInitialX(piece), GetInitialY(piece));
+
+            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _parent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 instance,
@@ -132,7 +135,49 @@ namespace Game.Gameplay.View.Player
             transform.position = transform.position.WithX(Mathf.RoundToInt(_pieceData.X));
         }
 
-        private Vector3 GetInitialPosition([NotNull] IPiece piece)
+        public void Rotate()
+        {
+            InvalidOperationException.ThrowIfNull(_pieceData);
+            InvalidOperationException.ThrowIfNull(Instance);
+
+            IPiece piece = _pieceData.Piece;
+
+            int width = piece.Width;
+            int withAfterRotate = piece.Height;
+            int offsetX = (width - withAfterRotate) / 2;
+
+            ++piece.Rotation;
+
+            Transform transform = Instance.transform;
+
+            float x = ClampX(piece, transform.position.x + offsetX);
+            float y = GetInitialY(piece);
+
+            transform.position = transform.position.WithX(x).WithY(y);
+
+            _pieceData.X = x;
+
+            IPieceViewEventNotifier pieceViewEventNotifier = Instance.GetComponent<IPieceViewEventNotifier>();
+
+            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+
+            pieceViewEventNotifier.OnRotated();
+        }
+
+        private float GetInitialX([NotNull] IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
+
+            int column = (board.Columns - piece.Width + 1) / 2;
+
+            return _worldPositionGetter.GetX(column);
+        }
+
+        private float GetInitialY([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
@@ -141,12 +186,8 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(board);
 
             int row = _camera.TopRow - piece.Height + 1;
-            int column = (board.Columns - piece.Width + 1) / 2;
 
-            float x = _worldPositionGetter.GetX(column);
-            float y = _worldPositionGetter.GetY(row);
-
-            return new Vector3(ClampX(piece, x), y);
+            return _worldPositionGetter.GetY(row);
         }
 
         private float ClampX([NotNull] IPiece piece, float x)
