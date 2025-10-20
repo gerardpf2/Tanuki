@@ -2,7 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.EventEnqueueing.Events;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -30,6 +30,29 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
+            bool resolved = false;
+
+            MovePiecesByGravityEvent movePiecesByGravityEvent = _eventFactory.GetMovePiecesByGravityEvent();
+
+            while (TryMovePieces(movePiecesByGravityEvent))
+            {
+                resolved = true;
+            }
+
+            if (!resolved)
+            {
+                return ResolveResult.NotUpdated;
+            }
+
+            _eventEnqueuer.Enqueue(movePiecesByGravityEvent);
+
+            return ResolveResult.Updated;
+        }
+
+        private bool TryMovePieces([NotNull] MovePiecesByGravityEvent movePiecesByGravityEvent)
+        {
+            ArgumentNullException.ThrowIfNull(movePiecesByGravityEvent);
+
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
@@ -38,14 +61,19 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             foreach (int pieceId in board.GetPieceIdsSortedByRowThenByColumn())
             {
-                resolved = TryMovePiece(pieceId) || resolved;
+                if (TryMovePiece(movePiecesByGravityEvent, pieceId))
+                {
+                    resolved = true;
+                }
             }
 
-            return resolved ? ResolveResult.Updated : ResolveResult.NotUpdated;
+            return resolved;
         }
 
-        private bool TryMovePiece(int pieceId)
+        private bool TryMovePiece([NotNull] MovePiecesByGravityEvent movePiecesByGravityEvent, int pieceId)
         {
+            ArgumentNullException.ThrowIfNull(movePiecesByGravityEvent);
+
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
@@ -65,14 +93,9 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             board.MovePiece(pieceId, rowOffset, columnOffset);
 
-            _eventEnqueuer.Enqueue(
-                _eventFactory.GetMovePieceEvent(
-                    pieceId,
-                    rowOffset,
-                    columnOffset,
-                    MovePieceReason.Gravity
-                )
-            );
+            MovePiecesByGravityEvent.PieceMovementData pieceMovementData = new(pieceId, rowOffset, columnOffset);
+
+            movePiecesByGravityEvent.Add(pieceMovementData);
 
             return true;
         }

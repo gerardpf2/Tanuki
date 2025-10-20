@@ -19,6 +19,7 @@ namespace Game.Gameplay.Board.Utils
                 coordinate.Column >= 0 && coordinate.Column < board.Columns;
         }
 
+        // TODO: Range (bottom row, top row) and optimize
         [NotNull]
         public static IEnumerable<int> GetPieceIdsSortedByRowThenByColumn([NotNull] this IBoard board)
         {
