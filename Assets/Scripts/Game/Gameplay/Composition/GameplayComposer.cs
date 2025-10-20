@@ -14,6 +14,7 @@ using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
+using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution;
@@ -28,6 +29,8 @@ using Infrastructure.ScreenLoading;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
+using Infrastructure.Tweening;
+using Infrastructure.Tweening.BuilderHelpers;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 
@@ -302,6 +305,23 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IMovementFactory>(r =>
+                    new MovementFactory(
+                        r.Resolve<ITransformTweenBuilderHelper>(),
+                        r.Resolve<ITweenRunner>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IMovementHelper>(r =>
+                    new MovementHelper(
+                        r.Resolve<IMovementFactory>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
                         r.Resolve<IBoardContainer>(),
@@ -327,6 +347,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IActionFactory>(r =>
                     new ActionFactory(
+                        r.Resolve<IMovementHelper>(),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),

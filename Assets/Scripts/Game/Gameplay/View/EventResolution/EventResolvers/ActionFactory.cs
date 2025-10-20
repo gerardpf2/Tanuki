@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
@@ -15,6 +16,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
     public class ActionFactory : IActionFactory
     {
+        [NotNull] private readonly IMovementHelper _movementHelper;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
@@ -23,6 +25,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
 
         public ActionFactory(
+            [NotNull] IMovementHelper movementHelper,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
@@ -30,6 +33,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             [NotNull] IMovesView movesView,
             [NotNull] IPlayerPieceView playerPieceView)
         {
+            ArgumentNullException.ThrowIfNull(movementHelper);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
@@ -37,6 +41,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             ArgumentNullException.ThrowIfNull(movesView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
 
+            _movementHelper = movementHelper;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _boardView = boardView;
             _cameraView = cameraView;
@@ -97,7 +102,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceAction(_boardView, pieceId, rowOffset, columnOffset, movePieceReason);
+            return new MovePieceAction(_movementHelper, _boardView, pieceId, rowOffset, columnOffset, movePieceReason);
         }
 
         public IAction GetSetCameraRowAction(int topRow)
