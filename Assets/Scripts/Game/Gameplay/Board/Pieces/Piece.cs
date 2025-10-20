@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Infrastructure.System;
+using Infrastructure.System.Exceptions;
 using Infrastructure.System.Matrix.Utils;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board.Pieces
 {
@@ -134,11 +131,12 @@ namespace Game.Gameplay.Board.Pieces
             AddStateEntry(RotationKey, Rotation);
         }
 
-        protected void AddStateEntry<T>([NotNull] string key, T value) where T : IEquatable<T>
+        protected void AddStateEntry<T>([NotNull] string key, [NotNull] T value)
         {
             ArgumentNullException.ThrowIfNull(key);
+            ArgumentNullException.ThrowIfNull(value);
 
-            if (!_temporaryStateEntries.TryAdd(key, Converter.Convert<string>(value)))
+            if (!_temporaryStateEntries.TryAdd(key, value.ToString()))
             {
                 InvalidOperationException.Throw($"State entry with Key: {key} and Value: {value} cannot be added");
             }
