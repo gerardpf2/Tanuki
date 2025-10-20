@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.MoveToInfrastructure;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
         [NotNull] private readonly YieldInstruction _waitForSeconds;
 
-        [NotNull, ItemNotNull] private readonly IList<IAction> _actions = new List<IAction>(); // ItemNotNull as long as all Add check for null
+        [NotNull, ItemNotNull] private readonly ICollection<IAction> _actions = new List<IAction>(); // ItemNotNull as long as all Add check for null
 
         public ActionGroup([NotNull] ICoroutineRunner coroutineRunner, float secondsBetweenActions)
         {
@@ -38,11 +39,11 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
         [NotNull]
         private IEnumerator ResolveImpl(Action onComplete)
         {
-            for (int i = 0; i < _actions.Count; ++i)
-            {
-                IAction action = _actions[i];
+            ActionGroupCompletionHandler actionGroupCompletionHandler = new(_actions.Count, onComplete);
 
-                action.Resolve(i == _actions.Count - 1 ? onComplete : null); // TODO: ActionGroupCompletitionHandler
+            foreach (IAction action in _actions)
+            {
+                action.Resolve(actionGroupCompletionHandler.RegisterCompleted);
 
                 yield return _waitForSeconds;
             }
