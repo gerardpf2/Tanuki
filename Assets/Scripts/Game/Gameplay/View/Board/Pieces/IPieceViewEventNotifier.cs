@@ -11,9 +11,9 @@ namespace Game.Gameplay.View.Board.Pieces
 
         void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete);
 
-        void OnStartMove(MovePieceReason movePieceReason, Action onComplete);
+        void OnStartMovement(MovePieceReason movePieceReason, Action onComplete);
 
-        void OnEndMove(MovePieceReason movePieceReason, Action onComplete);
+        void OnEndMovement(MovePieceReason movePieceReason, Action onComplete);
 
         void OnRotated();
     }

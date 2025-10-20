@@ -47,24 +47,24 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
-            pieceViewEventNotifier.OnStartMove(_movePieceReason, OnStartMoveComplete);
+            pieceViewEventNotifier.OnStartMovement(_movePieceReason, OnStartMovementComplete);
 
             return;
 
-            void OnStartMoveComplete()
+            void OnStartMovementComplete()
             {
-                DoMove(pieceInstance.transform, OnMovementComplete);
+                DoMovement(pieceInstance.transform, OnMovementComplete);
             }
 
             void OnMovementComplete()
             {
                 _boardView.MovePiece(_pieceId, _rowOffset, _columnOffset);
 
-                pieceViewEventNotifier.OnEndMove(_movePieceReason, onComplete);
+                pieceViewEventNotifier.OnEndMovement(_movePieceReason, onComplete);
             }
         }
 
-        private void DoMove(Transform transform, Action onComplete)
+        private void DoMovement(Transform transform, Action onComplete)
         {
             switch (_movePieceReason)
             {

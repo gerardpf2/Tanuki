@@ -34,7 +34,7 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
             TweenBuilder = transformTweenBuilderHelper.Move(transform, end, durationS).WithOnComplete(onComplete);
         }
 
-        public void Run()
+        public void Do()
         {
             ITween tween = TweenBuilder.Build();
 

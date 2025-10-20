@@ -29,7 +29,7 @@ namespace Game.Gameplay.View.Animation.Movement
 
             // ITweenMovement::TweenBuilder can be updated if customization is needed
 
-            tweenMovement.Run();
+            tweenMovement.Do();
         }
     }
 }
