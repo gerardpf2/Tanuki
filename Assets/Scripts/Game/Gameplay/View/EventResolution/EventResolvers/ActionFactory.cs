@@ -10,6 +10,7 @@ using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Header.Moves;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
@@ -23,6 +24,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IMovesView _movesView;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
+        [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
         public ActionFactory(
             [NotNull] IMovementHelper movementHelper,
@@ -31,7 +33,8 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
             [NotNull] IMovesView movesView,
-            [NotNull] IPlayerPieceView playerPieceView)
+            [NotNull] IPlayerPieceView playerPieceView,
+            [NotNull] ICoroutineRunner coroutineRunner)
         {
             ArgumentNullException.ThrowIfNull(movementHelper);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
@@ -40,6 +43,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(movesView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
+            ArgumentNullException.ThrowIfNull(coroutineRunner);
 
             _movementHelper = movementHelper;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
@@ -48,6 +52,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             _goalsView = goalsView;
             _movesView = movesView;
             _playerPieceView = playerPieceView;
+            _coroutineRunner = coroutineRunner;
         }
 
         public IAction GetInstantiatePieceAction(
@@ -118,6 +123,22 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         public IAction GetSetMovesAmountAction(int amount)
         {
             return new SetMovesAmountAction(_movesView, amount);
+        }
+
+        public IAction GetActionGroup([NotNull, ItemNotNull] IEnumerable<IAction> actions, float secondsBetweenActions)
+        {
+            ArgumentNullException.ThrowIfNull(actions);
+
+            ActionGroup actionGroup = new(_coroutineRunner, secondsBetweenActions);
+
+            foreach (IAction action in actions)
+            {
+                ArgumentNullException.ThrowIfNull(action);
+
+                actionGroup.Add(action);
+            }
+
+            return actionGroup;
         }
     }
 }

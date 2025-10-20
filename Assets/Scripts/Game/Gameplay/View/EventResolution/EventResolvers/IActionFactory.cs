@@ -43,5 +43,8 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         [NotNull]
         IAction GetSetMovesAmountAction(int amount);
+
+        [NotNull]
+        IAction GetActionGroup(IEnumerable<IAction> actions, float secondsBetweenActions);
     }
 }

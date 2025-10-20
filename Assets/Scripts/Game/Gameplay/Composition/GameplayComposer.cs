@@ -353,7 +353,8 @@ namespace Game.Gameplay.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IMovesView>(),
-                        r.Resolve<IPlayerPieceView>()
+                        r.Resolve<IPlayerPieceView>(),
+                        r.Resolve<ICoroutineRunner>()
                     )
                 )
             );
