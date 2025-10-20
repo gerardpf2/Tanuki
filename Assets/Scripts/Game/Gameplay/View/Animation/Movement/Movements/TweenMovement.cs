@@ -20,6 +20,7 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
             [NotNull] Transform transform,
             int rowOffset,
             int columnOffset,
+            float unitsPerSecond,
             Action onComplete)
         {
             ArgumentNullException.ThrowIfNull(transformTweenBuilderHelper);
@@ -29,7 +30,7 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
             _tweenRunner = tweenRunner;
 
             Vector3 end = GetEnd(transform.position, rowOffset, columnOffset);
-            float durationS = GetDurationS(rowOffset, columnOffset);
+            float durationS = GetDurationS(rowOffset, columnOffset, unitsPerSecond);
 
             TweenBuilder = transformTweenBuilderHelper.Move(transform, end, durationS).WithOnComplete(onComplete);
         }
@@ -49,13 +50,11 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
             return new Vector3(x, y, start.z);
         }
 
-        private static float GetDurationS(int rowOffset, int columnOffset)
+        private static float GetDurationS(int rowOffset, int columnOffset, float unitsPerSecond)
         {
-            float hypotenuse = Mathf.Sqrt(rowOffset * rowOffset + columnOffset * columnOffset);
+            float units = Mathf.Sqrt(rowOffset * rowOffset + columnOffset * columnOffset);
 
-            // TODO
-
-            return hypotenuse;
+            return units / unitsPerSecond;
         }
     }
 }

@@ -8,6 +8,12 @@ namespace Game.Gameplay.View.Animation.Movement
     public interface IMovementFactory
     {
         [NotNull]
-        ITweenMovement GetTweenMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete);
+        ITweenMovement GetTweenMovement(
+            Transform transform,
+            int rowOffset,
+            int columnOffset,
+            float unitsPerSecond,
+            Action onComplete
+        );
     }
 }

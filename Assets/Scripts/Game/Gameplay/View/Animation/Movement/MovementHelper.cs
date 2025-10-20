@@ -19,11 +19,14 @@ namespace Game.Gameplay.View.Animation.Movement
 
         public void DoGravityMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete)
         {
+            const float unitsPerSecond = 5.0f; // TODO
+
             ITweenMovement tweenMovement =
                 _movementFactory.GetTweenMovement(
                     transform,
                     rowOffset,
                     columnOffset,
+                    unitsPerSecond,
                     onComplete
                 );
 

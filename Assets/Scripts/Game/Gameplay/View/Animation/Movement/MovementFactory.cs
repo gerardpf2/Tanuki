@@ -28,6 +28,7 @@ namespace Game.Gameplay.View.Animation.Movement
             [NotNull] Transform transform,
             int rowOffset,
             int columnOffset,
+            float unitsPerSecond,
             Action onComplete)
         {
             ArgumentNullException.ThrowIfNull(transform);
@@ -39,6 +40,7 @@ namespace Game.Gameplay.View.Animation.Movement
                     transform,
                     rowOffset,
                     columnOffset,
+                    unitsPerSecond,
                     onComplete
                 );
         }
