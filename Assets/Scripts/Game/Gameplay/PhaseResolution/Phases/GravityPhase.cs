@@ -59,7 +59,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             bool resolved = false;
 
-            foreach (int pieceId in board.GetPieceIdsSortedByRowThenByColumn())
+            foreach (int pieceId in board.GetDistinctPieceIdsSortedByRowThenByColumn())
             {
                 if (TryMovePiece(movePiecesByGravityEvent, pieceId))
                 {
