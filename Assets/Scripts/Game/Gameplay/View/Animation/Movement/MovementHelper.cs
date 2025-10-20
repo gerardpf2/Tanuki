@@ -1,5 +1,6 @@
 using System;
 using Game.Gameplay.View.Animation.Movement.Movements;
+using Infrastructure.Tweening;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -19,7 +20,7 @@ namespace Game.Gameplay.View.Animation.Movement
 
         public void DoGravityMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete)
         {
-            const float unitsPerSecond = 5.0f; // TODO
+            const float unitsPerSecond = 15.0f;
 
             ITweenMovement tweenMovement =
                 _movementFactory.GetTweenMovement(
@@ -30,7 +31,7 @@ namespace Game.Gameplay.View.Animation.Movement
                     onComplete
                 );
 
-            // ITweenMovement::TweenBuilder can be updated if customization is needed
+            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad);
 
             tweenMovement.Do();
         }
