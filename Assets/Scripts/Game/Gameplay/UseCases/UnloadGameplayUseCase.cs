@@ -1,5 +1,6 @@
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
+using Game.Gameplay.Camera;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.PhaseResolution;
@@ -21,6 +22,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
+        [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
@@ -37,6 +39,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
+            [NotNull] ICamera camera,
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IMovesContainer movesContainer,
             [NotNull] IPhaseResolver phaseResolver,
@@ -52,6 +55,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
+            ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(phaseResolver);
@@ -67,6 +71,7 @@ namespace Game.Gameplay.UseCases
             _bagContainer = bagContainer;
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
+            _camera = camera;
             _goalsContainer = goalsContainer;
             _movesContainer = movesContainer;
             _phaseResolver = phaseResolver;
@@ -92,6 +97,7 @@ namespace Game.Gameplay.UseCases
             _bagContainer.Uninitialize();
             _boardContainer.Uninitialize();
             _pieceIdGetter.Uninitialize();
+            _camera.Uninitialize();
             _goalsContainer.Uninitialize();
             _movesContainer.Uninitialize();
             _phaseResolver.Uninitialize();

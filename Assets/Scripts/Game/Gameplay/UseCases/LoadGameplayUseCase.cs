@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
+using Game.Gameplay.Camera;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
@@ -25,6 +26,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
+        [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IGameplayParser _gameplayParser;
@@ -43,6 +45,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
+            [NotNull] ICamera camera,
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IMovesContainer movesContainer,
             [NotNull] IGameplayParser gameplayParser,
@@ -60,6 +63,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
+            ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(gameplayParser);
@@ -77,6 +81,7 @@ namespace Game.Gameplay.UseCases
             _bagContainer = bagContainer;
             _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
+            _camera = camera;
             _goalsContainer = goalsContainer;
             _movesContainer = movesContainer;
             _gameplayParser = gameplayParser;
@@ -115,6 +120,7 @@ namespace Game.Gameplay.UseCases
 
             _bagContainer.Initialize(bag);
             _boardContainer.Initialize(board, piecePlacements);
+            _camera.Initialize();
             _goalsContainer.Initialize(goals);
             _movesContainer.Initialize(moves);
             _phaseResolver.Initialize();
