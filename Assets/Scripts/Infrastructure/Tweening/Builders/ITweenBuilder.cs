@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.Tweening.Builders
 {
-    public interface ITweenBuilder<T> : ITweenBaseBuilderHelper<ITweenBuilder<T>>
+    public interface ITweenBuilder<in T> : ITweenBaseBuilderHelper<ITweenBuilder<T>>
     {
         [NotNull]
         ITweenBuilder<T> WithStart(T start);
