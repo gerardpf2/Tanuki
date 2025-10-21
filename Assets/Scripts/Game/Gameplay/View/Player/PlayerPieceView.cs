@@ -2,8 +2,8 @@ using System.Diagnostics.CodeAnalysis;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
-using Game.Gameplay.Common;
 using Game.Gameplay.View.Board.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Utils;
@@ -34,7 +34,6 @@ namespace Game.Gameplay.View.Player
 
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
-        [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
 
         private InitializedLabel _initializedLabel;
 
@@ -49,30 +48,19 @@ namespace Game.Gameplay.View.Player
 
                 Transform transform = Instance.transform;
 
-                float originX = _worldPositionGetter.GetX(0);
-                float originY = _worldPositionGetter.GetY(0);
-
-                int row = Mathf.FloorToInt(transform.position.y - originY);
-                int column = Mathf.FloorToInt(transform.position.x - originX);
-
-                return new Coordinate(row, column);
+                return transform.position.ToCoordinate();
             }
         }
 
         public GameObject Instance => _pieceData?.Instance;
 
-        public PlayerPieceView(
-            [NotNull] IBoardContainer boardContainer,
-            [NotNull] ICamera camera,
-            [NotNull] IWorldPositionGetter worldPositionGetter)
+        public PlayerPieceView([NotNull] IBoardContainer boardContainer, [NotNull] ICamera camera)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(camera);
-            ArgumentNullException.ThrowIfNull(worldPositionGetter);
 
             _boardContainer = boardContainer;
             _camera = camera;
-            _worldPositionGetter = worldPositionGetter;
         }
 
         public void Initialize()
@@ -101,7 +89,7 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
-            Vector3 position = new(GetInitialX(piece), GetInitialY(piece));
+            Vector3 position = new(GetInitialColumn(piece), GetInitialRow(piece));
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _parent);
 
@@ -151,7 +139,7 @@ namespace Game.Gameplay.View.Player
             Transform transform = Instance.transform;
 
             float x = ClampX(piece, transform.position.x + offsetX);
-            float y = GetInitialY(piece);
+            int y = GetInitialRow(piece);
 
             transform.position = transform.position.WithX(x).WithY(y);
 
@@ -164,7 +152,7 @@ namespace Game.Gameplay.View.Player
             pieceViewEventNotifier.OnRotated();
         }
 
-        private float GetInitialX([NotNull] IPiece piece)
+        private int GetInitialRow([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
@@ -172,12 +160,10 @@ namespace Game.Gameplay.View.Player
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int column = (board.Columns - piece.Width + 1) / 2;
-
-            return _worldPositionGetter.GetX(column);
+            return _camera.TopRow - piece.Height + 1;
         }
 
-        private float GetInitialY([NotNull] IPiece piece)
+        private int GetInitialColumn([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
@@ -185,9 +171,7 @@ namespace Game.Gameplay.View.Player
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int row = _camera.TopRow - piece.Height + 1;
-
-            return _worldPositionGetter.GetY(row);
+            return (board.Columns - piece.Width + 1) / 2;
         }
 
         private float ClampX([NotNull] IPiece piece, float x)
@@ -201,10 +185,7 @@ namespace Game.Gameplay.View.Player
             const int minColumn = 0;
             int maxColumn = Mathf.Max(board.Columns - piece.Width, minColumn);
 
-            float minX = _worldPositionGetter.GetX(minColumn);
-            float maxX = _worldPositionGetter.GetX(maxColumn);
-
-            return Mathf.Clamp(x, minX, maxX);
+            return Mathf.Clamp(x, minColumn, maxColumn);
         }
     }
 }

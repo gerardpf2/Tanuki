@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Game.Gameplay.Board.Utils
 {
@@ -30,16 +29,14 @@ namespace Game.Gameplay.Board.Utils
             return new Coordinate(coordinate.Row + rowOffset, coordinate.Column + columnOffset);
         }
 
-        [NotNull]
-        public static IEnumerable<Coordinate> Rect(this Coordinate coordinate, int rows, int columns)
+        public static Vector3 ToVector3(this Coordinate coordinate)
         {
-            for (int rowOffset = 0; rowOffset < rows; ++rowOffset)
-            {
-                for (int columnOffset = 0; columnOffset < columns; ++columnOffset)
-                {
-                    yield return coordinate.WithOffset(rowOffset, columnOffset);
-                }
-            }
+            return new Vector3(coordinate.Column, coordinate.Row);
+        }
+
+        public static Coordinate ToCoordinate(this Vector3 vector3)
+        {
+            return new Coordinate(Mathf.FloorToInt(vector3.y), Mathf.FloorToInt(vector3.x));
         }
     }
 }

@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Pieces;
-using Game.Gameplay.Common;
-using Game.Gameplay.Common.Utils;
+using Game.Gameplay.Board.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -14,7 +13,6 @@ namespace Game.Gameplay.View.Board
     public class BoardView : IBoardView
     {
         [NotNull] private readonly IBoardContainer _boardContainer;
-        [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
         [NotNull] private readonly ILogger _logger;
 
         [NotNull] private readonly IDictionary<int, GameObject> _pieceInstances = new Dictionary<int, GameObject>();
@@ -24,17 +22,12 @@ namespace Game.Gameplay.View.Board
         private IBoard _board;
         private Transform _piecesParent;
 
-        public BoardView(
-            [NotNull] IBoardContainer boardContainer,
-            [NotNull] IWorldPositionGetter worldPositionGetter,
-            [NotNull] ILogger logger)
+        public BoardView([NotNull] IBoardContainer boardContainer, [NotNull] ILogger logger)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
-            ArgumentNullException.ThrowIfNull(worldPositionGetter);
             ArgumentNullException.ThrowIfNull(logger);
 
             _boardContainer = boardContainer;
-            _worldPositionGetter = worldPositionGetter;
             _logger = logger;
         }
 
@@ -99,7 +92,7 @@ namespace Game.Gameplay.View.Board
 
             _board.AddPiece(piece, sourceCoordinate);
 
-            Vector3 position = GetWorldPosition(sourceCoordinate);
+            Vector3 position = sourceCoordinate.ToVector3();
             GameObject pieceInstance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
 
             InvalidOperationException.ThrowIfNullWithMessage(
@@ -132,11 +125,6 @@ namespace Game.Gameplay.View.Board
             EnsurePiecePositionIsExpected(pieceId);
         }
 
-        private Vector3 GetWorldPosition(Coordinate coordinate)
-        {
-            return _worldPositionGetter.Get(coordinate);
-        }
-
         private void EnsurePiecePositionIsExpected(int pieceId)
         {
             InvalidOperationException.ThrowIfNull(_board);
@@ -145,7 +133,7 @@ namespace Game.Gameplay.View.Board
 
             Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
 
-            Vector3 expectedWorldPosition = GetWorldPosition(sourceCoordinate);
+            Vector3 expectedWorldPosition = sourceCoordinate.ToVector3();
             Vector3 worldPosition = pieceInstance.transform.position;
 
             if (expectedWorldPosition == worldPosition) // Vector3 == means approximate equality
