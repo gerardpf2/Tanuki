@@ -17,12 +17,13 @@ namespace Game.Gameplay.View.Camera
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IWorldPositionGetter _worldPositionGetter;
-        [NotNull] private readonly UnityEngine.Camera _unityCamera;
         [NotNull] private readonly Transform _unityCameraTransform;
 
         private InitializedLabel _initializedLabel;
 
         private float _bottomPositionYAfterResize;
+
+        public UnityEngine.Camera UnityCamera { get; }
 
         public CameraView(
             [NotNull] IBoardContainer boardContainer,
@@ -38,8 +39,8 @@ namespace Game.Gameplay.View.Camera
             _boardContainer = boardContainer;
             _camera = camera;
             _worldPositionGetter = worldPositionGetter;
-            _unityCamera = cameraGetter.GetMain();
-            _unityCameraTransform = _unityCamera.transform;
+            UnityCamera = cameraGetter.GetMain();
+            _unityCameraTransform = UnityCamera.transform;
         }
 
         public void Initialize()
@@ -99,13 +100,13 @@ namespace Game.Gameplay.View.Camera
             topPositionY -= initialY;
             bottomPositionY -= initialY;
 
-            float initialSize = _unityCamera.orthographicSize;
+            float initialSize = UnityCamera.orthographicSize;
             float initialVisibleRows = topPositionY - bottomPositionY;
 
             int newVisibleRows = _camera.VisibleRows;
             float newSize = initialSize / initialVisibleRows * newVisibleRows;
 
-            _unityCamera.orthographicSize = newSize;
+            UnityCamera.orthographicSize = newSize;
             _bottomPositionYAfterResize = bottomPositionY * newSize / initialSize;
         }
     }
