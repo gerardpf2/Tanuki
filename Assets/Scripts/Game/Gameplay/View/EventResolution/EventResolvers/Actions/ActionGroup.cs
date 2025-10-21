@@ -12,6 +12,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
     public class ActionGroup : IAction
     {
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
+        private readonly float _secondsBetweenActions;
         [NotNull] private readonly YieldInstruction _waitForSeconds;
 
         [NotNull, ItemNotNull] private readonly ICollection<IAction> _actions = new List<IAction>(); // ItemNotNull as long as all Add check for null
@@ -21,6 +22,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
             ArgumentNullException.ThrowIfNull(coroutineRunner);
 
             _coroutineRunner = coroutineRunner;
+            _secondsBetweenActions = secondsBetweenActions;
             _waitForSeconds = new WaitForSeconds(secondsBetweenActions);
         }
 
@@ -45,7 +47,10 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
             {
                 action.Resolve(actionGroupCompletionHandler.RegisterCompleted);
 
-                yield return _waitForSeconds;
+                if (_secondsBetweenActions > 0.0f)
+                {
+                    yield return _waitForSeconds;
+                }
             }
         }
     }
