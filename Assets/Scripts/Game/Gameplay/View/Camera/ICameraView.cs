@@ -12,7 +12,5 @@ namespace Game.Gameplay.View.Camera
         void Uninitialize();
 
         void SetBoardViewLimits(float topPositionY, float bottomPositionY);
-
-        void UpdatePositionY(int row);
     }
 }
