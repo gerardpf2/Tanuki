@@ -27,7 +27,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
             IEnumerable<IAction> actions = evt.PiecesMovementsData.Select(GetMovePieceAction);
 
-            yield return _actionFactory.GetActionGroup(actions, SecondsBetweenActions);
+            yield return _actionFactory.GetParallelActionGroup(actions, SecondsBetweenActions);
 
             yield break;
 

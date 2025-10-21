@@ -125,20 +125,20 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new SetMovesAmountAction(_movesView, amount);
         }
 
-        public IAction GetActionGroup([NotNull, ItemNotNull] IEnumerable<IAction> actions, float secondsBetweenActions)
+        public IAction GetParallelActionGroup([NotNull, ItemNotNull] IEnumerable<IAction> actions, float secondsBetweenActions)
         {
             ArgumentNullException.ThrowIfNull(actions);
 
-            ActionGroup actionGroup = new(_coroutineRunner, secondsBetweenActions);
+            ParallelActionGroup parallelActionGroup = new(_coroutineRunner, secondsBetweenActions);
 
             foreach (IAction action in actions)
             {
                 ArgumentNullException.ThrowIfNull(action);
 
-                actionGroup.Add(action);
+                parallelActionGroup.Add(action);
             }
 
-            return actionGroup;
+            return parallelActionGroup;
         }
     }
 }

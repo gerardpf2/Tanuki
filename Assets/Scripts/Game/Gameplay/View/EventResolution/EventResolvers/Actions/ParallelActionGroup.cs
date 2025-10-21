@@ -9,7 +9,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
-    public class ActionGroup : IAction
+    public class ParallelActionGroup : IAction
     {
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
         private readonly float _secondsBetweenActions;
@@ -17,7 +17,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 
         [NotNull, ItemNotNull] private readonly ICollection<IAction> _actions = new List<IAction>(); // ItemNotNull as long as all Add check for null
 
-        public ActionGroup([NotNull] ICoroutineRunner coroutineRunner, float secondsBetweenActions)
+        public ParallelActionGroup([NotNull] ICoroutineRunner coroutineRunner, float secondsBetweenActions)
         {
             ArgumentNullException.ThrowIfNull(coroutineRunner);
 
