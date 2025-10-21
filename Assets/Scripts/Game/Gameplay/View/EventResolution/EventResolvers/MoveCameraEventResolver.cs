@@ -6,22 +6,22 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers
 {
-    public class SetCameraRowEventResolver : EventResolver<SetCameraRowEvent>
+    public class MoveCameraEventResolver : EventResolver<MoveCameraEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
 
-        public SetCameraRowEventResolver([NotNull] IActionFactory actionFactory)
+        public MoveCameraEventResolver([NotNull] IActionFactory actionFactory)
         {
             ArgumentNullException.ThrowIfNull(actionFactory);
 
             _actionFactory = actionFactory;
         }
 
-        protected override IEnumerable<IAction> GetActions([NotNull] SetCameraRowEvent evt)
+        protected override IEnumerable<IAction> GetActions([NotNull] MoveCameraEvent evt)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            yield return _actionFactory.GetSetCameraRowAction(evt.Row);
+            yield return _actionFactory.GetMoveCameraAction(evt.RowOffset);
         }
     }
 }

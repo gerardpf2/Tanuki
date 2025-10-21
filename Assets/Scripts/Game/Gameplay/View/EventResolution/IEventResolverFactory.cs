@@ -28,6 +28,6 @@ namespace Game.Gameplay.View.EventResolution
         IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver();
 
         [NotNull]
-        IEventResolver<SetCameraRowEvent> GetSetCameraRowEventResolver();
+        IEventResolver<MoveCameraEvent> GetMoveCameraEventResolver();
     }
 }

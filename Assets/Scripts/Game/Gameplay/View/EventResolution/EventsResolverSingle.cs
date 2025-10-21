@@ -44,8 +44,8 @@ namespace Game.Gameplay.View.EventResolution
                 case MovePiecesByGravityEvent movePiecesByGravityEvent:
                     _eventResolverFactory.GetMovePiecesByGravityEventResolver().Resolve(movePiecesByGravityEvent, onComplete);
                     break;
-                case SetCameraRowEvent setCameraRowEvent:
-                    _eventResolverFactory.GetSetCameraRowEventResolver().Resolve(setCameraRowEvent, onComplete);
+                case MoveCameraEvent moveCameraEvent:
+                    _eventResolverFactory.GetMoveCameraEventResolver().Resolve(moveCameraEvent, onComplete);
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);

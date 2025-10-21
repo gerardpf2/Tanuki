@@ -7,27 +7,30 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
 {
-    public class SetCameraRowAction : IAction
+    public class MoveCameraAction : IAction
     {
         [NotNull] private readonly IMovementHelper _movementHelper;
         [NotNull] private readonly ICameraView _cameraView;
-        private readonly int _row;
+        private readonly int _rowOffset;
 
-        public SetCameraRowAction([NotNull] IMovementHelper movementHelper, [NotNull] ICameraView cameraView, int row)
+        public MoveCameraAction(
+            [NotNull] IMovementHelper movementHelper,
+            [NotNull] ICameraView cameraView,
+            int rowOffset)
         {
             ArgumentNullException.ThrowIfNull(movementHelper);
             ArgumentNullException.ThrowIfNull(cameraView);
 
             _movementHelper = movementHelper;
             _cameraView = cameraView;
-            _row = row;
+            _rowOffset = rowOffset;
         }
 
         public void Resolve(Action onComplete)
         {
             Transform transform = _cameraView.UnityCamera.transform;
 
-            _movementHelper.DoCameraMovement(transform, _row, onComplete);
+            _movementHelper.DoCameraMovement(transform, _rowOffset, onComplete);
         }
     }
 }

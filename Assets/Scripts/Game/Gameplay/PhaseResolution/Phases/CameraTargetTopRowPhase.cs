@@ -37,7 +37,7 @@ namespace Game.Gameplay.PhaseResolution.Phases
             int topRow = _camera.TopRow;
             int rowOffset = topRow - prevTopRow;
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetSetCameraRowEvent(rowOffset));
+            _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
 
             return ResolveResult.Updated;
         }
