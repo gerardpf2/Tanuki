@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Game.MoveToInfrastructure;
+using Infrastructure.System;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 using UnityEngine;
