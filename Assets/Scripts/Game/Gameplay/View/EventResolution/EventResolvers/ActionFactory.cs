@@ -112,7 +112,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         public IAction GetSetCameraRowAction(int topRow)
         {
-            return new SetCameraRowAction(_cameraView, topRow);
+            return new SetCameraRowAction(_movementHelper, _cameraView, topRow);
         }
 
         public IAction GetSetGoalCurrentAmountAction(PieceType pieceType, int currentAmount, Coordinate coordinate)
