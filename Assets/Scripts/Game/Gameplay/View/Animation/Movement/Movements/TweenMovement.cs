@@ -18,8 +18,7 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
             [NotNull] ITransformTweenBuilderHelper transformTweenBuilderHelper,
             [NotNull] ITweenRunner tweenRunner,
             [NotNull] Transform transform,
-            int rowOffset,
-            int columnOffset,
+            Vector3 end,
             float unitsPerSecond,
             Action onComplete)
         {
@@ -29,8 +28,7 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
 
             _tweenRunner = tweenRunner;
 
-            Vector3 end = GetEnd(transform.position, rowOffset, columnOffset);
-            float durationS = GetDurationS(rowOffset, columnOffset, unitsPerSecond);
+            float durationS = GetDurationS(transform.position, end, unitsPerSecond);
 
             TweenBuilder = transformTweenBuilderHelper.Move(transform, end, durationS).WithOnComplete(onComplete);
         }
@@ -42,17 +40,9 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
             _tweenRunner.Run(tween);
         }
 
-        private static Vector3 GetEnd(Vector3 start, int rowOffset, int columnOffset)
+        private static float GetDurationS(Vector3 start, Vector3 end, float unitsPerSecond)
         {
-            float y = start.y + rowOffset;
-            float x = start.x + columnOffset;
-
-            return new Vector3(x, y, start.z);
-        }
-
-        private static float GetDurationS(int rowOffset, int columnOffset, float unitsPerSecond)
-        {
-            float units = Mathf.Sqrt(rowOffset * rowOffset + columnOffset * columnOffset);
+            float units = (end - start).magnitude;
 
             return units / unitsPerSecond;
         }

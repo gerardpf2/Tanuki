@@ -26,8 +26,7 @@ namespace Game.Gameplay.View.Animation.Movement
 
         public ITweenMovement GetTweenMovement(
             [NotNull] Transform transform,
-            int rowOffset,
-            int columnOffset,
+            Vector3 end,
             float unitsPerSecond,
             Action onComplete)
         {
@@ -38,8 +37,7 @@ namespace Game.Gameplay.View.Animation.Movement
                     _transformTweenBuilderHelper,
                     _tweenRunner,
                     transform,
-                    rowOffset,
-                    columnOffset,
+                    end,
                     unitsPerSecond,
                     onComplete
                 );

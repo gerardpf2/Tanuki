@@ -316,6 +316,7 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IMovementHelper>(r =>
                     new MovementHelper(
+                        r.Resolve<IWorldPositionGetter>(),
                         r.Resolve<IMovementFactory>()
                     )
                 )
