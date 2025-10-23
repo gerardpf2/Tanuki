@@ -11,11 +11,7 @@ namespace Infrastructure.Unity
         {
             ArgumentNullException.ThrowIfNull(enumerator);
 
-            Coroutine coroutine = StartCoroutine(enumerator);
-
-            InvalidOperationException.ThrowIfNull(coroutine);
-
-            return coroutine;
+            return StartCoroutine(enumerator);
         }
 
         public void Stop([NotNull] Coroutine coroutine)
