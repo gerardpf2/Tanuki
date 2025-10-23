@@ -1,6 +1,7 @@
 using System;
 using Game.Gameplay.View.Animation.Movement.Movements;
 using Infrastructure.Tweening;
+using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -24,7 +25,7 @@ namespace Game.Gameplay.View.Animation.Movement
 
             ArgumentNullException.ThrowIfNull(transform);
 
-            Vector3 end = GetEnd(transform, rowOffset, columnOffset); // TODO: Vector3Utils AddX + AddY
+            Vector3 end = transform.position.AddX(columnOffset).AddY(rowOffset);
 
             ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
 
@@ -35,25 +36,17 @@ namespace Game.Gameplay.View.Animation.Movement
 
         public void DoCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)
         {
-            const int columnOffset = 0;
             const float unitsPerSecond = 15.0f;
 
             ArgumentNullException.ThrowIfNull(transform);
 
-            Vector3 end = GetEnd(transform, rowOffset, columnOffset); // TODO: Vector3Utils AddY
+            Vector3 end = transform.position.AddY(rowOffset);
 
             ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
 
             tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad); // TODO: Review
 
             tweenMovement.Do();
-        }
-
-        private static Vector3 GetEnd([NotNull] Transform transform, int rowOffset, int columnOffset)
-        {
-            ArgumentNullException.ThrowIfNull(transform);
-
-            return transform.position + new Vector3(columnOffset, rowOffset);
         }
     }
 }

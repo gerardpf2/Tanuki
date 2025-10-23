@@ -66,9 +66,8 @@ namespace Game.Gameplay.View.Camera
             // Correct position y
 
             float offsetY = bottomPositionY * newSize / initialSize;
-            float y = _unityCameraTransform.position.y - offsetY;
 
-            _unityCameraTransform.position = _unityCameraTransform.position.WithY(y); // TODO: Vector3Utils AddY
+            _unityCameraTransform.position = _unityCameraTransform.position.AddY(-offsetY);
         }
 
         private void SetInitialPosition()
