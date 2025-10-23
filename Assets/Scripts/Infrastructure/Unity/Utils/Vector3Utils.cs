@@ -30,6 +30,24 @@ namespace Infrastructure.Unity.Utils
                 );
         }
 
+        // TODO: Test
+        public static Vector3 AddX(this Vector3 source, float value)
+        {
+            return source.WithX(source.x + value);
+        }
+
+        // TODO: Test
+        public static Vector3 AddY(this Vector3 source, float value)
+        {
+            return source.WithY(source.y + value);
+        }
+
+        // TODO: Test
+        public static Vector3 AddZ(this Vector3 source, float value)
+        {
+            return source.WithZ(source.z + value);
+        }
+
         public static Vector3 Abs(this Vector3 source)
         {
             return new Vector3(Math.Abs(source.x), Math.Abs(source.y), Math.Abs(source.z));
