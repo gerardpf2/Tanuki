@@ -29,7 +29,7 @@ namespace Game.Gameplay.View.Animation.Movement
 
             ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
 
-            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad); // TODO: Review
+            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad);
 
             tweenMovement.Do();
         }
@@ -44,7 +44,7 @@ namespace Game.Gameplay.View.Animation.Movement
 
             ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
 
-            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad); // TODO: Review
+            tweenMovement.TweenBuilder.WithEasingType(EasingType.InOutQuad);
 
             tweenMovement.Do();
         }
