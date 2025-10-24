@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Infrastructure.Unity
 {
-    public interface ICoroutineRunnerHelper
+    public interface ICoroutineHelper
     {
         Coroutine RunWaitForEndOfFrame(Action action);
     }

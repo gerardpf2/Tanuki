@@ -6,13 +6,13 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Unity
 {
-    public class CoroutineRunnerHelper : ICoroutineRunnerHelper
+    public class CoroutineHelper : ICoroutineHelper
     {
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
         [NotNull] private static readonly WaitForEndOfFrame WaitForEndOfFrame = new();
 
-        public CoroutineRunnerHelper([NotNull] ICoroutineRunner coroutineRunner)
+        public CoroutineHelper([NotNull] ICoroutineRunner coroutineRunner)
         {
             ArgumentNullException.ThrowIfNull(coroutineRunner);
 

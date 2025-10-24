@@ -27,8 +27,8 @@ namespace Infrastructure.Unity.Composition
             ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ICoroutineRunnerHelper>(r =>
-                    new CoroutineRunnerHelper(
+                ruleFactory.GetSingleton<ICoroutineHelper>(r =>
+                    new CoroutineHelper(
                         r.Resolve<ICoroutineRunner>()
                     )
                 )
