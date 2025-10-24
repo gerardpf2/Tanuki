@@ -40,14 +40,16 @@ namespace Game.Gameplay.View.Board
             // Wait for end of frame so UI stuff has been properly updated
             // For example, CameraView will move camera to (0, 0) but UI refreshes later
 
-            _coroutineHelper.GetWaitForEndOfFrame(
-                () =>
-                {
-                    Initialize();
+            StartCoroutine(_coroutineHelper.GetWaitForEndOfFrame(InitializeAndOnReadyInvoke));
 
-                    data.OnReady?.Invoke();
-                }
-            );
+            return;
+
+            void InitializeAndOnReadyInvoke()
+            {
+                Initialize();
+
+                data.OnReady?.Invoke();
+            }
         }
 
         private void Initialize()
