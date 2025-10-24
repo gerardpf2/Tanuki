@@ -3,7 +3,6 @@ using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
-using Game.Gameplay.Common;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
@@ -124,8 +123,6 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IWorldPositionGetter>(_ => new WorldPositionGetter()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
@@ -317,7 +314,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IMovementHelper>(r =>
                     new MovementHelper(
-                        r.Resolve<IWorldPositionGetter>(),
                         r.Resolve<IMovementFactory>()
                     )
                 )
@@ -327,7 +323,6 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<IWorldPositionGetter>(),
                         r.Resolve<ILogger>()
                     )
                 )
@@ -340,7 +335,6 @@ namespace Game.Gameplay.Composition
                     new CameraView(
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
-                        r.Resolve<IWorldPositionGetter>(),
                         r.Resolve<ICameraGetter>()
                     )
                 )
@@ -423,8 +417,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>(),
-                        r.Resolve<IWorldPositionGetter>()
+                        r.Resolve<ICamera>()
                     )
                 )
             );
