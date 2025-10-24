@@ -25,20 +25,47 @@ namespace Game.Gameplay.View.Animation.Movement
             _movementFactory = movementFactory;
         }
 
-        public void DoGravityMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete)
+        public void DoGravityMovement([NotNull] Transform transform, int rowOffset, int columnOffset, Action onComplete)
         {
             const float unitsPerSecond = 15.0f;
 
-            Vector3 origin = _worldPositionGetter.Get(0, 0);
+            ArgumentNullException.ThrowIfNull(transform);
+
+            Vector3 end = GetEnd(transform, rowOffset, columnOffset);
+
+            ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
+
+            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad); // TODO: Review
+
+            tweenMovement.Do();
+        }
+
+        public void DoCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)
+        {
+            const int columnOffset = 0;
+            const float unitsPerSecond = 15.0f;
+
+            ArgumentNullException.ThrowIfNull(transform);
+
+            Vector3 end = GetEnd(transform, rowOffset, columnOffset);
+
+            ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
+
+            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad); // TODO: Review
+
+            tweenMovement.Do();
+        }
+
+        private Vector3 GetEnd([NotNull] Transform transform, int rowOffset, int columnOffset)
+        {
+            ArgumentNullException.ThrowIfNull(transform);
+
+            Vector3 origin = _worldPositionGetter.Get(0, 0); // TODO: Cache
             Vector3 offset = _worldPositionGetter.Get(rowOffset, columnOffset) - origin;
             Vector3 start = transform.position;
             Vector3 end = start + offset;
 
-            ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
-
-            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad);
-
-            tweenMovement.Do();
+            return end;
         }
     }
 }

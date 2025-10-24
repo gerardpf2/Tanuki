@@ -38,6 +38,6 @@ namespace Game.Gameplay.EventEnqueueing
         MovePiecesByGravityEvent GetMovePiecesByGravityEvent();
 
         [NotNull]
-        IEvent GetSetCameraRowEvent(int topRow);
+        IEvent GetMoveCameraEvent(int rowOffset);
     }
 }

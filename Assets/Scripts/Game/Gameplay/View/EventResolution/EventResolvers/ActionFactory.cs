@@ -110,9 +110,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new MovePieceAction(_movementHelper, _boardView, pieceId, rowOffset, columnOffset, movePieceReason);
         }
 
-        public IAction GetSetCameraRowAction(int topRow)
+        public IAction GetMoveCameraAction(int rowOffset)
         {
-            return new SetCameraRowAction(_cameraView, topRow);
+            return new MoveCameraAction(_movementHelper, _cameraView, rowOffset);
         }
 
         public IAction GetSetGoalCurrentAmountAction(PieceType pieceType, int currentAmount, Coordinate coordinate)

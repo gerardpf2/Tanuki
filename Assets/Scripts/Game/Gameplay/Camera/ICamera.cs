@@ -8,6 +8,10 @@ namespace Game.Gameplay.Camera
 
         int VisibleRows { get; }
 
+        void Initialize();
+
+        void Uninitialize();
+
         bool UpdateRow();
     }
 }

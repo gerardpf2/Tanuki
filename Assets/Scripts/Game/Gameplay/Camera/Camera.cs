@@ -1,4 +1,5 @@
 using System;
+using Game.Common;
 using Game.Gameplay.Board;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -12,6 +13,8 @@ namespace Game.Gameplay.Camera
 
         [NotNull] private readonly IBoardContainer _boardContainer;
 
+        private InitializedLabel _initializedLabel;
+
         public int TopRow { get; private set; }
 
         public int BottomRow => TopRow - VisibleRows + 1;
@@ -24,7 +27,19 @@ namespace Game.Gameplay.Camera
 
             _boardContainer = boardContainer;
 
-            TopRow = VisibleRows - 1;
+            SetInitialTopRow();
+        }
+
+        public void Initialize()
+        {
+            _initializedLabel.SetInitialized();
+
+            SetInitialTopRow();
+        }
+
+        public void Uninitialize()
+        {
+            _initializedLabel.SetUninitialized();
         }
 
         public bool UpdateRow()
@@ -43,6 +58,11 @@ namespace Game.Gameplay.Camera
             TopRow = newTopRow;
 
             return true;
+        }
+
+        private void SetInitialTopRow()
+        {
+            TopRow = VisibleRows - 1;
         }
     }
 }
