@@ -1,10 +1,12 @@
 using System;
-using UnityEngine;
+using System.Collections;
+using JetBrains.Annotations;
 
 namespace Infrastructure.Unity
 {
     public interface ICoroutineHelper
     {
-        Coroutine RunWaitForEndOfFrame(Action action);
+        [NotNull]
+        IEnumerator GetWaitForEndOfFrame(Action action);
     }
 }

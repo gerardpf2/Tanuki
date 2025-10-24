@@ -24,15 +24,9 @@ namespace Infrastructure.Unity.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<ICameraGetter>(_ => new CameraGetter()));
 
-            ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
+            ruleAdder.Add(ruleFactory.GetSingleton<ICoroutineHelper>(_ => new CoroutineHelper()));
 
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<ICoroutineHelper>(r =>
-                    new CoroutineHelper(
-                        r.Resolve<ICoroutineRunner>()
-                    )
-                )
-            );
+            ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IDeltaTimeGetter>(_ => new DeltaTimeGetter()));
 
