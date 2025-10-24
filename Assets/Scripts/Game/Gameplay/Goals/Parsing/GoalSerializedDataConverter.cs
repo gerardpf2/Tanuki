@@ -9,14 +9,25 @@ namespace Game.Gameplay.Goals.Parsing
         {
             ArgumentNullException.ThrowIfNull(goalSerializedData);
 
-            return new Goal(goalSerializedData.PieceType, goalSerializedData.InitialAmount);
+            return
+                new Goal(
+                    goalSerializedData.PieceType,
+                    goalSerializedData.InitialAmount,
+                    goalSerializedData.CurrentAmount
+                );
         }
 
         public GoalSerializedData From([NotNull] IGoal goal)
         {
             ArgumentNullException.ThrowIfNull(goal);
 
-            return new GoalSerializedData { PieceType = goal.PieceType, InitialAmount = goal.InitialAmount };
+            return
+                new GoalSerializedData
+                {
+                    PieceType = goal.PieceType,
+                    InitialAmount = goal.InitialAmount,
+                    CurrentAmount = goal.CurrentAmount
+                };
         }
     }
 }

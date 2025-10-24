@@ -10,15 +10,16 @@ namespace Game.Gameplay.Goals
 
         public int CurrentAmount { get; set; }
 
-        public Goal(PieceType pieceType, int initialAmount)
+        public Goal(PieceType pieceType, int initialAmount, int currentAmount)
         {
             PieceType = pieceType;
             InitialAmount = initialAmount;
+            CurrentAmount = currentAmount;
         }
 
         public IGoal Clone()
         {
-            return new Goal(PieceType, InitialAmount) { CurrentAmount = CurrentAmount };
+            return new Goal(PieceType, InitialAmount, CurrentAmount);
         }
     }
 }

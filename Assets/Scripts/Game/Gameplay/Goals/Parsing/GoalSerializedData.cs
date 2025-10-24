@@ -9,7 +9,10 @@ namespace Game.Gameplay.Goals.Parsing
         [JsonProperty("TYPE"), JsonConverter(typeof(StringEnumConverter))]
         public PieceType PieceType { get; set; }
 
-        [JsonProperty("AMOUNT", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty("INITIAL", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int InitialAmount { get; set; }
+
+        [JsonProperty("CURRENT", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public int CurrentAmount { get; set; }
     }
 }
