@@ -47,11 +47,13 @@ namespace Game.Gameplay.REMOVE
         {
             if (Input.GetKeyDown(KeyCode.S))
             {
-                SerializeAndLog();
+                string value = Serialize();
+
+                CopyToClipboard(value);
             }
         }
 
-        private void SerializeAndLog()
+        private string Serialize()
         {
             InvalidOperationException.ThrowIfNull(_bagContainer);
             InvalidOperationException.ThrowIfNull(_boardContainer);
@@ -64,9 +66,13 @@ namespace Game.Gameplay.REMOVE
             IGoals goals = _goalsContainer.Goals;
             IMoves moves = _movesContainer.Moves;
 
-            string serializedGameplay = _gameplayParser.Serialize(board, goals, moves, bag);
+            return _gameplayParser.Serialize(board, goals, moves, bag);
+        }
 
-            Debug.Log(serializedGameplay);
+        // TODO: Infrastructure unity
+        private static void CopyToClipboard(string value)
+        {
+            GUIUtility.systemCopyBuffer = value;
         }
     }
 }
