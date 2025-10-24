@@ -43,9 +43,12 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             bool resolved = false;
 
-            foreach (int pieceId in board.GetPieceIdsSortedByRowThenByColumn())
+            foreach (int pieceId in board.GetDistinctPieceIdsSortedByRowThenByColumn())
             {
-                resolved = TryDestroyPiece(pieceId) || resolved;
+                if (TryDestroyPiece(pieceId))
+                {
+                    resolved = true;
+                }
             }
 
             return resolved ? ResolveResult.Updated : ResolveResult.NotUpdated;

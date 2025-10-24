@@ -46,6 +46,11 @@ namespace Game.Gameplay.View.EventResolution
             return new MovePieceEventResolver(_actionFactory);
         }
 
+        public IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver()
+        {
+            return new MovePiecesByGravityEventResolver(_actionFactory);
+        }
+
         public IEventResolver<SetCameraRowEvent> GetSetCameraRowEventResolver()
         {
             return new SetCameraRowEventResolver(_actionFactory);

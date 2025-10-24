@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Pieces.Utils;
+using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Game.Gameplay.Board.Utils
 {
@@ -20,35 +21,55 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull]
-        public static IEnumerable<int> GetPieceIdsSortedByRowThenByColumn([NotNull] this IBoard board)
+        public static IEnumerable<int> GetDistinctPieceIdsSortedByRowThenByColumn([NotNull] this IBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            return
-                board.PieceIds
-                    .Select(SelectPieceIdSourceCoordinate)
-                    .OrderBy(SelectRow)
-                    .ThenBy(SelectColumn)
-                    .Select(SelectPieceId);
+            const int bottomRow = 0;
+            int topRow = board.Rows - 1;
 
-            (int, Coordinate) SelectPieceIdSourceCoordinate(int pieceId)
-            {
-                return (pieceId, board.GetSourceCoordinate(pieceId));
-            }
+            return board.GetDistinctPieceIdsSortedByRowThenByColumn(bottomRow, topRow);
+        }
 
-            int SelectRow((int _, Coordinate sourceCoordinate) pieceIdSourceCoordinate)
-            {
-                return pieceIdSourceCoordinate.sourceCoordinate.Row;
-            }
+        [NotNull]
+        public static IEnumerable<int> GetDistinctPieceIdsSortedByRowThenByColumn(
+            [NotNull] this IBoard board,
+            int bottomRow,
+            int topRow)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentOutOfRangeException.ThrowIfNot(bottomRow, ComparisonOperator.GreaterThanOrEqualTo, 0);
+            ArgumentOutOfRangeException.ThrowIfNot(bottomRow, ComparisonOperator.LessThanOrEqualTo, topRow);
+            ArgumentOutOfRangeException.ThrowIfNot(topRow, ComparisonOperator.LessThan, board.Rows);
 
-            int SelectColumn((int _, Coordinate sourceCoordinate) pieceIdSourceCoordinate)
-            {
-                return pieceIdSourceCoordinate.sourceCoordinate.Column;
-            }
+            ICollection<int> visitedPieceIds = new HashSet<int>();
 
-            int SelectPieceId((int pieceId, Coordinate _) pieceIdSourceCoordinate)
+            int columns = board.Columns;
+
+            for (int row = bottomRow; row <= topRow; ++row)
             {
-                return pieceIdSourceCoordinate.pieceId;
+                for (int column = 0; column < columns; ++column)
+                {
+                    Coordinate coordinate = new(row, column);
+
+                    int? pieceId = board.GetPieceId(coordinate);
+
+                    if (!pieceId.HasValue)
+                    {
+                        continue;
+                    }
+
+                    int pieceIdValue = pieceId.Value;
+
+                    if (visitedPieceIds.Contains(pieceIdValue))
+                    {
+                        continue;
+                    }
+
+                    visitedPieceIds.Add(pieceIdValue);
+
+                    yield return pieceIdValue;
+                }
             }
         }
 

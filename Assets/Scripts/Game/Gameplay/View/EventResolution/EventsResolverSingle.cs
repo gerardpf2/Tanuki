@@ -41,6 +41,9 @@ namespace Game.Gameplay.View.EventResolution
                 case MovePieceEvent movePieceEvent:
                     _eventResolverFactory.GetMovePieceEventResolver().Resolve(movePieceEvent, onComplete);
                     break;
+                case MovePiecesByGravityEvent movePiecesByGravityEvent:
+                    _eventResolverFactory.GetMovePiecesByGravityEventResolver().Resolve(movePiecesByGravityEvent, onComplete);
+                    break;
                 case SetCameraRowEvent setCameraRowEvent:
                     _eventResolverFactory.GetSetCameraRowEventResolver().Resolve(setCameraRowEvent, onComplete);
                     break;
