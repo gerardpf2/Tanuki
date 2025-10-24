@@ -262,17 +262,16 @@ namespace Game.Gameplay.Composition
                 "NoMovesLeftPhase"
             );
 
-            // TODO: Review phases order
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseResolver>(r =>
                     new PhaseResolver(
-                        r.Resolve<IPhase>("GoalsCompletedPhase"),
-                        r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
-                        r.Resolve<IPhase>("CameraTargetTopRowPhase"),
-                        r.Resolve<IPhase>("LockPlayerPiecePhase"),
                         r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
+                        r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
+                        r.Resolve<IPhase>("LockPlayerPiecePhase"),
                         r.Resolve<IPhase>("GravityPhase"),
+                        r.Resolve<IPhase>("CameraTargetTopRowPhase"),
                         r.Resolve<IPhase>("LineClearPhase"),
+                        r.Resolve<IPhase>("GoalsCompletedPhase"),
                         r.Resolve<IPhase>("NoMovesLeftPhase"),
                         r.Resolve<IPhase>("InstantiatePlayerPiecePhase")
                     )

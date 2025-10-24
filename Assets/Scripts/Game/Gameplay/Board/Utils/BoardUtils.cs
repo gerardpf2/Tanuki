@@ -39,7 +39,6 @@ namespace Game.Gameplay.Board.Utils
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentOutOfRangeException.ThrowIfNot(bottomRow, ComparisonOperator.GreaterThanOrEqualTo, 0);
-            ArgumentOutOfRangeException.ThrowIfNot(bottomRow, ComparisonOperator.LessThanOrEqualTo, topRow);
             ArgumentOutOfRangeException.ThrowIfNot(topRow, ComparisonOperator.LessThan, board.Rows);
 
             ICollection<int> visitedPieceIds = new HashSet<int>();
