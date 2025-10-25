@@ -107,7 +107,7 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceAction(_movementHelper, _boardView, pieceId, rowOffset, columnOffset, movePieceReason);
+            return new MovePieceAction(_movementHelper, rowOffset, columnOffset, movePieceReason, _boardView, pieceId);
         }
 
         public IAction GetMoveCameraAction(int rowOffset)
