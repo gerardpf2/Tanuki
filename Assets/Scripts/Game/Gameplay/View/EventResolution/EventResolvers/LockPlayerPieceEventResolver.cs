@@ -22,7 +22,10 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            // TODO: Move player piece action
+            int rowOffset = evt.LockSourceCoordinate.Row - evt.SourceCoordinate.Row;
+            int columnOffset = evt.LockSourceCoordinate.Column - evt.SourceCoordinate.Column;
+
+            yield return _actionFactory.GetMovePlayerPieceAction(rowOffset, columnOffset, MovePieceReason.Gravity); // TODO: Reason
 
             yield return _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.Lock);
 
