@@ -36,6 +36,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
         IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
 
         [NotNull]
+        IAction GetMovePlayerPieceAction(int rowOffset, int columnOffset, MovePieceReason movePieceReason);
+
+        [NotNull]
         IAction GetMoveCameraAction(int rowOffset);
 
         [NotNull]
