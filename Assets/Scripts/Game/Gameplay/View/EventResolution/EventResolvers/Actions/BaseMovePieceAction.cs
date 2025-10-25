@@ -68,6 +68,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers.Actions
                 case MovePieceReason.Gravity:
                     _movementHelper.DoGravityMovement(transform, _rowOffset, _columnOffset, onComplete);
                     break;
+                case MovePieceReason.Lock:
+                    _movementHelper.DoLockMovement(transform, _rowOffset, _columnOffset, onComplete);
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(_movePieceReason);
                     return;

@@ -34,6 +34,21 @@ namespace Game.Gameplay.View.Animation.Movement
             tweenMovement.Do();
         }
 
+        public void DoLockMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete)
+        {
+            const float unitsPerSecond = 60.0f;
+
+            ArgumentNullException.ThrowIfNull(transform);
+
+            Vector3 end = transform.position.AddX(columnOffset).AddY(rowOffset);
+
+            ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
+
+            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad);
+
+            tweenMovement.Do();
+        }
+
         public void DoCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)
         {
             const float unitsPerSecond = 15.0f;

@@ -7,6 +7,8 @@ namespace Game.Gameplay.View.Animation.Movement
     {
         void DoGravityMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete);
 
+        void DoLockMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete);
+
         void DoCameraMovement(Transform transform, int rowOffset, Action onComplete);
     }
 }
