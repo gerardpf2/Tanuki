@@ -19,7 +19,12 @@ namespace Game.Gameplay.EventEnqueueing
         IEvent GetInstantiatePlayerPieceEvent(IPiece piece);
 
         [NotNull]
-        IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate, int movesAmount);
+        IEvent GetLockPlayerPieceEvent(
+            IPiece piece,
+            Coordinate sourceCoordinate,
+            Coordinate lockSourceCoordinate,
+            int movesAmount
+        );
 
         [NotNull]
         IEvent GetDamagePieceEvent(IPiece piece, DamagePieceReason damagePieceReason);

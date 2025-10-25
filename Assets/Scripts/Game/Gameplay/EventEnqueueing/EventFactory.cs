@@ -24,11 +24,15 @@ namespace Game.Gameplay.EventEnqueueing
             return new InstantiatePlayerPieceEvent(piece);
         }
 
-        public IEvent GetLockPlayerPieceEvent(IPiece piece, Coordinate lockSourceCoordinate, int movesAmount)
+        public IEvent GetLockPlayerPieceEvent(
+            IPiece piece,
+            Coordinate sourceCoordinate,
+            Coordinate lockSourceCoordinate,
+            int movesAmount)
         {
             IPiece pieceClone = piece.Clone(); // Clone needed so model and view boards have different piece refs
 
-            return new LockPlayerPieceEvent(pieceClone, lockSourceCoordinate, movesAmount);
+            return new LockPlayerPieceEvent(pieceClone, sourceCoordinate, lockSourceCoordinate, movesAmount);
         }
 
         public IEvent GetDamagePieceEvent([NotNull] IPiece piece, DamagePieceReason damagePieceReason)
