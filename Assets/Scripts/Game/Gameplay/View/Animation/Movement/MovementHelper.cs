@@ -25,13 +25,7 @@ namespace Game.Gameplay.View.Animation.Movement
 
             ArgumentNullException.ThrowIfNull(transform);
 
-            Vector3 end = transform.position.AddX(columnOffset).AddY(rowOffset);
-
-            ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
-
-            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad);
-
-            tweenMovement.Do();
+            DoTweenMovement(transform, rowOffset, columnOffset, unitsPerSecond, EasingType.InQuad, onComplete);
         }
 
         public void DoLockMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete)
@@ -40,26 +34,34 @@ namespace Game.Gameplay.View.Animation.Movement
 
             ArgumentNullException.ThrowIfNull(transform);
 
-            Vector3 end = transform.position.AddX(columnOffset).AddY(rowOffset);
-
-            ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
-
-            tweenMovement.TweenBuilder.WithEasingType(EasingType.InQuad);
-
-            tweenMovement.Do();
+            DoTweenMovement(transform, rowOffset, columnOffset, unitsPerSecond, EasingType.InQuad, onComplete);
         }
 
         public void DoCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)
         {
+            const int columnOffset = 0;
             const float unitsPerSecond = 15.0f;
 
             ArgumentNullException.ThrowIfNull(transform);
 
-            Vector3 end = transform.position.AddY(rowOffset);
+            DoTweenMovement(transform, rowOffset, columnOffset, unitsPerSecond, EasingType.InOutQuad, onComplete);
+        }
+
+        private void DoTweenMovement(
+            [NotNull] Transform transform,
+            int rowOffset,
+            int columnOffset,
+            float unitsPerSecond,
+            EasingType easingType,
+            Action onComplete)
+        {
+            ArgumentNullException.ThrowIfNull(transform);
+
+            Vector3 end = transform.position.AddX(columnOffset).AddY(rowOffset);
 
             ITweenMovement tweenMovement = _movementFactory.GetTweenMovement(transform, end, unitsPerSecond, onComplete);
 
-            tweenMovement.TweenBuilder.WithEasingType(EasingType.InOutQuad);
+            tweenMovement.TweenBuilder.WithEasingType(easingType);
 
             tweenMovement.Do();
         }
