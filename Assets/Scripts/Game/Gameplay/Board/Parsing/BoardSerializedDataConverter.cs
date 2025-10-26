@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Pieces;
+using Game.Gameplay.Pieces.Parsing;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.EventEnqueueing;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 

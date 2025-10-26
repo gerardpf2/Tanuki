@@ -1,6 +1,6 @@
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Pieces.Pieces;
 
 namespace Game.Gameplay.EventEnqueueing.Events
 {

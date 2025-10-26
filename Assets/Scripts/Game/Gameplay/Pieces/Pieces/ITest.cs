@@ -1,4 +1,4 @@
-namespace Game.Gameplay.Board.Pieces
+namespace Game.Gameplay.Pieces.Pieces
 {
     public interface ITest : IPiece
     {

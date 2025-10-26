@@ -1,6 +1,7 @@
-using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Board;
+using Game.Gameplay.Pieces.Pieces;
 
-namespace Game.Gameplay.Board
+namespace Game.Gameplay.Pieces
 {
     public class PiecePlacement
     {

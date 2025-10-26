@@ -7,7 +7,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.Board.Pieces
+namespace Game.Gameplay.Pieces.Pieces
 {
     public abstract class Piece : IPiece
     {

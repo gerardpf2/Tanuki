@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.Board.Parsing
+namespace Game.Gameplay.Pieces.Parsing
 {
     public interface IPiecePlacementSerializedDataConverter
     {

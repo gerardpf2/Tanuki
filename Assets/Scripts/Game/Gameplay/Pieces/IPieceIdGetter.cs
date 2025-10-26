@@ -1,4 +1,4 @@
-namespace Game.Gameplay.Board
+namespace Game.Gameplay.Pieces
 {
     public interface IPieceIdGetter
     {

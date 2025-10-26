@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;

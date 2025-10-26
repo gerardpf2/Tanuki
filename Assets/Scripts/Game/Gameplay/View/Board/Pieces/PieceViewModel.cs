@@ -1,6 +1,6 @@
 using System;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Utils;
 using UnityEngine;

@@ -1,5 +1,5 @@
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Player

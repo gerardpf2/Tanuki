@@ -1,6 +1,6 @@
 using Game.Common;
 
-namespace Game.Gameplay.Board
+namespace Game.Gameplay.Pieces
 {
     public class PieceIdGetter : IPieceIdGetter
     {

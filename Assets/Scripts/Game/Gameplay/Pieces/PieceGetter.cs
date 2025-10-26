@@ -1,11 +1,11 @@
-using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
-namespace Game.Gameplay.Board
+namespace Game.Gameplay.Pieces
 {
     public class PieceGetter : IPieceGetter
     {

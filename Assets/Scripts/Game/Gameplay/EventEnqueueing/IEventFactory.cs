@@ -1,7 +1,7 @@
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing.Events;
 using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.EventEnqueueing

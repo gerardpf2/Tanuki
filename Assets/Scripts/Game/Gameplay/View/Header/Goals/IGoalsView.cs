@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Header.Goals

@@ -1,9 +1,9 @@
-using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.Board
+namespace Game.Gameplay.Pieces
 {
     public class PieceFactory : IPieceFactory
     {

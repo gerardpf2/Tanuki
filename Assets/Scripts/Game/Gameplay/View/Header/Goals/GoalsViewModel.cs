@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Pieces;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;

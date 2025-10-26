@@ -1,6 +1,6 @@
 using Game.Gameplay.Bag;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 

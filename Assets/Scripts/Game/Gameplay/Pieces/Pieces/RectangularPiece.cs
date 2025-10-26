@@ -2,7 +2,7 @@ using Infrastructure.System;
 using Infrastructure.System.Matrix.Utils;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.Board.Pieces
+namespace Game.Gameplay.Pieces.Pieces
 {
     public abstract class RectangularPiece : Piece
     {

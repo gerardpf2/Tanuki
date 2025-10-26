@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board.Parsing

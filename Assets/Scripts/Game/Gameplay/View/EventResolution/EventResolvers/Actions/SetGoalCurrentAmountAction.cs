@@ -1,5 +1,6 @@
 using System;
 using Game.Gameplay.Board;
+using Game.Gameplay.Pieces;
 using Game.Gameplay.View.Header.Goals;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;

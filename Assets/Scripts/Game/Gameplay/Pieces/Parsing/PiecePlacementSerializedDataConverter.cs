@@ -1,7 +1,8 @@
+using Game.Gameplay.Board;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.Board.Parsing
+namespace Game.Gameplay.Pieces.Parsing
 {
     public class PiecePlacementSerializedDataConverter : IPiecePlacementSerializedDataConverter
     {

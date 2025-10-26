@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.Board.Pieces.Utils
+namespace Game.Gameplay.Pieces.Pieces.Utils
 {
     public static class PieceUtils
     {

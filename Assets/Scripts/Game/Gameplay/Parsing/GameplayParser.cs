@@ -3,6 +3,7 @@ using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
+using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
 using JetBrains.Annotations;

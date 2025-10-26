@@ -11,6 +11,8 @@ using Game.Gameplay.Moves.Parsing;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.PhaseResolution;
 using Game.Gameplay.PhaseResolution.Phases;
+using Game.Gameplay.Pieces;
+using Game.Gameplay.Pieces.Parsing;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Animation.Movement;

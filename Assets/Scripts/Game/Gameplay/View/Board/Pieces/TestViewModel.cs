@@ -1,4 +1,4 @@
-using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 
 namespace Game.Gameplay.View.Board.Pieces
 {

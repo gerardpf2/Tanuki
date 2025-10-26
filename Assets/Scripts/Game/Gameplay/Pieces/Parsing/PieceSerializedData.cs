@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Plastic.Newtonsoft.Json;
 using Unity.Plastic.Newtonsoft.Json.Converters;
 
-namespace Game.Gameplay.Board.Parsing
+namespace Game.Gameplay.Pieces.Parsing
 {
     public class PieceSerializedData
     {

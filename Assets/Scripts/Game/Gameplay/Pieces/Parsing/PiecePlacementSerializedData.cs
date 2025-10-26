@@ -1,6 +1,6 @@
 using Unity.Plastic.Newtonsoft.Json;
 
-namespace Game.Gameplay.Board.Parsing
+namespace Game.Gameplay.Pieces.Parsing
 {
     public class PiecePlacementSerializedData
     {

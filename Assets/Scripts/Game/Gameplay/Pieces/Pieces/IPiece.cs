@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.Board.Pieces
+namespace Game.Gameplay.Pieces.Pieces
 {
     public interface IPiece
     {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
+using Game.Gameplay.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Bag

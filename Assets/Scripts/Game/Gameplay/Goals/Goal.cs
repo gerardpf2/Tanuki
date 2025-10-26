@@ -1,4 +1,5 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.Pieces;
 
 namespace Game.Gameplay.Goals
 {

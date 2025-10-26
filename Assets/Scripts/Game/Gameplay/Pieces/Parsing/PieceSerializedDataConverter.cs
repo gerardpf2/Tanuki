@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Game.Gameplay.Board.Pieces;
-using Game.Gameplay.Board.Pieces.Utils;
+using Game.Gameplay.Pieces.Pieces;
+using Game.Gameplay.Pieces.Pieces.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.Board.Parsing
+namespace Game.Gameplay.Pieces.Parsing
 {
     public class PieceSerializedDataConverter : IPieceSerializedDataConverter
     {

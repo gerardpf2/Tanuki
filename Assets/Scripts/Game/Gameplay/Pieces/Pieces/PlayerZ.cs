@@ -1,8 +1,8 @@
-using Game.Gameplay.Board.Pieces.Utils;
+using Game.Gameplay.Pieces.Pieces.Utils;
 using Infrastructure.System;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.Board.Pieces
+namespace Game.Gameplay.Pieces.Pieces
 {
     public class PlayerZ : Piece
     {
