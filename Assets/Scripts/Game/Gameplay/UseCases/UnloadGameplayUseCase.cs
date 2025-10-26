@@ -3,7 +3,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
-using Game.Gameplay.PhaseResolution;
+using Game.Gameplay.Phases;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;

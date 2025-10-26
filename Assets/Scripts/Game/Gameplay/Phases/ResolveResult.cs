@@ -1,4 +1,4 @@
-namespace Game.Gameplay.PhaseResolution
+namespace Game.Gameplay.Phases
 {
     public enum ResolveResult
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Game.Gameplay.PhaseResolution
+namespace Game.Gameplay.Phases
 {
     public interface IPhaseResolver
     {

@@ -1,7 +1,7 @@
 using Game.Common;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
-using Game.Gameplay.PhaseResolution;
+using Game.Gameplay.Phases;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 

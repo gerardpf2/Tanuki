@@ -5,7 +5,7 @@ using Game.Gameplay.Camera;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
-using Game.Gameplay.PhaseResolution;
+using Game.Gameplay.Phases;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.View;
 using Game.Gameplay.View.Board;

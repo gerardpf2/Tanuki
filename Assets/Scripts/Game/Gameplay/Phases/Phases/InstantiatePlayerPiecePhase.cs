@@ -4,7 +4,7 @@ using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.PhaseResolution.Phases
+namespace Game.Gameplay.Phases.Phases
 {
     public class InstantiatePlayerPiecePhase : Phase
     {

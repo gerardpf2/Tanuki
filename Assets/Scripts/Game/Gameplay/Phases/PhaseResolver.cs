@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Game.Common;
-using Game.Gameplay.PhaseResolution.Phases;
+using Game.Gameplay.Phases.Phases;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
-namespace Game.Gameplay.PhaseResolution
+namespace Game.Gameplay.Phases
 {
     public class PhaseResolver : IPhaseResolver
     {

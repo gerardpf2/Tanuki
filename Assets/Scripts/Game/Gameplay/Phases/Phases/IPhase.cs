@@ -1,4 +1,4 @@
-namespace Game.Gameplay.PhaseResolution.Phases
+namespace Game.Gameplay.Phases.Phases
 {
     public interface IPhase
     {

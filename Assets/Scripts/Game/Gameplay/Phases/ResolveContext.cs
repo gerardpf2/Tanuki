@@ -1,6 +1,6 @@
 using Game.Gameplay.Board;
 
-namespace Game.Gameplay.PhaseResolution
+namespace Game.Gameplay.Phases
 {
     public class ResolveContext
     {

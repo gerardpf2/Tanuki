@@ -1,6 +1,6 @@
 using Game.Common;
 
-namespace Game.Gameplay.PhaseResolution.Phases
+namespace Game.Gameplay.Phases.Phases
 {
     public abstract class Phase : IPhase
     {

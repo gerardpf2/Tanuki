@@ -1,5 +1,5 @@
 using Game.Common;
-using Game.Gameplay.PhaseResolution;
+using Game.Gameplay.Phases;
 using Game.Gameplay.View.EventResolution;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
