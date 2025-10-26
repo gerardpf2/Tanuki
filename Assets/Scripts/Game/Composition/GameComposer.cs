@@ -3,6 +3,7 @@ using System.Linq;
 using Game.Gameplay;
 using Game.Gameplay.Composition;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Pieces;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;

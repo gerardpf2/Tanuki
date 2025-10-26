@@ -1,9 +1,8 @@
-using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
 using UnityEngine;
 
-namespace Game.Gameplay.View.Board
+namespace Game.Gameplay.View.Pieces
 {
     [CreateAssetMenu(fileName = nameof(PieceViewDefinitionContainer), menuName = "Tanuki/Game/Gameplay/Board/" + nameof(PieceViewDefinitionContainer))]
     public class PieceViewDefinitionContainer : ScriptableObject, IPieceViewDefinitionGetter

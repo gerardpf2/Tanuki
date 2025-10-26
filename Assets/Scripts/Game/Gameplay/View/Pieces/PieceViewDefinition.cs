@@ -1,10 +1,9 @@
 using System;
-using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.View.Board
+namespace Game.Gameplay.View.Pieces
 {
     [Serializable]
     public class PieceViewDefinition : IPieceViewDefinition

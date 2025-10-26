@@ -7,7 +7,7 @@ using UnityEngine;
 using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.View.Board.Pieces
+namespace Game.Gameplay.View.Pieces.Pieces
 {
     public class PieceViewModel : PieceViewModel<IPiece> { }
 

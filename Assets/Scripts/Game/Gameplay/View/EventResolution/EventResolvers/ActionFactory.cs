@@ -9,6 +9,7 @@ using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
 using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Header.Moves;
+using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;

@@ -1,6 +1,6 @@
 using System;
 using Game.Gameplay.Events.Reasons;
-using Game.Gameplay.View.Board.Pieces;
+using Game.Gameplay.View.Pieces.Pieces;
 using JetBrains.Annotations;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;

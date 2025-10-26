@@ -1,9 +1,8 @@
-using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Game.Gameplay.View.Board
+namespace Game.Gameplay.View.Pieces
 {
     public interface IPieceViewDefinition
     {

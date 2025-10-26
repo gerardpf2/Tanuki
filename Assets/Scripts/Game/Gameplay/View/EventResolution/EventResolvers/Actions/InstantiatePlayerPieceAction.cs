@@ -1,6 +1,7 @@
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
