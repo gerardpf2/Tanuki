@@ -7,7 +7,7 @@ using Game.Gameplay.Phases;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
-using Game.Gameplay.View.EventResolution;
+using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Header.Goals;
 using Game.Gameplay.View.Header.Moves;
 using Game.Gameplay.View.Input;

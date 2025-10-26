@@ -1,6 +1,6 @@
 using Game.Common;
 using Game.Gameplay.Phases;
-using Game.Gameplay.View.EventResolution;
+using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
