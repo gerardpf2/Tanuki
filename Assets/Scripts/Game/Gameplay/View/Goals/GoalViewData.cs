@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
-namespace Game.Gameplay.View.Header.Goals
+namespace Game.Gameplay.View.Goals
 {
     public class GoalViewData
     {

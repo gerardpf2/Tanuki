@@ -4,7 +4,7 @@ using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Game.Gameplay.View.Header.Goals
+namespace Game.Gameplay.View.Goals
 {
     public class GoalViewModel : ViewModel, IDataSettable<GoalViewData>
     {

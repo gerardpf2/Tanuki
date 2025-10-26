@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Pieces;
 using Infrastructure.DependencyInjection;
@@ -7,7 +6,7 @@ using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.Header.Goals
+namespace Game.Gameplay.View.Goals
 {
     public class GoalsViewModel : ViewModel, IDataSettable<GoalsViewData>
     {

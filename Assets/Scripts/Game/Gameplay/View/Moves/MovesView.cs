@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.View.Header.Moves
+namespace Game.Gameplay.View.Moves
 {
     public class MovesView : IMovesView
     {

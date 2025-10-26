@@ -1,5 +1,5 @@
 using System;
-using Game.Gameplay.View.Header.Moves;
+using Game.Gameplay.View.Moves;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 

@@ -1,6 +1,6 @@
 using System;
 
-namespace Game.Gameplay.View.Header.Moves
+namespace Game.Gameplay.View.Moves
 {
     public interface IMovesView
     {

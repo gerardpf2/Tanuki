@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Game.Common;
-using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.View.Header.Goals
+namespace Game.Gameplay.View.Goals
 {
     public class GoalsView : IGoalsView
     {

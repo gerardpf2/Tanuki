@@ -3,7 +3,7 @@ using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.Header.Moves
+namespace Game.Gameplay.View.Moves
 {
     public class MovesViewModel : ViewModel, IDataSettable<MovesViewData>
     {

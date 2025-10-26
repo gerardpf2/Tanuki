@@ -1,4 +1,4 @@
-namespace Game.Gameplay.View.Header.Moves
+namespace Game.Gameplay.View.Moves
 {
     // TODO: Remove if not needed
     public class MovesViewData { }
