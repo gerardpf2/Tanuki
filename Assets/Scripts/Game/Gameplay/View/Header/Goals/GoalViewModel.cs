@@ -1,4 +1,4 @@
-using Game.Gameplay.View.Common.Pieces;
+using Game.Gameplay.View.Pieces;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
