@@ -3,7 +3,7 @@ using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
-using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.Events;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
 using Game.Gameplay.Moves;

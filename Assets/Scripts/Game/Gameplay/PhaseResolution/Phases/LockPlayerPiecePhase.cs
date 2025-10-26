@@ -1,7 +1,7 @@
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
-using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.Events;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.Events.Events;
 using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;

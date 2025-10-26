@@ -1,6 +1,6 @@
 using Game.Gameplay.Pieces.Pieces;
 
-namespace Game.Gameplay.EventEnqueueing.Events
+namespace Game.Gameplay.Events.Events
 {
     public class InstantiatePlayerPieceEvent : IEvent
     {

@@ -1,5 +1,5 @@
 using System;
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events.Reasons;
 
 namespace Game.Gameplay.View.Board.Pieces
 {

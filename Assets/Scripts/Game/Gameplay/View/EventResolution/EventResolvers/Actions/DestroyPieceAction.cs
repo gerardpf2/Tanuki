@@ -1,4 +1,4 @@
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.View.Board;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.View.EventResolution.EventResolvers.Actions;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;

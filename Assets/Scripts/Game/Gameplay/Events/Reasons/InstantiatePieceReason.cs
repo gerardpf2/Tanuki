@@ -1,4 +1,4 @@
-namespace Game.Gameplay.EventEnqueueing.Events.Reasons
+namespace Game.Gameplay.Events.Reasons
 {
     public enum InstantiatePieceReason
     {

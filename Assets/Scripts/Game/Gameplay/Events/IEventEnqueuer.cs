@@ -1,7 +1,7 @@
-using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.Events.Events;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.EventEnqueueing
+namespace Game.Gameplay.Events
 {
     public interface IEventEnqueuer
     {

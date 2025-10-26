@@ -1,5 +1,5 @@
 using System;
-using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.Events.Events;
 
 namespace Game.Gameplay.View.EventResolution
 {

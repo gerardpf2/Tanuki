@@ -1,5 +1,5 @@
 using System;
-using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.Events.Events;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;

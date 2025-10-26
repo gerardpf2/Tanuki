@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
-using Game.Gameplay.EventEnqueueing;
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;

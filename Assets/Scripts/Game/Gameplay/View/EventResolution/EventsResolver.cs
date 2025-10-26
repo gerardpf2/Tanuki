@@ -1,6 +1,6 @@
 using Game.Common;
-using Game.Gameplay.EventEnqueueing;
-using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.Events;
+using Game.Gameplay.Events.Events;
 using Game.Gameplay.PhaseResolution;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;

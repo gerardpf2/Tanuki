@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.EventEnqueueing.Events
+namespace Game.Gameplay.Events.Events
 {
     public class MovePiecesByGravityEvent : IEvent
     {

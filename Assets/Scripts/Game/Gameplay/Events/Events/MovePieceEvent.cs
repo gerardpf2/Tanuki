@@ -1,6 +1,6 @@
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events.Reasons;
 
-namespace Game.Gameplay.EventEnqueueing.Events
+namespace Game.Gameplay.Events.Events
 {
     public class MovePieceEvent : IEvent
     {

@@ -1,10 +1,10 @@
 using Game.Gameplay.Board;
-using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.EventEnqueueing
+namespace Game.Gameplay.Events
 {
     public interface IEventFactory
     {

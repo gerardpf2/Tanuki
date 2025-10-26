@@ -1,8 +1,8 @@
 using Game.Gameplay.Board;
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces;
 
-namespace Game.Gameplay.EventEnqueueing.Events
+namespace Game.Gameplay.Events.Events
 {
     public class DestroyPieceEvent : IEvent
     {

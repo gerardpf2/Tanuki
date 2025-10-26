@@ -1,5 +1,5 @@
 using System;
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Utils;

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Game.Gameplay.EventEnqueueing.Events;
+using Game.Gameplay.Events.Events;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.EventEnqueueing
+namespace Game.Gameplay.Events
 {
     public class EventEnqueuer : IEventEnqueuer
     {

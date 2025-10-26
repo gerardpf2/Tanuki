@@ -1,5 +1,5 @@
 using Game.Gameplay.Camera;
-using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.Events;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 

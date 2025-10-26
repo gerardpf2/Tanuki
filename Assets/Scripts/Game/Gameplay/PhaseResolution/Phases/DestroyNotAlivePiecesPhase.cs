@@ -1,8 +1,8 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
-using Game.Gameplay.EventEnqueueing;
-using Game.Gameplay.EventEnqueueing.Events;
-using Game.Gameplay.EventEnqueueing.Events.Reasons;
+using Game.Gameplay.Events;
+using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Utils;
 using Game.Gameplay.Pieces;

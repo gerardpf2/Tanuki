@@ -1,5 +1,5 @@
 using Game.Gameplay.Bag;
-using Game.Gameplay.EventEnqueueing;
+using Game.Gameplay.Events;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
