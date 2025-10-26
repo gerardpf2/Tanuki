@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Pieces
 {
-    [CreateAssetMenu(fileName = nameof(PieceViewDefinitionContainer), menuName = "Tanuki/Game/Gameplay/Board/" + nameof(PieceViewDefinitionContainer))]
+    [CreateAssetMenu(fileName = nameof(PieceViewDefinitionContainer), menuName = "Tanuki/Game/Gameplay/Pieces/" + nameof(PieceViewDefinitionContainer))]
     public class PieceViewDefinitionContainer : ScriptableObject, IPieceViewDefinitionGetter
     {
         [SerializeField] private PieceViewDefinition[] _pieceViewDefinitions;

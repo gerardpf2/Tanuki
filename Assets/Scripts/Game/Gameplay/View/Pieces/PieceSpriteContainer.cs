@@ -6,7 +6,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.View.Pieces
 {
-    [CreateAssetMenu(fileName = nameof(PieceSpriteContainer), menuName = "Tanuki/Game/Common/Pieces/" + nameof(PieceSpriteContainer))]
+    [CreateAssetMenu(fileName = nameof(PieceSpriteContainer), menuName = "Tanuki/Game/Gameplay/Pieces/" + nameof(PieceSpriteContainer))]
     public class PieceSpriteContainer : ScriptableObject
     {
         [Serializable]
