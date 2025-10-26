@@ -1,4 +1,3 @@
-using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 

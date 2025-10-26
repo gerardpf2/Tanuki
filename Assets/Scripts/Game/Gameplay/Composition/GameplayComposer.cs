@@ -20,7 +20,6 @@ using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
-using Game.Gameplay.View.EventResolvers.EventResolvers;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Input;
 using Game.Gameplay.View.Moves;

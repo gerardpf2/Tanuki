@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using Unity.Plastic.Newtonsoft.Json;
 using Unity.Plastic.Newtonsoft.Json.Converters;

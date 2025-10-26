@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.List.Utils;
