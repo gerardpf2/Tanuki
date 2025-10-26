@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
-using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Actions.Actions;
 using Game.Gameplay.View.Animation.Movement;

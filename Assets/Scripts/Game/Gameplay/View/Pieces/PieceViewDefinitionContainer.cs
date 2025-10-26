@@ -1,5 +1,4 @@
 using Game.Common.Pieces;
-using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
 using UnityEngine;
 

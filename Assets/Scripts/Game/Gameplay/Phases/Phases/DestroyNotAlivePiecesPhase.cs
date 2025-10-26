@@ -6,7 +6,6 @@ using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Utils;
-using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;

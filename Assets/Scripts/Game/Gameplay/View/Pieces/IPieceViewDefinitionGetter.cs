@@ -1,5 +1,4 @@
 using Game.Common.Pieces;
-using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Pieces

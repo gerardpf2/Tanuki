@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Game.Common.Pieces;
-using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 
