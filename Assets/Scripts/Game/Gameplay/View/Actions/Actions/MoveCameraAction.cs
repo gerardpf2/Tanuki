@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
-namespace Game.Gameplay.View.Actions
+namespace Game.Gameplay.View.Actions.Actions
 {
     public class MoveCameraAction : IAction
     {

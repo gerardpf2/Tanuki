@@ -9,7 +9,7 @@ using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.View.Actions
+namespace Game.Gameplay.View.Actions.Actions
 {
     public class DamagePieceAction : IAction
     {

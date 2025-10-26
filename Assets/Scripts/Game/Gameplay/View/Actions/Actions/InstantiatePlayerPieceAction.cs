@@ -6,7 +6,7 @@ using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Game.Gameplay.View.Actions
+namespace Game.Gameplay.View.Actions.Actions
 {
     public class InstantiatePlayerPieceAction : BaseInstantiatePieceAction
     {

@@ -3,7 +3,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Pieces;
-using Game.Gameplay.View.Actions;
+using Game.Gameplay.View.Actions.Actions;
 using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -15,7 +15,7 @@ using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.EventResolvers.EventResolvers
+namespace Game.Gameplay.View.Actions
 {
     public class ActionFactory : IActionFactory
     {

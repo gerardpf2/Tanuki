@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.View.Actions
+namespace Game.Gameplay.View.Actions.Actions
 {
     public abstract class BaseDestroyPieceAction : IAction
     {

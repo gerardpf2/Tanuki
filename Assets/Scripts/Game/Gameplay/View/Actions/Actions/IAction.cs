@@ -1,6 +1,6 @@
 using System;
 
-namespace Game.Gameplay.View.Actions
+namespace Game.Gameplay.View.Actions.Actions
 {
     public interface IAction
     {

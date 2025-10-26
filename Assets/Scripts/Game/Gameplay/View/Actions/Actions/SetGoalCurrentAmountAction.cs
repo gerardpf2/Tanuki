@@ -5,7 +5,7 @@ using Game.Gameplay.View.Goals;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
-namespace Game.Gameplay.View.Actions
+namespace Game.Gameplay.View.Actions.Actions
 {
     public class SetGoalCurrentAmountAction : IAction
     {
