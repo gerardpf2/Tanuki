@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces;

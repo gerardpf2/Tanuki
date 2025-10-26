@@ -1,12 +1,12 @@
 using System;
-using Game.Gameplay.Pieces;
+using Game.Common.Pieces;
 using JetBrains.Annotations;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.View.Pieces
+namespace Game.Common.View.Pieces
 {
-    [CreateAssetMenu(fileName = nameof(PieceSpriteContainer), menuName = "Tanuki/Game/Gameplay/Pieces/" + nameof(PieceSpriteContainer))]
+    [CreateAssetMenu(fileName = nameof(PieceSpriteContainer), menuName = "Tanuki/Game/Common/Pieces/" + nameof(PieceSpriteContainer))]
     public class PieceSpriteContainer : ScriptableObject
     {
         [Serializable]

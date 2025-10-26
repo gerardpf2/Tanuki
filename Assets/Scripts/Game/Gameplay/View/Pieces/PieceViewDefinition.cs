@@ -1,4 +1,5 @@
 using System;
+using Game.Common.Pieces;
 using Game.Gameplay.Pieces;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;

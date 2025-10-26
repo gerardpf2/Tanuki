@@ -1,3 +1,4 @@
+using Game.Common.View.Pieces;
 using Game.Gameplay.View.Pieces;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common.Pieces;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Pieces;
 using Infrastructure.DependencyInjection;

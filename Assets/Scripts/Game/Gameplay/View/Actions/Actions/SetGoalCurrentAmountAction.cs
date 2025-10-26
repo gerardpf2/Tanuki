@@ -1,4 +1,5 @@
 using System;
+using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.View.Goals;

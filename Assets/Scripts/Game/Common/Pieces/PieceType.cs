@@ -1,4 +1,4 @@
-namespace Game.Gameplay.Pieces
+namespace Game.Common.Pieces
 {
     public enum PieceType
     {

@@ -1,3 +1,4 @@
+using Game.Common.Pieces;
 using Game.Gameplay.Pieces;
 
 namespace Game.Gameplay.Goals

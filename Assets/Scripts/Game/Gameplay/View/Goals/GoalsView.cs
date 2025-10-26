@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Common;
+using Game.Common.Pieces;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
