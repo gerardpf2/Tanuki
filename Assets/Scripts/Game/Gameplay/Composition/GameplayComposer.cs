@@ -4,6 +4,7 @@ using Game.Gameplay.Bag;
 using Game.Gameplay.Bag.Composition;
 using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Composition;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
@@ -17,7 +18,6 @@ using Game.Gameplay.Phases;
 using Game.Gameplay.Phases.Composition;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Composition;
-using Game.Gameplay.Pieces.Parsing;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Actions;
@@ -64,16 +64,6 @@ namespace Game.Gameplay.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IBoardSerializedDataConverter>(r =>
-                    new BoardSerializedDataConverter(
-                        r.Resolve<IPiecePlacementSerializedDataConverter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IBoardContainer>(_ => new BoardContainer()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ICamera>(r =>
@@ -349,6 +339,7 @@ namespace Game.Gameplay.Composition
             return base
                 .GetPartialScopeComposers()
                 .Append(new BagComposer())
+                .Append(new BoardComposer())
                 .Append(new GoalsComposer())
                 .Append(new PhasesComposer())
                 .Append(new PiecesComposer());
