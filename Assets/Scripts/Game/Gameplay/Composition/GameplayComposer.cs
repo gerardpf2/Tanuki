@@ -30,6 +30,7 @@ using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.EventResolvers.Composition;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Input;
+using Game.Gameplay.View.Input.Composition;
 using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
@@ -117,22 +118,6 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IInputHandler>(r =>
-                    new InputHandler(
-                        r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IEventsResolver>(),
-                        r.Resolve<IInputListener>(),
-                        r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<IScreenPropertiesGetter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(ruleFactory.GetSingleton(_ => new InputEventsHandler()));
-            ruleAdder.Add(ruleFactory.GetTo<IInputListener, InputEventsHandler>());
-            ruleAdder.Add(ruleFactory.GetTo<IInputNotifier, InputEventsHandler>());
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
@@ -232,7 +217,8 @@ namespace Game.Gameplay.Composition
                 .Append(new View.Board.Composition.BoardComposer())
                 .Append(new View.Camera.Composition.CameraComposer())
                 .Append(new EventResolversComposer())
-                .Append(new View.Goals.Composition.GoalsComposer());
+                .Append(new View.Goals.Composition.GoalsComposer())
+                .Append(new InputComposer());
         }
     }
 }
