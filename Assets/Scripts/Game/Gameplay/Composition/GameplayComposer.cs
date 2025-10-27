@@ -34,7 +34,6 @@ using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
-using Infrastructure.Logging;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
@@ -124,15 +123,6 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IMovementHelper>(r =>
                     new MovementHelper(
                         r.Resolve<IMovementFactory>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IBoardView>(r =>
-                    new BoardView(
-                        r.Resolve<IBoardContainer>(),
-                        r.Resolve<ILogger>()
                     )
                 )
             );
@@ -309,6 +299,7 @@ namespace Game.Gameplay.Composition
                 .Append(new PhasesComposer())
                 .Append(new PiecesComposer())
                 // View
+                .Append(new View.Board.Composition.BoardComposer())
                 .Append(new EventResolversComposer());
         }
     }
