@@ -34,6 +34,7 @@ using Game.Gameplay.View.Input.Composition;
 using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
+using Game.Gameplay.View.Player.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -110,15 +111,6 @@ namespace Game.Gameplay.Composition
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IPlayerPieceView>(r =>
-                    new PlayerPieceView(
-                        r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>()
-                    )
-                )
-            );
-
             ruleAdder.Add(ruleFactory.GetInstance(_gameplayDefinitionGetter));
         }
 
@@ -177,7 +169,8 @@ namespace Game.Gameplay.Composition
                 .Append(new EventResolversComposer())
                 .Append(new View.Goals.Composition.GoalsComposer())
                 .Append(new InputComposer())
-                .Append(new View.Moves.Composition.MovesComposer());
+                .Append(new View.Moves.Composition.MovesComposer())
+                .Append(new PlayerComposer());
         }
     }
 }
