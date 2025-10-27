@@ -32,7 +32,7 @@ namespace Game.Gameplay.View.Board.Composition
             ArgumentNullException.ThrowIfNull(ruleAdder);
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
-            base.AddRules(ruleAdder, ruleFactory);
+            base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
