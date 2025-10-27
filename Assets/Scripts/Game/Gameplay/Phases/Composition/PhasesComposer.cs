@@ -18,6 +18,8 @@ namespace Game.Gameplay.Phases.Composition
             ArgumentNullException.ThrowIfNull(ruleAdder);
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
+            base.AddRules(ruleAdder, ruleFactory);
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new CameraTargetTopRowPhase(

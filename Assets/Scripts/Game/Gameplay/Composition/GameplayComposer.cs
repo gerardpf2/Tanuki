@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Gameplay.Bag;
+using Game.Gameplay.Bag.Composition;
 using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Parsing;
@@ -62,19 +63,6 @@ namespace Game.Gameplay.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IBagPieceEntrySerializedDataConverter>(_ => new BagPieceEntrySerializedDataConverter()));
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IBagSerializedDataConverter>(r =>
-                    new BagSerializedDataConverter(
-                        r.Resolve<IBagPieceEntrySerializedDataConverter>(),
-                        r.Resolve<IPieceGetter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IBagContainer>(_ => new BagContainer()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardSerializedDataConverter>(r =>
@@ -404,7 +392,10 @@ namespace Game.Gameplay.Composition
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
-            return base.GetPartialScopeComposers().Append(new PhasesComposer());
+            return base
+                .GetPartialScopeComposers()
+                .Append(new BagComposer())
+                .Append(new PhasesComposer());
         }
     }
 }
