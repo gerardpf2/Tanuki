@@ -112,16 +112,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ICameraView>(r =>
-                    new CameraView(
-                        r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>(),
-                        r.Resolve<ICameraGetter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetSingleton<IActionFactory>(r =>
                     new ActionFactory(
                         r.Resolve<IMovementHelper>(),
@@ -283,6 +273,7 @@ namespace Game.Gameplay.Composition
                 // View
                 .Append(new AnimationComposer())
                 .Append(new View.Board.Composition.BoardComposer())
+                .Append(new View.Camera.Composition.CameraComposer())
                 .Append(new EventResolversComposer());
         }
     }
