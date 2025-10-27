@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.REMOVE
 {
-    public class LoadUnloadGameplay : MonoBehaviour
+    public class Load : MonoBehaviour
     {
         private ILoadGameplayUseCase _loadGameplayUseCase;
 

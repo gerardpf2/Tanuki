@@ -35,7 +35,7 @@ namespace Game.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetInject<LoadUnloadGameplay>((r, s) =>
+                ruleFactory.GetInject<Load>((r, s) =>
                     s.Inject(
                         r.Resolve<ILoadGameplayUseCase>()
                     )
