@@ -7,6 +7,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Composition;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
+using Game.Gameplay.Camera.Composition;
 using Game.Gameplay.Events;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Composition;
@@ -65,14 +66,6 @@ namespace Game.Gameplay.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<ICamera>(r =>
-                    new Camera.Camera(
-                        r.Resolve<IBoardContainer>()
-                    )
-                )
-            );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
@@ -337,6 +330,7 @@ namespace Game.Gameplay.Composition
                 .GetPartialScopeComposers()
                 .Append(new BagComposer())
                 .Append(new BoardComposer())
+                .Append(new CameraComposer())
                 .Append(new GoalsComposer())
                 .Append(new MovesComposer())
                 .Append(new PhasesComposer())
