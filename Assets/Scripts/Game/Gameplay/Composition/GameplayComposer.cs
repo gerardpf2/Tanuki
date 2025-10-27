@@ -131,6 +131,14 @@ namespace Game.Gameplay.Composition
                 )
             );
 
+            ruleAdder.Add(
+                ruleFactory.GetInject<UnloadGameplay>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IUnloadGameplayUseCase>()
+                    )
+                )
+            );
+
             // Shared so it can be loaded from anywhere
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>

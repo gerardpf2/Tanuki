@@ -9,22 +9,17 @@ namespace Game.REMOVE
     public class LoadUnloadGameplay : MonoBehaviour
     {
         private ILoadGameplayUseCase _loadGameplayUseCase;
-        private IUnloadGameplayUseCase _unloadGameplayUseCase;
 
         private void Start()
         {
             InjectResolver.Resolve(this);
         }
 
-        public void Inject(
-            [NotNull] ILoadGameplayUseCase loadGameplayUseCase,
-            [NotNull] IUnloadGameplayUseCase unloadGameplayUseCase)
+        public void Inject([NotNull] ILoadGameplayUseCase loadGameplayUseCase)
         {
             ArgumentNullException.ThrowIfNull(loadGameplayUseCase);
-            ArgumentNullException.ThrowIfNull(unloadGameplayUseCase);
 
             _loadGameplayUseCase = loadGameplayUseCase;
-            _unloadGameplayUseCase = unloadGameplayUseCase;
         }
 
         private void Update()
@@ -33,10 +28,6 @@ namespace Game.REMOVE
             {
                 LoadGameplay();
             }
-            else if (Input.GetKeyDown(KeyCode.U))
-            {
-                UnloadGameplay();
-            }
         }
 
         private void LoadGameplay()
@@ -44,13 +35,6 @@ namespace Game.REMOVE
             InvalidOperationException.ThrowIfNull(_loadGameplayUseCase);
 
             _loadGameplayUseCase.Resolve("Test");
-        }
-
-        private void UnloadGameplay()
-        {
-            InvalidOperationException.ThrowIfNull(_unloadGameplayUseCase);
-
-            _unloadGameplayUseCase.Resolve();
         }
     }
 }

@@ -37,8 +37,7 @@ namespace Game.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<LoadUnloadGameplay>((r, s) =>
                     s.Inject(
-                        r.Resolve<ILoadGameplayUseCase>(),
-                        r.Resolve<IUnloadGameplayUseCase>()
+                        r.Resolve<ILoadGameplayUseCase>()
                     )
                 )
             );
