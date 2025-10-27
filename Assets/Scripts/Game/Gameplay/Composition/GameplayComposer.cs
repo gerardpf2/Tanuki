@@ -22,9 +22,8 @@ using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Composition;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
-using Game.Gameplay.View.Actions;
+using Game.Gameplay.View.Actions.Composition;
 using Game.Gameplay.View.Animation.Composition;
-using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
@@ -110,21 +109,6 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IActionFactory>(r =>
-                    new ActionFactory(
-                        r.Resolve<IMovementHelper>(),
-                        r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IBoardView>(),
-                        r.Resolve<ICameraView>(),
-                        r.Resolve<IGoalsView>(),
-                        r.Resolve<IMovesView>(),
-                        r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<ICoroutineRunner>()
-                    )
-                )
-            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IGoalsView>(r =>
@@ -271,6 +255,7 @@ namespace Game.Gameplay.Composition
                 .Append(new PhasesComposer())
                 .Append(new PiecesComposer())
                 // View
+                .Append(new ActionsComposer())
                 .Append(new AnimationComposer())
                 .Append(new View.Board.Composition.BoardComposer())
                 .Append(new View.Camera.Composition.CameraComposer())
