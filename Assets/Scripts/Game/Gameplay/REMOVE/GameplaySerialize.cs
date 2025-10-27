@@ -18,7 +18,7 @@ namespace Game.Gameplay.REMOVE
         private IMovesContainer _movesContainer;
         private IGameplayParser _gameplayParser;
 
-        private void Start()
+        private void Awake()
         {
             InjectResolver.Resolve(this);
         }
