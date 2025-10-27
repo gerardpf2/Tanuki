@@ -112,14 +112,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IMovesView>(r =>
-                    new MovesView(
-                        r.Resolve<IMovesContainer>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
                         r.Resolve<IBoardContainer>(),
@@ -171,14 +163,6 @@ namespace Game.Gameplay.Composition
                     )
                 )
             );
-
-            ruleAdder.Add(
-                ruleFactory.GetInject<MovesViewModel>((r, vm) =>
-                    vm.Inject(
-                        r.Resolve<IMovesView>()
-                    )
-                )
-            );
         }
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
@@ -202,7 +186,8 @@ namespace Game.Gameplay.Composition
                 .Append(new View.Camera.Composition.CameraComposer())
                 .Append(new EventResolversComposer())
                 .Append(new View.Goals.Composition.GoalsComposer())
-                .Append(new InputComposer());
+                .Append(new InputComposer())
+                .Append(new View.Moves.Composition.MovesComposer());
         }
     }
 }
