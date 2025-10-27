@@ -173,25 +173,9 @@ namespace Game.Gameplay.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetInject<GoalsViewModel>((r, vm) =>
-                    vm.Inject(
-                        r.Resolve<IGoalsView>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetInject<MovesViewModel>((r, vm) =>
                     vm.Inject(
                         r.Resolve<IMovesView>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetInject<InputCatcher>((r, s) =>
-                    s.Inject(
-                        r.Resolve<IInputNotifier>()
                     )
                 )
             );

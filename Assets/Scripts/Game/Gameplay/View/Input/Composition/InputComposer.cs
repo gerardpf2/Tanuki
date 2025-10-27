@@ -33,5 +33,21 @@ namespace Game.Gameplay.View.Input.Composition
             ruleAdder.Add(ruleFactory.GetTo<IInputListener, InputEventsHandler>());
             ruleAdder.Add(ruleFactory.GetTo<IInputNotifier, InputEventsHandler>());
         }
+
+        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<InputCatcher>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IInputNotifier>()
+                    )
+                )
+            );
+        }
     }
 }

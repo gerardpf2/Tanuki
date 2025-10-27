@@ -22,5 +22,21 @@ namespace Game.Gameplay.View.Goals.Composition
                 )
             );
         }
+
+        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<GoalsViewModel>((r, vm) =>
+                    vm.Inject(
+                        r.Resolve<IGoalsView>()
+                    )
+                )
+            );
+        }
     }
 }
