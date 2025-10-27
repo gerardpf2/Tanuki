@@ -8,6 +8,7 @@ using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Goals.Composition;
 using Game.Gameplay.Goals.Parsing;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Moves.Parsing;
@@ -32,7 +33,6 @@ using Game.Gameplay.View.Player;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging;
 using Infrastructure.ScreenLoading;
-using Infrastructure.System;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
 using Infrastructure.Tweening;
@@ -86,18 +86,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoalSerializedDataConverter>(_ => new GoalSerializedDataConverter()));
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IGoalsSerializedDataConverter>(r =>
-                    new GoalsSerializedDataConverter(
-                        r.Resolve<IGoalSerializedDataConverter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IMovesSerializedDataConverter>(_ => new MovesSerializedDataConverter()));
 
@@ -361,6 +349,7 @@ namespace Game.Gameplay.Composition
             return base
                 .GetPartialScopeComposers()
                 .Append(new BagComposer())
+                .Append(new GoalsComposer())
                 .Append(new PhasesComposer())
                 .Append(new PiecesComposer());
         }
