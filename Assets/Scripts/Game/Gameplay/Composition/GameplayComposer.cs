@@ -15,6 +15,7 @@ using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
 using Game.Gameplay.Phases.Composition;
 using Game.Gameplay.Pieces;
+using Game.Gameplay.Pieces.Composition;
 using Game.Gameplay.Pieces.Parsing;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
@@ -72,42 +73,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IPiecePlacementSerializedDataConverter>(r =>
-                    new PiecePlacementSerializedDataConverter(
-                        r.Resolve<IPieceSerializedDataConverter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IPieceSerializedDataConverter>(r =>
-                    new PieceSerializedDataConverter(
-                        r.Resolve<IPieceGetter>()
-                    )
-                )
-            );
-
             ruleAdder.Add(ruleFactory.GetSingleton<IBoardContainer>(_ => new BoardContainer()));
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IPieceFactory>(r =>
-                    new PieceFactory(
-                        r.Resolve<IPieceIdGetter>(),
-                        r.Resolve<IConverter>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IPieceGetter>(r =>
-                    new PieceGetter(
-                        r.Resolve<IPieceFactory>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IPieceIdGetter>(_ => new PieceIdGetter()));
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ICamera>(r =>
@@ -395,7 +361,8 @@ namespace Game.Gameplay.Composition
             return base
                 .GetPartialScopeComposers()
                 .Append(new BagComposer())
-                .Append(new PhasesComposer());
+                .Append(new PhasesComposer())
+                .Append(new PiecesComposer());
         }
     }
 }
