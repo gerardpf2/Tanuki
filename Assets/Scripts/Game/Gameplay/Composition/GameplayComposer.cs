@@ -8,7 +8,6 @@ using Game.Gameplay.Board.Composition;
 using Game.Gameplay.Board.Parsing;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Camera.Composition;
-using Game.Gameplay.Events;
 using Game.Gameplay.Events.Composition;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Composition;
@@ -28,6 +27,7 @@ using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
+using Game.Gameplay.View.EventResolvers.Composition;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Input;
 using Game.Gameplay.View.Moves;
@@ -160,32 +160,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IMovesView>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<ICoroutineRunner>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IEventResolverFactory>(r =>
-                    new EventResolverFactory(
-                        r.Resolve<IActionFactory>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IEventsResolver>(r =>
-                    new EventsResolver(
-                        r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IEventsResolverSingle>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IEventsResolverSingle>(r =>
-                    new EventsResolverSingle(
-                        r.Resolve<IEventResolverFactory>()
                     )
                 )
             );
@@ -325,6 +299,7 @@ namespace Game.Gameplay.Composition
         {
             return base
                 .GetPartialScopeComposers()
+                // Model
                 .Append(new BagComposer())
                 .Append(new BoardComposer())
                 .Append(new CameraComposer())
@@ -332,7 +307,9 @@ namespace Game.Gameplay.Composition
                 .Append(new GoalsComposer())
                 .Append(new MovesComposer())
                 .Append(new PhasesComposer())
-                .Append(new PiecesComposer());
+                .Append(new PiecesComposer())
+                // View
+                .Append(new EventResolversComposer());
         }
     }
 }
