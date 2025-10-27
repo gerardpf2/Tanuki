@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Gameplay;
 using Game.Gameplay.Composition;
+using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Pieces;
+using Game.REMOVE;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -23,6 +25,23 @@ namespace Game.Composition
 
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
+        }
+
+        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddSharedRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<LoadUnloadGameplay>((r, s) =>
+                    s.Inject(
+                        r.Resolve<ILoadGameplayUseCase>(),
+                        r.Resolve<IUnloadGameplayUseCase>()
+                    )
+                )
+            );
         }
 
         protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
