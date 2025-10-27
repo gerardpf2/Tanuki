@@ -38,7 +38,6 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
-using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Composition
@@ -151,15 +150,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetInject<BoardViewModel>((r, vm) =>
-                    vm.Inject(
-                        r.Resolve<ICameraView>(),
-                        r.Resolve<ICoroutineHelper>()
                     )
                 )
             );
