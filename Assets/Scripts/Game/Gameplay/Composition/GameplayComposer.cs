@@ -111,14 +111,6 @@ namespace Game.Gameplay.Composition
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IGoalsView>(r =>
-                    new GoalsView(
-                        r.Resolve<IGoalsContainer>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetSingleton<IMovesView>(r =>
                     new MovesView(
                         r.Resolve<IMovesContainer>()
@@ -259,7 +251,8 @@ namespace Game.Gameplay.Composition
                 .Append(new AnimationComposer())
                 .Append(new View.Board.Composition.BoardComposer())
                 .Append(new View.Camera.Composition.CameraComposer())
-                .Append(new EventResolversComposer());
+                .Append(new EventResolversComposer())
+                .Append(new View.Goals.Composition.GoalsComposer());
         }
     }
 }
