@@ -23,6 +23,7 @@ using Game.Gameplay.Pieces.Composition;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Actions;
+using Game.Gameplay.View.Animation.Composition;
 using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -37,8 +38,6 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
-using Infrastructure.Tweening;
-using Infrastructure.Tweening.BuilderHelpers;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 
@@ -106,23 +105,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IMovementFactory>(r =>
-                    new MovementFactory(
-                        r.Resolve<ITransformTweenBuilderHelper>(),
-                        r.Resolve<ITweenRunner>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IMovementHelper>(r =>
-                    new MovementHelper(
-                        r.Resolve<IMovementFactory>()
                     )
                 )
             );
@@ -299,6 +281,7 @@ namespace Game.Gameplay.Composition
                 .Append(new PhasesComposer())
                 .Append(new PiecesComposer())
                 // View
+                .Append(new AnimationComposer())
                 .Append(new View.Board.Composition.BoardComposer())
                 .Append(new EventResolversComposer());
         }
