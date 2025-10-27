@@ -109,8 +109,6 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
-
             ruleAdder.Add(ruleFactory.GetInstance(_gameplayDefinitionGetter));
         }
 
@@ -170,6 +168,7 @@ namespace Game.Gameplay.Composition
                 .Append(new View.Goals.Composition.GoalsComposer())
                 .Append(new InputComposer())
                 .Append(new View.Moves.Composition.MovesComposer())
+                .Append(new View.Pieces.Composition.PiecesComposer(_pieceViewDefinitionGetter))
                 .Append(new PlayerComposer());
         }
     }
