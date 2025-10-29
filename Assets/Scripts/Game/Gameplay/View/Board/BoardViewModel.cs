@@ -14,7 +14,7 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private Transform _bottom;
 
         private ICameraView _cameraView;
-        private ICoroutineRunnerHelper _coroutineRunnerHelper;
+        private ICoroutineHelper _coroutineHelper;
 
         protected override void Awake()
         {
@@ -23,31 +23,33 @@ namespace Game.Gameplay.View.Board
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] ICameraView cameraView, [NotNull] ICoroutineRunnerHelper coroutineRunnerHelper)
+        public void Inject([NotNull] ICameraView cameraView, [NotNull] ICoroutineHelper coroutineHelper)
         {
             ArgumentNullException.ThrowIfNull(cameraView);
-            ArgumentNullException.ThrowIfNull(coroutineRunnerHelper);
+            ArgumentNullException.ThrowIfNull(coroutineHelper);
 
             _cameraView = cameraView;
-            _coroutineRunnerHelper = coroutineRunnerHelper;
+            _coroutineHelper = coroutineHelper;
         }
 
         public void SetData([NotNull] BoardViewData data)
         {
             ArgumentNullException.ThrowIfNull(data);
-            InvalidOperationException.ThrowIfNull(_coroutineRunnerHelper);
+            InvalidOperationException.ThrowIfNull(_coroutineHelper);
 
             // Wait for end of frame so UI stuff has been properly updated
             // For example, CameraView will move camera to (0, 0) but UI refreshes later
 
-            _coroutineRunnerHelper.RunWaitForEndOfFrame(
-                () =>
-                {
-                    Initialize();
+            StartCoroutine(_coroutineHelper.GetWaitForEndOfFrame(InitializeAndOnReadyInvoke));
 
-                    data.OnReady?.Invoke();
-                }
-            );
+            return;
+
+            void InitializeAndOnReadyInvoke()
+            {
+                Initialize();
+
+                data.OnReady?.Invoke();
+            }
         }
 
         private void Initialize()
