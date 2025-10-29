@@ -1,13 +1,17 @@
+using System;
 using System.Collections.Generic;
 using Infrastructure.System;
-using Infrastructure.System.Exceptions;
 using Infrastructure.System.Matrix.Utils;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board.Pieces
 {
     public abstract class Piece : IPiece
     {
+        private const bool DefaultAlive = true;
         [NotNull] private const string AliveKey = "ALIVE";
         [NotNull] private const string RotationKey = "ROTATION";
 
@@ -19,7 +23,7 @@ namespace Game.Gameplay.Board.Pieces
 
         public int Height => GetRotatedGrid().GetLength(0);
 
-        public bool Alive { get; private set; } = true;
+        public bool Alive { get; private set; } = DefaultAlive;
 
         public IEnumerable<KeyValuePair<string, string>> State => GetState();
 
@@ -122,19 +126,24 @@ namespace Game.Gameplay.Board.Pieces
 
             AddStateEntries();
 
-            return new Dictionary<string, string>(_temporaryStateEntries);
+            return _temporaryStateEntries.Count == 0 ? null : new Dictionary<string, string>(_temporaryStateEntries);
         }
 
         protected virtual void AddStateEntries()
         {
-            AddStateEntry(AliveKey, Alive);
+            AddStateEntry(AliveKey, Alive, DefaultAlive);
             AddStateEntry(RotationKey, Rotation);
         }
 
-        protected void AddStateEntry<T>([NotNull] string key, [NotNull] T value)
+        protected void AddStateEntry<T>([NotNull] string key, [NotNull] T value, T defaultValue = default) where T : IEquatable<T>
         {
             ArgumentNullException.ThrowIfNull(key);
             ArgumentNullException.ThrowIfNull(value);
+
+            if (value.Equals(defaultValue))
+            {
+                return;
+            }
 
             if (!_temporaryStateEntries.TryAdd(key, value.ToString()))
             {

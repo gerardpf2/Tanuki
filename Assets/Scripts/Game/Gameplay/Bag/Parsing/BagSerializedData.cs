@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Unity.Plastic.Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json.Converters;
 
 namespace Game.Gameplay.Bag.Parsing
 {
@@ -9,7 +10,7 @@ namespace Game.Gameplay.Bag.Parsing
         [JsonProperty("ENTRIES", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public List<BagPieceEntrySerializedData> BagPieceEntries { get; set; }
 
-        [JsonProperty("INITIAL", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty("INITIAL", ItemConverterType = typeof(StringEnumConverter), DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public List<PieceType> InitialPieceTypes { get; set; }
     }
 }
