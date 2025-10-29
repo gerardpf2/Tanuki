@@ -7,6 +7,7 @@ using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Moves.Parsing;
+using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 

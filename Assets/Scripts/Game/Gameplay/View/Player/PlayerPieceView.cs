@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using Game.Common;
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
-using Game.Gameplay.View.Board.Pieces;
+using Game.Gameplay.Pieces.Pieces;
+using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Utils;
 using UnityEngine;

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
+using Game.Common.Pieces;
+using Game.Gameplay.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.List.Utils;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;

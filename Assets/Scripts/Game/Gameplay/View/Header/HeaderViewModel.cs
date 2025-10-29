@@ -1,5 +1,5 @@
-using Game.Gameplay.View.Header.Goals;
-using Game.Gameplay.View.Header.Moves;
+using Game.Gameplay.View.Goals;
+using Game.Gameplay.View.Moves;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
 

@@ -1,0 +1,60 @@
+using Game.Gameplay.Events.Events;
+using Game.Gameplay.View.Actions;
+using Game.Gameplay.View.EventResolvers.EventResolvers;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
+
+namespace Game.Gameplay.View.EventResolvers
+{
+    public class EventResolverFactory : IEventResolverFactory
+    {
+        [NotNull] private readonly IActionFactory _actionFactory;
+
+        public EventResolverFactory([NotNull] IActionFactory actionFactory)
+        {
+            ArgumentNullException.ThrowIfNull(actionFactory);
+
+            _actionFactory = actionFactory;
+        }
+
+        public IEventResolver<InstantiatePieceEvent> GetInstantiatePieceEventResolver()
+        {
+            return new InstantiatePieceEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPieceEventResolver()
+        {
+            return new InstantiatePlayerPieceEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver()
+        {
+            return new LockPlayerPieceEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver()
+        {
+            return new DamagePieceEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<DestroyPieceEvent> GetDestroyPieceEventResolver()
+        {
+            return new DestroyPieceEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<MovePieceEvent> GetMovePieceEventResolver()
+        {
+            return new MovePieceEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver()
+        {
+            return new MovePiecesByGravityEventResolver(_actionFactory);
+        }
+
+        public IEventResolver<MoveCameraEvent> GetMoveCameraEventResolver()
+        {
+            return new MoveCameraEventResolver(_actionFactory);
+        }
+    }
+}

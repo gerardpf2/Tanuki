@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Game.Common;
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Pieces;
 using Game.Gameplay.Board.Utils;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;

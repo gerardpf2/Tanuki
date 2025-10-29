@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Common;
+using Game.Gameplay.Pieces;
 
 namespace Game.Gameplay.Board
 {
