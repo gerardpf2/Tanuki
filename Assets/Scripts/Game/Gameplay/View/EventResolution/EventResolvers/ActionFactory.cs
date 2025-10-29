@@ -107,7 +107,12 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceAction(_movementHelper, _boardView, pieceId, rowOffset, columnOffset, movePieceReason);
+            return new MovePieceAction(_movementHelper, rowOffset, columnOffset, movePieceReason, _boardView, pieceId);
+        }
+
+        public IAction GetMovePlayerPieceAction(int rowOffset, int columnOffset, MovePieceReason movePieceReason)
+        {
+            return new MovePlayerPieceAction(_movementHelper, rowOffset, columnOffset, movePieceReason, _playerPieceView);
         }
 
         public IAction GetMoveCameraAction(int rowOffset)
@@ -125,7 +130,9 @@ namespace Game.Gameplay.View.EventResolution.EventResolvers
             return new SetMovesAmountAction(_movesView, amount);
         }
 
-        public IAction GetParallelActionGroup([NotNull, ItemNotNull] IEnumerable<IAction> actions, float secondsBetweenActions)
+        public IAction GetParallelActionGroup(
+            [NotNull, ItemNotNull] IEnumerable<IAction> actions,
+            float secondsBetweenActions)
         {
             ArgumentNullException.ThrowIfNull(actions);
 

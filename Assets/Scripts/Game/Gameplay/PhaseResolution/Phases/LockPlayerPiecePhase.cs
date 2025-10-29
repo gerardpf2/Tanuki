@@ -50,13 +50,15 @@ namespace Game.Gameplay.PhaseResolution.Phases
 
             IPiece piece = ConsumeCurrentBagPiece();
 
-            Coordinate lockSourceCoordinate = AddPieceToBoard(piece, resolveContext.PieceSourceCoordinate.Value);
+            Coordinate sourceCoordinate = resolveContext.PieceSourceCoordinate.Value;
+            Coordinate lockSourceCoordinate = AddPieceToBoard(piece, sourceCoordinate);
 
             int movesAmount = DecreaseMovesAmount();
 
             _eventEnqueuer.Enqueue(
                 _eventFactory.GetLockPlayerPieceEvent(
                     piece,
+                    sourceCoordinate,
                     lockSourceCoordinate,
                     movesAmount
                 )
