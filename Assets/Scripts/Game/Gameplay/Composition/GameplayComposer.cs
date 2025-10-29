@@ -20,7 +20,7 @@ using Game.Gameplay.Phases;
 using Game.Gameplay.Phases.Composition;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Composition;
-using Game.Gameplay.REMOVE.Composition;
+using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
 using Game.Gameplay.View.Actions.Composition;
 using Game.Gameplay.View.Animation.Composition;
@@ -119,6 +119,26 @@ namespace Game.Gameplay.Composition
 
             base.AddSharedRules(ruleAdder, ruleFactory);
 
+            ruleAdder.Add(
+                ruleFactory.GetInject<GameplaySerialize>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IBagContainer>(),
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IGoalsContainer>(),
+                        r.Resolve<IMovesContainer>(),
+                        r.Resolve<IGameplayParser>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<UnloadGameplay>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IUnloadGameplayUseCase>()
+                    )
+                )
+            );
+
             // Shared so it can be loaded from anywhere
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
@@ -158,7 +178,6 @@ namespace Game.Gameplay.Composition
                 .Append(new MovesComposer())
                 .Append(new PhasesComposer())
                 .Append(new PiecesComposer())
-                .Append(new REMOVEComposer())
                 // View
                 .Append(new ActionsComposer())
                 .Append(new AnimationComposer())
