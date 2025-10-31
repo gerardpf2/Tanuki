@@ -1,90 +1,56 @@
-using Game.Common;
 using Game.Gameplay.Phases;
 using Game.Gameplay.View.EventResolvers;
-using Game.Gameplay.View.Player;
+using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Game.Gameplay.View.Input
+namespace Game.Gameplay.View.Player
 {
-    public class InputHandler : IInputHandler
+    public class PlayerPieceInputHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
         private const float LockPieceDeltaY = -0.5f; // TODO: Scriptable object for this and other input params
 
-        [NotNull] private readonly IPhaseResolver _phaseResolver;
-        [NotNull] private readonly IEventsResolver _eventsResolver;
-        [NotNull] private readonly IInputListener _inputListener;
-        [NotNull] private readonly IPlayerPieceView _playerPieceView;
-        [NotNull] private readonly IScreenPropertiesGetter _screenPropertiesGetter;
-
-        private InitializedLabel _initializedLabel;
+        private IPhaseResolver _phaseResolver;
+        private IEventsResolver _eventsResolver;
+        private IPlayerPieceView _playerPieceView;
+        private IScreenPropertiesGetter _screenPropertiesGetter;
 
         private Vector2 _previousWorldPosition;
         private bool _waitingEndDrag;
 
-        public InputHandler(
+        private void Awake()
+        {
+            InjectResolver.Resolve(this);
+        }
+
+        public void Inject(
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IEventsResolver eventsResolver,
-            [NotNull] IInputListener inputListener,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
         {
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(eventsResolver);
-            ArgumentNullException.ThrowIfNull(inputListener);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(screenPropertiesGetter);
 
             _phaseResolver = phaseResolver;
             _eventsResolver = eventsResolver;
-            _inputListener = inputListener;
             _playerPieceView = playerPieceView;
             _screenPropertiesGetter = screenPropertiesGetter;
         }
 
-        public void Initialize()
-        {
-            _initializedLabel.SetInitialized();
-
-            SubscribeToEvents();
-        }
-
-        public void Uninitialize()
-        {
-            _initializedLabel.SetUninitialized();
-
-            UnsubscribeFromEvents();
-        }
-
-        private void SubscribeToEvents()
-        {
-            UnsubscribeFromEvents();
-
-            _inputListener.OnBeginDrag += HandleBeginDrag;
-            _inputListener.OnDrag += HandleDrag;
-            _inputListener.OnEndDrag += HandleEndDrag;
-            _inputListener.OnPointerClick += HandlePointerClick;
-        }
-
-        private void UnsubscribeFromEvents()
-        {
-            _inputListener.OnBeginDrag -= HandleBeginDrag;
-            _inputListener.OnDrag -= HandleDrag;
-            _inputListener.OnEndDrag -= HandleEndDrag;
-            _inputListener.OnPointerClick -= HandlePointerClick;
-        }
-
-        private void HandleBeginDrag([NotNull] PointerEventData eventData)
+        public void OnBeginDrag([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
             _previousWorldPosition = eventData.pointerCurrentRaycast.worldPosition;
         }
 
-        private void HandleDrag([NotNull] PointerEventData eventData)
+        public void OnDrag([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
@@ -101,12 +67,12 @@ namespace Game.Gameplay.View.Input
             HandleDrag(worldPositionDelta);
         }
 
-        private void HandleEndDrag(PointerEventData _)
+        public void OnEndDrag(PointerEventData _)
         {
             _waitingEndDrag = false;
         }
 
-        private void HandlePointerClick([NotNull] PointerEventData eventData)
+        public void OnPointerClick([NotNull] PointerEventData eventData)
         {
             ArgumentNullException.ThrowIfNull(eventData);
 
@@ -134,11 +100,16 @@ namespace Game.Gameplay.View.Input
 
         private bool CanPerformAnyAction()
         {
+            InvalidOperationException.ThrowIfNull(_eventsResolver);
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
+
             return !_eventsResolver.Resolving && _playerPieceView.Instance != null;
         }
 
         private bool IsInsideScreen(Vector2 position)
         {
+            InvalidOperationException.ThrowIfNull(_screenPropertiesGetter);
+
             return
                 position.x >= 0.0f && position.x <= _screenPropertiesGetter.Width &&
                 position.y >= 0.0f && position.y <= _screenPropertiesGetter.Height;
@@ -146,6 +117,9 @@ namespace Game.Gameplay.View.Input
 
         private void HandleDrag(Vector2 worldPositionDelta)
         {
+            InvalidOperationException.ThrowIfNull(_phaseResolver);
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
+
             _playerPieceView.Move(worldPositionDelta.x);
 
             if (worldPositionDelta.y > LockPieceDeltaY)
@@ -160,6 +134,8 @@ namespace Game.Gameplay.View.Input
 
         private void HandlePointerClick()
         {
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
+
             _playerPieceView.Rotate();
         }
     }
