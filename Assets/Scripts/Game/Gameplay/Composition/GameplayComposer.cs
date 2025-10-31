@@ -29,8 +29,6 @@ using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.EventResolvers.Composition;
 using Game.Gameplay.View.Goals;
-using Game.Gameplay.View.Input;
-using Game.Gameplay.View.Input.Composition;
 using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
@@ -101,7 +99,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IMovesView>(),
-                        r.Resolve<IInputHandler>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
@@ -156,7 +153,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IMovesView>(),
-                        r.Resolve<IInputHandler>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
@@ -185,7 +181,6 @@ namespace Game.Gameplay.Composition
                 .Append(new View.Camera.Composition.CameraComposer())
                 .Append(new EventResolversComposer())
                 .Append(new View.Goals.Composition.GoalsComposer())
-                .Append(new InputComposer())
                 .Append(new View.Moves.Composition.MovesComposer())
                 .Append(new View.Pieces.Composition.PiecesComposer(_pieceViewDefinitionGetter))
                 .Append(new PlayerComposer());
