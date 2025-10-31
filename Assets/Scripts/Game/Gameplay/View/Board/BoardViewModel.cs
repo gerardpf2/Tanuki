@@ -2,7 +2,7 @@ using Game.Gameplay.View.Camera;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
-using Infrastructure.Unity;
+using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -14,7 +14,6 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private Transform _bottom;
 
         private ICameraView _cameraView;
-        private ICoroutineHelper _coroutineHelper;
 
         protected override void Awake()
         {
@@ -23,24 +22,21 @@ namespace Game.Gameplay.View.Board
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] ICameraView cameraView, [NotNull] ICoroutineHelper coroutineHelper)
+        public void Inject([NotNull] ICameraView cameraView)
         {
             ArgumentNullException.ThrowIfNull(cameraView);
-            ArgumentNullException.ThrowIfNull(coroutineHelper);
 
             _cameraView = cameraView;
-            _coroutineHelper = coroutineHelper;
         }
 
         public void SetData([NotNull] BoardViewData data)
         {
             ArgumentNullException.ThrowIfNull(data);
-            InvalidOperationException.ThrowIfNull(_coroutineHelper);
 
             // Wait for end of frame so UI stuff has been properly updated
             // For example, CameraView will move camera to (0, 0) but UI refreshes later
 
-            StartCoroutine(_coroutineHelper.GetWaitForEndOfFrame(InitializeAndOnReadyInvoke));
+            this.WaitForEndOfFrame(InitializeAndOnReadyInvoke);
 
             return;
 
