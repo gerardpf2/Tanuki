@@ -1,7 +1,10 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
+using Game.Gameplay.Phases;
+using Game.Gameplay.View.EventResolvers;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Player.Composition
@@ -20,6 +23,25 @@ namespace Game.Gameplay.View.Player.Composition
                     new PlayerPieceView(
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>()
+                    )
+                )
+            );
+        }
+
+        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddSharedRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<PlayerPieceInputHandler>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerPieceView>(),
+                        r.Resolve<IScreenPropertiesGetter>()
                     )
                 )
             );
