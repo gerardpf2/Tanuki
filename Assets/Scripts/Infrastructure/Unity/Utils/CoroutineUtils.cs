@@ -3,13 +3,15 @@ using System.Collections;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Infrastructure.Unity
+namespace Infrastructure.Unity.Utils
 {
-    public class CoroutineHelper : ICoroutineHelper
+    // TODO: Test
+    public static class CoroutineUtils
     {
         [NotNull] private static readonly WaitForEndOfFrame WaitForEndOfFrame = new();
 
-        public IEnumerator GetWaitForEndOfFrame(Action action)
+        [NotNull]
+        public static IEnumerator GetWaitForEndOfFrame(Action action)
         {
             yield return WaitForEndOfFrame;
 
