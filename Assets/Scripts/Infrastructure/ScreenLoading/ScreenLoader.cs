@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
-using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -96,7 +95,7 @@ namespace Infrastructure.ScreenLoading
             GameObject prefab = screenDefinition.Prefab;
             Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
 
-            return _gameObjectInstantiator.Instantiate(prefab).WithParent(placement, false);
+            return _gameObjectInstantiator.Instantiate(prefab, placement);
         }
 
         private static void SetData<T>([NotNull] GameObject instance, T data, string key)

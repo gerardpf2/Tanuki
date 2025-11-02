@@ -19,9 +19,9 @@ namespace Infrastructure.Unity.Pooling
             _gameObjectPool = gameObjectPool;
         }
 
-        public GameObject Instantiate(GameObject prefab)
+        public GameObject Instantiate(GameObject prefab, Transform parent)
         {
-            GameObjectPooledInstance gameObjectPooledInstance = _gameObjectPool.Get(prefab);
+            GameObjectPooledInstance gameObjectPooledInstance = _gameObjectPool.Get(prefab, parent);
             GameObject instance = gameObjectPooledInstance.Instance;
 
             if (_pooledInstances.ContainsKey(instance))

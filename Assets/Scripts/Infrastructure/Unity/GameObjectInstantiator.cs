@@ -7,11 +7,11 @@ namespace Infrastructure.Unity
     // TODO: Test
     public class GameObjectInstantiator : IGameObjectInstantiator
     {
-        public GameObject Instantiate([NotNull] GameObject prefab)
+        public GameObject Instantiate([NotNull] GameObject prefab, Transform parent)
         {
             ArgumentNullException.ThrowIfNull(prefab);
 
-            GameObject instance = Object.Instantiate(prefab);
+            GameObject instance = Object.Instantiate(prefab, parent);
 
             InvalidOperationException.ThrowIfNull(instance);
 

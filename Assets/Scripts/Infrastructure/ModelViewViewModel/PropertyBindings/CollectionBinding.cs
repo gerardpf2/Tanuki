@@ -3,7 +3,6 @@ using System.Linq;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
-using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -85,7 +84,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 
                 if (!_instances.TryGetValue(data, out GameObject instance))
                 {
-                    instance = GameObjectInstantiator.Instantiate(_prefab).WithParent(transform, false);
+                    instance = GameObjectInstantiator.Instantiate(_prefab, transform);
 
                     _instances.Add(data, instance);
                 }

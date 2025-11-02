@@ -19,21 +19,21 @@ namespace Infrastructure.Unity.Pooling
             _gameObjectInstantiator = gameObjectInstantiator;
         }
 
-        public GameObjectPooledInstance Get([NotNull] GameObject prefab)
+        public GameObjectPooledInstance Get([NotNull] GameObject prefab, Transform parent)
         {
             ArgumentNullException.ThrowIfNull(prefab);
 
-            return new GameObjectPooledInstance(prefab, GetInstance(prefab), EnqueueInstance);
+            return new GameObjectPooledInstance(prefab, GetInstance(prefab, parent), EnqueueInstance);
         }
 
         [NotNull]
-        private GameObject GetInstance([NotNull] GameObject prefab)
+        private GameObject GetInstance([NotNull] GameObject prefab, Transform parent)
         {
             ArgumentNullException.ThrowIfNull(prefab);
 
             if (!TryDequeueInstance(prefab, out GameObject instance))
             {
-                instance = _gameObjectInstantiator.Instantiate(prefab);
+                instance = _gameObjectInstantiator.Instantiate(prefab, parent);
             }
 
             return instance;
