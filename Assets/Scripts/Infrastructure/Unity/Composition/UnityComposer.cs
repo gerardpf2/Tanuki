@@ -31,15 +31,6 @@ namespace Infrastructure.Unity.Composition
                 )
             );
 
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IGameObjectInstantiator>(r =>
-                    new GameObjectPoolInstantiator(
-                        r.Resolve<IGameObjectPool>()
-                    )
-                ),
-                "Pool" // TODO: Const ¿?
-            );
-
             ruleAdder.Add(ruleFactory.GetSingleton<ICameraGetter>(_ => new CameraGetter()));
 
             ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
