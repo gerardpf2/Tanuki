@@ -11,6 +11,7 @@ namespace Infrastructure.Unity.Pooling
         [NotNull] private readonly IGameObjectInstantiator _gameObjectInstantiator;
 
         [NotNull] private readonly IDictionary<GameObject, Queue<GameObject>> _pooledInstancesByPrefab = new Dictionary<GameObject, Queue<GameObject>>();
+        [NotNull] private readonly Transform _pooledInstancesParent = new GameObject("PooledInstancesParent").transform;
 
         public GameObjectPool([NotNull] IGameObjectInstantiator gameObjectInstantiator)
         {
@@ -31,7 +32,7 @@ namespace Infrastructure.Unity.Pooling
         {
             ArgumentNullException.ThrowIfNull(prefab);
 
-            if (!TryDequeueInstance(prefab, out GameObject instance))
+            if (!TryDequeueInstance(prefab, parent, out GameObject instance))
             {
                 instance = _gameObjectInstantiator.Instantiate(prefab, parent);
             }
@@ -40,7 +41,7 @@ namespace Infrastructure.Unity.Pooling
         }
 
         [ContractAnnotation("=> true, instance:notnull; => false, instance:null")]
-        private bool TryDequeueInstance([NotNull] GameObject prefab, out GameObject instance)
+        private bool TryDequeueInstance([NotNull] GameObject prefab, Transform parent, out GameObject instance)
         {
             ArgumentNullException.ThrowIfNull(prefab);
 
@@ -51,6 +52,8 @@ namespace Infrastructure.Unity.Pooling
                 if (pooledInstances.TryDequeue(out instance))
                 {
                     InvalidOperationException.ThrowIfNull(instance);
+
+                    HandleInstanceDequeued(instance, parent);
 
                     return true;
                 }
@@ -78,6 +81,24 @@ namespace Infrastructure.Unity.Pooling
             }
 
             pooledInstances.Enqueue(instance);
+
+            HandleInstanceEnqueued(instance);
+        }
+
+        private static void HandleInstanceDequeued([NotNull] GameObject instance, Transform parent)
+        {
+            ArgumentNullException.ThrowIfNull(instance);
+
+            instance.transform.SetParent(parent);
+            instance.SetActive(true);
+        }
+
+        private void HandleInstanceEnqueued([NotNull] GameObject instance)
+        {
+            ArgumentNullException.ThrowIfNull(instance);
+
+            instance.SetActive(false);
+            instance.transform.SetParent(_pooledInstancesParent, false);
         }
     }
 }
