@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Infrastructure.Unity
 {
+    // TODO: Test
     public class GameObjectInstantiator : IGameObjectInstantiator
     {
         public GameObject Instantiate([NotNull] GameObject prefab)

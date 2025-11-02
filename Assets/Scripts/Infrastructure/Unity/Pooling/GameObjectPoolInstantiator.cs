@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Infrastructure.Unity.Pooling
 {
+    // TODO: Test
     public class GameObjectPoolInstantiator : IGameObjectInstantiator
     {
         [NotNull] private readonly IGameObjectPool _gameObjectPool;

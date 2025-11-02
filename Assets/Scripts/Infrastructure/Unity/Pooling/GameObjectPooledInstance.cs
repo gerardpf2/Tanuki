@@ -6,6 +6,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Unity.Pooling
 {
+    // TODO: Test
     public struct GameObjectPooledInstance
     {
         [NotNull] private readonly GameObject _prefab;
