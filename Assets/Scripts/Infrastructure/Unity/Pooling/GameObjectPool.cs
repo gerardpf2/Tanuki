@@ -27,6 +27,18 @@ namespace Infrastructure.Unity.Pooling
             return new GameObjectPooledInstance(prefab, GetInstance(prefab, parent), EnqueueInstance);
         }
 
+        public void Preload([NotNull] GameObject prefab, int amount)
+        {
+            ArgumentNullException.ThrowIfNull(prefab);
+
+            for (int i = 0; i < amount; ++i)
+            {
+                GameObject instance = _gameObjectInstantiator.Instantiate(prefab, null);
+
+                EnqueueInstance(prefab, instance);
+            }
+        }
+
         [NotNull]
         private GameObject GetInstance([NotNull] GameObject prefab, Transform parent)
         {
