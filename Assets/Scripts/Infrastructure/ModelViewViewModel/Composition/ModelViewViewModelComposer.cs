@@ -1,5 +1,7 @@
 using Infrastructure.DependencyInjection;
+using Infrastructure.ModelViewViewModel.PropertyBindings;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Infrastructure.ModelViewViewModel.Composition
@@ -24,6 +26,14 @@ namespace Infrastructure.ModelViewViewModel.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddSharedRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<CollectionBindingDependenciesContainer>((r, vm) =>
+                    vm.Inject(
+                        r.Resolve<IGameObjectInstantiator>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetInject<ViewModel>((r, vm) =>

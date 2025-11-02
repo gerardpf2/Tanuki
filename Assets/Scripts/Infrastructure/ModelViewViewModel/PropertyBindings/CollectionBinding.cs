@@ -1,16 +1,43 @@
 using System.Collections.Generic;
 using System.Linq;
+using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
+using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Infrastructure.ModelViewViewModel.PropertyBindings
 {
+    /*
+     *
+     * CollectionBinding is a template class, and inject cannot be resolved as usual
+     * CollectionBinding dependencies are injected to CollectionBindingDependenciesContainer instead
+     *
+     */
+    public class CollectionBindingDependenciesContainer
+    {
+        public IGameObjectInstantiator GameObjectInstantiator { get; private set; }
+
+        public void Inject(IGameObjectInstantiator gameObjectInstantiator)
+        {
+            GameObjectInstantiator = gameObjectInstantiator;
+        }
+    }
+
     public abstract class CollectionBinding<T> : PropertyBinding<IEnumerable<T>>
     {
         [SerializeField] private GameObject _prefab;
 
+        [NotNull] private readonly CollectionBindingDependenciesContainer _collectionBindingDependenciesContainer = new();
         [NotNull] private readonly IDictionary<T, GameObject> _instances = new Dictionary<T, GameObject>();
+
+        private IGameObjectInstantiator GameObjectInstantiator => _collectionBindingDependenciesContainer.GameObjectInstantiator;
+
+        private void Awake()
+        {
+            InjectResolver.Resolve(_collectionBindingDependenciesContainer);
+        }
 
         public override void Set([ItemNotNull] IEnumerable<T> value)
         {
@@ -32,6 +59,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
         private void RemoveObsoleteItems([NotNull] ICollection<T> currentData)
         {
             ArgumentNullException.ThrowIfNull(currentData);
+            InvalidOperationException.ThrowIfNull(GameObjectInstantiator);
 
             foreach (T data in _instances.Keys.ToList())
             {
@@ -40,7 +68,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
                     continue;
                 }
 
-                Destroy(_instances[data]);
+                GameObjectInstantiator.Destroy(_instances[data]);
 
                 _instances.Remove(data);
             }
@@ -49,6 +77,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
         private void AddItems([NotNull, ItemNotNull] IEnumerable<T> currentData)
         {
             ArgumentNullException.ThrowIfNull(currentData);
+            InvalidOperationException.ThrowIfNull(GameObjectInstantiator);
 
             foreach (T data in currentData)
             {
@@ -56,7 +85,7 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 
                 if (!_instances.TryGetValue(data, out GameObject instance))
                 {
-                    instance = Instantiate();
+                    instance = GameObjectInstantiator.Instantiate(_prefab).WithParent(transform, false);
 
                     _instances.Add(data, instance);
                 }
@@ -65,18 +94,6 @@ namespace Infrastructure.ModelViewViewModel.PropertyBindings
 
                 instance.transform.SetAsLastSibling();
             }
-        }
-
-        [NotNull]
-        private GameObject Instantiate()
-        {
-            InvalidOperationException.ThrowIfNull(_prefab);
-
-            GameObject instance = Instantiate(_prefab, transform);
-
-            InvalidOperationException.ThrowIfNull(instance);
-
-            return instance;
         }
 
         private static void SetData([NotNull] GameObject instance, T data)
