@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
+using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Infrastructure.ScreenLoading
 {
@@ -11,18 +12,22 @@ namespace Infrastructure.ScreenLoading
     {
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
+        [NotNull] private readonly IGameObjectInstantiator _gameObjectInstantiator;
 
         [NotNull] private readonly IDictionary<string, GameObject> _loaded = new Dictionary<string, GameObject>();
 
         public ScreenLoader(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
-            [NotNull] IScreenPlacementGetter screenPlacementGetter)
+            [NotNull] IScreenPlacementGetter screenPlacementGetter,
+            [NotNull] IGameObjectInstantiator gameObjectInstantiator)
         {
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(screenPlacementGetter);
+            ArgumentNullException.ThrowIfNull(gameObjectInstantiator);
 
             _screenDefinitionGetter = screenDefinitionGetter;
             _screenPlacementGetter = screenPlacementGetter;
+            _gameObjectInstantiator = gameObjectInstantiator;
         }
 
         public void Load([NotNull] string key)
@@ -78,9 +83,7 @@ namespace Infrastructure.ScreenLoading
                 return;
             }
 
-            InvalidOperationException.ThrowIfNull(instance);
-
-            Object.Destroy(instance);
+            _gameObjectInstantiator.Destroy(instance);
 
             _loaded.Remove(key);
         }
@@ -92,14 +95,8 @@ namespace Infrastructure.ScreenLoading
 
             GameObject prefab = screenDefinition.Prefab;
             Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
-            GameObject instance = Object.Instantiate(prefab, placement);
 
-            InvalidOperationException.ThrowIfNullWithMessage(
-                instance,
-                $"Cannot instantiate screen with Key: {screenDefinition.Key}"
-            );
-
-            return instance;
+            return _gameObjectInstantiator.Instantiate(prefab).WithParent(placement);
         }
 
         private static void SetData<T>([NotNull] GameObject instance, T data, string key)
