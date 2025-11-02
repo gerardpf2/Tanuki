@@ -8,11 +8,14 @@ namespace Infrastructure.Unity.Utils
     public static class GameObjectUtils
     {
         [NotNull]
-        public static GameObject WithParent([NotNull] this GameObject gameObject, Transform parent)
+        public static GameObject WithParent(
+            [NotNull] this GameObject gameObject,
+            Transform parent,
+            bool worldPositionStays)
         {
             ArgumentNullException.ThrowIfNull(gameObject);
 
-            gameObject.transform.SetParent(parent);
+            gameObject.transform.SetParent(parent, worldPositionStays);
 
             return gameObject;
         }

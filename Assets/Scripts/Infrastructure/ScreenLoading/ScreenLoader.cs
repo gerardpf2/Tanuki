@@ -96,7 +96,7 @@ namespace Infrastructure.ScreenLoading
             GameObject prefab = screenDefinition.Prefab;
             Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
 
-            return _gameObjectInstantiator.Instantiate(prefab).WithParent(placement);
+            return _gameObjectInstantiator.Instantiate(prefab).WithParent(placement, false);
         }
 
         private static void SetData<T>([NotNull] GameObject instance, T data, string key)
