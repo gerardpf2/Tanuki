@@ -5,6 +5,7 @@ using Game.Gameplay.View.EventResolvers;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
+using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Player.Composition
@@ -22,7 +23,8 @@ namespace Game.Gameplay.View.Player.Composition
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>()
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IGameObjectPool>()
                     )
                 )
             );
