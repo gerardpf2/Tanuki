@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Infrastructure.ScreenLoading
 {
+    // TODO: Test
     public class ScreenLoader : IScreenLoader
     {
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
