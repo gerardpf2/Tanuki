@@ -27,9 +27,14 @@ namespace Infrastructure.Unity.Pooling
             return new GameObjectPooledInstance(prefab, GetInstance(prefab, parent), EnqueueInstance);
         }
 
-        public void Preload([NotNull] GameObject prefab, int amount)
+        public void Preload([NotNull] GameObject prefab, int amount, bool onlyIfNeeded)
         {
             ArgumentNullException.ThrowIfNull(prefab);
+
+            if (onlyIfNeeded)
+            {
+                amount -= GetPooledInstancesAmount(prefab);
+            }
 
             for (int i = 0; i < amount; ++i)
             {
@@ -111,6 +116,20 @@ namespace Infrastructure.Unity.Pooling
 
             instance.SetActive(false);
             instance.transform.SetParent(_pooledInstancesParent, false);
+        }
+
+        private int GetPooledInstancesAmount([NotNull] GameObject prefab)
+        {
+            ArgumentNullException.ThrowIfNull(prefab);
+
+            if (!_pooledInstancesByPrefab.TryGetValue(prefab, out Queue<GameObject> pooledInstances))
+            {
+                return 0;
+            }
+
+            InvalidOperationException.ThrowIfNull(pooledInstances);
+
+            return pooledInstances.Count;
         }
     }
 }
