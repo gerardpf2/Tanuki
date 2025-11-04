@@ -6,6 +6,6 @@ namespace Infrastructure.Unity.Pooling
     {
         GameObjectPooledInstance Get(GameObject prefab, Transform parent);
 
-        void Preload(GameObject prefab, int amount);
+        void Preload(GameObject prefab, int amount, bool onlyIfNeeded);
     }
 }
