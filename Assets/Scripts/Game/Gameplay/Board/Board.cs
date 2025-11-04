@@ -96,11 +96,11 @@ namespace Game.Gameplay.Board
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                int? ptherPieceId = GetPieceId(coordinate);
+                int? otherPieceId = GetPieceId(coordinate);
 
-                if (ptherPieceId.HasValue)
+                if (otherPieceId.HasValue)
                 {
-                    InvalidOperationException.Throw($"Coordinate {coordinate} is not empty. It contains piece with Id: {ptherPieceId}");
+                    InvalidOperationException.Throw($"Coordinate {coordinate} is not empty. It contains piece with Id: {otherPieceId}");
                 }
 
                 Set(pieceId, coordinate);
@@ -117,11 +117,11 @@ namespace Game.Gameplay.Board
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                int? ptherPieceId = GetPieceId(coordinate);
+                int? otherPieceId = GetPieceId(coordinate);
 
-                if (ptherPieceId != pieceId)
+                if (otherPieceId != pieceId)
                 {
-                    InvalidOperationException.Throw($"Coordinate {coordinate} does not contain the expected piece. It should contain piece with Id: {pieceId} but instead it contains piece with Id: {ptherPieceId}");
+                    InvalidOperationException.Throw($"Coordinate {coordinate} does not contain the expected piece. It should contain piece with Id: {pieceId} but instead it contains piece with Id: {otherPieceId}");
                 }
 
                 Set(null, coordinate);
