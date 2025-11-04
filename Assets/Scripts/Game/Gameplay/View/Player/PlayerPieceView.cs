@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
@@ -8,6 +7,7 @@ using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using Infrastructure.Unity.Utils;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Player
@@ -78,16 +78,15 @@ namespace Game.Gameplay.View.Player
 
         public void Uninitialize()
         {
-            // TODO: Pooling
-
             _initializedLabel.SetUninitialized();
 
             InvalidOperationException.ThrowIfNull(_parent);
 
+            Destroy();
+
             Object.Destroy(_parent.gameObject);
 
             _parent = null;
-            _pieceData = null;
         }
 
         public void Instantiate([NotNull] IPiece piece, [NotNull] GameObject prefab)

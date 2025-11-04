@@ -52,15 +52,13 @@ namespace Game.Gameplay.View.Board
 
         public void Uninitialize()
         {
-            // TODO: Pooling
-
             _initializedLabel.SetUninitialized();
 
             InvalidOperationException.ThrowIfNull(_piecesParent);
 
-            Object.Destroy(_piecesParent.gameObject);
+            DestroyAllPieces();
 
-            _piecePooledInstances.Clear();
+            Object.Destroy(_piecesParent.gameObject);
 
             _board = null;
             _piecesParent = null;
@@ -122,6 +120,16 @@ namespace Game.Gameplay.View.Board
             _board.MovePiece(pieceId, rowOffset, columnOffset);
 
             EnsurePiecePositionIsExpected(pieceId);
+        }
+
+        private void DestroyAllPieces()
+        {
+            IEnumerable<int> pieceIds = new List<int>(_piecePooledInstances.Keys);
+
+            foreach (int pieceId in pieceIds)
+            {
+                DestroyPiece(pieceId);
+            }
         }
 
         private GameObjectPooledInstance GetPiecePooledInstance(int pieceId)
