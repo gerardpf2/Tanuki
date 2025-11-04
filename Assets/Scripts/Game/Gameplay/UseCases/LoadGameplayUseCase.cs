@@ -135,6 +135,8 @@ namespace Game.Gameplay.UseCases
             _goalsView.Initialize();
             _movesView.Initialize();
             _playerPieceView.Initialize();
+
+            _pieceGameObjectPreloader.Preload();
         }
 
         private void LoadScreen()
@@ -146,8 +148,6 @@ namespace Game.Gameplay.UseCases
 
         private void OnReady()
         {
-            _pieceGameObjectPreloader.Preload();
-
             _phaseResolver.Resolve(new ResolveContext(null));
         }
     }
