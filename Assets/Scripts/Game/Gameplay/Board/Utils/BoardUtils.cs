@@ -2,31 +2,20 @@ using System;
 using System.Collections.Generic;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.Pieces.Pieces.Utils;
-using Infrastructure.System;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Game.Gameplay.Board.Utils
 {
     public static class BoardUtils
     {
-        public static bool IsInside([NotNull] this IBoard board, Coordinate coordinate)
-        {
-            ArgumentNullException.ThrowIfNull(board);
-
-            return
-                coordinate.Row >= 0 && coordinate.Row < board.Rows &&
-                coordinate.Column >= 0 && coordinate.Column < board.Columns;
-        }
-
         [NotNull]
         public static IEnumerable<int> GetDistinctPieceIdsSortedByRowThenByColumn([NotNull] this IBoard board)
         {
             ArgumentNullException.ThrowIfNull(board);
 
             const int bottomRow = 0;
-            int topRow = board.Rows - 1;
+            int topRow = board.HighestNonEmptyRow;
 
             return board.GetDistinctPieceIdsSortedByRowThenByColumn(bottomRow, topRow);
         }
@@ -38,8 +27,6 @@ namespace Game.Gameplay.Board.Utils
             int topRow)
         {
             ArgumentNullException.ThrowIfNull(board);
-            ArgumentOutOfRangeException.ThrowIfNot(bottomRow, ComparisonOperator.GreaterThanOrEqualTo, 0);
-            ArgumentOutOfRangeException.ThrowIfNot(topRow, ComparisonOperator.LessThan, board.Rows);
 
             ICollection<int> visitedPieceIds = new HashSet<int>();
 
@@ -132,7 +119,7 @@ namespace Game.Gameplay.Board.Utils
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            int rowsAboveBoard = Math.Max(coordinate.Row - board.Rows, 0);
+            int rowsAboveBoard = Math.Max(coordinate.Row - board.HighestNonEmptyRow - 1, 0);
             int fall = rowsAboveBoard;
 
             for (int row = coordinate.Row - rowsAboveBoard - 1; row >= 0; --row)

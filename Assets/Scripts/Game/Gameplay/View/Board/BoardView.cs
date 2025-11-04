@@ -46,7 +46,7 @@ namespace Game.Gameplay.View.Board
 
             InvalidOperationException.ThrowIfNull(board);
 
-            _board = new Gameplay.Board.Board(board.Rows, board.Columns);
+            _board = new Gameplay.Board.Board(board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
         }
 

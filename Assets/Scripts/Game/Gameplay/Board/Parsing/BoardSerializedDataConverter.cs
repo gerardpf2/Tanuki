@@ -28,10 +28,7 @@ namespace Game.Gameplay.Board.Parsing
             ArgumentNullException.ThrowIfNull(boardSerializedData);
             ArgumentNullException.ThrowIfNull(boardSerializedData.PiecePlacementSerializedData);
 
-            int rows = boardSerializedData.Rows;
-            int columns = boardSerializedData.Columns;
-
-            board = new Board(rows, columns);
+            board = new Board(boardSerializedData.Columns);
 
             piecePlacements =
                 boardSerializedData.PiecePlacementSerializedData
@@ -46,7 +43,6 @@ namespace Game.Gameplay.Board.Parsing
             return
                 new BoardSerializedData
                 {
-                    Rows = board.Rows,
                     Columns = board.Columns,
                     PiecePlacementSerializedData = board.PieceIds.Select(GetPiecePlacementSerializedData).ToList()
                 };

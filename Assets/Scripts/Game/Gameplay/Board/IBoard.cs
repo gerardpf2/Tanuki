@@ -6,11 +6,9 @@ namespace Game.Gameplay.Board
 {
     public interface IBoard
     {
-        int Rows { get; }
+        int HighestNonEmptyRow { get; }
 
         int Columns { get; }
-
-        int HighestNonEmptyRow { get; }
 
         [NotNull]
         IEnumerable<int> PieceIds { get; }

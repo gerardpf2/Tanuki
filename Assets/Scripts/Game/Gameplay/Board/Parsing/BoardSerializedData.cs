@@ -6,9 +6,6 @@ namespace Game.Gameplay.Board.Parsing
 {
     public class BoardSerializedData
     {
-        [JsonProperty("ROWS", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int Rows { get; set; }
-
         [JsonProperty("COLUMNS", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int Columns { get; set; }
 

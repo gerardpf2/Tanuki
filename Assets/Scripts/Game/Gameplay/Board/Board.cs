@@ -14,15 +14,7 @@ namespace Game.Gameplay.Board
         [NotNull] private readonly SortedList<int, int> _piecesAmountByRows = new();
         private int?[,] _pieceIds;
 
-        public int Rows
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_pieceIds);
-
-                return _pieceIds.GetLength(0);
-            }
-        }
+        public int HighestNonEmptyRow => _piecesAmountByRows.Count > 0 ? _piecesAmountByRows.Keys[^1] : -1;
 
         public int Columns
         {
@@ -34,12 +26,22 @@ namespace Game.Gameplay.Board
             }
         }
 
-        public int HighestNonEmptyRow => _piecesAmountByRows.Count > 0 ? _piecesAmountByRows.Keys[^1] : 0;
-
         public IEnumerable<int> PieceIds => _piecesByPieceIds.Keys;
 
-        public Board(int rows, int columns)
+        private int Rows
         {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_pieceIds);
+
+                return _pieceIds.GetLength(0);
+            }
+        }
+
+        public Board(int columns)
+        {
+            const int rows = 0;
+
             _pieceIds = new int?[rows, columns];
         }
 
@@ -67,7 +69,7 @@ namespace Game.Gameplay.Board
 
         public int? GetPieceId(Coordinate coordinate)
         {
-            if (!this.IsInside(coordinate))
+            if (!IsInside(coordinate))
             {
                 ArgumentOutOfRangeException.Throw(coordinate);
             }
@@ -141,6 +143,13 @@ namespace Game.Gameplay.Board
             AddPiece(piece, newSourceCoordinate);
         }
 
+        private bool IsInside(Coordinate coordinate)
+        {
+            return
+                coordinate.Row >= 0 && coordinate.Row < Rows &&
+                coordinate.Column >= 0 && coordinate.Column < Columns;
+        }
+
         private void ExpandRowsIfNeeded(int newRows)
         {
             if (Rows >= newRows)
@@ -173,7 +182,7 @@ namespace Game.Gameplay.Board
 
         private void Set(int? pieceId, Coordinate coordinate)
         {
-            if (!this.IsInside(coordinate))
+            if (!IsInside(coordinate))
             {
                 ArgumentOutOfRangeException.Throw(coordinate);
             }
