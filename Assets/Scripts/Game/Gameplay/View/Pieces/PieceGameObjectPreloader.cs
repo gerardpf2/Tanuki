@@ -33,7 +33,7 @@ namespace Game.Gameplay.View.Pieces
                 PieceType pieceType = (PieceType)pieceTypeObj;
                 IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(pieceType);
 
-                _gameObjectPool.Preload(pieceViewDefinition.Prefab, amount);
+                _gameObjectPool.Preload(pieceViewDefinition.Prefab, amount, true);
             }
         }
     }
