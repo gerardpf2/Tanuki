@@ -89,24 +89,9 @@ namespace Game.Gameplay.Phases.Phases
 
             InvalidOperationException.ThrowIfNull(board);
 
-            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(piece, board, sourceCoordinate);
+            Coordinate lockSourceCoordinate = board.GetPieceLockSourceCoordinate(piece, sourceCoordinate);
 
             board.AddPiece(piece, lockSourceCoordinate);
-
-            return lockSourceCoordinate;
-        }
-
-        private static Coordinate GetLockSourceCoordinate(
-            [NotNull] IPiece piece,
-            [NotNull] IBoard board,
-            Coordinate sourceCoordinate)
-        {
-            ArgumentNullException.ThrowIfNull(piece);
-            ArgumentNullException.ThrowIfNull(board);
-
-            int fall = board.ComputePieceFall(piece, sourceCoordinate);
-
-            Coordinate lockSourceCoordinate = sourceCoordinate.Down(fall);
 
             return lockSourceCoordinate;
         }

@@ -97,6 +97,21 @@ namespace Game.Gameplay.Board.Utils
             columnOffset = column - sourceCoordinate.Column;
         }
 
+        public static Coordinate GetPieceLockSourceCoordinate(
+            [NotNull] this IBoard board,
+            [NotNull] IPiece piece,
+            Coordinate sourceCoordinate)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            int fall = board.ComputePieceFall(piece, sourceCoordinate);
+
+            Coordinate lockSourceCoordinate = sourceCoordinate.Down(fall);
+
+            return lockSourceCoordinate;
+        }
+
         public static int ComputePieceFall(
             [NotNull] this IBoard board,
             [NotNull] IPiece piece,

@@ -126,7 +126,7 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(board);
 
             Coordinate sourceCoordinate = _playerPieceView.Coordinate;
-            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(_pieceData.Piece, board, sourceCoordinate);
+            Coordinate lockSourceCoordinate = board.GetPieceLockSourceCoordinate(_pieceData.Piece, sourceCoordinate);
 
             Instance.transform.position = lockSourceCoordinate.ToVector3();
         }
@@ -145,22 +145,6 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
             pieceViewEventNotifier.OnRotated();
-        }
-
-        // TODO: Move to utils ¿? LockPlayerPiecePhase also uses it
-        private static Coordinate GetLockSourceCoordinate(
-            [NotNull] IPiece piece,
-            [NotNull] IBoard board,
-            Coordinate sourceCoordinate)
-        {
-            ArgumentNullException.ThrowIfNull(piece);
-            ArgumentNullException.ThrowIfNull(board);
-
-            int fall = board.ComputePieceFall(piece, sourceCoordinate);
-
-            Coordinate lockSourceCoordinate = sourceCoordinate.Down(fall);
-
-            return lockSourceCoordinate;
         }
     }
 }
