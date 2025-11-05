@@ -14,8 +14,6 @@ namespace Game.Gameplay.View.Pieces
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
-        [NotNull] private readonly IDictionary<PieceType, int> _amountByPieceType = new Dictionary<PieceType, int>();
-
         public PieceGameObjectPreloader(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
@@ -32,14 +30,11 @@ namespace Game.Gameplay.View.Pieces
 
         public void Preload()
         {
-            _amountByPieceType.Clear();
-
-            AddBoardAmounts();
-            AddBagAmounts();
-            PreloadImpl();
+            PreloadBoardPieces();
+            PreloadPieceGhosts();
         }
 
-        private void AddBoardAmounts()
+        private void PreloadBoardPieces()
         {
             // If piece culling is implemented at some point, this will have to be reviewed
 
@@ -47,39 +42,35 @@ namespace Game.Gameplay.View.Pieces
 
             InvalidOperationException.ThrowIfNull(piecePlacements);
 
+            IDictionary<PieceType, int> amountByPieceType = new Dictionary<PieceType, int>();
+
             foreach (PiecePlacement piecePlacement in piecePlacements)
             {
                 InvalidOperationException.ThrowIfNull(piecePlacement);
 
-                IncreaseAmount(piecePlacement.Piece.Type);
-            }
-        }
+                PieceType pieceType = piecePlacement.Piece.Type;
 
-        private void AddBagAmounts()
-        {
-            // TODO: Remove if not needed
-        }
-
-        private void IncreaseAmount(PieceType pieceType)
-        {
-            if (_amountByPieceType.TryGetValue(pieceType, out int amount))
-            {
-                _amountByPieceType[pieceType] = amount + 1;
+                if (amountByPieceType.TryGetValue(pieceType, out int amount))
+                {
+                    amountByPieceType[pieceType] = amount + 1;
+                }
+                else
+                {
+                    amountByPieceType.Add(pieceType, 1);
+                }
             }
-            else
-            {
-                _amountByPieceType.Add(pieceType, 1);
-            }
-        }
 
-        private void PreloadImpl()
-        {
-            foreach ((PieceType pieceType, int amount) in _amountByPieceType)
+            foreach ((PieceType pieceType, int amount) in amountByPieceType)
             {
                 IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(pieceType);
 
                 _gameObjectPool.Preload(pieceViewDefinition.Prefab, amount, true);
             }
+        }
+
+        private void PreloadPieceGhosts()
+        {
+            // TODO
         }
     }
 }
