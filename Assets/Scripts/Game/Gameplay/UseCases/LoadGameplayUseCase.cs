@@ -13,6 +13,7 @@ using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Moves;
+using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -35,6 +36,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IMovesView _movesView;
+        [NotNull] private readonly IPieceGameObjectPreloader _pieceGameObjectPreloader;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
         [NotNull] private readonly IEventsResolver _eventsResolver;
         [NotNull] private readonly IScreenLoader _screenLoader;
@@ -53,6 +55,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
             [NotNull] IMovesView movesView,
+            [NotNull] IPieceGameObjectPreloader pieceGameObjectPreloader,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
@@ -70,6 +73,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(movesView);
+            ArgumentNullException.ThrowIfNull(pieceGameObjectPreloader);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
@@ -87,6 +91,7 @@ namespace Game.Gameplay.UseCases
             _cameraView = cameraView;
             _goalsView = goalsView;
             _movesView = movesView;
+            _pieceGameObjectPreloader = pieceGameObjectPreloader;
             _playerPieceView = playerPieceView;
             _eventsResolver = eventsResolver;
             _screenLoader = screenLoader;
@@ -130,6 +135,8 @@ namespace Game.Gameplay.UseCases
             _goalsView.Initialize();
             _movesView.Initialize();
             _playerPieceView.Initialize();
+
+            _pieceGameObjectPreloader.Preload();
         }
 
         private void LoadScreen()

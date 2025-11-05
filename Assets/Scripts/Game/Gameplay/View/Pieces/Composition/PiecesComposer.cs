@@ -1,5 +1,6 @@
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Pieces.Composition
@@ -21,6 +22,15 @@ namespace Game.Gameplay.View.Pieces.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
+                    new PieceGameObjectPreloader(
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IGameObjectPool>()
+                    )
+                )
+            );
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
         }
