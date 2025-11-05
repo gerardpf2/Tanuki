@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Common.Pieces;
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
@@ -10,19 +11,23 @@ namespace Game.Gameplay.View.Pieces
 {
     public class PieceGameObjectPreloader : IPieceGameObjectPreloader
     {
+        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
         public PieceGameObjectPreloader(
+            [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
+            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
+            _bagContainer = bagContainer;
             _boardContainer = boardContainer;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
@@ -70,7 +75,37 @@ namespace Game.Gameplay.View.Pieces
 
         private void PreloadPieceGhosts()
         {
-            // TODO
+            IBag bag = _bagContainer.Bag;
+
+            InvalidOperationException.ThrowIfNull(bag);
+
+            ICollection<PieceType> pieceTypes = new HashSet<PieceType>();
+
+            foreach (BagPieceEntry bagPieceEntry in bag.BagPieceEntries)
+            {
+                PreloadIfNeeded(bagPieceEntry.PieceType);
+            }
+
+            foreach (PieceType pieceType in bag.InitialPieceTypes)
+            {
+                PreloadIfNeeded(pieceType);
+            }
+
+            return;
+
+            void PreloadIfNeeded(PieceType pieceType)
+            {
+                if (pieceTypes.Contains(pieceType))
+                {
+                    return;
+                }
+
+                IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.GetGhost(pieceType);
+
+                _gameObjectPool.Preload(pieceViewDefinition.Prefab, 1, true);
+
+                pieceTypes.Add(pieceType);
+            }
         }
     }
 }
