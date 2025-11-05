@@ -23,6 +23,8 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
+            yield return _actionFactory.GetDestroyPlayerPieceGhostAction(DestroyPieceReason.Lock);
+
             int rowOffset = evt.LockSourceCoordinate.Row - evt.SourceCoordinate.Row;
             int columnOffset = evt.LockSourceCoordinate.Column - evt.SourceCoordinate.Column;
 

@@ -84,9 +84,19 @@ namespace Game.Gameplay.View.Actions
             return new InstantiatePlayerPieceGhostAction(piece, instantiatePieceReason, _playerPieceGhostView);
         }
 
+        public IAction GetDestroyPieceAction(int pieceId, DestroyPieceReason destroyPieceReason)
+        {
+            return new DestroyPieceAction(destroyPieceReason, pieceId, _boardView);
+        }
+
         public IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason)
         {
             return new DestroyPlayerPieceAction(destroyPieceReason, _playerPieceView);
+        }
+
+        public IAction GetDestroyPlayerPieceGhostAction(DestroyPieceReason destroyPieceReason)
+        {
+            return new DestroyPlayerPieceGhostAction(destroyPieceReason, _playerPieceGhostView);
         }
 
         public IAction GetDamagePieceAction(
@@ -95,11 +105,6 @@ namespace Game.Gameplay.View.Actions
             DamagePieceReason damagePieceReason)
         {
             return new DamagePieceAction(pieceId, state, damagePieceReason, _boardView);
-        }
-
-        public IAction GetDestroyPieceAction(int pieceId, DestroyPieceReason destroyPieceReason)
-        {
-            return new DestroyPieceAction(destroyPieceReason, pieceId, _boardView);
         }
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
