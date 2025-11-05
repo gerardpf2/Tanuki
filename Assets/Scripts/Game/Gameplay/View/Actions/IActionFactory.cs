@@ -21,6 +21,9 @@ namespace Game.Gameplay.View.Actions
         IAction GetInstantiatePlayerPieceAction(IPiece piece, InstantiatePieceReason instantiatePieceReason);
 
         [NotNull]
+        IAction GetInstantiatePlayerPieceGhostAction(IPiece piece, InstantiatePieceReason instantiatePieceReason);
+
+        [NotNull]
         IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason);
 
         [NotNull]

@@ -23,6 +23,7 @@ namespace Game.Gameplay.View.Actions
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IMovesView _movesView;
+        [NotNull] private readonly IPlayerPieceGhostView _playerPieceGhostView;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
@@ -32,6 +33,7 @@ namespace Game.Gameplay.View.Actions
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
             [NotNull] IMovesView movesView,
+            [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] ICoroutineRunner coroutineRunner)
         {
@@ -40,6 +42,7 @@ namespace Game.Gameplay.View.Actions
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(movesView);
+            ArgumentNullException.ThrowIfNull(playerPieceGhostView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
 
@@ -48,6 +51,7 @@ namespace Game.Gameplay.View.Actions
             _cameraView = cameraView;
             _goalsView = goalsView;
             _movesView = movesView;
+            _playerPieceGhostView = playerPieceGhostView;
             _playerPieceView = playerPieceView;
             _coroutineRunner = coroutineRunner;
         }
@@ -69,6 +73,15 @@ namespace Game.Gameplay.View.Actions
             ArgumentNullException.ThrowIfNull(piece);
 
             return new InstantiatePlayerPieceAction(piece, instantiatePieceReason, _playerPieceView);
+        }
+
+        public IAction GetInstantiatePlayerPieceGhostAction(
+            [NotNull] IPiece piece,
+            InstantiatePieceReason instantiatePieceReason)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            return new InstantiatePlayerPieceGhostAction(piece, instantiatePieceReason, _playerPieceGhostView);
         }
 
         public IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason)

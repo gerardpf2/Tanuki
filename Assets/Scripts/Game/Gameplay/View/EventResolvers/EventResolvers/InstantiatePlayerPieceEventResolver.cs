@@ -24,6 +24,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             ArgumentNullException.ThrowIfNull(evt);
 
             yield return _actionFactory.GetInstantiatePlayerPieceAction(evt.Piece, InstantiatePieceReason.Player);
+            yield return _actionFactory.GetInstantiatePlayerPieceGhostAction(evt.Piece, InstantiatePieceReason.Player);
         }
     }
 }

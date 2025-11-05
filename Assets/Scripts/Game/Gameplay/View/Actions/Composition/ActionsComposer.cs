@@ -28,6 +28,7 @@ namespace Game.Gameplay.View.Actions.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IMovesView>(),
+                        r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<ICoroutineRunner>()
                     )
