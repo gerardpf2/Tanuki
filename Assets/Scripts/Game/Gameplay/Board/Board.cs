@@ -14,15 +14,7 @@ namespace Game.Gameplay.Board
         [NotNull] private readonly SortedList<int, int> _piecesAmountByRows = new();
         private int?[,] _pieceIds;
 
-        public int Rows
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_pieceIds);
-
-                return _pieceIds.GetLength(0);
-            }
-        }
+        public int HighestNonEmptyRow => _piecesAmountByRows.Count > 0 ? _piecesAmountByRows.Keys[^1] : -1;
 
         public int Columns
         {
@@ -34,12 +26,22 @@ namespace Game.Gameplay.Board
             }
         }
 
-        public int HighestNonEmptyRow => _piecesAmountByRows.Count > 0 ? _piecesAmountByRows.Keys[^1] : 0;
-
         public IEnumerable<int> PieceIds => _piecesByPieceIds.Keys;
 
-        public Board(int rows, int columns)
+        private int Rows
         {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_pieceIds);
+
+                return _pieceIds.GetLength(0);
+            }
+        }
+
+        public Board(int columns)
+        {
+            const int rows = 0;
+
             _pieceIds = new int?[rows, columns];
         }
 
@@ -67,7 +69,7 @@ namespace Game.Gameplay.Board
 
         public int? GetPieceId(Coordinate coordinate)
         {
-            if (!this.IsInside(coordinate))
+            if (!IsInside(coordinate))
             {
                 ArgumentOutOfRangeException.Throw(coordinate);
             }
@@ -94,11 +96,11 @@ namespace Game.Gameplay.Board
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                int? ptherPieceId = GetPieceId(coordinate);
+                int? otherPieceId = GetPieceId(coordinate);
 
-                if (ptherPieceId.HasValue)
+                if (otherPieceId.HasValue)
                 {
-                    InvalidOperationException.Throw($"Coordinate {coordinate} is not empty. It contains piece with Id: {ptherPieceId}");
+                    InvalidOperationException.Throw($"Coordinate {coordinate} is not empty. It contains piece with Id: {otherPieceId}");
                 }
 
                 Set(pieceId, coordinate);
@@ -115,11 +117,11 @@ namespace Game.Gameplay.Board
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                int? ptherPieceId = GetPieceId(coordinate);
+                int? otherPieceId = GetPieceId(coordinate);
 
-                if (ptherPieceId != pieceId)
+                if (otherPieceId != pieceId)
                 {
-                    InvalidOperationException.Throw($"Coordinate {coordinate} does not contain the expected piece. It should contain piece with Id: {pieceId} but instead it contains piece with Id: {ptherPieceId}");
+                    InvalidOperationException.Throw($"Coordinate {coordinate} does not contain the expected piece. It should contain piece with Id: {pieceId} but instead it contains piece with Id: {otherPieceId}");
                 }
 
                 Set(null, coordinate);
@@ -139,6 +141,13 @@ namespace Game.Gameplay.Board
             Coordinate newSourceCoordinate = sourceCoordinate.WithOffset(rowOffset, columnOffset);
 
             AddPiece(piece, newSourceCoordinate);
+        }
+
+        private bool IsInside(Coordinate coordinate)
+        {
+            return
+                coordinate.Row >= 0 && coordinate.Row < Rows &&
+                coordinate.Column >= 0 && coordinate.Column < Columns;
         }
 
         private void ExpandRowsIfNeeded(int newRows)
@@ -173,7 +182,7 @@ namespace Game.Gameplay.Board
 
         private void Set(int? pieceId, Coordinate coordinate)
         {
-            if (!this.IsInside(coordinate))
+            if (!IsInside(coordinate))
             {
                 ArgumentOutOfRangeException.Throw(coordinate);
             }

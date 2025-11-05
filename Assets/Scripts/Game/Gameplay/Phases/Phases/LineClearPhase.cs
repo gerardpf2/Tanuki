@@ -37,9 +37,10 @@ namespace Game.Gameplay.Phases.Phases
 
             bool resolved = false;
 
-            int rows = board.Rows;
+            const int bottomRow = 0;
+            int topRow = board.HighestNonEmptyRow;
 
-            for (int row = 0; row < rows; ++row)
+            for (int row = bottomRow; row <= topRow; ++row)
             {
                 resolved = TryDamageRow(row) || resolved;
             }
