@@ -3,6 +3,7 @@ using Game.Gameplay.View.Camera;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Board.Composition
@@ -20,7 +21,8 @@ namespace Game.Gameplay.View.Board.Composition
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<ILogger>()
+                        r.Resolve<ILogger>(),
+                        r.Resolve<IGameObjectPool>()
                     )
                 )
             );

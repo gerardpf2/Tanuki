@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
@@ -6,7 +5,9 @@ using Game.Gameplay.Camera;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity.Pooling;
 using Infrastructure.Unity.Utils;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Player
@@ -16,24 +17,24 @@ namespace Game.Gameplay.View.Player
         private sealed class PieceData
         {
             [NotNull] public readonly IPiece Piece;
-            [NotNull] public readonly GameObject Instance;
+            public GameObjectPooledInstance PooledInstance;
 
             public float X { get; set; }
 
-            public PieceData([NotNull] IPiece piece, [NotNull] GameObject instance)
+            public PieceData([NotNull] IPiece piece, GameObjectPooledInstance pooledInstance)
             {
                 ArgumentNullException.ThrowIfNull(piece);
-                ArgumentNullException.ThrowIfNull(instance);
 
                 Piece = piece;
-                Instance = instance;
+                PooledInstance = pooledInstance;
 
-                X = Instance.transform.position.x;
+                X = PooledInstance.Instance.transform.position.x;
             }
         }
 
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
+        [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
         private InitializedLabel _initializedLabel;
 
@@ -52,15 +53,20 @@ namespace Game.Gameplay.View.Player
             }
         }
 
-        public GameObject Instance => _pieceData?.Instance;
+        public GameObject Instance => _pieceData?.PooledInstance.Instance;
 
-        public PlayerPieceView([NotNull] IBoardContainer boardContainer, [NotNull] ICamera camera)
+        public PlayerPieceView(
+            [NotNull] IBoardContainer boardContainer,
+            [NotNull] ICamera camera,
+            [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(camera);
+            ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _boardContainer = boardContainer;
             _camera = camera;
+            _gameObjectPool = gameObjectPool;
         }
 
         public void Initialize()
@@ -76,10 +82,11 @@ namespace Game.Gameplay.View.Player
 
             InvalidOperationException.ThrowIfNull(_parent);
 
+            Destroy();
+
             Object.Destroy(_parent.gameObject);
 
             _parent = null;
-            _pieceData = null;
         }
 
         public void Instantiate([NotNull] IPiece piece, [NotNull] GameObject prefab)
@@ -90,24 +97,18 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
             Vector3 position = new(GetInitialColumn(piece), GetInitialRow(piece));
+            GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(prefab, _parent);
 
-            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity, _parent);
+            pooledInstance.Instance.transform.position = position;
 
-            InvalidOperationException.ThrowIfNullWithMessage(
-                instance,
-                $"Cannot instantiate player piece with Prefab: {prefab.name}"
-            );
-
-            _pieceData = new PieceData(piece, instance);
+            _pieceData = new PieceData(piece, pooledInstance);
         }
 
         public void Destroy()
         {
             InvalidOperationException.ThrowIfNull(_pieceData);
-            InvalidOperationException.ThrowIfNull(Instance);
 
-            Object.Destroy(Instance);
-
+            _pieceData.PooledInstance.ReturnToPool();
             _pieceData = null;
         }
 

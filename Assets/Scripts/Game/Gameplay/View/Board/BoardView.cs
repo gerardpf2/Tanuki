@@ -4,6 +4,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 using UnityEngine;
 using ILogger = Infrastructure.Logging.ILogger;
@@ -14,21 +15,27 @@ namespace Game.Gameplay.View.Board
     {
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ILogger _logger;
+        [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
-        [NotNull] private readonly IDictionary<int, GameObject> _pieceInstances = new Dictionary<int, GameObject>();
+        [NotNull] private readonly IDictionary<int, GameObjectPooledInstance> _piecePooledInstances = new Dictionary<int, GameObjectPooledInstance>();
 
         private InitializedLabel _initializedLabel;
 
         private IBoard _board;
         private Transform _piecesParent;
 
-        public BoardView([NotNull] IBoardContainer boardContainer, [NotNull] ILogger logger)
+        public BoardView(
+            [NotNull] IBoardContainer boardContainer,
+            [NotNull] ILogger logger,
+            [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _boardContainer = boardContainer;
             _logger = logger;
+            _gameObjectPool = gameObjectPool;
         }
 
         public void Initialize()
@@ -49,9 +56,9 @@ namespace Game.Gameplay.View.Board
 
             InvalidOperationException.ThrowIfNull(_piecesParent);
 
-            Object.Destroy(_piecesParent.gameObject);
+            DestroyAllPieces();
 
-            _pieceInstances.Clear();
+            Object.Destroy(_piecesParent.gameObject);
 
             _board = null;
             _piecesParent = null;
@@ -66,14 +73,7 @@ namespace Game.Gameplay.View.Board
 
         public GameObject GetPieceInstance(int pieceId)
         {
-            if (!_pieceInstances.TryGetValue(pieceId, out GameObject pieceInstance))
-            {
-                InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be found");
-            }
-
-            InvalidOperationException.ThrowIfNull(pieceInstance);
-
-            return pieceInstance;
+            return GetPiecePooledInstance(pieceId).Instance;
         }
 
         public void InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
@@ -85,7 +85,7 @@ namespace Game.Gameplay.View.Board
 
             int pieceId = piece.Id;
 
-            if (_pieceInstances.ContainsKey(pieceId))
+            if (_piecePooledInstances.ContainsKey(pieceId))
             {
                 InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been instantiated");
             }
@@ -93,14 +93,11 @@ namespace Game.Gameplay.View.Board
             _board.AddPiece(piece, sourceCoordinate);
 
             Vector3 position = sourceCoordinate.ToVector3();
-            GameObject pieceInstance = Object.Instantiate(prefab, position, Quaternion.identity, _piecesParent);
+            GameObjectPooledInstance piecePooledInstance = _gameObjectPool.Get(prefab, _piecesParent);
 
-            InvalidOperationException.ThrowIfNullWithMessage(
-                pieceInstance,
-                $"Cannot instantiate piece with Id: {pieceId} and Prefab: {prefab.name}"
-            );
+            piecePooledInstance.Instance.transform.position = position;
 
-            _pieceInstances.Add(pieceId, pieceInstance);
+            _piecePooledInstances.Add(pieceId, piecePooledInstance);
         }
 
         public void DestroyPiece(int pieceId)
@@ -109,11 +106,11 @@ namespace Game.Gameplay.View.Board
 
             _board.RemovePiece(pieceId);
 
-            GameObject pieceInstance = GetPieceInstance(pieceId);
+            GameObjectPooledInstance piecePooledInstance = GetPiecePooledInstance(pieceId);
 
-            Object.Destroy(pieceInstance);
+            piecePooledInstance.ReturnToPool();
 
-            _pieceInstances.Remove(pieceId);
+            _piecePooledInstances.Remove(pieceId);
         }
 
         public void MovePiece(int pieceId, int rowOffset, int columnOffset)
@@ -123,6 +120,26 @@ namespace Game.Gameplay.View.Board
             _board.MovePiece(pieceId, rowOffset, columnOffset);
 
             EnsurePiecePositionIsExpected(pieceId);
+        }
+
+        private void DestroyAllPieces()
+        {
+            IEnumerable<int> pieceIds = new List<int>(_piecePooledInstances.Keys);
+
+            foreach (int pieceId in pieceIds)
+            {
+                DestroyPiece(pieceId);
+            }
+        }
+
+        private GameObjectPooledInstance GetPiecePooledInstance(int pieceId)
+        {
+            if (!_piecePooledInstances.TryGetValue(pieceId, out GameObjectPooledInstance piecePooledInstance))
+            {
+                InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be found");
+            }
+
+            return piecePooledInstance;
         }
 
         private void EnsurePiecePositionIsExpected(int pieceId)
