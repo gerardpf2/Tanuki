@@ -21,6 +21,17 @@ namespace Game.Gameplay.View.Player.Composition
             base.AddRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerPieceGhostView>(r =>
+                    new PlayerPieceGhostView(
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IPlayerPieceView>(),
+                        r.Resolve<IGameObjectPool>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
                         r.Resolve<IBoardContainer>(),
