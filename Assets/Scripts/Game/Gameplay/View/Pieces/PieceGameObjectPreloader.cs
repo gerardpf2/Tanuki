@@ -41,6 +41,8 @@ namespace Game.Gameplay.View.Pieces
 
         private void AddBoardAmounts()
         {
+            // If piece culling is implemented at some point, this will have to be reviewed
+
             IEnumerable<PiecePlacement> piecePlacements = _boardContainer.PiecePlacements;
 
             InvalidOperationException.ThrowIfNull(piecePlacements);
