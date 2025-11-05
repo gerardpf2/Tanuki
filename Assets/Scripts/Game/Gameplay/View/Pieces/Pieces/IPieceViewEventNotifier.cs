@@ -9,12 +9,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         void OnDestroyed(DestroyPieceReason destroyPieceReason, Action onComplete);
 
-        void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete);
-
-        void OnStartMovement(MovePieceReason movePieceReason, Action onComplete);
-
-        void OnEndMovement(MovePieceReason movePieceReason, Action onComplete);
-
         void OnRotated();
     }
 }
