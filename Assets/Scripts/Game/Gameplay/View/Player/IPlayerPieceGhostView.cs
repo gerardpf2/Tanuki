@@ -1,4 +1,4 @@
-using Game.Common.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Player
@@ -11,7 +11,7 @@ namespace Game.Gameplay.View.Player
 
         void Uninitialize();
 
-        void Instantiate(PieceType pieceType);
+        void Instantiate(IPiece piece);
 
         void Destroy();
     }

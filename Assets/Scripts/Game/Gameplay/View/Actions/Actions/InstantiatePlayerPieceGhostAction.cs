@@ -21,11 +21,9 @@ namespace Game.Gameplay.View.Actions.Actions
             _playerPieceGhostView = playerPieceGhostView;
         }
 
-        protected override GameObject InstantiatePiece([NotNull] IPiece piece)
+        protected override GameObject InstantiatePiece(IPiece piece)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            _playerPieceGhostView.Instantiate(piece.Type);
+            _playerPieceGhostView.Instantiate(piece);
 
             GameObject instance = _playerPieceGhostView.Instance;
 

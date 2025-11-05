@@ -1,6 +1,7 @@
 using Game.Common;
-using Game.Common.Pieces;
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Utils;
+using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
@@ -11,6 +12,20 @@ namespace Game.Gameplay.View.Player
 {
     public class PlayerPieceGhostView : IPlayerPieceGhostView
     {
+        private sealed class PieceData
+        {
+            [NotNull] public readonly IPiece Piece;
+            public GameObjectPooledInstance PooledInstance;
+
+            public PieceData([NotNull] IPiece piece, GameObjectPooledInstance pooledInstance)
+            {
+                ArgumentNullException.ThrowIfNull(piece);
+
+                Piece = piece;
+                PooledInstance = pooledInstance;
+            }
+        }
+
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
@@ -19,9 +34,9 @@ namespace Game.Gameplay.View.Player
         private InitializedLabel _initializedLabel;
 
         private Transform _parent;
-        private GameObjectPooledInstance? _pooledInstance;
+        private PieceData _pieceData;
 
-        public GameObject Instance => _pooledInstance?.Instance;
+        public GameObject Instance => _pieceData?.PooledInstance.Instance;
 
         public PlayerPieceGhostView(
             [NotNull] IBoardContainer boardContainer,
@@ -45,6 +60,8 @@ namespace Game.Gameplay.View.Player
             _initializedLabel.SetInitialized();
 
             _parent = new GameObject("PlayerPieceGhostParent").transform; // New game object outside canvas, etc
+
+            SubscribeToEvents();
         }
 
         public void Uninitialize()
@@ -58,29 +75,81 @@ namespace Game.Gameplay.View.Player
             Object.Destroy(_parent.gameObject);
 
             _parent = null;
+
+            UnsubscribeFromEvents();
         }
 
-        public void Instantiate(PieceType pieceType)
+        public void Instantiate([NotNull] IPiece piece)
         {
-            if (_pooledInstance.HasValue)
-            {
-                InvalidOperationException.Throw(); // TODO
-            }
+            ArgumentNullException.ThrowIfNull(piece);
+            InvalidOperationException.ThrowIfNotNull(_pieceData);
 
-            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(pieceType);
+            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
+            GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
 
-            _pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
+            _pieceData = new PieceData(piece, pooledInstance);
+
+            UpdatePosition();
+            UpdateRotation();
         }
 
         public void Destroy()
         {
-            if (!_pooledInstance.HasValue)
-            {
-                InvalidOperationException.Throw(); // TODO
-            }
+            InvalidOperationException.ThrowIfNull(_pieceData);
 
-            _pooledInstance.Value.ReturnToPool();
-            _pooledInstance = null;
+            _pieceData.PooledInstance.ReturnToPool();
+            _pieceData = null;
+        }
+
+        private void SubscribeToEvents()
+        {
+            UnsubscribeFromEvents();
+
+            _playerPieceView.OnMoved += UpdatePosition;
+            _playerPieceView.OnRotated += UpdateRotation;
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            _playerPieceView.OnMoved -= UpdatePosition;
+            _playerPieceView.OnRotated -= UpdateRotation;
+        }
+
+        private void UpdatePosition()
+        {
+            // TODO: Optimize
+
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(_pieceData);
+            InvalidOperationException.ThrowIfNull(Instance);
+            InvalidOperationException.ThrowIfNull(board);
+
+            Coordinate sourceCoordinate = _playerPieceView.Coordinate;
+            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(_pieceData.Piece, board, sourceCoordinate);
+
+            Instance.transform.position = lockSourceCoordinate.ToVector3();
+        }
+
+        private void UpdateRotation()
+        {
+
+        }
+
+        // TODO: Move to utils ¿? LockPlayerPiecePhase also uses it
+        private static Coordinate GetLockSourceCoordinate(
+            [NotNull] IPiece piece,
+            [NotNull] IBoard board,
+            Coordinate sourceCoordinate)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+            ArgumentNullException.ThrowIfNull(board);
+
+            int fall = board.ComputePieceFall(piece, sourceCoordinate);
+
+            Coordinate lockSourceCoordinate = sourceCoordinate.Down(fall);
+
+            return lockSourceCoordinate;
         }
     }
 }
