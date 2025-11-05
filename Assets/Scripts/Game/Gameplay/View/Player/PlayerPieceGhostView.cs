@@ -18,6 +18,8 @@ namespace Game.Gameplay.View.Player
             [NotNull] public readonly IPiece Piece;
             public GameObjectPooledInstance PooledInstance;
 
+            public Coordinate LastSourceCoordinate { get; set; }
+
             public PieceData([NotNull] IPiece piece, GameObjectPooledInstance pooledInstance)
             {
                 ArgumentNullException.ThrowIfNull(piece);
@@ -117,8 +119,6 @@ namespace Game.Gameplay.View.Player
 
         private void UpdatePosition()
         {
-            // TODO: Optimize
-
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(_pieceData);
@@ -126,6 +126,14 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(board);
 
             Coordinate sourceCoordinate = _playerPieceView.Coordinate;
+
+            if (_pieceData.LastSourceCoordinate.Equals(sourceCoordinate))
+            {
+                return;
+            }
+
+            _pieceData.LastSourceCoordinate = sourceCoordinate;
+
             Coordinate lockSourceCoordinate = board.GetPieceLockSourceCoordinate(_pieceData.Piece, sourceCoordinate);
 
             Instance.transform.position = lockSourceCoordinate.ToVector3();
