@@ -1,3 +1,4 @@
+using System;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
@@ -5,11 +6,13 @@ using Game.Gameplay.Camera;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
-using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
+using Object = UnityEngine.Object;
 
 namespace Game.Gameplay.View.Player
 {
@@ -42,6 +45,9 @@ namespace Game.Gameplay.View.Player
 
         private Transform _parent;
         private PieceData _pieceData;
+
+        public event Action OnMoved;
+        public event Action OnRotated;
 
         public Coordinate Coordinate
         {
@@ -127,6 +133,8 @@ namespace Game.Gameplay.View.Player
             Transform transform = Instance.transform;
 
             transform.position = transform.position.WithX(Mathf.RoundToInt(_pieceData.X));
+
+            OnMoved?.Invoke();
         }
 
         public void Rotate()
@@ -156,6 +164,8 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
 
             pieceViewEventNotifier.OnRotated();
+
+            OnRotated?.Invoke();
         }
 
         private int GetInitialRow([NotNull] IPiece piece)
