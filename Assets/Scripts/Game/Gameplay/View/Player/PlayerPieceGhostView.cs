@@ -3,6 +3,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
+using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
@@ -90,7 +91,6 @@ namespace Game.Gameplay.View.Player
             _pieceData = new PieceData(piece, pooledInstance);
 
             UpdatePosition();
-            UpdateRotation();
         }
 
         public void Destroy()
@@ -105,14 +105,14 @@ namespace Game.Gameplay.View.Player
         {
             UnsubscribeFromEvents();
 
-            _playerPieceView.OnMoved += UpdatePosition;
-            _playerPieceView.OnRotated += UpdateRotation;
+            _playerPieceView.OnMoved += HandleMoved;
+            _playerPieceView.OnRotated += HandleRotated;
         }
 
         private void UnsubscribeFromEvents()
         {
-            _playerPieceView.OnMoved -= UpdatePosition;
-            _playerPieceView.OnRotated -= UpdateRotation;
+            _playerPieceView.OnMoved -= HandleMoved;
+            _playerPieceView.OnRotated -= HandleRotated;
         }
 
         private void UpdatePosition()
@@ -131,9 +131,20 @@ namespace Game.Gameplay.View.Player
             Instance.transform.position = lockSourceCoordinate.ToVector3();
         }
 
-        private void UpdateRotation()
+        private void HandleMoved()
         {
+            UpdatePosition();
+        }
 
+        private void HandleRotated()
+        {
+            InvalidOperationException.ThrowIfNull(Instance);
+
+            IPieceViewEventNotifier pieceViewEventNotifier = Instance.GetComponent<IPieceViewEventNotifier>();
+
+            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+
+            pieceViewEventNotifier.OnRotated();
         }
 
         // TODO: Move to utils ¿? LockPlayerPiecePhase also uses it

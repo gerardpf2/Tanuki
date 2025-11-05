@@ -165,6 +165,7 @@ namespace Game.Gameplay.View.Player
 
             pieceViewEventNotifier.OnRotated();
 
+            OnMoved?.Invoke();
             OnRotated?.Invoke();
         }
 
