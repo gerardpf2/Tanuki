@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: -2066478087
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: da54e9a3f90999b4689ddc725e7a7095, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 890f3a959ca5f7b4bb110245bdee8ce9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -128,9 +128,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1070835727361169376}
-  - component: {fileID: 1193365893685326306}
+  - component: {fileID: -6604469840970171195}
   m_Layer: 0
-  m_Name: PlayerI
+  m_Name: PlayerGhostT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ Transform:
   - {fileID: 823495390370513058}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1193365893685326306
+--- !u!114 &-6604469840970171195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
