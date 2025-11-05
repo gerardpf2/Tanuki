@@ -1,7 +1,6 @@
 using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
-using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
@@ -13,28 +12,20 @@ namespace Game.Gameplay.View.Actions.Actions
 {
     public abstract class BaseInstantiatePieceAction : IAction
     {
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IPiece _piece;
         private readonly InstantiatePieceReason _instantiatePieceReason;
 
-        protected BaseInstantiatePieceAction(
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] IPiece piece,
-            InstantiatePieceReason instantiatePieceReason)
+        protected BaseInstantiatePieceAction([NotNull] IPiece piece, InstantiatePieceReason instantiatePieceReason)
         {
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(piece);
 
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _piece = piece;
             _instantiatePieceReason = instantiatePieceReason;
         }
 
         public void Resolve(Action onComplete)
         {
-            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(_piece.Type);
-
-            GameObject pieceInstance = InstantiatePiece(_piece, pieceViewDefinition);
+            GameObject pieceInstance = InstantiatePiece(_piece);
 
             IDataSettable<IPiece> dataSettable = pieceInstance.GetComponent<IDataSettable<IPiece>>();
             IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
@@ -47,6 +38,6 @@ namespace Game.Gameplay.View.Actions.Actions
         }
 
         [NotNull]
-        protected abstract GameObject InstantiatePiece(IPiece piece, IPieceViewDefinition pieceViewDefinition);
+        protected abstract GameObject InstantiatePiece(IPiece piece);
     }
 }

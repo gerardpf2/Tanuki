@@ -3,6 +3,7 @@ using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
+using Game.Gameplay.View.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
@@ -14,6 +15,7 @@ namespace Game.Gameplay.View.Board
     public class BoardView : IBoardView
     {
         [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly ILogger _logger;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
@@ -26,14 +28,17 @@ namespace Game.Gameplay.View.Board
 
         public BoardView(
             [NotNull] IBoardContainer boardContainer,
+            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] ILogger logger,
             [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(logger);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _boardContainer = boardContainer;
+            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _logger = logger;
             _gameObjectPool = gameObjectPool;
         }
@@ -76,10 +81,9 @@ namespace Game.Gameplay.View.Board
             return GetPiecePooledInstance(pieceId).Instance;
         }
 
-        public void InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate, [NotNull] GameObject prefab)
+        public void InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_board);
             InvalidOperationException.ThrowIfNull(_piecesParent);
 
@@ -92,8 +96,9 @@ namespace Game.Gameplay.View.Board
 
             _board.AddPiece(piece, sourceCoordinate);
 
+            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
             Vector3 position = sourceCoordinate.ToVector3();
-            GameObjectPooledInstance piecePooledInstance = _gameObjectPool.Get(prefab, _piecesParent);
+            GameObjectPooledInstance piecePooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _piecesParent);
 
             piecePooledInstance.Instance.transform.position = position;
 

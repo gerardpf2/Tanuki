@@ -1,6 +1,5 @@
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
-using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -13,21 +12,18 @@ namespace Game.Gameplay.View.Actions.Actions
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
 
         public InstantiatePlayerPieceAction(
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IPiece piece,
             InstantiatePieceReason instantiatePieceReason,
-            [NotNull] IPlayerPieceView playerPieceView) : base(pieceViewDefinitionGetter, piece, instantiatePieceReason)
+            [NotNull] IPlayerPieceView playerPieceView) : base(piece, instantiatePieceReason)
         {
             ArgumentNullException.ThrowIfNull(playerPieceView);
 
             _playerPieceView = playerPieceView;
         }
 
-        protected override GameObject InstantiatePiece(IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
+        protected override GameObject InstantiatePiece(IPiece piece)
         {
-            ArgumentNullException.ThrowIfNull(pieceViewDefinition);
-
-            _playerPieceView.Instantiate(piece, pieceViewDefinition.Prefab);
+            _playerPieceView.Instantiate(piece);
 
             GameObject instance = _playerPieceView.Instance;
 

@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.View.Camera;
+using Game.Gameplay.View.Pieces;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging;
 using Infrastructure.System.Exceptions;
@@ -21,6 +22,7 @@ namespace Game.Gameplay.View.Board.Composition
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
                         r.Resolve<IBoardContainer>(),
+                        r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<ILogger>(),
                         r.Resolve<IGameObjectPool>()
                     )

@@ -9,7 +9,6 @@ using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Moves;
-using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
@@ -20,7 +19,6 @@ namespace Game.Gameplay.View.Actions
     public class ActionFactory : IActionFactory
     {
         [NotNull] private readonly IMovementHelper _movementHelper;
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
@@ -30,7 +28,6 @@ namespace Game.Gameplay.View.Actions
 
         public ActionFactory(
             [NotNull] IMovementHelper movementHelper,
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
@@ -39,7 +36,6 @@ namespace Game.Gameplay.View.Actions
             [NotNull] ICoroutineRunner coroutineRunner)
         {
             ArgumentNullException.ThrowIfNull(movementHelper);
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
@@ -48,7 +44,6 @@ namespace Game.Gameplay.View.Actions
             ArgumentNullException.ThrowIfNull(coroutineRunner);
 
             _movementHelper = movementHelper;
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
@@ -64,14 +59,7 @@ namespace Game.Gameplay.View.Actions
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return
-                new InstantiatePieceAction(
-                    _pieceViewDefinitionGetter,
-                    piece,
-                    instantiatePieceReason,
-                    _boardView,
-                    sourceCoordinate
-                );
+            return new InstantiatePieceAction(piece, instantiatePieceReason, _boardView, sourceCoordinate);
         }
 
         public IAction GetInstantiatePlayerPieceAction(
@@ -80,13 +68,7 @@ namespace Game.Gameplay.View.Actions
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return
-                new InstantiatePlayerPieceAction(
-                    _pieceViewDefinitionGetter,
-                    piece,
-                    instantiatePieceReason,
-                    _playerPieceView
-                );
+            return new InstantiatePlayerPieceAction(piece, instantiatePieceReason, _playerPieceView);
         }
 
         public IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason)

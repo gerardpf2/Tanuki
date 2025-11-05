@@ -3,6 +3,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Pieces.Pieces;
+using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
@@ -34,6 +35,7 @@ namespace Game.Gameplay.View.Player
 
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
+        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
         private InitializedLabel _initializedLabel;
@@ -58,14 +60,17 @@ namespace Game.Gameplay.View.Player
         public PlayerPieceView(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera,
+            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(camera);
+            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _boardContainer = boardContainer;
             _camera = camera;
+            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
         }
 
@@ -89,15 +94,15 @@ namespace Game.Gameplay.View.Player
             _parent = null;
         }
 
-        public void Instantiate([NotNull] IPiece piece, [NotNull] GameObject prefab)
+        public void Instantiate([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            ArgumentNullException.ThrowIfNull(prefab);
             InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
+            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
             Vector3 position = new(GetInitialColumn(piece), GetInitialRow(piece));
-            GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(prefab, _parent);
+            GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
 
             pooledInstance.Instance.transform.position = position;
 

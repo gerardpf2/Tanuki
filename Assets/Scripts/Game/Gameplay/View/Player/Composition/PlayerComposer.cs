@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Phases;
 using Game.Gameplay.View.EventResolvers;
+using Game.Gameplay.View.Pieces;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
@@ -24,6 +25,7 @@ namespace Game.Gameplay.View.Player.Composition
                     new PlayerPieceView(
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
+                        r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>()
                     )
                 )
