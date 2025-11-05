@@ -7,5 +7,8 @@ namespace Game.Gameplay.View.Pieces
     {
         [NotNull]
         IPieceViewDefinition Get(PieceType pieceType);
+
+        [NotNull]
+        IPieceViewDefinition GetGhost(PieceType pieceType);
     }
 }

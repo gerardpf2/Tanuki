@@ -87,7 +87,7 @@ namespace Game.Gameplay.View.Player
             ArgumentNullException.ThrowIfNull(piece);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
-            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
+            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.GetGhost(piece.Type);
             GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
 
             _pieceData = new PieceData(piece, pooledInstance);
