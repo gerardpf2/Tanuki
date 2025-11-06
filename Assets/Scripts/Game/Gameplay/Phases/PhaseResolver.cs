@@ -14,6 +14,7 @@ namespace Game.Gameplay.Phases
 
         private InitializedLabel _initializedLabel;
 
+        public event Action OnBeginIteration;
         public event Action OnEndIteration;
 
         public PhaseResolver([NotNull, ItemNotNull] params IPhase[] phases)
@@ -93,6 +94,8 @@ namespace Game.Gameplay.Phases
 
         private void NotifyBeginIteration()
         {
+            OnBeginIteration?.Invoke();
+
             foreach (IPhase phase in _phases)
             {
                 phase.OnBeginIteration();
