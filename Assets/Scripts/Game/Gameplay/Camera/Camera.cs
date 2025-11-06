@@ -4,9 +4,28 @@ namespace Game.Gameplay.Camera
 {
     public class Camera : ICamera
     {
-        public int TopRow { get; set; }
+        private int _topRow;
+        private int _bottomRow;
 
-        public int BottomRow => TopRow - VisibleRows + 1;
+        public int TopRow
+        {
+            get => _topRow;
+            set
+            {
+                _topRow = value;
+                _bottomRow = TopRow - VisibleRows + 1;
+            }
+        }
+
+        public int BottomRow
+        {
+            get => _bottomRow;
+            set
+            {
+                _bottomRow = value;
+                _topRow = BottomRow + VisibleRows - 1;
+            }
+        }
 
         public int VisibleRows => 15; // TODO: ScriptableObject
 
@@ -16,14 +35,14 @@ namespace Game.Gameplay.Camera
 
         public Camera()
         {
-            SetInitialTopRow();
+            SetInitialBottomRow();
         }
 
         public void Initialize()
         {
             _initializedLabel.SetInitialized();
 
-            SetInitialTopRow();
+            SetInitialBottomRow();
         }
 
         public void Uninitialize()
@@ -31,9 +50,9 @@ namespace Game.Gameplay.Camera
             _initializedLabel.SetUninitialized();
         }
 
-        private void SetInitialTopRow()
+        private void SetInitialBottomRow()
         {
-            TopRow = VisibleRows - 1;
+            BottomRow = 0;
         }
     }
 }

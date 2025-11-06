@@ -4,7 +4,7 @@ namespace Game.Gameplay.Camera
     {
         int TopRow { get; set; }
 
-        int BottomRow { get; }
+        int BottomRow { get; set; }
 
         int VisibleRows { get; }
 
