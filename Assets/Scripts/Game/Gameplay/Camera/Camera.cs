@@ -29,8 +29,6 @@ namespace Game.Gameplay.Camera
 
         public int VisibleRows => 15; // TODO: ScriptableObject
 
-        public int ExtraRowsOnTop => 5; // TODO: ScriptableObject
-
         private InitializedLabel _initializedLabel;
 
         public Camera()

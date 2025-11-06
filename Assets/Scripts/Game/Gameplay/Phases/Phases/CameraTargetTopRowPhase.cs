@@ -10,6 +10,8 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class CameraTargetTopRowPhase : Phase
     {
+        private const int ExtraRowsOnTop = 5;
+
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
@@ -39,7 +41,7 @@ namespace Game.Gameplay.Phases.Phases
             InvalidOperationException.ThrowIfNull(board);
 
             int prevTopRow = _camera.TopRow;
-            int newTopRow = Math.Max(board.HighestNonEmptyRow + _camera.ExtraRowsOnTop, _camera.VisibleRows - 1);
+            int newTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, _camera.VisibleRows - 1);
 
             if (prevTopRow == newTopRow)
             {

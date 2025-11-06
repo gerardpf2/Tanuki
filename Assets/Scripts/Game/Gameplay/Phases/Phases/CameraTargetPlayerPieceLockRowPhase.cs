@@ -1,13 +1,16 @@
+using System;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.Phases.Phases
 {
     public class CameraTargetPlayerPieceLockRowPhase : Phase
     {
+        private const int ExtraRowsOnBottom = 3;
+
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
@@ -46,6 +49,8 @@ namespace Game.Gameplay.Phases.Phases
             {
                 return ResolveResult.NotUpdated;
             }
+
+            newBottomRow = Math.Max(newBottomRow - ExtraRowsOnBottom, 0);
 
             _camera.BottomRow = newBottomRow;
 
