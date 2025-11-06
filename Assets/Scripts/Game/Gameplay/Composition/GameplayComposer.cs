@@ -134,18 +134,6 @@ namespace Game.Gameplay.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetInject<GameplaySerialize>((r, s) =>
-                    s.Inject(
-                        r.Resolve<IBagContainer>(),
-                        r.Resolve<IBoardContainer>(),
-                        r.Resolve<IGoalsContainer>(),
-                        r.Resolve<IMovesContainer>(),
-                        r.Resolve<IGameplayParser>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetInject<UnloadGameplay>((r, s) =>
                     s.Inject(
                         r.Resolve<IUnloadGameplayUseCase>()
