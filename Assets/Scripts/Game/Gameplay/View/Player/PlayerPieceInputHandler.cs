@@ -15,6 +15,7 @@ namespace Game.Gameplay.View.Player
 
         private IPhaseResolver _phaseResolver;
         private IEventsResolver _eventsResolver;
+        private IPlayerPieceGhostView _playerPieceGhostView;
         private IPlayerPieceView _playerPieceView;
         private IScreenPropertiesGetter _screenPropertiesGetter;
 
@@ -29,16 +30,19 @@ namespace Game.Gameplay.View.Player
         public void Inject(
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] IEventsResolver eventsResolver,
+            [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
         {
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(eventsResolver);
+            ArgumentNullException.ThrowIfNull(playerPieceGhostView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(screenPropertiesGetter);
 
             _phaseResolver = phaseResolver;
             _eventsResolver = eventsResolver;
+            _playerPieceGhostView = playerPieceGhostView;
             _playerPieceView = playerPieceView;
             _screenPropertiesGetter = screenPropertiesGetter;
         }
@@ -127,7 +131,7 @@ namespace Game.Gameplay.View.Player
                 return;
             }
 
-            _phaseResolver.Resolve(new ResolveContext(_playerPieceView.Coordinate));
+            _phaseResolver.Resolve(new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate));
 
             _waitingEndDrag = true;
         }

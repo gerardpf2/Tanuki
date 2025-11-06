@@ -39,6 +39,18 @@ namespace Game.Gameplay.View.Player
         private Transform _parent;
         private PieceData _pieceData;
 
+        public Coordinate Coordinate
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(Instance);
+
+                Transform transform = Instance.transform;
+
+                return transform.position.ToCoordinate();
+            }
+        }
+
         public GameObject Instance => _pieceData?.PooledInstance.Instance;
 
         public PlayerPieceGhostView(

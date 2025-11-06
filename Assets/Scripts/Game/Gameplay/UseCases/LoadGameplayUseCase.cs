@@ -153,7 +153,7 @@ namespace Game.Gameplay.UseCases
 
         private void OnReady()
         {
-            _phaseResolver.Resolve(new ResolveContext(null));
+            _phaseResolver.Resolve(new ResolveContext(null, null));
         }
     }
 }
