@@ -44,7 +44,9 @@ namespace Game.Gameplay.Phases.Phases
 
             if (prevBottomRow <= newBottomRow)
             {
-                return ResolveResult.NotUpdated;
+                // Updated since it has been resolved, but with no effect (should avoid issues with MaxResolveTimesPerIteration)
+
+                return ResolveResult.Updated;
             }
 
             _camera.BottomRow = newBottomRow;
