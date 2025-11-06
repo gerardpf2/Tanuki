@@ -5,6 +5,7 @@ using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Phases;
 using Game.Gameplay.Pieces;
+using Game.Gameplay.REMOVE;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
@@ -26,6 +27,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
+        [NotNull] private readonly IGameplaySerializerOnBeginIteration _gameplaySerializerOnBeginIteration;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
@@ -43,6 +45,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IMovesContainer movesContainer,
             [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IGameplaySerializerOnBeginIteration gameplaySerializerOnBeginIteration,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
@@ -59,6 +62,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(phaseResolver);
+            ArgumentNullException.ThrowIfNull(gameplaySerializerOnBeginIteration);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
@@ -75,6 +79,7 @@ namespace Game.Gameplay.UseCases
             _goalsContainer = goalsContainer;
             _movesContainer = movesContainer;
             _phaseResolver = phaseResolver;
+            _gameplaySerializerOnBeginIteration = gameplaySerializerOnBeginIteration;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
@@ -101,6 +106,7 @@ namespace Game.Gameplay.UseCases
             _goalsContainer.Uninitialize();
             _movesContainer.Uninitialize();
             _phaseResolver.Uninitialize();
+            _gameplaySerializerOnBeginIteration.Uninitialize();
         }
 
         private void PrepareView()
