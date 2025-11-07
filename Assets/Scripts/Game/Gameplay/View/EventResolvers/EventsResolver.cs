@@ -1,9 +1,11 @@
+using System;
 using Game.Common;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Phases;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.EventResolvers
 {
@@ -14,8 +16,33 @@ namespace Game.Gameplay.View.EventResolvers
         [NotNull] private readonly IEventsResolverSingle _eventsResolverSingle;
 
         private InitializedLabel _initializedLabel;
+        private bool _resolving;
 
-        public bool Resolving { get; private set; }
+        public event Action OnResolveBegin;
+        public event Action OnResolveEnd;
+
+        public bool Resolving
+        {
+            get => _resolving;
+            private set
+            {
+                if (Resolving == value)
+                {
+                    return;
+                }
+
+                _resolving = value;
+
+                if (Resolving)
+                {
+                    OnResolveBegin?.Invoke();
+                }
+                else
+                {
+                    OnResolveEnd?.Invoke();
+                }
+            }
+        }
 
         public EventsResolver(
             [NotNull] IEventEnqueuer eventEnqueuer,
