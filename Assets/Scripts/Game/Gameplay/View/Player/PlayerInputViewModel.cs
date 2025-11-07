@@ -111,10 +111,8 @@ namespace Game.Gameplay.View.Player
         private void OnLockClick()
         {
             InvalidOperationException.ThrowIfNull(_phaseContainer);
-            InvalidOperationException.ThrowIfNull(_playerPieceGhostView);
-            InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            _phaseContainer.Resolve(new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate));
+            _phaseContainer.Resolve(GetResolveContext());
         }
 
         private void OnResolveBegin()
@@ -133,6 +131,15 @@ namespace Game.Gameplay.View.Player
             _moveRight.Value.SetEnabled(value);
             _rotate.Value.SetEnabled(value);
             _lock.Value.SetEnabled(value);
+        }
+
+        [NotNull]
+        private ResolveContext GetResolveContext()
+        {
+            InvalidOperationException.ThrowIfNull(_phaseContainer);
+            InvalidOperationException.ThrowIfNull(_playerPieceGhostView);
+
+            return new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
         }
     }
 }
