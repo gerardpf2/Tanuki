@@ -2,8 +2,8 @@ namespace Game.Gameplay.Camera
 {
     public interface ICameraRowsUpdater
     {
-        void TargetHighestNonEmptyRow();
+        int TargetHighestNonEmptyRow();
 
-        void TargetLockRow(int lockRow);
+        int TargetLockRow(int lockRow);
     }
 }

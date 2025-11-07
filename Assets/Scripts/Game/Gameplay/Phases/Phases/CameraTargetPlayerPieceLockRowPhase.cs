@@ -1,4 +1,3 @@
-using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Infrastructure.System.Exceptions;
@@ -8,22 +7,22 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class CameraTargetPlayerPieceLockRowPhase : Phase
     {
-        [NotNull] private readonly ICamera _camera;
+        [NotNull] private readonly ICameraRowsUpdater _cameraRowsUpdater;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
         protected override int? MaxResolveTimesPerIteration => 1;
 
         public CameraTargetPlayerPieceLockRowPhase(
-            [NotNull] ICamera camera,
+            [NotNull] ICameraRowsUpdater cameraRowsUpdater,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
         {
-            ArgumentNullException.ThrowIfNull(camera);
+            ArgumentNullException.ThrowIfNull(cameraRowsUpdater);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
-            _camera = camera;
+            _cameraRowsUpdater = cameraRowsUpdater;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
@@ -37,23 +36,13 @@ namespace Game.Gameplay.Phases.Phases
                 return ResolveResult.NotUpdated;
             }
 
-            Coordinate lockSourceCoordinate = resolveContext.PieceLockSourceCoordinate.Value;
+            int lockRow = resolveContext.PieceLockSourceCoordinate.Value.Row;
+            int rowOffset = _cameraRowsUpdater.TargetLockRow(lockRow);
 
-            int prevBottomRow = _camera.BottomRow;
-            int newBottomRow = lockSourceCoordinate.Row;
-
-            if (prevBottomRow <= newBottomRow)
+            if (rowOffset != 0)
             {
-                // Updated since it has been resolved, but with no effect (should avoid issues with MaxResolveTimesPerIteration)
-
-                return ResolveResult.Updated;
+                _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
             }
-
-            _camera.BottomRow = newBottomRow;
-
-            int rowOffset = newBottomRow - prevBottomRow;
-
-            _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
 
             return ResolveResult.Updated;
         }

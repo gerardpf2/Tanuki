@@ -23,7 +23,7 @@ namespace Game.Gameplay.Camera
             _camera = camera;
         }
 
-        public void TargetHighestNonEmptyRow()
+        public int TargetHighestNonEmptyRow()
         {
             IBoard board = _boardContainer.Board;
 
@@ -34,23 +34,27 @@ namespace Game.Gameplay.Camera
 
             if (prevTopRow == newTopRow)
             {
-                return;
+                return 0;
             }
 
             _camera.TopRow = newTopRow;
+
+            return newTopRow - prevTopRow;
         }
 
-        public void TargetLockRow(int lockRow)
+        public int TargetLockRow(int lockRow)
         {
             int prevBottomRow = _camera.BottomRow;
             int newBottomRow = Math.Max(lockRow - ExtraRowsOnBottom, 0);
 
             if (prevBottomRow <= newBottomRow)
             {
-                return;
+                return 0;
             }
 
             _camera.BottomRow = newBottomRow;
+
+            return newBottomRow - prevBottomRow;
         }
     }
 }

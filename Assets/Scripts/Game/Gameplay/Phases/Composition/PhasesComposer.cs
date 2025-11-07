@@ -23,7 +23,7 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new CameraTargetPlayerPieceLockRowPhase(
-                        r.Resolve<ICamera>(),
+                        r.Resolve<ICameraRowsUpdater>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )
@@ -34,8 +34,7 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new CameraTargetTopRowPhase(
-                        r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>(),
+                        r.Resolve<ICameraRowsUpdater>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )

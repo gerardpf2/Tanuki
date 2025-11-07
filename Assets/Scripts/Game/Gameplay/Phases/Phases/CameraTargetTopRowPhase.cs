@@ -1,56 +1,38 @@
-using System;
-using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
     public class CameraTargetTopRowPhase : Phase
     {
-        private const int ExtraRowsOnTop = 5;
-
-        [NotNull] private readonly IBoardContainer _boardContainer;
-        [NotNull] private readonly ICamera _camera;
+        [NotNull] private readonly ICameraRowsUpdater _cameraRowsUpdater;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
         public CameraTargetTopRowPhase(
-            [NotNull] IBoardContainer boardContainer,
-            [NotNull] ICamera camera,
+            [NotNull] ICameraRowsUpdater cameraRowsUpdater,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
-            ArgumentNullException.ThrowIfNull(camera);
+            ArgumentNullException.ThrowIfNull(cameraRowsUpdater);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
-            _boardContainer = boardContainer;
-            _camera = camera;
+            _cameraRowsUpdater = cameraRowsUpdater;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            IBoard board = _boardContainer.Board;
+            int rowOffset = _cameraRowsUpdater.TargetHighestNonEmptyRow();
 
-            InvalidOperationException.ThrowIfNull(board);
-
-            int prevTopRow = _camera.TopRow;
-            int newTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, _camera.VisibleRows - 1);
-
-            if (prevTopRow == newTopRow)
+            if (rowOffset == 0)
             {
                 return ResolveResult.NotUpdated;
             }
-
-            _camera.TopRow = newTopRow;
-
-            int rowOffset = newTopRow - prevTopRow;
 
             _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
 
