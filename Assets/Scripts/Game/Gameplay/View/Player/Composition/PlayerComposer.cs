@@ -5,7 +5,6 @@ using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
-using Infrastructure.Unity;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 
@@ -57,18 +56,6 @@ namespace Game.Gameplay.View.Player.Composition
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
-                ruleFactory.GetInject<PlayerPieceInputHandler>((r, s) =>
-                    s.Inject(
-                        r.Resolve<IPhaseContainer>(),
-                        r.Resolve<IEventsResolver>(),
-                        r.Resolve<IPlayerPieceGhostView>(),
-                        r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<IScreenPropertiesGetter>()
                     )
                 )
             );
