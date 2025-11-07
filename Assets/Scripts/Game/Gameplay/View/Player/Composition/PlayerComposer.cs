@@ -51,6 +51,17 @@ namespace Game.Gameplay.View.Player.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
+                ruleFactory.GetInject<PlayerInputViewModel>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IPhaseContainer>(),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetInject<PlayerPieceInputHandler>((r, s) =>
                     s.Inject(
                         r.Resolve<IPhaseContainer>(),

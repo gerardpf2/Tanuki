@@ -1,12 +1,20 @@
 using Game.Common.UI;
+using Game.Gameplay.Phases;
+using Game.Gameplay.View.EventResolvers;
+using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using UnityEngine;
 
 namespace Game.Gameplay.View.Player
 {
     public class PlayerInputViewModel : ViewModel
     {
+        private IPhaseContainer _phaseContainer;
+        private IEventsResolver _eventsResolver;
+        private IPlayerPieceGhostView _playerPieceGhostView;
+        private IPlayerPieceView _playerPieceView;
+
         [NotNull] private readonly IBoundProperty<ButtonViewData> _moveLeft = new BoundProperty<ButtonViewData>("MoveLeftButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _moveRight = new BoundProperty<ButtonViewData>("MoveRightButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _rotate = new BoundProperty<ButtonViewData>("RotateButtonViewData");
@@ -16,8 +24,27 @@ namespace Game.Gameplay.View.Player
         {
             base.Awake();
 
+            InjectResolver.Resolve(this);
+
             InitializeBindings();
             AddBindings();
+        }
+
+        public void Inject(
+            [NotNull] IPhaseContainer phaseContainer,
+            [NotNull] IEventsResolver eventsResolver,
+            [NotNull] IPlayerPieceGhostView playerPieceGhostView,
+            [NotNull] IPlayerPieceView playerPieceView)
+        {
+            ArgumentNullException.ThrowIfNull(phaseContainer);
+            ArgumentNullException.ThrowIfNull(eventsResolver);
+            ArgumentNullException.ThrowIfNull(playerPieceGhostView);
+            ArgumentNullException.ThrowIfNull(playerPieceView);
+
+            _phaseContainer = phaseContainer;
+            _eventsResolver = eventsResolver;
+            _playerPieceGhostView = playerPieceGhostView;
+            _playerPieceView = playerPieceView;
         }
 
         private void InitializeBindings()
@@ -38,30 +65,32 @@ namespace Game.Gameplay.View.Player
 
         private void OnMoveLeftClick()
         {
-            // TODO
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            Debug.Log("OnMoveLeftClick");
+            _playerPieceView.Move(-1.0f);
         }
 
         private void OnMoveRightClick()
         {
-            // TODO
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            Debug.Log("OnMoveRightClick");
+            _playerPieceView.Move(1.0f);
         }
 
         private void OnRotateClick()
         {
-            // TODO
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            Debug.Log("OnRotateClick");
+            _playerPieceView.Rotate();
         }
 
         private void OnLockClick()
         {
-            // TODO
+            InvalidOperationException.ThrowIfNull(_phaseContainer);
+            InvalidOperationException.ThrowIfNull(_playerPieceGhostView);
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            Debug.Log("OnLockClick");
+            _phaseContainer.Resolve(new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate));
         }
     }
 }
