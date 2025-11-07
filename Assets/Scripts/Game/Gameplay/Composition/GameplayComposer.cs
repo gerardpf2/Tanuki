@@ -34,6 +34,7 @@ using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
 using Game.Gameplay.View.Player.Composition;
 using Infrastructure.DependencyInjection;
+using Infrastructure.Logging;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
@@ -84,6 +85,20 @@ namespace Game.Gameplay.Composition
                 )
             );
 
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IGameplaySerializerOnBeginIteration>(r =>
+                    new GameplaySerializerOnBeginIteration(
+                        r.Resolve<IBagContainer>(),
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IGoalsContainer>(),
+                        r.Resolve<IMovesContainer>(),
+                        r.Resolve<IGameplayParser>(),
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<ILogger>()
+                    )
+                )
+            );
+
             // Not shared so it can only be unloaded from here
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
@@ -95,6 +110,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IMovesContainer>(),
                         r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IGameplaySerializerOnBeginIteration>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
@@ -118,18 +134,6 @@ namespace Game.Gameplay.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetInject<GameplaySerialize>((r, s) =>
-                    s.Inject(
-                        r.Resolve<IBagContainer>(),
-                        r.Resolve<IBoardContainer>(),
-                        r.Resolve<IGoalsContainer>(),
-                        r.Resolve<IMovesContainer>(),
-                        r.Resolve<IGameplayParser>()
-                    )
-                )
-            );
-
-            ruleAdder.Add(
                 ruleFactory.GetInject<UnloadGameplay>((r, s) =>
                     s.Inject(
                         r.Resolve<IUnloadGameplayUseCase>()
@@ -150,6 +154,7 @@ namespace Game.Gameplay.Composition
                         r.Resolve<IMovesContainer>(),
                         r.Resolve<IGameplayParser>(),
                         r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IGameplaySerializerOnBeginIteration>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),

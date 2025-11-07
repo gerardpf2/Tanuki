@@ -4,6 +4,7 @@ namespace Game.Gameplay.Phases
 {
     public interface IPhaseResolver
     {
+        event Action OnBeginIteration;
         event Action OnEndIteration;
 
         void Initialize();
