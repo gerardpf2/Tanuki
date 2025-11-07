@@ -55,6 +55,7 @@ namespace Game.Gameplay.View.Player.Composition
                     s.Inject(
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IScreenPropertiesGetter>()
                     )

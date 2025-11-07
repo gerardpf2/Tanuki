@@ -1,6 +1,5 @@
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
-using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Events;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Pieces.Pieces;
@@ -43,15 +42,17 @@ namespace Game.Gameplay.Phases.Phases
         {
             ArgumentNullException.ThrowIfNull(resolveContext);
 
-            if (!resolveContext.PieceSourceCoordinate.HasValue)
+            if (!resolveContext.PieceSourceCoordinate.HasValue || !resolveContext.PieceLockSourceCoordinate.HasValue)
             {
                 return ResolveResult.NotUpdated;
             }
 
+            Coordinate sourceCoordinate = resolveContext.PieceSourceCoordinate.Value;
+            Coordinate lockSourceCoordinate = resolveContext.PieceLockSourceCoordinate.Value;
+
             IPiece piece = ConsumeCurrentBagPiece();
 
-            Coordinate sourceCoordinate = resolveContext.PieceSourceCoordinate.Value;
-            Coordinate lockSourceCoordinate = AddPieceToBoard(piece, sourceCoordinate);
+            AddPieceToBoard(piece, lockSourceCoordinate);
 
             int movesAmount = DecreaseMovesAmount();
 
@@ -81,7 +82,7 @@ namespace Game.Gameplay.Phases.Phases
             return piece;
         }
 
-        private Coordinate AddPieceToBoard([NotNull] IPiece piece, Coordinate sourceCoordinate)
+        private void AddPieceToBoard([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
@@ -89,11 +90,7 @@ namespace Game.Gameplay.Phases.Phases
 
             InvalidOperationException.ThrowIfNull(board);
 
-            Coordinate lockSourceCoordinate = board.GetPieceLockSourceCoordinate(piece, sourceCoordinate);
-
-            board.AddPiece(piece, lockSourceCoordinate);
-
-            return lockSourceCoordinate;
+            board.AddPiece(piece, sourceCoordinate);
         }
 
         private int DecreaseMovesAmount()
