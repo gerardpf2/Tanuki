@@ -1,30 +1,37 @@
+using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
+using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
     public class LineClearPhase : Phase
     {
         [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
         public LineClearPhase(
             [NotNull] IBoardContainer boardContainer,
+            [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
             _boardContainer = boardContainer;
+            _camera = camera;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
@@ -37,8 +44,8 @@ namespace Game.Gameplay.Phases.Phases
 
             bool resolved = false;
 
-            const int bottomRow = 0;
-            int topRow = board.HighestNonEmptyRow;
+            int bottomRow = _camera.BottomRow;
+            int topRow = Math.Min(board.HighestNonEmptyRow, _camera.TopRow);
 
             for (int row = bottomRow; row <= topRow; ++row)
             {
