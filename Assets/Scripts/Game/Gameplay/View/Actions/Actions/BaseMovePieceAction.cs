@@ -35,11 +35,11 @@ namespace Game.Gameplay.View.Actions.Actions
         {
             GameObject pieceInstance = GetPieceInstance();
 
-            IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
+            IBoardPieceViewEventNotifier boardPieceViewEventNotifier = pieceInstance.GetComponent<IBoardPieceViewEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
 
-            pieceViewEventNotifier.OnStartMovement(_movePieceReason, OnStartMovementComplete);
+            boardPieceViewEventNotifier.OnStartMovement(_movePieceReason, OnStartMovementComplete);
 
             return;
 
@@ -52,7 +52,7 @@ namespace Game.Gameplay.View.Actions.Actions
             {
                 MovePiece(_rowOffset, _columnOffset);
 
-                pieceViewEventNotifier.OnEndMovement(_movePieceReason, onComplete);
+                boardPieceViewEventNotifier.OnEndMovement(_movePieceReason, onComplete);
             }
         }
 
