@@ -7,10 +7,15 @@ namespace Game.Common.UI
 {
     public class ButtonViewModel : ViewModel, IDataSettable<ButtonViewData>
     {
+        [SerializeField] private Sprite _normalBackground;
+        [SerializeField] private Sprite _pressedBackground;
+        [SerializeField] private Sprite _disabledBackground;
+
         [SerializeField] private Sprite _normalSprite;
         [SerializeField] private Sprite _pressedSprite;
         [SerializeField] private Sprite _disabledSprite;
 
+        [NotNull] private readonly IBoundProperty<Sprite> _background = new BoundProperty<Sprite>("Background");
         [NotNull] private readonly IBoundProperty<Sprite> _sprite = new BoundProperty<Sprite>("Sprite");
 
         private ButtonViewData _buttonViewData;
@@ -20,6 +25,7 @@ namespace Game.Common.UI
         {
             base.Awake();
 
+            Add(_background);
             Add(_sprite);
 
             Add(new BoundMethod(OnPointerDown));
@@ -40,7 +46,7 @@ namespace Game.Common.UI
             _buttonViewData = data;
 
             SubscribeToEvents();
-            RefreshSprite();
+            RefreshImages();
         }
 
         private void SubscribeToEvents()
@@ -64,7 +70,7 @@ namespace Game.Common.UI
         {
             _pressed = true;
 
-            RefreshSprite();
+            RefreshImages();
         }
 
         private void OnPointerUp()
@@ -78,25 +84,34 @@ namespace Game.Common.UI
 
             _pressed = false;
 
-            RefreshSprite();
+            RefreshImages();
         }
 
         private void OnEnabledUpdated()
         {
-            RefreshSprite();
+            RefreshImages();
         }
 
-        private void RefreshSprite()
+        private void RefreshImages()
         {
-            InvalidOperationException.ThrowIfNull(_buttonViewData);
+            Refresh(_background, _normalBackground, _pressedBackground, _disabledBackground);
+            Refresh(_sprite, _normalSprite, _pressedSprite, _disabledSprite);
 
-            if (!_buttonViewData.Enabled)
+            return;
+
+            void Refresh([NotNull] IBoundProperty<Sprite> boundProperty, Sprite normal, Sprite pressed, Sprite disabled)
             {
-                _sprite.Value = _disabledSprite;
-            }
-            else
-            {
-                _sprite.Value = _pressed ? _pressedSprite : _normalSprite;
+                ArgumentNullException.ThrowIfNull(boundProperty);
+                InvalidOperationException.ThrowIfNull(_buttonViewData);
+
+                if (!_buttonViewData.Enabled)
+                {
+                    boundProperty.Value = disabled;
+                }
+                else
+                {
+                    boundProperty.Value = _pressed ? pressed : normal;
+                }
             }
         }
     }
