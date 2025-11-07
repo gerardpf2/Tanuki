@@ -1,6 +1,7 @@
 using Game.Common.UI;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Game.Gameplay.View.Player
 {
@@ -38,21 +39,29 @@ namespace Game.Gameplay.View.Player
         private void OnMoveLeftClick()
         {
             // TODO
+
+            Debug.Log("OnMoveLeftClick");
         }
 
         private void OnMoveRightClick()
         {
             // TODO
+
+            Debug.Log("OnMoveRightClick");
         }
 
         private void OnRotateClick()
         {
             // TODO
+
+            Debug.Log("OnRotateClick");
         }
 
         private void OnLockClick()
         {
             // TODO
+
+            Debug.Log("OnLockClick");
         }
     }
 }
