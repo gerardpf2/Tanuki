@@ -2,16 +2,14 @@ namespace Game.Gameplay.Camera
 {
     public interface ICamera
     {
-        int TopRow { get; }
+        int TopRow { get; set; }
 
-        int BottomRow { get; }
+        int BottomRow { get; set; }
 
         int VisibleRows { get; }
 
         void Initialize();
 
         void Uninitialize();
-
-        bool UpdateRow();
     }
 }

@@ -22,7 +22,19 @@ namespace Game.Gameplay.Phases.Composition
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
+                    new CameraTargetPlayerPieceLockRowPhase(
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>()
+                    )
+                ),
+                "CameraTargetPlayerPieceLockRowPhase"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhase>(r =>
                     new CameraTargetTopRowPhase(
+                        r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
@@ -123,10 +135,11 @@ namespace Game.Gameplay.Phases.Composition
                     new PhaseResolver(
                         r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
+                        r.Resolve<IPhase>("CameraTargetPlayerPieceLockRowPhase"),
                         r.Resolve<IPhase>("LockPlayerPiecePhase"),
                         r.Resolve<IPhase>("GravityPhase"),
-                        r.Resolve<IPhase>("CameraTargetTopRowPhase"),
                         r.Resolve<IPhase>("LineClearPhase"),
+                        r.Resolve<IPhase>("CameraTargetTopRowPhase"),
                         r.Resolve<IPhase>("GoalsCompletedPhase"),
                         r.Resolve<IPhase>("NoMovesLeftPhase"),
                         r.Resolve<IPhase>("InstantiatePlayerPiecePhase")

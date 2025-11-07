@@ -1,40 +1,46 @@
-using System;
 using Game.Common;
-using Game.Gameplay.Board;
-using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Camera
 {
     public class Camera : ICamera
     {
-        private const int ExtraRowsOnTop = 5; // TODO: ScriptableObject
+        private int _topRow;
+        private int _bottomRow;
 
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        public int TopRow
+        {
+            get => _topRow;
+            set
+            {
+                _topRow = value;
+                _bottomRow = TopRow - VisibleRows + 1;
+            }
+        }
 
-        private InitializedLabel _initializedLabel;
-
-        public int TopRow { get; private set; }
-
-        public int BottomRow => TopRow - VisibleRows + 1;
+        public int BottomRow
+        {
+            get => _bottomRow;
+            set
+            {
+                _bottomRow = value;
+                _topRow = BottomRow + VisibleRows - 1;
+            }
+        }
 
         public int VisibleRows => 15; // TODO: ScriptableObject
 
-        public Camera([NotNull] IBoardContainer boardContainer)
+        private InitializedLabel _initializedLabel;
+
+        public Camera()
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
-
-            _boardContainer = boardContainer;
-
-            SetInitialTopRow();
+            SetInitialBottomRow();
         }
 
         public void Initialize()
         {
             _initializedLabel.SetInitialized();
 
-            SetInitialTopRow();
+            SetInitialBottomRow();
         }
 
         public void Uninitialize()
@@ -42,27 +48,9 @@ namespace Game.Gameplay.Camera
             _initializedLabel.SetUninitialized();
         }
 
-        public bool UpdateRow()
+        private void SetInitialBottomRow()
         {
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            int newTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, VisibleRows - 1);
-
-            if (TopRow == newTopRow)
-            {
-                return false;
-            }
-
-            TopRow = newTopRow;
-
-            return true;
-        }
-
-        private void SetInitialTopRow()
-        {
-            TopRow = VisibleRows - 1;
+            BottomRow = 0;
         }
     }
 }
