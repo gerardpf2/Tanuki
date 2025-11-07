@@ -1,3 +1,4 @@
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
@@ -27,6 +28,7 @@ namespace Game.Gameplay.View.Pieces.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
                     new PieceGameObjectPreloader(
+                        r.Resolve<IBagContainer>(),
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>()

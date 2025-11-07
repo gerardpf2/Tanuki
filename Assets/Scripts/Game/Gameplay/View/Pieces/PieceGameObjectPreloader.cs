@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Common.Pieces;
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
@@ -10,21 +11,23 @@ namespace Game.Gameplay.View.Pieces
 {
     public class PieceGameObjectPreloader : IPieceGameObjectPreloader
     {
+        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
-        [NotNull] private readonly IDictionary<PieceType, int> _amountByPieceType = new Dictionary<PieceType, int>();
-
         public PieceGameObjectPreloader(
+            [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
+            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
+            _bagContainer = bagContainer;
             _boardContainer = boardContainer;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
@@ -32,14 +35,11 @@ namespace Game.Gameplay.View.Pieces
 
         public void Preload()
         {
-            _amountByPieceType.Clear();
-
-            AddBoardAmounts();
-            AddBagAmounts();
-            PreloadImpl();
+            PreloadBoardPieces();
+            PreloadPieceGhosts();
         }
 
-        private void AddBoardAmounts()
+        private void PreloadBoardPieces()
         {
             // If piece culling is implemented at some point, this will have to be reviewed
 
@@ -47,38 +47,64 @@ namespace Game.Gameplay.View.Pieces
 
             InvalidOperationException.ThrowIfNull(piecePlacements);
 
+            IDictionary<PieceType, int> amountByPieceType = new Dictionary<PieceType, int>();
+
             foreach (PiecePlacement piecePlacement in piecePlacements)
             {
                 InvalidOperationException.ThrowIfNull(piecePlacement);
 
-                IncreaseAmount(piecePlacement.Piece.Type);
-            }
-        }
+                PieceType pieceType = piecePlacement.Piece.Type;
 
-        private void AddBagAmounts()
-        {
-            // TODO: Remove if not needed
-        }
-
-        private void IncreaseAmount(PieceType pieceType)
-        {
-            if (_amountByPieceType.TryGetValue(pieceType, out int amount))
-            {
-                _amountByPieceType[pieceType] = amount + 1;
+                if (amountByPieceType.TryGetValue(pieceType, out int amount))
+                {
+                    amountByPieceType[pieceType] = amount + 1;
+                }
+                else
+                {
+                    amountByPieceType.Add(pieceType, 1);
+                }
             }
-            else
-            {
-                _amountByPieceType.Add(pieceType, 1);
-            }
-        }
 
-        private void PreloadImpl()
-        {
-            foreach ((PieceType pieceType, int amount) in _amountByPieceType)
+            foreach ((PieceType pieceType, int amount) in amountByPieceType)
             {
                 IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(pieceType);
 
                 _gameObjectPool.Preload(pieceViewDefinition.Prefab, amount, true);
+            }
+        }
+
+        private void PreloadPieceGhosts()
+        {
+            IBag bag = _bagContainer.Bag;
+
+            InvalidOperationException.ThrowIfNull(bag);
+
+            ICollection<PieceType> pieceTypes = new HashSet<PieceType>();
+
+            foreach (BagPieceEntry bagPieceEntry in bag.BagPieceEntries)
+            {
+                PreloadIfNeeded(bagPieceEntry.PieceType);
+            }
+
+            foreach (PieceType pieceType in bag.InitialPieceTypes)
+            {
+                PreloadIfNeeded(pieceType);
+            }
+
+            return;
+
+            void PreloadIfNeeded(PieceType pieceType)
+            {
+                if (pieceTypes.Contains(pieceType))
+                {
+                    return;
+                }
+
+                IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.GetGhost(pieceType);
+
+                _gameObjectPool.Preload(pieceViewDefinition.Prefab, 1, true);
+
+                pieceTypes.Add(pieceType);
             }
         }
     }
