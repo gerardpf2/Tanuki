@@ -1,8 +1,11 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
+using Game.Gameplay.Events;
 using Game.Gameplay.Phases;
+using Game.Gameplay.Phases.Phases;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
+using Game.Gameplay.View.Player.Phases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
@@ -18,6 +21,17 @@ namespace Game.Gameplay.View.Player.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhase>(r =>
+                    new CameraTargetDesiredRowPhase(
+                        r.Resolve<ICameraRowsUpdater>(),
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IEventFactory>()
+                    )
+                ),
+                "CameraTargetDesiredRowPhase"
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceGhostView>(r =>
