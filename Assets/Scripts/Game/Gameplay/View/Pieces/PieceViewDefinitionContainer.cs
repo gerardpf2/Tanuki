@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Game.Common.Pieces;
 using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Pieces
@@ -8,33 +10,42 @@ namespace Game.Gameplay.View.Pieces
     public class PieceViewDefinitionContainer : ScriptableObject, IPieceViewDefinitionGetter
     {
         [SerializeField] private PieceViewDefinition[] _pieceViewDefinitions;
+        [SerializeField] private PieceViewDefinition[] _pieceGhostViewDefinitions;
 
         public IPieceViewDefinition Get(PieceType pieceType)
         {
             InvalidOperationException.ThrowIfNull(_pieceViewDefinitions);
 
-            IPieceViewDefinition pieceViewDefinition = null;
+            return Get(_pieceViewDefinitions, pieceType);
+        }
 
-            foreach (PieceViewDefinition pieceViewDefinitionCandidate in _pieceViewDefinitions)
+        public IPieceViewDefinition GetGhost(PieceType pieceType)
+        {
+            InvalidOperationException.ThrowIfNull(_pieceGhostViewDefinitions);
+
+            return Get(_pieceGhostViewDefinitions, pieceType);
+        }
+
+        [NotNull]
+        private static IPieceViewDefinition Get(
+            [NotNull] IEnumerable<PieceViewDefinition> pieceViewDefinitions,
+            PieceType pieceType)
+        {
+            ArgumentNullException.ThrowIfNull(pieceViewDefinitions);
+
+            foreach (PieceViewDefinition pieceViewDefinition in pieceViewDefinitions)
             {
-                InvalidOperationException.ThrowIfNull(pieceViewDefinitionCandidate);
-
-                if (pieceViewDefinitionCandidate.PieceType != pieceType)
+                if (pieceViewDefinition?.PieceType != pieceType)
                 {
                     continue;
                 }
 
-                pieceViewDefinition = pieceViewDefinitionCandidate;
-
-                break;
+                return pieceViewDefinition;
             }
 
-            InvalidOperationException.ThrowIfNullWithMessage(
-                pieceViewDefinition,
-                $"Cannot get piece view definition with PieceType: {pieceType}"
-            );
+            InvalidOperationException.Throw($"Cannot get piece view definition with PieceType: {pieceType}");
 
-            return pieceViewDefinition;
+            return null;
         }
     }
 }

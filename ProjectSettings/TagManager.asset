@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: PieceGhost
+    uniqueID: 2228489209
+    locked: 0
   - name: Piece
     uniqueID: 586585799
     locked: 0

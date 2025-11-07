@@ -17,7 +17,7 @@ namespace Game.Gameplay.View.Board
         [NotNull]
         GameObject GetPieceInstance(int pieceId);
 
-        void InstantiatePiece(IPiece piece, Coordinate sourceCoordinate, GameObject prefab);
+        void InstantiatePiece(IPiece piece, Coordinate sourceCoordinate);
 
         void DestroyPiece(int pieceId);
 

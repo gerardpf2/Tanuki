@@ -2,7 +2,6 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Board;
-using Game.Gameplay.View.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -15,11 +14,10 @@ namespace Game.Gameplay.View.Actions.Actions
         private readonly Coordinate _sourceCoordinate;
 
         public InstantiatePieceAction(
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IPiece piece,
             InstantiatePieceReason instantiatePieceReason,
             [NotNull] IBoardView boardView,
-            Coordinate sourceCoordinate) : base(pieceViewDefinitionGetter, piece, instantiatePieceReason)
+            Coordinate sourceCoordinate) : base(piece, instantiatePieceReason)
         {
             ArgumentNullException.ThrowIfNull(boardView);
 
@@ -27,12 +25,11 @@ namespace Game.Gameplay.View.Actions.Actions
             _sourceCoordinate = sourceCoordinate;
         }
 
-        protected override GameObject InstantiatePiece([NotNull] IPiece piece, [NotNull] IPieceViewDefinition pieceViewDefinition)
+        protected override GameObject InstantiatePiece([NotNull] IPiece piece)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            ArgumentNullException.ThrowIfNull(pieceViewDefinition);
 
-            _boardView.InstantiatePiece(piece, _sourceCoordinate, pieceViewDefinition.Prefab);
+            _boardView.InstantiatePiece(piece, _sourceCoordinate);
 
             return _boardView.GetPieceInstance(piece.Id);
         }

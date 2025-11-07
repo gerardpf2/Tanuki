@@ -29,3 +29,18 @@ MonoBehaviour:
     _prefab: {fileID: 6451969163346834527, guid: 439e06f5939c7784e8650e1f039d91c5, type: 3}
   - _pieceType: 30
     _prefab: {fileID: 6451969163346834527, guid: 8c89310b2782a15488919f493a7f7130, type: 3}
+  _pieceGhostViewDefinitions:
+  - _pieceType: 10
+    _prefab: {fileID: 6451969163346834527, guid: 5c06182fe4b3872499986c22f0df9cb5, type: 3}
+  - _pieceType: 11
+    _prefab: {fileID: 6451969163346834527, guid: 8e68a11190d368e4d9532dc6ca431a85, type: 3}
+  - _pieceType: 12
+    _prefab: {fileID: 6451969163346834527, guid: b8a241f81ccee18469dba67d51e752dd, type: 3}
+  - _pieceType: 13
+    _prefab: {fileID: 6451969163346834527, guid: 56374d2278789c346bf69344e681547f, type: 3}
+  - _pieceType: 14
+    _prefab: {fileID: 6451969163346834527, guid: 98c0110e7db7aaf4ab554852e3102d4f, type: 3}
+  - _pieceType: 15
+    _prefab: {fileID: 6451969163346834527, guid: d88bf49cc5cac034584b5e99b8125639, type: 3}
+  - _pieceType: 16
+    _prefab: {fileID: 6451969163346834527, guid: acab8e2e7a7a4db47bee08e373d5fc0c, type: 3}

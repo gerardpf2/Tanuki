@@ -21,7 +21,16 @@ namespace Game.Gameplay.View.Actions
         IAction GetInstantiatePlayerPieceAction(IPiece piece, InstantiatePieceReason instantiatePieceReason);
 
         [NotNull]
+        IAction GetInstantiatePlayerPieceGhostAction(IPiece piece, InstantiatePieceReason instantiatePieceReason);
+
+        [NotNull]
+        IAction GetDestroyPieceAction(int pieceId, DestroyPieceReason destroyPieceReason);
+
+        [NotNull]
         IAction GetDestroyPlayerPieceAction(DestroyPieceReason destroyPieceReason);
+
+        [NotNull]
+        IAction GetDestroyPlayerPieceGhostAction(DestroyPieceReason destroyPieceReason);
 
         [NotNull]
         IAction GetDamagePieceAction(
@@ -29,9 +38,6 @@ namespace Game.Gameplay.View.Actions
             IEnumerable<KeyValuePair<string, string>> state,
             DamagePieceReason damagePieceReason
         );
-
-        [NotNull]
-        IAction GetDestroyPieceAction(int pieceId, DestroyPieceReason destroyPieceReason);
 
         [NotNull]
         IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason);

@@ -1,17 +1,10 @@
-using System;
-using Game.Gameplay.Board;
 using Game.Gameplay.Pieces.Pieces;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Player
 {
-    public interface IPlayerPieceView
+    public interface IPlayerPieceGhostView
     {
-        event Action OnMoved;
-        event Action OnRotated;
-
-        Coordinate Coordinate { get; }
-
         GameObject Instance { get; }
 
         void Initialize();
@@ -21,9 +14,5 @@ namespace Game.Gameplay.View.Player
         void Instantiate(IPiece piece);
 
         void Destroy();
-
-        void Move(float deltaX);
-
-        void Rotate();
     }
 }
