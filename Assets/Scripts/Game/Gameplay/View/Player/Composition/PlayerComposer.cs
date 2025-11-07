@@ -67,7 +67,9 @@ namespace Game.Gameplay.View.Player.Composition
                 ruleFactory.GetInject<PlayerInputViewModel>((r, s) =>
                     s.Inject(
                         r.Resolve<IPhaseContainer>(),
+                        r.Resolve<IPhaseResolver>(),
                         r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>()
                     )
