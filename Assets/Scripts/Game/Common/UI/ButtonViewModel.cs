@@ -9,6 +9,7 @@ namespace Game.Common.UI
     {
         [SerializeField] private Sprite _normalSprite;
         [SerializeField] private Sprite _pressedSprite;
+        [SerializeField] private Sprite _disabledSprite;
 
         [NotNull] private readonly IBoundProperty<Sprite> _sprite = new BoundProperty<Sprite>("Sprite");
 
@@ -25,13 +26,38 @@ namespace Game.Common.UI
             Add(new BoundMethod(OnPointerUp));
         }
 
+        private void OnDestroy()
+        {
+            UnsubscribeFromEvents();
+        }
+
         public void SetData([NotNull] ButtonViewData data)
         {
             ArgumentNullException.ThrowIfNull(data);
 
+            UnsubscribeFromEvents();
+
             _buttonViewData = data;
 
+            SubscribeToEvents();
             RefreshSprite();
+        }
+
+        private void SubscribeToEvents()
+        {
+            InvalidOperationException.ThrowIfNull(_buttonViewData);
+
+            UnsubscribeFromEvents();
+
+            _buttonViewData.OnEnabledUpdated += OnEnabledUpdated;
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            if (_buttonViewData is not null)
+            {
+                _buttonViewData.OnEnabledUpdated -= OnEnabledUpdated;
+            }
         }
 
         private void OnPointerDown()
@@ -45,16 +71,33 @@ namespace Game.Common.UI
         {
             InvalidOperationException.ThrowIfNull(_buttonViewData);
 
-            _buttonViewData.OnClick?.Invoke();
+            if (_buttonViewData.Enabled)
+            {
+                _buttonViewData.OnClick?.Invoke();
+            }
 
             _pressed = false;
 
             RefreshSprite();
         }
 
+        private void OnEnabledUpdated()
+        {
+            RefreshSprite();
+        }
+
         private void RefreshSprite()
         {
-            _sprite.Value = _pressed ? _pressedSprite : _normalSprite;
+            InvalidOperationException.ThrowIfNull(_buttonViewData);
+
+            if (!_buttonViewData.Enabled)
+            {
+                _sprite.Value = _disabledSprite;
+            }
+            else
+            {
+                _sprite.Value = _pressed ? _pressedSprite : _normalSprite;
+            }
         }
     }
 }
