@@ -53,7 +53,7 @@ namespace Game.Gameplay.Phases
 
         public void Resolve(ResolveContext resolveContext)
         {
-            // TODO
+            _phaseResolver.Resolve(_phases, resolveContext);
         }
     }
 }
