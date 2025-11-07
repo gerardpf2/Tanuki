@@ -12,7 +12,8 @@ namespace Game.Common.UI
         {
             base.Awake();
 
-            Add(new BoundMethod(OnClick));
+            Add(new BoundMethod(OnPointerDown));
+            Add(new BoundMethod(OnPointerUp));
         }
 
         public void SetData([NotNull] ButtonViewData data)
@@ -22,7 +23,12 @@ namespace Game.Common.UI
             _buttonViewData = data;
         }
 
-        private void OnClick()
+        private void OnPointerDown()
+        {
+
+        }
+
+        private void OnPointerUp()
         {
             InvalidOperationException.ThrowIfNull(_buttonViewData);
 
