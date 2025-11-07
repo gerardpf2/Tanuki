@@ -28,6 +28,12 @@ namespace Game.Gameplay.View.Player
 
             InitializeBindings();
             AddBindings();
+            SubscribeToEvents();
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeFromEvents();
         }
 
         public void Inject(
@@ -63,6 +69,24 @@ namespace Game.Gameplay.View.Player
             Add(_lock);
         }
 
+        private void SubscribeToEvents()
+        {
+            InvalidOperationException.ThrowIfNull(_eventsResolver);
+
+            UnsubscribeFromEvents();
+
+            _eventsResolver.OnResolveBegin += OnResolveBegin;
+            _eventsResolver.OnResolveEnd += OnResolveEnd;
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            InvalidOperationException.ThrowIfNull(_eventsResolver);
+
+            _eventsResolver.OnResolveBegin -= OnResolveBegin;
+            _eventsResolver.OnResolveEnd -= OnResolveEnd;
+        }
+
         private void OnMoveLeftClick()
         {
             InvalidOperationException.ThrowIfNull(_playerPieceView);
@@ -91,6 +115,24 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(_playerPieceView);
 
             _phaseContainer.Resolve(new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate));
+        }
+
+        private void OnResolveBegin()
+        {
+            SetButtonsEnabled(false);
+        }
+
+        private void OnResolveEnd()
+        {
+            SetButtonsEnabled(true);
+        }
+
+        private void SetButtonsEnabled(bool value)
+        {
+            _moveLeft.Value.SetEnabled(value);
+            _moveRight.Value.SetEnabled(value);
+            _rotate.Value.SetEnabled(value);
+            _lock.Value.SetEnabled(value);
         }
     }
 }
