@@ -10,7 +10,7 @@ namespace Game.Common.UI
 
         public bool Enabled { get; private set; }
 
-        public ButtonViewData(Action onClick, bool enabled)
+        public ButtonViewData(Action onClick, bool enabled = true)
         {
             OnClick = onClick;
             Enabled = enabled;
