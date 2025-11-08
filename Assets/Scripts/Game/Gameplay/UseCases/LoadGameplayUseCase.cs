@@ -133,7 +133,6 @@ namespace Game.Gameplay.UseCases
             _camera.Initialize();
             _goalsContainer.Initialize(goals);
             _movesContainer.Initialize(moves);
-            _phaseContainer.Initialize();
             _gameplaySerializerOnBeginIteration.Initialize();
         }
 

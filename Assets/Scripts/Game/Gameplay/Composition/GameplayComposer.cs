@@ -109,7 +109,6 @@ namespace Game.Gameplay.Composition
                         r.Resolve<ICamera>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IMovesContainer>(),
-                        r.Resolve<IPhaseContainer>(),
                         r.Resolve<IGameplaySerializerOnBeginIteration>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
