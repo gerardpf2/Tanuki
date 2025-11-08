@@ -1,5 +1,6 @@
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Pieces.Pieces;
@@ -38,10 +39,15 @@ namespace Game.Gameplay.Phases.Phases
             _eventFactory = eventFactory;
         }
 
-        protected override ResolveResult ResolveImpl(ResolveContext _)
+        protected override ResolveResult ResolveImpl([NotNull] ResolveContext resolveContext)
         {
+            ArgumentNullException.ThrowIfNull(resolveContext);
+
             IPiece piece = GetPiece();
             Coordinate sourceCoordinate = GetSourceCoordinate(piece);
+            Coordinate lockSourceCoordinate = GetLockSourceCoordinate(piece, sourceCoordinate);
+
+            resolveContext.SetPieceSourceCoordinate(sourceCoordinate, lockSourceCoordinate);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetInstantiatePlayerPieceEvent(piece, sourceCoordinate));
 
@@ -70,6 +76,17 @@ namespace Game.Gameplay.Phases.Phases
             int column = (board.Columns - piece.Width + 1) / 2;
 
             return new Coordinate(row, column);
+        }
+
+        private Coordinate GetLockSourceCoordinate([NotNull] IPiece piece, Coordinate sourceCoordinate)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
+
+            return board.GetPieceLockSourceCoordinate(piece, sourceCoordinate);
         }
     }
 }
