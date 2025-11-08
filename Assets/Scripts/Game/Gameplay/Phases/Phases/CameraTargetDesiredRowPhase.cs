@@ -5,13 +5,15 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Phases.Phases
 {
-    public class CameraTargetTopRowPhase : Phase
+    public class CameraTargetDesiredRowPhase : Phase
     {
         [NotNull] private readonly ICameraRowsUpdater _cameraRowsUpdater;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        public CameraTargetTopRowPhase(
+        protected override int? MaxResolveTimesPerIteration => 1;
+
+        public CameraTargetDesiredRowPhase(
             [NotNull] ICameraRowsUpdater cameraRowsUpdater,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
@@ -25,16 +27,22 @@ namespace Game.Gameplay.Phases.Phases
             _eventFactory = eventFactory;
         }
 
-        protected override ResolveResult ResolveImpl(ResolveContext _)
+        protected override ResolveResult ResolveImpl([NotNull] ResolveContext resolveContext)
         {
-            int rowOffset = _cameraRowsUpdater.TargetHighestNonEmptyRow();
+            ArgumentNullException.ThrowIfNull(resolveContext);
 
-            if (rowOffset == 0)
+            if (!resolveContext.PieceLockSourceCoordinate.HasValue)
             {
                 return ResolveResult.NotUpdated;
             }
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
+            int lockRow = resolveContext.PieceLockSourceCoordinate.Value.Row;
+            int rowOffset = _cameraRowsUpdater.TargetHighestNonEmptyRow() + _cameraRowsUpdater.TargetLockRow(lockRow);
+
+            if (rowOffset != 0)
+            {
+                _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
+            }
 
             return ResolveResult.Updated;
         }
