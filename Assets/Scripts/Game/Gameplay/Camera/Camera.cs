@@ -12,6 +12,11 @@ namespace Game.Gameplay.Camera
             get => _topRow;
             set
             {
+                if (TopRow == value)
+                {
+                    return;
+                }
+
                 _topRow = value;
                 _bottomRow = TopRow - VisibleRows + 1;
             }
@@ -22,12 +27,19 @@ namespace Game.Gameplay.Camera
             get => _bottomRow;
             set
             {
+                if (BottomRow == value)
+                {
+                    return;
+                }
+
                 _bottomRow = value;
                 _topRow = BottomRow + VisibleRows - 1;
             }
         }
 
         public int VisibleRows => 15; // TODO: ScriptableObject
+
+        public int ExtraRowsOnTop => 5; // TODO: ScriptableObject
 
         private InitializedLabel _initializedLabel;
 

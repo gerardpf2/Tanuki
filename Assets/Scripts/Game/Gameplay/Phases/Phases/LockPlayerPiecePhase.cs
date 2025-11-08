@@ -49,7 +49,7 @@ namespace Game.Gameplay.Phases.Phases
 
             if (!resolveContext.PieceSourceCoordinate.HasValue || !resolveContext.PieceLockSourceCoordinate.HasValue)
             {
-                InvalidOperationException.Throw(); // TODO
+                InvalidOperationException.Throw("Coordinates cannot be undefined");
             }
 
             Coordinate sourceCoordinate = resolveContext.PieceSourceCoordinate.Value;

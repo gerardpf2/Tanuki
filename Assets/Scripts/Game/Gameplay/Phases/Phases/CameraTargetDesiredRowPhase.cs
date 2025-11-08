@@ -10,10 +10,7 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class CameraTargetDesiredRowPhase : Phase
     {
-        // TODO: Comment
-
-        private const int ExtraRowsOnTop = 5;
-        private const int ExtraRowsOnBottom = 0;
+        // Targets the highest board row that allows the player piece ghost to be fully visible
 
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
@@ -49,7 +46,7 @@ namespace Game.Gameplay.Phases.Phases
             int prevCameraBottomRow = _camera.BottomRow;
 
             TargetBoardHighestNonEmptyRow();
-            TargetPlayerPieceLockRowIfNeeded(resolveContext.PieceLockSourceCoordinate.Value.Row);
+            TargetPlayerPieceLockRow(resolveContext.PieceLockSourceCoordinate.Value.Row);
 
             int newCameraBottomRow = _camera.BottomRow;
 
@@ -71,22 +68,12 @@ namespace Game.Gameplay.Phases.Phases
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int newCameraTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, _camera.VisibleRows - 1);
-
-            _camera.TopRow = newCameraTopRow;
+            _camera.TopRow = Math.Max(board.HighestNonEmptyRow + _camera.ExtraRowsOnTop, _camera.VisibleRows - 1);
         }
 
-        private void TargetPlayerPieceLockRowIfNeeded(int playerPieceLockRow)
+        private void TargetPlayerPieceLockRow(int playerPieceLockRow)
         {
-            int prevCameraBottomRow = _camera.BottomRow;
-            int newCameraBottomRow = Math.Max(playerPieceLockRow - ExtraRowsOnBottom, 0);
-
-            if (prevCameraBottomRow <= newCameraBottomRow)
-            {
-                return;
-            }
-
-            _camera.BottomRow = newCameraBottomRow;
+            _camera.BottomRow = Math.Min(_camera.BottomRow, playerPieceLockRow);
         }
     }
 }

@@ -8,6 +8,8 @@ namespace Game.Gameplay.Camera
 
         int VisibleRows { get; }
 
+        int ExtraRowsOnTop { get; }
+
         void Initialize();
 
         void Uninitialize();
