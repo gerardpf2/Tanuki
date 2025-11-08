@@ -22,16 +22,12 @@ namespace Game.Gameplay.View.Player
             [NotNull] public readonly IPiece Piece;
             public GameObjectPooledInstance PooledInstance;
 
-            public float X { get; set; }
-
             public PieceData([NotNull] IPiece piece, GameObjectPooledInstance pooledInstance)
             {
                 ArgumentNullException.ThrowIfNull(piece);
 
                 Piece = piece;
                 PooledInstance = pooledInstance;
-
-                X = PooledInstance.Instance.transform.position.x;
             }
         }
 
@@ -126,16 +122,17 @@ namespace Game.Gameplay.View.Player
             OnDestroyed?.Invoke();
         }
 
-        public void Move(float deltaX)
+        public void Move(int offsetX)
         {
             InvalidOperationException.ThrowIfNull(_pieceData);
             InvalidOperationException.ThrowIfNull(Instance);
 
-            _pieceData.X = ClampX(_pieceData.Piece, _pieceData.X + deltaX);
-
+            IPiece piece = _pieceData.Piece;
             Transform transform = Instance.transform;
 
-            transform.position = transform.position.WithX(Mathf.RoundToInt(_pieceData.X));
+            float x = ClampX(piece, transform.position.x + offsetX);
+
+            transform.position = transform.position.WithX(x);
 
             OnMoved?.Invoke();
         }
@@ -159,8 +156,6 @@ namespace Game.Gameplay.View.Player
             float x = ClampX(piece, transform.position.x + offsetX);
 
             transform.position = transform.position.WithX(x).AddY(offsetY);
-
-            _pieceData.X = x;
 
             IPieceViewEventNotifier pieceViewEventNotifier = Instance.GetComponent<IPieceViewEventNotifier>();
 

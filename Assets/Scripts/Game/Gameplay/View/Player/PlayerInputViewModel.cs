@@ -108,18 +108,22 @@ namespace Game.Gameplay.View.Player
 
         private void OnMoveLeftClick()
         {
+            const int offsetX = -1;
+
             InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            _playerPieceView.Move(-1.0f);
+            _playerPieceView.Move(offsetX);
 
             ResolveAfterMove();
         }
 
         private void OnMoveRightClick()
         {
+            const int offsetX = 1;
+
             InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            _playerPieceView.Move(1.0f);
+            _playerPieceView.Move(offsetX);
 
             ResolveAfterMove();
         }
