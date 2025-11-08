@@ -1,11 +1,13 @@
+using System;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Pieces.Pieces;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
@@ -72,7 +74,7 @@ namespace Game.Gameplay.Phases.Phases
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int row = board.HighestNonEmptyRow + _camera.ExtraRowsOnTop - piece.Height + 1;
+            int row = Math.Max(board.HighestNonEmptyRow + _camera.ExtraRowsOnTop, _camera.TopRow) - piece.Height + 1;
             int column = (board.Columns - piece.Width + 1) / 2;
 
             return new Coordinate(row, column);
