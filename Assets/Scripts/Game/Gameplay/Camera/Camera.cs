@@ -1,3 +1,4 @@
+using System;
 using Game.Common;
 
 namespace Game.Gameplay.Camera
@@ -12,6 +13,8 @@ namespace Game.Gameplay.Camera
             get => _topRow;
             set
             {
+                value = Math.Max(value, VisibleRows - 1);
+
                 if (TopRow == value)
                 {
                     return;
@@ -27,6 +30,8 @@ namespace Game.Gameplay.Camera
             get => _bottomRow;
             set
             {
+                value = Math.Max(value, 0);
+
                 if (BottomRow == value)
                 {
                     return;

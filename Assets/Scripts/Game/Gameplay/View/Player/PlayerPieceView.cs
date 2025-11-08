@@ -44,6 +44,8 @@ namespace Game.Gameplay.View.Player
         private Transform _parent;
         private PieceData _pieceData;
 
+        public event Action OnInstantiated;
+        public event Action OnDestroyed;
         public event Action OnMoved;
         public event Action OnRotated;
 
@@ -107,14 +109,21 @@ namespace Game.Gameplay.View.Player
             pooledInstance.Instance.transform.position = sourceCoordinate.ToVector3();
 
             _pieceData = new PieceData(piece, pooledInstance);
+
+            OnInstantiated?.Invoke();
         }
 
         public void Destroy()
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
+            if (_pieceData is null)
+            {
+                return;
+            }
 
             _pieceData.PooledInstance.ReturnToPool();
             _pieceData = null;
+
+            OnDestroyed?.Invoke();
         }
 
         public void Move(float deltaX)

@@ -7,6 +7,8 @@ namespace Game.Gameplay.View.Player
 {
     public interface IPlayerPieceView
     {
+        event Action OnInstantiated;
+        event Action OnDestroyed;
         event Action OnMoved;
         event Action OnRotated;
 

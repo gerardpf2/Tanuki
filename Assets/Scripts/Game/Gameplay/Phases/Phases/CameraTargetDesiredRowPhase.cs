@@ -68,7 +68,7 @@ namespace Game.Gameplay.Phases.Phases
 
             InvalidOperationException.ThrowIfNull(board);
 
-            _camera.TopRow = Math.Max(board.HighestNonEmptyRow + _camera.ExtraRowsOnTop, _camera.VisibleRows - 1);
+            _camera.TopRow = board.HighestNonEmptyRow + _camera.ExtraRowsOnTop;
         }
 
         private void TargetPlayerPieceLockRow(int playerPieceLockRow)

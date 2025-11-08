@@ -24,6 +24,9 @@ namespace Game.Gameplay.View.Player
         [NotNull] private readonly IBoundProperty<ButtonViewData> _rotate = new BoundProperty<ButtonViewData>("RotateButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _lock = new BoundProperty<ButtonViewData>("LockButtonViewData");
 
+        private bool _resolvingEvents;
+        private bool _playerPieceViewInstantiated;
+
         protected override void Awake()
         {
             base.Awake();
@@ -82,19 +85,25 @@ namespace Game.Gameplay.View.Player
         private void SubscribeToEvents()
         {
             InvalidOperationException.ThrowIfNull(_eventsResolver);
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
 
             UnsubscribeFromEvents();
 
             _eventsResolver.OnResolveBegin += OnResolveBegin;
             _eventsResolver.OnResolveEnd += OnResolveEnd;
+            _playerPieceView.OnInstantiated += OnPlayerPieceViewInstantiated;
+            _playerPieceView.OnDestroyed += OnPlayerPieceViewDestroyed;
         }
 
         private void UnsubscribeFromEvents()
         {
             InvalidOperationException.ThrowIfNull(_eventsResolver);
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
 
             _eventsResolver.OnResolveBegin -= OnResolveBegin;
             _eventsResolver.OnResolveEnd -= OnResolveEnd;
+            _playerPieceView.OnInstantiated -= OnPlayerPieceViewInstantiated;
+            _playerPieceView.OnDestroyed -= OnPlayerPieceViewDestroyed;
         }
 
         private void OnMoveLeftClick()
@@ -133,20 +142,40 @@ namespace Game.Gameplay.View.Player
 
         private void OnResolveBegin()
         {
-            SetButtonsEnabled(false);
+            _resolvingEvents = true;
+
+            RefreshButtonsEnabled();
         }
 
         private void OnResolveEnd()
         {
-            SetButtonsEnabled(true);
+            _resolvingEvents = false;
+
+            RefreshButtonsEnabled();
         }
 
-        private void SetButtonsEnabled(bool value)
+        private void OnPlayerPieceViewInstantiated()
         {
-            _moveLeft.Value.SetEnabled(value);
-            _moveRight.Value.SetEnabled(value);
-            _rotate.Value.SetEnabled(value);
-            _lock.Value.SetEnabled(value);
+            _playerPieceViewInstantiated = true;
+
+            RefreshButtonsEnabled();
+        }
+
+        private void OnPlayerPieceViewDestroyed()
+        {
+            _playerPieceViewInstantiated = false;
+
+            RefreshButtonsEnabled();
+        }
+
+        private void RefreshButtonsEnabled()
+        {
+            bool buttonsEnabled = !_resolvingEvents && _playerPieceViewInstantiated;
+
+            _moveLeft.Value.SetEnabled(buttonsEnabled);
+            _moveRight.Value.SetEnabled(buttonsEnabled);
+            _rotate.Value.SetEnabled(buttonsEnabled);
+            _lock.Value.SetEnabled(buttonsEnabled);
         }
 
         private void ResolveAfterMove()
@@ -159,8 +188,8 @@ namespace Game.Gameplay.View.Player
         [NotNull]
         private ResolveContext GetResolveContext(bool comesFromLock)
         {
-            InvalidOperationException.ThrowIfNull(_phaseContainer);
             InvalidOperationException.ThrowIfNull(_playerPieceGhostView);
+            InvalidOperationException.ThrowIfNull(_playerPieceView);
 
             return new ResolveContext(comesFromLock, _playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
         }

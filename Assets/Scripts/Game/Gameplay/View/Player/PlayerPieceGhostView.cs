@@ -109,7 +109,10 @@ namespace Game.Gameplay.View.Player
 
         public void Destroy()
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
+            if (_pieceData is null)
+            {
+                return;
+            }
 
             _pieceData.PooledInstance.ReturnToPool();
             _pieceData = null;
