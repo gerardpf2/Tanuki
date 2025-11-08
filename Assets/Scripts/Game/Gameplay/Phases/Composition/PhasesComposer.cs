@@ -79,7 +79,6 @@ namespace Game.Gameplay.Phases.Composition
                     new InstantiatePlayerPiecePhase(
                         r.Resolve<IBagContainer>(),
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )
@@ -127,6 +126,7 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
                         r.Resolve<IPhase>("LockPlayerPiecePhase"),
                         r.Resolve<IPhase>("GravityPhase"),
                         r.Resolve<IPhase>("LineClearPhase"),

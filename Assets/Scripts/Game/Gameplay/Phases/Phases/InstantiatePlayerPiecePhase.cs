@@ -1,7 +1,6 @@
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
-using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
@@ -13,7 +12,6 @@ namespace Game.Gameplay.Phases.Phases
     {
         [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
-        [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
@@ -22,19 +20,16 @@ namespace Game.Gameplay.Phases.Phases
         public InstantiatePlayerPiecePhase(
             [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
-            [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(boardContainer);
-            ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
             _bagContainer = bagContainer;
             _boardContainer = boardContainer;
-            _camera = camera;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
@@ -72,7 +67,7 @@ namespace Game.Gameplay.Phases.Phases
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int row = _camera.TopRow - piece.Height + 1;
+            int row = board.HighestNonEmptyRow + 5 - piece.Height + 1; // TODO
             int column = (board.Columns - piece.Width + 1) / 2;
 
             return new Coordinate(row, column);
