@@ -1,7 +1,10 @@
+using System;
+using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
@@ -9,20 +12,27 @@ namespace Game.Gameplay.Phases.Phases
     {
         // TODO: Comment
 
-        [NotNull] private readonly ICameraRowsUpdater _cameraRowsUpdater;
+        private const int ExtraRowsOnTop = 5;
+        private const int ExtraRowsOnBottom = 0;
+
+        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
         public CameraTargetDesiredRowPhase(
-            [NotNull] ICameraRowsUpdater cameraRowsUpdater,
+            [NotNull] IBoardContainer boardContainer,
+            [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
         {
-            ArgumentNullException.ThrowIfNull(cameraRowsUpdater);
+            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
-            _cameraRowsUpdater = cameraRowsUpdater;
+            _boardContainer = boardContainer;
+            _camera = camera;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
@@ -36,9 +46,14 @@ namespace Game.Gameplay.Phases.Phases
                 return ResolveResult.NotUpdated;
             }
 
-            int rowOffset =
-                _cameraRowsUpdater.TargetHighestNonEmptyRow() +
-                _cameraRowsUpdater.TargetLockRow(resolveContext.PieceLockSourceCoordinate.Value.Row);
+            int prevCameraBottomRow = _camera.BottomRow;
+
+            TargetBoardHighestNonEmptyRow();
+            TargetPlayerPieceLockRowIfNeeded(resolveContext.PieceLockSourceCoordinate.Value.Row);
+
+            int newCameraBottomRow = _camera.BottomRow;
+
+            int rowOffset = newCameraBottomRow - prevCameraBottomRow;
 
             if (rowOffset == 0)
             {
@@ -48,6 +63,30 @@ namespace Game.Gameplay.Phases.Phases
             _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
 
             return ResolveResult.Updated;
+        }
+
+        private void TargetBoardHighestNonEmptyRow()
+        {
+            IBoard board = _boardContainer.Board;
+
+            InvalidOperationException.ThrowIfNull(board);
+
+            int newCameraTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, _camera.VisibleRows - 1);
+
+            _camera.TopRow = newCameraTopRow;
+        }
+
+        private void TargetPlayerPieceLockRowIfNeeded(int playerPieceLockRow)
+        {
+            int prevCameraBottomRow = _camera.BottomRow;
+            int newCameraBottomRow = Math.Max(playerPieceLockRow - ExtraRowsOnBottom, 0);
+
+            if (prevCameraBottomRow <= newCameraBottomRow)
+            {
+                return;
+            }
+
+            _camera.BottomRow = newCameraBottomRow;
         }
     }
 }

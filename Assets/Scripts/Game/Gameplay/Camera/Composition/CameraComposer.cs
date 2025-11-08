@@ -1,4 +1,3 @@
-using Game.Gameplay.Board;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -15,15 +14,6 @@ namespace Game.Gameplay.Camera.Composition
             base.AddRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetSingleton<ICamera>(_ => new Camera()));
-
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<ICameraRowsUpdater>(r =>
-                    new CameraRowsUpdater(
-                        r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>()
-                    )
-                )
-            );
         }
     }
 }

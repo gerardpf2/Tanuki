@@ -23,7 +23,8 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new CameraTargetDesiredRowPhase(
-                        r.Resolve<ICameraRowsUpdater>(),
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )
