@@ -16,7 +16,7 @@ namespace Game.Gameplay.Events
         );
 
         [NotNull]
-        IEvent GetInstantiatePlayerPieceEvent(IPiece piece);
+        IEvent GetInstantiatePlayerPieceEvent(IPiece piece, Coordinate sourceCoordinate);
 
         [NotNull]
         IEvent GetLockPlayerPieceEvent(

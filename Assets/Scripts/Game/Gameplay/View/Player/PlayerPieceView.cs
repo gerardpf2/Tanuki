@@ -2,7 +2,6 @@ using System;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
-using Game.Gameplay.Camera;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
@@ -37,7 +36,6 @@ namespace Game.Gameplay.View.Player
         }
 
         [NotNull] private readonly IBoardContainer _boardContainer;
-        [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
@@ -65,17 +63,14 @@ namespace Game.Gameplay.View.Player
 
         public PlayerPieceView(
             [NotNull] IBoardContainer boardContainer,
-            [NotNull] ICamera camera,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
-            ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _boardContainer = boardContainer;
-            _camera = camera;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
         }
@@ -100,17 +95,16 @@ namespace Game.Gameplay.View.Player
             _parent = null;
         }
 
-        public void Instantiate([NotNull] IPiece piece)
+        public void Instantiate([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
             InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
-            Vector3 position = new(GetInitialColumn(piece), GetInitialRow(piece));
             GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
 
-            pooledInstance.Instance.transform.position = position;
+            pooledInstance.Instance.transform.position = sourceCoordinate.ToVector3();
 
             _pieceData = new PieceData(piece, pooledInstance);
         }
@@ -167,28 +161,6 @@ namespace Game.Gameplay.View.Player
 
             OnMoved?.Invoke();
             OnRotated?.Invoke();
-        }
-
-        private int GetInitialRow([NotNull] IPiece piece)
-        {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            return _camera.TopRow - piece.Height + 1;
-        }
-
-        private int GetInitialColumn([NotNull] IPiece piece)
-        {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            return (board.Columns - piece.Width + 1) / 2;
         }
 
         private float ClampX([NotNull] IPiece piece, float x)

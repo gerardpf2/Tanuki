@@ -89,6 +89,8 @@ namespace Game.Gameplay.Phases.Composition
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new InstantiatePlayerPiecePhase(
                         r.Resolve<IBagContainer>(),
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )

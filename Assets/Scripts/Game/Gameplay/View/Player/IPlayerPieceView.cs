@@ -18,7 +18,7 @@ namespace Game.Gameplay.View.Player
 
         void Uninitialize();
 
-        void Instantiate(IPiece piece);
+        void Instantiate(IPiece piece, Coordinate sourceCoordinate);
 
         void Destroy();
 

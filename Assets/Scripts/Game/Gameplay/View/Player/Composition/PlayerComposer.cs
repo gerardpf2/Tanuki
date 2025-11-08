@@ -48,7 +48,6 @@ namespace Game.Gameplay.View.Player.Composition
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>(),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>()
                     )
