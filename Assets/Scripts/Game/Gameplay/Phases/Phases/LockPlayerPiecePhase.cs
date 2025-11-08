@@ -82,10 +82,8 @@ namespace Game.Gameplay.Phases.Phases
             return piece;
         }
 
-        private void AddPieceToBoard([NotNull] IPiece piece, Coordinate sourceCoordinate)
+        private void AddPieceToBoard(IPiece piece, Coordinate sourceCoordinate)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
