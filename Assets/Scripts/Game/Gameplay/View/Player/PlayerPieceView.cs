@@ -2,7 +2,6 @@ using System;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
-using Game.Gameplay.Camera;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
@@ -23,21 +22,16 @@ namespace Game.Gameplay.View.Player
             [NotNull] public readonly IPiece Piece;
             public GameObjectPooledInstance PooledInstance;
 
-            public float X { get; set; }
-
             public PieceData([NotNull] IPiece piece, GameObjectPooledInstance pooledInstance)
             {
                 ArgumentNullException.ThrowIfNull(piece);
 
                 Piece = piece;
                 PooledInstance = pooledInstance;
-
-                X = PooledInstance.Instance.transform.position.x;
             }
         }
 
         [NotNull] private readonly IBoardContainer _boardContainer;
-        [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
@@ -46,6 +40,8 @@ namespace Game.Gameplay.View.Player
         private Transform _parent;
         private PieceData _pieceData;
 
+        public event Action OnInstantiated;
+        public event Action OnDestroyed;
         public event Action OnMoved;
         public event Action OnRotated;
 
@@ -65,17 +61,14 @@ namespace Game.Gameplay.View.Player
 
         public PlayerPieceView(
             [NotNull] IBoardContainer boardContainer,
-            [NotNull] ICamera camera,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
-            ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _boardContainer = boardContainer;
-            _camera = camera;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
         }
@@ -100,39 +93,46 @@ namespace Game.Gameplay.View.Player
             _parent = null;
         }
 
-        public void Instantiate([NotNull] IPiece piece)
+        public void Instantiate([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
             InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
-            Vector3 position = new(GetInitialColumn(piece), GetInitialRow(piece));
             GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
 
-            pooledInstance.Instance.transform.position = position;
+            pooledInstance.Instance.transform.position = sourceCoordinate.ToVector3();
 
             _pieceData = new PieceData(piece, pooledInstance);
+
+            OnInstantiated?.Invoke();
         }
 
         public void Destroy()
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
+            if (_pieceData is null)
+            {
+                return;
+            }
 
             _pieceData.PooledInstance.ReturnToPool();
             _pieceData = null;
+
+            OnDestroyed?.Invoke();
         }
 
-        public void Move(float deltaX)
+        public void Move(int offsetX)
         {
             InvalidOperationException.ThrowIfNull(_pieceData);
             InvalidOperationException.ThrowIfNull(Instance);
 
-            _pieceData.X = ClampX(_pieceData.Piece, _pieceData.X + deltaX);
-
+            IPiece piece = _pieceData.Piece;
             Transform transform = Instance.transform;
 
-            transform.position = transform.position.WithX(Mathf.RoundToInt(_pieceData.X));
+            float x = ClampX(piece, transform.position.x + offsetX);
+
+            transform.position = transform.position.WithX(x);
 
             OnMoved?.Invoke();
         }
@@ -145,19 +145,17 @@ namespace Game.Gameplay.View.Player
             IPiece piece = _pieceData.Piece;
 
             int width = piece.Width;
-            int withAfterRotate = piece.Height;
-            int offsetX = (width - withAfterRotate) / 2;
+            int height = piece.Height;
+            int offsetX = (width - height) / 2;
+            int offsetY = height - width;
 
             ++piece.Rotation;
 
             Transform transform = Instance.transform;
 
             float x = ClampX(piece, transform.position.x + offsetX);
-            int y = GetInitialRow(piece);
 
-            transform.position = transform.position.WithX(x).WithY(y);
-
-            _pieceData.X = x;
+            transform.position = transform.position.WithX(x).AddY(offsetY);
 
             IPieceViewEventNotifier pieceViewEventNotifier = Instance.GetComponent<IPieceViewEventNotifier>();
 
@@ -167,28 +165,6 @@ namespace Game.Gameplay.View.Player
 
             OnMoved?.Invoke();
             OnRotated?.Invoke();
-        }
-
-        private int GetInitialRow([NotNull] IPiece piece)
-        {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            return _camera.TopRow - piece.Height + 1;
-        }
-
-        private int GetInitialColumn([NotNull] IPiece piece)
-        {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            return (board.Columns - piece.Width + 1) / 2;
         }
 
         private float ClampX([NotNull] IPiece piece, float x)

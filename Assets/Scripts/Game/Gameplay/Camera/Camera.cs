@@ -1,3 +1,4 @@
+using System;
 using Game.Common;
 
 namespace Game.Gameplay.Camera
@@ -12,6 +13,13 @@ namespace Game.Gameplay.Camera
             get => _topRow;
             set
             {
+                value = Math.Max(value, VisibleRows - 1);
+
+                if (TopRow == value)
+                {
+                    return;
+                }
+
                 _topRow = value;
                 _bottomRow = TopRow - VisibleRows + 1;
             }
@@ -22,12 +30,21 @@ namespace Game.Gameplay.Camera
             get => _bottomRow;
             set
             {
+                value = Math.Max(value, 0);
+
+                if (BottomRow == value)
+                {
+                    return;
+                }
+
                 _bottomRow = value;
                 _topRow = BottomRow + VisibleRows - 1;
             }
         }
 
         public int VisibleRows => 15; // TODO: ScriptableObject
+
+        public int ExtraRowsOnTop => 5; // TODO: ScriptableObject
 
         private InitializedLabel _initializedLabel;
 

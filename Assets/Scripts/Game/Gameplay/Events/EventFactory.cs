@@ -19,9 +19,9 @@ namespace Game.Gameplay.Events
             return new InstantiatePieceEvent(pieceClone, sourceCoordinate, instantiatePieceReason);
         }
 
-        public IEvent GetInstantiatePlayerPieceEvent(IPiece piece)
+        public IEvent GetInstantiatePlayerPieceEvent(IPiece piece, Coordinate sourceCoordinate)
         {
-            return new InstantiatePlayerPieceEvent(piece);
+            return new InstantiatePlayerPieceEvent(piece, sourceCoordinate);
         }
 
         public IEvent GetLockPlayerPieceEvent(

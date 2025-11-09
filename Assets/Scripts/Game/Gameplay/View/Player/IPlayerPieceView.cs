@@ -7,6 +7,8 @@ namespace Game.Gameplay.View.Player
 {
     public interface IPlayerPieceView
     {
+        event Action OnInstantiated;
+        event Action OnDestroyed;
         event Action OnMoved;
         event Action OnRotated;
 
@@ -18,11 +20,11 @@ namespace Game.Gameplay.View.Player
 
         void Uninitialize();
 
-        void Instantiate(IPiece piece);
+        void Instantiate(IPiece piece, Coordinate sourceCoordinate);
 
         void Destroy();
 
-        void Move(float deltaX);
+        void Move(int offsetX);
 
         void Rotate();
     }

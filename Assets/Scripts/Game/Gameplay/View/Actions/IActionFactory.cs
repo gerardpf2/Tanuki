@@ -18,7 +18,11 @@ namespace Game.Gameplay.View.Actions
         );
 
         [NotNull]
-        IAction GetInstantiatePlayerPieceAction(IPiece piece, InstantiatePieceReason instantiatePieceReason);
+        IAction GetInstantiatePlayerPieceAction(
+            IPiece piece,
+            InstantiatePieceReason instantiatePieceReason,
+            Coordinate sourceCoordinate
+        );
 
         [NotNull]
         IAction GetInstantiatePlayerPieceGhostAction(IPiece piece, InstantiatePieceReason instantiatePieceReason);

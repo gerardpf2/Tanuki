@@ -42,9 +42,14 @@ namespace Game.Gameplay.Phases.Phases
         {
             ArgumentNullException.ThrowIfNull(resolveContext);
 
-            if (!resolveContext.PieceSourceCoordinate.HasValue || !resolveContext.PieceLockSourceCoordinate.HasValue)
+            if (!resolveContext.ComesFromLock)
             {
                 return ResolveResult.NotUpdated;
+            }
+
+            if (!resolveContext.PieceSourceCoordinate.HasValue || !resolveContext.PieceLockSourceCoordinate.HasValue)
+            {
+                InvalidOperationException.Throw("Coordinates cannot be undefined");
             }
 
             Coordinate sourceCoordinate = resolveContext.PieceSourceCoordinate.Value;
@@ -82,10 +87,8 @@ namespace Game.Gameplay.Phases.Phases
             return piece;
         }
 
-        private void AddPieceToBoard([NotNull] IPiece piece, Coordinate sourceCoordinate)
+        private void AddPieceToBoard(IPiece piece, Coordinate sourceCoordinate)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);

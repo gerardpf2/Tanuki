@@ -4,10 +4,23 @@ namespace Game.Gameplay.Phases
 {
     public class ResolveContext
     {
-        public readonly Coordinate? PieceSourceCoordinate;
-        public readonly Coordinate? PieceLockSourceCoordinate;
+        public readonly bool ComesFromLock;
 
-        public ResolveContext(Coordinate? pieceSourceCoordinate, Coordinate? pieceLockSourceCoordinate)
+        public Coordinate? PieceSourceCoordinate { get; private set; }
+
+        public Coordinate? PieceLockSourceCoordinate { get; private set; }
+
+        public ResolveContext(
+            bool comesFromLock,
+            Coordinate? pieceSourceCoordinate,
+            Coordinate? pieceLockSourceCoordinate)
+        {
+            ComesFromLock = comesFromLock;
+
+            SetPieceSourceCoordinate(pieceSourceCoordinate, pieceLockSourceCoordinate);
+        }
+
+        public void SetPieceSourceCoordinate(Coordinate? pieceSourceCoordinate, Coordinate? pieceLockSourceCoordinate)
         {
             PieceSourceCoordinate = pieceSourceCoordinate;
             PieceLockSourceCoordinate = pieceLockSourceCoordinate;

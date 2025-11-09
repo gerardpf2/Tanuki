@@ -68,11 +68,12 @@ namespace Game.Gameplay.View.Actions
 
         public IAction GetInstantiatePlayerPieceAction(
             [NotNull] IPiece piece,
-            InstantiatePieceReason instantiatePieceReason)
+            InstantiatePieceReason instantiatePieceReason,
+            Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return new InstantiatePlayerPieceAction(piece, instantiatePieceReason, _playerPieceView);
+            return new InstantiatePlayerPieceAction(piece, instantiatePieceReason, _playerPieceView, sourceCoordinate);
         }
 
         public IAction GetInstantiatePlayerPieceGhostAction(

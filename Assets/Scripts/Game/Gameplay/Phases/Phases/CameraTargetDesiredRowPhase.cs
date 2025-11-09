@@ -8,16 +8,16 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.Phases.Phases
 {
-    public class CameraTargetTopRowPhase : Phase
+    public class CameraTargetDesiredRowPhase : Phase
     {
-        private const int ExtraRowsOnTop = 5;
+        // Targets the highest board row that allows the player piece ghost to be fully visible
 
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
-        public CameraTargetTopRowPhase(
+        public CameraTargetDesiredRowPhase(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
@@ -34,27 +34,46 @@ namespace Game.Gameplay.Phases.Phases
             _eventFactory = eventFactory;
         }
 
-        protected override ResolveResult ResolveImpl(ResolveContext _)
+        protected override ResolveResult ResolveImpl([NotNull] ResolveContext resolveContext)
+        {
+            ArgumentNullException.ThrowIfNull(resolveContext);
+
+            if (!resolveContext.PieceLockSourceCoordinate.HasValue)
+            {
+                return ResolveResult.NotUpdated;
+            }
+
+            int prevCameraBottomRow = _camera.BottomRow;
+
+            TargetBoardHighestNonEmptyRow();
+            TargetPlayerPieceLockRow(resolveContext.PieceLockSourceCoordinate.Value.Row);
+
+            int newCameraBottomRow = _camera.BottomRow;
+
+            int rowOffset = newCameraBottomRow - prevCameraBottomRow;
+
+            if (rowOffset == 0)
+            {
+                return ResolveResult.NotUpdated;
+            }
+
+            _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
+
+            return ResolveResult.Updated;
+        }
+
+        private void TargetBoardHighestNonEmptyRow()
         {
             IBoard board = _boardContainer.Board;
 
             InvalidOperationException.ThrowIfNull(board);
 
-            int prevTopRow = _camera.TopRow;
-            int newTopRow = Math.Max(board.HighestNonEmptyRow + ExtraRowsOnTop, _camera.VisibleRows - 1);
+            _camera.TopRow = board.HighestNonEmptyRow + _camera.ExtraRowsOnTop;
+        }
 
-            if (prevTopRow == newTopRow)
-            {
-                return ResolveResult.NotUpdated;
-            }
-
-            _camera.TopRow = newTopRow;
-
-            int rowOffset = newTopRow - prevTopRow;
-
-            _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
-
-            return ResolveResult.Updated;
+        private void TargetPlayerPieceLockRow(int playerPieceLockRow)
+        {
+            _camera.BottomRow = Math.Min(_camera.BottomRow, playerPieceLockRow);
         }
     }
 }

@@ -1,11 +1,10 @@
 using Game.Gameplay.Board;
-using Game.Gameplay.Camera;
 using Game.Gameplay.Phases;
+using Game.Gameplay.Phases.Phases;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
-using Infrastructure.Unity;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 
@@ -35,7 +34,6 @@ namespace Game.Gameplay.View.Player.Composition
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
                         r.Resolve<IBoardContainer>(),
-                        r.Resolve<ICamera>(),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>()
                     )
@@ -51,13 +49,14 @@ namespace Game.Gameplay.View.Player.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetInject<PlayerPieceInputHandler>((r, s) =>
+                ruleFactory.GetInject<PlayerInputViewModel>((r, s) =>
                     s.Inject(
                         r.Resolve<IPhaseContainer>(),
+                        r.Resolve<IPhaseResolver>(),
                         r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
                         r.Resolve<IPlayerPieceGhostView>(),
-                        r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<IScreenPropertiesGetter>()
+                        r.Resolve<IPlayerPieceView>()
                     )
                 )
             );
