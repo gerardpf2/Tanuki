@@ -8,6 +8,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.Phases.Phases
 {
+    // TODO: Rename
     public class CameraTargetDesiredRowPhase : Phase
     {
         // Targets the highest board row that allows the player piece ghost to be fully visible
@@ -16,6 +17,8 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
+
+        private Coordinate? _lastTargetedPieceLockSourceCoordinate;
 
         public CameraTargetDesiredRowPhase(
             [NotNull] IBoardContainer boardContainer,
@@ -43,10 +46,20 @@ namespace Game.Gameplay.Phases.Phases
                 return ResolveResult.NotUpdated;
             }
 
+            Coordinate pieceLockSourceCoordinate = resolveContext.PieceLockSourceCoordinate.Value;
+
+            if (_lastTargetedPieceLockSourceCoordinate.HasValue &&
+                _lastTargetedPieceLockSourceCoordinate.Value.Equals(pieceLockSourceCoordinate))
+            {
+                return ResolveResult.NotUpdated;
+            }
+
+            _lastTargetedPieceLockSourceCoordinate = pieceLockSourceCoordinate;
+
             int prevCameraBottomRow = _camera.BottomRow;
 
-            TargetBoardHighestNonEmptyRow();
-            TargetPlayerPieceLockRow(resolveContext.PieceLockSourceCoordinate.Value.Row);
+            TargetHighestNonEmptyRow();
+            TargetPieceLockRow(pieceLockSourceCoordinate.Row);
 
             int newCameraBottomRow = _camera.BottomRow;
 
@@ -62,7 +75,14 @@ namespace Game.Gameplay.Phases.Phases
             return ResolveResult.Updated;
         }
 
-        private void TargetBoardHighestNonEmptyRow()
+        public override void OnEndIteration()
+        {
+            base.OnEndIteration();
+
+            _lastTargetedPieceLockSourceCoordinate = null;
+        }
+
+        private void TargetHighestNonEmptyRow()
         {
             IBoard board = _boardContainer.Board;
 
@@ -71,9 +91,9 @@ namespace Game.Gameplay.Phases.Phases
             _camera.TopRow = board.HighestNonEmptyRow + _camera.ExtraRowsOnTop;
         }
 
-        private void TargetPlayerPieceLockRow(int playerPieceLockRow)
+        private void TargetPieceLockRow(int pieceLockSourceCoordinateRow)
         {
-            _camera.BottomRow = Math.Min(_camera.BottomRow, playerPieceLockRow);
+            _camera.BottomRow = Math.Min(_camera.BottomRow, pieceLockSourceCoordinateRow);
         }
     }
 }

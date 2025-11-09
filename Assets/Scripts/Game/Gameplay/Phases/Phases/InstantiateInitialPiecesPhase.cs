@@ -15,6 +15,8 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
+        protected override int? MaxResolveTimesPerIteration => 1;
+
         public InstantiateInitialPiecesPhase(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] IEventEnqueuer eventEnqueuer,

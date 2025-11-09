@@ -128,7 +128,7 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
                         r.Resolve<IPhase>("InstantiatePlayerPiecePhase"),
-                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase") // TODO: Lock
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase")
                     )
                 ),
                 "Initial"
