@@ -1,36 +1,43 @@
+using System;
 using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
+using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Utils;
 using Game.Gameplay.Pieces.Pieces;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
     public class DestroyNotAlivePiecesPhase : Phase
     {
         [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
 
         public DestroyNotAlivePiecesPhase(
             [NotNull] IBoardContainer boardContainer,
+            [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
             [NotNull] IGoalsContainer goalsContainer)
         {
             ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(goalsContainer);
 
             _boardContainer = boardContainer;
+            _camera = camera;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
             _goalsContainer = goalsContainer;
@@ -44,7 +51,10 @@ namespace Game.Gameplay.Phases.Phases
 
             bool resolved = false;
 
-            foreach (int pieceId in board.GetDistinctPieceIdsSortedByRowThenByColumn())
+            int bottomRow = _camera.BottomRow;
+            int topRow = Math.Min(board.HighestNonEmptyRow, _camera.TopRow);
+
+            foreach (int pieceId in board.GetDistinctPieceIdsSortedByRowThenByColumn(bottomRow, topRow))
             {
                 if (TryDestroyPiece(pieceId))
                 {

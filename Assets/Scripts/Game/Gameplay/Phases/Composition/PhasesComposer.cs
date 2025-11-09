@@ -22,20 +22,21 @@ namespace Game.Gameplay.Phases.Composition
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
-                    new CameraTargetDesiredRowPhase(
+                    new CameraTargetHighestPlayerPieceLockRowPhase(
                         r.Resolve<IBoardContainer>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>()
                     )
                 ),
-                "CameraTargetDesiredRowPhase"
+                "CameraTargetHighestPlayerPieceLockRowPhase"
             );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new DestroyNotAlivePiecesPhase(
                         r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
                         r.Resolve<IGoalsContainer>()
@@ -123,20 +124,54 @@ namespace Game.Gameplay.Phases.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhase>(r =>
+                    new SimulateInstantiatePlayerPiecePhase(
+                        r.Resolve<IBagContainer>(),
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>()
+                    )
+                ),
+                "SimulateInstantiatePlayerPiecePhase"
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseContainer>(r =>
                     new PhaseContainer(
                         r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
-                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
+                        r.Resolve<IPhase>("InstantiatePlayerPiecePhase"),
+                        r.Resolve<IPhase>("CameraTargetHighestPlayerPieceLockRowPhase")
+                    )
+                ),
+                "Initial"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhaseContainer>(r =>
+                    new PhaseContainer(
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPhase>("CameraTargetHighestPlayerPieceLockRowPhase"),
                         r.Resolve<IPhase>("LockPlayerPiecePhase"),
-                        r.Resolve<IPhase>("GravityPhase"),
+                        r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("LineClearPhase"),
+                        r.Resolve<IPhase>("GravityPhase"),
                         r.Resolve<IPhase>("GoalsCompletedPhase"),
                         r.Resolve<IPhase>("NoMovesLeftPhase"),
+                        r.Resolve<IPhase>("SimulateInstantiatePlayerPiecePhase"),
                         r.Resolve<IPhase>("InstantiatePlayerPiecePhase")
                     )
-                )
+                ),
+                "Lock"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhaseContainer>(r =>
+                    new PhaseContainer(
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPhase>("CameraTargetHighestPlayerPieceLockRowPhase")
+                    )
+                ),
+                "Move"
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPhaseResolver>(_ => new PhaseResolver()));

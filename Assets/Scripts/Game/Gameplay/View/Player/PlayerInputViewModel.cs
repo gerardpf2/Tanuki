@@ -1,7 +1,5 @@
 using Game.Common.UI;
 using Game.Gameplay.Phases;
-using Game.Gameplay.Phases.Phases;
-using Game.Gameplay.Phases.Utils;
 using Game.Gameplay.View.EventResolvers;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
@@ -12,10 +10,9 @@ namespace Game.Gameplay.View.Player
 {
     public class PlayerInputViewModel : ViewModel
     {
-        private IPhaseContainer _phaseContainer;
-        private IPhaseResolver _phaseResolver;
+        private IPhaseContainer _phaseContainerLock;
+        private IPhaseContainer _phaseContainerMove;
         private IEventsResolver _eventsResolver;
-        private IPhase _cameraTargetDesiredRowPhase;
         private IPlayerPieceGhostView _playerPieceGhostView;
         private IPlayerPieceView _playerPieceView;
 
@@ -44,24 +41,21 @@ namespace Game.Gameplay.View.Player
         }
 
         public void Inject(
-            [NotNull] IPhaseContainer phaseContainer,
-            [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IPhaseContainer phaseContainerLock,
+            [NotNull] IPhaseContainer phaseContainerMove,
             [NotNull] IEventsResolver eventsResolver,
-            [NotNull] IPhase cameraTargetDesiredRowPhase,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView)
         {
-            ArgumentNullException.ThrowIfNull(phaseContainer);
-            ArgumentNullException.ThrowIfNull(phaseResolver);
+            ArgumentNullException.ThrowIfNull(phaseContainerLock);
+            ArgumentNullException.ThrowIfNull(phaseContainerMove);
             ArgumentNullException.ThrowIfNull(eventsResolver);
-            ArgumentNullException.ThrowIfNull(cameraTargetDesiredRowPhase);
             ArgumentNullException.ThrowIfNull(playerPieceGhostView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
 
-            _phaseContainer = phaseContainer;
-            _phaseResolver = phaseResolver;
+            _phaseContainerLock = phaseContainerLock;
+            _phaseContainerMove = phaseContainerMove;
             _eventsResolver = eventsResolver;
-            _cameraTargetDesiredRowPhase = cameraTargetDesiredRowPhase;
             _playerPieceGhostView = playerPieceGhostView;
             _playerPieceView = playerPieceView;
         }
@@ -139,9 +133,9 @@ namespace Game.Gameplay.View.Player
 
         private void OnLockClick()
         {
-            InvalidOperationException.ThrowIfNull(_phaseContainer);
+            InvalidOperationException.ThrowIfNull(_phaseContainerLock);
 
-            _phaseContainer.Resolve(GetResolveContext(true));
+            _phaseContainerLock.Resolve(GetResolveContext());
         }
 
         private void OnResolveBegin()
@@ -184,18 +178,18 @@ namespace Game.Gameplay.View.Player
 
         private void ResolveAfterMove()
         {
-            InvalidOperationException.ThrowIfNull(_phaseResolver);
+            InvalidOperationException.ThrowIfNull(_phaseContainerMove);
 
-            _phaseResolver.Resolve(_cameraTargetDesiredRowPhase, GetResolveContext(false));
+            _phaseContainerMove.Resolve(GetResolveContext());
         }
 
         [NotNull]
-        private ResolveContext GetResolveContext(bool comesFromLock)
+        private ResolveContext GetResolveContext()
         {
             InvalidOperationException.ThrowIfNull(_playerPieceGhostView);
             InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            return new ResolveContext(comesFromLock, _playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
+            return new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
         }
     }
 }
