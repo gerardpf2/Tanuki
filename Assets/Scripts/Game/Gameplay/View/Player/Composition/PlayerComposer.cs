@@ -1,6 +1,5 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Phases;
-using Game.Gameplay.Phases.Phases;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
 using Infrastructure.DependencyInjection;
@@ -51,10 +50,9 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<PlayerInputViewModel>((r, s) =>
                     s.Inject(
-                        r.Resolve<IPhaseContainer>(),
-                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPhaseContainer>("Lock"),
+                        r.Resolve<IPhaseContainer>("Move"),
                         r.Resolve<IEventsResolver>(),
-                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>()
                     )

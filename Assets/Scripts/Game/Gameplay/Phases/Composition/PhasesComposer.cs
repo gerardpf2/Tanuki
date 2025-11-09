@@ -126,17 +126,40 @@ namespace Game.Gameplay.Phases.Composition
                 ruleFactory.GetSingleton<IPhaseContainer>(r =>
                     new PhaseContainer(
                         r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
-                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
+                        r.Resolve<IPhase>("InstantiatePlayerPiecePhase"),
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase") // TODO: Lock
+                    )
+                ),
+                "Initial"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhaseContainer>(r =>
+                    new PhaseContainer(
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"), // TODO: Lock
                         r.Resolve<IPhase>("LockPlayerPiecePhase"),
-                        r.Resolve<IPhase>("GravityPhase"),
+                        r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("LineClearPhase"),
+                        r.Resolve<IPhase>("GravityPhase"),
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
                         r.Resolve<IPhase>("GoalsCompletedPhase"),
                         r.Resolve<IPhase>("NoMovesLeftPhase"),
                         r.Resolve<IPhase>("InstantiatePlayerPiecePhase")
                     )
-                )
+                ),
+                "Lock"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhaseContainer>(r =>
+                    new PhaseContainer(
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase")
+                    )
+                ),
+                "Move"
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPhaseResolver>(_ => new PhaseResolver()));
