@@ -36,6 +36,7 @@ namespace Game.Gameplay.Phases.Composition
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new DestroyNotAlivePiecesPhase(
                         r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
                         r.Resolve<IGoalsContainer>()
@@ -123,6 +124,17 @@ namespace Game.Gameplay.Phases.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhase>(r =>
+                    new PrepareInstantiatePlayerPiecePhase(
+                        r.Resolve<IBagContainer>(),
+                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<ICamera>()
+                    )
+                ),
+                "PrepareInstantiatePlayerPiecePhase"
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseContainer>(r =>
                     new PhaseContainer(
                         r.Resolve<IPhaseResolver>(),
@@ -138,14 +150,14 @@ namespace Game.Gameplay.Phases.Composition
                 ruleFactory.GetSingleton<IPhaseContainer>(r =>
                     new PhaseContainer(
                         r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"), // TODO: Lock
+                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
                         r.Resolve<IPhase>("LockPlayerPiecePhase"),
                         r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("LineClearPhase"),
                         r.Resolve<IPhase>("GravityPhase"),
-                        r.Resolve<IPhase>("CameraTargetDesiredRowPhase"),
                         r.Resolve<IPhase>("GoalsCompletedPhase"),
                         r.Resolve<IPhase>("NoMovesLeftPhase"),
+                        r.Resolve<IPhase>("PrepareInstantiatePlayerPiecePhase"),
                         r.Resolve<IPhase>("InstantiatePlayerPiecePhase")
                     )
                 ),

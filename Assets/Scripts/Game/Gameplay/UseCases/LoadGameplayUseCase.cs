@@ -158,7 +158,7 @@ namespace Game.Gameplay.UseCases
 
         private void OnReady()
         {
-            _phaseContainerInitial.Resolve(new ResolveContext(false, null, null));
+            _phaseContainerInitial.Resolve(new ResolveContext(null, null));
         }
     }
 }

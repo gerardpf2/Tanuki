@@ -42,14 +42,9 @@ namespace Game.Gameplay.Phases.Phases
         {
             ArgumentNullException.ThrowIfNull(resolveContext);
 
-            if (!resolveContext.ComesFromLock)
-            {
-                return ResolveResult.NotUpdated;
-            }
-
             if (!resolveContext.PieceSourceCoordinate.HasValue || !resolveContext.PieceLockSourceCoordinate.HasValue)
             {
-                InvalidOperationException.Throw("Coordinates cannot be undefined");
+                return ResolveResult.NotUpdated;
             }
 
             Coordinate sourceCoordinate = resolveContext.PieceSourceCoordinate.Value;

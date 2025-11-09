@@ -135,7 +135,7 @@ namespace Game.Gameplay.View.Player
         {
             InvalidOperationException.ThrowIfNull(_phaseContainerLock);
 
-            _phaseContainerLock.Resolve(GetResolveContext(true));
+            _phaseContainerLock.Resolve(GetResolveContext());
         }
 
         private void OnResolveBegin()
@@ -180,16 +180,16 @@ namespace Game.Gameplay.View.Player
         {
             InvalidOperationException.ThrowIfNull(_phaseContainerMove);
 
-            _phaseContainerMove.Resolve(GetResolveContext(false));
+            _phaseContainerMove.Resolve(GetResolveContext());
         }
 
         [NotNull]
-        private ResolveContext GetResolveContext(bool comesFromLock)
+        private ResolveContext GetResolveContext()
         {
             InvalidOperationException.ThrowIfNull(_playerPieceGhostView);
             InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            return new ResolveContext(comesFromLock, _playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
+            return new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
         }
     }
 }
