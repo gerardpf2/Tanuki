@@ -8,8 +8,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.Phases.Phases
 {
-    // TODO: Rename
-    public class CameraTargetDesiredRowPhase : Phase
+    public class CameraTargetHighestPlayerPieceLockRowPhase : Phase
     {
         // Targets the highest board row that allows the player piece ghost to be fully visible
 
@@ -20,7 +19,7 @@ namespace Game.Gameplay.Phases.Phases
 
         private Coordinate? _lastTargetedPieceLockSourceCoordinate;
 
-        public CameraTargetDesiredRowPhase(
+        public CameraTargetHighestPlayerPieceLockRowPhase(
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,

@@ -10,14 +10,13 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.Phases.Phases
 {
-    // TODO: Rename
-    public class PrepareInstantiatePlayerPiecePhase : Phase
+    public class SimulateInstantiatePlayerPiecePhase : Phase
     {
         [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly ICamera _camera;
 
-        public PrepareInstantiatePlayerPiecePhase(
+        public SimulateInstantiatePlayerPiecePhase(
             [NotNull] IBagContainer bagContainer,
             [NotNull] IBoardContainer boardContainer,
             [NotNull] ICamera camera)
