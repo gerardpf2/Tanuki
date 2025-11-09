@@ -132,8 +132,9 @@ namespace Game.Gameplay.Phases.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IPhaseResolver>(r =>
-                    new PhaseResolver(
+                ruleFactory.GetSingleton<IPhaseContainer>(r =>
+                    new PhaseContainer(
+                        r.Resolve<IPhaseResolver>(),
                         r.Resolve<IPhase>("DestroyNotAlivePiecesPhase"),
                         r.Resolve<IPhase>("InstantiateInitialPiecesPhase"),
                         r.Resolve<IPhase>("CameraTargetPlayerPieceLockRowPhase"),
@@ -147,6 +148,8 @@ namespace Game.Gameplay.Phases.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IPhaseResolver>(_ => new PhaseResolver()));
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Game.Gameplay.View.Player
     {
         private const float LockPieceDeltaY = -0.5f; // TODO: Scriptable object for this and other input params
 
-        private IPhaseResolver _phaseResolver;
+        private IPhaseContainer _phaseContainer;
         private IEventsResolver _eventsResolver;
         private IPlayerPieceGhostView _playerPieceGhostView;
         private IPlayerPieceView _playerPieceView;
@@ -28,19 +28,19 @@ namespace Game.Gameplay.View.Player
         }
 
         public void Inject(
-            [NotNull] IPhaseResolver phaseResolver,
+            [NotNull] IPhaseContainer phaseContainer,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IScreenPropertiesGetter screenPropertiesGetter)
         {
-            ArgumentNullException.ThrowIfNull(phaseResolver);
+            ArgumentNullException.ThrowIfNull(phaseContainer);
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(playerPieceGhostView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(screenPropertiesGetter);
 
-            _phaseResolver = phaseResolver;
+            _phaseContainer = phaseContainer;
             _eventsResolver = eventsResolver;
             _playerPieceGhostView = playerPieceGhostView;
             _playerPieceView = playerPieceView;
@@ -121,7 +121,7 @@ namespace Game.Gameplay.View.Player
 
         private void HandleDrag(Vector2 worldPositionDelta)
         {
-            InvalidOperationException.ThrowIfNull(_phaseResolver);
+            InvalidOperationException.ThrowIfNull(_phaseContainer);
             InvalidOperationException.ThrowIfNull(_playerPieceView);
 
             _playerPieceView.Move(worldPositionDelta.x);
@@ -131,7 +131,7 @@ namespace Game.Gameplay.View.Player
                 return;
             }
 
-            _phaseResolver.Resolve(new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate));
+            _phaseContainer.Resolve(new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate));
 
             _waitingEndDrag = true;
         }

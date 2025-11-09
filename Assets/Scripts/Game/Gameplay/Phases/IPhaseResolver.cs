@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Game.Gameplay.Phases.Phases;
 
 namespace Game.Gameplay.Phases
 {
@@ -7,10 +9,6 @@ namespace Game.Gameplay.Phases
         event Action OnBeginIteration;
         event Action OnEndIteration;
 
-        void Initialize();
-
-        void Uninitialize();
-
-        void Resolve(ResolveContext resolveContext);
+        void Resolve(IReadOnlyList<IPhase> phases, ResolveContext resolveContext);
     }
 }

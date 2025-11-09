@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.Common;
 using Game.Gameplay.Phases.Phases;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -10,66 +9,33 @@ namespace Game.Gameplay.Phases
 {
     public class PhaseResolver : IPhaseResolver
     {
-        [NotNull, ItemNotNull] private readonly IReadOnlyList<IPhase> _phases;
-
-        private InitializedLabel _initializedLabel;
-
         public event Action OnBeginIteration;
         public event Action OnEndIteration;
 
-        public PhaseResolver([NotNull, ItemNotNull] params IPhase[] phases)
+        public void Resolve([NotNull, ItemNotNull] IReadOnlyList<IPhase> phases, ResolveContext resolveContext)
         {
             ArgumentNullException.ThrowIfNull(phases);
-
-            List<IPhase> phasesCopy = new();
 
             foreach (IPhase phase in phases)
             {
                 ArgumentNullException.ThrowIfNull(phase);
-
-                phasesCopy.Add(phase);
             }
 
-            _phases = phasesCopy;
-        }
-
-        public void Initialize()
-        {
-            _initializedLabel.SetInitialized();
-
-            foreach (IPhase phase in _phases)
-            {
-                phase.Initialize();
-            }
-        }
-
-        public void Uninitialize()
-        {
-            _initializedLabel.SetUninitialized();
-
-            foreach (IPhase phase in _phases)
-            {
-                phase.Uninitialize();
-            }
-        }
-
-        public void Resolve(ResolveContext resolveContext)
-        {
-            NotifyBeginIteration();
+            NotifyBeginIteration(phases);
 
             int index = 0;
 
-            while (index < _phases.Count)
+            while (index < phases.Count)
             {
-                IPhase phase = _phases[index];
+                IPhase phase = phases[index];
 
-                ResolvePhase(phase, resolveContext, ref index);
+                ResolveSingle(phase, resolveContext, ref index);
             }
 
-            NotifyEndIteration();
+            NotifyEndIteration(phases);
         }
 
-        private static void ResolvePhase([NotNull] IPhase phase, ResolveContext resolveContext, ref int index)
+        private static void ResolveSingle([NotNull] IPhase phase, ResolveContext resolveContext, ref int index)
         {
             ArgumentNullException.ThrowIfNull(phase);
 
@@ -92,20 +58,28 @@ namespace Game.Gameplay.Phases
             }
         }
 
-        private void NotifyBeginIteration()
+        private void NotifyBeginIteration([NotNull, ItemNotNull] IEnumerable<IPhase> phases)
         {
-            OnBeginIteration?.Invoke();
+            ArgumentNullException.ThrowIfNull(phases);
 
-            foreach (IPhase phase in _phases)
+            foreach (IPhase phase in phases)
             {
+                ArgumentNullException.ThrowIfNull(phase);
+
                 phase.OnBeginIteration();
             }
+
+            OnBeginIteration?.Invoke();
         }
 
-        private void NotifyEndIteration()
+        private void NotifyEndIteration([NotNull, ItemNotNull] IEnumerable<IPhase> phases)
         {
-            foreach (IPhase phase in _phases)
+            ArgumentNullException.ThrowIfNull(phases);
+
+            foreach (IPhase phase in phases)
             {
+                ArgumentNullException.ThrowIfNull(phase);
+
                 phase.OnEndIteration();
             }
 

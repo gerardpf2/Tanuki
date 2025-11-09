@@ -53,7 +53,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<PlayerPieceInputHandler>((r, s) =>
                     s.Inject(
-                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPhaseContainer>(),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>(),
