@@ -14,7 +14,7 @@ namespace Game.Gameplay.REMOVE
     public class GameplaySerializerOnBeginIteration : IGameplaySerializerOnBeginIteration
     {
         [NotNull] private readonly IBagContainer _bagContainer;
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        private readonly IBoard _board;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IGameplayParser _gameplayParser;
@@ -25,7 +25,7 @@ namespace Game.Gameplay.REMOVE
 
         public GameplaySerializerOnBeginIteration(
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
+            IBoard board,
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IMovesContainer movesContainer,
             [NotNull] IGameplayParser gameplayParser,
@@ -33,7 +33,6 @@ namespace Game.Gameplay.REMOVE
             [NotNull] ILogger logger)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
-            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(gameplayParser);
@@ -41,7 +40,7 @@ namespace Game.Gameplay.REMOVE
             ArgumentNullException.ThrowIfNull(logger);
 
             _bagContainer = bagContainer;
-            _boardContainer = boardContainer;
+            _board = board;
             _goalsContainer = goalsContainer;
             _movesContainer = movesContainer;
             _gameplayParser = gameplayParser;
@@ -79,7 +78,7 @@ namespace Game.Gameplay.REMOVE
         {
             string serializedGameplay =
                 _gameplayParser.Serialize(
-                    _boardContainer.Board,
+                    _board,
                     _goalsContainer.Goals,
                     _movesContainer.Moves,
                     _bagContainer.Bag

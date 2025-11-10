@@ -89,7 +89,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IGameplaySerializerOnBeginIteration>(r =>
                     new GameplaySerializerOnBeginIteration(
                         r.Resolve<IBagContainer>(),
-                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IBoard>(),
                         r.Resolve<IGoalsContainer>(),
                         r.Resolve<IMovesContainer>(),
                         r.Resolve<IGameplayParser>(),
@@ -104,7 +104,7 @@ namespace Game.Gameplay.Composition
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
                         r.Resolve<IBagContainer>(),
-                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IBoard>(),
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IGoalsContainer>(),
@@ -146,7 +146,7 @@ namespace Game.Gameplay.Composition
                     new LoadGameplayUseCase(
                         r.Resolve<IGameplayDefinitionGetter>(),
                         r.Resolve<IBagContainer>(),
-                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IBoard>(),
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IGoalsContainer>(),

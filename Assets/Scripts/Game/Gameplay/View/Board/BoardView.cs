@@ -14,7 +14,8 @@ namespace Game.Gameplay.View.Board
 {
     public class BoardView : IBoardView
     {
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _modelBoard;
+        [NotNull] private readonly IBoard _viewBoard;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly ILogger _logger;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
@@ -23,21 +24,23 @@ namespace Game.Gameplay.View.Board
 
         private InitializedLabel _initializedLabel;
 
-        private IBoard _board;
         private Transform _piecesParent;
 
         public BoardView(
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard modelBoard,
+            [NotNull] IBoard viewBoard,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] ILogger logger,
             [NotNull] IGameObjectPool gameObjectPool)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(modelBoard);
+            ArgumentNullException.ThrowIfNull(viewBoard);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(logger);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
-            _boardContainer = boardContainer;
+            _modelBoard = modelBoard;
+            _viewBoard = viewBoard;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _logger = logger;
             _gameObjectPool = gameObjectPool;
@@ -47,12 +50,9 @@ namespace Game.Gameplay.View.Board
         {
             _initializedLabel.SetInitialized();
 
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            _board = new Gameplay.Board.Board(board.Columns);
             _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
+
+            _viewBoard.Build(_modelBoard.Columns);
         }
 
         public void Uninitialize()
@@ -65,15 +65,14 @@ namespace Game.Gameplay.View.Board
 
             Object.Destroy(_piecesParent.gameObject);
 
-            _board = null;
             _piecesParent = null;
+
+            _viewBoard.Clear();
         }
 
         public IPiece GetPiece(int pieceId)
         {
-            InvalidOperationException.ThrowIfNull(_board);
-
-            return _board.GetPiece(pieceId);
+            return _viewBoard.GetPiece(pieceId);
         }
 
         public GameObject GetPieceInstance(int pieceId)
@@ -84,7 +83,6 @@ namespace Game.Gameplay.View.Board
         public void InstantiatePiece([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            InvalidOperationException.ThrowIfNull(_board);
             InvalidOperationException.ThrowIfNull(_piecesParent);
 
             int pieceId = piece.Id;
@@ -94,7 +92,7 @@ namespace Game.Gameplay.View.Board
                 InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been instantiated");
             }
 
-            _board.AddPiece(piece, sourceCoordinate);
+            _viewBoard.AddPiece(piece, sourceCoordinate);
 
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
             Vector3 position = sourceCoordinate.ToVector3();
@@ -107,9 +105,7 @@ namespace Game.Gameplay.View.Board
 
         public void DestroyPiece(int pieceId)
         {
-            InvalidOperationException.ThrowIfNull(_board);
-
-            _board.RemovePiece(pieceId);
+            _viewBoard.RemovePiece(pieceId);
 
             GameObjectPooledInstance piecePooledInstance = GetPiecePooledInstance(pieceId);
 
@@ -120,9 +116,7 @@ namespace Game.Gameplay.View.Board
 
         public void MovePiece(int pieceId, int rowOffset, int columnOffset)
         {
-            InvalidOperationException.ThrowIfNull(_board);
-
-            _board.MovePiece(pieceId, rowOffset, columnOffset);
+            _viewBoard.MovePiece(pieceId, rowOffset, columnOffset);
 
             EnsurePiecePositionIsExpected(pieceId);
         }
@@ -149,11 +143,9 @@ namespace Game.Gameplay.View.Board
 
         private void EnsurePiecePositionIsExpected(int pieceId)
         {
-            InvalidOperationException.ThrowIfNull(_board);
-
             GameObject pieceInstance = GetPieceInstance(pieceId);
 
-            Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
+            Coordinate sourceCoordinate = _viewBoard.GetSourceCoordinate(pieceId);
 
             Vector3 expectedWorldPosition = sourceCoordinate.ToVector3();
             Vector3 worldPosition = pieceInstance.transform.position;

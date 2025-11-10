@@ -39,11 +39,6 @@ namespace Game.Gameplay.Board
             }
         }
 
-        public Board(int columns) // TODO: Remove
-        {
-            Build(columns);
-        }
-
         public void Build(int columns)
         {
             Clear();

@@ -4,8 +4,7 @@ namespace Game.Gameplay.Board.Parsing
 {
     public interface IBoardSerializedDataConverter
     {
-        [NotNull]
-        IBoard To(BoardSerializedData boardSerializedData);
+        void To(BoardSerializedData boardSerializedData, IBoard board);
 
         [NotNull]
         BoardSerializedData From(IBoard board);

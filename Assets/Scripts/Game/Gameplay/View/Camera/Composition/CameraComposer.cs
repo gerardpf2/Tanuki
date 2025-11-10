@@ -19,7 +19,7 @@ namespace Game.Gameplay.View.Camera.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ICameraView>(r =>
                     new CameraView(
-                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IBoard>("View"),
                         r.Resolve<ICamera>(),
                         r.Resolve<ICameraGetter>()
                     )

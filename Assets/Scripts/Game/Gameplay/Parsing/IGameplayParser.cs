@@ -12,7 +12,7 @@ namespace Game.Gameplay.Parsing
 
         void Deserialize(
             string value,
-            [NotNull] out IBoard board,
+            IBoard board,
             [NotNull] out IGoals goals,
             [NotNull] out IMoves moves,
             [NotNull] out IBag bag

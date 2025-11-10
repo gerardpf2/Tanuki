@@ -20,7 +20,7 @@ namespace Game.Gameplay.UseCases
     public class UnloadGameplayUseCase : IUnloadGameplayUseCase
     {
         [NotNull] private readonly IBagContainer _bagContainer;
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
@@ -37,7 +37,7 @@ namespace Game.Gameplay.UseCases
 
         public UnloadGameplayUseCase(
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] ICamera camera,
             [NotNull] IGoalsContainer goalsContainer,
@@ -53,7 +53,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(goalsContainer);
@@ -69,7 +69,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(screenLoader);
 
             _bagContainer = bagContainer;
-            _boardContainer = boardContainer;
+            _board = board;
             _pieceIdGetter = pieceIdGetter;
             _camera = camera;
             _goalsContainer = goalsContainer;
@@ -95,12 +95,13 @@ namespace Game.Gameplay.UseCases
         private void PrepareModel()
         {
             _bagContainer.Uninitialize();
-            _boardContainer.Uninitialize();
             _pieceIdGetter.Uninitialize();
             _camera.Uninitialize();
             _goalsContainer.Uninitialize();
             _movesContainer.Uninitialize();
             _gameplaySerializerOnBeginIteration.Uninitialize();
+
+            _board.Clear();
         }
 
         private void PrepareView()

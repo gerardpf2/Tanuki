@@ -39,14 +39,14 @@ namespace Game.Gameplay.Parsing
 
         public void Deserialize(
             string value,
-            out IBoard board,
+            IBoard board,
             out IGoals goals,
             out IMoves moves,
             out IBag bag)
         {
             GameplaySerializedData gameplaySerializedData = _parser.Deserialize<GameplaySerializedData>(value);
 
-            _gameplaySerializedDataConverter.To(gameplaySerializedData, out board, out goals, out moves, out bag);
+            _gameplaySerializedDataConverter.To(gameplaySerializedData, board, out goals, out moves, out bag);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Game.Gameplay.View.Player
             }
         }
 
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
@@ -60,15 +60,15 @@ namespace Game.Gameplay.View.Player
         public GameObject Instance => _pieceData?.PooledInstance.Instance;
 
         public PlayerPieceView(
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
-            _boardContainer = boardContainer;
+            _board = board;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
         }
@@ -171,12 +171,8 @@ namespace Game.Gameplay.View.Player
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
             const int minColumn = 0;
-            int maxColumn = Mathf.Max(board.Columns - piece.Width, minColumn);
+            int maxColumn = Mathf.Max(_board.Columns - piece.Width, minColumn);
 
             return Mathf.Clamp(x, minColumn, maxColumn);
         }

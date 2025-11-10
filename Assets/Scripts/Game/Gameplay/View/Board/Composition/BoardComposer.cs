@@ -18,10 +18,13 @@ namespace Game.Gameplay.View.Board.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoard>(_ => new Gameplay.Board.Board()), "View");
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
-                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IBoard>(),
+                        r.Resolve<IBoard>("View"),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<ILogger>(),
                         r.Resolve<IGameObjectPool>()

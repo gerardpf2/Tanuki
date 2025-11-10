@@ -12,23 +12,23 @@ namespace Game.Gameplay.View.Pieces
     public class PieceGameObjectPreloader : IPieceGameObjectPreloader
     {
         [NotNull] private readonly IBagContainer _bagContainer;
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
         public PieceGameObjectPreloader(
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _bagContainer = bagContainer;
-            _boardContainer = boardContainer;
+            _board = board;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
         }
@@ -43,15 +43,11 @@ namespace Game.Gameplay.View.Pieces
         {
             // If piece culling is implemented at some point, this will have to be reviewed
 
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
             IDictionary<PieceType, int> amountByPieceType = new Dictionary<PieceType, int>();
 
-            foreach (int pieceId in board.PieceIds)
+            foreach (int pieceId in _board.PieceIds)
             {
-                IPiece piece = board.GetPiece(pieceId);
+                IPiece piece = _board.GetPiece(pieceId);
                 PieceType pieceType = piece.Type;
 
                 if (amountByPieceType.TryGetValue(pieceType, out int amount))

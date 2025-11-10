@@ -23,7 +23,7 @@ namespace Game.Gameplay.Board.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IBoardContainer>(_ => new BoardContainer()));
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoard>(_ => new Board()));
         }
     }
 }
