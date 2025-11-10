@@ -44,14 +44,19 @@ namespace Game.Gameplay.View.Moves
 
             InvalidOperationException.ThrowIfNull(_movesView);
 
-            _movesView.OnUpdated += UpdateAmount;
+            _movesView.OnUpdated += HandleUpdated;
         }
 
         private void UnsubscribeFromEvents()
         {
             InvalidOperationException.ThrowIfNull(_movesView);
 
-            _movesView.OnUpdated -= UpdateAmount;
+            _movesView.OnUpdated -= HandleUpdated;
+        }
+
+        private void HandleUpdated()
+        {
+            UpdateAmount();
         }
 
         private void UpdateAmount()

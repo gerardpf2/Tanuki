@@ -83,10 +83,10 @@ namespace Game.Gameplay.View.Player
 
             UnsubscribeFromEvents();
 
-            _eventsResolver.OnResolveBegin += OnResolveBegin;
-            _eventsResolver.OnResolveEnd += OnResolveEnd;
-            _playerPieceView.OnInstantiated += OnPlayerPieceViewInstantiated;
-            _playerPieceView.OnDestroyed += OnPlayerPieceViewDestroyed;
+            _eventsResolver.OnResolveBegin += HandleResolveBegin;
+            _eventsResolver.OnResolveEnd += HandleResolveEnd;
+            _playerPieceView.OnInstantiated += HandlePlayerPieceViewInstantiated;
+            _playerPieceView.OnDestroyed += HandlePlayerPieceViewDestroyed;
         }
 
         private void UnsubscribeFromEvents()
@@ -94,10 +94,10 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(_eventsResolver);
             InvalidOperationException.ThrowIfNull(_playerPieceView);
 
-            _eventsResolver.OnResolveBegin -= OnResolveBegin;
-            _eventsResolver.OnResolveEnd -= OnResolveEnd;
-            _playerPieceView.OnInstantiated -= OnPlayerPieceViewInstantiated;
-            _playerPieceView.OnDestroyed -= OnPlayerPieceViewDestroyed;
+            _eventsResolver.OnResolveBegin -= HandleResolveBegin;
+            _eventsResolver.OnResolveEnd -= HandleResolveEnd;
+            _playerPieceView.OnInstantiated -= HandlePlayerPieceViewInstantiated;
+            _playerPieceView.OnDestroyed -= HandlePlayerPieceViewDestroyed;
         }
 
         private void OnMoveLeftClick()
@@ -138,28 +138,28 @@ namespace Game.Gameplay.View.Player
             _phaseContainerLock.Resolve(GetResolveContext());
         }
 
-        private void OnResolveBegin()
+        private void HandleResolveBegin()
         {
             _resolvingEvents = true;
 
             RefreshButtonsEnabled();
         }
 
-        private void OnResolveEnd()
+        private void HandleResolveEnd()
         {
             _resolvingEvents = false;
 
             RefreshButtonsEnabled();
         }
 
-        private void OnPlayerPieceViewInstantiated()
+        private void HandlePlayerPieceViewInstantiated()
         {
             _playerPieceViewInstantiated = true;
 
             RefreshButtonsEnabled();
         }
 
-        private void OnPlayerPieceViewDestroyed()
+        private void HandlePlayerPieceViewDestroyed()
         {
             _playerPieceViewInstantiated = false;
 

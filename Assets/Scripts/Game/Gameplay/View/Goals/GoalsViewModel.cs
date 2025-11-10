@@ -47,14 +47,19 @@ namespace Game.Gameplay.View.Goals
 
             InvalidOperationException.ThrowIfNull(_goalsView);
 
-            _goalsView.OnUpdated += UpdateGoals;
+            _goalsView.OnUpdated += HandleUpdated;
         }
 
         private void UnsubscribeFromEvents()
         {
             InvalidOperationException.ThrowIfNull(_goalsView);
 
-            _goalsView.OnUpdated -= UpdateGoals;
+            _goalsView.OnUpdated -= HandleUpdated;
+        }
+
+        private void HandleUpdated()
+        {
+            UpdateGoals();
         }
 
         private void UpdateGoals()
