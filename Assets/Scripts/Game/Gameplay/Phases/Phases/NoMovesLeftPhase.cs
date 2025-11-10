@@ -7,22 +7,18 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class NoMovesLeftPhase : Phase
     {
-        [NotNull] private readonly IMovesContainer _movesContainer;
+        [NotNull] private readonly IMoves _moves;
 
-        public NoMovesLeftPhase([NotNull] IMovesContainer movesContainer)
+        public NoMovesLeftPhase([NotNull] IMoves moves)
         {
-            ArgumentNullException.ThrowIfNull(movesContainer);
+            ArgumentNullException.ThrowIfNull(moves);
 
-            _movesContainer = movesContainer;
+            _moves = moves;
         }
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            IMoves moves = _movesContainer.Moves;
-
-            InvalidOperationException.ThrowIfNull(moves);
-
-            if (moves.Amount > 0)
+            if (_moves.Amount > 0)
             {
                 return ResolveResult.NotUpdated;
             }

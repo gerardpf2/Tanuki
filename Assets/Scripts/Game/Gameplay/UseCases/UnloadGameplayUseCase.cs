@@ -24,7 +24,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
-        [NotNull] private readonly IMovesContainer _movesContainer;
+        [NotNull] private readonly IMoves _moves;
         [NotNull] private readonly IGameplaySerializerOnBeginIteration _gameplaySerializerOnBeginIteration;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
@@ -41,7 +41,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] ICamera camera,
             [NotNull] IGoalsContainer goalsContainer,
-            [NotNull] IMovesContainer movesContainer,
+            [NotNull] IMoves moves,
             [NotNull] IGameplaySerializerOnBeginIteration gameplaySerializerOnBeginIteration,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
@@ -57,7 +57,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(goalsContainer);
-            ArgumentNullException.ThrowIfNull(movesContainer);
+            ArgumentNullException.ThrowIfNull(moves);
             ArgumentNullException.ThrowIfNull(gameplaySerializerOnBeginIteration);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
@@ -73,7 +73,7 @@ namespace Game.Gameplay.UseCases
             _pieceIdGetter = pieceIdGetter;
             _camera = camera;
             _goalsContainer = goalsContainer;
-            _movesContainer = movesContainer;
+            _moves = moves;
             _gameplaySerializerOnBeginIteration = gameplaySerializerOnBeginIteration;
             _boardView = boardView;
             _cameraView = cameraView;
@@ -98,10 +98,10 @@ namespace Game.Gameplay.UseCases
             _pieceIdGetter.Uninitialize();
             _camera.Uninitialize();
             _goalsContainer.Uninitialize();
-            _movesContainer.Uninitialize();
             _gameplaySerializerOnBeginIteration.Uninitialize();
 
             _board.Clear();
+            _moves.Reset();
         }
 
         private void PrepareView()

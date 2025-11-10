@@ -14,7 +14,7 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
-        [NotNull] private readonly IMovesContainer _movesContainer;
+        [NotNull] private readonly IMoves _moves;
 
         protected override int? MaxResolveTimesPerIteration => 1;
 
@@ -23,19 +23,19 @@ namespace Game.Gameplay.Phases.Phases
             [NotNull] IBoard board,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
-            [NotNull] IMovesContainer movesContainer)
+            [NotNull] IMoves moves)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
-            ArgumentNullException.ThrowIfNull(movesContainer);
+            ArgumentNullException.ThrowIfNull(moves);
 
             _bagContainer = bagContainer;
             _board = board;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
-            _movesContainer = movesContainer;
+            _moves = moves;
         }
 
         protected override ResolveResult ResolveImpl([NotNull] ResolveContext resolveContext)
@@ -89,11 +89,7 @@ namespace Game.Gameplay.Phases.Phases
 
         private int DecreaseMovesAmount()
         {
-            IMoves moves = _movesContainer.Moves;
-
-            InvalidOperationException.ThrowIfNull(moves);
-
-            return --moves.Amount;
+            return --_moves.Amount;
         }
     }
 }
