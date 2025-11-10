@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
@@ -122,14 +121,13 @@ namespace Game.Gameplay.UseCases
             _gameplayParser.Deserialize(
                 gameplayDefinition.Data,
                 out IBoard board,
-                out IEnumerable<PiecePlacement> piecePlacements,
                 out IGoals goals,
                 out IMoves moves,
                 out IBag bag
             );
 
             _bagContainer.Initialize(bag);
-            _boardContainer.Initialize(board, piecePlacements);
+            _boardContainer.Initialize(board);
             _camera.Initialize();
             _goalsContainer.Initialize(goals);
             _movesContainer.Initialize(moves);

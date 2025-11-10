@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using Game.Gameplay.Board;
+using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Reasons;
-using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -34,19 +33,13 @@ namespace Game.Gameplay.Phases.Phases
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
             IBoard board = _boardContainer.Board;
-            IEnumerable<PiecePlacement> piecePlacements = _boardContainer.PiecePlacements;
 
             InvalidOperationException.ThrowIfNull(board);
-            InvalidOperationException.ThrowIfNull(piecePlacements);
 
-            foreach (PiecePlacement piecePlacement in piecePlacements)
+            foreach (int pieceId in board.GetDistinctPieceIdsSortedByRowThenByColumn())
             {
-                InvalidOperationException.ThrowIfNull(piecePlacement);
-
-                IPiece piece = piecePlacement.Piece;
-                Coordinate sourceCoordinate = piecePlacement.Coordinate;
-
-                board.AddPiece(piece, sourceCoordinate);
+                IPiece piece = board.GetPiece(pieceId);
+                Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
 
                 _eventEnqueuer.Enqueue(
                     _eventFactory.GetInstantiatePieceEvent(

@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
-using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
 using JetBrains.Annotations;
@@ -42,21 +40,13 @@ namespace Game.Gameplay.Parsing
         public void Deserialize(
             string value,
             out IBoard board,
-            out IEnumerable<PiecePlacement> piecePlacements,
             out IGoals goals,
             out IMoves moves,
             out IBag bag)
         {
             GameplaySerializedData gameplaySerializedData = _parser.Deserialize<GameplaySerializedData>(value);
 
-            _gameplaySerializedDataConverter.To(
-                gameplaySerializedData,
-                out board,
-                out piecePlacements,
-                out goals,
-                out moves,
-                out bag
-            );
+            _gameplaySerializedDataConverter.To(gameplaySerializedData, out board, out goals, out moves, out bag);
         }
     }
 }

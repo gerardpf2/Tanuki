@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Game.Common;
-using Game.Gameplay.Pieces;
 
 namespace Game.Gameplay.Board
 {
@@ -10,14 +8,11 @@ namespace Game.Gameplay.Board
 
         public IBoard Board { get; private set; }
 
-        public IEnumerable<PiecePlacement> PiecePlacements { get; private set; }
-
-        public void Initialize(IBoard board, IEnumerable<PiecePlacement> piecePlacements)
+        public void Initialize(IBoard board)
         {
             _initializedLabel.SetInitialized();
 
             Board = board;
-            PiecePlacements = piecePlacements;
         }
 
         public void Uninitialize()
@@ -25,7 +20,6 @@ namespace Game.Gameplay.Board
             _initializedLabel.SetUninitialized();
 
             Board = null;
-            PiecePlacements = null;
         }
     }
 }

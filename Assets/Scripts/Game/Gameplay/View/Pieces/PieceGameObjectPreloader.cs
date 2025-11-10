@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Game.Common.Pieces;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
-using Game.Gameplay.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
@@ -43,17 +43,16 @@ namespace Game.Gameplay.View.Pieces
         {
             // If piece culling is implemented at some point, this will have to be reviewed
 
-            IEnumerable<PiecePlacement> piecePlacements = _boardContainer.PiecePlacements;
+            IBoard board = _boardContainer.Board;
 
-            InvalidOperationException.ThrowIfNull(piecePlacements);
+            InvalidOperationException.ThrowIfNull(board);
 
             IDictionary<PieceType, int> amountByPieceType = new Dictionary<PieceType, int>();
 
-            foreach (PiecePlacement piecePlacement in piecePlacements)
+            foreach (int pieceId in board.PieceIds)
             {
-                InvalidOperationException.ThrowIfNull(piecePlacement);
-
-                PieceType pieceType = piecePlacement.Piece.Type;
+                IPiece piece = board.GetPiece(pieceId);
+                PieceType pieceType = piece.Type;
 
                 if (amountByPieceType.TryGetValue(pieceType, out int amount))
                 {
