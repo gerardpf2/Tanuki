@@ -13,6 +13,10 @@ namespace Game.Gameplay.Board
         [NotNull]
         IEnumerable<int> PieceIds { get; }
 
+        void Build(int columns);
+
+        void Clear();
+
         [NotNull]
         IPiece GetPiece(int pieceId);
 

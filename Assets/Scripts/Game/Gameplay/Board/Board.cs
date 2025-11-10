@@ -3,6 +3,7 @@ using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.Pieces.Pieces.Utils;
 using Infrastructure.System.Exceptions;
+using Infrastructure.System.Matrix.Utils;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board
@@ -38,11 +39,26 @@ namespace Game.Gameplay.Board
             }
         }
 
-        public Board(int columns)
+        public Board(int columns) // TODO: Remove
         {
+            Build(columns);
+        }
+
+        public void Build(int columns)
+        {
+            Clear();
+
             const int rows = 0;
 
             _pieceIds = new int?[rows, columns];
+        }
+
+        public void Clear()
+        {
+            _piecesByPieceIds.Clear();
+            _sourceCoordinatesByPieceIds.Clear();
+            _piecesAmountByRows.Clear();
+            _pieceIds?.Fill(null);
         }
 
         public IPiece GetPiece(int pieceId)
