@@ -17,7 +17,7 @@ namespace Game.Gameplay.View.Goals
 
         public event Action OnUpdated;
 
-        public IEnumerable<PieceType> PieceTypes => _viewGoals?.PieceTypes;
+        public IEnumerable<IGoal> Entries => _viewGoals.Entries;
 
         public GoalsView([NotNull] IGoals modelGoals, [NotNull] IGoals viewGoals)
         {
@@ -32,7 +32,10 @@ namespace Game.Gameplay.View.Goals
         {
             _initializedLabel.SetInitialized();
 
-            // TODO: _viewGoals
+            foreach (IGoal goal in _modelGoals.Entries)
+            {
+                _viewGoals.Add(goal.Clone());
+            }
         }
 
         public void Uninitialize()
@@ -42,14 +45,9 @@ namespace Game.Gameplay.View.Goals
             _viewGoals.Clear();
         }
 
-        public IGoal Get(PieceType pieceType)
-        {
-            return _viewGoals.Get(pieceType);
-        }
-
         public void SetCurrentAmount(PieceType pieceType, int currentAmount)
         {
-            IGoal goal = Get(pieceType);
+            IGoal goal = _viewGoals.Get(pieceType);
 
             if (goal.CurrentAmount == currentAmount)
             {

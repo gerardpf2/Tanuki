@@ -9,7 +9,7 @@ namespace Game.Gameplay.Goals
     {
         [NotNull] private readonly IDictionary<PieceType, IGoal> _goals = new Dictionary<PieceType, IGoal>();
 
-        public IEnumerable<PieceType> PieceTypes => _goals.Keys;
+        public IEnumerable<IGoal> Entries => _goals.Values; // ItemNotNull as long as all Add check for null
 
         public void Add([NotNull] IGoal goal)
         {

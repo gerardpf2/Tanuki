@@ -20,8 +20,10 @@ namespace Game.Gameplay.Goals.Parsing
             ArgumentNullException.ThrowIfNull(goalsSerializedData);
             ArgumentNullException.ThrowIfNull(goals);
 
-            // TODO
-            // return new Goals(goalsSerializedData.GoalSerializedData.Select(_goalSerializedDataConverter.To));
+            foreach (IGoal goal in goalsSerializedData.GoalSerializedData.Select(_goalSerializedDataConverter.To))
+            {
+                goals.Add(goal);
+            }
         }
 
         public GoalsSerializedData From([NotNull] IGoals goals)
@@ -31,7 +33,7 @@ namespace Game.Gameplay.Goals.Parsing
             return
                 new GoalsSerializedData
                 {
-                    GoalSerializedData = goals.PieceTypes.Select(pieceType => _goalSerializedDataConverter.From(goals.Get(pieceType))).ToList()
+                    GoalSerializedData = goals.Entries.Select(_goalSerializedDataConverter.From).ToList()
                 };
         }
     }

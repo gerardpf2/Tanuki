@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game.Common.Pieces;
 using Game.Gameplay.Goals;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
@@ -65,14 +64,11 @@ namespace Game.Gameplay.View.Goals
         private void UpdateGoals()
         {
             InvalidOperationException.ThrowIfNull(_goalsView);
-            InvalidOperationException.ThrowIfNull(_goalsView.PieceTypes);
 
             ICollection<GoalViewData> goalsViewData = new List<GoalViewData>();
 
-            foreach (PieceType pieceType in _goalsView.PieceTypes)
+            foreach (IGoal goal in _goalsView.Entries)
             {
-                IGoal goal = _goalsView.Get(pieceType);
-
                 GoalViewData goalViewData = new(goal.PieceType, goal.InitialAmount, goal.CurrentAmount);
 
                 goalsViewData.Add(goalViewData);

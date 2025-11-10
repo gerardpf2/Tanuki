@@ -6,8 +6,8 @@ namespace Game.Gameplay.Goals
 {
     public interface IGoals
     {
-        [NotNull]
-        IEnumerable<PieceType> PieceTypes { get; }
+        [NotNull, ItemNotNull]
+        IEnumerable<IGoal> Entries { get; }
 
         void Add(IGoal goal);
 
