@@ -9,11 +9,15 @@ namespace Game.Gameplay.Goals
         [NotNull]
         IEnumerable<PieceType> PieceTypes { get; }
 
+        void Add(IGoal goal);
+
         [NotNull]
         IGoal Get(PieceType pieceType);
 
         [ContractAnnotation("=> true, goal:notnull; => false, goal:null")]
         bool TryGet(PieceType pieceType, out IGoal goal);
+
+        void Clear();
 
         [NotNull]
         IGoals Clone();

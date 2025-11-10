@@ -8,10 +8,11 @@ namespace Game.Gameplay.Goals
 {
     public class Goals : IGoals
     {
-        [NotNull] private readonly IReadOnlyDictionary<PieceType, IGoal> _goals;
+        [NotNull] private readonly IDictionary<PieceType, IGoal> _goals = new Dictionary<PieceType, IGoal>();
 
         public IEnumerable<PieceType> PieceTypes => _goals.Keys;
 
+        // TODO: Remove
         public Goals([NotNull, ItemNotNull] IEnumerable<IGoal> goals)
         {
             ArgumentNullException.ThrowIfNull(goals);
@@ -31,6 +32,16 @@ namespace Game.Gameplay.Goals
             _goals = goalsCopy;
         }
 
+        public void Add([NotNull] IGoal goal)
+        {
+            ArgumentNullException.ThrowIfNull(goal);
+
+            if (!_goals.TryAdd(goal.PieceType, goal))
+            {
+                InvalidOperationException.Throw($"Cannot add goal with PieceType: {goal.PieceType}");
+            }
+        }
+
         public IGoal Get(PieceType pieceType)
         {
             if (!TryGet(pieceType, out IGoal goal))
@@ -44,6 +55,11 @@ namespace Game.Gameplay.Goals
         public bool TryGet(PieceType pieceType, out IGoal goal)
         {
             return _goals.TryGetValue(pieceType, out goal);
+        }
+
+        public void Clear()
+        {
+            _goals.Clear();
         }
 
         public IGoals Clone()
