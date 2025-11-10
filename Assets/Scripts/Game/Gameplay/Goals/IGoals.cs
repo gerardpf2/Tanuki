@@ -18,8 +18,5 @@ namespace Game.Gameplay.Goals
         bool TryGet(PieceType pieceType, out IGoal goal);
 
         void Clear();
-
-        [NotNull]
-        IGoals Clone();
     }
 }

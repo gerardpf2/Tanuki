@@ -1,6 +1,5 @@
 using Game.Gameplay.Bag;
 using Game.Gameplay.Camera;
-using Game.Gameplay.Goals;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
 using Game.Gameplay.Pieces;
@@ -25,7 +24,6 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly ICamera _camera;
-        [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IGameplayParser _gameplayParser;
         [NotNull] private readonly IPhaseContainer _phaseContainerInitial;
         [NotNull] private readonly IGameplaySerializerOnBeginIteration _gameplaySerializerOnBeginIteration;
@@ -44,7 +42,6 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBagContainer bagContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] ICamera camera,
-            [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IGameplayParser gameplayParser,
             [NotNull] IPhaseContainer phaseContainerInitial,
             [NotNull] IGameplaySerializerOnBeginIteration gameplaySerializerOnBeginIteration,
@@ -62,7 +59,6 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(camera);
-            ArgumentNullException.ThrowIfNull(goalsContainer);
             ArgumentNullException.ThrowIfNull(gameplayParser);
             ArgumentNullException.ThrowIfNull(phaseContainerInitial);
             ArgumentNullException.ThrowIfNull(gameplaySerializerOnBeginIteration);
@@ -80,7 +76,6 @@ namespace Game.Gameplay.UseCases
             _bagContainer = bagContainer;
             _pieceIdGetter = pieceIdGetter;
             _camera = camera;
-            _goalsContainer = goalsContainer;
             _gameplayParser = gameplayParser;
             _phaseContainerInitial = phaseContainerInitial;
             _gameplaySerializerOnBeginIteration = gameplaySerializerOnBeginIteration;
@@ -108,11 +103,10 @@ namespace Game.Gameplay.UseCases
 
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
-            _gameplayParser.Deserialize(gameplayDefinition.Data, out IGoals goals, out IBag bag);
+            _gameplayParser.Deserialize(gameplayDefinition.Data, out IBag bag);
 
             _bagContainer.Initialize(bag);
             _camera.Initialize();
-            _goalsContainer.Initialize(goals);
             _gameplaySerializerOnBeginIteration.Initialize();
         }
 

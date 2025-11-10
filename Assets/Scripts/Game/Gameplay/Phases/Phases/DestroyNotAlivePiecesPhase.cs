@@ -11,7 +11,6 @@ using Game.Gameplay.Goals.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
@@ -21,26 +20,26 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
-        [NotNull] private readonly IGoalsContainer _goalsContainer;
+        [NotNull] private readonly IGoals _goals;
 
         public DestroyNotAlivePiecesPhase(
             [NotNull] IBoard board,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
-            [NotNull] IGoalsContainer goalsContainer)
+            [NotNull] IGoals goals)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
-            ArgumentNullException.ThrowIfNull(goalsContainer);
+            ArgumentNullException.ThrowIfNull(goals);
 
             _board = board;
             _camera = camera;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
-            _goalsContainer = goalsContainer;
+            _goals = goals;
         }
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
@@ -92,11 +91,7 @@ namespace Game.Gameplay.Phases.Phases
 
         private bool TryIncreaseGoalCurrentAmount(PieceType pieceType, out int goalCurrentAmount)
         {
-            IGoals goals = _goalsContainer.Goals;
-
-            InvalidOperationException.ThrowIfNull(goals);
-
-            return goals.TryIncreaseCurrentAmount(pieceType, out goalCurrentAmount);
+            return _goals.TryIncreaseCurrentAmount(pieceType, out goalCurrentAmount);
         }
     }
 }

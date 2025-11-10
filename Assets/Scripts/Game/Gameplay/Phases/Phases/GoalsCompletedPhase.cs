@@ -8,22 +8,18 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class GoalsCompletedPhase : Phase
     {
-        [NotNull] private readonly IGoalsContainer _goalsContainer;
+        [NotNull] private readonly IGoals _goals;
 
-        public GoalsCompletedPhase([NotNull] IGoalsContainer goalsContainer)
+        public GoalsCompletedPhase([NotNull] IGoals goals)
         {
-            ArgumentNullException.ThrowIfNull(goalsContainer);
+            ArgumentNullException.ThrowIfNull(goals);
 
-            _goalsContainer = goalsContainer;
+            _goals = goals;
         }
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            IGoals goals = _goalsContainer.Goals;
-
-            InvalidOperationException.ThrowIfNull(goals);
-
-            if (!goals.AreCompleted())
+            if (!_goals.AreCompleted())
             {
                 return ResolveResult.NotUpdated;
             }

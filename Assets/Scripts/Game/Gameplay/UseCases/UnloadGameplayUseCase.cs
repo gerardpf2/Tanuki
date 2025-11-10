@@ -23,7 +23,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly ICamera _camera;
-        [NotNull] private readonly IGoalsContainer _goalsContainer;
+        [NotNull] private readonly IGoals _goals;
         [NotNull] private readonly IMoves _moves;
         [NotNull] private readonly IGameplaySerializerOnBeginIteration _gameplaySerializerOnBeginIteration;
         [NotNull] private readonly IBoardView _boardView;
@@ -40,7 +40,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IBoard board,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] ICamera camera,
-            [NotNull] IGoalsContainer goalsContainer,
+            [NotNull] IGoals goals,
             [NotNull] IMoves moves,
             [NotNull] IGameplaySerializerOnBeginIteration gameplaySerializerOnBeginIteration,
             [NotNull] IBoardView boardView,
@@ -56,7 +56,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(camera);
-            ArgumentNullException.ThrowIfNull(goalsContainer);
+            ArgumentNullException.ThrowIfNull(goals);
             ArgumentNullException.ThrowIfNull(moves);
             ArgumentNullException.ThrowIfNull(gameplaySerializerOnBeginIteration);
             ArgumentNullException.ThrowIfNull(boardView);
@@ -72,7 +72,7 @@ namespace Game.Gameplay.UseCases
             _board = board;
             _pieceIdGetter = pieceIdGetter;
             _camera = camera;
-            _goalsContainer = goalsContainer;
+            _goals = goals;
             _moves = moves;
             _gameplaySerializerOnBeginIteration = gameplaySerializerOnBeginIteration;
             _boardView = boardView;
@@ -97,10 +97,10 @@ namespace Game.Gameplay.UseCases
             _bagContainer.Uninitialize();
             _pieceIdGetter.Uninitialize();
             _camera.Uninitialize();
-            _goalsContainer.Uninitialize();
             _gameplaySerializerOnBeginIteration.Uninitialize();
 
             _board.Clear();
+            _goals.Clear();
             _moves.Reset();
         }
 

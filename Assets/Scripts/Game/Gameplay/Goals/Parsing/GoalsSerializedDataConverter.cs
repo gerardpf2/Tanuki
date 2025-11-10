@@ -15,11 +15,13 @@ namespace Game.Gameplay.Goals.Parsing
             _goalSerializedDataConverter = goalSerializedDataConverter;
         }
 
-        public IGoals To([NotNull] GoalsSerializedData goalsSerializedData)
+        public void To([NotNull] GoalsSerializedData goalsSerializedData, [NotNull] IGoals goals)
         {
             ArgumentNullException.ThrowIfNull(goalsSerializedData);
+            ArgumentNullException.ThrowIfNull(goals);
 
-            return new Goals(goalsSerializedData.GoalSerializedData.Select(_goalSerializedDataConverter.To));
+            // TODO
+            // return new Goals(goalsSerializedData.GoalSerializedData.Select(_goalSerializedDataConverter.To));
         }
 
         public GoalsSerializedData From([NotNull] IGoals goals)

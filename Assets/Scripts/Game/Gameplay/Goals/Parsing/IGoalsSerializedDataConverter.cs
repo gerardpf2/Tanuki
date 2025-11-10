@@ -4,8 +4,7 @@ namespace Game.Gameplay.Goals.Parsing
 {
     public interface IGoalsSerializedDataConverter
     {
-        [NotNull]
-        IGoals To(GoalsSerializedData goalsSerializedData);
+        void To(GoalsSerializedData goalsSerializedData, IGoals goals);
 
         [NotNull]
         GoalsSerializedData From(IGoals goals);

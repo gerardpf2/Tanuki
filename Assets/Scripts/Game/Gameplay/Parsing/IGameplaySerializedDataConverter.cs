@@ -11,7 +11,7 @@ namespace Game.Gameplay.Parsing
         void To(
             GameplaySerializedData gameplaySerializedData,
             IBoard board,
-            [NotNull] out IGoals goals,
+            IGoals goals,
             IMoves moves,
             [NotNull] out IBag bag
         );
