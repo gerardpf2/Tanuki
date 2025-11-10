@@ -1,6 +1,5 @@
 using Game.Common;
 using Game.Gameplay.Bag;
-using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
@@ -14,7 +13,6 @@ namespace Game.Gameplay.REMOVE
     public class GameplaySerializerOnBeginIteration : IGameplaySerializerOnBeginIteration
     {
         [NotNull] private readonly IBagContainer _bagContainer;
-        private readonly IBoard _board;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
         [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IGameplayParser _gameplayParser;
@@ -25,7 +23,6 @@ namespace Game.Gameplay.REMOVE
 
         public GameplaySerializerOnBeginIteration(
             [NotNull] IBagContainer bagContainer,
-            IBoard board,
             [NotNull] IGoalsContainer goalsContainer,
             [NotNull] IMovesContainer movesContainer,
             [NotNull] IGameplayParser gameplayParser,
@@ -40,7 +37,6 @@ namespace Game.Gameplay.REMOVE
             ArgumentNullException.ThrowIfNull(logger);
 
             _bagContainer = bagContainer;
-            _board = board;
             _goalsContainer = goalsContainer;
             _movesContainer = movesContainer;
             _gameplayParser = gameplayParser;
@@ -78,7 +74,6 @@ namespace Game.Gameplay.REMOVE
         {
             string serializedGameplay =
                 _gameplayParser.Serialize(
-                    _board,
                     _goalsContainer.Goals,
                     _movesContainer.Moves,
                     _bagContainer.Bag
