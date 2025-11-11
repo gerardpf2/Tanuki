@@ -22,8 +22,8 @@ namespace Game.Common.UI
 
             Add(_sprite);
 
-            Add(new BoundMethod(OnPointerDown));
-            Add(new BoundMethod(OnPointerUp));
+            Add(new BoundMethod("OnPointerDown", HandlePointerDown));
+            Add(new BoundMethod("OnPointerUp", HandlePointerUp));
         }
 
         private void OnDestroy()
@@ -49,25 +49,25 @@ namespace Game.Common.UI
 
             UnsubscribeFromEvents();
 
-            _buttonViewData.OnEnabledUpdated += OnEnabledUpdated;
+            _buttonViewData.OnEnabledUpdated += HandleEnabledUpdated;
         }
 
         private void UnsubscribeFromEvents()
         {
             if (_buttonViewData is not null)
             {
-                _buttonViewData.OnEnabledUpdated -= OnEnabledUpdated;
+                _buttonViewData.OnEnabledUpdated -= HandleEnabledUpdated;
             }
         }
 
-        private void OnPointerDown()
+        private void HandlePointerDown()
         {
             _pressed = true;
 
             RefreshSprite();
         }
 
-        private void OnPointerUp()
+        private void HandlePointerUp()
         {
             InvalidOperationException.ThrowIfNull(_buttonViewData);
 
@@ -81,7 +81,7 @@ namespace Game.Common.UI
             RefreshSprite();
         }
 
-        private void OnEnabledUpdated()
+        private void HandleEnabledUpdated()
         {
             RefreshSprite();
         }
