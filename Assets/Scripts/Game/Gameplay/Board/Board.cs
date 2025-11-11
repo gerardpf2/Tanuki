@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.Pieces.Pieces.Utils;
-using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Board
 {
@@ -146,20 +149,35 @@ namespace Game.Gameplay.Board
 
         private void ExpandRowsIfNeeded(int newRows)
         {
-            if (Rows >= newRows)
+            int rows = Rows;
+
+            if (rows >= newRows)
             {
                 return;
             }
 
-            ExpandRows(newRows);
+            ExpandRows(newRows - rows);
         }
 
-        private void ExpandRows(int newRows)
+        private void ExpandRows(int extraRows)
         {
             InvalidOperationException.ThrowIfNull(_pieceIds);
 
+            /*
+             *
+             * Since expanding rows can be an expensive operation, it is interesting to reduce the amount of times this
+             * gets called. By using minExtraRows, this can be achieved. Then, the effect this can cause to the board
+             * is that it may contain some unneeded empty rows, but this should not be an issue in practice
+             *
+             */
+
+            const int minExtraRows = 10;
+
+            extraRows = Math.Max(extraRows, minExtraRows);
+
             int rows = Rows;
             int columns = Columns;
+            int newRows = rows + extraRows;
 
             int?[,] newPieceIds = new int?[newRows, columns];
 
