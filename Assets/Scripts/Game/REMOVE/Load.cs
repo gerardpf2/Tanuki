@@ -1,4 +1,4 @@
-using Game.Gameplay.UseCases;
+using Game.Gameplay.View.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
