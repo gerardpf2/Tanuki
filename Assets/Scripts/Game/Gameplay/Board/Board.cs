@@ -3,7 +3,6 @@ using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.Pieces.Pieces.Utils;
 using Infrastructure.System.Exceptions;
-using Infrastructure.System.Matrix.Utils;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Board
@@ -17,27 +16,11 @@ namespace Game.Gameplay.Board
 
         public int HighestNonEmptyRow => _piecesAmountByRows.Count > 0 ? _piecesAmountByRows.Keys[^1] : -1;
 
-        public int Columns
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_pieceIds);
-
-                return _pieceIds.GetLength(1);
-            }
-        }
+        public int Columns => _pieceIds?.GetLength(1) ?? 0;
 
         public IEnumerable<int> PieceIds => _piecesByPieceIds.Keys;
 
-        private int Rows
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_pieceIds);
-
-                return _pieceIds.GetLength(0);
-            }
-        }
+        private int Rows => _pieceIds?.GetLength(0) ?? 0;
 
         public void Build(int columns)
         {
@@ -53,7 +36,7 @@ namespace Game.Gameplay.Board
             _piecesByPieceIds.Clear();
             _sourceCoordinatesByPieceIds.Clear();
             _piecesAmountByRows.Clear();
-            _pieceIds?.Fill(null);
+            _pieceIds = null;
         }
 
         public IPiece GetPiece(int pieceId)
