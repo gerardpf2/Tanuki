@@ -22,17 +22,14 @@ using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Composition;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.UseCases;
-using Game.Gameplay.View.Actions.Composition;
-using Game.Gameplay.View.Animation.Composition;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
+using Game.Gameplay.View.Composition;
 using Game.Gameplay.View.EventResolvers;
-using Game.Gameplay.View.EventResolvers.Composition;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player;
-using Game.Gameplay.View.Player.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging;
 using Infrastructure.ScreenLoading;
@@ -168,7 +165,6 @@ namespace Game.Gameplay.Composition
         {
             return base
                 .GetPartialScopeComposers()
-                // Model
                 .Append(new BagComposer())
                 .Append(new BoardComposer())
                 .Append(new CameraComposer())
@@ -176,17 +172,12 @@ namespace Game.Gameplay.Composition
                 .Append(new GoalsComposer())
                 .Append(new MovesComposer())
                 .Append(new PhasesComposer())
-                .Append(new PiecesComposer())
-                // View
-                .Append(new ActionsComposer())
-                .Append(new AnimationComposer())
-                .Append(new View.Board.Composition.BoardComposer())
-                .Append(new View.Camera.Composition.CameraComposer())
-                .Append(new EventResolversComposer())
-                .Append(new View.Goals.Composition.GoalsComposer())
-                .Append(new View.Moves.Composition.MovesComposer())
-                .Append(new View.Pieces.Composition.PiecesComposer(_pieceViewDefinitionGetter))
-                .Append(new PlayerComposer());
+                .Append(new PiecesComposer());
+        }
+
+        protected override IEnumerable<IScopeComposer> GetChildScopeComposers()
+        {
+            return base.GetChildScopeComposers().Append(new GameplayViewComposer(_pieceViewDefinitionGetter));
         }
     }
 }
