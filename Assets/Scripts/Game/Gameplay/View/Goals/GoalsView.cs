@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Common;
 using Game.Common.Pieces;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Goals.Utils;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
@@ -32,10 +34,7 @@ namespace Game.Gameplay.View.Goals
         {
             _initializedLabel.SetInitialized();
 
-            foreach (IGoal goal in _modelGoals.Entries)
-            {
-                _viewGoals.Add(goal.Clone());
-            }
+            _viewGoals.Add(_modelGoals.Entries.Select(goal => goal.Clone()));
         }
 
         public void Uninitialize()

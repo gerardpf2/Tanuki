@@ -1,4 +1,5 @@
 using System.Linq;
+using Game.Gameplay.Goals.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -20,10 +21,7 @@ namespace Game.Gameplay.Goals.Parsing
             ArgumentNullException.ThrowIfNull(goalsSerializedData);
             ArgumentNullException.ThrowIfNull(goals);
 
-            foreach (IGoal goal in goalsSerializedData.GoalSerializedData.Select(_goalSerializedDataConverter.To))
-            {
-                goals.Add(goal);
-            }
+            goals.Add(goalsSerializedData.GoalSerializedData.Select(_goalSerializedDataConverter.To));
         }
 
         public GoalsSerializedData From([NotNull] IGoals goals)
