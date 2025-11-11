@@ -13,9 +13,10 @@ namespace Game.Gameplay.Bag
     public class Bag : IBag
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
-        [NotNull, ItemNotNull] private readonly IReadOnlyCollection<BagPieceEntry> _bagPieceEntries;
-        [NotNull] private readonly IReadOnlyList<PieceType> _initialPieceTypes;
-        [NotNull] private readonly Random _random = new();
+        [NotNull] private readonly Random _random = new(); // TODO: IRandom dependency
+
+        [NotNull, ItemNotNull] private readonly ICollection<BagPieceEntry> _bagPieceEntries = new List<BagPieceEntry>(); // ItemNotNull as long as all Add check for null
+        [NotNull] private readonly IList<PieceType> _initialPieceTypes = new List<PieceType>();
 
         /*
          *
@@ -74,6 +75,37 @@ namespace Game.Gameplay.Bag
             }
         }
 
+        public void Build(
+            [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries,
+            [NotNull] IEnumerable<PieceType> initialPieceTypes)
+        {
+            ArgumentNullException.ThrowIfNull(bagPieceEntries);
+            ArgumentNullException.ThrowIfNull(initialPieceTypes);
+
+            Clear();
+
+            foreach (BagPieceEntry bagPieceEntry in bagPieceEntries)
+            {
+                ArgumentNullException.ThrowIfNull(bagPieceEntry);
+
+                _bagPieceEntries.Add(bagPieceEntry);
+            }
+
+            foreach (PieceType pieceType in initialPieceTypes)
+            {
+                _initialPieceTypes.Add(pieceType);
+            }
+
+            Refill();
+
+            for (int i = _initialPieceTypes.Count - 1; i >= 0; --i)
+            {
+                IPiece piece = GetPiece(_initialPieceTypes[i]);
+
+                _pieces.Add(piece);
+            }
+        }
+
         public void ConsumeCurrent()
         {
             if (_pieces.Count == 0)
@@ -87,6 +119,13 @@ namespace Game.Gameplay.Bag
             {
                 Refill();
             }
+        }
+
+        public void Clear()
+        {
+            _bagPieceEntries.Clear();
+            _initialPieceTypes.Clear();
+            _pieces.Clear();
         }
 
         private void Refill()
