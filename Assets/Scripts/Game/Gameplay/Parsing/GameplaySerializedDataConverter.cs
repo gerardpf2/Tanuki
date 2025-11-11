@@ -39,14 +39,14 @@ namespace Game.Gameplay.Parsing
             [NotNull] GameplaySerializedData gameplaySerializedData,
             IBoard board,
             out IGoals goals,
-            out IMoves moves,
+            IMoves moves,
             out IBag bag)
         {
             ArgumentNullException.ThrowIfNull(gameplaySerializedData);
 
             _boardSerializedDataConverter.To(gameplaySerializedData.BoardSerializedData, board);
             goals = _goalsSerializedDataConverter.To(gameplaySerializedData.GoalsSerializedData);
-            moves = _movesSerializedDataConverter.To(gameplaySerializedData.MovesSerializedData);
+            _movesSerializedDataConverter.To(gameplaySerializedData.MovesSerializedData, moves);
             bag = _bagSerializedDataConverter.To(gameplaySerializedData.BagSerializedData);
         }
 

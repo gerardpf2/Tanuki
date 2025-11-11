@@ -12,7 +12,7 @@ namespace Game.Gameplay.Parsing
             GameplaySerializedData gameplaySerializedData,
             IBoard board,
             [NotNull] out IGoals goals,
-            [NotNull] out IMoves moves,
+            IMoves moves,
             [NotNull] out IBag bag
         );
 

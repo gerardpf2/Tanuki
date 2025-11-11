@@ -4,14 +4,9 @@ namespace Game.Gameplay.Moves
     {
         public int Amount { get; set; }
 
-        public Moves(int amount)
+        public void Reset()
         {
-            Amount = amount;
-        }
-
-        public IMoves Clone()
-        {
-            return new Moves(Amount);
+            Amount = 0;
         }
     }
 }

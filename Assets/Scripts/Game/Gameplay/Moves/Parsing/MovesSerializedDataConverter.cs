@@ -5,11 +5,12 @@ namespace Game.Gameplay.Moves.Parsing
 {
     public class MovesSerializedDataConverter : IMovesSerializedDataConverter
     {
-        public IMoves To([NotNull] MovesSerializedData movesSerializedData)
+        public void To([NotNull] MovesSerializedData movesSerializedData, [NotNull] IMoves moves)
         {
             ArgumentNullException.ThrowIfNull(movesSerializedData);
+            ArgumentNullException.ThrowIfNull(moves);
 
-            return new Moves(movesSerializedData.Amount);
+            moves.Amount = movesSerializedData.Amount;
         }
 
         public MovesSerializedData From([NotNull] IMoves moves)

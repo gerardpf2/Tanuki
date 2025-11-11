@@ -1,7 +1,6 @@
 using Game.Common;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Goals;
-using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
 using Infrastructure.Logging;
@@ -14,7 +13,6 @@ namespace Game.Gameplay.REMOVE
     {
         [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
-        [NotNull] private readonly IMovesContainer _movesContainer;
         [NotNull] private readonly IGameplayParser _gameplayParser;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly ILogger _logger;
@@ -24,21 +22,18 @@ namespace Game.Gameplay.REMOVE
         public GameplaySerializerOnBeginIteration(
             [NotNull] IBagContainer bagContainer,
             [NotNull] IGoalsContainer goalsContainer,
-            [NotNull] IMovesContainer movesContainer,
             [NotNull] IGameplayParser gameplayParser,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] ILogger logger)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(goalsContainer);
-            ArgumentNullException.ThrowIfNull(movesContainer);
             ArgumentNullException.ThrowIfNull(gameplayParser);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(logger);
 
             _bagContainer = bagContainer;
             _goalsContainer = goalsContainer;
-            _movesContainer = movesContainer;
             _gameplayParser = gameplayParser;
             _phaseResolver = phaseResolver;
             _logger = logger;
@@ -72,12 +67,7 @@ namespace Game.Gameplay.REMOVE
 
         private void HandleBeginIteration()
         {
-            string serializedGameplay =
-                _gameplayParser.Serialize(
-                    _goalsContainer.Goals,
-                    _movesContainer.Moves,
-                    _bagContainer.Bag
-                );
+            string serializedGameplay = _gameplayParser.Serialize(_goalsContainer.Goals, _bagContainer.Bag);
 
             _logger.Info(serializedGameplay);
         }

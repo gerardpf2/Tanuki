@@ -108,7 +108,7 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IBoard>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
-                        r.Resolve<IMovesContainer>()
+                        r.Resolve<IMoves>()
                     )
                 ),
                 nameof(LockPlayerPiecePhase)
@@ -117,7 +117,7 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new NoMovesLeftPhase(
-                        r.Resolve<IMovesContainer>()
+                        r.Resolve<IMoves>()
                     )
                 ),
                 nameof(NoMovesLeftPhase)

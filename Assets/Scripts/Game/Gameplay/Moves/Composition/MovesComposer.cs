@@ -16,7 +16,7 @@ namespace Game.Gameplay.Moves.Composition
 
             ruleAdder.Add(ruleFactory.GetSingleton<IMovesSerializedDataConverter>(_ => new MovesSerializedDataConverter()));
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IMovesContainer>(_ => new MovesContainer()));
+            ruleAdder.Add(ruleFactory.GetSingleton<IMoves>(_ => new Moves()));
         }
     }
 }

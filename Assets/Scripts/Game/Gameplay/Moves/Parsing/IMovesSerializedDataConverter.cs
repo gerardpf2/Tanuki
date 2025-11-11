@@ -4,8 +4,7 @@ namespace Game.Gameplay.Moves.Parsing
 {
     public interface IMovesSerializedDataConverter
     {
-        [NotNull]
-        IMoves To(MovesSerializedData movesSerializedData);
+        void To(MovesSerializedData movesSerializedData, IMoves moves);
 
         [NotNull]
         MovesSerializedData From(IMoves moves);
