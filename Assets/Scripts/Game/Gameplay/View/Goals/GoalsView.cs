@@ -1,61 +1,52 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Common;
 using Game.Common.Pieces;
 using Game.Gameplay.Goals;
+using Game.Gameplay.Goals.Utils;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.Goals
 {
     public class GoalsView : IGoalsView
     {
-        [NotNull] private readonly IGoalsContainer _goalsContainer;
+        [NotNull] private readonly IGoals _modelGoals;
+        [NotNull] private readonly IGoals _viewGoals;
 
         private InitializedLabel _initializedLabel;
 
-        private IGoals _goals;
-
         public event Action OnUpdated;
 
-        public IEnumerable<PieceType> PieceTypes => _goals?.PieceTypes;
+        public IEnumerable<IGoal> Entries => _viewGoals.Entries;
 
-        public GoalsView([NotNull] IGoalsContainer goalsContainer)
+        public GoalsView([NotNull] IGoals modelGoals, [NotNull] IGoals viewGoals)
         {
-            ArgumentNullException.ThrowIfNull(goalsContainer);
+            ArgumentNullException.ThrowIfNull(modelGoals);
+            ArgumentNullException.ThrowIfNull(viewGoals);
 
-            _goalsContainer = goalsContainer;
+            _modelGoals = modelGoals;
+            _viewGoals = viewGoals;
         }
 
         public void Initialize()
         {
             _initializedLabel.SetInitialized();
 
-            IGoals goals = _goalsContainer.Goals;
-
-            InvalidOperationException.ThrowIfNull(goals);
-
-            _goals = goals.Clone();
+            _viewGoals.Add(_modelGoals.Entries.Select(goal => goal.Clone()));
         }
 
         public void Uninitialize()
         {
             _initializedLabel.SetUninitialized();
 
-            _goals = null;
-        }
-
-        public IGoal Get(PieceType pieceType)
-        {
-            InvalidOperationException.ThrowIfNull(_goals);
-
-            return _goals.Get(pieceType);
+            _viewGoals.Clear();
         }
 
         public void SetCurrentAmount(PieceType pieceType, int currentAmount)
         {
-            IGoal goal = Get(pieceType);
+            IGoal goal = _viewGoals.Get(pieceType);
 
             if (goal.CurrentAmount == currentAmount)
             {

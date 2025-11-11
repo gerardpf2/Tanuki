@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Game.Common.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -8,27 +7,18 @@ namespace Game.Gameplay.Goals
 {
     public class Goals : IGoals
     {
-        [NotNull] private readonly IReadOnlyDictionary<PieceType, IGoal> _goals;
+        [NotNull] private readonly IDictionary<PieceType, IGoal> _goals = new Dictionary<PieceType, IGoal>();
 
-        public IEnumerable<PieceType> PieceTypes => _goals.Keys;
+        public IEnumerable<IGoal> Entries => _goals.Values; // ItemNotNull as long as all Add check for null
 
-        public Goals([NotNull, ItemNotNull] IEnumerable<IGoal> goals)
+        public void Add([NotNull] IGoal goal)
         {
-            ArgumentNullException.ThrowIfNull(goals);
+            ArgumentNullException.ThrowIfNull(goal);
 
-            Dictionary<PieceType, IGoal> goalsCopy = new();
-
-            foreach (IGoal goal in goals)
+            if (!_goals.TryAdd(goal.PieceType, goal))
             {
-                ArgumentNullException.ThrowIfNull(goal);
-
-                if (!goalsCopy.TryAdd(goal.PieceType, goal))
-                {
-                    InvalidOperationException.Throw($"Cannot add goal with PieceType: {goal.PieceType}");
-                }
+                InvalidOperationException.Throw($"Cannot add goal with PieceType: {goal.PieceType}");
             }
-
-            _goals = goalsCopy;
         }
 
         public IGoal Get(PieceType pieceType)
@@ -46,9 +36,9 @@ namespace Game.Gameplay.Goals
             return _goals.TryGetValue(pieceType, out goal);
         }
 
-        public IGoals Clone()
+        public void Clear()
         {
-            return new Goals(PieceTypes.Select(pieceType => Get(pieceType).Clone()));
+            _goals.Clear();
         }
     }
 }

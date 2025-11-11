@@ -39,7 +39,7 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
-                        r.Resolve<IGoalsContainer>()
+                        r.Resolve<IGoals>()
                     )
                 ),
                 nameof(DestroyNotAlivePiecesPhase)
@@ -48,7 +48,7 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new GoalsCompletedPhase(
-                        r.Resolve<IGoalsContainer>()
+                        r.Resolve<IGoals>()
                     )
                 ),
                 nameof(GoalsCompletedPhase)

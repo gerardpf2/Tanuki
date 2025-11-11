@@ -10,14 +10,12 @@ namespace Game.Gameplay.View.Goals
     {
         event Action OnUpdated;
 
-        IEnumerable<PieceType> PieceTypes { get; }
+        [NotNull, ItemNotNull]
+        IEnumerable<IGoal> Entries { get; }
 
         void Initialize();
 
         void Uninitialize();
-
-        [NotNull]
-        IGoal Get(PieceType pieceType);
 
         void SetCurrentAmount(PieceType pieceType, int currentAmount);
     }

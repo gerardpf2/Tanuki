@@ -1,4 +1,5 @@
 using System.Linq;
+using Game.Gameplay.Goals.Utils;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -15,11 +16,12 @@ namespace Game.Gameplay.Goals.Parsing
             _goalSerializedDataConverter = goalSerializedDataConverter;
         }
 
-        public IGoals To([NotNull] GoalsSerializedData goalsSerializedData)
+        public void To([NotNull] GoalsSerializedData goalsSerializedData, [NotNull] IGoals goals)
         {
             ArgumentNullException.ThrowIfNull(goalsSerializedData);
+            ArgumentNullException.ThrowIfNull(goals);
 
-            return new Goals(goalsSerializedData.GoalSerializedData.Select(_goalSerializedDataConverter.To));
+            goals.Add(goalsSerializedData.GoalSerializedData.Select(_goalSerializedDataConverter.To));
         }
 
         public GoalsSerializedData From([NotNull] IGoals goals)
@@ -29,7 +31,7 @@ namespace Game.Gameplay.Goals.Parsing
             return
                 new GoalsSerializedData
                 {
-                    GoalSerializedData = goals.PieceTypes.Select(pieceType => _goalSerializedDataConverter.From(goals.Get(pieceType))).ToList()
+                    GoalSerializedData = goals.Entries.Select(_goalSerializedDataConverter.From).ToList()
                 };
         }
     }

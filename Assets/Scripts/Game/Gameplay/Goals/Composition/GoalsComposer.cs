@@ -24,7 +24,7 @@ namespace Game.Gameplay.Goals.Composition
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoalsContainer>(_ => new GoalsContainer()));
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoals>(_ => new Goals()));
         }
     }
 }
