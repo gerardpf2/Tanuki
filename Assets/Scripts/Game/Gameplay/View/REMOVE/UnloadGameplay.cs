@@ -1,10 +1,10 @@
-using Game.Gameplay.UseCases;
+using Game.Gameplay.View.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Game.Gameplay.REMOVE
+namespace Game.Gameplay.View.REMOVE
 {
     public class UnloadGameplay : MonoBehaviour
     {
