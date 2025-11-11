@@ -6,7 +6,6 @@ using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Composition;
 using Game.Gameplay.Board.Parsing;
-using Game.Gameplay.Camera;
 using Game.Gameplay.Camera.Composition;
 using Game.Gameplay.Events.Composition;
 using Game.Gameplay.Goals;
@@ -18,21 +17,12 @@ using Game.Gameplay.Moves.Parsing;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
 using Game.Gameplay.Phases.Composition;
-using Game.Gameplay.Pieces;
 using Game.Gameplay.Pieces.Composition;
 using Game.Gameplay.REMOVE;
-using Game.Gameplay.View.Board;
-using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.Composition;
-using Game.Gameplay.View.EventResolvers;
-using Game.Gameplay.View.Goals;
-using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Pieces;
-using Game.Gameplay.View.Player;
-using Game.Gameplay.View.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging;
-using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using Infrastructure.System.Parsing;
 using JetBrains.Annotations;
@@ -96,69 +86,7 @@ namespace Game.Gameplay.Composition
                 )
             );
 
-            // Not shared so it can only be unloaded from here
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
-                    new UnloadGameplayUseCase(
-                        r.Resolve<IBag>(),
-                        r.Resolve<IBoard>(),
-                        r.Resolve<IPieceIdGetter>(),
-                        r.Resolve<ICamera>(),
-                        r.Resolve<IGoals>(),
-                        r.Resolve<IMoves>(),
-                        r.Resolve<IGameplaySerializerOnBeginIteration>(),
-                        r.Resolve<IBoardView>(),
-                        r.Resolve<ICameraView>(),
-                        r.Resolve<IGoalsView>(),
-                        r.Resolve<IMovesView>(),
-                        r.Resolve<IPlayerPieceGhostView>(),
-                        r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<IEventsResolver>(),
-                        r.Resolve<IScreenLoader>()
-                    )
-                )
-            );
-
             ruleAdder.Add(ruleFactory.GetInstance(_gameplayDefinitionGetter));
-        }
-
-        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
-        {
-            ArgumentNullException.ThrowIfNull(ruleAdder);
-            ArgumentNullException.ThrowIfNull(ruleFactory);
-
-            base.AddSharedRules(ruleAdder, ruleFactory);
-
-            ruleAdder.Add(
-                ruleFactory.GetInject<UnloadGameplay>((r, s) =>
-                    s.Inject(
-                        r.Resolve<IUnloadGameplayUseCase>()
-                    )
-                )
-            );
-
-            // Shared so it can be loaded from anywhere
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
-                    new LoadGameplayUseCase(
-                        r.Resolve<IGameplayDefinitionGetter>(),
-                        r.Resolve<IPieceIdGetter>(),
-                        r.Resolve<ICamera>(),
-                        r.Resolve<IGameplayParser>(),
-                        r.Resolve<IPhaseContainer>("Initial"),
-                        r.Resolve<IGameplaySerializerOnBeginIteration>(),
-                        r.Resolve<IBoardView>(),
-                        r.Resolve<ICameraView>(),
-                        r.Resolve<IGoalsView>(),
-                        r.Resolve<IMovesView>(),
-                        r.Resolve<IPieceGameObjectPreloader>(),
-                        r.Resolve<IPlayerPieceGhostView>(),
-                        r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<IEventsResolver>(),
-                        r.Resolve<IScreenLoader>()
-                    )
-                )
-            );
         }
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
