@@ -27,7 +27,7 @@ namespace Game.Gameplay.View.Player
             }
         }
 
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
@@ -52,17 +52,17 @@ namespace Game.Gameplay.View.Player
         public GameObject Instance => _pieceData?.PooledInstance.Instance;
 
         public PlayerPieceGhostView(
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IGameObjectPool gameObjectPool)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
-            _boardContainer = boardContainer;
+            _board = board;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _playerPieceView = playerPieceView;
             _gameObjectPool = gameObjectPool;
@@ -132,14 +132,11 @@ namespace Game.Gameplay.View.Player
 
         private void UpdatePosition()
         {
-            IBoard board = _boardContainer.Board;
-
             InvalidOperationException.ThrowIfNull(_pieceData);
             InvalidOperationException.ThrowIfNull(Instance);
-            InvalidOperationException.ThrowIfNull(board);
 
             Coordinate sourceCoordinate = _playerPieceView.Coordinate;
-            Coordinate lockSourceCoordinate = board.GetPieceLockSourceCoordinate(_pieceData.Piece, sourceCoordinate);
+            Coordinate lockSourceCoordinate = _board.GetPieceLockSourceCoordinate(_pieceData.Piece, sourceCoordinate);
 
             Instance.transform.position = lockSourceCoordinate.ToVector3();
         }

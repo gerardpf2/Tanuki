@@ -16,33 +16,27 @@ namespace Game.Gameplay.Board
 
         public int HighestNonEmptyRow => _piecesAmountByRows.Count > 0 ? _piecesAmountByRows.Keys[^1] : -1;
 
-        public int Columns
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_pieceIds);
-
-                return _pieceIds.GetLength(1);
-            }
-        }
+        public int Columns => _pieceIds?.GetLength(1) ?? 0;
 
         public IEnumerable<int> PieceIds => _piecesByPieceIds.Keys;
 
-        private int Rows
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_pieceIds);
+        private int Rows => _pieceIds?.GetLength(0) ?? 0;
 
-                return _pieceIds.GetLength(0);
-            }
-        }
-
-        public Board(int columns)
+        public void Build(int columns)
         {
+            Clear();
+
             const int rows = 0;
 
             _pieceIds = new int?[rows, columns];
+        }
+
+        public void Clear()
+        {
+            _piecesByPieceIds.Clear();
+            _sourceCoordinatesByPieceIds.Clear();
+            _piecesAmountByRows.Clear();
+            _pieceIds = null;
         }
 
         public IPiece GetPiece(int pieceId)

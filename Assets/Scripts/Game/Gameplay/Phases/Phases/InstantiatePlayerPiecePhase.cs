@@ -17,10 +17,10 @@ namespace Game.Gameplay.Phases.Phases
 
         public InstantiatePlayerPiecePhase(
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory) : base(bagContainer, boardContainer, camera)
+            [NotNull] IEventFactory eventFactory) : base(bagContainer, board, camera)
         {
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);

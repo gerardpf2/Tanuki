@@ -11,8 +11,8 @@ namespace Game.Gameplay.Phases.Phases
     {
         public SimulateInstantiatePlayerPiecePhase(
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
-            [NotNull] ICamera camera) : base(bagContainer, boardContainer, camera) { }
+            [NotNull] IBoard board,
+            [NotNull] ICamera camera) : base(bagContainer, board, camera) { }
 
         protected override ResolveResult ResolveImpl(
             [NotNull] ResolveContext resolveContext,

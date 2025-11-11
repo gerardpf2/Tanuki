@@ -11,7 +11,7 @@ namespace Game.Gameplay.Phases.Phases
     public class LockPlayerPiecePhase : Phase
     {
         [NotNull] private readonly IBagContainer _bagContainer;
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IMovesContainer _movesContainer;
@@ -20,19 +20,19 @@ namespace Game.Gameplay.Phases.Phases
 
         public LockPlayerPiecePhase(
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
             [NotNull] IMovesContainer movesContainer)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(movesContainer);
 
             _bagContainer = bagContainer;
-            _boardContainer = boardContainer;
+            _board = board;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
             _movesContainer = movesContainer;
@@ -84,11 +84,7 @@ namespace Game.Gameplay.Phases.Phases
 
         private void AddPieceToBoard(IPiece piece, Coordinate sourceCoordinate)
         {
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            board.AddPiece(piece, sourceCoordinate);
+            _board.AddPiece(piece, sourceCoordinate);
         }
 
         private int DecreaseMovesAmount()

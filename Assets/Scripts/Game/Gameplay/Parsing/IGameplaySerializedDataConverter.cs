@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
-using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.Parsing
@@ -12,8 +10,7 @@ namespace Game.Gameplay.Parsing
     {
         void To(
             GameplaySerializedData gameplaySerializedData,
-            [NotNull] out IBoard board,
-            [NotNull] out IEnumerable<PiecePlacement> piecePlacements,
+            IBoard board,
             [NotNull] out IGoals goals,
             [NotNull] out IMoves moves,
             [NotNull] out IBag bag

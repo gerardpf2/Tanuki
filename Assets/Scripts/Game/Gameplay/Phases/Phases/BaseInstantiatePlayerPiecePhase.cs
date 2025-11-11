@@ -13,20 +13,20 @@ namespace Game.Gameplay.Phases.Phases
     public abstract class BaseInstantiatePlayerPiecePhase : Phase
     {
         [NotNull] private readonly IBagContainer _bagContainer;
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
 
         protected BaseInstantiatePlayerPiecePhase(
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] ICamera camera)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
 
             _bagContainer = bagContainer;
-            _boardContainer = boardContainer;
+            _board = board;
             _camera = camera;
         }
 
@@ -60,12 +60,8 @@ namespace Game.Gameplay.Phases.Phases
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            int row = Math.Max(board.HighestNonEmptyRow + _camera.ExtraRowsOnTop, _camera.TopRow) - piece.Height + 1;
-            int column = (board.Columns - piece.Width + 1) / 2;
+            int row = Math.Max(_board.HighestNonEmptyRow + _camera.ExtraRowsOnTop, _camera.TopRow) - piece.Height + 1;
+            int column = (_board.Columns - piece.Width + 1) / 2;
 
             return new Coordinate(row, column);
         }
@@ -74,11 +70,7 @@ namespace Game.Gameplay.Phases.Phases
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            return board.GetPieceLockSourceCoordinate(piece, sourceCoordinate);
+            return _board.GetPieceLockSourceCoordinate(piece, sourceCoordinate);
         }
     }
 }

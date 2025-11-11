@@ -8,29 +8,28 @@ using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
     public class LineClearPhase : Phase
     {
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
         public LineClearPhase(
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
-            _boardContainer = boardContainer;
+            _board = board;
             _camera = camera;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
@@ -38,14 +37,10 @@ namespace Game.Gameplay.Phases.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
             bool resolved = false;
 
             int bottomRow = _camera.BottomRow;
-            int topRow = Math.Min(board.HighestNonEmptyRow, _camera.TopRow);
+            int topRow = Math.Min(_board.HighestNonEmptyRow, _camera.TopRow);
 
             for (int row = bottomRow; row <= topRow; ++row)
             {
@@ -57,13 +52,9 @@ namespace Game.Gameplay.Phases.Phases
 
         private bool TryDamageRow(int row)
         {
-            IBoard board = _boardContainer.Board;
+            IReadOnlyCollection<KeyValuePair<int, int>> pieceIdsInRow = new List<KeyValuePair<int, int>>(_board.GetPieceIdsInRow(row));
 
-            InvalidOperationException.ThrowIfNull(board);
-
-            IReadOnlyCollection<KeyValuePair<int, int>> pieceIdsInRow = new List<KeyValuePair<int, int>>(board.GetPieceIdsInRow(row));
-
-            if (pieceIdsInRow.Count < board.Columns)
+            if (pieceIdsInRow.Count < _board.Columns)
             {
                 return false;
             }
@@ -72,9 +63,9 @@ namespace Game.Gameplay.Phases.Phases
 
             foreach ((int pieceId, int column) in pieceIdsInRow)
             {
-                IPiece piece = board.GetPiece(pieceId);
+                IPiece piece = _board.GetPiece(pieceId);
 
-                board.GetPieceRowColumnOffset(pieceId, row, column, out int rowOffset, out int columnOffset);
+                _board.GetPieceRowColumnOffset(pieceId, row, column, out int rowOffset, out int columnOffset);
 
                 piece.Damage(rowOffset, columnOffset);
 

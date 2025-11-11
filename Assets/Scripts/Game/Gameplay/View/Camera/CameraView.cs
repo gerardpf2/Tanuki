@@ -11,7 +11,7 @@ namespace Game.Gameplay.View.Camera
 {
     public class CameraView : ICameraView
     {
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly Transform _unityCameraTransform;
 
@@ -19,18 +19,15 @@ namespace Game.Gameplay.View.Camera
 
         public UnityEngine.Camera UnityCamera { get; }
 
-        public CameraView(
-            [NotNull] IBoardContainer boardContainer,
-            [NotNull] ICamera camera,
-            [NotNull] ICameraGetter cameraGetter)
+        public CameraView([NotNull] IBoard board, [NotNull] ICamera camera, [NotNull] ICameraGetter cameraGetter)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(cameraGetter);
 
             UnityCamera = cameraGetter.GetMain();
 
-            _boardContainer = boardContainer;
+            _board = board;
             _camera = camera;
             _unityCameraTransform = UnityCamera.transform;
         }
@@ -80,11 +77,7 @@ namespace Game.Gameplay.View.Camera
 
         private int ComputeInitialColumn()
         {
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            return board.Columns / 2;
+            return _board.Columns / 2;
         }
     }
 }

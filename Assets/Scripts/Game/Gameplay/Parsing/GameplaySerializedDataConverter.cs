@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Bag.Parsing;
 using Game.Gameplay.Board;
@@ -7,7 +6,6 @@ using Game.Gameplay.Goals;
 using Game.Gameplay.Goals.Parsing;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Moves.Parsing;
-using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -39,15 +37,14 @@ namespace Game.Gameplay.Parsing
 
         public void To(
             [NotNull] GameplaySerializedData gameplaySerializedData,
-            out IBoard board,
-            out IEnumerable<PiecePlacement> piecePlacements,
+            IBoard board,
             out IGoals goals,
             out IMoves moves,
             out IBag bag)
         {
             ArgumentNullException.ThrowIfNull(gameplaySerializedData);
 
-            _boardSerializedDataConverter.To(gameplaySerializedData.BoardSerializedData, out board, out piecePlacements);
+            _boardSerializedDataConverter.To(gameplaySerializedData.BoardSerializedData, board);
             goals = _goalsSerializedDataConverter.To(gameplaySerializedData.GoalsSerializedData);
             moves = _movesSerializedDataConverter.To(gameplaySerializedData.MovesSerializedData);
             bag = _bagSerializedDataConverter.To(gameplaySerializedData.BagSerializedData);

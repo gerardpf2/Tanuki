@@ -29,7 +29,7 @@ namespace Game.Gameplay.View.Pieces.Composition
                 ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
                     new PieceGameObjectPreloader(
                         r.Resolve<IBagContainer>(),
-                        r.Resolve<IBoardContainer>(),
+                        r.Resolve<IBoard>(),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>()
                     )

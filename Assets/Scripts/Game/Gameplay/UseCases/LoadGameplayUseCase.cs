@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Game.Gameplay.Bag;
-using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
@@ -26,7 +24,6 @@ namespace Game.Gameplay.UseCases
     {
         [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
         [NotNull] private readonly IBagContainer _bagContainer;
-        [NotNull] private readonly IBoardContainer _boardContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
@@ -47,7 +44,6 @@ namespace Game.Gameplay.UseCases
         public LoadGameplayUseCase(
             [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] ICamera camera,
             [NotNull] IGoalsContainer goalsContainer,
@@ -67,7 +63,6 @@ namespace Game.Gameplay.UseCases
         {
             ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
             ArgumentNullException.ThrowIfNull(bagContainer);
-            ArgumentNullException.ThrowIfNull(boardContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(goalsContainer);
@@ -87,7 +82,6 @@ namespace Game.Gameplay.UseCases
 
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
             _bagContainer = bagContainer;
-            _boardContainer = boardContainer;
             _pieceIdGetter = pieceIdGetter;
             _camera = camera;
             _goalsContainer = goalsContainer;
@@ -119,17 +113,9 @@ namespace Game.Gameplay.UseCases
 
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
-            _gameplayParser.Deserialize(
-                gameplayDefinition.Data,
-                out IBoard board,
-                out IEnumerable<PiecePlacement> piecePlacements,
-                out IGoals goals,
-                out IMoves moves,
-                out IBag bag
-            );
+            _gameplayParser.Deserialize(gameplayDefinition.Data, out IGoals goals, out IMoves moves, out IBag bag);
 
             _bagContainer.Initialize(bag);
-            _boardContainer.Initialize(board, piecePlacements);
             _camera.Initialize();
             _goalsContainer.Initialize(goals);
             _movesContainer.Initialize(moves);

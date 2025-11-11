@@ -4,7 +4,6 @@ using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
@@ -12,7 +11,7 @@ namespace Game.Gameplay.Phases.Phases
     {
         // Targets the highest board row that allows the player piece ghost to be fully visible
 
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
@@ -20,17 +19,17 @@ namespace Game.Gameplay.Phases.Phases
         private Coordinate? _lastTargetedPieceLockSourceCoordinate;
 
         public CameraTargetHighestPlayerPieceLockRowPhase(
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
-            _boardContainer = boardContainer;
+            _board = board;
             _camera = camera;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
@@ -83,11 +82,7 @@ namespace Game.Gameplay.Phases.Phases
 
         private void TargetHighestNonEmptyRow()
         {
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            _camera.TopRow = board.HighestNonEmptyRow + _camera.ExtraRowsOnTop;
+            _camera.TopRow = _board.HighestNonEmptyRow + _camera.ExtraRowsOnTop;
         }
 
         private void TargetPieceLockRow(int pieceLockSourceCoordinateRow)

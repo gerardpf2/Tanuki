@@ -20,20 +20,23 @@ namespace Game.Gameplay.Board.Parsing
             _piecePlacementSerializedDataConverter = piecePlacementSerializedDataConverter;
         }
 
-        public void To(
-            [NotNull] BoardSerializedData boardSerializedData,
-            out IBoard board,
-            out IEnumerable<PiecePlacement> piecePlacements)
+        public void To([NotNull] BoardSerializedData boardSerializedData, [NotNull] IBoard board)
         {
             ArgumentNullException.ThrowIfNull(boardSerializedData);
             ArgumentNullException.ThrowIfNull(boardSerializedData.PiecePlacementSerializedData);
+            ArgumentNullException.ThrowIfNull(board);
 
-            board = new Board(boardSerializedData.Columns);
-
-            piecePlacements =
+            IEnumerable<PiecePlacement> piecePlacements =
                 boardSerializedData.PiecePlacementSerializedData
                     .Select(_piecePlacementSerializedDataConverter.To)
                     .ToList();
+
+            board.Build(boardSerializedData.Columns);
+
+            foreach (PiecePlacement piecePlacement in piecePlacements)
+            {
+                board.AddPiece(piecePlacement.Piece, piecePlacement.Coordinate);
+            }
         }
 
         public BoardSerializedData From([NotNull] IBoard board)

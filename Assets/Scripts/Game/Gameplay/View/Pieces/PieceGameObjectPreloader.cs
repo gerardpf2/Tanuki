@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Game.Common.Pieces;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
-using Game.Gameplay.Pieces;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
@@ -12,23 +12,23 @@ namespace Game.Gameplay.View.Pieces
     public class PieceGameObjectPreloader : IPieceGameObjectPreloader
     {
         [NotNull] private readonly IBagContainer _bagContainer;
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
         public PieceGameObjectPreloader(
             [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(bagContainer);
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _bagContainer = bagContainer;
-            _boardContainer = boardContainer;
+            _board = board;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
         }
@@ -43,17 +43,12 @@ namespace Game.Gameplay.View.Pieces
         {
             // If piece culling is implemented at some point, this will have to be reviewed
 
-            IEnumerable<PiecePlacement> piecePlacements = _boardContainer.PiecePlacements;
-
-            InvalidOperationException.ThrowIfNull(piecePlacements);
-
             IDictionary<PieceType, int> amountByPieceType = new Dictionary<PieceType, int>();
 
-            foreach (PiecePlacement piecePlacement in piecePlacements)
+            foreach (int pieceId in _board.PieceIds)
             {
-                InvalidOperationException.ThrowIfNull(piecePlacement);
-
-                PieceType pieceType = piecePlacement.Piece.Type;
+                IPiece piece = _board.GetPiece(pieceId);
+                PieceType pieceType = piece.Type;
 
                 if (amountByPieceType.TryGetValue(pieceType, out int amount))
                 {

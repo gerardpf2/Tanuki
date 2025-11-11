@@ -17,26 +17,26 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class DestroyNotAlivePiecesPhase : Phase
     {
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IGoalsContainer _goalsContainer;
 
         public DestroyNotAlivePiecesPhase(
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
             [NotNull] IGoalsContainer goalsContainer)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(goalsContainer);
 
-            _boardContainer = boardContainer;
+            _board = board;
             _camera = camera;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
@@ -45,16 +45,12 @@ namespace Game.Gameplay.Phases.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
             bool resolved = false;
 
             int bottomRow = _camera.BottomRow;
-            int topRow = Math.Min(board.HighestNonEmptyRow, _camera.TopRow);
+            int topRow = Math.Min(_board.HighestNonEmptyRow, _camera.TopRow);
 
-            foreach (int pieceId in board.GetDistinctPieceIdsSortedByRowThenByColumn(bottomRow, topRow))
+            foreach (int pieceId in _board.GetDistinctPieceIdsSortedByRowThenByColumn(bottomRow, topRow))
             {
                 if (TryDestroyPiece(pieceId))
                 {
@@ -67,11 +63,7 @@ namespace Game.Gameplay.Phases.Phases
 
         private bool TryDestroyPiece(int pieceId)
         {
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
-            IPiece piece = board.GetPiece(pieceId);
+            IPiece piece = _board.GetPiece(pieceId);
 
             if (piece.Alive)
             {
@@ -82,7 +74,7 @@ namespace Game.Gameplay.Phases.Phases
 
             if (TryIncreaseGoalCurrentAmount(piece.Type, out int goalCurrentAmount))
             {
-                Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
+                Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
 
                 goalData = new DestroyPieceEvent.GoalCurrentAmountUpdatedData(
                     piece.Type,
@@ -91,7 +83,7 @@ namespace Game.Gameplay.Phases.Phases
                 );
             }
 
-            board.RemovePiece(pieceId);
+            _board.RemovePiece(pieceId);
 
             _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(pieceId, DestroyPieceReason.NotAlive, goalData));
 

@@ -10,20 +10,20 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class GravityPhase : Phase
     {
-        [NotNull] private readonly IBoardContainer _boardContainer;
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
 
         public GravityPhase(
-            [NotNull] IBoardContainer boardContainer,
+            [NotNull] IBoard board,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory)
         {
-            ArgumentNullException.ThrowIfNull(boardContainer);
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
 
-            _boardContainer = boardContainer;
+            _board = board;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
         }
@@ -53,13 +53,9 @@ namespace Game.Gameplay.Phases.Phases
         {
             ArgumentNullException.ThrowIfNull(movePiecesByGravityEvent);
 
-            IBoard board = _boardContainer.Board;
-
-            InvalidOperationException.ThrowIfNull(board);
-
             bool resolved = false;
 
-            foreach (int pieceId in board.GetDistinctPieceIdsSortedByRowThenByColumn())
+            foreach (int pieceId in _board.GetDistinctPieceIdsSortedByRowThenByColumn())
             {
                 if (TryMovePiece(movePiecesByGravityEvent, pieceId))
                 {
@@ -74,14 +70,10 @@ namespace Game.Gameplay.Phases.Phases
         {
             ArgumentNullException.ThrowIfNull(movePiecesByGravityEvent);
 
-            IBoard board = _boardContainer.Board;
+            IPiece piece = _board.GetPiece(pieceId);
+            Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
 
-            InvalidOperationException.ThrowIfNull(board);
-
-            IPiece piece = board.GetPiece(pieceId);
-            Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
-
-            int fall = board.ComputePieceFall(piece, sourceCoordinate);
+            int fall = _board.ComputePieceFall(piece, sourceCoordinate);
 
             if (fall <= 0)
             {
@@ -91,7 +83,7 @@ namespace Game.Gameplay.Phases.Phases
             int rowOffset = -fall;
             const int columnOffset = 0;
 
-            board.MovePiece(pieceId, rowOffset, columnOffset);
+            _board.MovePiece(pieceId, rowOffset, columnOffset);
 
             MovePiecesByGravityEvent.PieceMovementData pieceMovementData = new(pieceId, rowOffset, columnOffset);
 
