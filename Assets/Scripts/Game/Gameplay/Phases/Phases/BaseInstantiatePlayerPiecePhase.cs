@@ -6,26 +6,22 @@ using Game.Gameplay.Camera;
 using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.Phases.Phases
 {
     public abstract class BaseInstantiatePlayerPiecePhase : Phase
     {
-        [NotNull] private readonly IBagContainer _bagContainer;
+        [NotNull] private readonly IBag _bag;
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
 
-        protected BaseInstantiatePlayerPiecePhase(
-            [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoard board,
-            [NotNull] ICamera camera)
+        protected BaseInstantiatePlayerPiecePhase([NotNull] IBag bag, [NotNull] IBoard board, [NotNull] ICamera camera)
         {
-            ArgumentNullException.ThrowIfNull(bagContainer);
+            ArgumentNullException.ThrowIfNull(bag);
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
 
-            _bagContainer = bagContainer;
+            _bag = bag;
             _board = board;
             _camera = camera;
         }
@@ -49,11 +45,7 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull]
         private IPiece GetPiece()
         {
-            IBag bag = _bagContainer.Bag;
-
-            InvalidOperationException.ThrowIfNull(bag);
-
-            return bag.Current;
+            return _bag.Current;
         }
 
         private Coordinate GetSourceCoordinate([NotNull] IPiece piece)

@@ -8,13 +8,7 @@ namespace Game.Gameplay.Parsing
 {
     public interface IGameplaySerializedDataConverter
     {
-        void To(
-            GameplaySerializedData gameplaySerializedData,
-            IBoard board,
-            IGoals goals,
-            IMoves moves,
-            [NotNull] out IBag bag
-        );
+        void To(GameplaySerializedData gameplaySerializedData, IBoard board, IGoals goals, IMoves moves, IBag bag);
 
         [NotNull]
         GameplaySerializedData From(IBoard board, IGoals goals, IMoves moves, IBag bag);

@@ -4,8 +4,7 @@ namespace Game.Gameplay.Bag.Parsing
 {
     public interface IBagSerializedDataConverter
     {
-        [NotNull]
-        IBag To(BagSerializedData bagSerializedData);
+        void To(BagSerializedData bagSerializedData, IBag bag);
 
         [NotNull]
         BagSerializedData From(IBag bag);

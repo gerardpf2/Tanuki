@@ -19,7 +19,7 @@ namespace Game.Gameplay.UseCases
 {
     public class UnloadGameplayUseCase : IUnloadGameplayUseCase
     {
-        [NotNull] private readonly IBagContainer _bagContainer;
+        [NotNull] private readonly IBag _bag;
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly ICamera _camera;
@@ -36,7 +36,7 @@ namespace Game.Gameplay.UseCases
         [NotNull] private readonly IScreenLoader _screenLoader;
 
         public UnloadGameplayUseCase(
-            [NotNull] IBagContainer bagContainer,
+            [NotNull] IBag bag,
             [NotNull] IBoard board,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] ICamera camera,
@@ -52,7 +52,7 @@ namespace Game.Gameplay.UseCases
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IScreenLoader screenLoader)
         {
-            ArgumentNullException.ThrowIfNull(bagContainer);
+            ArgumentNullException.ThrowIfNull(bag);
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(camera);
@@ -68,7 +68,7 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(eventsResolver);
             ArgumentNullException.ThrowIfNull(screenLoader);
 
-            _bagContainer = bagContainer;
+            _bag = bag;
             _board = board;
             _pieceIdGetter = pieceIdGetter;
             _camera = camera;
@@ -94,11 +94,11 @@ namespace Game.Gameplay.UseCases
 
         private void PrepareModel()
         {
-            _bagContainer.Uninitialize();
             _pieceIdGetter.Uninitialize();
             _camera.Uninitialize();
             _gameplaySerializerOnBeginIteration.Uninitialize();
 
+            _bag.Clear();
             _board.Clear();
             _goals.Clear();
             _moves.Reset();

@@ -28,7 +28,7 @@ namespace Game.Gameplay.View.Pieces.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
                     new PieceGameObjectPreloader(
-                        r.Resolve<IBagContainer>(),
+                        r.Resolve<IBag>(),
                         r.Resolve<IBoard>(),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>()

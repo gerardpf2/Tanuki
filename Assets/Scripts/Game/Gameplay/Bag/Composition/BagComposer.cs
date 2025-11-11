@@ -20,13 +20,18 @@ namespace Game.Gameplay.Bag.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBagSerializedDataConverter>(r =>
                     new BagSerializedDataConverter(
-                        r.Resolve<IBagPieceEntrySerializedDataConverter>(),
-                        r.Resolve<IPieceGetter>()
+                        r.Resolve<IBagPieceEntrySerializedDataConverter>()
                     )
                 )
             );
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IBagContainer>(_ => new BagContainer()));
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IBag>(r =>
+                    new Bag(
+                        r.Resolve<IPieceGetter>()
+                    )
+                )
+            );
         }
     }
 }
