@@ -4,7 +4,7 @@ using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Game.Gameplay.REMOVE
+namespace Game.Gameplay.View.REMOVE
 {
     public class UnloadGameplay : MonoBehaviour
     {

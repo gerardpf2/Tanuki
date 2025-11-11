@@ -25,6 +25,7 @@ using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Composition;
 using Game.Gameplay.View.Player;
 using Game.Gameplay.View.Player.Composition;
+using Game.Gameplay.View.REMOVE;
 using Game.Gameplay.View.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
