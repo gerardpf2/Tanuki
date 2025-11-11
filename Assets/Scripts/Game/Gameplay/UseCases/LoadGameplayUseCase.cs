@@ -1,4 +1,3 @@
-using Game.Gameplay.Bag;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
@@ -21,7 +20,6 @@ namespace Game.Gameplay.UseCases
     public class LoadGameplayUseCase : ILoadGameplayUseCase
     {
         [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
-        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IPieceIdGetter _pieceIdGetter;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IGameplayParser _gameplayParser;
@@ -39,7 +37,6 @@ namespace Game.Gameplay.UseCases
 
         public LoadGameplayUseCase(
             [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
-            [NotNull] IBagContainer bagContainer,
             [NotNull] IPieceIdGetter pieceIdGetter,
             [NotNull] ICamera camera,
             [NotNull] IGameplayParser gameplayParser,
@@ -56,7 +53,6 @@ namespace Game.Gameplay.UseCases
             [NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(pieceIdGetter);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(gameplayParser);
@@ -73,7 +69,6 @@ namespace Game.Gameplay.UseCases
             ArgumentNullException.ThrowIfNull(screenLoader);
 
             _gameplayDefinitionGetter = gameplayDefinitionGetter;
-            _bagContainer = bagContainer;
             _pieceIdGetter = pieceIdGetter;
             _camera = camera;
             _gameplayParser = gameplayParser;
@@ -103,9 +98,8 @@ namespace Game.Gameplay.UseCases
 
             IGameplayDefinition gameplayDefinition = _gameplayDefinitionGetter.Get(id);
 
-            _gameplayParser.Deserialize(gameplayDefinition.Data, out IBag bag);
+            _gameplayParser.Deserialize(gameplayDefinition.Data);
 
-            _bagContainer.Initialize(bag);
             _camera.Initialize();
             _gameplaySerializerOnBeginIteration.Initialize();
         }

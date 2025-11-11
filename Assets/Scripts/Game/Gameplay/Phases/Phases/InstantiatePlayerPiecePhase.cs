@@ -16,11 +16,11 @@ namespace Game.Gameplay.Phases.Phases
         protected override int? MaxResolveTimesPerIteration => 1;
 
         public InstantiatePlayerPiecePhase(
-            [NotNull] IBagContainer bagContainer,
+            [NotNull] IBag bag,
             [NotNull] IBoard board,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory) : base(bagContainer, board, camera)
+            [NotNull] IEventFactory eventFactory) : base(bag, board, camera)
         {
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);

@@ -16,6 +16,10 @@ namespace Game.Gameplay.Bag
         [NotNull]
         IPiece Current { get; }
 
+        void Build(IEnumerable<BagPieceEntry> bagPieceEntries, IEnumerable<PieceType> initialPieceTypes);
+
         void ConsumeCurrent();
+
+        void Clear();
     }
 }

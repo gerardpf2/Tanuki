@@ -9,10 +9,7 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class SimulateInstantiatePlayerPiecePhase : BaseInstantiatePlayerPiecePhase
     {
-        public SimulateInstantiatePlayerPiecePhase(
-            [NotNull] IBagContainer bagContainer,
-            [NotNull] IBoard board,
-            [NotNull] ICamera camera) : base(bagContainer, board, camera) { }
+        public SimulateInstantiatePlayerPiecePhase([NotNull] IBag bag, [NotNull] IBoard board, [NotNull] ICamera camera) : base(bag, board, camera) { }
 
         protected override ResolveResult ResolveImpl(
             [NotNull] ResolveContext resolveContext,

@@ -10,7 +10,7 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class LockPlayerPiecePhase : Phase
     {
-        [NotNull] private readonly IBagContainer _bagContainer;
+        [NotNull] private readonly IBag _bag;
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
         [NotNull] private readonly IEventFactory _eventFactory;
@@ -19,19 +19,19 @@ namespace Game.Gameplay.Phases.Phases
         protected override int? MaxResolveTimesPerIteration => 1;
 
         public LockPlayerPiecePhase(
-            [NotNull] IBagContainer bagContainer,
+            [NotNull] IBag bag,
             [NotNull] IBoard board,
             [NotNull] IEventEnqueuer eventEnqueuer,
             [NotNull] IEventFactory eventFactory,
             [NotNull] IMoves moves)
         {
-            ArgumentNullException.ThrowIfNull(bagContainer);
+            ArgumentNullException.ThrowIfNull(bag);
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
             ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(moves);
 
-            _bagContainer = bagContainer;
+            _bag = bag;
             _board = board;
             _eventEnqueuer = eventEnqueuer;
             _eventFactory = eventFactory;
@@ -71,13 +71,9 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull]
         private IPiece ConsumeCurrentBagPiece()
         {
-            IBag bag = _bagContainer.Bag;
+            IPiece piece = _bag.Current;
 
-            InvalidOperationException.ThrowIfNull(bag);
-
-            IPiece piece = bag.Current;
-
-            bag.ConsumeCurrent();
+            _bag.ConsumeCurrent();
 
             return piece;
         }

@@ -1,5 +1,4 @@
 using Game.Common;
-using Game.Gameplay.Bag;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
 using Infrastructure.Logging;
@@ -10,7 +9,6 @@ namespace Game.Gameplay.REMOVE
 {
     public class GameplaySerializerOnBeginIteration : IGameplaySerializerOnBeginIteration
     {
-        [NotNull] private readonly IBagContainer _bagContainer;
         [NotNull] private readonly IGameplayParser _gameplayParser;
         [NotNull] private readonly IPhaseResolver _phaseResolver;
         [NotNull] private readonly ILogger _logger;
@@ -18,17 +16,14 @@ namespace Game.Gameplay.REMOVE
         private InitializedLabel _initializedLabel;
 
         public GameplaySerializerOnBeginIteration(
-            [NotNull] IBagContainer bagContainer,
             [NotNull] IGameplayParser gameplayParser,
             [NotNull] IPhaseResolver phaseResolver,
             [NotNull] ILogger logger)
         {
-            ArgumentNullException.ThrowIfNull(bagContainer);
             ArgumentNullException.ThrowIfNull(gameplayParser);
             ArgumentNullException.ThrowIfNull(phaseResolver);
             ArgumentNullException.ThrowIfNull(logger);
 
-            _bagContainer = bagContainer;
             _gameplayParser = gameplayParser;
             _phaseResolver = phaseResolver;
             _logger = logger;
@@ -62,7 +57,7 @@ namespace Game.Gameplay.REMOVE
 
         private void HandleBeginIteration()
         {
-            string serializedGameplay = _gameplayParser.Serialize(_bagContainer.Bag);
+            string serializedGameplay = _gameplayParser.Serialize();
 
             _logger.Info(serializedGameplay);
         }

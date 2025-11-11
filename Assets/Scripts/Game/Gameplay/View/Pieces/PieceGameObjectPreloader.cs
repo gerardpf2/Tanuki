@@ -11,23 +11,23 @@ namespace Game.Gameplay.View.Pieces
 {
     public class PieceGameObjectPreloader : IPieceGameObjectPreloader
     {
-        [NotNull] private readonly IBagContainer _bagContainer;
+        [NotNull] private readonly IBag _bag;
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
         public PieceGameObjectPreloader(
-            [NotNull] IBagContainer bagContainer,
+            [NotNull] IBag bag,
             [NotNull] IBoard board,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool)
         {
-            ArgumentNullException.ThrowIfNull(bagContainer);
+            ArgumentNullException.ThrowIfNull(bag);
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
-            _bagContainer = bagContainer;
+            _bag = bag;
             _board = board;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
             _gameObjectPool = gameObjectPool;
@@ -70,18 +70,14 @@ namespace Game.Gameplay.View.Pieces
 
         private void PreloadPieceGhosts()
         {
-            IBag bag = _bagContainer.Bag;
-
-            InvalidOperationException.ThrowIfNull(bag);
-
             ICollection<PieceType> pieceTypes = new HashSet<PieceType>();
 
-            foreach (BagPieceEntry bagPieceEntry in bag.BagPieceEntries)
+            foreach (BagPieceEntry bagPieceEntry in _bag.BagPieceEntries)
             {
                 PreloadIfNeeded(bagPieceEntry.PieceType);
             }
 
-            foreach (PieceType pieceType in bag.InitialPieceTypes)
+            foreach (PieceType pieceType in _bag.InitialPieceTypes)
             {
                 PreloadIfNeeded(pieceType);
             }

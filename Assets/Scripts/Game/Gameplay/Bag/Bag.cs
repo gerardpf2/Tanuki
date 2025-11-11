@@ -13,9 +13,10 @@ namespace Game.Gameplay.Bag
     public class Bag : IBag
     {
         [NotNull] private readonly IPieceGetter _pieceGetter;
-        [NotNull, ItemNotNull] private readonly IReadOnlyCollection<BagPieceEntry> _bagPieceEntries;
-        [NotNull] private readonly IReadOnlyList<PieceType> _initialPieceTypes;
-        [NotNull] private readonly Random _random = new();
+        [NotNull] private readonly Random _random = new(); // TODO: IRandom dependency
+
+        [NotNull, ItemNotNull] private readonly ICollection<BagPieceEntry> _bagPieceEntries = new List<BagPieceEntry>(); // ItemNotNull as long as all Add check for null
+        [NotNull] private readonly List<PieceType> _initialPieceTypes = new();
 
         /*
          *
@@ -42,29 +43,32 @@ namespace Game.Gameplay.Bag
             }
         }
 
-        public Bag(
-            [NotNull] IPieceGetter pieceGetter,
+        public Bag([NotNull] IPieceGetter pieceGetter)
+        {
+            ArgumentNullException.ThrowIfNull(pieceGetter);
+
+            _pieceGetter = pieceGetter;
+        }
+
+        public void Build(
             [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries,
             [NotNull] IEnumerable<PieceType> initialPieceTypes)
         {
-            ArgumentNullException.ThrowIfNull(pieceGetter);
             ArgumentNullException.ThrowIfNull(bagPieceEntries);
             ArgumentNullException.ThrowIfNull(initialPieceTypes);
 
-            List<BagPieceEntry> bagPieceEntriesCopy = new();
+            Clear();
 
             foreach (BagPieceEntry bagPieceEntry in bagPieceEntries)
             {
                 ArgumentNullException.ThrowIfNull(bagPieceEntry);
 
-                bagPieceEntriesCopy.Add(bagPieceEntry);
+                _bagPieceEntries.Add(bagPieceEntry);
             }
 
-            _pieceGetter = pieceGetter;
-            _bagPieceEntries = bagPieceEntriesCopy;
-            _initialPieceTypes = new List<PieceType>(initialPieceTypes);
-
             Refill();
+
+            _initialPieceTypes.AddRange(initialPieceTypes);
 
             for (int i = _initialPieceTypes.Count - 1; i >= 0; --i)
             {
@@ -87,6 +91,13 @@ namespace Game.Gameplay.Bag
             {
                 Refill();
             }
+        }
+
+        public void Clear()
+        {
+            _bagPieceEntries.Clear();
+            _initialPieceTypes.Clear();
+            _pieces.Clear();
         }
 
         private void Refill()

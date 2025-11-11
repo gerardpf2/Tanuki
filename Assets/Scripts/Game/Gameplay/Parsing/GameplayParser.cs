@@ -10,6 +10,7 @@ namespace Game.Gameplay.Parsing
 {
     public class GameplayParser : IGameplayParser
     {
+        private readonly IBag _bag;
         private readonly IBoard _board;
         private readonly IGoals _goals;
         private readonly IMoves _moves;
@@ -17,6 +18,7 @@ namespace Game.Gameplay.Parsing
         [NotNull] private readonly IParser _parser;
 
         public GameplayParser(
+            IBag bag,
             IBoard board,
             IGoals goals,
             IMoves moves,
@@ -26,6 +28,7 @@ namespace Game.Gameplay.Parsing
             ArgumentNullException.ThrowIfNull(gameplaySerializedDataConverter);
             ArgumentNullException.ThrowIfNull(parser);
 
+            _bag = bag;
             _board = board;
             _goals = goals;
             _moves = moves;
@@ -33,24 +36,24 @@ namespace Game.Gameplay.Parsing
             _parser = parser;
         }
 
-        public string Serialize(IBag bag)
+        public string Serialize()
         {
             GameplaySerializedData gameplaySerializedData =
                 _gameplaySerializedDataConverter.From(
                     _board,
                     _goals,
                     _moves,
-                    bag
+                    _bag
                 );
 
             return _parser.Serialize(gameplaySerializedData);
         }
 
-        public void Deserialize(string value, out IBag bag)
+        public void Deserialize(string value)
         {
             GameplaySerializedData gameplaySerializedData = _parser.Deserialize<GameplaySerializedData>(value);
 
-            _gameplaySerializedDataConverter.To(gameplaySerializedData, _board, _goals, _moves, out bag);
+            _gameplaySerializedDataConverter.To(gameplaySerializedData, _board, _goals, _moves, _bag);
         }
     }
 }

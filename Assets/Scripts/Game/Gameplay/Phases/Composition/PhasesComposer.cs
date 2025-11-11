@@ -79,7 +79,7 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new InstantiatePlayerPiecePhase(
-                        r.Resolve<IBagContainer>(),
+                        r.Resolve<IBag>(),
                         r.Resolve<IBoard>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
@@ -104,7 +104,7 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new LockPlayerPiecePhase(
-                        r.Resolve<IBagContainer>(),
+                        r.Resolve<IBag>(),
                         r.Resolve<IBoard>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
@@ -126,7 +126,7 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new SimulateInstantiatePlayerPiecePhase(
-                        r.Resolve<IBagContainer>(),
+                        r.Resolve<IBag>(),
                         r.Resolve<IBoard>(),
                         r.Resolve<ICamera>()
                     )

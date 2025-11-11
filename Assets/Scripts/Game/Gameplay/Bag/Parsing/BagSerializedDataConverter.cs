@@ -1,5 +1,4 @@
 using System.Linq;
-using Game.Gameplay.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -8,29 +7,24 @@ namespace Game.Gameplay.Bag.Parsing
     public class BagSerializedDataConverter : IBagSerializedDataConverter
     {
         [NotNull] private readonly IBagPieceEntrySerializedDataConverter _bagPieceEntrySerializedDataConverter;
-        [NotNull] private readonly IPieceGetter _pieceGetter;
 
         public BagSerializedDataConverter(
-            [NotNull] IBagPieceEntrySerializedDataConverter bagPieceEntrySerializedDataConverter,
-            [NotNull] IPieceGetter pieceGetter)
+            [NotNull] IBagPieceEntrySerializedDataConverter bagPieceEntrySerializedDataConverter)
         {
             ArgumentNullException.ThrowIfNull(bagPieceEntrySerializedDataConverter);
-            ArgumentNullException.ThrowIfNull(pieceGetter);
 
             _bagPieceEntrySerializedDataConverter = bagPieceEntrySerializedDataConverter;
-            _pieceGetter = pieceGetter;
         }
 
-        public IBag To([NotNull] BagSerializedData bagSerializedData)
+        public void To([NotNull] BagSerializedData bagSerializedData, [NotNull] IBag bag)
         {
             ArgumentNullException.ThrowIfNull(bagSerializedData);
+            ArgumentNullException.ThrowIfNull(bag);
 
-            return
-                new Bag(
-                    _pieceGetter,
-                    bagSerializedData.BagPieceEntries.Select(_bagPieceEntrySerializedDataConverter.To),
-                    bagSerializedData.InitialPieceTypes
-                );
+            bag.Build(
+                bagSerializedData.BagPieceEntries.Select(_bagPieceEntrySerializedDataConverter.To),
+                bagSerializedData.InitialPieceTypes
+            );
         }
 
         public BagSerializedData From([NotNull] IBag bag)
