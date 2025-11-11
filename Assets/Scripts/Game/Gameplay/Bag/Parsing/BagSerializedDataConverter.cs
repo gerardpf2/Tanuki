@@ -25,12 +25,14 @@ namespace Game.Gameplay.Bag.Parsing
         {
             ArgumentNullException.ThrowIfNull(bagSerializedData);
 
-            return
-                new Bag(
-                    _pieceGetter,
-                    bagSerializedData.BagPieceEntries.Select(_bagPieceEntrySerializedDataConverter.To),
-                    bagSerializedData.InitialPieceTypes
-                );
+            IBag bag = new Bag(_pieceGetter);
+
+            bag.Build(
+                bagSerializedData.BagPieceEntries.Select(_bagPieceEntrySerializedDataConverter.To),
+                bagSerializedData.InitialPieceTypes
+            );
+
+            return bag;
         }
 
         public BagSerializedData From([NotNull] IBag bag)

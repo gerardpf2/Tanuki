@@ -16,7 +16,7 @@ namespace Game.Gameplay.Bag
         [NotNull] private readonly Random _random = new(); // TODO: IRandom dependency
 
         [NotNull, ItemNotNull] private readonly ICollection<BagPieceEntry> _bagPieceEntries = new List<BagPieceEntry>(); // ItemNotNull as long as all Add check for null
-        [NotNull] private readonly IList<PieceType> _initialPieceTypes = new List<PieceType>();
+        [NotNull] private readonly List<PieceType> _initialPieceTypes = new();
 
         /*
          *
@@ -43,36 +43,11 @@ namespace Game.Gameplay.Bag
             }
         }
 
-        public Bag(
-            [NotNull] IPieceGetter pieceGetter,
-            [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries,
-            [NotNull] IEnumerable<PieceType> initialPieceTypes)
+        public Bag([NotNull] IPieceGetter pieceGetter)
         {
             ArgumentNullException.ThrowIfNull(pieceGetter);
-            ArgumentNullException.ThrowIfNull(bagPieceEntries);
-            ArgumentNullException.ThrowIfNull(initialPieceTypes);
-
-            List<BagPieceEntry> bagPieceEntriesCopy = new();
-
-            foreach (BagPieceEntry bagPieceEntry in bagPieceEntries)
-            {
-                ArgumentNullException.ThrowIfNull(bagPieceEntry);
-
-                bagPieceEntriesCopy.Add(bagPieceEntry);
-            }
 
             _pieceGetter = pieceGetter;
-            _bagPieceEntries = bagPieceEntriesCopy;
-            _initialPieceTypes = new List<PieceType>(initialPieceTypes);
-
-            Refill();
-
-            for (int i = _initialPieceTypes.Count - 1; i >= 0; --i)
-            {
-                IPiece piece = GetPiece(_initialPieceTypes[i]);
-
-                _pieces.Add(piece);
-            }
         }
 
         public void Build(
@@ -91,12 +66,9 @@ namespace Game.Gameplay.Bag
                 _bagPieceEntries.Add(bagPieceEntry);
             }
 
-            foreach (PieceType pieceType in initialPieceTypes)
-            {
-                _initialPieceTypes.Add(pieceType);
-            }
-
             Refill();
+
+            _initialPieceTypes.AddRange(initialPieceTypes);
 
             for (int i = _initialPieceTypes.Count - 1; i >= 0; --i)
             {
