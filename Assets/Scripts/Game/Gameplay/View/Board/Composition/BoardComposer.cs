@@ -43,6 +43,7 @@ namespace Game.Gameplay.View.Board.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardViewModel>((r, vm) =>
                     vm.Inject(
+                        r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>()
                     )
                 )
