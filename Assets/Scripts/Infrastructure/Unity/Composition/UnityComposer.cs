@@ -2,6 +2,8 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
+using UnityEngine;
+using ILogger = Infrastructure.Logging.ILogger;
 
 namespace Infrastructure.Unity.Composition
 {
@@ -40,6 +42,17 @@ namespace Infrastructure.Unity.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IGameObjectInstantiator>(_ => new GameObjectInstantiator()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IScreenPropertiesGetter>(_ => new ScreenPropertiesGetter()));
+
+            ruleAdder.Add(ruleFactory.GetSingleton(_ => new UnityLogHandler(Debug.unityLogger)));
+        }
+
+        protected override void Initialize([NotNull] IRuleResolver ruleResolver)
+        {
+            ArgumentNullException.ThrowIfNull(ruleResolver);
+
+            base.Initialize(ruleResolver);
+
+            ruleResolver.Resolve<ILogger>().Add(ruleResolver.Resolve<UnityLogHandler>());
         }
     }
 }
