@@ -11,6 +11,15 @@ namespace Game.Gameplay.View.Camera
 {
     public class CameraView : ICameraView
     {
+        /*
+         *
+         * ExtraRowsOnBottom has no impact during phases resolution
+         * It allows the view to render more rows than the expected ones
+         * For example, it can be used to render half a row to see the board ground
+         *
+         */
+        private const float ExtraRowsOnBottom = 0.5f; // TODO: ScriptableObject
+
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly Transform _unityCameraTransform;
@@ -55,14 +64,14 @@ namespace Game.Gameplay.View.Camera
             float initialSize = UnityCamera.orthographicSize;
             float initialVisibleRows = topPositionY - bottomPositionY;
 
-            int newVisibleRows = _camera.VisibleRows;
+            float newVisibleRows = _camera.VisibleRows + ExtraRowsOnBottom;
             float newSize = initialSize / initialVisibleRows * newVisibleRows;
 
             UnityCamera.orthographicSize = newSize;
 
             // Correct position y
 
-            float offsetY = bottomPositionY * newSize / initialSize;
+            float offsetY = bottomPositionY * newSize / initialSize + ExtraRowsOnBottom;
 
             _unityCameraTransform.position = _unityCameraTransform.position.AddY(-offsetY);
         }
