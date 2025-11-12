@@ -3,7 +3,6 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.DependencyInjection.Rules;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.ModelViewViewModel.Composition;
-using Infrastructure.ModelViewViewModel.PropertyBindings;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -47,15 +46,12 @@ namespace Editor.Tests.Infrastructure.ModelViewViewModel.Composition
         [Test]
         public void AddSharedRules_AddExpected()
         {
-            IRule<Action<CollectionBindingDependenciesContainer>> collectionBindingDependenciesContainerRule = Substitute.For<IRule<Action<CollectionBindingDependenciesContainer>>>();
             IRule<Action<ViewModel>> viewModelRule = Substitute.For<IRule<Action<ViewModel>>>();
-            _ruleFactory.GetInject(Arg.Any<Action<IRuleResolver, CollectionBindingDependenciesContainer>>()).Returns(collectionBindingDependenciesContainerRule);
             _ruleFactory.GetInject(Arg.Any<Action<IRuleResolver, ViewModel>>()).Returns(viewModelRule);
             _modelViewViewModelComposer.Compose(_scopeBuildingContext);
 
             _scopeBuildingContext.AddSharedRules(_ruleAdder, _ruleFactory);
 
-            _ruleAdder.Received(1).Add(collectionBindingDependenciesContainerRule);
             _ruleAdder.Received(1).Add(viewModelRule);
         }
     }
