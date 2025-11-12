@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Unity",
-        "DependencyInjection"
+        "DependencyInjection",
+        "Logging"
     ],
     "includePlatforms": [
         "Editor"

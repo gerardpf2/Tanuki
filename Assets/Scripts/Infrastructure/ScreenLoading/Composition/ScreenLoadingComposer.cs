@@ -1,6 +1,5 @@
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
-using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Infrastructure.ScreenLoading.Composition
@@ -40,8 +39,7 @@ namespace Infrastructure.ScreenLoading.Composition
                 ruleFactory.GetSingleton<IScreenLoader>(r =>
                     new ScreenLoader(
                         r.Resolve<IScreenDefinitionGetter>(),
-                        r.Resolve<IScreenPlacementGetter>(),
-                        r.Resolve<IGameObjectInstantiator>()
+                        r.Resolve<IScreenPlacementGetter>()
                     )
                 )
             );

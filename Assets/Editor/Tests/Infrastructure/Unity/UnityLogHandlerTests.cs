@@ -1,10 +1,9 @@
-using Infrastructure.Logging;
+using Infrastructure.Unity;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
-using ILogger = UnityEngine.ILogger;
 
-namespace Editor.Tests.Infrastructure.Logging
+namespace Editor.Tests.Infrastructure.Unity
 {
     public class UnityLogHandlerTests
     {
