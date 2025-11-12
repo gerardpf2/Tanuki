@@ -41,14 +41,12 @@ namespace Editor.Tests.Infrastructure.Unity.Composition
             IRule<ICameraGetter> cameraGetterRule = Substitute.For<IRule<ICameraGetter>>();
             IRule<ICoroutineRunner> coroutineRunnerRule = Substitute.For<IRule<ICoroutineRunner>>();
             IRule<IDeltaTimeGetter> deltaTimeGetterRule = Substitute.For<IRule<IDeltaTimeGetter>>();
-            IRule<IGameObjectInstantiator> gameObjectInstantiatorRule = Substitute.For<IRule<IGameObjectInstantiator>>();
             IRule<IScreenPropertiesGetter> screenPropertiesGetterRule = Substitute.For<IRule<IScreenPropertiesGetter>>();
             IRule<UnityLogHandler> unityLogHandlerRule = Substitute.For<IRule<UnityLogHandler>>();
             _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, IGameObjectPool>>()).Returns(gameObjectPoolRule);
             _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, ICameraGetter>>()).Returns(cameraGetterRule);
             _ruleFactory.GetInstance(_coroutineRunner).Returns(coroutineRunnerRule);
             _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, IDeltaTimeGetter>>()).Returns(deltaTimeGetterRule);
-            _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, IGameObjectInstantiator>>()).Returns(gameObjectInstantiatorRule);
             _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, IScreenPropertiesGetter>>()).Returns(screenPropertiesGetterRule);
             _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, UnityLogHandler>>()).Returns(unityLogHandlerRule);
             _unityComposer.Compose(_scopeBuildingContext);
@@ -59,7 +57,6 @@ namespace Editor.Tests.Infrastructure.Unity.Composition
             _ruleAdder.Received(1).Add(cameraGetterRule);
             _ruleAdder.Received(1).Add(coroutineRunnerRule);
             _ruleAdder.Received(1).Add(deltaTimeGetterRule);
-            _ruleAdder.Received(1).Add(gameObjectInstantiatorRule);
             _ruleAdder.Received(1).Add(screenPropertiesGetterRule);
             _ruleAdder.Received(1).Add(unityLogHandlerRule);
         }

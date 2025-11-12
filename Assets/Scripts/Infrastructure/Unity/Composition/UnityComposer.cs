@@ -25,21 +25,13 @@ namespace Infrastructure.Unity.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            ruleAdder.Add(
-                ruleFactory.GetSingleton<IGameObjectPool>(r =>
-                    new GameObjectPool(
-                        r.Resolve<IGameObjectInstantiator>()
-                    )
-                )
-            );
+            ruleAdder.Add(ruleFactory.GetSingleton<IGameObjectPool>(_ => new GameObjectPool()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<ICameraGetter>(_ => new CameraGetter()));
 
             ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IDeltaTimeGetter>(_ => new DeltaTimeGetter()));
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IGameObjectInstantiator>(_ => new GameObjectInstantiator()));
 
             ruleAdder.Add(ruleFactory.GetSingleton<IScreenPropertiesGetter>(_ => new ScreenPropertiesGetter()));
 
