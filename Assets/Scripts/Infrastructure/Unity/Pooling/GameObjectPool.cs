@@ -8,17 +8,8 @@ namespace Infrastructure.Unity.Pooling
     // TODO: Test
     public class GameObjectPool : IGameObjectPool
     {
-        [NotNull] private readonly IGameObjectInstantiator _gameObjectInstantiator;
-
         [NotNull] private readonly IDictionary<GameObject, Queue<GameObject>> _pooledInstancesByPrefab = new Dictionary<GameObject, Queue<GameObject>>();
         [NotNull] private readonly Transform _pooledInstancesParent = new GameObject("PooledInstancesParent").transform;
-
-        public GameObjectPool([NotNull] IGameObjectInstantiator gameObjectInstantiator)
-        {
-            ArgumentNullException.ThrowIfNull(gameObjectInstantiator);
-
-            _gameObjectInstantiator = gameObjectInstantiator;
-        }
 
         public GameObjectPooledInstance Get([NotNull] GameObject prefab, Transform parent)
         {
@@ -38,7 +29,9 @@ namespace Infrastructure.Unity.Pooling
 
             for (int i = 0; i < amount; ++i)
             {
-                GameObject instance = _gameObjectInstantiator.Instantiate(prefab, null);
+                GameObject instance = Object.Instantiate(prefab);
+
+                InvalidOperationException.ThrowIfNull(instance);
 
                 EnqueueInstance(prefab, instance);
             }
@@ -51,7 +44,9 @@ namespace Infrastructure.Unity.Pooling
 
             if (!TryDequeueInstance(prefab, parent, out GameObject instance))
             {
-                instance = _gameObjectInstantiator.Instantiate(prefab, parent);
+                instance = Object.Instantiate(prefab, parent);
+
+                InvalidOperationException.ThrowIfNull(instance);
             }
 
             return instance;
