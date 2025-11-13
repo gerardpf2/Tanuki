@@ -78,15 +78,10 @@ namespace Game.Gameplay.View.Camera
 
         private void SetInitialPosition()
         {
-            const int initialRow = 0;
-            int initialColumn = ComputeInitialColumn();
+            const int y = 0;
+            float x = 0.5f * (_board.Columns - 1);
 
-            _unityCameraTransform.position = _unityCameraTransform.position.WithX(initialColumn).WithY(initialRow);
-        }
-
-        private int ComputeInitialColumn()
-        {
-            return _board.Columns / 2;
+            _unityCameraTransform.position = _unityCameraTransform.position.WithX(x).WithY(y);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Game.Gameplay.View.Board
             InvalidOperationException.ThrowIfNull(_spriteRenderer);
             InvalidOperationException.ThrowIfNull(_board);
 
-            int x = _board.Columns / 2;
+            float x = 0.5f * (_board.Columns - 1);
 
             _spriteRenderer.transform.position = _spriteRenderer.transform.position.WithX(x);
         }
