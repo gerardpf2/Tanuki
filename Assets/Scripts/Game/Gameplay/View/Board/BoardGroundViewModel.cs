@@ -1,4 +1,5 @@
 using Game.Gameplay.Board;
+using Game.Gameplay.View.Camera;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
@@ -16,6 +17,7 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
         private IBoard _board;
+        private ICameraView _cameraView;
 
         protected override void Awake()
         {
@@ -24,11 +26,13 @@ namespace Game.Gameplay.View.Board
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] IBoard board)
+        public void Inject([NotNull] IBoard board, [NotNull] ICameraView cameraView)
         {
             ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(cameraView);
 
             _board = board;
+            _cameraView = cameraView;
 
             UpdatePositionX();
             UpdateWidth();
@@ -48,9 +52,10 @@ namespace Game.Gameplay.View.Board
         {
             InvalidOperationException.ThrowIfNull(_spriteRenderer);
             InvalidOperationException.ThrowIfNull(_board);
+            InvalidOperationException.ThrowIfNull(_cameraView);
 
-            const float height = 1.0f;
             float width = _board.Columns + _extraWidth;
+            float height = _cameraView.ExtraRowsOnBottom;
 
             _spriteRenderer.size = new Vector2(width, height);
         }
