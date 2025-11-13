@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Game.Gameplay;
-using Game.Gameplay.Composition;
-using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.UseCases;
 using Game.REMOVE;
 using Infrastructure.DependencyInjection;
@@ -13,18 +10,22 @@ namespace Game.Composition
 {
     public class GameComposer : ScopeComposer
     {
-        [NotNull] private readonly IGameplayDefinitionGetter _gameplayDefinitionGetter;
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
+        [NotNull, ItemNotNull] private readonly IReadOnlyCollection<IGameScopeComposerBuilder> _childScopeComposerBuilders;
 
-        public GameComposer(
-            [NotNull] IGameplayDefinitionGetter gameplayDefinitionGetter,
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
+        public GameComposer([NotNull, ItemNotNull] IEnumerable<IGameScopeComposerBuilder> childScopeComposerBuilders)
         {
-            ArgumentNullException.ThrowIfNull(gameplayDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(childScopeComposerBuilders);
 
-            _gameplayDefinitionGetter = gameplayDefinitionGetter;
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
+            List<IGameScopeComposerBuilder> childScopeComposerBuildersCopy = new();
+
+            foreach (IGameScopeComposerBuilder gameScopeComposerBuilder in childScopeComposerBuilders)
+            {
+                ArgumentNullException.ThrowIfNull(gameScopeComposerBuilder);
+
+                childScopeComposerBuildersCopy.Add(gameScopeComposerBuilder);
+            }
+
+            _childScopeComposerBuilders = childScopeComposerBuildersCopy;
         }
 
         protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
@@ -47,7 +48,7 @@ namespace Game.Composition
         {
             return base
                 .GetChildScopeComposers()
-                .Append(new GameplayComposer(_gameplayDefinitionGetter, _pieceViewDefinitionGetter));
+                .Concat(_childScopeComposerBuilders.Select(childScopeComposerBuilder => childScopeComposerBuilder.Build()));
         }
     }
 }

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21dd442a61674a9b95a84f793bbbd370, type: 3}
   m_Name: GameComposerBuilder
   m_EditorClassIdentifier: 
-  _gameplayDefinitionContainer: {fileID: 11400000, guid: c7c34effe0bdd4f468a41f8a1f1f5cc6, type: 2}
-  _pieceViewDefinitionContainer: {fileID: 11400000, guid: 07ed93ba71d0f354bbdedce7fd0ef610, type: 2}
+  _childScopeComposerBuilders:
+  - {fileID: 11400000, guid: 0e0a2515d922b804183eb12377ef1ea4, type: 2}
