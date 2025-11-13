@@ -30,11 +30,11 @@ namespace Game.Gameplay.View.Board
 
             _board = board;
 
-            UpdatePosition();
+            UpdatePositionX();
             UpdateWidth();
         }
 
-        private void UpdatePosition()
+        private void UpdatePositionX()
         {
             InvalidOperationException.ThrowIfNull(_spriteRenderer);
             InvalidOperationException.ThrowIfNull(_board);
