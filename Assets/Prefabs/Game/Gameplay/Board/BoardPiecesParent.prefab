@@ -42,6 +42,8 @@ GameObject:
   m_Component:
   - component: {fileID: 154792800184654612}
   - component: {fileID: 4272887805113496463}
+  - component: {fileID: 1816306322354226064}
+  - component: {fileID: 1741566531043580027}
   - component: {fileID: 2867790684787648009}
   m_Layer: 0
   m_Name: Ground
@@ -77,7 +79,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 024cc246ca5c4ce092ac9bcbf90531da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _extraWidth: 2
+  _extraWidth: 1
+--- !u!114 &1816306322354226064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8953837371348468630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca953e5f0f6f47e08e666000f13efa43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 4272887805113496463}
+  _key: Position
+  _transform: {fileID: 154792800184654612}
+--- !u!114 &1741566531043580027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8953837371348468630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e160666b95d74c3dba51f90bade3702d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 4272887805113496463}
+  _key: Size
   _spriteRenderer: {fileID: 2867790684787648009}
 --- !u!212 &2867790684787648009
 SpriteRenderer:
