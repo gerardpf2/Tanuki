@@ -1,11 +1,12 @@
+using System;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
-using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.View.Camera
 {
@@ -25,6 +26,8 @@ namespace Game.Gameplay.View.Camera
         [NotNull] private readonly Transform _unityCameraTransform;
 
         private InitializedLabel _initializedLabel;
+
+        public event Action OnUnityCameraSizeUpdated;
 
         public UnityEngine.Camera UnityCamera { get; }
 
@@ -74,6 +77,8 @@ namespace Game.Gameplay.View.Camera
             float offsetY = bottomPositionY * newSize / initialSize + ExtraRowsOnBottom;
 
             _unityCameraTransform.position = _unityCameraTransform.position.AddY(-offsetY);
+
+            OnUnityCameraSizeUpdated?.Invoke();
         }
 
         private void SetInitialPosition()
