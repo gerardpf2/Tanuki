@@ -41,6 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BoardWall
+    uniqueID: 4019108957
+    locked: 0
+  - name: BoardGround
+    uniqueID: 423012845
+    locked: 0
   - name: PieceGhost
     uniqueID: 2228489209
     locked: 0

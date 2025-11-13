@@ -8,10 +8,12 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public class BoardViewGroundViewModel : ViewModel
+    public class BoardGroundViewModel : ViewModel
     {
+        // TODO: Use bindings
+
         [SerializeField] private float _extraWidth;
-        [SerializeField] private SpriteRenderer _spriteRenderer; // TODO: Binding
+        [SerializeField] private SpriteRenderer _spriteRenderer;
 
         private IBoard _board;
 
@@ -28,11 +30,11 @@ namespace Game.Gameplay.View.Board
 
             _board = board;
 
-            UpdatePosition();
+            UpdatePositionX();
             UpdateWidth();
         }
 
-        private void UpdatePosition()
+        private void UpdatePositionX()
         {
             InvalidOperationException.ThrowIfNull(_spriteRenderer);
             InvalidOperationException.ThrowIfNull(_board);
