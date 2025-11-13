@@ -48,6 +48,14 @@ namespace Game.Gameplay.View.Board.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<BoardViewGroundViewModel>((r, vm) =>
+                    vm.Inject(
+                        r.Resolve<IBoard>("View")
+                    )
+                )
+            );
         }
     }
 }
