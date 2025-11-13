@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public class BoardViewGroundViewModel : ViewModel
+    public class BoardGroundViewModel : ViewModel
     {
         // TODO: Use bindings
 

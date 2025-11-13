@@ -41,7 +41,7 @@ namespace Game.Gameplay.View.Board.Composition
             base.AddSharedRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(
-                ruleFactory.GetInject<BoardViewGroundViewModel>((r, vm) =>
+                ruleFactory.GetInject<BoardGroundViewModel>((r, vm) =>
                     vm.Inject(
                         r.Resolve<IBoard>("View")
                     )
@@ -58,7 +58,7 @@ namespace Game.Gameplay.View.Board.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetInject<BoardViewWallViewModel>((r, vm) =>
+                ruleFactory.GetInject<BoardWallViewModel>((r, vm) =>
                     vm.Inject(
                         r.Resolve<IBoard>("View")
                     )

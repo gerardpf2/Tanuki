@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Board
 {
-    public class BoardViewWallViewModel : ViewModel
+    public class BoardWallViewModel : ViewModel
     {
         // TODO: Use bindings
 
