@@ -5,8 +5,8 @@ namespace Game.Gameplay.Camera
 {
     public class Camera : ICamera
     {
-        private int _topRow;
-        private int _bottomRow;
+        private int _topRow = -1;
+        private int _bottomRow = -1;
 
         public int TopRow
         {
