@@ -17,6 +17,8 @@ namespace Game.Gameplay.View.Board
         [SerializeField] private RectTransform _rectTransform;
         [SerializeField] private bool _isLeft;
 
+        [NotNull] private readonly IBoundProperty<bool> _widthUpdated = new BoundProperty<bool>("WidthUpdated");
+
         private IBoard _board;
         private ICameraView _cameraView;
         private ICameraGetter _cameraGetter;
@@ -26,6 +28,8 @@ namespace Game.Gameplay.View.Board
             base.Awake();
 
             InjectResolver.Resolve(this);
+
+            Add(_widthUpdated);
 
             SubscribeToEvents();
         }
@@ -91,6 +95,8 @@ namespace Game.Gameplay.View.Board
             {
                 _rectTransform.offsetMin = new Vector2(boardHalfWidth, 0.0f);
             }
+
+            _widthUpdated.Value = true;
         }
     }
 }
