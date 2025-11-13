@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public class BoardWallViewModel : ViewModel
+    public class BoardWallsViewModel : ViewModel
     {
         // TODO: Use bindings
 
