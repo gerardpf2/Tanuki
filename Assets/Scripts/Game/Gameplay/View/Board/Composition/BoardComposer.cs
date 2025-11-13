@@ -4,6 +4,7 @@ using Game.Gameplay.View.Pieces;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 
@@ -60,7 +61,9 @@ namespace Game.Gameplay.View.Board.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardWallViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IBoard>("View")
+                        r.Resolve<IBoard>("View"),
+                        r.Resolve<ICameraView>(),
+                        r.Resolve<ICameraGetter>()
                     )
                 )
             );
