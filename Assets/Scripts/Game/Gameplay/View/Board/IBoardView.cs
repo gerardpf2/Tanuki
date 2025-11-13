@@ -11,6 +11,8 @@ namespace Game.Gameplay.View.Board
 
         void Uninitialize();
 
+        void InstantiatePiecesParent(GameObject piecesParentPrefab);
+
         [NotNull]
         IPiece GetPiece(int pieceId);
 

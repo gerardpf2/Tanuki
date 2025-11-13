@@ -50,8 +50,6 @@ namespace Game.Gameplay.View.Board
         {
             _initializedLabel.SetInitialized();
 
-            _piecesParent = new GameObject("PiecesParent").transform; // New game object outside canvas, etc
-
             _viewBoard.Build(_modelBoard.Columns);
         }
 
@@ -68,6 +66,17 @@ namespace Game.Gameplay.View.Board
             _piecesParent = null;
 
             _viewBoard.Clear();
+        }
+
+        public void InstantiatePiecesParent([NotNull] GameObject piecesParentPrefab)
+        {
+            ArgumentNullException.ThrowIfNull(piecesParentPrefab);
+
+            GameObject piecesParentInstance = Object.Instantiate(piecesParentPrefab); // New game object outside canvas, etc
+
+            InvalidOperationException.ThrowIfNull(piecesParentInstance);
+
+            _piecesParent = piecesParentInstance.transform;
         }
 
         public IPiece GetPiece(int pieceId)

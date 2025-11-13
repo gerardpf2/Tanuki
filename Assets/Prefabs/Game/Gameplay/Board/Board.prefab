@@ -85,6 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d327f52a3a2e4195b4473941065a02f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _piecesParentPrefab: {fileID: 175779871780464168, guid: b0d647543d6662c4a8abf8a3e8ccb930, type: 3}
   _top: {fileID: 5709986867385670541}
   _bottom: {fileID: 1596348822360933571}
 --- !u!1 &5835795559298667794

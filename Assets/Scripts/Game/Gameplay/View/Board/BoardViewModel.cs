@@ -10,9 +10,11 @@ namespace Game.Gameplay.View.Board
 {
     public class BoardViewModel : ViewModel, IDataSettable<BoardViewData>
     {
+        [SerializeField] private GameObject _piecesParentPrefab;
         [SerializeField] private Transform _top;
         [SerializeField] private Transform _bottom;
 
+        private IBoardView _boardView;
         private ICameraView _cameraView;
 
         protected override void Awake()
@@ -22,10 +24,12 @@ namespace Game.Gameplay.View.Board
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] ICameraView cameraView)
+        public void Inject([NotNull] IBoardView boardView, [NotNull] ICameraView cameraView)
         {
+            ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
 
+            _boardView = boardView;
             _cameraView = cameraView;
         }
 
@@ -42,13 +46,21 @@ namespace Game.Gameplay.View.Board
 
             void InitializeAndOnReadyInvoke()
             {
-                Initialize();
+                InstantiatePiecesParent();
+                SetViewLimits();
 
                 data.OnReady?.Invoke();
             }
         }
 
-        private void Initialize()
+        private void InstantiatePiecesParent()
+        {
+            InvalidOperationException.ThrowIfNull(_boardView);
+
+            _boardView.InstantiatePiecesParent(_piecesParentPrefab);
+        }
+
+        private void SetViewLimits()
         {
             InvalidOperationException.ThrowIfNull(_top);
             InvalidOperationException.ThrowIfNull(_bottom);
