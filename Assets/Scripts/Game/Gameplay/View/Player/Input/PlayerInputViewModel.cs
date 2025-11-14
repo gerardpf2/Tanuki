@@ -6,7 +6,7 @@ using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.Player
+namespace Game.Gameplay.View.Player.Input
 {
     public class PlayerInputViewModel : ViewModel
     {

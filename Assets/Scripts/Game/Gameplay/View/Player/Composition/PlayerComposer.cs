@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Phases;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
+using Game.Gameplay.View.Player.Input;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
