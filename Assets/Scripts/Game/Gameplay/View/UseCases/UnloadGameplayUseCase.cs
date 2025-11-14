@@ -11,6 +11,7 @@ using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Player;
+using Game.Gameplay.View.Player.Input.ActionHandlers;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -30,6 +31,10 @@ namespace Game.Gameplay.View.UseCases
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
         [NotNull] private readonly IMovesView _movesView;
+        [NotNull] private readonly IPlayerInputActionHandler _lockPlayerInputActionHandler;
+        [NotNull] private readonly IPlayerInputActionHandler _moveLeftPlayerInputActionHandler;
+        [NotNull] private readonly IPlayerInputActionHandler _moveRightPlayerInputActionHandler;
+        [NotNull] private readonly IPlayerInputActionHandler _rotatePlayerInputActionHandler;
         [NotNull] private readonly IPlayerPieceGhostView _playerPieceGhostView;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
         [NotNull] private readonly IEventsResolver _eventsResolver;
@@ -47,6 +52,10 @@ namespace Game.Gameplay.View.UseCases
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
             [NotNull] IMovesView movesView,
+            [NotNull] IPlayerInputActionHandler lockPlayerInputActionHandler,
+            [NotNull] IPlayerInputActionHandler moveLeftPlayerInputActionHandler,
+            [NotNull] IPlayerInputActionHandler moveRightPlayerInputActionHandler,
+            [NotNull] IPlayerInputActionHandler rotatePlayerInputActionHandler,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IEventsResolver eventsResolver,
@@ -63,6 +72,10 @@ namespace Game.Gameplay.View.UseCases
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
             ArgumentNullException.ThrowIfNull(movesView);
+            ArgumentNullException.ThrowIfNull(lockPlayerInputActionHandler);
+            ArgumentNullException.ThrowIfNull(moveLeftPlayerInputActionHandler);
+            ArgumentNullException.ThrowIfNull(moveRightPlayerInputActionHandler);
+            ArgumentNullException.ThrowIfNull(rotatePlayerInputActionHandler);
             ArgumentNullException.ThrowIfNull(playerPieceGhostView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(eventsResolver);
@@ -79,6 +92,10 @@ namespace Game.Gameplay.View.UseCases
             _cameraView = cameraView;
             _goalsView = goalsView;
             _movesView = movesView;
+            _lockPlayerInputActionHandler = lockPlayerInputActionHandler;
+            _moveLeftPlayerInputActionHandler = moveLeftPlayerInputActionHandler;
+            _moveRightPlayerInputActionHandler = moveRightPlayerInputActionHandler;
+            _rotatePlayerInputActionHandler = rotatePlayerInputActionHandler;
             _playerPieceGhostView = playerPieceGhostView;
             _playerPieceView = playerPieceView;
             _eventsResolver = eventsResolver;
@@ -110,6 +127,10 @@ namespace Game.Gameplay.View.UseCases
             _cameraView.Uninitialize();
             _goalsView.Uninitialize();
             _movesView.Uninitialize();
+            _lockPlayerInputActionHandler.Uninitialize();
+            _moveLeftPlayerInputActionHandler.Uninitialize();
+            _moveRightPlayerInputActionHandler.Uninitialize();
+            _rotatePlayerInputActionHandler.Uninitialize();
             _playerPieceGhostView.Uninitialize();
             _playerPieceView.Uninitialize();
             _eventsResolver.Uninitialize();

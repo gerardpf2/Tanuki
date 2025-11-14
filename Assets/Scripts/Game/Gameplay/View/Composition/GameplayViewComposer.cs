@@ -25,6 +25,7 @@ using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Composition;
 using Game.Gameplay.View.Player;
 using Game.Gameplay.View.Player.Composition;
+using Game.Gameplay.View.Player.Input.ActionHandlers;
 using Game.Gameplay.View.REMOVE;
 using Game.Gameplay.View.UseCases;
 using Infrastructure.DependencyInjection;
@@ -67,6 +68,10 @@ namespace Game.Gameplay.View.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IMovesView>(),
+                        r.Resolve<IPlayerInputActionHandler>("Lock"),
+                        r.Resolve<IPlayerInputActionHandler>("MoveLeft"),
+                        r.Resolve<IPlayerInputActionHandler>("MoveRight"),
+                        r.Resolve<IPlayerInputActionHandler>("Rotate"),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
@@ -106,6 +111,10 @@ namespace Game.Gameplay.View.Composition
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IMovesView>(),
                         r.Resolve<IPieceGameObjectPreloader>(),
+                        r.Resolve<IPlayerInputActionHandler>("Lock"),
+                        r.Resolve<IPlayerInputActionHandler>("MoveLeft"),
+                        r.Resolve<IPlayerInputActionHandler>("MoveRight"),
+                        r.Resolve<IPlayerInputActionHandler>("Rotate"),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
