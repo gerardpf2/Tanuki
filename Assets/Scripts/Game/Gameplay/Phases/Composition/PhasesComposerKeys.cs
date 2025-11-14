@@ -2,7 +2,7 @@ namespace Game.Gameplay.Phases.Composition
 {
     public static class PhasesComposerKeys
     {
-        public static class Phases
+        public static class Phase
         {
             public const string CameraTargetHighestPlayerPieceLockRowPhase = nameof(CameraTargetHighestPlayerPieceLockRowPhase);
             public const string DestroyNotAlivePiecesPhase = nameof(DestroyNotAlivePiecesPhase);
