@@ -24,6 +24,8 @@ namespace Game.Gameplay.View.Player
 
         void Destroy();
 
+        bool CanMove(int offsetX);
+
         void Move(int offsetX);
 
         void Rotate();

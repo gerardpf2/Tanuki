@@ -25,9 +25,7 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
 
         protected override bool GetAvailable()
         {
-            // TODO
-
-            return base.GetAvailable();
+            return base.GetAvailable() && _playerPieceView.CanMove(_offsetX);
         }
 
         protected override void ResolveImpl()

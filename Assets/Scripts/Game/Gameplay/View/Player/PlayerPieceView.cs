@@ -122,6 +122,20 @@ namespace Game.Gameplay.View.Player
             OnDestroyed?.Invoke();
         }
 
+        public bool CanMove(int offsetX)
+        {
+            InvalidOperationException.ThrowIfNull(_pieceData);
+
+            IPiece piece = _pieceData.Piece;
+
+            const int minColumn = 0;
+            int maxColumn = Mathf.Max(_board.Columns - piece.Width, minColumn);
+
+            int column = Coordinate.Column + offsetX;
+
+            return column >= minColumn && column <= maxColumn;
+        }
+
         public void Move(int offsetX)
         {
             InvalidOperationException.ThrowIfNull(_pieceData);
