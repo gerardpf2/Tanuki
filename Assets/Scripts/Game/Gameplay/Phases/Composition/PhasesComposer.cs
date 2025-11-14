@@ -143,7 +143,7 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IPhase>(nameof(CameraTargetHighestPlayerPieceLockRowPhase))
                     )
                 ),
-                "Initial"
+                PhasesComposerKeys.PhaseContainer.Initial
             );
 
             ruleAdder.Add(
@@ -161,7 +161,7 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IPhase>(nameof(InstantiatePlayerPiecePhase))
                     )
                 ),
-                "Lock"
+                PhasesComposerKeys.PhaseContainer.Lock
             );
 
             ruleAdder.Add(
@@ -171,7 +171,7 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IPhase>(nameof(CameraTargetHighestPlayerPieceLockRowPhase))
                     )
                 ),
-                "Move"
+                PhasesComposerKeys.PhaseContainer.Move
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPhaseResolver>(_ => new PhaseResolver()));

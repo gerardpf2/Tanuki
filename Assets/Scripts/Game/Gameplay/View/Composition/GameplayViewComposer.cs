@@ -7,6 +7,7 @@ using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
+using Game.Gameplay.Phases.Composition;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.View.Actions.Composition;
@@ -104,7 +105,7 @@ namespace Game.Gameplay.View.Composition
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IGameplayParser>(),
-                        r.Resolve<IPhaseContainer>("Initial"),
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Initial),
                         r.Resolve<IGameplaySerializerOnBeginIteration>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),

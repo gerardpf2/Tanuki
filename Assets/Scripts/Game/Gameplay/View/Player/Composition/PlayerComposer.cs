@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Phases;
+using Game.Gameplay.Phases.Composition;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player.Input;
@@ -23,7 +24,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
                     new LockPlayerInputActionHandler(
-                        r.Resolve<IPhaseContainer>("Lock"),
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Lock),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>()
@@ -35,7 +36,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
                     new MoveLeftPlayerInputActionHandler(
-                        r.Resolve<IPhaseContainer>("Move"),
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Move),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>()
@@ -47,7 +48,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
                     new MoveRightPlayerInputActionHandler(
-                        r.Resolve<IPhaseContainer>("Move"),
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Move),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>()
@@ -59,7 +60,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
                     new RotatePlayerInputActionHandler(
-                        r.Resolve<IPhaseContainer>("Move"),
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Move),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>()
