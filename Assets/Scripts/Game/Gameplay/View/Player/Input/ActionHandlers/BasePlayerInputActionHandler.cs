@@ -117,7 +117,7 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
                 _playerPieceView.Instance != null;
         }
 
-        protected abstract void ResolveImpl();
+        protected virtual void ResolveImpl() { }
 
         [NotNull]
         private ResolveContext GetResolveContext()
