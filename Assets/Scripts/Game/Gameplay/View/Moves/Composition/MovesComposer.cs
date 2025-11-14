@@ -14,13 +14,13 @@ namespace Game.Gameplay.View.Moves.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IMoves>(_ => new Gameplay.Moves.Moves()), "View");
+            ruleAdder.Add(ruleFactory.GetSingleton<IMoves>(_ => new Gameplay.Moves.Moves()), MovesComposerKeys.Moves.View);
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IMovesView>(r =>
                     new MovesView(
                         r.Resolve<IMoves>(),
-                        r.Resolve<IMoves>("View")
+                        r.Resolve<IMoves>(MovesComposerKeys.Moves.View)
                     )
                 )
             );
