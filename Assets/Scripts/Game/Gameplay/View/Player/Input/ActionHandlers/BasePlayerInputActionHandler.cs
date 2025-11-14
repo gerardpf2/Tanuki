@@ -87,6 +87,8 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
 
             _eventsResolver.OnResolveBegin += HandleEventInvoked;
             _eventsResolver.OnResolveEnd += HandleEventInvoked;
+            _playerPieceGhostView.OnInstantiated += HandleEventInvoked;
+            _playerPieceGhostView.OnDestroyed += HandleEventInvoked;
             _playerPieceView.OnInstantiated += HandleEventInvoked;
             _playerPieceView.OnDestroyed += HandleEventInvoked;
         }
@@ -95,6 +97,8 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
         {
             _eventsResolver.OnResolveBegin -= HandleEventInvoked;
             _eventsResolver.OnResolveEnd -= HandleEventInvoked;
+            _playerPieceGhostView.OnInstantiated -= HandleEventInvoked;
+            _playerPieceGhostView.OnDestroyed -= HandleEventInvoked;
             _playerPieceView.OnInstantiated -= HandleEventInvoked;
             _playerPieceView.OnDestroyed -= HandleEventInvoked;
         }
