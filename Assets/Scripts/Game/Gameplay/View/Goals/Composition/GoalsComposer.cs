@@ -14,13 +14,13 @@ namespace Game.Gameplay.View.Goals.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IGoals>(_ => new Gameplay.Goals.Goals()), "View");
+            ruleAdder.Add(ruleFactory.GetSingleton<IGoals>(_ => new Gameplay.Goals.Goals()), GoalsComposerKeys.Goals.View);
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IGoalsView>(r =>
                     new GoalsView(
                         r.Resolve<IGoals>(),
-                        r.Resolve<IGoals>("View")
+                        r.Resolve<IGoals>(GoalsComposerKeys.Goals.View)
                     )
                 )
             );
