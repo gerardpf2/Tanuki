@@ -1,6 +1,7 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Phases;
 using Game.Gameplay.Phases.Composition;
+using Game.Gameplay.View.Board.Composition;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player.Input;
@@ -72,7 +73,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceGhostView>(r =>
                     new PlayerPieceGhostView(
-                        r.Resolve<IBoard>("View"),
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IGameObjectPool>()
@@ -83,7 +84,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
-                        r.Resolve<IBoard>("View"),
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>()
                     )

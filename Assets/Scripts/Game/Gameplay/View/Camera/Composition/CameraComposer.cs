@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
+using Game.Gameplay.View.Board.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
@@ -19,7 +20,7 @@ namespace Game.Gameplay.View.Camera.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ICameraView>(r =>
                     new CameraView(
-                        r.Resolve<IBoard>("View"),
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<ICamera>(),
                         r.Resolve<ICameraGetter>()
                     )
