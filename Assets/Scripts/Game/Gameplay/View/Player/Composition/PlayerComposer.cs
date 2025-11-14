@@ -30,7 +30,7 @@ namespace Game.Gameplay.View.Player.Composition
                         r.Resolve<IPlayerPieceView>()
                     )
                 ),
-                "Lock"
+                PlayerComposerKeys.PlayerInputActionHandler.Lock
             );
 
             ruleAdder.Add(
@@ -42,7 +42,7 @@ namespace Game.Gameplay.View.Player.Composition
                         r.Resolve<IPlayerPieceView>()
                     )
                 ),
-                "MoveLeft"
+                PlayerComposerKeys.PlayerInputActionHandler.MoveLeft
             );
 
             ruleAdder.Add(
@@ -54,7 +54,7 @@ namespace Game.Gameplay.View.Player.Composition
                         r.Resolve<IPlayerPieceView>()
                     )
                 ),
-                "MoveRight"
+                PlayerComposerKeys.PlayerInputActionHandler.MoveRight
             );
 
             ruleAdder.Add(
@@ -66,7 +66,7 @@ namespace Game.Gameplay.View.Player.Composition
                         r.Resolve<IPlayerPieceView>()
                     )
                 ),
-                "Rotate"
+                PlayerComposerKeys.PlayerInputActionHandler.Rotate
             );
 
             ruleAdder.Add(
@@ -101,10 +101,10 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<PlayerInputViewModel>((r, s) =>
                     s.Inject(
-                        r.Resolve<IPlayerInputActionHandler>("Lock"),
-                        r.Resolve<IPlayerInputActionHandler>("MoveLeft"),
-                        r.Resolve<IPlayerInputActionHandler>("MoveRight"),
-                        r.Resolve<IPlayerInputActionHandler>("Rotate")
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Lock),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveLeft),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate)
                     )
                 )
             );
