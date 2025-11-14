@@ -10,10 +10,10 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
 
         public RotatePlayerInputActionHandler(
-            [NotNull] IPhaseContainer phaseContainerRotate,
+            [NotNull] IPhaseContainer phaseContainer,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
-            [NotNull] IPlayerPieceView playerPieceView) : base(phaseContainerRotate, eventsResolver, playerPieceGhostView, playerPieceView)
+            [NotNull] IPlayerPieceView playerPieceView) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView)
         {
             ArgumentNullException.ThrowIfNull(playerPieceView);
 

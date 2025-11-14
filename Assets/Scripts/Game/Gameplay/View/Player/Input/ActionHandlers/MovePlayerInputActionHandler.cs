@@ -11,11 +11,11 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
         private readonly int _offsetX;
 
         protected MovePlayerInputActionHandler(
-            [NotNull] IPhaseContainer phaseContainerMove,
+            [NotNull] IPhaseContainer phaseContainer,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView,
-            int offsetX) : base(phaseContainerMove, eventsResolver, playerPieceGhostView, playerPieceView)
+            int offsetX) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView)
         {
             ArgumentNullException.ThrowIfNull(playerPieceView);
 

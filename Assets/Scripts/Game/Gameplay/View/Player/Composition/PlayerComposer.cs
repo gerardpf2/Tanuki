@@ -3,6 +3,7 @@ using Game.Gameplay.Phases;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Player.Input;
+using Game.Gameplay.View.Player.Input.ActionHandlers;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
@@ -18,6 +19,54 @@ namespace Game.Gameplay.View.Player.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
+                    new LockPlayerInputActionHandler(
+                        r.Resolve<IPhaseContainer>("Lock"),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>()
+                    )
+                ),
+                "Lock"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
+                    new MoveLeftPlayerInputActionHandler(
+                        r.Resolve<IPhaseContainer>("Move"),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>()
+                    )
+                ),
+                "MoveLeft"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
+                    new MoveRightPlayerInputActionHandler(
+                        r.Resolve<IPhaseContainer>("Move"),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>()
+                    )
+                ),
+                "MoveRight"
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
+                    new RotatePlayerInputActionHandler(
+                        r.Resolve<IPhaseContainer>("Move"),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>()
+                    )
+                ),
+                "Rotate"
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceGhostView>(r =>

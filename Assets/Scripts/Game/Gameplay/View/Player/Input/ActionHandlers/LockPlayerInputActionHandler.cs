@@ -7,9 +7,9 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
     public class LockPlayerInputActionHandler : BasePlayerInputActionHandler
     {
         public LockPlayerInputActionHandler(
-            [NotNull] IPhaseContainer phaseContainerLock,
+            [NotNull] IPhaseContainer phaseContainer,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
-            [NotNull] IPlayerPieceView playerPieceView) : base(phaseContainerLock, eventsResolver, playerPieceGhostView, playerPieceView) { }
+            [NotNull] IPlayerPieceView playerPieceView) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView) { }
     }
 }
