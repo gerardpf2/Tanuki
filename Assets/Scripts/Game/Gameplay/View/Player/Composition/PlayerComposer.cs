@@ -100,11 +100,10 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<PlayerInputViewModel>((r, s) =>
                     s.Inject(
-                        r.Resolve<IPhaseContainer>("Lock"),
-                        r.Resolve<IPhaseContainer>("Move"),
-                        r.Resolve<IEventsResolver>(),
-                        r.Resolve<IPlayerPieceGhostView>(),
-                        r.Resolve<IPlayerPieceView>()
+                        r.Resolve<IPlayerInputActionHandler>("Lock"),
+                        r.Resolve<IPlayerInputActionHandler>("MoveLeft"),
+                        r.Resolve<IPlayerInputActionHandler>("MoveRight"),
+                        r.Resolve<IPlayerInputActionHandler>("Rotate")
                     )
                 )
             );

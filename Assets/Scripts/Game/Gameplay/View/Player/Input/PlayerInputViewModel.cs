@@ -1,6 +1,5 @@
 using Game.Common.UI;
-using Game.Gameplay.Phases;
-using Game.Gameplay.View.EventResolvers;
+using Game.Gameplay.View.Player.Input.ActionHandlers;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.System.Exceptions;
@@ -10,19 +9,15 @@ namespace Game.Gameplay.View.Player.Input
 {
     public class PlayerInputViewModel : ViewModel
     {
-        private IPhaseContainer _phaseContainerLock;
-        private IPhaseContainer _phaseContainerMove;
-        private IEventsResolver _eventsResolver;
-        private IPlayerPieceGhostView _playerPieceGhostView;
-        private IPlayerPieceView _playerPieceView;
+        private IPlayerInputActionHandler _lockPlayerInputActionHandler;
+        private IPlayerInputActionHandler _moveLeftPlayerInputActionHandler;
+        private IPlayerInputActionHandler _moveRightPlayerInputActionHandler;
+        private IPlayerInputActionHandler _rotatePlayerInputActionHandler;
 
+        [NotNull] private readonly IBoundProperty<ButtonViewData> _lock = new BoundProperty<ButtonViewData>("LockButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _moveLeft = new BoundProperty<ButtonViewData>("MoveLeftButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _moveRight = new BoundProperty<ButtonViewData>("MoveRightButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _rotate = new BoundProperty<ButtonViewData>("RotateButtonViewData");
-        [NotNull] private readonly IBoundProperty<ButtonViewData> _lock = new BoundProperty<ButtonViewData>("LockButtonViewData");
-
-        private bool _resolvingEvents;
-        private bool _playerPieceViewInstantiated;
 
         protected override void Awake()
         {
@@ -33,6 +28,11 @@ namespace Game.Gameplay.View.Player.Input
             InitializeBindings();
             AddBindings();
             SubscribeToEvents();
+
+            UpdateLockEnabled();
+            UpdateMoveLeftEnabled();
+            UpdateMoveRightEnabled();
+            UpdateRotateEnabled();
         }
 
         private void OnDestroy()
@@ -41,155 +41,154 @@ namespace Game.Gameplay.View.Player.Input
         }
 
         public void Inject(
-            [NotNull] IPhaseContainer phaseContainerLock,
-            [NotNull] IPhaseContainer phaseContainerMove,
-            [NotNull] IEventsResolver eventsResolver,
-            [NotNull] IPlayerPieceGhostView playerPieceGhostView,
-            [NotNull] IPlayerPieceView playerPieceView)
+            [NotNull] IPlayerInputActionHandler lockPlayerInputActionHandler,
+            [NotNull] IPlayerInputActionHandler moveLeftPlayerInputActionHandler,
+            [NotNull] IPlayerInputActionHandler moveRightPlayerInputActionHandler,
+            [NotNull] IPlayerInputActionHandler rotatePlayerInputActionHandler)
         {
-            ArgumentNullException.ThrowIfNull(phaseContainerLock);
-            ArgumentNullException.ThrowIfNull(phaseContainerMove);
-            ArgumentNullException.ThrowIfNull(eventsResolver);
-            ArgumentNullException.ThrowIfNull(playerPieceGhostView);
-            ArgumentNullException.ThrowIfNull(playerPieceView);
+            ArgumentNullException.ThrowIfNull(lockPlayerInputActionHandler);
+            ArgumentNullException.ThrowIfNull(moveLeftPlayerInputActionHandler);
+            ArgumentNullException.ThrowIfNull(moveRightPlayerInputActionHandler);
+            ArgumentNullException.ThrowIfNull(rotatePlayerInputActionHandler);
 
-            _phaseContainerLock = phaseContainerLock;
-            _phaseContainerMove = phaseContainerMove;
-            _eventsResolver = eventsResolver;
-            _playerPieceGhostView = playerPieceGhostView;
-            _playerPieceView = playerPieceView;
+            _lockPlayerInputActionHandler = lockPlayerInputActionHandler;
+            _moveLeftPlayerInputActionHandler = moveLeftPlayerInputActionHandler;
+            _moveRightPlayerInputActionHandler = moveRightPlayerInputActionHandler;
+            _rotatePlayerInputActionHandler = rotatePlayerInputActionHandler;
         }
 
         private void InitializeBindings()
         {
-            _moveLeft.Value = new ButtonViewData(OnMoveLeftClick);
-            _moveRight.Value = new ButtonViewData(OnMoveRightClick);
-            _rotate.Value = new ButtonViewData(OnRotateClick);
-            _lock.Value = new ButtonViewData(OnLockClick);
+            _lock.Value = new ButtonViewData(HandleLockClick);
+            _moveLeft.Value = new ButtonViewData(HandleMoveLeftClick);
+            _moveRight.Value = new ButtonViewData(HandleMoveRightClick);
+            _rotate.Value = new ButtonViewData(HandleRotateClick);
         }
 
         private void AddBindings()
         {
+            Add(_lock);
             Add(_moveLeft);
             Add(_moveRight);
             Add(_rotate);
-            Add(_lock);
         }
 
         private void SubscribeToEvents()
         {
-            InvalidOperationException.ThrowIfNull(_eventsResolver);
-            InvalidOperationException.ThrowIfNull(_playerPieceView);
+            InvalidOperationException.ThrowIfNull(_lockPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_moveLeftPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_moveRightPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_rotatePlayerInputActionHandler);
 
             UnsubscribeFromEvents();
 
-            _eventsResolver.OnResolveBegin += HandleResolveBegin;
-            _eventsResolver.OnResolveEnd += HandleResolveEnd;
-            _playerPieceView.OnInstantiated += HandlePlayerPieceViewInstantiated;
-            _playerPieceView.OnDestroyed += HandlePlayerPieceViewDestroyed;
+            _lockPlayerInputActionHandler.OnAvailableUpdated += HandleLockActionAvailableUpdated;
+            _moveLeftPlayerInputActionHandler.OnAvailableUpdated += HandleMoveLeftActionAvailableUpdated;
+            _moveRightPlayerInputActionHandler.OnAvailableUpdated += HandleMoveRightActionAvailableUpdated;
+            _rotatePlayerInputActionHandler.OnAvailableUpdated += HandleRotateActionAvailableUpdated;
         }
 
         private void UnsubscribeFromEvents()
         {
-            InvalidOperationException.ThrowIfNull(_eventsResolver);
-            InvalidOperationException.ThrowIfNull(_playerPieceView);
+            InvalidOperationException.ThrowIfNull(_lockPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_moveLeftPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_moveRightPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_rotatePlayerInputActionHandler);
 
-            _eventsResolver.OnResolveBegin -= HandleResolveBegin;
-            _eventsResolver.OnResolveEnd -= HandleResolveEnd;
-            _playerPieceView.OnInstantiated -= HandlePlayerPieceViewInstantiated;
-            _playerPieceView.OnDestroyed -= HandlePlayerPieceViewDestroyed;
+            _lockPlayerInputActionHandler.OnAvailableUpdated -= HandleLockActionAvailableUpdated;
+            _moveLeftPlayerInputActionHandler.OnAvailableUpdated -= HandleMoveLeftActionAvailableUpdated;
+            _moveRightPlayerInputActionHandler.OnAvailableUpdated -= HandleMoveRightActionAvailableUpdated;
+            _rotatePlayerInputActionHandler.OnAvailableUpdated -= HandleRotateActionAvailableUpdated;
         }
 
-        private void OnMoveLeftClick()
+        private void HandleLockClick()
         {
-            const int offsetX = -1;
+            InvalidOperationException.ThrowIfNull(_lockPlayerInputActionHandler);
 
-            InvalidOperationException.ThrowIfNull(_playerPieceView);
-
-            _playerPieceView.Move(offsetX);
-
-            ResolveAfterMove();
+            _lockPlayerInputActionHandler.Resolve();
         }
 
-        private void OnMoveRightClick()
+        private void HandleMoveLeftClick()
         {
-            const int offsetX = 1;
+            InvalidOperationException.ThrowIfNull(_moveLeftPlayerInputActionHandler);
 
-            InvalidOperationException.ThrowIfNull(_playerPieceView);
-
-            _playerPieceView.Move(offsetX);
-
-            ResolveAfterMove();
+            _moveLeftPlayerInputActionHandler.Resolve();
         }
 
-        private void OnRotateClick()
+        private void HandleMoveRightClick()
         {
-            InvalidOperationException.ThrowIfNull(_playerPieceView);
+            InvalidOperationException.ThrowIfNull(_moveRightPlayerInputActionHandler);
 
-            _playerPieceView.Rotate();
-
-            ResolveAfterMove();
+            _moveRightPlayerInputActionHandler.Resolve();
         }
 
-        private void OnLockClick()
+        private void HandleRotateClick()
         {
-            InvalidOperationException.ThrowIfNull(_phaseContainerLock);
+            InvalidOperationException.ThrowIfNull(_rotatePlayerInputActionHandler);
 
-            _phaseContainerLock.Resolve(GetResolveContext());
+            _rotatePlayerInputActionHandler.Resolve();
         }
 
-        private void HandleResolveBegin()
+        private void HandleLockActionAvailableUpdated()
         {
-            _resolvingEvents = true;
-
-            RefreshButtonsEnabled();
+            UpdateLockEnabled();
         }
 
-        private void HandleResolveEnd()
+        private void HandleMoveLeftActionAvailableUpdated()
         {
-            _resolvingEvents = false;
-
-            RefreshButtonsEnabled();
+            UpdateMoveLeftEnabled();
         }
 
-        private void HandlePlayerPieceViewInstantiated()
+        private void HandleMoveRightActionAvailableUpdated()
         {
-            _playerPieceViewInstantiated = true;
-
-            RefreshButtonsEnabled();
+            UpdateMoveRightEnabled();
         }
 
-        private void HandlePlayerPieceViewDestroyed()
+        private void HandleRotateActionAvailableUpdated()
         {
-            _playerPieceViewInstantiated = false;
-
-            RefreshButtonsEnabled();
+            UpdateRotateEnabled();
         }
 
-        private void RefreshButtonsEnabled()
+        private void UpdateLockEnabled()
         {
-            bool buttonsEnabled = !_resolvingEvents && _playerPieceViewInstantiated;
+            InvalidOperationException.ThrowIfNull(_lockPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_lock.Value);
 
-            _moveLeft.Value.SetEnabled(buttonsEnabled);
-            _moveRight.Value.SetEnabled(buttonsEnabled);
-            _rotate.Value.SetEnabled(buttonsEnabled);
-            _lock.Value.SetEnabled(buttonsEnabled);
+            UpdateButtonEnabled(_lock.Value, _lockPlayerInputActionHandler);
         }
 
-        private void ResolveAfterMove()
+        private void UpdateMoveLeftEnabled()
         {
-            InvalidOperationException.ThrowIfNull(_phaseContainerMove);
+            InvalidOperationException.ThrowIfNull(_moveLeftPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_moveLeft.Value);
 
-            _phaseContainerMove.Resolve(GetResolveContext());
+            UpdateButtonEnabled(_moveLeft.Value, _moveLeftPlayerInputActionHandler);
         }
 
-        [NotNull]
-        private ResolveContext GetResolveContext()
+        private void UpdateMoveRightEnabled()
         {
-            InvalidOperationException.ThrowIfNull(_playerPieceGhostView);
-            InvalidOperationException.ThrowIfNull(_playerPieceView);
+            InvalidOperationException.ThrowIfNull(_moveRightPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_moveRight.Value);
 
-            return new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
+            UpdateButtonEnabled(_moveRight.Value, _moveRightPlayerInputActionHandler);
+        }
+
+        private void UpdateRotateEnabled()
+        {
+            InvalidOperationException.ThrowIfNull(_rotatePlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_rotate.Value);
+
+            UpdateButtonEnabled(_rotate.Value, _rotatePlayerInputActionHandler);
+        }
+
+        private static void UpdateButtonEnabled(
+            [NotNull] ButtonViewData buttonViewData,
+            [NotNull] IPlayerInputActionHandler playerInputActionHandler)
+        {
+            ArgumentNullException.ThrowIfNull(buttonViewData);
+            ArgumentNullException.ThrowIfNull(playerInputActionHandler);
+
+            buttonViewData.SetEnabled(playerInputActionHandler.Available);
         }
     }
 }
