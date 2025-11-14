@@ -20,6 +20,11 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
             _playerPieceView = playerPieceView;
         }
 
+        protected override bool GetAvailable()
+        {
+            return base.GetAvailable() && _playerPieceView.CanRotate();
+        }
+
         protected override void ResolveImpl()
         {
             base.ResolveImpl();

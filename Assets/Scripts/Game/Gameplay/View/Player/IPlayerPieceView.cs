@@ -28,6 +28,8 @@ namespace Game.Gameplay.View.Player
 
         void Move(int offsetX);
 
+        bool CanRotate();
+
         void Rotate();
     }
 }

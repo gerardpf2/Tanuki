@@ -138,17 +138,27 @@ namespace Game.Gameplay.View.Player
 
         public void Move(int offsetX)
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
             InvalidOperationException.ThrowIfNull(Instance);
 
-            IPiece piece = _pieceData.Piece;
             Transform transform = Instance.transform;
 
-            float x = ClampX(piece, transform.position.x + offsetX);
+            if (!CanMove(offsetX))
+            {
+                InvalidOperationException.Throw("Cannot be moved");
+            }
 
-            transform.position = transform.position.WithX(x);
+            transform.position = transform.position.AddX(offsetX);
 
             OnMoved?.Invoke();
+        }
+
+        public bool CanRotate()
+        {
+            InvalidOperationException.ThrowIfNull(_pieceData);
+
+            IPiece piece = _pieceData.Piece;
+
+            return piece.CanRotate;
         }
 
         public void Rotate()
@@ -156,14 +166,23 @@ namespace Game.Gameplay.View.Player
             InvalidOperationException.ThrowIfNull(_pieceData);
             InvalidOperationException.ThrowIfNull(Instance);
 
+            if (!CanRotate())
+            {
+                InvalidOperationException.Throw("Cannot be rotated");
+            }
+
             IPiece piece = _pieceData.Piece;
 
             int width = piece.Width;
             int height = piece.Height;
-            int offsetX = (width - height) / 2;
-            int offsetY = height - width;
 
             ++piece.Rotation;
+
+            int widthAfterRotate = piece.Width;
+            int heightAfterRotate = piece.Height;
+
+            int offsetX = (width - widthAfterRotate) / 2;
+            int offsetY = height - heightAfterRotate;
 
             Transform transform = Instance.transform;
 
