@@ -20,9 +20,9 @@ namespace Game.Gameplay.Pieces.Pieces
 
         public PieceType Type { get; }
 
-        public int Width => GetRotatedGrid().GetLength(1);
+        public int Height => Grid.GetLength(0);
 
-        public int Height => GetRotatedGrid().GetLength(0);
+        public int Width => Grid.GetLength(1);
 
         public bool Alive { get; private set; } = DefaultAlive;
 
@@ -47,16 +47,25 @@ namespace Game.Gameplay.Pieces.Pieces
                     return;
                 }
 
-                _rotatedGrid = null;
+                int steps = value - Rotation;
+
                 _rotation = value;
+
+                Rotate(steps);
             }
+        }
+
+        [NotNull] // Get
+        private bool[,] Grid
+        {
+            get => _grid ??= GetGrid();
+            set => _grid = value;
         }
 
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
-
-        private bool[,] _rotatedGrid;
+        private bool[,] _grid;
         private int _rotation;
 
         protected Piece([NotNull] IConverter converter, int id, PieceType type)
@@ -76,7 +85,7 @@ namespace Game.Gameplay.Pieces.Pieces
             ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.LessThan, Width);
 
-            return GetRotatedGrid()[rowOffset, columnOffset];
+            return Grid[rowOffset, columnOffset];
         }
 
         public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)
@@ -173,15 +182,21 @@ namespace Game.Gameplay.Pieces.Pieces
             return false;
         }
 
+        private void Rotate(int steps)
+        {
+            // TODO: Optimize
+
+            if (steps < 0)
+            {
+                steps += MatrixUtils.MaxRotationSteps;
+            }
+
+            Grid = Grid.RotateClockwise(steps);
+        }
+
         protected virtual void HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
         {
             Alive = false;
-        }
-
-        [NotNull]
-        private bool[,] GetRotatedGrid()
-        {
-            return _rotatedGrid ??= GetGrid().RotateClockwise(Rotation);
         }
 
         [NotNull]

@@ -10,9 +10,9 @@ namespace Game.Gameplay.Pieces.Pieces
 
         PieceType Type { get; }
 
-        int Width { get; }
-
         int Height { get; }
+
+        int Width { get; }
 
         bool Alive { get; }
 
