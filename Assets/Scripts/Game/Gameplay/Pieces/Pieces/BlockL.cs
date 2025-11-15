@@ -15,6 +15,8 @@ namespace Game.Gameplay.Pieces.Pieces
          *
          */
 
+        public override bool CanRotate => false;
+
         public BlockL([NotNull] IConverter converter, int id) : base(converter, id, PieceType.BlockL, 1, 1) { }
 
         public override IPiece Clone()
