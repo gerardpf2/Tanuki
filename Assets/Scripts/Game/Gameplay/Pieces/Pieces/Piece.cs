@@ -62,6 +62,14 @@ namespace Game.Gameplay.Pieces.Pieces
             set => _grid = value;
         }
 
+        /*
+         *
+         * Has always the same height, width and rotation as grid
+         *
+         * True -> Damaged
+         * False -> Undamaged (or maybe not filled)
+         *
+         */
         [NotNull] // Get
         private bool[,] DamageGrid
         {
@@ -94,6 +102,11 @@ namespace Game.Gameplay.Pieces.Pieces
             ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.LessThan, Width);
 
             return Grid[rowOffset, columnOffset];
+        }
+
+        public bool IsDamaged(int rowOffset, int columnOffset)
+        {
+            return IsFilled(rowOffset, columnOffset) && DamageGrid[rowOffset, columnOffset];
         }
 
         public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)

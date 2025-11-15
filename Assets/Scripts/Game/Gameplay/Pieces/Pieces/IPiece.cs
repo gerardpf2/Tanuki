@@ -24,6 +24,8 @@ namespace Game.Gameplay.Pieces.Pieces
 
         bool IsFilled(int rowOffset, int columnOffset);
 
+        bool IsDamaged(int rowOffset, int columnOffset);
+
         void ProcessState(IEnumerable<KeyValuePair<string, string>> state);
 
         void Damage(int rowOffset, int columnOffset);
