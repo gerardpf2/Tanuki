@@ -46,6 +46,27 @@ namespace Game.Gameplay.Pieces
                 case PieceType.PlayerZ:
                     piece = _pieceFactory.GetPlayerZ();
                     break;
+                case PieceType.BlockI:
+                    piece = _pieceFactory.GetBlockI();
+                    break;
+                case PieceType.BlockO:
+                    piece = _pieceFactory.GetBlockO();
+                    break;
+                case PieceType.BlockT:
+                    piece = _pieceFactory.GetBlockT();
+                    break;
+                case PieceType.BlockJ:
+                    piece = _pieceFactory.GetBlockJ();
+                    break;
+                case PieceType.BlockL:
+                    piece = _pieceFactory.GetBlockL();
+                    break;
+                case PieceType.BlockS:
+                    piece = _pieceFactory.GetBlockS();
+                    break;
+                case PieceType.BlockZ:
+                    piece = _pieceFactory.GetBlockZ();
+                    break;
                 case PieceType.Test:
                     piece = _pieceFactory.GetTest();
                     break;

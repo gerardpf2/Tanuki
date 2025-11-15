@@ -27,6 +27,27 @@ namespace Game.Gameplay.Pieces
         IPiece GetPlayerZ();
 
         [NotNull]
+        IPiece GetBlockI();
+
+        [NotNull]
+        IPiece GetBlockO();
+
+        [NotNull]
+        IPiece GetBlockT();
+
+        [NotNull]
+        IPiece GetBlockJ();
+
+        [NotNull]
+        IPiece GetBlockL();
+
+        [NotNull]
+        IPiece GetBlockS();
+
+        [NotNull]
+        IPiece GetBlockZ();
+
+        [NotNull]
         IPiece GetTest();
     }
 }
