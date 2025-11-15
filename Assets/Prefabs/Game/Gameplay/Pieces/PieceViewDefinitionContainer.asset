@@ -27,6 +27,20 @@ MonoBehaviour:
     _prefab: {fileID: 6451969163346834527, guid: 163540bbaa2deda4d9c924b0af10bed7, type: 3}
   - _pieceType: 16
     _prefab: {fileID: 6451969163346834527, guid: 439e06f5939c7784e8650e1f039d91c5, type: 3}
+  - _pieceType: 20
+    _prefab: {fileID: 6451969163346834527, guid: 42c329ef75f619442b7f98b82b72dbc7, type: 3}
+  - _pieceType: 21
+    _prefab: {fileID: 6451969163346834527, guid: 42c329ef75f619442b7f98b82b72dbc7, type: 3}
+  - _pieceType: 22
+    _prefab: {fileID: 6451969163346834527, guid: 42c329ef75f619442b7f98b82b72dbc7, type: 3}
+  - _pieceType: 23
+    _prefab: {fileID: 6451969163346834527, guid: 42c329ef75f619442b7f98b82b72dbc7, type: 3}
+  - _pieceType: 24
+    _prefab: {fileID: 6451969163346834527, guid: 42c329ef75f619442b7f98b82b72dbc7, type: 3}
+  - _pieceType: 25
+    _prefab: {fileID: 6451969163346834527, guid: 42c329ef75f619442b7f98b82b72dbc7, type: 3}
+  - _pieceType: 26
+    _prefab: {fileID: 6451969163346834527, guid: 42c329ef75f619442b7f98b82b72dbc7, type: 3}
   - _pieceType: 30
     _prefab: {fileID: 6451969163346834527, guid: 8c89310b2782a15488919f493a7f7130, type: 3}
   _pieceGhostViewDefinitions:

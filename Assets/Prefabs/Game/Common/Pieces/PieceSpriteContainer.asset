@@ -27,5 +27,19 @@ MonoBehaviour:
     _sprite: {fileID: 21300000, guid: 4f36734e01468db42a91ae949d6e952a, type: 3}
   - _pieceType: 16
     _sprite: {fileID: 21300000, guid: f8742de8234b0c44cbea575a255c62a1, type: 3}
+  - _pieceType: 20
+    _sprite: {fileID: 21300000, guid: 3fd99a74771b8024780aa3066f6537bf, type: 3}
+  - _pieceType: 21
+    _sprite: {fileID: 21300000, guid: 2b73f7e6df6491b4db1a7bacb4985a57, type: 3}
+  - _pieceType: 22
+    _sprite: {fileID: 21300000, guid: 746f392d2ece18542bcf23463ea86327, type: 3}
+  - _pieceType: 23
+    _sprite: {fileID: 21300000, guid: 2906db20559ad4643a31be59a463db64, type: 3}
+  - _pieceType: 24
+    _sprite: {fileID: 21300000, guid: 410339d4bcfd52c4695e8e7027de39d8, type: 3}
+  - _pieceType: 25
+    _sprite: {fileID: 21300000, guid: db2d7124aca89a245a5d39e6901662c2, type: 3}
+  - _pieceType: 26
+    _sprite: {fileID: 21300000, guid: 0175ed8b7cea6a5458d196f9da150f29, type: 3}
   - _pieceType: 30
     _sprite: {fileID: 21300000, guid: f16bbcdce81691544b5e4bdfe3267de3, type: 3}
