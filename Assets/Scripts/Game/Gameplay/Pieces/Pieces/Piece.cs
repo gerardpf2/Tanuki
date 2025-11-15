@@ -215,8 +215,8 @@ namespace Game.Gameplay.Pieces.Pieces
                 steps += MatrixUtils.MaxRotationSteps;
             }
 
+            DamageGrid = DamageGrid.RotateClockwise(steps); // Needs to be rotated before grid in case it gets created at this point
             Grid = Grid.RotateClockwise(steps);
-            DamageGrid = DamageGrid.RotateClockwise(steps);
         }
 
         protected virtual bool HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
