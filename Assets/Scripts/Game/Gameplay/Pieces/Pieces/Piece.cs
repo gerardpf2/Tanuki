@@ -62,9 +62,17 @@ namespace Game.Gameplay.Pieces.Pieces
             set => _grid = value;
         }
 
+        [NotNull] // Get
+        private bool[,] DamageGrid
+        {
+            get => _damageGrid ??= GetDamageGrid();
+            set => _damageGrid = value;
+        }
+
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
+        private bool[,] _damageGrid;
         private bool[,] _grid;
         private int _rotation;
 
@@ -125,7 +133,10 @@ namespace Game.Gameplay.Pieces.Pieces
                 Rotation
             );
 
-            HandleDamaged(rotatedRowOffset, rotatedColumnOffset);
+            if (HandleDamaged(rotatedRowOffset, rotatedColumnOffset))
+            {
+                DamageGrid[rowOffset, columnOffset] = true;
+            }
         }
 
         public abstract IPiece Clone();
@@ -192,14 +203,23 @@ namespace Game.Gameplay.Pieces.Pieces
             }
 
             Grid = Grid.RotateClockwise(steps);
+            DamageGrid = DamageGrid.RotateClockwise(steps);
         }
 
-        protected virtual void HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
+        protected virtual bool HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
         {
             Alive = false;
+
+            return true;
         }
 
         [NotNull]
         protected abstract bool[,] GetGrid();
+
+        [NotNull]
+        private bool[,] GetDamageGrid()
+        {
+            return new bool[Height, Width];
+        }
     }
 }
