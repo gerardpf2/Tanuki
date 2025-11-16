@@ -49,8 +49,6 @@ namespace Game.Gameplay.Pieces.Composition
             );
 
             ruleAdder.Add(ruleFactory.GetSingleton<IPieceIdGetter>(_ => new PieceIdGetter()));
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IPieceTypeCategoryRegistry>(_ => new PieceTypeCategoryRegistry()));
         }
     }
 }

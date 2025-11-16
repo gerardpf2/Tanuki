@@ -16,7 +16,7 @@ namespace Game.Gameplay.Pieces.Pieces
          *
          */
 
-        public override bool DecomposeOnDestroy => true;
+        public override PieceType? DecomposeType => PieceType.BlockS;
 
         public PlayerS([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerS) { }
 

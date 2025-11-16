@@ -5,6 +5,6 @@ namespace Game.Gameplay.Events.Reasons
         Initial,
         Player,
         Lock,
-        DecomposeOnDestroy
+        Decompose
     }
 }

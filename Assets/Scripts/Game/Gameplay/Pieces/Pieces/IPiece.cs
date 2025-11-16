@@ -22,7 +22,7 @@ namespace Game.Gameplay.Pieces.Pieces
 
         int Rotation { get; set; } // Rotation steps 0, 1, 2, 3 -> 0, 90, 180, 270
 
-        bool DecomposeOnDestroy { get; }
+        PieceType? DecomposeType { get; } // Expected to be a 1 Row x 1 Column piece, otherwise it may not work
 
         bool IsFilled(int rowOffset, int columnOffset);
 

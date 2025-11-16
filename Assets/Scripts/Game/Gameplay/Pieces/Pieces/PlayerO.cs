@@ -17,7 +17,7 @@ namespace Game.Gameplay.Pieces.Pieces
 
         public override bool CanRotate => false;
 
-        public override bool DecomposeOnDestroy => true;
+        public override PieceType? DecomposeType => PieceType.BlockO;
 
         public PlayerO([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerO, 2, 2) { }
 

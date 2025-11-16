@@ -55,7 +55,7 @@ namespace Game.Gameplay.Pieces.Pieces
             }
         }
 
-        public virtual bool DecomposeOnDestroy => false;
+        public virtual PieceType? DecomposeType => null;
 
         [NotNull] // Get
         private bool[,] Grid
