@@ -29,12 +29,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             if (goalData is not null)
             {
-                yield return
-                    _actionFactory.GetSetGoalCurrentAmountAction(
-                        goalData.PieceType,
-                        goalData.CurrentAmount,
-                        goalData.Coordinate
-                    );
+                yield return GetGoalDataAction(goalData);
             }
 
             yield return _actionFactory.GetDestroyPieceAction(evt.PieceId, evt.DestroyPieceReason);
@@ -43,12 +38,31 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             if (decomposeData is not null)
             {
-                IEnumerable<IAction> actions = decomposeData.PiecePlacements.Select(GetInstantiatePieceAction);
-
-                yield return _actionFactory.GetParallelActionGroup(actions);
+                yield return GetDecomposeDataAction(decomposeData);
             }
+        }
 
-            yield break;
+        [NotNull]
+        private IAction GetGoalDataAction([NotNull] DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData)
+        {
+            ArgumentNullException.ThrowIfNull(goalData);
+
+            return
+                _actionFactory.GetSetGoalCurrentAmountAction(
+                    goalData.PieceType,
+                    goalData.CurrentAmount,
+                    goalData.Coordinate
+                );
+        }
+
+        [NotNull]
+        private IAction GetDecomposeDataAction([NotNull] DestroyPieceEvent.DecomposePieceData decomposeData)
+        {
+            ArgumentNullException.ThrowIfNull(decomposeData);
+
+            IEnumerable<IAction> actions = decomposeData.PiecePlacements.Select(GetInstantiatePieceAction);
+
+            return _actionFactory.GetParallelActionGroup(actions);
 
             [NotNull]
             IAction GetInstantiatePieceAction([NotNull] PiecePlacement piecePlacement)
