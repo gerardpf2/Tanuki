@@ -11,9 +11,11 @@ namespace Game.Gameplay.Pieces.Pieces
          *
          * 4 Row x 1 Column
          *
-         * Has no special behaviour
+         * Has no special behaviour, except for block decomposition on destroy
          *
          */
+
+        public override bool DecomposeOnDestroy => true;
 
         public PlayerI([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerI, 4, 1) { }
 

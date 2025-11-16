@@ -22,6 +22,8 @@ namespace Game.Gameplay.Pieces.Pieces
 
         int Rotation { get; set; } // Rotation steps 0, 1, 2, 3 -> 0, 90, 180, 270
 
+        bool DecomposeOnDestroy { get; }
+
         bool IsFilled(int rowOffset, int columnOffset);
 
         bool IsDamaged(int rowOffset, int columnOffset);
