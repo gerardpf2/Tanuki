@@ -4,6 +4,7 @@ namespace Game.Gameplay.Events.Reasons
     {
         Initial,
         Player,
-        Lock
+        Lock,
+        DecomposeOnDestroy
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
@@ -69,29 +68,39 @@ namespace Game.Gameplay.Phases.Phases
                 return false;
             }
 
-            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData = null;
-
-            if (TryIncreaseGoalCurrentAmount(piece.Type, out int goalCurrentAmount))
-            {
-                Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
-
-                goalData = new DestroyPieceEvent.GoalCurrentAmountUpdatedData(
-                    piece.Type,
-                    goalCurrentAmount,
-                    sourceCoordinate // TODO: Use center coordinate instead ¿?
-                );
-            }
+            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData = IncreaseGoalCurrentAmount(piece);
 
             _board.RemovePiece(pieceId);
+
+            InstantiateDecomposedBlocks();
 
             _eventEnqueuer.Enqueue(_eventFactory.GetDestroyPieceEvent(pieceId, DestroyPieceReason.NotAlive, goalData));
 
             return true;
         }
 
-        private bool TryIncreaseGoalCurrentAmount(PieceType pieceType, out int goalCurrentAmount)
+        private DestroyPieceEvent.GoalCurrentAmountUpdatedData IncreaseGoalCurrentAmount([NotNull] IPiece piece)
         {
-            return _goals.TryIncreaseCurrentAmount(pieceType, out goalCurrentAmount);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            if (!_goals.TryIncreaseCurrentAmount(piece.Type, out int goalCurrentAmount))
+            {
+                return null;
+            }
+
+            Coordinate sourceCoordinate = _board.GetSourceCoordinate(piece.Id);
+
+            return
+                new DestroyPieceEvent.GoalCurrentAmountUpdatedData(
+                    piece.Type,
+                    goalCurrentAmount,
+                    sourceCoordinate // TODO: Use center coordinate instead ¿?
+                );
+        }
+
+        private void InstantiateDecomposedBlocks()
+        {
+            // TODO
         }
     }
 }
