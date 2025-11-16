@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
+using Game.Gameplay.Pieces;
 using Game.Gameplay.View.Actions;
 using Game.Gameplay.View.Actions.Actions;
 using Infrastructure.System.Exceptions;
@@ -35,6 +38,30 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             }
 
             yield return _actionFactory.GetDestroyPieceAction(evt.PieceId, evt.DestroyPieceReason);
+
+            DestroyPieceEvent.DecomposePieceData decomposeData = evt.DecomposeData;
+
+            if (decomposeData is not null)
+            {
+                IEnumerable<IAction> actions = decomposeData.PiecePlacements.Select(GetInstantiatePieceAction);
+
+                yield return _actionFactory.GetParallelActionGroup(actions);
+            }
+
+            yield break;
+
+            [NotNull]
+            IAction GetInstantiatePieceAction([NotNull] PiecePlacement piecePlacement)
+            {
+                ArgumentNullException.ThrowIfNull(piecePlacement);
+
+                return
+                    _actionFactory.GetInstantiatePieceAction(
+                        piecePlacement.Piece,
+                        InstantiatePieceReason.Decompose,
+                        piecePlacement.Coordinate
+                    );
+            }
         }
     }
 }
