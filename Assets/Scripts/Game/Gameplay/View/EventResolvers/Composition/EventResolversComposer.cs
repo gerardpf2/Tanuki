@@ -1,8 +1,11 @@
+using Game.Gameplay.Board;
 using Game.Gameplay.Events;
 using Game.Gameplay.Phases;
 using Game.Gameplay.View.Actions;
+using Game.Gameplay.View.Board.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.EventResolvers.Composition
@@ -19,7 +22,9 @@ namespace Game.Gameplay.View.EventResolvers.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IEventResolverFactory>(r =>
                     new EventResolverFactory(
-                        r.Resolve<IActionFactory>()
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
+                        r.Resolve<IActionFactory>(),
+                        r.Resolve<ICoroutineRunner>()
                     )
                 )
             );
