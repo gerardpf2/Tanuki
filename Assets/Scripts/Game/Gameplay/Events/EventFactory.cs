@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
@@ -56,9 +57,11 @@ namespace Game.Gameplay.Events
             return new MovePieceEvent(pieceId, rowOffset, columnOffset, movePieceReason);
         }
 
-        public MovePiecesByGravityEvent GetMovePiecesByGravityEvent()
+        public IEvent GetMovePiecesByGravityEvent([NotNull] IEnumerable<KeyValuePair<int, int>> fallData)
         {
-            return new MovePiecesByGravityEvent();
+            ArgumentNullException.ThrowIfNull(fallData);
+
+            return new MovePiecesByGravityEvent(fallData);
         }
 
         public IEvent GetMoveCameraEvent(int rowOffset)

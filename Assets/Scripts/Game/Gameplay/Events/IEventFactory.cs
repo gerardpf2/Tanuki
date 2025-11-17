@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
@@ -41,7 +42,7 @@ namespace Game.Gameplay.Events
         IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
 
         [NotNull]
-        MovePiecesByGravityEvent GetMovePiecesByGravityEvent();
+        IEvent GetMovePiecesByGravityEvent(IEnumerable<KeyValuePair<int, int>> fallData);
 
         [NotNull]
         IEvent GetMoveCameraEvent(int rowOffset);

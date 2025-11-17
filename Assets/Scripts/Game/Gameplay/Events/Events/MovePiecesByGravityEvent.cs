@@ -6,30 +6,23 @@ namespace Game.Gameplay.Events.Events
 {
     public class MovePiecesByGravityEvent : IEvent
     {
-        public class PieceMovementData
-        {
-            public readonly int PieceId;
-            public readonly int RowOffset;
-            public readonly int ColumnOffset;
+        [NotNull] public readonly IEnumerable<KeyValuePair<int, int>> FallData;
 
-            public PieceMovementData(int pieceId, int rowOffset, int columnOffset)
+        public MovePiecesByGravityEvent([NotNull] IEnumerable<KeyValuePair<int, int>> fallData)
+        {
+            ArgumentNullException.ThrowIfNull(fallData);
+
+            IDictionary<int, int> fallDataCopy = new Dictionary<int, int>();
+
+            foreach ((int pieceId, int fall) in fallData)
             {
-                PieceId = pieceId;
-                RowOffset = rowOffset;
-                ColumnOffset = columnOffset;
+                if (!fallDataCopy.TryAdd(pieceId, fall))
+                {
+                    InvalidOperationException.Throw(); // TODO
+                }
             }
-        }
 
-        [NotNull, ItemNotNull] private readonly Queue<PieceMovementData> _piecesMovementsData = new(); // ItemNotNull as long as all Add check for null
-
-        [NotNull, ItemNotNull]
-        public IEnumerable<PieceMovementData> PiecesMovementsData => _piecesMovementsData;
-
-        public void Add([NotNull] PieceMovementData pieceMovementData)
-        {
-            ArgumentNullException.ThrowIfNull(pieceMovementData);
-
-            _piecesMovementsData.Enqueue(pieceMovementData);
+            FallData = fallDataCopy;
         }
     }
 }
