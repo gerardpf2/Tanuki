@@ -18,7 +18,7 @@ namespace Game.Gameplay.Events.Events
             {
                 if (!fallDataCopy.TryAdd(pieceId, fall))
                 {
-                    InvalidOperationException.Throw(); // TODO
+                    InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be added");
                 }
             }
 

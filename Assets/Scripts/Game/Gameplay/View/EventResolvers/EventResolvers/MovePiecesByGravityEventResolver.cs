@@ -51,9 +51,13 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             }
         }
 
+        private const float SecondsBetweenActions = 0.05f;
+
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IActionFactory _actionFactory;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
+
+        [NotNull] private readonly YieldInstruction _waitForSeconds = new WaitForSeconds(SecondsBetweenActions);
 
         public MovePiecesByGravityEventResolver(
             [NotNull] IBoard board,
@@ -97,7 +101,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             {
                 if (!fallData.TryAdd(pieceId, fall))
                 {
-                    InvalidOperationException.Throw(); // TODO
+                    InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be added");
                 }
             }
 
@@ -130,7 +134,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
                     fallAction.Resolve(actionGroupCompletionHandler.RegisterCompleted);
 
-                    yield return new WaitForSeconds(0.05f); // TODO
+                    yield return _waitForSeconds;
                 }
 
                 pieceIds.Clear();
