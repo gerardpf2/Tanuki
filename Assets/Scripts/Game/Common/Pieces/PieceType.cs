@@ -18,6 +18,6 @@ namespace Game.Common.Pieces
         BlockS = 25,
         BlockZ = 26,
 
-        Test = 30
+        Test = 100
     }
 }
