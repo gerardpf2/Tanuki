@@ -62,12 +62,14 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         }
 
         private const float SecondsBetweenActions = 0.05f;
+        private const float SecondsBetweenActionsBatch = 1.5f * SecondsBetweenActions;
 
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IActionFactory _actionFactory;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
-        [NotNull] private readonly YieldInstruction _waitForSeconds = new WaitForSeconds(SecondsBetweenActions);
+        [NotNull] private readonly YieldInstruction _waitForSecondsBetweenActions = new WaitForSeconds(SecondsBetweenActions);
+        [NotNull] private readonly YieldInstruction _waitForSecondsBetweenActionsBatch = new WaitForSeconds(SecondsBetweenActionsBatch);
 
         public MovePiecesByGravityEventResolver(
             [NotNull] IBoard board,
@@ -125,8 +127,10 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             ActionGroupCompletionHandler actionGroupCompletionHandler = new(fallData.Count, onComplete);
             List<int> pieceIds = new(); // Avoid modifying fallData while iterating it
 
-            while (fallData.Count > 0)
+            while (true)
             {
+                ICollection<IAction> fallActions = new List<IAction>();
+
                 pieceIds.AddRange(fallData.Keys);
 
                 foreach (int pieceId in pieceIds)
@@ -142,12 +146,26 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
                     IAction fallAction = GetFallAction(pieceId, fall);
 
-                    fallAction.Resolve(actionGroupCompletionHandler.RegisterCompleted);
-
-                    yield return _waitForSeconds;
+                    fallActions.Add(fallAction);
                 }
 
                 pieceIds.Clear();
+
+                if (fallActions.Count > 0)
+                {
+                    // Resolving it in a different coroutine allows the following ones to be resolved in a parallel way
+
+                    _coroutineRunner.Run(ResolveActionsBatch(fallActions, actionGroupCompletionHandler));
+                }
+
+                if (fallData.Count > 0)
+                {
+                    yield return _waitForSecondsBetweenActionsBatch;
+                }
+                else
+                {
+                    break;
+                }
             }
 
             yield break;
@@ -175,6 +193,23 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
                 int rowOffset = -fall;
 
                 return _actionFactory.GetMovePieceAction(pieceId, rowOffset, columnOffset, MovePieceReason.Gravity);
+            }
+        }
+
+        private IEnumerator ResolveActionsBatch(
+            [NotNull, ItemNotNull] IEnumerable<IAction> actions,
+            [NotNull] ActionGroupCompletionHandler actionGroupCompletionHandler)
+        {
+            ArgumentNullException.ThrowIfNull(actions);
+            ArgumentNullException.ThrowIfNull(actionGroupCompletionHandler);
+
+            foreach (IAction action in actions)
+            {
+                ArgumentNullException.ThrowIfNull(action);
+
+                action.Resolve(actionGroupCompletionHandler.RegisterCompleted);
+
+                yield return _waitForSecondsBetweenActions;
             }
         }
     }
