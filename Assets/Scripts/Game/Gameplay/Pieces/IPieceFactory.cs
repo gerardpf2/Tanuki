@@ -48,6 +48,9 @@ namespace Game.Gameplay.Pieces
         IPiece GetBlockZ();
 
         [NotNull]
+        IPiece GetStaticBlock();
+
+        [NotNull]
         IPiece GetTest();
     }
 }

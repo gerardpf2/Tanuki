@@ -70,6 +70,9 @@ namespace Game.Gameplay.Pieces
                 case PieceType.Test:
                     piece = _pieceFactory.GetTest();
                     break;
+                case PieceType.StaticBlock:
+                    piece = _pieceFactory.GetStaticBlock();
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(pieceType);
                     return null;

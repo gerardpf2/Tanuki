@@ -89,6 +89,11 @@ namespace Game.Gameplay.Pieces
             return new BlockZ(_converter, GetNewPieceId());
         }
 
+        public IPiece GetStaticBlock()
+        {
+            return new StaticBlock(_converter, GetNewPieceId());
+        }
+
         public IPiece GetTest()
         {
             return new Test(_converter, GetNewPieceId());
