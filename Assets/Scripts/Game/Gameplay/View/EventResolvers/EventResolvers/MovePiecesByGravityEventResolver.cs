@@ -62,14 +62,14 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         }
 
         private const float SecondsBetweenActions = 0.05f;
-        private const float SecondsBetweenActionsBatch = 1.5f * SecondsBetweenActions;
+        private const float SecondsBetweenActionBatches = SecondsBetweenActions - 0.001f;
 
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IActionFactory _actionFactory;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
         [NotNull] private readonly YieldInstruction _waitForSecondsBetweenActions = new WaitForSeconds(SecondsBetweenActions);
-        [NotNull] private readonly YieldInstruction _waitForSecondsBetweenActionsBatch = new WaitForSeconds(SecondsBetweenActionsBatch);
+        [NotNull] private readonly YieldInstruction _waitForSecondsBetweenActionBatches = new WaitForSeconds(SecondsBetweenActionBatches);
 
         public MovePiecesByGravityEventResolver(
             [NotNull] IBoard board,
@@ -160,7 +160,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
                 if (fallData.Count > 0)
                 {
-                    yield return _waitForSecondsBetweenActionsBatch;
+                    yield return _waitForSecondsBetweenActionBatches;
                 }
                 else
                 {
