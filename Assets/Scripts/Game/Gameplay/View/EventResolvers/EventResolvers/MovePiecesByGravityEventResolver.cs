@@ -21,6 +21,8 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
     {
         private sealed class FallDataComparer : IComparer<int>
         {
+            // Sort by column, then by row
+
             [NotNull] private readonly IBoard _board;
 
             public FallDataComparer([NotNull] IBoard board)
@@ -44,6 +46,14 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
                 if (result == 0)
                 {
+                    /*
+                     *
+                     * Some pieces with different ids may fall in here because of their rotations, since a source
+                     * coordinate doesn't necessarily need to be filled (maybe it does if rotation is 0, but it doesn't
+                     * if rotation is not 0)
+                     *
+                     */
+
                     result = pieceIdA.CompareTo(pieceIdB);
                 }
 
@@ -113,7 +123,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             ArgumentNullException.ThrowIfNull(fallData);
 
             ActionGroupCompletionHandler actionGroupCompletionHandler = new(fallData.Count, onComplete);
-            List<int> pieceIds = new();
+            List<int> pieceIds = new(); // Avoid modifying fallData while iterating it
 
             while (fallData.Count > 0)
             {
@@ -144,6 +154,14 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             bool CanFall(int pieceId, int fall)
             {
+                /*
+                 *
+                 * All pieces are going to fall, but not at the same time. The ones that can fall directly to their
+                 * end position (the one indicated by model) are going to be resolved, creating empty spaces for the
+                 * following ones. Each piece falls just once
+                 *
+                 */
+
                 IPiece piece = _board.GetPiece(pieceId);
                 Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
 
