@@ -24,6 +24,8 @@ namespace Game.Gameplay.Pieces.Pieces
 
         PieceType? DecomposeType { get; } // Expected to be a 1 Row x 1 Column piece, otherwise it may not work
 
+        bool AffectedByGravity { get; }
+
         bool IsFilled(int rowOffset, int columnOffset);
 
         bool IsDamaged(int rowOffset, int columnOffset);
