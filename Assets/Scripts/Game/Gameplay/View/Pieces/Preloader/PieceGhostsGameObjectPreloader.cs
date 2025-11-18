@@ -25,6 +25,8 @@ namespace Game.Gameplay.View.Pieces.Preloader
         protected override IEnumerable<PreloadRequest> GetPreloadRequests(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
         {
+            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
+
             foreach (BagPieceEntry bagPieceEntry in _bag.BagPieceEntries)
             {
                 yield return GetPreloadRequest(bagPieceEntry.PieceType);
@@ -39,9 +41,11 @@ namespace Game.Gameplay.View.Pieces.Preloader
 
             PreloadRequest GetPreloadRequest(PieceType pieceType)
             {
+                const int amount = 1;
+
                 GameObject prefab = pieceViewDefinitionGetter.GetGhost(pieceType).Prefab;
 
-                return new PreloadRequest(prefab, 1, true);
+                return new PreloadRequest(prefab, amount);
             }
         }
     }

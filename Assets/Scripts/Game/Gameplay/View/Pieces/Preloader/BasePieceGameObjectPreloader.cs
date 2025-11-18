@@ -14,7 +14,7 @@ namespace Game.Gameplay.View.Pieces.Preloader
             public readonly int Amount;
             public readonly bool OnlyIfNeeded;
 
-            public PreloadRequest(GameObject prefab, int amount, bool onlyIfNeeded)
+            public PreloadRequest(GameObject prefab, int amount, bool onlyIfNeeded = true)
             {
                 Prefab = prefab;
                 Amount = amount;

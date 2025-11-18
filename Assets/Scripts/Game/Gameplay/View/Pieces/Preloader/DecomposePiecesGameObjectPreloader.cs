@@ -9,13 +9,11 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Pieces.Preloader
 {
-    public class BoardPiecesGameObjectPreloader : BasePieceGameObjectPreloader
+    public class DecomposePiecesGameObjectPreloader : BasePieceGameObjectPreloader
     {
-        // If piece culling is implemented at some point, this will have to be reviewed
-
         [NotNull] private readonly IBoard _board;
 
-        public BoardPiecesGameObjectPreloader(
+        public DecomposePiecesGameObjectPreloader(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool,
             [NotNull] IBoard board) : base(pieceViewDefinitionGetter, gameObjectPool)
@@ -30,26 +28,20 @@ namespace Game.Gameplay.View.Pieces.Preloader
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
-            IDictionary<PieceType, int> amountByPieceType = new Dictionary<PieceType, int>();
+            const int amount = 3;
 
             foreach (int pieceId in _board.PieceIds)
             {
                 IPiece piece = _board.GetPiece(pieceId);
-                PieceType pieceType = piece.Type;
 
-                if (amountByPieceType.TryGetValue(pieceType, out int amount))
+                if (!piece.DecomposeType.HasValue)
                 {
-                    amountByPieceType[pieceType] = amount + 1;
+                    continue;
                 }
-                else
-                {
-                    amountByPieceType.Add(pieceType, 1);
-                }
-            }
 
-            foreach ((PieceType pieceType, int amount) in amountByPieceType)
-            {
-                GameObject prefab = pieceViewDefinitionGetter.Get(pieceType).Prefab;
+                PieceType decomposeType = piece.DecomposeType.Value;
+
+                GameObject prefab = pieceViewDefinitionGetter.Get(decomposeType).Prefab;
 
                 yield return new PreloadRequest(prefab, amount);
             }

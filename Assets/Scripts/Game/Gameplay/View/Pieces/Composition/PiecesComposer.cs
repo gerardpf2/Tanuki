@@ -39,9 +39,21 @@ namespace Game.Gameplay.View.Pieces.Composition
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
+                    new DecomposePiecesGameObjectPreloader(
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IGameObjectPool>(),
+                        r.Resolve<IBoard>()
+                    )
+                ),
+                PiecesComposerKeys.Preloader.DecomposePieces
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
                     new PieceGameObjectPreloaderGroup(
                         r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.BoardPieces),
-                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.PieceGhosts)
+                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.PieceGhosts),
+                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.DecomposePieces)
                     )
                 )
             );
