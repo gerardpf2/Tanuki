@@ -32,6 +32,30 @@ namespace Infrastructure.Logging
             }
         }
 
+        public void Info(IComposedMessage composedMessage)
+        {
+            foreach (ILogHandler logHandler in _logHandlers)
+            {
+                logHandler.Info(composedMessage);
+            }
+        }
+
+        public void Warning(IComposedMessage composedMessage)
+        {
+            foreach (ILogHandler logHandler in _logHandlers)
+            {
+                logHandler.Warning(composedMessage);
+            }
+        }
+
+        public void Error(IComposedMessage composedMessage)
+        {
+            foreach (ILogHandler logHandler in _logHandlers)
+            {
+                logHandler.Error(composedMessage);
+            }
+        }
+
         public void Add([NotNull] ILogHandler logHandler)
         {
             ArgumentNullException.ThrowIfNull(logHandler);
