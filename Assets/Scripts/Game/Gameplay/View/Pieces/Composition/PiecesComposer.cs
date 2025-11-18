@@ -28,13 +28,33 @@ namespace Game.Gameplay.View.Pieces.Composition
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
-                    new PieceGameObjectPreloader(
-                        r.Resolve<IBag>(),
-                        r.Resolve<IBoard>(),
+                    new BoardPiecesGameObjectPreloader(
                         r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IGameObjectPool>()
+                        r.Resolve<IGameObjectPool>(),
+                        r.Resolve<IBoard>()
+                    )
+                ),
+                PiecesComposerKeys.Preloader.BoardPieces
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
+                    new PieceGameObjectPreloaderGroup(
+                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.BoardPieces),
+                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.PieceGhosts)
                     )
                 )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
+                    new PieceGhostsGameObjectPreloader(
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IGameObjectPool>(),
+                        r.Resolve<IBag>()
+                    )
+                ),
+                PiecesComposerKeys.Preloader.PieceGhosts
             );
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));
