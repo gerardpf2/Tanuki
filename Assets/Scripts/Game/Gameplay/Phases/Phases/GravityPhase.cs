@@ -66,6 +66,12 @@ namespace Game.Gameplay.Phases.Phases
             ArgumentNullException.ThrowIfNull(fallData);
 
             IPiece piece = _board.GetPiece(pieceId);
+
+            if (!piece.AffectedByGravity)
+            {
+                return false;
+            }
+
             Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
 
             int fall = _board.ComputePieceFall(piece, sourceCoordinate);

@@ -7,16 +7,6 @@ namespace Game.Gameplay.Pieces.Pieces
 {
     public class PlayerJ : Piece
     {
-        /*
-         *
-         *  X
-         *  X
-         * XX
-         *
-         * Has no special behaviour, except for block decomposition on destroy
-         *
-         */
-
         public override PieceType? DecomposeType => PieceType.BlockJ;
 
         public PlayerJ([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerJ) { }

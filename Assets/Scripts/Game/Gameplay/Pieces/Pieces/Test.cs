@@ -9,8 +9,6 @@ namespace Game.Gameplay.Pieces.Pieces
     {
         /*
          *
-         * 3 Row x 1 Column
-         *
          * Has an eye that moves from bottom to top, and vice versa
          * Can only be damaged if the eye is hit
          *

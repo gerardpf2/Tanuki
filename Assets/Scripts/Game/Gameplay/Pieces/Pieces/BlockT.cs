@@ -7,14 +7,6 @@ namespace Game.Gameplay.Pieces.Pieces
 {
     public class BlockT : RectangularPiece
     {
-        /*
-         *
-         * 1 Row x 1 Column
-         *
-         * Has no special behaviour
-         *
-         */
-
         public override bool CanRotate => false;
 
         public BlockT([NotNull] IConverter converter, int id) : base(converter, id, PieceType.BlockT, 1, 1) { }

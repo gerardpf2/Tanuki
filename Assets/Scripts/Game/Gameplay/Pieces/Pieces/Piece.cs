@@ -57,6 +57,8 @@ namespace Game.Gameplay.Pieces.Pieces
 
         public virtual PieceType? DecomposeType => null;
 
+        public virtual bool AffectedByGravity => true;
+
         [NotNull] // Get
         private bool[,] Grid
         {
