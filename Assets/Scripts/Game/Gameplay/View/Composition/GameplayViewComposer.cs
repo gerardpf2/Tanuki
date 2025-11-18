@@ -7,6 +7,7 @@ using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
+using Game.Gameplay.Phases.Composition;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.View.Actions.Composition;
@@ -68,10 +69,10 @@ namespace Game.Gameplay.View.Composition
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IMovesView>(),
-                        r.Resolve<IPlayerInputActionHandler>("Lock"),
-                        r.Resolve<IPlayerInputActionHandler>("MoveLeft"),
-                        r.Resolve<IPlayerInputActionHandler>("MoveRight"),
-                        r.Resolve<IPlayerInputActionHandler>("Rotate"),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Lock),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveLeft),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),
@@ -104,17 +105,17 @@ namespace Game.Gameplay.View.Composition
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IGameplayParser>(),
-                        r.Resolve<IPhaseContainer>("Initial"),
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Initial),
                         r.Resolve<IGameplaySerializerOnBeginIteration>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
                         r.Resolve<IMovesView>(),
                         r.Resolve<IPieceGameObjectPreloader>(),
-                        r.Resolve<IPlayerInputActionHandler>("Lock"),
-                        r.Resolve<IPlayerInputActionHandler>("MoveLeft"),
-                        r.Resolve<IPlayerInputActionHandler>("MoveRight"),
-                        r.Resolve<IPlayerInputActionHandler>("Rotate"),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Lock),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveLeft),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>(),
                         r.Resolve<IEventsResolver>(),

@@ -19,13 +19,13 @@ namespace Game.Gameplay.View.Board.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            ruleAdder.Add(ruleFactory.GetSingleton<IBoard>(_ => new Gameplay.Board.Board()), "View");
+            ruleAdder.Add(ruleFactory.GetSingleton<IBoard>(_ => new Gameplay.Board.Board()), BoardComposerKeys.Board.View);
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IBoardView>(r =>
                     new BoardView(
                         r.Resolve<IBoard>(),
-                        r.Resolve<IBoard>("View"),
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<ILogger>(),
                         r.Resolve<IGameObjectPool>()
@@ -44,7 +44,7 @@ namespace Game.Gameplay.View.Board.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardGroundViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IBoard>("View"),
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<ICameraView>()
                     )
                 )
@@ -62,7 +62,7 @@ namespace Game.Gameplay.View.Board.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<BoardWallsViewModel>((r, vm) =>
                     vm.Inject(
-                        r.Resolve<IBoard>("View"),
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<ICameraView>(),
                         r.Resolve<ICameraGetter>()
                     )
