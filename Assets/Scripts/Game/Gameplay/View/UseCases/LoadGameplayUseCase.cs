@@ -8,7 +8,7 @@ using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Moves;
-using Game.Gameplay.View.Pieces;
+using Game.Gameplay.View.Pieces.Preloader;
 using Game.Gameplay.View.Player;
 using Game.Gameplay.View.Player.Input.ActionHandlers;
 using Infrastructure.ScreenLoading;
