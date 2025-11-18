@@ -11,11 +11,13 @@ namespace Game.Gameplay.Pieces.Pieces
          *
          * 2 Row x 2 Column
          *
-         * Has no special behaviour
+         * Has no special behaviour, except for block decomposition on destroy
          *
          */
 
         public override bool CanRotate => false;
+
+        public override PieceType? DecomposeType => PieceType.BlockO;
 
         public PlayerO([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerO, 2, 2) { }
 

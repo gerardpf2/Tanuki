@@ -28,6 +28,13 @@ namespace Game.Gameplay.View.Actions.Actions
 
         public void Resolve(Action onComplete)
         {
+            if (_actions.Count == 0)
+            {
+                onComplete?.Invoke();
+
+                return;
+            }
+
             _coroutineRunner.Run(ResolveImpl(onComplete));
         }
 

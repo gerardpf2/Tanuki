@@ -59,6 +59,6 @@ namespace Game.Gameplay.View.Actions
         IAction GetSetMovesAmountAction(int amount);
 
         [NotNull]
-        IAction GetParallelActionGroup(IEnumerable<IAction> actions, float secondsBetweenActions);
+        IAction GetParallelActionGroup(IEnumerable<IAction> actions, float secondsBetweenActions = 0.0f);
     }
 }

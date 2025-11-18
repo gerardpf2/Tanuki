@@ -12,9 +12,11 @@ namespace Game.Gameplay.Pieces.Pieces
          *  XX
          * XX
          *
-         * Has no special behaviour
+         * Has no special behaviour, except for block decomposition on destroy
          *
          */
+
+        public override PieceType? DecomposeType => PieceType.BlockS;
 
         public PlayerS([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerS) { }
 

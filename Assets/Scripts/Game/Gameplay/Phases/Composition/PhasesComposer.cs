@@ -5,6 +5,7 @@ using Game.Gameplay.Events;
 using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Phases.Phases;
+using Game.Gameplay.Pieces;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -39,7 +40,8 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
                         r.Resolve<IEventFactory>(),
-                        r.Resolve<IGoals>()
+                        r.Resolve<IGoals>(),
+                        r.Resolve<IPieceGetter>()
                     )
                 ),
                 PhasesComposerKeys.Phase.DestroyNotAlivePiecesPhase

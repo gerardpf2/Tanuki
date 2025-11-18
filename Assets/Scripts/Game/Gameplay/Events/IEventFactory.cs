@@ -33,7 +33,8 @@ namespace Game.Gameplay.Events
         IEvent GetDestroyPieceEvent(
             int pieceId,
             DestroyPieceReason destroyPieceReason,
-            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData
+            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData,
+            DestroyPieceEvent.DecomposePieceData decomposeData
         );
 
         [NotNull]
