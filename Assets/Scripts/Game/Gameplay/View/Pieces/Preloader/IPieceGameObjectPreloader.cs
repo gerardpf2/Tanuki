@@ -1,4 +1,4 @@
-namespace Game.Gameplay.View.Pieces
+namespace Game.Gameplay.View.Pieces.Preloader
 {
     public interface IPieceGameObjectPreloader
     {

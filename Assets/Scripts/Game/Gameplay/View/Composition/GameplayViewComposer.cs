@@ -24,6 +24,7 @@ using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Moves.Composition;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Composition;
+using Game.Gameplay.View.Pieces.Preloader;
 using Game.Gameplay.View.Player;
 using Game.Gameplay.View.Player.Composition;
 using Game.Gameplay.View.Player.Input.ActionHandlers;

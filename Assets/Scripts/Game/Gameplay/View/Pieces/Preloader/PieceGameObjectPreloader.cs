@@ -7,7 +7,7 @@ using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.Pieces
+namespace Game.Gameplay.View.Pieces.Preloader
 {
     public class PieceGameObjectPreloader : IPieceGameObjectPreloader
     {
