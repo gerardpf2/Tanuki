@@ -4,6 +4,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.System
 {
+    // TODO: Test
     public class ActionGroupCompletionHandler
     {
         private int _amount;
