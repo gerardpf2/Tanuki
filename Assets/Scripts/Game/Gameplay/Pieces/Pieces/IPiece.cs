@@ -18,6 +18,8 @@ namespace Game.Gameplay.Pieces.Pieces
 
         IEnumerable<KeyValuePair<string, string>> State { get; }
 
+        bool CanRotate { get; }
+
         int Rotation { get; set; } // Rotation steps 0, 1, 2, 3 -> 0, 90, 180, 270
 
         bool IsFilled(int rowOffset, int columnOffset);

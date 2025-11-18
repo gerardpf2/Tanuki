@@ -16,9 +16,11 @@ namespace Game.Gameplay.Pieces.Pieces
          *
          */
 
-        public const int Rows = 3;
+        private const int Rows = 3;
         [NotNull] private const string EyeMovementDirectionUpKey = "DIRECTION_UP";
         [NotNull] private const string EyeRowOffsetKey = "ROW_OFFSET";
+
+        public override bool CanRotate => false;
 
         public bool EyeMovementDirectionUp { get; private set; }
 

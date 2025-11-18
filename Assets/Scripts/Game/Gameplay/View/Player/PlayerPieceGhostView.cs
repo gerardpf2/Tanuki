@@ -1,13 +1,16 @@
+using System;
 using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
-using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 using UnityEngine;
+using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
+using Object = UnityEngine.Object;
 
 namespace Game.Gameplay.View.Player
 {
@@ -36,6 +39,9 @@ namespace Game.Gameplay.View.Player
 
         private Transform _parent;
         private PieceData _pieceData;
+
+        public event Action OnInstantiated;
+        public event Action OnDestroyed;
 
         public Coordinate Coordinate
         {
@@ -103,6 +109,8 @@ namespace Game.Gameplay.View.Player
             _pieceData = new PieceData(piece, pooledInstance);
 
             UpdatePosition();
+
+            OnInstantiated?.Invoke();
         }
 
         public void Destroy()
@@ -114,6 +122,8 @@ namespace Game.Gameplay.View.Player
 
             _pieceData.PooledInstance.ReturnToPool();
             _pieceData = null;
+
+            OnDestroyed?.Invoke();
         }
 
         private void SubscribeToEvents()

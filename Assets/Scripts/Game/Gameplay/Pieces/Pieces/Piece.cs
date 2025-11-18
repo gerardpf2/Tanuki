@@ -28,6 +28,8 @@ namespace Game.Gameplay.Pieces.Pieces
 
         public IEnumerable<KeyValuePair<string, string>> State => GetState();
 
+        public virtual bool CanRotate => true;
+
         public int Rotation
         {
             get => _rotation;
@@ -35,7 +37,7 @@ namespace Game.Gameplay.Pieces.Pieces
             {
                 if (!CanRotate)
                 {
-                    return;
+                    InvalidOperationException.Throw($"Piece with Type: {Type} cannot be rotated");
                 }
 
                 value %= MatrixUtils.MaxRotationSteps;
@@ -49,8 +51,6 @@ namespace Game.Gameplay.Pieces.Pieces
                 _rotation = value;
             }
         }
-
-        protected virtual bool CanRotate => true;
 
         [NotNull] protected readonly IConverter Converter;
 
