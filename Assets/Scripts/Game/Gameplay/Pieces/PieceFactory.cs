@@ -54,6 +54,41 @@ namespace Game.Gameplay.Pieces
             return new PlayerZ(_converter, GetNewPieceId());
         }
 
+        public IPiece GetBlockI()
+        {
+            return new BlockI(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetBlockO()
+        {
+            return new BlockO(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetBlockT()
+        {
+            return new BlockT(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetBlockJ()
+        {
+            return new BlockJ(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetBlockL()
+        {
+            return new BlockL(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetBlockS()
+        {
+            return new BlockS(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetBlockZ()
+        {
+            return new BlockZ(_converter, GetNewPieceId());
+        }
+
         public IPiece GetTest()
         {
             return new Test(_converter, GetNewPieceId());

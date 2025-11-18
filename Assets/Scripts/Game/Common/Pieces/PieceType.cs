@@ -10,6 +10,14 @@ namespace Game.Common.Pieces
         PlayerS = 15,
         PlayerZ = 16,
 
+        BlockI = 20,
+        BlockO = 21,
+        BlockT = 22,
+        BlockJ = 23,
+        BlockL = 24,
+        BlockS = 25,
+        BlockZ = 26,
+
         Test = 30
     }
 }
