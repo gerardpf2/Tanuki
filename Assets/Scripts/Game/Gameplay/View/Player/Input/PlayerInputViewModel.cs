@@ -1,7 +1,7 @@
-using Game.Common.UI;
 using Game.Gameplay.View.Player.Input.ActionHandlers;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
+using Infrastructure.ModelViewViewModel.Examples.Button;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
