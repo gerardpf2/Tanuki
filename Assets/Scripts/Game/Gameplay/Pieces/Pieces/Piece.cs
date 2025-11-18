@@ -20,9 +20,9 @@ namespace Game.Gameplay.Pieces.Pieces
 
         public PieceType Type { get; }
 
-        public int Width => GetRotatedGrid().GetLength(1);
+        public int Height => Grid.GetLength(0);
 
-        public int Height => GetRotatedGrid().GetLength(0);
+        public int Width => Grid.GetLength(1);
 
         public bool Alive { get; private set; } = DefaultAlive;
 
@@ -47,16 +47,41 @@ namespace Game.Gameplay.Pieces.Pieces
                     return;
                 }
 
-                _rotatedGrid = null;
+                int steps = value - Rotation;
+
                 _rotation = value;
+
+                Rotate(steps);
             }
+        }
+
+        [NotNull] // Get
+        private bool[,] Grid
+        {
+            get => _grid ??= GetGrid();
+            set => _grid = value;
+        }
+
+        /*
+         *
+         * Has always the same height, width and rotation as grid
+         *
+         * True -> Damaged
+         * False -> Undamaged (or maybe not filled)
+         *
+         */
+        [NotNull] // Get
+        private bool[,] DamageGrid
+        {
+            get => _damageGrid ??= GetDamageGrid();
+            set => _damageGrid = value;
         }
 
         [NotNull] protected readonly IConverter Converter;
 
         [NotNull] private readonly IDictionary<string, string> _temporaryStateEntries = new Dictionary<string, string>();
-
-        private bool[,] _rotatedGrid;
+        private bool[,] _damageGrid;
+        private bool[,] _grid;
         private int _rotation;
 
         protected Piece([NotNull] IConverter converter, int id, PieceType type)
@@ -76,7 +101,12 @@ namespace Game.Gameplay.Pieces.Pieces
             ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.GreaterThanOrEqualTo, 0);
             ArgumentOutOfRangeException.ThrowIfNot(columnOffset, ComparisonOperator.LessThan, Width);
 
-            return GetRotatedGrid()[rowOffset, columnOffset];
+            return Grid[rowOffset, columnOffset];
+        }
+
+        public bool IsDamaged(int rowOffset, int columnOffset)
+        {
+            return IsFilled(rowOffset, columnOffset) && DamageGrid[rowOffset, columnOffset];
         }
 
         public void ProcessState(IEnumerable<KeyValuePair<string, string>> state)
@@ -116,7 +146,10 @@ namespace Game.Gameplay.Pieces.Pieces
                 Rotation
             );
 
-            HandleDamaged(rotatedRowOffset, rotatedColumnOffset);
+            if (HandleDamaged(rotatedRowOffset, rotatedColumnOffset))
+            {
+                DamageGrid[rowOffset, columnOffset] = true;
+            }
         }
 
         public abstract IPiece Clone();
@@ -173,18 +206,33 @@ namespace Game.Gameplay.Pieces.Pieces
             return false;
         }
 
-        protected virtual void HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
+        private void Rotate(int steps)
         {
-            Alive = false;
+            // TODO: Optimize
+
+            if (steps < 0)
+            {
+                steps += MatrixUtils.MaxRotationSteps;
+            }
+
+            DamageGrid = DamageGrid.RotateClockwise(steps); // Needs to be rotated before grid in case it gets created at this point
+            Grid = Grid.RotateClockwise(steps);
         }
 
-        [NotNull]
-        private bool[,] GetRotatedGrid()
+        protected virtual bool HandleDamaged(int nonRotatedRowOffset, int nonRotatedColumnOffset)
         {
-            return _rotatedGrid ??= GetGrid().RotateClockwise(Rotation);
+            Alive = false;
+
+            return true;
         }
 
         [NotNull]
         protected abstract bool[,] GetGrid();
+
+        [NotNull]
+        private bool[,] GetDamageGrid()
+        {
+            return new bool[Height, Width];
+        }
     }
 }

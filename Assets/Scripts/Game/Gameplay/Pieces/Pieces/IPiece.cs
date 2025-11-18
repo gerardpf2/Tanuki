@@ -10,9 +10,9 @@ namespace Game.Gameplay.Pieces.Pieces
 
         PieceType Type { get; }
 
-        int Width { get; }
-
         int Height { get; }
+
+        int Width { get; }
 
         bool Alive { get; }
 
@@ -23,6 +23,8 @@ namespace Game.Gameplay.Pieces.Pieces
         int Rotation { get; set; } // Rotation steps 0, 1, 2, 3 -> 0, 90, 180, 270
 
         bool IsFilled(int rowOffset, int columnOffset);
+
+        bool IsDamaged(int rowOffset, int columnOffset);
 
         void ProcessState(IEnumerable<KeyValuePair<string, string>> state);
 
