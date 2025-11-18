@@ -9,13 +9,13 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Board
 {
-    public class BoardWallViewModel : ViewModel
+    public class BoardWallsViewModel : ViewModel
     {
-        // TODO: Use bindings
-
         [SerializeField] private float _referenceHeight = 1920.0f;
-        [SerializeField] private RectTransform _rectTransform;
-        [SerializeField] private bool _isLeft;
+
+        [NotNull] private readonly IBoundProperty<bool> _widthUpdated = new BoundProperty<bool>("WidthUpdated");
+        [NotNull] private readonly IBoundProperty<Vector2> _offsetLeft = new BoundProperty<Vector2>("OffsetLeft");
+        [NotNull] private readonly IBoundProperty<Vector2> _offsetRight = new BoundProperty<Vector2>("OffsetRight");
 
         private IBoard _board;
         private ICameraView _cameraView;
@@ -26,6 +26,10 @@ namespace Game.Gameplay.View.Board
             base.Awake();
 
             InjectResolver.Resolve(this);
+
+            Add(_widthUpdated);
+            Add(_offsetLeft);
+            Add(_offsetRight);
 
             SubscribeToEvents();
         }
@@ -72,7 +76,6 @@ namespace Game.Gameplay.View.Board
 
         private void UpdateWidth()
         {
-            InvalidOperationException.ThrowIfNull(_rectTransform);
             InvalidOperationException.ThrowIfNull(_board);
             InvalidOperationException.ThrowIfNull(_cameraGetter);
 
@@ -83,14 +86,10 @@ namespace Game.Gameplay.View.Board
             float boardWidth = _board.Columns * unitSize;
             float boardHalfWidth = 0.5f * boardWidth;
 
-            if (_isLeft)
-            {
-                _rectTransform.offsetMax = new Vector2(-boardHalfWidth, 0.0f);
-            }
-            else
-            {
-                _rectTransform.offsetMin = new Vector2(boardHalfWidth, 0.0f);
-            }
+            _offsetLeft.Value = new Vector2(-boardHalfWidth, 0.0f);
+            _offsetRight.Value = new Vector2(boardHalfWidth, 0.0f);
+
+            _widthUpdated.Value = true;
         }
     }
 }
