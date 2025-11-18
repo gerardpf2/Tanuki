@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Events;
-using Game.Gameplay.Events.Events;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -30,34 +30,29 @@ namespace Game.Gameplay.Phases.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            bool resolved = false;
+            IDictionary<int, int> fallData = new Dictionary<int, int>();
 
-            MovePiecesByGravityEvent movePiecesByGravityEvent = _eventFactory.GetMovePiecesByGravityEvent();
+            while (TryMovePieces(fallData));
 
-            while (TryMovePieces(movePiecesByGravityEvent))
-            {
-                resolved = true;
-            }
-
-            if (!resolved)
+            if (fallData.Count <= 0)
             {
                 return ResolveResult.NotUpdated;
             }
 
-            _eventEnqueuer.Enqueue(movePiecesByGravityEvent);
+            _eventEnqueuer.Enqueue(_eventFactory.GetMovePiecesByGravityEvent(fallData));
 
             return ResolveResult.Updated;
         }
 
-        private bool TryMovePieces([NotNull] MovePiecesByGravityEvent movePiecesByGravityEvent)
+        private bool TryMovePieces([NotNull] IDictionary<int, int> fallData)
         {
-            ArgumentNullException.ThrowIfNull(movePiecesByGravityEvent);
+            ArgumentNullException.ThrowIfNull(fallData);
 
             bool resolved = false;
 
             foreach (int pieceId in _board.GetDistinctPieceIdsSortedByRowThenByColumn())
             {
-                if (TryMovePiece(movePiecesByGravityEvent, pieceId))
+                if (TryMovePiece(fallData, pieceId))
                 {
                     resolved = true;
                 }
@@ -66,9 +61,9 @@ namespace Game.Gameplay.Phases.Phases
             return resolved;
         }
 
-        private bool TryMovePiece([NotNull] MovePiecesByGravityEvent movePiecesByGravityEvent, int pieceId)
+        private bool TryMovePiece([NotNull] IDictionary<int, int> fallData, int pieceId)
         {
-            ArgumentNullException.ThrowIfNull(movePiecesByGravityEvent);
+            ArgumentNullException.ThrowIfNull(fallData);
 
             IPiece piece = _board.GetPiece(pieceId);
             Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
@@ -80,16 +75,30 @@ namespace Game.Gameplay.Phases.Phases
                 return false;
             }
 
-            int rowOffset = -fall;
-            const int columnOffset = 0;
-
-            _board.MovePiece(pieceId, rowOffset, columnOffset);
-
-            MovePiecesByGravityEvent.PieceMovementData pieceMovementData = new(pieceId, rowOffset, columnOffset);
-
-            movePiecesByGravityEvent.Add(pieceMovementData);
+            UpdateFallData();
+            UpdateBoard();
 
             return true;
+
+            void UpdateFallData()
+            {
+                if (fallData.TryGetValue(pieceId, out int currentFall))
+                {
+                    fallData[pieceId] = currentFall + fall;
+                }
+                else
+                {
+                    fallData.Add(pieceId, fall);
+                }
+            }
+
+            void UpdateBoard()
+            {
+                int rowOffset = -fall;
+                const int columnOffset = 0;
+
+                _board.MovePiece(pieceId, rowOffset, columnOffset);
+            }
         }
     }
 }

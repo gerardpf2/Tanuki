@@ -125,6 +125,11 @@ namespace Game.Gameplay.Board.Utils
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
                 fall = Math.Min(board.ComputePieceFallImpl(piece.Id, coordinate), fall);
+
+                if (fall <= 0)
+                {
+                    break;
+                }
             }
 
             return fall;

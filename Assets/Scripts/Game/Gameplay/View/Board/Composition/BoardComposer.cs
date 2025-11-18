@@ -2,7 +2,6 @@ using Game.Gameplay.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.Pieces;
 using Infrastructure.DependencyInjection;
-using Infrastructure.Logging;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity;
 using Infrastructure.Unity.Pooling;
@@ -27,7 +26,6 @@ namespace Game.Gameplay.View.Board.Composition
                         r.Resolve<IBoard>(),
                         r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<ILogger>(),
                         r.Resolve<IGameObjectPool>()
                     )
                 )

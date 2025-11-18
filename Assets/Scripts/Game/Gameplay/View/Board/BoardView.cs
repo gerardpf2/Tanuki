@@ -8,7 +8,6 @@ using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 using UnityEngine;
-using ILogger = Infrastructure.Logging.ILogger;
 
 namespace Game.Gameplay.View.Board
 {
@@ -17,7 +16,6 @@ namespace Game.Gameplay.View.Board
         [NotNull] private readonly IBoard _modelBoard;
         [NotNull] private readonly IBoard _viewBoard;
         [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
-        [NotNull] private readonly ILogger _logger;
         [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
         [NotNull] private readonly IDictionary<int, GameObjectPooledInstance> _piecePooledInstances = new Dictionary<int, GameObjectPooledInstance>();
@@ -30,19 +28,16 @@ namespace Game.Gameplay.View.Board
             [NotNull] IBoard modelBoard,
             [NotNull] IBoard viewBoard,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] ILogger logger,
             [NotNull] IGameObjectPool gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(modelBoard);
             ArgumentNullException.ThrowIfNull(viewBoard);
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(logger);
             ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _modelBoard = modelBoard;
             _viewBoard = viewBoard;
             _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
-            _logger = logger;
             _gameObjectPool = gameObjectPool;
         }
 
@@ -126,8 +121,6 @@ namespace Game.Gameplay.View.Board
         public void MovePiece(int pieceId, int rowOffset, int columnOffset)
         {
             _viewBoard.MovePiece(pieceId, rowOffset, columnOffset);
-
-            EnsurePiecePositionIsExpected(pieceId);
         }
 
         private void DestroyAllPieces()
@@ -148,27 +141,6 @@ namespace Game.Gameplay.View.Board
             }
 
             return piecePooledInstance;
-        }
-
-        private void EnsurePiecePositionIsExpected(int pieceId)
-        {
-            GameObject pieceInstance = GetPieceInstance(pieceId);
-
-            Coordinate sourceCoordinate = _viewBoard.GetSourceCoordinate(pieceId);
-
-            Vector3 expectedWorldPosition = sourceCoordinate.ToVector3();
-            Vector3 worldPosition = pieceInstance.transform.position;
-
-            if (expectedWorldPosition == worldPosition) // Vector3 == means approximate equality
-            {
-                return;
-            }
-
-            // TODO: Exception
-            _logger.Warning($"Piece with Id: {pieceId} position is not the expected one. Its coordinates are {sourceCoordinate} and its world position should be {expectedWorldPosition}, but instead it is {worldPosition}");
-
-            // TODO: Remove
-            pieceInstance.transform.position = expectedWorldPosition;
         }
     }
 }

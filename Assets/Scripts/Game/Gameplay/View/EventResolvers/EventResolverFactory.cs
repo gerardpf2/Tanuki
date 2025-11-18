@@ -1,20 +1,31 @@
+using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.View.Actions;
 using Game.Gameplay.View.EventResolvers.EventResolvers;
 using Infrastructure.System.Exceptions;
+using Infrastructure.Unity;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.EventResolvers
 {
     public class EventResolverFactory : IEventResolverFactory
     {
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IActionFactory _actionFactory;
+        [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
-        public EventResolverFactory([NotNull] IActionFactory actionFactory)
+        public EventResolverFactory(
+            [NotNull] IBoard board,
+            [NotNull] IActionFactory actionFactory,
+            [NotNull] ICoroutineRunner coroutineRunner)
         {
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(actionFactory);
+            ArgumentNullException.ThrowIfNull(coroutineRunner);
 
+            _board = board;
             _actionFactory = actionFactory;
+            _coroutineRunner = coroutineRunner;
         }
 
         public IEventResolver<InstantiatePieceEvent> GetInstantiatePieceEventResolver()
@@ -49,7 +60,7 @@ namespace Game.Gameplay.View.EventResolvers
 
         public IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver()
         {
-            return new MovePiecesByGravityEventResolver(_actionFactory);
+            return new MovePiecesByGravityEventResolver(_board, _actionFactory, _coroutineRunner);
         }
 
         public IEventResolver<MoveCameraEvent> GetMoveCameraEventResolver()
