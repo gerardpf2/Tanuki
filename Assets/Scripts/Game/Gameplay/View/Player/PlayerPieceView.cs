@@ -1,5 +1,5 @@
 using System;
-using Game.Common;
+using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
@@ -10,132 +10,39 @@ using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
-using Object = UnityEngine.Object;
 
 namespace Game.Gameplay.View.Player
 {
-    public class PlayerPieceView : IPlayerPieceView
+    public class PlayerPieceView : BasePlayerPieceView, IPlayerPieceView
     {
-        private sealed class PieceData
-        {
-            [NotNull] public readonly IPiece Piece;
-            public GameObjectPooledInstance PooledInstance;
-
-            public PieceData([NotNull] IPiece piece, GameObjectPooledInstance pooledInstance)
-            {
-                ArgumentNullException.ThrowIfNull(piece);
-
-                Piece = piece;
-                PooledInstance = pooledInstance;
-            }
-        }
-
         [NotNull] private readonly IBoard _board;
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
-        [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
-        private InitializedLabel _initializedLabel;
-
-        private Transform _parent;
-        private PieceData _pieceData;
-
-        public event Action OnInstantiated;
-        public event Action OnDestroyed;
         public event Action OnMoved;
         public event Action OnRotated;
 
-        public Coordinate Coordinate
-        {
-            get
-            {
-                GameObject instance = Instance;
-
-                InvalidOperationException.ThrowIfNull(instance);
-
-                return instance.transform.position.ToCoordinate();
-            }
-            private set
-            {
-                GameObject instance = Instance;
-
-                InvalidOperationException.ThrowIfNull(instance);
-
-                instance.transform.position = value.ToVector3();
-            }
-        }
-
-        public GameObject Instance => _pieceData?.PooledInstance.Instance;
+        protected override string ParentName => "PlayerPieceParent";
 
         public PlayerPieceView(
-            [NotNull] IBoard board,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] IGameObjectPool gameObjectPool)
+            [NotNull] IGameObjectPool gameObjectPool,
+            [NotNull] IBoard board) : base(pieceViewDefinitionGetter, gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(board);
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _board = board;
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
-            _gameObjectPool = gameObjectPool;
-        }
-
-        public void Initialize()
-        {
-            _initializedLabel.SetInitialized();
-
-            _parent = new GameObject("PlayerPieceParent").transform; // New game object outside canvas, etc
-        }
-
-        public void Uninitialize()
-        {
-            _initializedLabel.SetUninitialized();
-
-            InvalidOperationException.ThrowIfNull(_parent);
-
-            Destroy();
-
-            Object.Destroy(_parent.gameObject);
-
-            _parent = null;
         }
 
         public void Instantiate([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            InvalidOperationException.ThrowIfNotNull(_pieceData);
 
-            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
-            GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
-
-            _pieceData = new PieceData(piece, pooledInstance);
-
-            Coordinate = sourceCoordinate;
-
-            OnInstantiated?.Invoke();
-        }
-
-        public void Destroy()
-        {
-            if (_pieceData is null)
-            {
-                return;
-            }
-
-            _pieceData.PooledInstance.ReturnToPool();
-            _pieceData = null;
-
-            OnDestroyed?.Invoke();
+            InstantiateImpl(piece, sourceCoordinate);
         }
 
         public bool CanMove(int columnOffset)
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
-
-            IPiece piece = _pieceData.Piece;
-
             int column = Coordinate.Column + columnOffset;
-            int clampedColumn = GetClampedColumn(piece, column);
+            int clampedColumn = GetClampedColumn(Piece, column);
 
             return column == clampedColumn;
         }
@@ -156,11 +63,7 @@ namespace Game.Gameplay.View.Player
 
         public bool CanRotate()
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
-
-            IPiece piece = _pieceData.Piece;
-
-            return piece.CanRotate;
+            return Piece.CanRotate;
         }
 
         public void Rotate()
@@ -180,9 +83,7 @@ namespace Game.Gameplay.View.Player
 
             void RotateAndUpdateCoordinate()
             {
-                InvalidOperationException.ThrowIfNull(_pieceData);
-
-                IPiece piece = _pieceData.Piece;
+                IPiece piece = Piece;
 
                 int height = piece.Height;
                 int width = piece.Width;
@@ -215,6 +116,15 @@ namespace Game.Gameplay.View.Player
 
                 pieceViewEventNotifier.OnRotated();
             }
+        }
+
+        protected override IPieceViewDefinition GetPieceViewDefinition(
+            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
+            PieceType pieceType)
+        {
+            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
+
+            return pieceViewDefinitionGetter.Get(pieceType);
         }
 
         private int GetClampedColumn([NotNull] IPiece piece, int column)

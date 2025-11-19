@@ -51,7 +51,7 @@ namespace Game.Gameplay.View.Player
 
                 return instance.transform.position.ToCoordinate();
             }
-            private set
+            protected set
             {
                 GameObject instance = Instance;
 
@@ -64,6 +64,17 @@ namespace Game.Gameplay.View.Player
         public GameObject Instance => _pieceData?.PooledInstance.Instance;
 
         protected abstract string ParentName { get; }
+
+        [NotNull]
+        protected IPiece Piece
+        {
+            get
+            {
+                InvalidOperationException.ThrowIfNull(_pieceData);
+
+                return _pieceData.Piece;
+            }
+        }
 
         protected BasePlayerPieceView(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
