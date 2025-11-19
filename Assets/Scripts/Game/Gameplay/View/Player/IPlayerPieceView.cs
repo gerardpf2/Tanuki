@@ -24,9 +24,9 @@ namespace Game.Gameplay.View.Player
 
         void Destroy();
 
-        bool CanMove(int offsetX);
+        bool CanMove(int columnOffset);
 
-        void Move(int offsetX);
+        void Move(int columnOffset);
 
         bool CanRotate();
 

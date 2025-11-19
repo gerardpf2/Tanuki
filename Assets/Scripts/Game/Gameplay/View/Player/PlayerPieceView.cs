@@ -6,7 +6,6 @@ using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.Unity.Pooling;
-using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -49,11 +48,19 @@ namespace Game.Gameplay.View.Player
         {
             get
             {
-                InvalidOperationException.ThrowIfNull(Instance);
+                GameObject instance = Instance;
 
-                Transform transform = Instance.transform;
+                InvalidOperationException.ThrowIfNull(instance);
 
-                return transform.position.ToCoordinate();
+                return instance.transform.position.ToCoordinate();
+            }
+            private set
+            {
+                GameObject instance = Instance;
+
+                InvalidOperationException.ThrowIfNull(instance);
+
+                instance.transform.position = value.ToVector3();
             }
         }
 
@@ -96,15 +103,14 @@ namespace Game.Gameplay.View.Player
         public void Instantiate([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            InvalidOperationException.ThrowIfNull(_parent);
             InvalidOperationException.ThrowIfNotNull(_pieceData);
 
             IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
             GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
 
-            pooledInstance.Instance.transform.position = sourceCoordinate.ToVector3();
-
             _pieceData = new PieceData(piece, pooledInstance);
+
+            Coordinate = sourceCoordinate;
 
             OnInstantiated?.Invoke();
         }
@@ -122,32 +128,28 @@ namespace Game.Gameplay.View.Player
             OnDestroyed?.Invoke();
         }
 
-        public bool CanMove(int offsetX)
+        public bool CanMove(int columnOffset)
         {
             InvalidOperationException.ThrowIfNull(_pieceData);
 
             IPiece piece = _pieceData.Piece;
 
-            const int minColumn = 0;
-            int maxColumn = Mathf.Max(_board.Columns - piece.Width, minColumn);
+            int column = Coordinate.Column + columnOffset;
+            int clampedColumn = GetClampedColumn(piece, column);
 
-            int column = Coordinate.Column + offsetX;
-
-            return column >= minColumn && column <= maxColumn;
+            return column == clampedColumn;
         }
 
-        public void Move(int offsetX)
+        public void Move(int columnOffset)
         {
-            InvalidOperationException.ThrowIfNull(Instance);
+            const int rowOffset = 0;
 
-            Transform transform = Instance.transform;
-
-            if (!CanMove(offsetX))
+            if (!CanMove(columnOffset))
             {
                 InvalidOperationException.Throw("Cannot be moved");
             }
 
-            transform.position = transform.position.AddX(offsetX);
+            Coordinate = Coordinate.WithOffset(rowOffset, columnOffset);
 
             OnMoved?.Invoke();
         }
@@ -163,51 +165,66 @@ namespace Game.Gameplay.View.Player
 
         public void Rotate()
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
-            InvalidOperationException.ThrowIfNull(Instance);
-
             if (!CanRotate())
             {
                 InvalidOperationException.Throw("Cannot be rotated");
             }
 
-            IPiece piece = _pieceData.Piece;
-
-            int width = piece.Width;
-            int height = piece.Height;
-
-            ++piece.Rotation;
-
-            int widthAfterRotate = piece.Width;
-            int heightAfterRotate = piece.Height;
-
-            int offsetX = (width - widthAfterRotate) / 2;
-            int offsetY = height - heightAfterRotate;
-
-            Transform transform = Instance.transform;
-
-            float x = ClampX(piece, transform.position.x + offsetX);
-
-            transform.position = transform.position.WithX(x).AddY(offsetY);
-
-            IPieceViewEventNotifier pieceViewEventNotifier = Instance.GetComponent<IPieceViewEventNotifier>();
-
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
-
-            pieceViewEventNotifier.OnRotated();
+            RotateAndUpdateCoordinate();
+            NotifyRotated();
 
             OnMoved?.Invoke();
             OnRotated?.Invoke();
+
+            return;
+
+            void RotateAndUpdateCoordinate()
+            {
+                InvalidOperationException.ThrowIfNull(_pieceData);
+
+                IPiece piece = _pieceData.Piece;
+
+                int height = piece.Height;
+                int width = piece.Width;
+
+                ++piece.Rotation;
+
+                int heightAfterRotate = piece.Height;
+                int widthAfterRotate = piece.Width;
+
+                int rowOffset = height - heightAfterRotate;
+                int columnOffset = (width - widthAfterRotate) / 2;
+
+                Coordinate coordinate = Coordinate;
+
+                int row = coordinate.Row + rowOffset;
+                int column = coordinate.Column + columnOffset;
+
+                Coordinate = new Coordinate(row, GetClampedColumn(piece, column));
+            }
+
+            void NotifyRotated()
+            {
+                GameObject instance = Instance;
+
+                InvalidOperationException.ThrowIfNull(instance);
+
+                IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
+
+                InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+
+                pieceViewEventNotifier.OnRotated();
+            }
         }
 
-        private float ClampX([NotNull] IPiece piece, float x)
+        private int GetClampedColumn([NotNull] IPiece piece, int column)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
             const int minColumn = 0;
-            int maxColumn = Mathf.Max(_board.Columns - piece.Width, minColumn);
+            int maxColumn = Math.Max(_board.Columns - piece.Width, minColumn);
 
-            return Mathf.Clamp(x, minColumn, maxColumn);
+            return Math.Clamp(column, minColumn, maxColumn);
         }
     }
 }
