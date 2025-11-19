@@ -94,6 +94,11 @@ namespace Game.Gameplay.Pieces
             return new StaticBlock(_converter, GetNewPieceId());
         }
 
+        public IPiece GetTato()
+        {
+            return new Tato(_converter, GetNewPieceId());
+        }
+
         public IPiece GetTest()
         {
             return new Test(_converter, GetNewPieceId());

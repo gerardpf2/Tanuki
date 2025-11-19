@@ -73,6 +73,9 @@ namespace Game.Gameplay.Pieces
                 case PieceType.StaticBlock:
                     piece = _pieceFactory.GetStaticBlock();
                     break;
+                case PieceType.Tato:
+                    piece = _pieceFactory.GetTato();
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(pieceType);
                     return null;
