@@ -11,7 +11,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 {
     public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier where T : IPiece
     {
-        [SerializeField] private Transform _content;
+        [SerializeField] private Transform _content; // TODO: Use bindings
 
         protected T Piece;
 
