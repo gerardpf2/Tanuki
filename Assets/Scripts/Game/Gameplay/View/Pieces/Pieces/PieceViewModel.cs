@@ -1,6 +1,7 @@
 using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
+using Game.Gameplay.View.Animation.Animator.Utils;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Pieces.Pieces
@@ -26,7 +27,9 @@ namespace Game.Gameplay.View.Pieces.Pieces
             {
                 SetAnimationEndCallback("FallStart", onComplete);
 
-                _animator.SetTrigger("FallStart");
+                string triggerName = TriggerNameUtils.GetStart(movePieceReason);
+
+                _animator.SetTrigger(triggerName);
             }
             else
             {
@@ -42,7 +45,9 @@ namespace Game.Gameplay.View.Pieces.Pieces
             {
                 SetAnimationEndCallback("FallEnd", onComplete);
 
-                _animator.SetTrigger("FallEnd");
+                string triggerName = TriggerNameUtils.GetEnd(movePieceReason);
+
+                _animator.SetTrigger(triggerName);
             }
             else
             {
