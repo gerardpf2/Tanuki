@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1070835727361169376}
   - component: {fileID: 3209040088352875747}
+  - component: {fileID: 7489185302281341990}
   - component: {fileID: 4687716747180991768}
   m_Layer: 0
   m_Name: Tato
@@ -167,6 +168,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _content: {fileID: 823495390370513058}
   _animator: {fileID: 4687716747180991768}
+--- !u!114 &7489185302281341990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6451969163346834527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb03ebb23034aa181298933e22d2fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &4687716747180991768
 Animator:
   serializedVersion: 7
