@@ -24,7 +24,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             if (_animator)
             {
-                _animator.SetBool("Fall", true);
+                _animator.SetTrigger("FallStart");
             }
 
             onComplete?.Invoke();
@@ -36,7 +36,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             if (_animator)
             {
-                _animator.SetBool("Fall", false);
+                _animator.SetTrigger("FallEnd");
             }
 
             onComplete?.Invoke();
