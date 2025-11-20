@@ -12,23 +12,11 @@ namespace Game.Gameplay.View.Pieces.Pieces
 {
     public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
     {
-        private readonly struct AnimationCallback
-        {
-            public readonly string AnimationName;
-            public readonly Action Callback;
-
-            public AnimationCallback(string animationName, Action callback)
-            {
-                AnimationName = animationName;
-                Callback = callback;
-            }
-        }
-
         [SerializeField] private Transform _content; // TODO: Use bindings
 
         protected T Piece;
 
-        private AnimationCallback? _currentAnimationEndCallback;
+        private Action _animationEndCallback;
 
         public void SetData(IPiece data)
         {
@@ -58,23 +46,15 @@ namespace Game.Gameplay.View.Pieces.Pieces
             SyncRotation();
         }
 
-        public void OnAnimationEnd(string animationName)
+        public void OnAnimationEnd(string _)
         {
-            if (!_currentAnimationEndCallback.HasValue)
+            if (_animationEndCallback is null)
             {
                 InvalidOperationException.Throw(); // TODO
             }
 
-            AnimationCallback animationCallback = _currentAnimationEndCallback.Value;
-
-            if (animationCallback.AnimationName != animationName)
-            {
-                InvalidOperationException.Throw(); // TODO
-            }
-
-            animationCallback.Callback?.Invoke();
-
-            _currentAnimationEndCallback = null;
+            _animationEndCallback();
+            _animationEndCallback = null;
         }
 
         protected virtual void SyncState()
@@ -82,14 +62,14 @@ namespace Game.Gameplay.View.Pieces.Pieces
             SyncRotation();
         }
 
-        protected void SetAnimationEndCallback(string animationName, Action callback)
+        protected void SetAnimationEndCallback(Action animationEndCallback)
         {
-            if (_currentAnimationEndCallback.HasValue)
+            if (_animationEndCallback is not null)
             {
                 InvalidOperationException.Throw(); // TODO
             }
 
-            _currentAnimationEndCallback = new AnimationCallback(animationName, callback);
+            _animationEndCallback = animationEndCallback;
         }
 
         private void SyncRotation()

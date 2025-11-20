@@ -25,7 +25,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             if (_animator)
             {
-                SetAnimationEndCallback("FallStart", onComplete);
+                SetAnimationEndCallback(onComplete);
 
                 string triggerName = TriggerNameUtils.GetStart(movePieceReason);
 
@@ -43,7 +43,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             if (_animator)
             {
-                SetAnimationEndCallback("FallEnd", onComplete);
+                SetAnimationEndCallback(onComplete);
 
                 string triggerName = TriggerNameUtils.GetEnd(movePieceReason);
 
