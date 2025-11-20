@@ -73,10 +73,10 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceGhostView>(r =>
                     new PlayerPieceGhostView(
-                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<IGameObjectPool>()
+                        r.Resolve<IGameObjectPool>(),
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
+                        r.Resolve<IPlayerPieceView>()
                     )
                 )
             );
@@ -84,9 +84,9 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceView>(r =>
                     new PlayerPieceView(
-                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<IPieceViewDefinitionGetter>(),
-                        r.Resolve<IGameObjectPool>()
+                        r.Resolve<IGameObjectPool>(),
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View)
                     )
                 )
             );

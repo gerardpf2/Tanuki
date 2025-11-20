@@ -1,213 +1,140 @@
 using System;
-using Game.Common;
+using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.Unity.Pooling;
-using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
-using Object = UnityEngine.Object;
 
 namespace Game.Gameplay.View.Player
 {
-    public class PlayerPieceView : IPlayerPieceView
+    public class PlayerPieceView : BasePlayerPieceView, IPlayerPieceView
     {
-        private sealed class PieceData
-        {
-            [NotNull] public readonly IPiece Piece;
-            public GameObjectPooledInstance PooledInstance;
-
-            public PieceData([NotNull] IPiece piece, GameObjectPooledInstance pooledInstance)
-            {
-                ArgumentNullException.ThrowIfNull(piece);
-
-                Piece = piece;
-                PooledInstance = pooledInstance;
-            }
-        }
-
         [NotNull] private readonly IBoard _board;
-        [NotNull] private readonly IPieceViewDefinitionGetter _pieceViewDefinitionGetter;
-        [NotNull] private readonly IGameObjectPool _gameObjectPool;
 
-        private InitializedLabel _initializedLabel;
-
-        private Transform _parent;
-        private PieceData _pieceData;
-
-        public event Action OnInstantiated;
-        public event Action OnDestroyed;
         public event Action OnMoved;
         public event Action OnRotated;
 
-        public Coordinate Coordinate
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(Instance);
-
-                Transform transform = Instance.transform;
-
-                return transform.position.ToCoordinate();
-            }
-        }
-
-        public GameObject Instance => _pieceData?.PooledInstance.Instance;
+        protected override string ParentName => "PlayerPieceParent";
 
         public PlayerPieceView(
-            [NotNull] IBoard board,
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
-            [NotNull] IGameObjectPool gameObjectPool)
+            [NotNull] IGameObjectPool gameObjectPool,
+            [NotNull] IBoard board) : base(pieceViewDefinitionGetter, gameObjectPool)
         {
             ArgumentNullException.ThrowIfNull(board);
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(gameObjectPool);
 
             _board = board;
-            _pieceViewDefinitionGetter = pieceViewDefinitionGetter;
-            _gameObjectPool = gameObjectPool;
-        }
-
-        public void Initialize()
-        {
-            _initializedLabel.SetInitialized();
-
-            _parent = new GameObject("PlayerPieceParent").transform; // New game object outside canvas, etc
-        }
-
-        public void Uninitialize()
-        {
-            _initializedLabel.SetUninitialized();
-
-            InvalidOperationException.ThrowIfNull(_parent);
-
-            Destroy();
-
-            Object.Destroy(_parent.gameObject);
-
-            _parent = null;
         }
 
         public void Instantiate([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
-            InvalidOperationException.ThrowIfNull(_parent);
-            InvalidOperationException.ThrowIfNotNull(_pieceData);
 
-            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
-            GameObjectPooledInstance pooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _parent);
-
-            pooledInstance.Instance.transform.position = sourceCoordinate.ToVector3();
-
-            _pieceData = new PieceData(piece, pooledInstance);
-
-            OnInstantiated?.Invoke();
+            InstantiateImpl(piece, sourceCoordinate);
         }
 
-        public void Destroy()
+        public bool CanMove(int columnOffset)
         {
-            if (_pieceData is null)
-            {
-                return;
-            }
+            int column = Coordinate.Column + columnOffset;
+            int clampedColumn = GetClampedColumn(Piece, column);
 
-            _pieceData.PooledInstance.ReturnToPool();
-            _pieceData = null;
-
-            OnDestroyed?.Invoke();
+            return column == clampedColumn;
         }
 
-        public bool CanMove(int offsetX)
+        public void Move(int columnOffset)
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
+            const int rowOffset = 0;
 
-            IPiece piece = _pieceData.Piece;
-
-            const int minColumn = 0;
-            int maxColumn = Mathf.Max(_board.Columns - piece.Width, minColumn);
-
-            int column = Coordinate.Column + offsetX;
-
-            return column >= minColumn && column <= maxColumn;
-        }
-
-        public void Move(int offsetX)
-        {
-            InvalidOperationException.ThrowIfNull(Instance);
-
-            Transform transform = Instance.transform;
-
-            if (!CanMove(offsetX))
+            if (!CanMove(columnOffset))
             {
                 InvalidOperationException.Throw("Cannot be moved");
             }
 
-            transform.position = transform.position.AddX(offsetX);
+            Coordinate = Coordinate.WithOffset(rowOffset, columnOffset);
 
             OnMoved?.Invoke();
         }
 
         public bool CanRotate()
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
-
-            IPiece piece = _pieceData.Piece;
-
-            return piece.CanRotate;
+            return Piece.CanRotate;
         }
 
         public void Rotate()
         {
-            InvalidOperationException.ThrowIfNull(_pieceData);
-            InvalidOperationException.ThrowIfNull(Instance);
-
             if (!CanRotate())
             {
                 InvalidOperationException.Throw("Cannot be rotated");
             }
 
-            IPiece piece = _pieceData.Piece;
-
-            int width = piece.Width;
-            int height = piece.Height;
-
-            ++piece.Rotation;
-
-            int widthAfterRotate = piece.Width;
-            int heightAfterRotate = piece.Height;
-
-            int offsetX = (width - widthAfterRotate) / 2;
-            int offsetY = height - heightAfterRotate;
-
-            Transform transform = Instance.transform;
-
-            float x = ClampX(piece, transform.position.x + offsetX);
-
-            transform.position = transform.position.WithX(x).AddY(offsetY);
-
-            IPieceViewEventNotifier pieceViewEventNotifier = Instance.GetComponent<IPieceViewEventNotifier>();
-
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
-
-            pieceViewEventNotifier.OnRotated();
+            RotateAndUpdateCoordinate();
+            NotifyRotated();
 
             OnMoved?.Invoke();
             OnRotated?.Invoke();
+
+            return;
+
+            void RotateAndUpdateCoordinate()
+            {
+                IPiece piece = Piece;
+
+                int height = piece.Height;
+                int width = piece.Width;
+
+                ++piece.Rotation;
+
+                int heightAfterRotate = piece.Height;
+                int widthAfterRotate = piece.Width;
+
+                int rowOffset = height - heightAfterRotate;
+                int columnOffset = (width - widthAfterRotate) / 2;
+
+                Coordinate coordinate = Coordinate;
+
+                int row = coordinate.Row + rowOffset;
+                int column = coordinate.Column + columnOffset;
+
+                Coordinate = new Coordinate(row, GetClampedColumn(piece, column));
+            }
+
+            void NotifyRotated()
+            {
+                GameObject instance = Instance;
+
+                InvalidOperationException.ThrowIfNull(instance);
+
+                IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
+
+                InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+
+                pieceViewEventNotifier.OnRotated();
+            }
         }
 
-        private float ClampX([NotNull] IPiece piece, float x)
+        protected override IPieceViewDefinition GetPieceViewDefinition(
+            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
+            PieceType pieceType)
+        {
+            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
+
+            return pieceViewDefinitionGetter.Get(pieceType);
+        }
+
+        private int GetClampedColumn([NotNull] IPiece piece, int column)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
             const int minColumn = 0;
-            int maxColumn = Mathf.Max(_board.Columns - piece.Width, minColumn);
+            int maxColumn = Math.Max(_board.Columns - piece.Width, minColumn);
 
-            return Mathf.Clamp(x, minColumn, maxColumn);
+            return Math.Clamp(column, minColumn, maxColumn);
         }
     }
 }

@@ -8,31 +8,31 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
     public abstract class MovePlayerInputActionHandler : BasePlayerInputActionHandler
     {
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
-        private readonly int _offsetX;
+        private readonly int _columnOffset;
 
         protected MovePlayerInputActionHandler(
             [NotNull] IPhaseContainer phaseContainer,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView,
-            int offsetX) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView)
+            int columnOffset) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView)
         {
             ArgumentNullException.ThrowIfNull(playerPieceView);
 
             _playerPieceView = playerPieceView;
-            _offsetX = offsetX;
+            _columnOffset = columnOffset;
         }
 
         protected override bool GetAvailable()
         {
-            return base.GetAvailable() && _playerPieceView.CanMove(_offsetX);
+            return base.GetAvailable() && _playerPieceView.CanMove(_columnOffset);
         }
 
         protected override void ResolveImpl()
         {
             base.ResolveImpl();
 
-            _playerPieceView.Move(_offsetX);
+            _playerPieceView.Move(_columnOffset);
         }
     }
 }
