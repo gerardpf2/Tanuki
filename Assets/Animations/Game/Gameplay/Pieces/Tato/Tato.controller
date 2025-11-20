@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0067fa4ab8a34034aab9ff9b4812f8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: FallEnd
+  _name: 
 --- !u!1101 &5347722411723486123
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0067fa4ab8a34034aab9ff9b4812f8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: FallStart
+  _name: 
 --- !u!1107 &7640119653962320074
 AnimatorStateMachine:
   serializedVersion: 6

@@ -48,6 +48,17 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnAnimationEnd(string _)
         {
+            /*
+             *
+             * Ideally animationName should be compared with the one that could have been set at SetAnimationEndCallback
+             * in order to determine if the animation that has ended is the expected one
+             *
+             * But this is something that cannot be done, at least for pieces, because one piece can use different
+             * animations for each animation trigger and another can use the exact same animation for all them. In this
+             * last case it is not clear which animation name should be set in the animator state
+             *
+             */
+
             if (_animationEndCallback is null)
             {
                 InvalidOperationException.Throw(); // TODO
