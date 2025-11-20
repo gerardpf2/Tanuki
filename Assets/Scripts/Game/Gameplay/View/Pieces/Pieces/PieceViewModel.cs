@@ -24,10 +24,14 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             if (_animator)
             {
+                SetAnimationEndCallback("FallStart", onComplete);
+
                 _animator.SetTrigger("FallStart");
             }
-
-            onComplete?.Invoke();
+            else
+            {
+                onComplete?.Invoke();
+            }
         }
 
         public void OnEndMovement(MovePieceReason movePieceReason, Action onComplete)
@@ -36,10 +40,14 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             if (_animator)
             {
+                SetAnimationEndCallback("FallEnd", onComplete);
+
                 _animator.SetTrigger("FallEnd");
             }
-
-            onComplete?.Invoke();
+            else
+            {
+                onComplete?.Invoke();
+            }
         }
     }
 }
