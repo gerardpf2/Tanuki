@@ -16,7 +16,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         protected T Piece;
 
-        private Action _animationEndCallback;
+        private Action _animationOnComplete;
 
         public void SetData(IPiece data)
         {
@@ -50,8 +50,8 @@ namespace Game.Gameplay.View.Pieces.Pieces
         {
             /*
              *
-             * Ideally animationName should be compared with the one that could have been set at SetAnimationEndCallback
-             * in order to determine if the animation that has ended is the expected one
+             * Ideally animationName should be compared with the one that could have been set at PrepareAnimation in
+             * order to determine if the animation that has ended is the expected one
              *
              * But this is something that cannot be done, at least for pieces, because one piece can use different
              * animations for each animation trigger and another can use the exact same animation for all them. In this
@@ -59,13 +59,8 @@ namespace Game.Gameplay.View.Pieces.Pieces
              *
              */
 
-            if (_animationEndCallback is null)
-            {
-                InvalidOperationException.Throw(); // TODO
-            }
-
-            _animationEndCallback();
-            _animationEndCallback = null;
+            _animationOnComplete?.Invoke();
+            _animationOnComplete = null;
         }
 
         protected virtual void SyncState()
@@ -73,14 +68,24 @@ namespace Game.Gameplay.View.Pieces.Pieces
             SyncRotation();
         }
 
-        protected void SetAnimationEndCallback(Action animationEndCallback)
+        protected void PrepareAnimation(string triggerName, Action onComplete)
         {
-            if (_animationEndCallback is not null)
+            // TODO: Remove animator and use bindings
+
+            Animator animator = GetComponentInChildren<Animator>();
+
+            if (!animator)
             {
-                InvalidOperationException.Throw(); // TODO
+                onComplete?.Invoke();
+
+                return;
             }
 
-            _animationEndCallback = animationEndCallback;
+            InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
+
+            _animationOnComplete = onComplete;
+
+            animator.SetTrigger(triggerName);
         }
 
         private void SyncRotation()
