@@ -3,7 +3,7 @@ using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Animator;
-using Infrastructure.Unity.Utils;
+using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
@@ -12,9 +12,18 @@ namespace Game.Gameplay.View.Pieces.Pieces
 {
     public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
     {
+        [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
+        [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
+
         protected T Piece;
 
         private Action _animationOnComplete;
+
+        private void Awake()
+        {
+            Add(_offsetPosition);
+            Add(_offsetRotation);
+        }
 
         public void SetData(IPiece data)
         {
@@ -88,13 +97,10 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         private void SyncRotation()
         {
-            Transform content = transform.GetChild(0); // TODO: Remove and use bindings
-
-            InvalidOperationException.ThrowIfNull(content);
             InvalidOperationException.ThrowIfNull(Piece);
 
-            content.localPosition = content.localPosition.WithX(0.5f * (Piece.Width - 1)).WithY(0.5f * Piece.Height);
-            content.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation); // Clockwise rotation
+            _offsetPosition.Value = new Vector3(0.5f * (Piece.Width - 1), 0.5f * Piece.Height);
+            _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation); // Clockwise rotation
         }
     }
 }
