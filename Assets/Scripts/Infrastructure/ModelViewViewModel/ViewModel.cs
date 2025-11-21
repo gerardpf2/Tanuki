@@ -1,6 +1,6 @@
-using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel.MethodBindings;
 using Infrastructure.ModelViewViewModel.PropertyBindings;
+using Infrastructure.ModelViewViewModel.TriggerBindings;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -9,29 +9,31 @@ namespace Infrastructure.ModelViewViewModel
 {
     public class ViewModel : MonoBehaviour
     {
-        private IBoundPropertyContainer _boundPropertyContainer;
-        private IBoundMethodContainer _boundMethodContainer;
+        [NotNull] private readonly IBoundMethodContainer _boundMethodContainer = new BoundMethodContainer();
+        [NotNull] private readonly IBoundPropertyContainer _boundPropertyContainer = new BoundPropertyContainer();
+        [NotNull] private readonly IBoundTriggerContainer _boundTriggerContainer = new BoundTriggerContainer();
 
-        protected virtual void Awake()
+        #region Method binding
+
+        public void Resolve([NotNull] IMethodBinding methodBinding)
         {
-            InjectResolver.Resolve(this);
+            ArgumentNullException.ThrowIfNull(methodBinding);
+
+            _boundMethodContainer.Get(methodBinding.Key).Call();
         }
 
-        public void Inject(
-            [NotNull] IBoundPropertyContainer boundPropertyContainer,
-            [NotNull] IBoundMethodContainer boundMethodContainer)
+        protected void Add(IBoundMethod boundMethod)
         {
-            ArgumentNullException.ThrowIfNull(boundPropertyContainer);
-            ArgumentNullException.ThrowIfNull(boundMethodContainer);
-
-            _boundPropertyContainer = boundPropertyContainer;
-            _boundMethodContainer = boundMethodContainer;
+            _boundMethodContainer.Add(boundMethod);
         }
+
+        #endregion
+
+        #region Property binding
 
         public void Bind<T>([NotNull] IPropertyBinding<T> propertyBinding)
         {
             ArgumentNullException.ThrowIfNull(propertyBinding);
-            InvalidOperationException.ThrowIfNull(_boundPropertyContainer);
 
             _boundPropertyContainer.Get<T>(propertyBinding.Key).Add(propertyBinding.Set);
         }
@@ -39,31 +41,38 @@ namespace Infrastructure.ModelViewViewModel
         public void Unbind<T>([NotNull] IPropertyBinding<T> propertyBinding)
         {
             ArgumentNullException.ThrowIfNull(propertyBinding);
-            InvalidOperationException.ThrowIfNull(_boundPropertyContainer);
 
             _boundPropertyContainer.Get<T>(propertyBinding.Key).Remove(propertyBinding.Set);
         }
 
-        public void Resolve([NotNull] IMethodBinding methodBinding)
-        {
-            ArgumentNullException.ThrowIfNull(methodBinding);
-            InvalidOperationException.ThrowIfNull(_boundMethodContainer);
-
-            _boundMethodContainer.Get(methodBinding.Key).Call();
-        }
-
         protected void Add<T>(IBoundProperty<T> boundProperty)
         {
-            InvalidOperationException.ThrowIfNull(_boundPropertyContainer);
-
             _boundPropertyContainer.Add(boundProperty);
         }
 
-        protected void Add(IBoundMethod boundMethod)
-        {
-            InvalidOperationException.ThrowIfNull(_boundMethodContainer);
+        #endregion
 
-            _boundMethodContainer.Add(boundMethod);
+        #region Trigger binding
+
+        public void Bind<T>([NotNull] ITriggerBinding<T> triggerBinding)
+        {
+            ArgumentNullException.ThrowIfNull(triggerBinding);
+
+            _boundTriggerContainer.Get<T>(triggerBinding.Key).Add(triggerBinding.OnTriggered);
         }
+
+        public void Unbind<T>([NotNull] ITriggerBinding<T> triggerBinding)
+        {
+            ArgumentNullException.ThrowIfNull(triggerBinding);
+
+            _boundTriggerContainer.Get<T>(triggerBinding.Key).Remove(triggerBinding.OnTriggered);
+        }
+
+        protected void Add<T>(IBoundTrigger<T> boundTrigger)
+        {
+            _boundTriggerContainer.Add(boundTrigger);
+        }
+
+        #endregion
     }
 }
