@@ -39,14 +39,14 @@ namespace Game.Gameplay.View.Actions.Actions
 
             InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
 
-            MovePiece(_rowOffset, _columnOffset);
-
             boardPieceViewEventNotifier.OnStartMovement(_movePieceReason, OnStartMovementComplete);
 
             return;
 
             void OnStartMovementComplete()
             {
+                MovePiece(_rowOffset, _columnOffset);
+
                 DoMovement(pieceInstance.transform, OnMovementComplete);
             }
 
