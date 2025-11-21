@@ -14,6 +14,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
     {
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
+        [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
 
         protected T Piece;
 
@@ -23,6 +24,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
         {
             Add(_offsetPosition);
             Add(_offsetRotation);
+            Add(_animationTrigger);
         }
 
         public void SetData(IPiece data)
@@ -77,7 +79,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         protected void PrepareAnimation(string triggerName, Action onComplete)
         {
-            // TODO: Remove animator and use bindings
+            // TODO: Remove animator check when each piece has proper animator and animations
 
             Animator animator = GetComponentInChildren<Animator>();
 
@@ -91,8 +93,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
             InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
 
             _animationOnComplete = onComplete;
-
-            animator.SetTrigger(triggerName);
+            _animationTrigger.Trigger(triggerName);
         }
 
         private void SyncRotation()
