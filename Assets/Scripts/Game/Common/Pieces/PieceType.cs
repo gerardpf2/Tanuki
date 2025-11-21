@@ -20,6 +20,8 @@ namespace Game.Common.Pieces
 
         StaticBlock = 30,
 
+        Tato = 50,
+
         Test = 100
     }
 }

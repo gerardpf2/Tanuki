@@ -51,6 +51,9 @@ namespace Game.Gameplay.Pieces
         IPiece GetStaticBlock();
 
         [NotNull]
+        IPiece GetTato();
+
+        [NotNull]
         IPiece GetTest();
     }
 }
