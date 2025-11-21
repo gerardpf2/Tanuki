@@ -56,10 +56,18 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -2066478087
       objectReference: {fileID: 0}
+    - target: {fileID: 3910727045903111598, guid: cee7863dfdb3a144883616753b446523, type: 3}
+      propertyPath: _viewModel
+      value: 
+      objectReference: {fileID: 7124008355638303980}
     - target: {fileID: 6451969163346834527, guid: cee7863dfdb3a144883616753b446523, type: 3}
       propertyPath: m_Name
       value: PieceGhost
       objectReference: {fileID: 0}
+    - target: {fileID: 6887118609220005050, guid: cee7863dfdb3a144883616753b446523, type: 3}
+      propertyPath: _viewModel
+      value: 
+      objectReference: {fileID: 7124008355638303980}
     m_RemovedComponents:
     - {fileID: 3209040088352875747, guid: cee7863dfdb3a144883616753b446523, type: 3}
     m_RemovedGameObjects: []

@@ -96,6 +96,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 823495390370513058}
+  - component: {fileID: 3910727045903111598}
+  - component: {fileID: 6887118609220005050}
   m_Layer: 0
   m_Name: Content
   m_TagString: Untagged
@@ -119,6 +121,36 @@ Transform:
   - {fileID: 2382537397673491627}
   m_Father: {fileID: 1070835727361169376}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3910727045903111598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699528811282216672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30eec327465b43a9bb6dc00321017fa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 3209040088352875747}
+  _key: OffsetPosition
+  _transform: {fileID: 823495390370513058}
+--- !u!114 &6887118609220005050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699528811282216672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4b7dc9f5c9a48438a033335026b033e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 3209040088352875747}
+  _key: OffsetRotation
+  _transform: {fileID: 823495390370513058}
 --- !u!1 &6451969163346834527
 GameObject:
   m_ObjectHideFlags: 0

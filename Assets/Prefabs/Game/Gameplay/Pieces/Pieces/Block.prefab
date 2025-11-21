@@ -60,10 +60,18 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3910727045903111598, guid: cee7863dfdb3a144883616753b446523, type: 3}
+      propertyPath: _viewModel
+      value: 
+      objectReference: {fileID: 2823763858566086100}
     - target: {fileID: 6451969163346834527, guid: cee7863dfdb3a144883616753b446523, type: 3}
       propertyPath: m_Name
       value: Block
       objectReference: {fileID: 0}
+    - target: {fileID: 6887118609220005050, guid: cee7863dfdb3a144883616753b446523, type: 3}
+      propertyPath: _viewModel
+      value: 
+      objectReference: {fileID: 2823763858566086100}
     m_RemovedComponents:
     - {fileID: 3209040088352875747, guid: cee7863dfdb3a144883616753b446523, type: 3}
     m_RemovedGameObjects: []
