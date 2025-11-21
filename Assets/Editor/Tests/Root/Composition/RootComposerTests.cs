@@ -5,7 +5,6 @@ using Infrastructure.Configuring;
 using Infrastructure.Configuring.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Logging.Composition;
-using Infrastructure.ModelViewViewModel.Composition;
 using Infrastructure.ScreenLoading;
 using Infrastructure.ScreenLoading.Composition;
 using Infrastructure.System;
@@ -82,8 +81,7 @@ namespace Editor.Tests.Root.Composition
 
             List<IScopeComposer> childScopeComposers = _scopeBuildingContext.GetChildScopeComposers().ToList();
 
-            Assert.IsTrue(childScopeComposers.Count == 2);
-            Assert.NotNull(childScopeComposers.Find(childScopeComposer => childScopeComposer is ModelViewViewModelComposer));
+            Assert.IsTrue(childScopeComposers.Count == 1);
             Assert.IsTrue(childScopeComposers.Contains(_gameComposer));
         }
     }

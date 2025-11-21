@@ -15,10 +15,8 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
         private ButtonViewData _buttonViewData;
         private bool _pressed;
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             Add(_sprite);
 
             Add(new BoundMethod("OnPointerDown", HandlePointerDown));
