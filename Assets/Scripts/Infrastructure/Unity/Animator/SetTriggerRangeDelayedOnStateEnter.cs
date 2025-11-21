@@ -8,9 +8,9 @@ namespace Infrastructure.Unity.Animator
 {
     public class SetTriggerRangeDelayedOnStateEnter : StateMachineBehaviour
     {
-        [SerializeField] private string _name;
-        [SerializeField] private float _minDelayS;
-        [SerializeField] private float _maxDelayS;
+        [SerializeField] private string _triggerName;
+        [SerializeField, Min(0.0f)] private float _minDelayS;
+        [SerializeField, Min(0.0f)] private float _maxDelayS;
 
         private CoroutineRunner _coroutineRunner; // Not using the interface is intended. Check StopCoroutineIfNeeded comment
         private Coroutine _coroutine;
@@ -73,14 +73,13 @@ namespace Infrastructure.Unity.Animator
         private IEnumerator SetTrigger([NotNull] UnityEngine.Animator animator)
         {
             ArgumentNullException.ThrowIfNull(animator);
-            InvalidOperationException.ThrowIfNot(_minDelayS, ComparisonOperator.GreaterThanOrEqualTo, 0.0f);
             InvalidOperationException.ThrowIfNot(_minDelayS, ComparisonOperator.LessThanOrEqualTo, _maxDelayS);
 
             float delay = Random.Range(_minDelayS, _maxDelayS);
 
             yield return new WaitForSeconds(delay);
 
-            animator.SetTrigger(_name);
+            animator.SetTrigger(_triggerName);
 
             _coroutine = null;
         }
