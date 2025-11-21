@@ -2,6 +2,7 @@ using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.ModelViewViewModel;
+using Infrastructure.Unity.Animator;
 using Infrastructure.Unity.Utils;
 using UnityEngine;
 using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
@@ -9,11 +10,13 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
-    public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier where T : IPiece
+    public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
     {
         [SerializeField] private Transform _content; // TODO: Use bindings
 
         protected T Piece;
+
+        private Action _animationOnComplete;
 
         public void SetData(IPiece data)
         {
@@ -43,9 +46,46 @@ namespace Game.Gameplay.View.Pieces.Pieces
             SyncRotation();
         }
 
+        public void OnAnimationEnd(string _)
+        {
+            /*
+             *
+             * Ideally animationName should be compared with the one that could have been set at PrepareAnimation in
+             * order to determine if the animation that has ended is the expected one
+             *
+             * But this is something that cannot be done, at least for pieces, because one piece can use different
+             * animations for each animation trigger and another can use the exact same animation for all them. In this
+             * last case it is not clear which animation name should be set in the animator state
+             *
+             */
+
+            _animationOnComplete?.Invoke();
+            _animationOnComplete = null;
+        }
+
         protected virtual void SyncState()
         {
             SyncRotation();
+        }
+
+        protected void PrepareAnimation(string triggerName, Action onComplete)
+        {
+            // TODO: Remove animator and use bindings
+
+            Animator animator = GetComponentInChildren<Animator>();
+
+            if (!animator)
+            {
+                onComplete?.Invoke();
+
+                return;
+            }
+
+            InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
+
+            _animationOnComplete = onComplete;
+
+            animator.SetTrigger(triggerName);
         }
 
         private void SyncRotation()

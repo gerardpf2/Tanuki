@@ -1,7 +1,7 @@
 using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
-using UnityEngine;
+using Game.Gameplay.View.Animation.Animator.Utils;
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
@@ -9,8 +9,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
     public abstract class PieceViewModel<T> : BasePieceViewModel<T>, IBoardPieceViewEventNotifier where T : IPiece
     {
-        [SerializeField] private Animator _animator; // TODO: Use bindings
-
         public void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete)
         {
             // TODO
@@ -20,26 +18,12 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnStartMovement(MovePieceReason movePieceReason, Action onComplete)
         {
-            // TODO
-
-            if (_animator)
-            {
-                _animator.SetTrigger("FallStart");
-            }
-
-            onComplete?.Invoke();
+            PrepareAnimation(TriggerNameUtils.GetStart(movePieceReason), onComplete);
         }
 
         public void OnEndMovement(MovePieceReason movePieceReason, Action onComplete)
         {
-            // TODO
-
-            if (_animator)
-            {
-                _animator.SetTrigger("FallEnd");
-            }
-
-            onComplete?.Invoke();
+            PrepareAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
         }
     }
 }
