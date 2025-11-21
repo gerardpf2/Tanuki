@@ -72,7 +72,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             Animator animator = GetComponentInChildren<Animator>();
 
-            if (!animator)
+            if (!animator || !animator.runtimeAnimatorController)
             {
                 onComplete?.Invoke();
 
