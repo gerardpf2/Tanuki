@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3188302404754487522, guid: cee7863dfdb3a144883616753b446523, type: 3}
+      propertyPath: _viewModel
+      value: 
+      objectReference: {fileID: 2823763858566086100}
     - target: {fileID: 3910727045903111598, guid: cee7863dfdb3a144883616753b446523, type: 3}
       propertyPath: _viewModel
       value: 
