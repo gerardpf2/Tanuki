@@ -12,8 +12,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
 {
     public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
     {
-        [SerializeField] private Transform _content; // TODO: Use bindings
-
         protected T Piece;
 
         private Action _animationOnComplete;
@@ -90,11 +88,13 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         private void SyncRotation()
         {
-            InvalidOperationException.ThrowIfNull(_content);
+            Transform content = transform.GetChild(0); // TODO: Remove and use bindings
+
+            InvalidOperationException.ThrowIfNull(content);
             InvalidOperationException.ThrowIfNull(Piece);
 
-            _content.localPosition = _content.localPosition.WithX(0.5f * (Piece.Width - 1)).WithY(0.5f * Piece.Height);
-            _content.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation); // Clockwise rotation
+            content.localPosition = content.localPosition.WithX(0.5f * (Piece.Width - 1)).WithY(0.5f * Piece.Height);
+            content.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation); // Clockwise rotation
         }
     }
 }
