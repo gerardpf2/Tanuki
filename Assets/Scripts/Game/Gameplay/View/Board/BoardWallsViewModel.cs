@@ -21,10 +21,8 @@ namespace Game.Gameplay.View.Board
         private ICameraView _cameraView;
         private ICameraGetter _cameraGetter;
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             InjectResolver.Resolve(this);
 
             Add(_widthUpdated);

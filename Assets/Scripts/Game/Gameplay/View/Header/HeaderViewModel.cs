@@ -10,10 +10,8 @@ namespace Game.Gameplay.View.Header
         [NotNull] private readonly IBoundProperty<GoalsViewData> _goalsViewData = new BoundProperty<GoalsViewData>("GoalsViewData");
         [NotNull] private readonly IBoundProperty<MovesViewData> _movesViewData = new BoundProperty<MovesViewData>("MovesViewData");
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             Add(_goalsViewData);
             Add(_movesViewData);
         }

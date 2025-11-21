@@ -11,10 +11,8 @@ namespace Game.Gameplay.View.Moves
 
         [NotNull] private readonly IBoundProperty<string> _amount = new BoundProperty<string>("Amount");
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             InjectResolver.Resolve(this);
 
             Add(_amount);

@@ -13,10 +13,8 @@ namespace Game.Gameplay.View.Goals
 
         [NotNull] private readonly IBoundProperty<IEnumerable<GoalViewData>> _goalsViewData = new BoundProperty<IEnumerable<GoalViewData>>("GoalsViewData");
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             InjectResolver.Resolve(this);
 
             Add(_goalsViewData);

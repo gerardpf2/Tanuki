@@ -18,10 +18,8 @@ namespace Game.Gameplay.View.Board
         private IBoard _board;
         private ICameraView _cameraView;
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             InjectResolver.Resolve(this);
 
             Add(_position);

@@ -14,10 +14,8 @@ namespace Game.Gameplay.View.Goals
         [NotNull] private readonly IBoundProperty<string> _initialAmount = new BoundProperty<string>("InitialAmount");
         [NotNull] private readonly IBoundProperty<string> _currentAmount = new BoundProperty<string>("CurrentAmount");
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             Add(_sprite);
             Add(_initialAmount);
             Add(_currentAmount);

@@ -11,10 +11,8 @@ namespace Game.Gameplay.View
         [NotNull] private readonly IBoundProperty<HeaderViewData> _headerViewData = new BoundProperty<HeaderViewData>("HeaderViewData");
         [NotNull] private readonly IBoundProperty<BoardViewData> _boardViewData = new BoundProperty<BoardViewData>("BoardViewData");
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             Add(_headerViewData);
             Add(_boardViewData);
         }

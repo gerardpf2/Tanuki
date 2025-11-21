@@ -19,10 +19,8 @@ namespace Game.Gameplay.View.Player.Input
         [NotNull] private readonly IBoundProperty<ButtonViewData> _moveRight = new BoundProperty<ButtonViewData>("MoveRightButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _rotate = new BoundProperty<ButtonViewData>("RotateButtonViewData");
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-
             InjectResolver.Resolve(this);
 
             InitializeBindings();
