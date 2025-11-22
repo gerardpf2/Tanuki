@@ -6,7 +6,7 @@ namespace Infrastructure.Unity.Animator
 {
     public class NotifyAnimationEndOnStateExit : StateMachineBehaviour
     {
-        [SerializeField] private string _name;
+        [SerializeField] private string _animationName;
 
         private IAnimationEventNotifier _animationEventNotifier;
 
@@ -23,7 +23,7 @@ namespace Infrastructure.Unity.Animator
 
             base.OnStateExit(animator, stateInfo, layerIndex);
 
-            _animationEventNotifier.OnAnimationEnd(_name);
+            _animationEventNotifier.OnAnimationEnd(_animationName);
         }
 
         private void FindAnimationEventNotifierIfNeeded([NotNull] Component component)
