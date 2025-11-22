@@ -230,7 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _triggerNameWeightPairs:
   - _triggerName: EnterIdle0
-    _weight: 5
+    _weight: 4
   - _triggerName: EnterIdle1
     _weight: 1
 --- !u!1101 &-1827808059796374839
