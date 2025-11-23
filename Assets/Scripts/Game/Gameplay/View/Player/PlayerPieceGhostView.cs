@@ -87,7 +87,11 @@ namespace Game.Gameplay.View.Player
 
         private void HandleMoved()
         {
-            Coordinate = GetLockSourceCoordinate(Piece);
+            IPiece piece = Piece;
+
+            InvalidOperationException.ThrowIfNull(piece);
+
+            Coordinate = GetLockSourceCoordinate(piece);
         }
 
         private void HandleRotated()
