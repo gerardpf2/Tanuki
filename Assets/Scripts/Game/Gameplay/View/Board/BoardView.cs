@@ -118,11 +118,6 @@ namespace Game.Gameplay.View.Board
             _piecePooledInstances.Remove(pieceId);
         }
 
-        public void MovePiece(int pieceId, int rowOffset, int columnOffset)
-        {
-            _viewBoard.MovePiece(pieceId, rowOffset, columnOffset);
-        }
-
         private void DestroyAllPieces()
         {
             IEnumerable<int> pieceIds = new List<int>(_piecePooledInstances.Keys);
