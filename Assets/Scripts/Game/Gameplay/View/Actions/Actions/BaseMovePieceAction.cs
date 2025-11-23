@@ -65,14 +65,14 @@ namespace Game.Gameplay.View.Actions.Actions
         }
 
         [NotNull]
-        protected abstract GameObject GetPieceInstance();
-
-        protected abstract void MovePiece(int rowOffset, int columnOffset);
-
-        [NotNull]
         protected abstract IPiece GetPiece();
 
         protected abstract Coordinate GetSourceCoordinate();
+
+        [NotNull]
+        protected abstract GameObject GetPieceInstance();
+
+        protected abstract void MovePiece(int rowOffset, int columnOffset);
 
         private void DoMovement(Transform transform, Action onComplete)
         {

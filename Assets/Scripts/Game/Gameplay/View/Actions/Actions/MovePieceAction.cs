@@ -32,16 +32,6 @@ namespace Game.Gameplay.View.Actions.Actions
             _pieceId = pieceId;
         }
 
-        protected override GameObject GetPieceInstance()
-        {
-            return _boardView.GetPieceInstance(_pieceId);
-        }
-
-        protected override void MovePiece(int rowOffset, int columnOffset)
-        {
-            _board.MovePiece(_pieceId, rowOffset, columnOffset);
-        }
-
         protected override IPiece GetPiece()
         {
             return _board.GetPiece(_pieceId);
@@ -50,6 +40,16 @@ namespace Game.Gameplay.View.Actions.Actions
         protected override Coordinate GetSourceCoordinate()
         {
             return _board.GetSourceCoordinate(_pieceId);
+        }
+
+        protected override GameObject GetPieceInstance()
+        {
+            return _boardView.GetPieceInstance(_pieceId);
+        }
+
+        protected override void MovePiece(int rowOffset, int columnOffset)
+        {
+            _board.MovePiece(_pieceId, rowOffset, columnOffset);
         }
     }
 }

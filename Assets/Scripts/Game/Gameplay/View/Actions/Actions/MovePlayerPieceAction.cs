@@ -26,17 +26,6 @@ namespace Game.Gameplay.View.Actions.Actions
             _playerPieceView = playerPieceView;
         }
 
-        protected override GameObject GetPieceInstance()
-        {
-            GameObject instance = _playerPieceView.Instance;
-
-            InvalidOperationException.ThrowIfNull(instance);
-
-            return instance;
-        }
-
-        protected override void MovePiece(int _, int __) { }
-
         protected override IPiece GetPiece()
         {
             IPiece piece = _playerPieceView.Piece;
@@ -50,5 +39,16 @@ namespace Game.Gameplay.View.Actions.Actions
         {
             return _playerPieceView.Coordinate;
         }
+
+        protected override GameObject GetPieceInstance()
+        {
+            GameObject instance = _playerPieceView.Instance;
+
+            InvalidOperationException.ThrowIfNull(instance);
+
+            return instance;
+        }
+
+        protected override void MovePiece(int _, int __) { }
     }
 }
