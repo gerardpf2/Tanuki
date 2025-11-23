@@ -1,4 +1,6 @@
+using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
+using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
@@ -12,11 +14,12 @@ namespace Game.Gameplay.View.Actions.Actions
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
 
         public MovePlayerPieceAction(
+            [NotNull] IBoard board,
             [NotNull] IMovementHelper movementHelper,
             int rowOffset,
             int columnOffset,
             MovePieceReason movePieceReason,
-            [NotNull] IPlayerPieceView playerPieceView) : base(movementHelper, rowOffset, columnOffset, movePieceReason)
+            [NotNull] IPlayerPieceView playerPieceView) : base(board, movementHelper, rowOffset, columnOffset, movePieceReason)
         {
             ArgumentNullException.ThrowIfNull(playerPieceView);
 
@@ -33,5 +36,19 @@ namespace Game.Gameplay.View.Actions.Actions
         }
 
         protected override void MovePiece(int _, int __) { }
+
+        protected override IPiece GetPiece()
+        {
+            IPiece piece = _playerPieceView.Piece;
+
+            InvalidOperationException.ThrowIfNull(piece);
+
+            return piece;
+        }
+
+        protected override Coordinate GetSourceCoordinate()
+        {
+            return _playerPieceView.Coordinate;
+        }
     }
 }

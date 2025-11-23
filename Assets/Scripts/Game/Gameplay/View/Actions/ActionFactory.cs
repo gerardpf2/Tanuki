@@ -18,6 +18,7 @@ namespace Game.Gameplay.View.Actions
 {
     public class ActionFactory : IActionFactory
     {
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IMovementHelper _movementHelper;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
@@ -28,6 +29,7 @@ namespace Game.Gameplay.View.Actions
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
         public ActionFactory(
+            [NotNull] IBoard board,
             [NotNull] IMovementHelper movementHelper,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
@@ -37,6 +39,7 @@ namespace Game.Gameplay.View.Actions
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] ICoroutineRunner coroutineRunner)
         {
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(movementHelper);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
@@ -46,6 +49,7 @@ namespace Game.Gameplay.View.Actions
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
 
+            _board = board;
             _movementHelper = movementHelper;
             _boardView = boardView;
             _cameraView = cameraView;
@@ -110,12 +114,12 @@ namespace Game.Gameplay.View.Actions
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceAction(_movementHelper, rowOffset, columnOffset, movePieceReason, _boardView, pieceId);
+            return new MovePieceAction(_board, _movementHelper, rowOffset, columnOffset, movePieceReason, _boardView, pieceId);
         }
 
         public IAction GetMovePlayerPieceAction(int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePlayerPieceAction(_movementHelper, rowOffset, columnOffset, movePieceReason, _playerPieceView);
+            return new MovePlayerPieceAction(_board, _movementHelper, rowOffset, columnOffset, movePieceReason, _playerPieceView);
         }
 
         public IAction GetMoveCameraAction(int rowOffset)
