@@ -7,7 +7,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tato_Idle_0
+  m_Name: Idle0
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -34,7 +34,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Selector
+  m_Name: IdleSelector
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -192,7 +192,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wait
+  m_Name: Idle
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -6171343818039459489}
@@ -369,7 +369,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tato_Idle_1
+  m_Name: Idle1
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
