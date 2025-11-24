@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Events.Reasons;
+using Game.Gameplay.Events.Reasons.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
@@ -23,6 +24,7 @@ namespace Game.Gameplay.View.Actions.Actions
         private readonly int _rowOffset;
         private readonly int _columnOffset;
         private readonly MovePieceReason _movePieceReason;
+        private readonly HitPieceReason _hitPieceReason;
 
         protected BaseMovePieceAction(
             [NotNull] IBoard board,
@@ -42,6 +44,7 @@ namespace Game.Gameplay.View.Actions.Actions
             _rowOffset = rowOffset;
             _columnOffset = columnOffset;
             _movePieceReason = movePieceReason;
+            _hitPieceReason = HitPieceReasonUtils.GetFrom(_movePieceReason);
         }
 
         public void Resolve(Action onComplete)
@@ -141,7 +144,7 @@ namespace Game.Gameplay.View.Actions.Actions
 
                     InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
 
-                    boardPieceViewEventNotifier.OnHit();
+                    boardPieceViewEventNotifier.OnHit(_hitPieceReason);
                 }
             }
         }
