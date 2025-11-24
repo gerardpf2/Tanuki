@@ -96,7 +96,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
             _animationTrigger.Trigger(triggerName);
         }
 
-        protected void PrepareSecondaryAnimation(string triggerName)
+        protected void RaiseSecondaryAnimationTrigger(string triggerName)
         {
             if (_animationOnComplete is not null)
             {

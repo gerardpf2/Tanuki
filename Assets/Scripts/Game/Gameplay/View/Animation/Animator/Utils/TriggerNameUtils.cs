@@ -21,9 +21,19 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
             return $"{Move}_{movePieceReason}_{End}";
         }
 
+        public static string GetHitBase()
+        {
+            return $"{Hit}";
+        }
+
+        public static string Get(HitPieceReason hitPieceReason)
+        {
+            return $"{GetHitBase()}_{hitPieceReason}";
+        }
+
         public static string Get(HitPieceReason hitPieceReason, Direction direction)
         {
-            return $"{Hit}_{hitPieceReason}_{direction}";
+            return $"{Get(hitPieceReason)}_{direction}";
         }
     }
 }
