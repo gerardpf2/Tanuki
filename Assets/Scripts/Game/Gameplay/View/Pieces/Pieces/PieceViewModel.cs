@@ -1,4 +1,5 @@
 using System;
+using Game.Common;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Animator.Utils;
@@ -26,7 +27,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
             PrepareAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
         }
 
-        public void OnHit(HitPieceReason hitPieceReason)
+        public void OnHit(HitPieceReason hitPieceReason, Direction direction)
         {
             // TODO: Combine direction and rotation
         }

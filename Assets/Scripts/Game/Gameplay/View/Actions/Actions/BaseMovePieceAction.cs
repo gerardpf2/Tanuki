@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Events.Reasons;
@@ -108,8 +109,8 @@ namespace Game.Gameplay.View.Actions.Actions
             ICollection<int> visitedPieceIds = new HashSet<int>();
 
             IEnumerable<int> pieceIdsInContactDown = _board.GetDistinctPieceIdsInContactDown(piece, sourceCoordinate);
-            IEnumerable<int> pieceIdsInContactLeft = _board.GetDistinctPieceIdsInContactLeft(piece, sourceCoordinate);
             IEnumerable<int> pieceIdsInContactRight = _board.GetDistinctPieceIdsInContactRight(piece, sourceCoordinate);
+            IEnumerable<int> pieceIdsInContactLeft = _board.GetDistinctPieceIdsInContactLeft(piece, sourceCoordinate);
 
             /*
              *
@@ -119,13 +120,13 @@ namespace Game.Gameplay.View.Actions.Actions
              *
              */
 
-            Notify(pieceIdsInContactDown);
-            Notify(pieceIdsInContactLeft);
-            Notify(pieceIdsInContactRight);
+            Notify(pieceIdsInContactDown, Direction.Down);
+            Notify(pieceIdsInContactRight, Direction.Right);
+            Notify(pieceIdsInContactLeft, Direction.Left);
 
             return;
 
-            void Notify([NotNull] IEnumerable<int> pieceIds)
+            void Notify([NotNull] IEnumerable<int> pieceIds, Direction direction)
             {
                 ArgumentNullException.ThrowIfNull(pieceIds);
 
@@ -144,7 +145,7 @@ namespace Game.Gameplay.View.Actions.Actions
 
                     InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
 
-                    boardPieceViewEventNotifier.OnHit(_hitPieceReason);
+                    boardPieceViewEventNotifier.OnHit(_hitPieceReason, direction);
                 }
             }
         }
