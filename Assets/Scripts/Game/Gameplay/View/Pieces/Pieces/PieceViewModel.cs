@@ -1,8 +1,10 @@
 using System;
 using Game.Common;
+using Game.Common.Utils;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Animator.Utils;
+using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
@@ -29,7 +31,13 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnHit(HitPieceReason hitPieceReason, Direction direction)
         {
-            // TODO: Combine direction and rotation
+            IPiece piece = Piece;
+
+            InvalidOperationException.ThrowIfNull(piece);
+
+            direction = direction.GetRotated(piece.Rotation);
+
+            // TODO
         }
     }
 }

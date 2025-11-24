@@ -2,9 +2,11 @@ namespace Game.Common
 {
     public enum Direction
     {
-        Up,
+        // Order is relevant. Check DirectionUtils::GetRotated for more details
+
         Down,
         Right,
+        Up,
         Left
     }
 }
