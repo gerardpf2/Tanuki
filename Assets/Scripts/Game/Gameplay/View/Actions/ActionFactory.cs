@@ -114,12 +114,30 @@ namespace Game.Gameplay.View.Actions
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePieceAction(_board, _movementHelper, rowOffset, columnOffset, movePieceReason, _boardView, pieceId);
+            return
+                new MovePieceAction(
+                    _board,
+                    _movementHelper,
+                    _boardView,
+                    rowOffset,
+                    columnOffset,
+                    movePieceReason,
+                    pieceId
+                );
         }
 
         public IAction GetMovePlayerPieceAction(int rowOffset, int columnOffset, MovePieceReason movePieceReason)
         {
-            return new MovePlayerPieceAction(_board, _movementHelper, rowOffset, columnOffset, movePieceReason, _playerPieceView);
+            return
+                new MovePlayerPieceAction(
+                    _board,
+                    _movementHelper,
+                    _boardView,
+                    rowOffset,
+                    columnOffset,
+                    movePieceReason,
+                    _playerPieceView
+                );
         }
 
         public IAction GetMoveCameraAction(int rowOffset)

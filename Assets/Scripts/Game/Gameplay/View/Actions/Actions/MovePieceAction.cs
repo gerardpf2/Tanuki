@@ -18,11 +18,11 @@ namespace Game.Gameplay.View.Actions.Actions
         public MovePieceAction(
             [NotNull] IBoard board,
             [NotNull] IMovementHelper movementHelper,
+            [NotNull] IBoardView boardView,
             int rowOffset,
             int columnOffset,
             MovePieceReason movePieceReason,
-            [NotNull] IBoardView boardView,
-            int pieceId) : base(board, movementHelper, rowOffset, columnOffset, movePieceReason)
+            int pieceId) : base(board, movementHelper, boardView, rowOffset, columnOffset, movePieceReason)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(boardView);

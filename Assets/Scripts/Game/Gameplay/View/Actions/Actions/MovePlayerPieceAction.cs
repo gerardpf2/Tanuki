@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Movement;
+using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Player;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -16,10 +17,11 @@ namespace Game.Gameplay.View.Actions.Actions
         public MovePlayerPieceAction(
             [NotNull] IBoard board,
             [NotNull] IMovementHelper movementHelper,
+            [NotNull] IBoardView boardView,
             int rowOffset,
             int columnOffset,
             MovePieceReason movePieceReason,
-            [NotNull] IPlayerPieceView playerPieceView) : base(board, movementHelper, rowOffset, columnOffset, movePieceReason)
+            [NotNull] IPlayerPieceView playerPieceView) : base(board, movementHelper, boardView, rowOffset, columnOffset, movePieceReason)
         {
             ArgumentNullException.ThrowIfNull(playerPieceView);
 

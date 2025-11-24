@@ -10,5 +10,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
         void OnStartMovement(MovePieceReason movePieceReason, Action onComplete);
 
         void OnEndMovement(MovePieceReason movePieceReason, Action onComplete);
+
+        void OnHit(); // TODO: Reason and direction
     }
 }

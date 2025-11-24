@@ -25,5 +25,10 @@ namespace Game.Gameplay.View.Pieces.Pieces
         {
             PrepareAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
         }
+
+        public void OnHit()
+        {
+            // TODO: Combine direction and rotation
+        }
     }
 }
