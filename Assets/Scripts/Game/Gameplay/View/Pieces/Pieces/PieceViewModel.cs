@@ -21,12 +21,12 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnStartMovement(MovePieceReason movePieceReason, Action onComplete)
         {
-            PrepareAnimation(TriggerNameUtils.GetStart(movePieceReason), onComplete);
+            PrepareMainAnimation(TriggerNameUtils.GetStart(movePieceReason), onComplete);
         }
 
         public void OnEndMovement(MovePieceReason movePieceReason, Action onComplete)
         {
-            PrepareAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
+            PrepareMainAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
         }
 
         public void OnHit(HitPieceReason hitPieceReason, Direction direction)
@@ -37,7 +37,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             direction = direction.GetRotated(piece.Rotation);
 
-            // TODO
+            PrepareSecondaryAnimation(TriggerNameUtils.Get(hitPieceReason, direction));
         }
     }
 }
