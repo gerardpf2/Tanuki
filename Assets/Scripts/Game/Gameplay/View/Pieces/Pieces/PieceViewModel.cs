@@ -9,6 +9,8 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
+    public class PieceViewModel : PieceViewModel<IPiece> { }
+
     public abstract class PieceViewModel<T> : ViewModel, IDataSettable<T>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
     {
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
