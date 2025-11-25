@@ -49,7 +49,7 @@ namespace Game.Gameplay.View.Pieces.Preloader
 
             foreach ((PieceType pieceType, int amount) in amountByPieceType)
             {
-                GameObject prefab = pieceViewDefinitionGetter.Get(pieceType).Prefab;
+                GameObject prefab = pieceViewDefinitionGetter.GetBoardPiece(pieceType).Prefab;
 
                 yield return new PreloadRequest(prefab, amount);
             }

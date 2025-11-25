@@ -134,7 +134,7 @@ namespace Game.Gameplay.View.Player
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
-            return pieceViewDefinitionGetter.Get(pieceType);
+            return pieceViewDefinitionGetter.GetPlayerPiece(pieceType);
         }
 
         private int GetClampedColumn([NotNull] IPiece piece, int column)

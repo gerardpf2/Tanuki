@@ -58,7 +58,7 @@ namespace Game.Gameplay.View.Player
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
-            return pieceViewDefinitionGetter.GetGhost(pieceType);
+            return pieceViewDefinitionGetter.GetPlayerPieceGhost(pieceType);
         }
 
         private void SubscribeToEvents()

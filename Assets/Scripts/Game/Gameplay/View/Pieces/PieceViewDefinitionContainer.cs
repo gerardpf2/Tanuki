@@ -9,21 +9,29 @@ namespace Game.Gameplay.View.Pieces
     [CreateAssetMenu(fileName = nameof(PieceViewDefinitionContainer), menuName = "Tanuki/Game/Gameplay/Pieces/" + nameof(PieceViewDefinitionContainer))]
     public class PieceViewDefinitionContainer : ScriptableObject, IPieceViewDefinitionGetter
     {
-        [SerializeField] private PieceViewDefinition[] _pieceViewDefinitions;
-        [SerializeField] private PieceViewDefinition[] _pieceGhostViewDefinitions;
+        [SerializeField] private PieceViewDefinition[] _boardPieceViewDefinitions;
+        [SerializeField] private PieceViewDefinition[] _playerPieceViewDefinitions;
+        [SerializeField] private PieceViewDefinition[] _playerPieceGhostViewDefinitions;
 
-        public IPieceViewDefinition Get(PieceType pieceType)
+        public IPieceViewDefinition GetBoardPiece(PieceType pieceType)
         {
-            InvalidOperationException.ThrowIfNull(_pieceViewDefinitions);
+            InvalidOperationException.ThrowIfNull(_boardPieceViewDefinitions);
 
-            return Get(_pieceViewDefinitions, pieceType);
+            return Get(_boardPieceViewDefinitions, pieceType);
         }
 
-        public IPieceViewDefinition GetGhost(PieceType pieceType)
+        public IPieceViewDefinition GetPlayerPiece(PieceType pieceType)
         {
-            InvalidOperationException.ThrowIfNull(_pieceGhostViewDefinitions);
+            InvalidOperationException.ThrowIfNull(_playerPieceViewDefinitions);
 
-            return Get(_pieceGhostViewDefinitions, pieceType);
+            return Get(_playerPieceViewDefinitions, pieceType);
+        }
+
+        public IPieceViewDefinition GetPlayerPieceGhost(PieceType pieceType)
+        {
+            InvalidOperationException.ThrowIfNull(_playerPieceGhostViewDefinitions);
+
+            return Get(_playerPieceGhostViewDefinitions, pieceType);
         }
 
         [NotNull]

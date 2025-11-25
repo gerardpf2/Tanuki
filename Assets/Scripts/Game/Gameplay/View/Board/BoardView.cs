@@ -98,7 +98,7 @@ namespace Game.Gameplay.View.Board
 
             _viewBoard.AddPiece(piece, sourceCoordinate);
 
-            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.Get(piece.Type);
+            IPieceViewDefinition pieceViewDefinition = _pieceViewDefinitionGetter.GetBoardPiece(piece.Type);
             Vector3 position = sourceCoordinate.ToVector3();
             GameObjectPooledInstance piecePooledInstance = _gameObjectPool.Get(pieceViewDefinition.Prefab, _piecesParent);
 

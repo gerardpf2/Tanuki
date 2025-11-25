@@ -6,9 +6,12 @@ namespace Game.Gameplay.View.Pieces
     public interface IPieceViewDefinitionGetter
     {
         [NotNull]
-        IPieceViewDefinition Get(PieceType pieceType);
+        IPieceViewDefinition GetBoardPiece(PieceType pieceType);
 
         [NotNull]
-        IPieceViewDefinition GetGhost(PieceType pieceType);
+        IPieceViewDefinition GetPlayerPiece(PieceType pieceType);
+
+        [NotNull]
+        IPieceViewDefinition GetPlayerPieceGhost(PieceType pieceType);
     }
 }
