@@ -9,7 +9,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
-    public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<T>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
+    public abstract class PieceViewModel<T> : ViewModel, IDataSettable<T>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
     {
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
