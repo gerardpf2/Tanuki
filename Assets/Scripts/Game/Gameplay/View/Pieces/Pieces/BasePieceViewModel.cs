@@ -5,12 +5,11 @@ using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Animator;
 using JetBrains.Annotations;
 using UnityEngine;
-using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
-    public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<IPiece>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
+    public abstract class BasePieceViewModel<T> : ViewModel, IDataSettable<T>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
     {
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
@@ -27,11 +26,9 @@ namespace Game.Gameplay.View.Pieces.Pieces
             Add(_animationTrigger);
         }
 
-        public void SetData(IPiece data)
+        public void SetData(T data)
         {
-            ArgumentException.ThrowIfTypeIsNot<T>(data);
-
-            Piece = (T)data;
+            Piece = data;
 
             SyncState();
         }
