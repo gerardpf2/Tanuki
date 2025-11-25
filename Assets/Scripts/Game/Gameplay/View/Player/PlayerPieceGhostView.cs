@@ -100,11 +100,11 @@ namespace Game.Gameplay.View.Player
 
             InvalidOperationException.ThrowIfNull(instance);
 
-            IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
+            IPieceViewRotateEventNotifier pieceViewRotateEventNotifier = instance.GetComponent<IPieceViewRotateEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(pieceViewRotateEventNotifier);
 
-            pieceViewEventNotifier.OnRotated();
+            pieceViewRotateEventNotifier.OnRotated();
         }
     }
 }

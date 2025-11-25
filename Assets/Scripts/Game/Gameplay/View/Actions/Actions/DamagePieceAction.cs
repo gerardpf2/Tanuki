@@ -40,11 +40,11 @@ namespace Game.Gameplay.View.Actions.Actions
 
             GameObject pieceInstance = _boardView.GetPieceInstance(_pieceId);
 
-            IBoardPieceViewEventNotifier boardPieceViewEventNotifier = pieceInstance.GetComponent<IBoardPieceViewEventNotifier>();
+            IPieceViewDamageEventNotifier pieceViewDamageEventNotifier = pieceInstance.GetComponent<IPieceViewDamageEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(pieceViewDamageEventNotifier);
 
-            boardPieceViewEventNotifier.OnDamaged(_damagePieceReason, onComplete);
+            pieceViewDamageEventNotifier.OnDamaged(_damagePieceReason, onComplete);
         }
     }
 }

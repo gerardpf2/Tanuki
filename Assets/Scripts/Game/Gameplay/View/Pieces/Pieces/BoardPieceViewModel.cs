@@ -10,7 +10,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 {
     public class BoardPieceViewModel : BoardPieceViewModel<IPiece> { }
 
-    public abstract class BoardPieceViewModel<TPiece> : PieceViewModel<TPiece>, IBoardPieceViewEventNotifier where TPiece : IPiece
+    public abstract class BoardPieceViewModel<TPiece> : PieceViewModel<TPiece>, IPieceViewDamageEventNotifier, IPieceViewMoveEventNotifier, IPieceViewHitEventNotifier where TPiece : IPiece
     {
         public void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete)
         {

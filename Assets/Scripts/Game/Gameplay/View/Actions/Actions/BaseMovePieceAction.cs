@@ -52,11 +52,11 @@ namespace Game.Gameplay.View.Actions.Actions
         {
             GameObject pieceInstance = GetPieceInstance();
 
-            IBoardPieceViewEventNotifier boardPieceViewEventNotifier = pieceInstance.GetComponent<IBoardPieceViewEventNotifier>();
+            IPieceViewMoveEventNotifier pieceViewMoveEventNotifier = pieceInstance.GetComponent<IPieceViewMoveEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(pieceViewMoveEventNotifier);
 
-            boardPieceViewEventNotifier.OnStartMovement(_movePieceReason, OnStartMovementComplete);
+            pieceViewMoveEventNotifier.OnStartMovement(_movePieceReason, OnStartMovementComplete);
 
             return;
 
@@ -71,7 +71,7 @@ namespace Game.Gameplay.View.Actions.Actions
             {
                 NotifyHit();
 
-                boardPieceViewEventNotifier.OnEndMovement(_movePieceReason, onComplete);
+                pieceViewMoveEventNotifier.OnEndMovement(_movePieceReason, onComplete);
             }
         }
 
@@ -147,11 +147,11 @@ namespace Game.Gameplay.View.Actions.Actions
 
                     GameObject pieceInstance = _boardView.GetPieceInstance(pieceId);
 
-                    IBoardPieceViewEventNotifier boardPieceViewEventNotifier = pieceInstance.GetComponent<IBoardPieceViewEventNotifier>();
+                    IPieceViewHitEventNotifier pieceViewHitEventNotifier = pieceInstance.GetComponent<IPieceViewHitEventNotifier>();
 
-                    InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
+                    InvalidOperationException.ThrowIfNull(pieceViewHitEventNotifier);
 
-                    boardPieceViewEventNotifier.OnHit(_hitPieceReason, direction);
+                    pieceViewHitEventNotifier.OnHit(_hitPieceReason, direction);
                 }
             }
         }

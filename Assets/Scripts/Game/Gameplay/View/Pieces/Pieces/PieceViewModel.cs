@@ -11,7 +11,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 {
     public class PieceViewModel : PieceViewModel<IPiece> { }
 
-    public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<TPiece>, IPieceViewEventNotifier, IAnimationEventNotifier where TPiece : IPiece
+    public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<TPiece>, IPieceViewInstantiateEventNotifier, IPieceViewRotateEventNotifier, IAnimationEventNotifier where TPiece : IPiece
     {
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");

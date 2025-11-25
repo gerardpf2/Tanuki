@@ -20,11 +20,11 @@ namespace Game.Gameplay.View.Actions.Actions
         {
             GameObject pieceInstance = GetPieceInstance();
 
-            IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
+            IPieceViewInstantiateEventNotifier pieceViewInstantiateEventNotifier = pieceInstance.GetComponent<IPieceViewInstantiateEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(pieceViewInstantiateEventNotifier);
 
-            pieceViewEventNotifier.OnDestroyed(_destroyPieceReason, OnComplete);
+            pieceViewInstantiateEventNotifier.OnDestroyed(_destroyPieceReason, OnComplete);
 
             return;
 
