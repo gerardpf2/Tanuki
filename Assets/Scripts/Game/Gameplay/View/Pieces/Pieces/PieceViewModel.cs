@@ -1,6 +1,7 @@
 using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
+using Game.Gameplay.View.Pieces.EventNotifiers;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Animator;
 using JetBrains.Annotations;

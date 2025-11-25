@@ -1,7 +1,7 @@
 using Game.Common;
 using Game.Gameplay.Events.Reasons;
 
-namespace Game.Gameplay.View.Pieces.Pieces
+namespace Game.Gameplay.View.Pieces.EventNotifiers
 {
     public interface IPieceViewHitEventNotifier
     {

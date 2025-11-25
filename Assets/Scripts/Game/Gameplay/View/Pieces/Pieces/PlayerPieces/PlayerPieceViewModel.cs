@@ -1,10 +1,11 @@
 using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.View.Animation.Animator.Utils;
+using Game.Gameplay.View.Pieces.EventNotifiers;
 using Infrastructure.System;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
-namespace Game.Gameplay.View.Pieces.Pieces
+namespace Game.Gameplay.View.Pieces.Pieces.PlayerPieces
 {
     public class PlayerPieceViewModel : PieceViewModel, IPieceViewMoveEventNotifier
     {

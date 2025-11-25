@@ -1,6 +1,6 @@
 using Game.Gameplay.Pieces.Pieces;
 
-namespace Game.Gameplay.View.Pieces.Pieces
+namespace Game.Gameplay.View.Pieces.Pieces.BoardPieces
 {
     public class TestViewModel : BoardPieceViewModel<ITest>
     {
