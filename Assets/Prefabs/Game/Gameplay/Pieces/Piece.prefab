@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30eec327465b43a9bb6dc00321017fa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _viewModel: {fileID: 3209040088352875747}
+  _viewModel: {fileID: 8892076526197247949}
   _key: OffsetPosition
   _transform: {fileID: 823495390370513058}
 --- !u!114 &6887118609220005050
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b7dc9f5c9a48438a033335026b033e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _viewModel: {fileID: 3209040088352875747}
+  _viewModel: {fileID: 8892076526197247949}
   _key: OffsetRotation
   _transform: {fileID: 823495390370513058}
 --- !u!1 &6451969163346834527
@@ -160,7 +160,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1070835727361169376}
-  - component: {fileID: 3209040088352875747}
+  - component: {fileID: 8892076526197247949}
   - component: {fileID: 7489185302281341990}
   - component: {fileID: 4687716747180991768}
   - component: {fileID: 3188302404754487522}
@@ -187,7 +187,7 @@ Transform:
   - {fileID: 823495390370513058}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3209040088352875747
+--- !u!114 &8892076526197247949
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6451969163346834527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2c0cc70e5f740f692779563217513a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 2506e667b0c94566a00ae40ee2091b16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &7489185302281341990
@@ -245,6 +245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6ca77af5a24f25bbd0b7ddaa57702b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _viewModel: {fileID: 3209040088352875747}
+  _viewModel: {fileID: 8892076526197247949}
   _key: AnimationTrigger
   _animator: {fileID: 4687716747180991768}
