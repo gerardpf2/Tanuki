@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Pieces.Preloader
 {
-    public class PieceGhostsGameObjectPreloader : BasePieceGameObjectPreloader
+    public class PlayerPieceGhostsGameObjectPreloader : BasePieceGameObjectPreloader
     {
         [NotNull] private readonly IBag _bag;
 
-        public PieceGhostsGameObjectPreloader(
+        public PlayerPieceGhostsGameObjectPreloader(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool,
             [NotNull] IBag bag) : base(pieceViewDefinitionGetter, gameObjectPool)
