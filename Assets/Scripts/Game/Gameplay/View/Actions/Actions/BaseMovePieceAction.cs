@@ -56,11 +56,11 @@ namespace Game.Gameplay.View.Actions.Actions
 
             InvalidOperationException.ThrowIfNull(pieceViewMoveEventNotifier);
 
-            pieceViewMoveEventNotifier.OnStartMovement(_movePieceReason, OnStartMovementComplete);
+            pieceViewMoveEventNotifier.OnMovementStarted(_movePieceReason, OnMovementStartedComplete);
 
             return;
 
-            void OnStartMovementComplete()
+            void OnMovementStartedComplete()
             {
                 MovePiece(_rowOffset, _columnOffset);
 
@@ -71,7 +71,7 @@ namespace Game.Gameplay.View.Actions.Actions
             {
                 NotifyHit();
 
-                pieceViewMoveEventNotifier.OnEndMovement(_movePieceReason, onComplete);
+                pieceViewMoveEventNotifier.OnMovementEnded(_movePieceReason, onComplete);
             }
         }
 

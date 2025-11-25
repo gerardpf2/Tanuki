@@ -20,14 +20,14 @@ namespace Game.Gameplay.View.Pieces.Pieces
             onComplete?.Invoke();
         }
 
-        public void OnStartMovement(MovePieceReason movePieceReason, Action onComplete)
+        public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
         {
             InvalidOperationException.ThrowIfNot(movePieceReason, ComparisonOperator.UnequalTo, MovePieceReason.Lock);
 
             PrepareMainAnimation(TriggerNameUtils.GetStart(movePieceReason), onComplete);
         }
 
-        public void OnEndMovement(MovePieceReason movePieceReason, Action onComplete)
+        public void OnMovementEnded(MovePieceReason movePieceReason, Action onComplete)
         {
             InvalidOperationException.ThrowIfNot(movePieceReason, ComparisonOperator.UnequalTo, MovePieceReason.Lock);
 
