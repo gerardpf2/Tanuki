@@ -25,26 +25,26 @@ namespace Game.Gameplay.Pieces
 
             switch (pieceType)
             {
-                case PieceType.PlayerI:
-                    piece = _pieceFactory.GetPlayerI();
+                case PieceType.I:
+                    piece = _pieceFactory.GetI();
                     break;
-                case PieceType.PlayerO:
-                    piece = _pieceFactory.GetPlayerO();
+                case PieceType.O:
+                    piece = _pieceFactory.GetO();
                     break;
-                case PieceType.PlayerT:
-                    piece = _pieceFactory.GetPlayerT();
+                case PieceType.T:
+                    piece = _pieceFactory.GetT();
                     break;
-                case PieceType.PlayerJ:
-                    piece = _pieceFactory.GetPlayerJ();
+                case PieceType.J:
+                    piece = _pieceFactory.GetJ();
                     break;
-                case PieceType.PlayerL:
-                    piece = _pieceFactory.GetPlayerL();
+                case PieceType.L:
+                    piece = _pieceFactory.GetL();
                     break;
-                case PieceType.PlayerS:
-                    piece = _pieceFactory.GetPlayerS();
+                case PieceType.S:
+                    piece = _pieceFactory.GetS();
                     break;
-                case PieceType.PlayerZ:
-                    piece = _pieceFactory.GetPlayerZ();
+                case PieceType.Z:
+                    piece = _pieceFactory.GetZ();
                     break;
                 case PieceType.BlockI:
                     piece = _pieceFactory.GetBlockI();

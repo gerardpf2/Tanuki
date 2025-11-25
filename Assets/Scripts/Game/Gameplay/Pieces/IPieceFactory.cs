@@ -6,25 +6,25 @@ namespace Game.Gameplay.Pieces
     public interface IPieceFactory
     {
         [NotNull]
-        IPiece GetPlayerI();
+        IPiece GetI();
 
         [NotNull]
-        IPiece GetPlayerO();
+        IPiece GetO();
 
         [NotNull]
-        IPiece GetPlayerT();
+        IPiece GetT();
 
         [NotNull]
-        IPiece GetPlayerJ();
+        IPiece GetJ();
 
         [NotNull]
-        IPiece GetPlayerL();
+        IPiece GetL();
 
         [NotNull]
-        IPiece GetPlayerS();
+        IPiece GetS();
 
         [NotNull]
-        IPiece GetPlayerZ();
+        IPiece GetZ();
 
         [NotNull]
         IPiece GetBlockI();

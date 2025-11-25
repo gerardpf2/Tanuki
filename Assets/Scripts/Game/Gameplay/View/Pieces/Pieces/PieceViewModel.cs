@@ -11,13 +11,13 @@ namespace Game.Gameplay.View.Pieces.Pieces
 {
     public class PieceViewModel : PieceViewModel<IPiece> { }
 
-    public abstract class PieceViewModel<T> : ViewModel, IDataSettable<T>, IPieceViewEventNotifier, IAnimationEventNotifier where T : IPiece
+    public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<TPiece>, IPieceViewEventNotifier, IAnimationEventNotifier where TPiece : IPiece
     {
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
         [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
 
-        protected T Piece;
+        protected TPiece Piece;
 
         private Action _animationOnComplete;
 
@@ -28,7 +28,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
             Add(_animationTrigger);
         }
 
-        public void SetData(T data)
+        public void SetData(TPiece data)
         {
             Piece = data;
 

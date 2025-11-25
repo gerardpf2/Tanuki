@@ -3,8 +3,8 @@ using Game.Gameplay.Events.Events;
 
 namespace Game.Gameplay.View.EventResolvers.EventResolvers
 {
-    public interface IEventResolver<in T> where T : IEvent
+    public interface IEventResolver<in TEvent> where TEvent : IEvent
     {
-        void Resolve(T evt, Action onComplete);
+        void Resolve(TEvent evt, Action onComplete);
     }
 }

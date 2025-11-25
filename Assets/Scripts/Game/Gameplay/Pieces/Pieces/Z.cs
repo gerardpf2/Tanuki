@@ -5,15 +5,15 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Pieces.Pieces
 {
-    public class PlayerZ : Piece
+    public class Z : Piece
     {
         public override PieceType? DecomposeType => PieceType.BlockZ;
 
-        public PlayerZ([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerZ) { }
+        public Z([NotNull] IConverter converter, int id) : base(converter, id, PieceType.Z) { }
 
         public override IPiece Clone()
         {
-            return new PlayerZ(Converter, Id).WithState(State);
+            return new Z(Converter, Id).WithState(State);
         }
 
         protected override bool[,] GetGrid()

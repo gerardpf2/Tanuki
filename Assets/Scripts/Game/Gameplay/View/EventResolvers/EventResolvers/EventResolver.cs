@@ -8,9 +8,9 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.View.EventResolvers.EventResolvers
 {
-    public abstract class EventResolver<T> : IEventResolver<T> where T : IEvent
+    public abstract class EventResolver<TEvent> : IEventResolver<TEvent> where TEvent : IEvent
     {
-        public void Resolve(T evt, Action onComplete)
+        public void Resolve(TEvent evt, Action onComplete)
         {
             IEnumerator<IAction> actions = GetActions(evt).GetEnumerator();
 
@@ -27,7 +27,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         }
 
         [NotNull, ItemNotNull]
-        protected abstract IEnumerable<IAction> GetActions(T evt);
+        protected abstract IEnumerable<IAction> GetActions(TEvent evt);
 
         private static void ResolveActions([NotNull] IEnumerator<IAction> actions, Action onComplete)
         {

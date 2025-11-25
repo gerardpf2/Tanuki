@@ -5,17 +5,17 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.Pieces.Pieces
 {
-    public class PlayerO : RectangularPiece
+    public class O : RectangularPiece
     {
         public override bool CanRotate => false;
 
         public override PieceType? DecomposeType => PieceType.BlockO;
 
-        public PlayerO([NotNull] IConverter converter, int id) : base(converter, id, PieceType.PlayerO, 2, 2) { }
+        public O([NotNull] IConverter converter, int id) : base(converter, id, PieceType.O, 2, 2) { }
 
         public override IPiece Clone()
         {
-            return new PlayerO(Converter, Id).WithState(State);
+            return new O(Converter, Id).WithState(State);
         }
     }
 }
