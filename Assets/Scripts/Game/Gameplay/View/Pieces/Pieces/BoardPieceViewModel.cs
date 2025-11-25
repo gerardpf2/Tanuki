@@ -8,9 +8,9 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
-    public class PieceViewModel : PieceViewModel<IPiece> { }
+    public class BoardPieceViewModel : BoardPieceViewModel<IPiece> { }
 
-    public abstract class PieceViewModel<T> : BasePieceViewModel<T>, IBoardPieceViewEventNotifier where T : IPiece
+    public abstract class BoardPieceViewModel<T> : BasePieceViewModel<T>, IBoardPieceViewEventNotifier where T : IPiece
     {
         public void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete)
         {

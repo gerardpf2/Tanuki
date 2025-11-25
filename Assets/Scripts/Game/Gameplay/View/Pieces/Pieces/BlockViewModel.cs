@@ -1,6 +1,6 @@
 namespace Game.Gameplay.View.Pieces.Pieces
 {
-    public class BlockViewModel : PieceViewModel
+    public class BlockViewModel : BoardPieceViewModel
     {
         protected override void SyncState()
         {

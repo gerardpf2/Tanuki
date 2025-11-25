@@ -2,7 +2,7 @@ using Game.Gameplay.Pieces.Pieces;
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
-    public class TestViewModel : PieceViewModel<ITest>
+    public class TestViewModel : BoardPieceViewModel<ITest>
     {
         protected override void SyncState()
         {
