@@ -7,7 +7,7 @@ namespace Game.Gameplay.View.Pieces.Composition
             public const string BoardPieces = nameof(BoardPieces);
             public const string PlayerPieces = nameof(PlayerPieces);
             public const string PlayerPieceGhosts = nameof(PlayerPieceGhosts);
-            public const string DecomposePieces = nameof(DecomposePieces);
+            public const string DecomposeBoardPieces = nameof(DecomposeBoardPieces);
         }
     }
 }
