@@ -42,6 +42,13 @@ namespace Game.Gameplay.Board
             _pieceIds = null;
         }
 
+        public bool IsInside(Coordinate coordinate)
+        {
+            return
+                coordinate.Row >= 0 && coordinate.Row < Rows &&
+                coordinate.Column >= 0 && coordinate.Column < Columns;
+        }
+
         public IPiece GetPiece(int pieceId)
         {
             if (!_piecesByPieceIds.TryGetValue(pieceId, out IPiece piece))
@@ -138,13 +145,6 @@ namespace Game.Gameplay.Board
             Coordinate newSourceCoordinate = sourceCoordinate.WithOffset(rowOffset, columnOffset);
 
             AddPiece(piece, newSourceCoordinate);
-        }
-
-        private bool IsInside(Coordinate coordinate)
-        {
-            return
-                coordinate.Row >= 0 && coordinate.Row < Rows &&
-                coordinate.Column >= 0 && coordinate.Column < Columns;
         }
 
         private void ExpandRowsIfNeeded(int newRows)

@@ -17,6 +17,8 @@ namespace Game.Gameplay.Board
 
         void Clear();
 
+        bool IsInside(Coordinate coordinate);
+
         [NotNull]
         IPiece GetPiece(int pieceId);
 
