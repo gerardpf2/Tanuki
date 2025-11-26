@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common;
 using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
@@ -107,9 +108,10 @@ namespace Game.Gameplay.View.Actions
         public IAction GetDamagePieceAction(
             int pieceId,
             IEnumerable<KeyValuePair<string, string>> state,
-            DamagePieceReason damagePieceReason)
+            DamagePieceReason damagePieceReason,
+            Direction direction)
         {
-            return new DamagePieceAction(pieceId, state, damagePieceReason, _boardView);
+            return new DamagePieceAction(pieceId, state, damagePieceReason, direction, _boardView);
         }
 
         public IAction GetMovePieceAction(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)

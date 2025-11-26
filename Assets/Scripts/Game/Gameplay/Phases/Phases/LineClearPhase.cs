@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
@@ -69,7 +70,13 @@ namespace Game.Gameplay.Phases.Phases
 
                 piece.Damage(rowOffset, columnOffset);
 
-                _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece, DamagePieceReason.LineClear));
+                _eventEnqueuer.Enqueue(
+                    _eventFactory.GetDamagePieceEvent(
+                        piece,
+                        DamagePieceReason.LineClear,
+                        Direction.Right
+                    )
+                );
 
                 anyDamaged = true;
             }

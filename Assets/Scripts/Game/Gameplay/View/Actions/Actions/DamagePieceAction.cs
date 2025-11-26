@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Board;
@@ -16,12 +17,14 @@ namespace Game.Gameplay.View.Actions.Actions
         private readonly int _pieceId;
         private readonly IEnumerable<KeyValuePair<string, string>> _state;
         private readonly DamagePieceReason _damagePieceReason;
+        private readonly Direction _direction;
         [NotNull] private readonly IBoardView _boardView;
 
         public DamagePieceAction(
             int pieceId,
             IEnumerable<KeyValuePair<string, string>> state,
             DamagePieceReason damagePieceReason,
+            Direction direction,
             [NotNull] IBoardView boardView)
         {
             ArgumentNullException.ThrowIfNull(boardView);
@@ -29,6 +32,7 @@ namespace Game.Gameplay.View.Actions.Actions
             _pieceId = pieceId;
             _state = state;
             _damagePieceReason = damagePieceReason;
+            _direction = direction;
             _boardView = boardView;
         }
 
@@ -44,7 +48,7 @@ namespace Game.Gameplay.View.Actions.Actions
 
             InvalidOperationException.ThrowIfNull(pieceViewDamageEventNotifier);
 
-            pieceViewDamageEventNotifier.OnDamaged(_damagePieceReason, onComplete);
+            pieceViewDamageEventNotifier.OnDamaged(_damagePieceReason, _direction, onComplete);
         }
     }
 }

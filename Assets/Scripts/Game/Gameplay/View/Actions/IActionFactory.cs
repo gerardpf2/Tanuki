@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common;
 using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
@@ -40,7 +41,8 @@ namespace Game.Gameplay.View.Actions
         IAction GetDamagePieceAction(
             int pieceId,
             IEnumerable<KeyValuePair<string, string>> state,
-            DamagePieceReason damagePieceReason
+            DamagePieceReason damagePieceReason,
+            Direction direction
         );
 
         [NotNull]

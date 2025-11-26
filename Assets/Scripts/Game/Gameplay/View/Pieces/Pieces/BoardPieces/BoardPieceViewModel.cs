@@ -14,8 +14,14 @@ namespace Game.Gameplay.View.Pieces.Pieces.BoardPieces
 
     public abstract class BoardPieceViewModel<TPiece> : PieceViewModel<TPiece>, IPieceViewDamageEventNotifier, IPieceViewMoveEventNotifier, IPieceViewHitEventNotifier where TPiece : IPiece
     {
-        public void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete)
+        public void OnDamaged(DamagePieceReason damagePieceReason, Direction direction, Action onComplete)
         {
+            IPiece piece = Piece;
+
+            InvalidOperationException.ThrowIfNull(piece);
+
+            direction = direction.GetRotated(piece.Rotation);
+
             // TODO
 
             onComplete?.Invoke();

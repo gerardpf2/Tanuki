@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
@@ -36,11 +37,14 @@ namespace Game.Gameplay.Events
             return new LockPlayerPieceEvent(pieceClone, sourceCoordinate, lockSourceCoordinate, movesAmount);
         }
 
-        public IEvent GetDamagePieceEvent([NotNull] IPiece piece, DamagePieceReason damagePieceReason)
+        public IEvent GetDamagePieceEvent(
+            [NotNull] IPiece piece,
+            DamagePieceReason damagePieceReason,
+            Direction direction)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason);
+            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason, direction);
         }
 
         public IEvent GetDestroyPieceEvent(

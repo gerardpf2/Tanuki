@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
@@ -28,7 +29,7 @@ namespace Game.Gameplay.Events
         );
 
         [NotNull]
-        IEvent GetDamagePieceEvent(IPiece piece, DamagePieceReason damagePieceReason);
+        IEvent GetDamagePieceEvent(IPiece piece, DamagePieceReason damagePieceReason, Direction direction);
 
         [NotNull]
         IEvent GetDestroyPieceEvent(
