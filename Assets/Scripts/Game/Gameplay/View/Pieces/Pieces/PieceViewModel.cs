@@ -101,7 +101,51 @@ namespace Game.Gameplay.View.Pieces.Pieces
             _animationTrigger.Trigger(triggerName);
         }
 
-        protected void RaiseSecondaryAnimationTrigger(params string[] triggerNames)
+        protected void PrepareMainAnimation(Action onComplete, params string[] triggerNames)
+        {
+            InvalidOperationException.ThrowIfNull(_animatorTriggerNameContainer);
+            InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
+
+            foreach (string triggerName in triggerNames)
+            {
+                if (!_animatorTriggerNameContainer.Contains(triggerName))
+                {
+                    // TODO: Exception
+
+                    onComplete?.Invoke();
+
+                    return;
+                }
+            }
+
+            _animationOnComplete = onComplete;
+
+            foreach (string triggerName in triggerNames)
+            {
+                _animationTrigger.Trigger(triggerName);
+            }
+        }
+
+        protected void PrepareSecondaryAnimation(string triggerName)
+        {
+            InvalidOperationException.ThrowIfNull(_animatorTriggerNameContainer);
+
+            if (_animationOnComplete is not null)
+            {
+                // Main animation in progress
+
+                return;
+            }
+
+            if (!_animatorTriggerNameContainer.Contains(triggerName))
+            {
+                return;
+            }
+
+            _animationTrigger.Trigger(triggerName);
+        }
+
+        protected void PrepareSecondaryAnimation(params string[] triggerNames)
         {
             InvalidOperationException.ThrowIfNull(_animatorTriggerNameContainer);
 

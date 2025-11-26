@@ -16,15 +16,14 @@ namespace Game.Gameplay.View.Pieces.Pieces.BoardPieces
     {
         public void OnDamaged(DamagePieceReason damagePieceReason, Direction direction, Action onComplete)
         {
-            IPiece piece = Piece;
+            direction = GetRotated(direction);
 
-            InvalidOperationException.ThrowIfNull(piece);
-
-            direction = direction.GetRotated(piece.Rotation);
-
-            // TODO
-
-            onComplete?.Invoke();
+            PrepareMainAnimation(
+                onComplete,
+                TriggerNameUtils.Get(damagePieceReason, direction),
+                TriggerNameUtils.Get(damagePieceReason),
+                TriggerNameUtils.GetDamageBase()
+            );
         }
 
         public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
@@ -43,28 +42,22 @@ namespace Game.Gameplay.View.Pieces.Pieces.BoardPieces
 
         public void OnHit(HitPieceReason hitPieceReason, Direction direction)
         {
+            direction = GetRotated(direction);
+
+            PrepareSecondaryAnimation(
+                TriggerNameUtils.Get(hitPieceReason, direction),
+                TriggerNameUtils.Get(hitPieceReason),
+                TriggerNameUtils.GetHitBase()
+            );
+        }
+
+        private Direction GetRotated(Direction direction)
+        {
             IPiece piece = Piece;
 
             InvalidOperationException.ThrowIfNull(piece);
 
-            direction = direction.GetRotated(piece.Rotation);
-
-            /*
-             *
-             * Maybe not ideal, but very convenient in terms of animator transition complexity
-             * This secondary animation is split into three steps
-             *
-             * 1) Go from current secondary animation to hit animation selector
-             * 2) Go from hit animation selector to hit strong / weak animation selector
-             * 3) Go from hit strong / weak animation selector to direction down, right or left hit selector
-             *
-             * Triggers are raised in reverse order
-             *
-             */
-
-            RaiseSecondaryAnimationTrigger(TriggerNameUtils.Get(hitPieceReason, direction));
-            RaiseSecondaryAnimationTrigger(TriggerNameUtils.Get(hitPieceReason));
-            RaiseSecondaryAnimationTrigger(TriggerNameUtils.GetHitBase());
+            return direction.GetRotated(piece.Rotation);
         }
     }
 }
