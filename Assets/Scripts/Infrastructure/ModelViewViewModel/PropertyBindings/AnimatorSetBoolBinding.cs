@@ -3,15 +3,16 @@ using UnityEngine;
 
 namespace Infrastructure.ModelViewViewModel.PropertyBindings
 {
-    public class AnimatorSetBoolBinding : PropertyBinding<(string, bool)>
+    public class AnimatorSetBoolBinding : PropertyBinding<bool>
     {
         [SerializeField] private Animator _animator;
+        [SerializeField] private string _name;
 
-        public override void Set((string, bool) value)
+        public override void Set(bool value)
         {
             InvalidOperationException.ThrowIfNull(_animator);
 
-            _animator.SetBool(value.Item1, value.Item2);
+            _animator.SetBool(_name, value);
         }
     }
 }
