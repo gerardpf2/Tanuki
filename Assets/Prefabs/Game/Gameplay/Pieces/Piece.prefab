@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 7489185302281341990}
   - component: {fileID: 4687716747180991768}
   - component: {fileID: 3188302404754487522}
+  - component: {fileID: 3150732065535047232}
   m_Layer: 0
   m_Name: Piece
   m_TagString: Untagged
@@ -199,6 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2506e667b0c94566a00ae40ee2091b16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animatorTriggerNameContainer: {fileID: 3150732065535047232}
 --- !u!114 &7489185302281341990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,3 +250,17 @@ MonoBehaviour:
   _viewModel: {fileID: 8892076526197247949}
   _key: AnimationTrigger
   _animator: {fileID: 4687716747180991768}
+--- !u!114 &3150732065535047232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6451969163346834527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b48e4d581e7241df801be81b4039abb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 4687716747180991768}
+  _triggerNames: []

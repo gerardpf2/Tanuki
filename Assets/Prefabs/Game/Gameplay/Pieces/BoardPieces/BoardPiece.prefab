@@ -90,3 +90,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c0cc70e5f740f692779563217513a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animatorTriggerNameContainer: {fileID: 7817169342854382413}
+--- !u!114 &7817169342854382413 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3150732065535047232, guid: cee7863dfdb3a144883616753b446523, type: 3}
+  m_PrefabInstance: {fileID: 5171693710564324621}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2183247197674471762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b48e4d581e7241df801be81b4039abb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -121,12 +121,6 @@ namespace Game.Gameplay.View.Actions.Actions
              */
 
             Notify(pieceIdsInContactDown, Direction.Down);
-
-            if (_hitPieceReason is not HitPieceReason.Lock)
-            {
-                return;
-            }
-
             Notify(pieceIdsInContactRight, Direction.Right);
             Notify(pieceIdsInContactLeft, Direction.Left);
 

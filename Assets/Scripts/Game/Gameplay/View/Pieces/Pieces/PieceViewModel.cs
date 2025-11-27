@@ -1,6 +1,7 @@
 using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
+using Game.Gameplay.View.Animation.Animator;
 using Game.Gameplay.View.Pieces.EventNotifiers;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Animator;
@@ -15,6 +16,8 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
     public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<IPiece>, IPieceViewInstantiateEventNotifier, IPieceViewRotateEventNotifier, IAnimationEventNotifier where TPiece : IPiece
     {
+        [SerializeField] private AnimatorTriggerNameContainer _animatorTriggerNameContainer;
+
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
         [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
@@ -82,25 +85,26 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         protected void PrepareMainAnimation(string triggerName, Action onComplete)
         {
-            // TODO: Remove animator check when each piece has proper animator and animations
+            InvalidOperationException.ThrowIfNull(_animatorTriggerNameContainer);
+            InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
 
-            Animator animator = GetComponentInChildren<Animator>();
-
-            if (!animator || !animator.runtimeAnimatorController)
+            if (!_animatorTriggerNameContainer.Contains(triggerName))
             {
+                // TODO: Exception
+
                 onComplete?.Invoke();
 
                 return;
             }
 
-            InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
-
             _animationOnComplete = onComplete;
             _animationTrigger.Trigger(triggerName);
         }
 
-        protected void RaiseSecondaryAnimationTrigger(string triggerName)
+        protected void RaiseSecondaryAnimationTrigger(params string[] triggerNames)
         {
+            InvalidOperationException.ThrowIfNull(_animatorTriggerNameContainer);
+
             if (_animationOnComplete is not null)
             {
                 // Main animation in progress
@@ -108,16 +112,18 @@ namespace Game.Gameplay.View.Pieces.Pieces
                 return;
             }
 
-            // TODO: Remove animator check when each piece has proper animator and animations
-
-            Animator animator = GetComponentInChildren<Animator>();
-
-            if (!animator || !animator.runtimeAnimatorController)
+            foreach (string triggerName in triggerNames)
             {
-                return;
+                if (!_animatorTriggerNameContainer.Contains(triggerName))
+                {
+                    return;
+                }
             }
 
-            _animationTrigger.Trigger(triggerName);
+            foreach (string triggerName in triggerNames)
+            {
+                _animationTrigger.Trigger(triggerName);
+            }
         }
 
         private void SyncRotation()
