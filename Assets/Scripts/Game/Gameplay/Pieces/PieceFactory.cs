@@ -19,39 +19,39 @@ namespace Game.Gameplay.Pieces
             _converter = converter;
         }
 
-        public IPiece GetPlayerI()
+        public IPiece GetI()
         {
-            return new PlayerI(_converter, GetNewPieceId());
+            return new I(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerO()
+        public IPiece GetO()
         {
-            return new PlayerO(_converter, GetNewPieceId());
+            return new O(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerT()
+        public IPiece GetT()
         {
-            return new PlayerT(_converter, GetNewPieceId());
+            return new T(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerJ()
+        public IPiece GetJ()
         {
-            return new PlayerJ(_converter, GetNewPieceId());
+            return new J(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerL()
+        public IPiece GetL()
         {
-            return new PlayerL(_converter, GetNewPieceId());
+            return new L(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerS()
+        public IPiece GetS()
         {
-            return new PlayerS(_converter, GetNewPieceId());
+            return new S(_converter, GetNewPieceId());
         }
 
-        public IPiece GetPlayerZ()
+        public IPiece GetZ()
         {
-            return new PlayerZ(_converter, GetNewPieceId());
+            return new Z(_converter, GetNewPieceId());
         }
 
         public IPiece GetBlockI()

@@ -2,13 +2,13 @@ namespace Game.Common.Pieces
 {
     public enum PieceType
     {
-        PlayerI = 10,
-        PlayerO = 11,
-        PlayerT = 12,
-        PlayerJ = 13,
-        PlayerL = 14,
-        PlayerS = 15,
-        PlayerZ = 16,
+        I = 10,
+        O = 11,
+        T = 12,
+        J = 13,
+        L = 14,
+        S = 15,
+        Z = 16,
 
         BlockI = 20,
         BlockO = 21,

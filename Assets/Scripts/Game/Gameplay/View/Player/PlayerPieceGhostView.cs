@@ -3,7 +3,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
-using Game.Gameplay.View.Pieces.Pieces;
+using Game.Gameplay.View.Pieces.EventNotifiers;
 using Infrastructure.System.Exceptions;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
@@ -58,7 +58,7 @@ namespace Game.Gameplay.View.Player
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
-            return pieceViewDefinitionGetter.GetGhost(pieceType);
+            return pieceViewDefinitionGetter.GetPlayerPieceGhost(pieceType);
         }
 
         private void SubscribeToEvents()
@@ -100,11 +100,11 @@ namespace Game.Gameplay.View.Player
 
             InvalidOperationException.ThrowIfNull(instance);
 
-            IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
+            IPieceViewRotateEventNotifier pieceViewRotateEventNotifier = instance.GetComponent<IPieceViewRotateEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(pieceViewRotateEventNotifier);
 
-            pieceViewEventNotifier.OnRotated();
+            pieceViewRotateEventNotifier.OnRotated();
         }
     }
 }

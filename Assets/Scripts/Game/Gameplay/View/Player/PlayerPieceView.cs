@@ -4,7 +4,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces;
-using Game.Gameplay.View.Pieces.Pieces;
+using Game.Gameplay.View.Pieces.EventNotifiers;
 using Infrastructure.Unity.Pooling;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -120,11 +120,11 @@ namespace Game.Gameplay.View.Player
 
                 InvalidOperationException.ThrowIfNull(instance);
 
-                IPieceViewEventNotifier pieceViewEventNotifier = instance.GetComponent<IPieceViewEventNotifier>();
+                IPieceViewRotateEventNotifier pieceViewRotateEventNotifier = instance.GetComponent<IPieceViewRotateEventNotifier>();
 
-                InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+                InvalidOperationException.ThrowIfNull(pieceViewRotateEventNotifier);
 
-                pieceViewEventNotifier.OnRotated();
+                pieceViewRotateEventNotifier.OnRotated();
             }
         }
 
@@ -134,7 +134,7 @@ namespace Game.Gameplay.View.Player
         {
             ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
 
-            return pieceViewDefinitionGetter.Get(pieceType);
+            return pieceViewDefinitionGetter.GetPlayerPiece(pieceType);
         }
 
         private int GetClampedColumn([NotNull] IPiece piece, int column)

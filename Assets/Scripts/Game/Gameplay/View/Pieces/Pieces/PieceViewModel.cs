@@ -1,58 +1,131 @@
 using System;
-using Game.Common;
-using Game.Common.Utils;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
-using Game.Gameplay.View.Animation.Animator.Utils;
+using Game.Gameplay.View.Pieces.EventNotifiers;
+using Infrastructure.ModelViewViewModel;
+using Infrastructure.Unity.Animator;
+using JetBrains.Annotations;
+using UnityEngine;
+using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
     public class PieceViewModel : PieceViewModel<IPiece> { }
 
-    public abstract class PieceViewModel<T> : BasePieceViewModel<T>, IBoardPieceViewEventNotifier where T : IPiece
+    public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<IPiece>, IPieceViewInstantiateEventNotifier, IPieceViewRotateEventNotifier, IAnimationEventNotifier where TPiece : IPiece
     {
-        public void OnDamaged(DamagePieceReason damagePieceReason, Action onComplete)
+        [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
+        [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
+        [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
+
+        protected TPiece Piece;
+
+        private Action _animationOnComplete;
+
+        private void Awake()
+        {
+            Add(_offsetPosition);
+            Add(_offsetRotation);
+            Add(_animationTrigger);
+        }
+
+        public void SetData(IPiece data)
+        {
+            ArgumentException.ThrowIfTypeIsNot<TPiece>(data);
+
+            Piece = (TPiece)data;
+
+            SyncState();
+        }
+
+        public void OnInstantiated(InstantiatePieceReason instantiatePieceReason, Action onComplete)
         {
             // TODO
 
             onComplete?.Invoke();
         }
 
-        public void OnStartMovement(MovePieceReason movePieceReason, Action onComplete)
+        public void OnDestroyed(DestroyPieceReason destroyPieceReason, Action onComplete)
         {
-            PrepareMainAnimation(TriggerNameUtils.GetStart(movePieceReason), onComplete);
+            // TODO
+
+            onComplete?.Invoke();
         }
 
-        public void OnEndMovement(MovePieceReason movePieceReason, Action onComplete)
+        public void OnRotated()
         {
-            PrepareMainAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
+            SyncRotation();
         }
 
-        public void OnHit(HitPieceReason hitPieceReason, Direction direction)
+        public void OnAnimationEnd(string _)
         {
-            IPiece piece = Piece;
-
-            InvalidOperationException.ThrowIfNull(piece);
-
-            direction = direction.GetRotated(piece.Rotation);
-
             /*
              *
-             * Maybe not ideal, but very convenient in terms of animator transition complexity
-             * This secondary animation is split into three steps
+             * Ideally animationName should be compared with the one that could have been set at PrepareAnimation in
+             * order to determine if the animation that has ended is the expected one
              *
-             * 1) Go from current secondary animation to hit animation selector
-             * 2) Go from hit animation selector to hit strong / weak animation selector
-             * 3) Go from hit strong / weak animation selector to direction down, right or left hit selector
-             *
-             * Triggers are raised in reverse order
+             * But this is something that cannot be done, at least for pieces, because one piece can use different
+             * animations for each animation trigger and another can use the exact same animation for all them. In this
+             * last case it is not clear which animation name should be set in the animator state
              *
              */
 
-            RaiseSecondaryAnimationTrigger(TriggerNameUtils.Get(hitPieceReason, direction));
-            RaiseSecondaryAnimationTrigger(TriggerNameUtils.Get(hitPieceReason));
-            RaiseSecondaryAnimationTrigger(TriggerNameUtils.GetHitBase());
+            _animationOnComplete?.Invoke();
+            _animationOnComplete = null;
+        }
+
+        protected virtual void SyncState()
+        {
+            SyncRotation();
+        }
+
+        protected void PrepareMainAnimation(string triggerName, Action onComplete)
+        {
+            // TODO: Remove animator check when each piece has proper animator and animations
+
+            Animator animator = GetComponentInChildren<Animator>();
+
+            if (!animator || !animator.runtimeAnimatorController)
+            {
+                onComplete?.Invoke();
+
+                return;
+            }
+
+            InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
+
+            _animationOnComplete = onComplete;
+            _animationTrigger.Trigger(triggerName);
+        }
+
+        protected void RaiseSecondaryAnimationTrigger(string triggerName)
+        {
+            if (_animationOnComplete is not null)
+            {
+                // Main animation in progress
+
+                return;
+            }
+
+            // TODO: Remove animator check when each piece has proper animator and animations
+
+            Animator animator = GetComponentInChildren<Animator>();
+
+            if (!animator || !animator.runtimeAnimatorController)
+            {
+                return;
+            }
+
+            _animationTrigger.Trigger(triggerName);
+        }
+
+        private void SyncRotation()
+        {
+            InvalidOperationException.ThrowIfNull(Piece);
+
+            _offsetPosition.Value = new Vector3(0.5f * (Piece.Width - 1), 0.5f * Piece.Height);
+            _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation); // Clockwise rotation
         }
     }
 }

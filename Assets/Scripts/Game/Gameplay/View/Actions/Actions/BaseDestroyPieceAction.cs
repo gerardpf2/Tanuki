@@ -1,6 +1,6 @@
 using System;
 using Game.Gameplay.Events.Reasons;
-using Game.Gameplay.View.Pieces.Pieces;
+using Game.Gameplay.View.Pieces.EventNotifiers;
 using JetBrains.Annotations;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
@@ -20,11 +20,11 @@ namespace Game.Gameplay.View.Actions.Actions
         {
             GameObject pieceInstance = GetPieceInstance();
 
-            IPieceViewEventNotifier pieceViewEventNotifier = pieceInstance.GetComponent<IPieceViewEventNotifier>();
+            IPieceViewInstantiateEventNotifier pieceViewInstantiateEventNotifier = pieceInstance.GetComponent<IPieceViewInstantiateEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(pieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(pieceViewInstantiateEventNotifier);
 
-            pieceViewEventNotifier.OnDestroyed(_destroyPieceReason, OnComplete);
+            pieceViewInstantiateEventNotifier.OnDestroyed(_destroyPieceReason, OnComplete);
 
             return;
 

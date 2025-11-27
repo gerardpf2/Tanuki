@@ -8,7 +8,7 @@ using Game.Gameplay.Events.Reasons.Utils;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
-using Game.Gameplay.View.Pieces.Pieces;
+using Game.Gameplay.View.Pieces.EventNotifiers;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -52,15 +52,15 @@ namespace Game.Gameplay.View.Actions.Actions
         {
             GameObject pieceInstance = GetPieceInstance();
 
-            IBoardPieceViewEventNotifier boardPieceViewEventNotifier = pieceInstance.GetComponent<IBoardPieceViewEventNotifier>();
+            IPieceViewMoveEventNotifier pieceViewMoveEventNotifier = pieceInstance.GetComponent<IPieceViewMoveEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(pieceViewMoveEventNotifier);
 
-            boardPieceViewEventNotifier.OnStartMovement(_movePieceReason, OnStartMovementComplete);
+            pieceViewMoveEventNotifier.OnMovementStarted(_movePieceReason, OnMovementStartedComplete);
 
             return;
 
-            void OnStartMovementComplete()
+            void OnMovementStartedComplete()
             {
                 MovePiece(_rowOffset, _columnOffset);
 
@@ -71,7 +71,7 @@ namespace Game.Gameplay.View.Actions.Actions
             {
                 NotifyHit();
 
-                boardPieceViewEventNotifier.OnEndMovement(_movePieceReason, onComplete);
+                pieceViewMoveEventNotifier.OnMovementEnded(_movePieceReason, onComplete);
             }
         }
 
@@ -147,11 +147,11 @@ namespace Game.Gameplay.View.Actions.Actions
 
                     GameObject pieceInstance = _boardView.GetPieceInstance(pieceId);
 
-                    IBoardPieceViewEventNotifier boardPieceViewEventNotifier = pieceInstance.GetComponent<IBoardPieceViewEventNotifier>();
+                    IPieceViewHitEventNotifier pieceViewHitEventNotifier = pieceInstance.GetComponent<IPieceViewHitEventNotifier>();
 
-                    InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
+                    InvalidOperationException.ThrowIfNull(pieceViewHitEventNotifier);
 
-                    boardPieceViewEventNotifier.OnHit(_hitPieceReason, direction);
+                    pieceViewHitEventNotifier.OnHit(_hitPieceReason, direction);
                 }
             }
         }

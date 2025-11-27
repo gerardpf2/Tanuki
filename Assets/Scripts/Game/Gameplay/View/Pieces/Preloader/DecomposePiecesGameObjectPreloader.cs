@@ -41,7 +41,7 @@ namespace Game.Gameplay.View.Pieces.Preloader
 
                 PieceType decomposeType = piece.DecomposeType.Value;
 
-                GameObject prefab = pieceViewDefinitionGetter.Get(decomposeType).Prefab;
+                GameObject prefab = pieceViewDefinitionGetter.GetBoardPiece(decomposeType).Prefab;
 
                 yield return new PreloadRequest(prefab, amount);
             }

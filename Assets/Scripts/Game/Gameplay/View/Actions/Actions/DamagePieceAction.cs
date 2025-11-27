@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Board;
-using Game.Gameplay.View.Pieces.Pieces;
+using Game.Gameplay.View.Pieces.EventNotifiers;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -40,11 +40,11 @@ namespace Game.Gameplay.View.Actions.Actions
 
             GameObject pieceInstance = _boardView.GetPieceInstance(_pieceId);
 
-            IBoardPieceViewEventNotifier boardPieceViewEventNotifier = pieceInstance.GetComponent<IBoardPieceViewEventNotifier>();
+            IPieceViewDamageEventNotifier pieceViewDamageEventNotifier = pieceInstance.GetComponent<IPieceViewDamageEventNotifier>();
 
-            InvalidOperationException.ThrowIfNull(boardPieceViewEventNotifier);
+            InvalidOperationException.ThrowIfNull(pieceViewDamageEventNotifier);
 
-            boardPieceViewEventNotifier.OnDamaged(_damagePieceReason, onComplete);
+            pieceViewDamageEventNotifier.OnDamaged(_damagePieceReason, onComplete);
         }
     }
 }

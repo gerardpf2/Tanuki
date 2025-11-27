@@ -173,7 +173,7 @@ namespace Game.Gameplay.Pieces.Pieces
             AddStateEntry(RotationKey, Rotation);
         }
 
-        protected void AddStateEntry<T>([NotNull] string key, [NotNull] T value, T defaultValue = default) where T : IEquatable<T>
+        protected void AddStateEntry<TEquatable>([NotNull] string key, [NotNull] TEquatable value, TEquatable defaultValue = default) where TEquatable : IEquatable<TEquatable>
         {
             ArgumentNullException.ThrowIfNull(key);
             ArgumentNullException.ThrowIfNull(value);

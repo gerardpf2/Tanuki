@@ -43,7 +43,7 @@ namespace Game.Gameplay.View.Pieces.Preloader
             {
                 const int amount = 1;
 
-                GameObject prefab = pieceViewDefinitionGetter.GetGhost(pieceType).Prefab;
+                GameObject prefab = pieceViewDefinitionGetter.GetPlayerPieceGhost(pieceType).Prefab;
 
                 return new PreloadRequest(prefab, amount);
             }
