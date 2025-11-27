@@ -39,34 +39,46 @@ namespace Game.Gameplay.View.Pieces.Composition
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
-                    new DecomposePiecesGameObjectPreloader(
+                    new DecomposeBoardPiecesGameObjectPreloader(
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>(),
                         r.Resolve<IBoard>()
                     )
                 ),
-                PiecesComposerKeys.Preloader.DecomposePieces
+                PiecesComposerKeys.Preloader.DecomposeBoardPieces
             );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
                     new PieceGameObjectPreloaderGroup(
                         r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.BoardPieces),
-                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.PieceGhosts),
-                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.DecomposePieces)
+                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.PlayerPieces),
+                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.PlayerPieceGhosts),
+                        r.Resolve<IPieceGameObjectPreloader>(PiecesComposerKeys.Preloader.DecomposeBoardPieces)
                     )
                 )
             );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
-                    new PieceGhostsGameObjectPreloader(
+                    new PlayerPieceGhostsGameObjectPreloader(
                         r.Resolve<IPieceViewDefinitionGetter>(),
                         r.Resolve<IGameObjectPool>(),
                         r.Resolve<IBag>()
                     )
                 ),
-                PiecesComposerKeys.Preloader.PieceGhosts
+                PiecesComposerKeys.Preloader.PlayerPieceGhosts
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPieceGameObjectPreloader>(r =>
+                    new PlayerPiecesGameObjectPreloader(
+                        r.Resolve<IPieceViewDefinitionGetter>(),
+                        r.Resolve<IGameObjectPool>(),
+                        r.Resolve<IBag>()
+                    )
+                ),
+                PiecesComposerKeys.Preloader.PlayerPieces
             );
 
             ruleAdder.Add(ruleFactory.GetInstance(_pieceViewDefinitionGetter));

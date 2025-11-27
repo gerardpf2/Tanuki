@@ -9,11 +9,11 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Pieces.Preloader
 {
-    public class DecomposePiecesGameObjectPreloader : BasePieceGameObjectPreloader
+    public class DecomposeBoardPiecesGameObjectPreloader : BasePieceGameObjectPreloader
     {
         [NotNull] private readonly IBoard _board;
 
-        public DecomposePiecesGameObjectPreloader(
+        public DecomposeBoardPiecesGameObjectPreloader(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool,
             [NotNull] IBoard board) : base(pieceViewDefinitionGetter, gameObjectPool)

@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace Game.Gameplay.View.Pieces.Preloader
 {
-    public class PieceGhostsGameObjectPreloader : BasePieceGameObjectPreloader
+    public abstract class BasePlayerPiecesGameObjectPreloader : BasePieceGameObjectPreloader
     {
         [NotNull] private readonly IBag _bag;
 
-        public PieceGhostsGameObjectPreloader(
+        protected BasePlayerPiecesGameObjectPreloader(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,
             [NotNull] IGameObjectPool gameObjectPool,
             [NotNull] IBag bag) : base(pieceViewDefinitionGetter, gameObjectPool)
@@ -23,10 +23,8 @@ namespace Game.Gameplay.View.Pieces.Preloader
         }
 
         protected override IEnumerable<PreloadRequest> GetPreloadRequests(
-            [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter)
+            IPieceViewDefinitionGetter pieceViewDefinitionGetter)
         {
-            ArgumentNullException.ThrowIfNull(pieceViewDefinitionGetter);
-
             foreach (BagPieceEntry bagPieceEntry in _bag.BagPieceEntries)
             {
                 yield return GetPreloadRequest(bagPieceEntry.PieceType);
@@ -43,10 +41,17 @@ namespace Game.Gameplay.View.Pieces.Preloader
             {
                 const int amount = 1;
 
-                GameObject prefab = pieceViewDefinitionGetter.GetPlayerPieceGhost(pieceType).Prefab;
+                IPieceViewDefinition pieceViewDefinition = GetPieceViewDefinition(pieceViewDefinitionGetter, pieceType);
+                GameObject prefab = pieceViewDefinition.Prefab;
 
                 return new PreloadRequest(prefab, amount);
             }
         }
+
+        [NotNull]
+        protected abstract IPieceViewDefinition GetPieceViewDefinition(
+            IPieceViewDefinitionGetter pieceViewDefinitionGetter,
+            PieceType pieceType
+        );
     }
 }
