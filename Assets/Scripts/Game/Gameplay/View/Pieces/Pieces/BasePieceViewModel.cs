@@ -77,7 +77,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
             SyncRotation();
         }
 
-        protected void PrepareAnimation(string triggerName, Action onComplete)
+        protected void PrepareMainAnimation(string triggerName, Action onComplete)
         {
             // TODO: Remove animator check when each piece has proper animator and animations
 
@@ -93,6 +93,27 @@ namespace Game.Gameplay.View.Pieces.Pieces
             InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
 
             _animationOnComplete = onComplete;
+            _animationTrigger.Trigger(triggerName);
+        }
+
+        protected void RaiseSecondaryAnimationTrigger(string triggerName)
+        {
+            if (_animationOnComplete is not null)
+            {
+                // Main animation in progress
+
+                return;
+            }
+
+            // TODO: Remove animator check when each piece has proper animator and animations
+
+            Animator animator = GetComponentInChildren<Animator>();
+
+            if (!animator || !animator.runtimeAnimatorController)
+            {
+                return;
+            }
+
             _animationTrigger.Trigger(triggerName);
         }
 
