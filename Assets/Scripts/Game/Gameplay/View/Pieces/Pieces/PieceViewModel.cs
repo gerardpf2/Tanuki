@@ -72,9 +72,13 @@ namespace Game.Gameplay.View.Pieces.Pieces
              * animations for each animation trigger and another can use the exact same animation for all them. In this
              * last case it is not clear which animation name should be set in the animator state
              *
+             * This should only be called for main animations
+             *
              */
 
-            _animationOnComplete?.Invoke();
+            InvalidOperationException.ThrowIfNull(_animationOnComplete);
+
+            _animationOnComplete();
             _animationOnComplete = null;
         }
 
@@ -101,7 +105,51 @@ namespace Game.Gameplay.View.Pieces.Pieces
             _animationTrigger.Trigger(triggerName);
         }
 
-        protected void RaiseSecondaryAnimationTrigger(params string[] triggerNames)
+        protected void PrepareMainAnimation(Action onComplete, params string[] triggerNames)
+        {
+            InvalidOperationException.ThrowIfNull(_animatorTriggerNameContainer);
+            InvalidOperationException.ThrowIfNotNull(_animationOnComplete);
+
+            foreach (string triggerName in triggerNames)
+            {
+                if (!_animatorTriggerNameContainer.Contains(triggerName))
+                {
+                    // TODO: Exception
+
+                    onComplete?.Invoke();
+
+                    return;
+                }
+            }
+
+            _animationOnComplete = onComplete;
+
+            foreach (string triggerName in triggerNames)
+            {
+                _animationTrigger.Trigger(triggerName);
+            }
+        }
+
+        protected void PrepareSecondaryAnimation(string triggerName)
+        {
+            InvalidOperationException.ThrowIfNull(_animatorTriggerNameContainer);
+
+            if (_animationOnComplete is not null)
+            {
+                // Main animation in progress
+
+                return;
+            }
+
+            if (!_animatorTriggerNameContainer.Contains(triggerName))
+            {
+                return;
+            }
+
+            _animationTrigger.Trigger(triggerName);
+        }
+
+        protected void PrepareSecondaryAnimation(params string[] triggerNames)
         {
             InvalidOperationException.ThrowIfNull(_animatorTriggerNameContainer);
 

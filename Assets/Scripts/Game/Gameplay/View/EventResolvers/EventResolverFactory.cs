@@ -48,6 +48,11 @@ namespace Game.Gameplay.View.EventResolvers
             return new DamagePieceEventResolver(_actionFactory);
         }
 
+        public IEventResolver<DamagePiecesByLineClearEvent> GetDamagePiecesByLineClearEventResolver()
+        {
+            return new DamagePiecesByLineClearEventResolver(_board, _actionFactory);
+        }
+
         public IEventResolver<DestroyPieceEvent> GetDestroyPieceEventResolver()
         {
             return new DestroyPieceEventResolver(_actionFactory);

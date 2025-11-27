@@ -58,7 +58,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: _triggerNames.Array.size
-      value: 12
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: '_triggerNames.Array.data[0]'
@@ -107,6 +107,22 @@ PrefabInstance:
     - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: '_triggerNames.Array.data[11]'
       value: Hit_Gravity_Down
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
+      propertyPath: '_triggerNames.Array.data[12]'
+      value: Damage
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
+      propertyPath: '_triggerNames.Array.data[13]'
+      value: Damage_LineClear
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
+      propertyPath: '_triggerNames.Array.data[14]'
+      value: Damage_LineClear_Right
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
+      propertyPath: '_triggerNames.Array.data[15]'
+      value: Damage_LineClear_Left
       objectReference: {fileID: 0}
     - target: {fileID: 7839989407518439827, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: m_Size.y

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
@@ -11,10 +12,12 @@ namespace Game.Gameplay.Events
     public class EventFactory : IEventFactory
     {
         public IEvent GetInstantiatePieceEvent(
-            IPiece piece,
+            [NotNull] IPiece piece,
             Coordinate sourceCoordinate,
             InstantiatePieceReason instantiatePieceReason)
         {
+            ArgumentNullException.ThrowIfNull(piece);
+
             IPiece pieceClone = piece.Clone(); // Clone needed so model and view boards have different piece refs
 
             return new InstantiatePieceEvent(pieceClone, sourceCoordinate, instantiatePieceReason);
@@ -26,21 +29,42 @@ namespace Game.Gameplay.Events
         }
 
         public IEvent GetLockPlayerPieceEvent(
-            IPiece piece,
+            [NotNull] IPiece piece,
             Coordinate sourceCoordinate,
             Coordinate lockSourceCoordinate,
             int movesAmount)
         {
+            ArgumentNullException.ThrowIfNull(piece);
+
             IPiece pieceClone = piece.Clone(); // Clone needed so model and view boards have different piece refs
 
             return new LockPlayerPieceEvent(pieceClone, sourceCoordinate, lockSourceCoordinate, movesAmount);
         }
 
-        public IEvent GetDamagePieceEvent([NotNull] IPiece piece, DamagePieceReason damagePieceReason)
+        public IEvent GetDamagePieceEvent(
+            [NotNull] IPiece piece,
+            DamagePieceReason damagePieceReason,
+            Direction direction)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason);
+            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason, direction);
+        }
+
+        public IEvent GetDamagePiecesByLineClearEvent([NotNull, ItemNotNull] IEnumerable<IPiece> pieces)
+        {
+            ArgumentNullException.ThrowIfNull(pieces);
+
+            DamagePiecesByLineClearEvent damagePiecesByLineClearEvent = new();
+
+            foreach (IPiece piece in pieces)
+            {
+                ArgumentNullException.ThrowIfNull(piece);
+
+                damagePiecesByLineClearEvent.Add(piece);
+            }
+
+            return damagePiecesByLineClearEvent;
         }
 
         public IEvent GetDestroyPieceEvent(

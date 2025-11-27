@@ -8,8 +8,30 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
         private const string Start = nameof(Start);
         private const string End = nameof(End);
 
+        private const string Damage = nameof(Damage);
         private const string Move = nameof(Move);
         private const string Hit = nameof(Hit);
+
+        #region Damage
+
+        public static string GetDamageBase()
+        {
+            return $"{Damage}";
+        }
+
+        public static string Get(DamagePieceReason damagePieceReason)
+        {
+            return $"{GetDamageBase()}_{damagePieceReason}";
+        }
+
+        public static string Get(DamagePieceReason damagePieceReason, Direction direction)
+        {
+            return $"{Get(damagePieceReason)}_{direction}";
+        }
+
+        #endregion
+
+        #region Move
 
         public static string GetStart(MovePieceReason movePieceReason)
         {
@@ -20,6 +42,10 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
         {
             return $"{Move}_{movePieceReason}_{End}";
         }
+
+        #endregion
+
+        #region Hit
 
         public static string GetHitBase()
         {
@@ -35,5 +61,7 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
         {
             return $"{Get(hitPieceReason)}_{direction}";
         }
+
+        #endregion
     }
 }

@@ -4,7 +4,6 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
-using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -37,29 +36,36 @@ namespace Game.Gameplay.Phases.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            bool resolved = false;
+            Queue<IPiece> damagedPieces = new();
 
             int bottomRow = _camera.BottomRow;
             int topRow = Math.Min(_board.HighestNonEmptyRow, _camera.TopRow);
 
             for (int row = bottomRow; row <= topRow; ++row)
             {
-                resolved = TryDamageRow(row) || resolved;
+                TryDamageRow(row, damagedPieces);
             }
 
-            return resolved ? ResolveResult.Updated : ResolveResult.NotUpdated;
+            if (damagedPieces.Count <= 0)
+            {
+                return ResolveResult.NotUpdated;
+            }
+
+            _eventEnqueuer.Enqueue(_eventFactory.GetDamagePiecesByLineClearEvent(damagedPieces));
+
+            return ResolveResult.Updated;
         }
 
-        private bool TryDamageRow(int row)
+        private void TryDamageRow(int row, [NotNull] Queue<IPiece> damagedPieces)
         {
+            ArgumentNullException.ThrowIfNull(damagedPieces);
+
             IReadOnlyCollection<KeyValuePair<int, int>> pieceIdsInRow = new List<KeyValuePair<int, int>>(_board.GetPieceIdsInRow(row));
 
             if (pieceIdsInRow.Count < _board.Columns)
             {
-                return false;
+                return;
             }
-
-            bool anyDamaged = false;
 
             foreach ((int pieceId, int column) in pieceIdsInRow)
             {
@@ -69,12 +75,8 @@ namespace Game.Gameplay.Phases.Phases
 
                 piece.Damage(rowOffset, columnOffset);
 
-                _eventEnqueuer.Enqueue(_eventFactory.GetDamagePieceEvent(piece, DamagePieceReason.LineClear));
-
-                anyDamaged = true;
+                damagedPieces.Enqueue(piece);
             }
-
-            return anyDamaged;
         }
     }
 }
