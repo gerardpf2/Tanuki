@@ -35,6 +35,9 @@ namespace Game.Gameplay.View.EventResolvers
                 case DamagePieceEvent damagePieceEvent:
                     _eventResolverFactory.GetDamagePieceEventResolver().Resolve(damagePieceEvent, onComplete);
                     break;
+                case DamagePiecesByLineClearEvent damagePiecesByLineClearEvent:
+                    _eventResolverFactory.GetDamagePiecesByLineClearEventResolver().Resolve(damagePiecesByLineClearEvent, onComplete);
+                    break;
                 case DestroyPieceEvent destroyPieceEvent:
                     _eventResolverFactory.GetDestroyPieceEventResolver().Resolve(destroyPieceEvent, onComplete);
                     break;

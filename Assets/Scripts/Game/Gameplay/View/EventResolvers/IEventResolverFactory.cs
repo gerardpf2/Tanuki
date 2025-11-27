@@ -19,6 +19,9 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver();
 
         [NotNull]
+        IEventResolver<DamagePiecesByLineClearEvent> GetDamagePiecesByLineClearEventResolver();
+
+        [NotNull]
         IEventResolver<DestroyPieceEvent> GetDestroyPieceEventResolver();
 
         [NotNull]

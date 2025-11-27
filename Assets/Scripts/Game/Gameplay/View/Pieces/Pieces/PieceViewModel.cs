@@ -72,9 +72,13 @@ namespace Game.Gameplay.View.Pieces.Pieces
              * animations for each animation trigger and another can use the exact same animation for all them. In this
              * last case it is not clear which animation name should be set in the animator state
              *
+             * This should only be called for main animations
+             *
              */
 
-            _animationOnComplete?.Invoke();
+            InvalidOperationException.ThrowIfNull(_animationOnComplete);
+
+            _animationOnComplete();
             _animationOnComplete = null;
         }
 
