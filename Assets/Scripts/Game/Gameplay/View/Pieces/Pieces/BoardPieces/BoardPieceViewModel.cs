@@ -5,7 +5,9 @@ using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Animator.Utils;
 using Game.Gameplay.View.Pieces.EventNotifiers;
+using Infrastructure.ModelViewViewModel;
 using Infrastructure.System;
+using JetBrains.Annotations;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.Pieces.Pieces.BoardPieces
@@ -14,16 +16,34 @@ namespace Game.Gameplay.View.Pieces.Pieces.BoardPieces
 
     public abstract class BoardPieceViewModel<TPiece> : PieceViewModel<TPiece>, IPieceViewDamageEventNotifier, IPieceViewMoveEventNotifier, IPieceViewHitEventNotifier where TPiece : IPiece
     {
+        [NotNull] private readonly IBoundProperty<bool> _alive = new BoundProperty<bool>("Alive");
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            Add(_alive);
+        }
+
         public void OnDamaged(DamagePieceReason damagePieceReason, Direction direction, Action onComplete)
         {
             direction = GetRotated(direction);
 
             PrepareMainAnimation(
-                onComplete,
+                OnComplete,
                 TriggerNameUtils.Get(damagePieceReason, direction),
                 TriggerNameUtils.Get(damagePieceReason),
                 TriggerNameUtils.GetDamageBase()
             );
+
+            return;
+
+            void OnComplete()
+            {
+                SyncAlive();
+
+                onComplete?.Invoke();
+            }
         }
 
         public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
@@ -51,11 +71,25 @@ namespace Game.Gameplay.View.Pieces.Pieces.BoardPieces
             );
         }
 
+        protected override void SyncState()
+        {
+            base.SyncState();
+
+            SyncAlive();
+        }
+
         private Direction GetRotated(Direction direction)
         {
             InvalidOperationException.ThrowIfNull(Piece);
 
             return direction.GetRotated(Piece.Rotation);
+        }
+
+        private void SyncAlive()
+        {
+            InvalidOperationException.ThrowIfNull(Piece);
+
+            _alive.Value = Piece.Alive;
         }
     }
 }
