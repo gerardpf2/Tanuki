@@ -41,6 +41,8 @@ namespace Game.Gameplay.View.Player
         public event Action OnInstantiated;
         public event Action OnDestroyed;
 
+        public IPiece Piece => _pieceData?.Piece;
+
         public Coordinate Coordinate
         {
             get
@@ -64,17 +66,6 @@ namespace Game.Gameplay.View.Player
         public GameObject Instance => _pieceData?.PooledInstance.Instance;
 
         protected abstract string ParentName { get; }
-
-        [NotNull]
-        protected IPiece Piece
-        {
-            get
-            {
-                InvalidOperationException.ThrowIfNull(_pieceData);
-
-                return _pieceData.Piece;
-            }
-        }
 
         protected BasePlayerPieceView(
             [NotNull] IPieceViewDefinitionGetter pieceViewDefinitionGetter,

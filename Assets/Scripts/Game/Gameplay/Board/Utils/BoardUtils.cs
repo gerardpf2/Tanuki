@@ -135,6 +135,63 @@ namespace Game.Gameplay.Board.Utils
             return fall;
         }
 
+        [NotNull]
+        public static IEnumerable<int> GetDistinctPieceIdsInContactDown(
+            [NotNull] this IBoard board,
+            [NotNull] IPiece piece,
+            Coordinate sourceCoordinate)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            return board.GetDistinctPieceIdsInContact(piece, sourceCoordinate, OtherCoordinateGetter);
+
+            Coordinate? OtherCoordinateGetter(Coordinate coordinate)
+            {
+                const int minRow = 0;
+
+                return coordinate.Row > minRow ? coordinate.Down(1) : null;
+            }
+        }
+
+        [NotNull]
+        public static IEnumerable<int> GetDistinctPieceIdsInContactLeft(
+            [NotNull] this IBoard board,
+            [NotNull] IPiece piece,
+            Coordinate sourceCoordinate)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            return board.GetDistinctPieceIdsInContact(piece, sourceCoordinate, OtherCoordinateGetter);
+
+            Coordinate? OtherCoordinateGetter(Coordinate coordinate)
+            {
+                const int minColumn = 0;
+
+                return coordinate.Column > minColumn ? coordinate.Left(1) : null;
+            }
+        }
+
+        [NotNull]
+        public static IEnumerable<int> GetDistinctPieceIdsInContactRight(
+            [NotNull] this IBoard board,
+            [NotNull] IPiece piece,
+            Coordinate sourceCoordinate)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+
+            return board.GetDistinctPieceIdsInContact(piece, sourceCoordinate, OtherCoordinateGetter);
+
+            Coordinate? OtherCoordinateGetter(Coordinate coordinate)
+            {
+                int maxColumn = board.Columns - 1;
+
+                return coordinate.Column < maxColumn ? coordinate.Right(1) : null;
+            }
+        }
+
         private static int ComputePieceFallImpl([NotNull] this IBoard board, int ignorePieceId, Coordinate coordinate)
         {
             ArgumentNullException.ThrowIfNull(board);
@@ -157,6 +214,48 @@ namespace Game.Gameplay.Board.Utils
             }
 
             return fall;
+        }
+
+        [NotNull]
+        private static IEnumerable<int> GetDistinctPieceIdsInContact(
+            [NotNull] this IBoard board,
+            [NotNull] IPiece piece,
+            Coordinate sourceCoordinate,
+            [NotNull] Func<Coordinate, Coordinate?> otherCoordinateGetter)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+            ArgumentNullException.ThrowIfNull(piece);
+            ArgumentNullException.ThrowIfNull(otherCoordinateGetter);
+
+            ICollection<int> visitedPieceIds = new HashSet<int>();
+
+            foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
+            {
+                Coordinate? otherCoordinate = otherCoordinateGetter(coordinate);
+
+                if (!otherCoordinate.HasValue)
+                {
+                    continue;
+                }
+
+                int? otherPieceId = board.GetPieceId(otherCoordinate.Value);
+
+                if (!otherPieceId.HasValue)
+                {
+                    continue;
+                }
+
+                int otherPieceIdValue = otherPieceId.Value;
+
+                if (otherPieceIdValue == piece.Id || visitedPieceIds.Contains(otherPieceIdValue))
+                {
+                    continue;
+                }
+
+                visitedPieceIds.Add(otherPieceIdValue);
+
+                yield return otherPieceIdValue;
+            }
         }
     }
 }

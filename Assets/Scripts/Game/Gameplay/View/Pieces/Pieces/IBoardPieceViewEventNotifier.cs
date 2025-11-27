@@ -1,4 +1,5 @@
 using System;
+using Game.Common;
 using Game.Gameplay.Events.Reasons;
 
 namespace Game.Gameplay.View.Pieces.Pieces
@@ -10,5 +11,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
         void OnStartMovement(MovePieceReason movePieceReason, Action onComplete);
 
         void OnEndMovement(MovePieceReason movePieceReason, Action onComplete);
+
+        void OnHit(HitPieceReason hitPieceReason, Direction direction);
     }
 }

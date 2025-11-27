@@ -22,7 +22,5 @@ namespace Game.Gameplay.View.Board
         void InstantiatePiece(IPiece piece, Coordinate sourceCoordinate);
 
         void DestroyPiece(int pieceId);
-
-        void MovePiece(int pieceId, int rowOffset, int columnOffset);
     }
 }

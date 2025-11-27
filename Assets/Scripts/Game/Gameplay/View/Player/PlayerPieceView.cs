@@ -41,8 +41,12 @@ namespace Game.Gameplay.View.Player
 
         public bool CanMove(int columnOffset)
         {
+            IPiece piece = Piece;
+
+            InvalidOperationException.ThrowIfNull(piece);
+
             int column = Coordinate.Column + columnOffset;
-            int clampedColumn = GetClampedColumn(Piece, column);
+            int clampedColumn = GetClampedColumn(piece, column);
 
             return column == clampedColumn;
         }
@@ -63,7 +67,11 @@ namespace Game.Gameplay.View.Player
 
         public bool CanRotate()
         {
-            return Piece.CanRotate;
+            IPiece piece = Piece;
+
+            InvalidOperationException.ThrowIfNull(piece);
+
+            return piece.CanRotate;
         }
 
         public void Rotate()
@@ -84,6 +92,8 @@ namespace Game.Gameplay.View.Player
             void RotateAndUpdateCoordinate()
             {
                 IPiece piece = Piece;
+
+                InvalidOperationException.ThrowIfNull(piece);
 
                 int height = piece.Height;
                 int width = piece.Width;

@@ -1,5 +1,7 @@
+using Game.Gameplay.Board;
 using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Board.Composition;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Moves;
@@ -23,6 +25,7 @@ namespace Game.Gameplay.View.Actions.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IActionFactory>(r =>
                     new ActionFactory(
+                        r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<IMovementHelper>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),

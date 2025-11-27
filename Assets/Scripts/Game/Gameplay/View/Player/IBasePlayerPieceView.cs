@@ -1,5 +1,6 @@
 using System;
 using Game.Gameplay.Board;
+using Game.Gameplay.Pieces.Pieces;
 using UnityEngine;
 
 namespace Game.Gameplay.View.Player
@@ -9,6 +10,8 @@ namespace Game.Gameplay.View.Player
         event Action OnInstantiated;
         event Action OnDestroyed;
 
+        IPiece Piece { get; }
+
         Coordinate Coordinate { get; }
 
         GameObject Instance { get; }
@@ -16,7 +19,7 @@ namespace Game.Gameplay.View.Player
         void Initialize();
 
         void Uninitialize();
-        
+
         void Destroy();
     }
 }
