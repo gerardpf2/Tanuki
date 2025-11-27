@@ -146,11 +146,9 @@ namespace Game.Gameplay.Board.Utils
 
             return board.GetDistinctPieceIdsInContact(piece, sourceCoordinate, OtherCoordinateGetter);
 
-            Coordinate? OtherCoordinateGetter(Coordinate coordinate)
+            Coordinate OtherCoordinateGetter(Coordinate coordinate)
             {
-                const int minRow = 0;
-
-                return coordinate.Row > minRow ? coordinate.Down(1) : null;
+                return coordinate.Down();
             }
         }
 
@@ -165,11 +163,9 @@ namespace Game.Gameplay.Board.Utils
 
             return board.GetDistinctPieceIdsInContact(piece, sourceCoordinate, OtherCoordinateGetter);
 
-            Coordinate? OtherCoordinateGetter(Coordinate coordinate)
+            Coordinate OtherCoordinateGetter(Coordinate coordinate)
             {
-                const int minColumn = 0;
-
-                return coordinate.Column > minColumn ? coordinate.Left(1) : null;
+                return coordinate.Left();
             }
         }
 
@@ -184,11 +180,9 @@ namespace Game.Gameplay.Board.Utils
 
             return board.GetDistinctPieceIdsInContact(piece, sourceCoordinate, OtherCoordinateGetter);
 
-            Coordinate? OtherCoordinateGetter(Coordinate coordinate)
+            Coordinate OtherCoordinateGetter(Coordinate coordinate)
             {
-                int maxColumn = board.Columns - 1;
-
-                return coordinate.Column < maxColumn ? coordinate.Right(1) : null;
+                return coordinate.Right();
             }
         }
 
@@ -221,7 +215,7 @@ namespace Game.Gameplay.Board.Utils
             [NotNull] this IBoard board,
             [NotNull] IPiece piece,
             Coordinate sourceCoordinate,
-            [NotNull] Func<Coordinate, Coordinate?> otherCoordinateGetter)
+            [NotNull] Func<Coordinate, Coordinate> otherCoordinateGetter)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(piece);
@@ -231,14 +225,14 @@ namespace Game.Gameplay.Board.Utils
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                Coordinate? otherCoordinate = otherCoordinateGetter(coordinate);
+                Coordinate otherCoordinate = otherCoordinateGetter(coordinate);
 
-                if (!otherCoordinate.HasValue)
+                if (!board.IsInside(otherCoordinate))
                 {
                     continue;
                 }
 
-                int? otherPieceId = board.GetPieceId(otherCoordinate.Value);
+                int? otherPieceId = board.GetPieceId(otherCoordinate);
 
                 if (!otherPieceId.HasValue)
                 {
