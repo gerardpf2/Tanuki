@@ -53,11 +53,9 @@ namespace Game.Gameplay.View.Pieces.Pieces.BoardPieces
 
         private Direction GetRotated(Direction direction)
         {
-            IPiece piece = Piece;
+            InvalidOperationException.ThrowIfNull(Piece);
 
-            InvalidOperationException.ThrowIfNull(piece);
-
-            return direction.GetRotated(piece.Rotation);
+            return direction.GetRotated(Piece.Rotation);
         }
     }
 }

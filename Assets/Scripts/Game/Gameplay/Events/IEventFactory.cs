@@ -32,6 +32,9 @@ namespace Game.Gameplay.Events
         IEvent GetDamagePieceEvent(IPiece piece, DamagePieceReason damagePieceReason, Direction direction);
 
         [NotNull]
+        IEvent GetDamagePiecesByLineClearEvent(IEnumerable<IPiece> pieces);
+
+        [NotNull]
         IEvent GetDestroyPieceEvent(
             int pieceId,
             DestroyPieceReason destroyPieceReason,
