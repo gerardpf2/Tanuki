@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using Game.Common;
 using Game.Common.Pieces;
 using Game.Gameplay.Board;
+using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Actions.Actions;
 using Game.Gameplay.View.Animation.Movement;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
+using Game.Gameplay.View.EventResolvers.EventResolvers;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Player;
@@ -173,6 +175,13 @@ namespace Game.Gameplay.View.Actions
             }
 
             return parallelActionGroup;
+        }
+
+        public IAction GetEventResolverAction<TEvent>([NotNull] IEventResolver<TEvent> eventResolver, TEvent evt) where TEvent : IEvent
+        {
+            ArgumentNullException.ThrowIfNull(eventResolver);
+
+            return new EventResolverAction<TEvent>(eventResolver, evt);
         }
     }
 }
