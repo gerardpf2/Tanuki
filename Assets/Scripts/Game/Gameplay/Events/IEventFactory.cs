@@ -11,7 +11,7 @@ namespace Game.Gameplay.Events
     public interface IEventFactory
     {
         [NotNull]
-        IEvent GetInstantiatePieceEvent(
+        InstantiatePieceEvent GetInstantiatePieceEvent(
             IPiece piece,
             Coordinate sourceCoordinate,
             InstantiatePieceReason instantiatePieceReason

@@ -40,7 +40,7 @@ namespace Game.Gameplay.View.EventResolvers
 
         public IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver()
         {
-            return new LockPlayerPieceEventResolver(_actionFactory);
+            return new LockPlayerPieceEventResolver(_actionFactory, this);
         }
 
         public IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver()

@@ -11,7 +11,7 @@ namespace Game.Gameplay.Events
 {
     public class EventFactory : IEventFactory
     {
-        public IEvent GetInstantiatePieceEvent(
+        public InstantiatePieceEvent GetInstantiatePieceEvent(
             [NotNull] IPiece piece,
             Coordinate sourceCoordinate,
             InstantiatePieceReason instantiatePieceReason)
@@ -36,9 +36,14 @@ namespace Game.Gameplay.Events
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            IPiece pieceClone = piece.Clone(); // Clone needed so model and view boards have different piece refs
+            InstantiatePieceEvent instantiatePieceEvent =
+                GetInstantiatePieceEvent(
+                    piece,
+                    lockSourceCoordinate,
+                    InstantiatePieceReason.Lock
+                );
 
-            return new LockPlayerPieceEvent(pieceClone, sourceCoordinate, lockSourceCoordinate, movesAmount);
+            return new LockPlayerPieceEvent(instantiatePieceEvent, sourceCoordinate, movesAmount);
         }
 
         public IEvent GetDamagePieceEvent(
