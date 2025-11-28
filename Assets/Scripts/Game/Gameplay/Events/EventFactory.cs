@@ -44,11 +44,12 @@ namespace Game.Gameplay.Events
         public IEvent GetDamagePieceEvent(
             [NotNull] IPiece piece,
             DamagePieceReason damagePieceReason,
-            Direction direction)
+            Direction direction,
+            DestroyPieceData destroyPieceData)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason, direction);
+            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason, direction, destroyPieceData);
         }
 
         public IEvent GetDamagePiecesByLineClearEvent([NotNull, ItemNotNull] IEnumerable<IPiece> pieces)
