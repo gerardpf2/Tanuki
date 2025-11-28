@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3377694515360191957
+--- !u!1 &3464150715258583590
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7138705206007176041}
-  - component: {fileID: 2963046394024511732}
+  - component: {fileID: 7327165595202244111}
+  - component: {fileID: 1824446419321295708}
   m_Layer: 0
   m_Name: Eye
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7138705206007176041
+--- !u!4 &7327165595202244111
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3377694515360191957}
+  m_GameObject: {fileID: 3464150715258583590}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
@@ -32,13 +32,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7305174631940014241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2963046394024511732
+--- !u!212 &1824446419321295708
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3377694515360191957}
+  m_GameObject: {fileID: 3464150715258583590}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -95,14 +95,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1167808621779601339, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
-      propertyPath: _viewModel
-      value: 
-      objectReference: {fileID: 4952718477877311161}
     - target: {fileID: 1753723133082507703, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: _viewModel
       value: 
-      objectReference: {fileID: 4952718477877311161}
+      objectReference: {fileID: 6411656335552999662}
     - target: {fileID: 2183247197674471762, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: m_Name
       value: Test
@@ -150,7 +146,7 @@ PrefabInstance:
     - target: {fileID: 7780720569986895343, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: _viewModel
       value: 
-      objectReference: {fileID: 4952718477877311161}
+      objectReference: {fileID: 6411656335552999662}
     - target: {fileID: 7839989407518439827, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -162,25 +158,25 @@ PrefabInstance:
     - target: {fileID: 8178604543972450467, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: _viewModel
       value: 
-      objectReference: {fileID: 4952718477877311161}
+      objectReference: {fileID: 6411656335552999662}
     m_RemovedComponents:
-    - {fileID: 9145772954171743587, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
+    - {fileID: 4369209045909600960, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5523709707811435951, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7138705206007176041}
+      addedObject: {fileID: 7327165595202244111}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2183247197674471762, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4952718477877311161}
+      addedObject: {fileID: 6411656335552999662}
   m_SourcePrefab: {fileID: 100100000, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
 --- !u!1 &4000721403228845148 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2183247197674471762, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
   m_PrefabInstance: {fileID: 3010965490538444046}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4952718477877311161
+--- !u!114 &6411656335552999662
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

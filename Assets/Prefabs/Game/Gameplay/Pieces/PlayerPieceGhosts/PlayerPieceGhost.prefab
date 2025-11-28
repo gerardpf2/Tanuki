@@ -56,57 +56,12 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -2066478087
       objectReference: {fileID: 0}
-    - target: {fileID: 3188302404754487522, guid: cee7863dfdb3a144883616753b446523, type: 3}
-      propertyPath: _viewModel
-      value: 
-      objectReference: {fileID: 2110027736416078946}
-    - target: {fileID: 3910727045903111598, guid: cee7863dfdb3a144883616753b446523, type: 3}
-      propertyPath: _viewModel
-      value: 
-      objectReference: {fileID: 2110027736416078946}
     - target: {fileID: 6451969163346834527, guid: cee7863dfdb3a144883616753b446523, type: 3}
       propertyPath: m_Name
       value: PlayerPieceGhost
       objectReference: {fileID: 0}
-    - target: {fileID: 6887118609220005050, guid: cee7863dfdb3a144883616753b446523, type: 3}
-      propertyPath: _viewModel
-      value: 
-      objectReference: {fileID: 2110027736416078946}
-    m_RemovedComponents:
-    - {fileID: 8892076526197247949, guid: cee7863dfdb3a144883616753b446523, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6451969163346834527, guid: cee7863dfdb3a144883616753b446523, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2110027736416078946}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cee7863dfdb3a144883616753b446523, type: 3}
---- !u!1 &2065888878151115815 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6451969163346834527, guid: cee7863dfdb3a144883616753b446523, type: 3}
-  m_PrefabInstance: {fileID: 4981681817643864184}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2110027736416078946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065888878151115815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a18b47a8737147669872886b1b0144d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animatorTriggerNameContainer: {fileID: 7970204925441959480}
---- !u!114 &7970204925441959480 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3150732065535047232, guid: cee7863dfdb3a144883616753b446523, type: 3}
-  m_PrefabInstance: {fileID: 4981681817643864184}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065888878151115815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b48e4d581e7241df801be81b4039abb8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
