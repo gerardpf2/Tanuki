@@ -25,42 +25,42 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData = evt.GoalData;
+            UpdateGoalData updateGoalData = evt.UpdateGoalData;
 
-            if (goalData is not null)
+            if (updateGoalData is not null)
             {
-                yield return GetGoalDataAction(goalData);
+                yield return GetUpdateGoalDataAction(updateGoalData);
             }
 
             yield return _actionFactory.GetDestroyPieceAction(evt.PieceId, evt.DestroyPieceReason);
 
-            DestroyPieceEvent.DecomposePieceData decomposeData = evt.DecomposeData;
+            DecomposePieceData decomposePieceData = evt.DecomposePieceData;
 
-            if (decomposeData is not null)
+            if (decomposePieceData is not null)
             {
-                yield return GetDecomposeDataAction(decomposeData);
+                yield return GetDecomposePieceDataAction(decomposePieceData);
             }
         }
 
         [NotNull]
-        private IAction GetGoalDataAction([NotNull] DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData)
+        private IAction GetUpdateGoalDataAction([NotNull] UpdateGoalData updateGoalData)
         {
-            ArgumentNullException.ThrowIfNull(goalData);
+            ArgumentNullException.ThrowIfNull(updateGoalData);
 
             return
                 _actionFactory.GetSetGoalCurrentAmountAction(
-                    goalData.PieceType,
-                    goalData.CurrentAmount,
-                    goalData.Coordinate
+                    updateGoalData.PieceType,
+                    updateGoalData.CurrentAmount,
+                    updateGoalData.Coordinate
                 );
         }
 
         [NotNull]
-        private IAction GetDecomposeDataAction([NotNull] DestroyPieceEvent.DecomposePieceData decomposeData)
+        private IAction GetDecomposePieceDataAction([NotNull] DecomposePieceData decomposePieceData)
         {
-            ArgumentNullException.ThrowIfNull(decomposeData);
+            ArgumentNullException.ThrowIfNull(decomposePieceData);
 
-            IEnumerable<IAction> actions = decomposeData.PiecePlacements.Select(GetInstantiatePieceAction);
+            IEnumerable<IAction> actions = decomposePieceData.PiecePlacements.Select(GetInstantiatePieceAction);
 
             return _actionFactory.GetParallelActionGroup(actions);
 

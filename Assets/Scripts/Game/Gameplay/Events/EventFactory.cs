@@ -71,10 +71,10 @@ namespace Game.Gameplay.Events
         public IEvent GetDestroyPieceEvent(
             int pieceId,
             DestroyPieceReason destroyPieceReason,
-            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData,
-            DestroyPieceEvent.DecomposePieceData decomposeData)
+            UpdateGoalData updateGoalData,
+            DecomposePieceData decomposePieceData)
         {
-            return new DestroyPieceEvent(pieceId, destroyPieceReason, goalData, decomposeData);
+            return new DestroyPieceEvent(pieceId, destroyPieceReason, updateGoalData, decomposePieceData);
         }
 
         public IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason)
