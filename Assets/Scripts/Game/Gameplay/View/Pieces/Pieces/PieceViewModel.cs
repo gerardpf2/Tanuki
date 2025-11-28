@@ -55,7 +55,11 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnDestroyed(DestroyPieceReason destroyPieceReason, Action onComplete)
         {
-            PrepareMainAnimation(TriggerNameUtils.Get(destroyPieceReason), onComplete);
+            PrepareMainAnimation(
+                onComplete,
+                TriggerNameUtils.Get(destroyPieceReason),
+                TriggerNameUtils.GetDestroyBase()
+            );
         }
 
         public void OnRotated()

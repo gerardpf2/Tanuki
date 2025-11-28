@@ -15,9 +15,14 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
 
         #region Destroy
 
+        public static string GetDestroyBase()
+        {
+            return $"{Destroy}";
+        }
+
         public static string Get(DestroyPieceReason destroyPieceReason)
         {
-            return $"{Destroy}_{destroyPieceReason}";
+            return $"{GetDestroyBase()}_{destroyPieceReason}";
         }
 
         #endregion
