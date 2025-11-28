@@ -32,12 +32,9 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         private Action _animationOnComplete;
 
-        protected virtual void Awake()
+        private void Awake()
         {
-            Add(_alive);
-            Add(_offsetPosition);
-            Add(_offsetRotation);
-            Add(_animationTrigger);
+            AddBindings();
         }
 
         public void SetData(IPiece data)
@@ -129,6 +126,14 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             _animationOnComplete();
             _animationOnComplete = null;
+        }
+
+        protected virtual void AddBindings()
+        {
+            Add(_alive);
+            Add(_offsetPosition);
+            Add(_offsetRotation);
+            Add(_animationTrigger);
         }
 
         protected virtual void SyncState()
