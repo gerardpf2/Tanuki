@@ -36,7 +36,7 @@ namespace Game.Gameplay.Phases.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            Queue<IPiece> damagedPieces = new();
+            ICollection<IPiece> damagedPieces = new HashSet<IPiece>();
 
             int bottomRow = _camera.BottomRow;
             int topRow = Math.Min(_board.HighestNonEmptyRow, _camera.TopRow);
@@ -56,7 +56,7 @@ namespace Game.Gameplay.Phases.Phases
             return ResolveResult.Updated;
         }
 
-        private void TryDamageRow(int row, [NotNull] Queue<IPiece> damagedPieces)
+        private void TryDamageRow(int row, [NotNull] ICollection<IPiece> damagedPieces)
         {
             ArgumentNullException.ThrowIfNull(damagedPieces);
 
@@ -75,7 +75,7 @@ namespace Game.Gameplay.Phases.Phases
 
                 piece.Damage(rowOffset, columnOffset);
 
-                damagedPieces.Enqueue(piece);
+                damagedPieces.Add(piece);
             }
         }
     }
