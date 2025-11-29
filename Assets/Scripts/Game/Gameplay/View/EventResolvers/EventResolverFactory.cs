@@ -45,7 +45,7 @@ namespace Game.Gameplay.View.EventResolvers
 
         public IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver()
         {
-            return new DamagePieceEventResolver(_actionFactory);
+            return new DamagePieceEventResolver(_actionFactory, this);
         }
 
         public IEventResolver<DamagePiecesByLineClearEvent> GetDamagePiecesByLineClearEventResolver()

@@ -40,7 +40,7 @@ namespace Game.Gameplay.Events
         IEvent GetDamagePiecesByLineClearEvent(IEnumerable<IPiece> pieces);
 
         [NotNull]
-        IEvent GetDestroyPieceEvent(
+        DestroyPieceEvent GetDestroyPieceEvent(
             int pieceId,
             DestroyPieceReason destroyPieceReason,
             UpdateGoalData updateGoalData,

@@ -54,7 +54,20 @@ namespace Game.Gameplay.Events
         {
             ArgumentNullException.ThrowIfNull(piece);
 
-            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason, direction, destroyPieceData);
+            DestroyPieceEvent destroyPieceEvent = null;
+
+            if (destroyPieceData is not null)
+            {
+                destroyPieceEvent =
+                    new DestroyPieceEvent(
+                        piece.Id,
+                        DestroyPieceReason.NotAlive,
+                        destroyPieceData.UpdateGoalData,
+                        destroyPieceData.DecomposePieceData
+                    );
+            }
+
+            return new DamagePieceEvent(piece.Id, piece.State, damagePieceReason, direction, destroyPieceEvent);
         }
 
         public IEvent GetDamagePiecesByLineClearEvent([NotNull, ItemNotNull] IEnumerable<IPiece> pieces)
@@ -73,7 +86,7 @@ namespace Game.Gameplay.Events
             return damagePiecesByLineClearEvent;
         }
 
-        public IEvent GetDestroyPieceEvent(
+        public DestroyPieceEvent GetDestroyPieceEvent(
             int pieceId,
             DestroyPieceReason destroyPieceReason,
             UpdateGoalData updateGoalData,
