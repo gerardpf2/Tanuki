@@ -4,20 +4,20 @@ namespace Game.Gameplay.Events.Events
 {
     public class DestroyPieceEvent : IEvent
     {
+        public readonly UpdateGoalEvent UpdateGoalEvent;
         public readonly int PieceId;
         public readonly DestroyPieceReason DestroyPieceReason;
-        public readonly UpdateGoalData UpdateGoalData;
         public readonly DecomposePieceData DecomposePieceData;
 
         public DestroyPieceEvent(
+            UpdateGoalEvent updateGoalEvent,
             int pieceId,
             DestroyPieceReason destroyPieceReason,
-            UpdateGoalData updateGoalData,
             DecomposePieceData decomposePieceData)
         {
+            UpdateGoalEvent = updateGoalEvent;
             PieceId = pieceId;
             DestroyPieceReason = destroyPieceReason;
-            UpdateGoalData = updateGoalData;
             DecomposePieceData = decomposePieceData;
         }
     }
