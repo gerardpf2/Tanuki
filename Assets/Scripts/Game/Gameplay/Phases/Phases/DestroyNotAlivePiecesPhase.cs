@@ -78,7 +78,7 @@ namespace Game.Gameplay.Phases.Phases
 
             _board.RemovePiece(pieceId);
 
-            IReadOnlyCollection<InstantiatePieceEvent> instantiatePieceEventsDecompose = DecomposePiece(piece, sourceCoordinate);
+            IEnumerable<InstantiatePieceEvent> instantiatePieceEventsDecompose = DecomposePiece(piece, sourceCoordinate);
 
             DestroyPieceEvent destroyPieceEvent =
                 new(
@@ -107,7 +107,8 @@ namespace Game.Gameplay.Phases.Phases
             return updateGoalEvent;
         }
 
-        private IReadOnlyCollection<InstantiatePieceEvent> DecomposePiece(
+        [NotNull, ItemNotNull]
+        private IEnumerable<InstantiatePieceEvent> DecomposePiece(
             [NotNull] IPiece pieceToDecompose,
             Coordinate pieceToDecomposeSourceCoordinate)
         {
@@ -115,10 +116,8 @@ namespace Game.Gameplay.Phases.Phases
 
             if (!pieceToDecompose.DecomposeType.HasValue)
             {
-                return null;
+                yield break;
             }
-
-            List<InstantiatePieceEvent> instantiatePieceEventsDecompose = new();
 
             PieceType decomposeType = pieceToDecompose.DecomposeType.Value;
 
@@ -135,10 +134,8 @@ namespace Game.Gameplay.Phases.Phases
                         InstantiatePieceReason.Decompose
                     );
 
-                instantiatePieceEventsDecompose.Add(instantiatePieceEvent);
+                yield return instantiatePieceEvent;
             }
-
-            return instantiatePieceEventsDecompose;
         }
     }
 }
