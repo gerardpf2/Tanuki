@@ -29,10 +29,10 @@ namespace Game.Gameplay.Events
 
         [NotNull]
         IEvent GetDamagePieceEvent(
+            DestroyPieceEvent destroyPieceEvent,
             IPiece piece,
             DamagePieceReason damagePieceReason,
-            Direction direction,
-            DestroyPieceData destroyPieceData
+            Direction direction
         );
 
         [NotNull]
