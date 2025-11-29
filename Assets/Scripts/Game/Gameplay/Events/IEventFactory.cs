@@ -22,9 +22,8 @@ namespace Game.Gameplay.Events
 
         [NotNull]
         IEvent GetLockPlayerPieceEvent(
-            IPiece piece,
+            InstantiatePieceEvent instantiatePieceEvent,
             Coordinate sourceCoordinate,
-            Coordinate lockSourceCoordinate,
             int movesAmount
         );
 

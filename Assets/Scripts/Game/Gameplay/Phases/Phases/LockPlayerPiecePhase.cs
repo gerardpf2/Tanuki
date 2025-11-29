@@ -1,6 +1,8 @@
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events;
+using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
@@ -56,14 +58,21 @@ namespace Game.Gameplay.Phases.Phases
 
             int movesAmount = DecreaseMovesAmount();
 
-            _eventEnqueuer.Enqueue(
-                _eventFactory.GetLockPlayerPieceEvent(
+            InstantiatePieceEvent instantiatePieceEvent =
+                _eventFactory.GetInstantiatePieceEvent(
                     piece,
-                    sourceCoordinate,
                     lockSourceCoordinate,
+                    InstantiatePieceReason.Lock
+                );
+
+            IEvent lockPlayerPieceEvent =
+                _eventFactory.GetLockPlayerPieceEvent(
+                    instantiatePieceEvent,
+                    sourceCoordinate,
                     movesAmount
-                )
-            );
+                );
+
+            _eventEnqueuer.Enqueue(lockPlayerPieceEvent);
 
             return ResolveResult.Updated;
         }

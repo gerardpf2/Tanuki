@@ -29,20 +29,10 @@ namespace Game.Gameplay.Events
         }
 
         public IEvent GetLockPlayerPieceEvent(
-            [NotNull] IPiece piece,
+            InstantiatePieceEvent instantiatePieceEvent,
             Coordinate sourceCoordinate,
-            Coordinate lockSourceCoordinate,
             int movesAmount)
         {
-            ArgumentNullException.ThrowIfNull(piece);
-
-            InstantiatePieceEvent instantiatePieceEvent =
-                GetInstantiatePieceEvent(
-                    piece,
-                    lockSourceCoordinate,
-                    InstantiatePieceReason.Lock
-                );
-
             return new LockPlayerPieceEvent(instantiatePieceEvent, sourceCoordinate, movesAmount);
         }
 
