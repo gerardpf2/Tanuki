@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Gameplay.Events.Events;
-using Game.Gameplay.Events.Reasons;
-using Game.Gameplay.Pieces;
 using Game.Gameplay.View.Actions;
 using Game.Gameplay.View.Actions.Actions;
 using Infrastructure.System.Exceptions;
@@ -34,42 +32,46 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             if (updateGoalEvent is not null)
             {
-                yield return
-                    _actionFactory.GetEventResolverAction(
-                        _eventResolverFactory.GetUpdateGoalEventResolver(),
-                        updateGoalEvent
-                    );
+                yield return GetUpdateGoalEventAction(updateGoalEvent);
             }
 
             yield return _actionFactory.GetDestroyPieceAction(evt.PieceId, evt.DestroyPieceReason);
 
-            DecomposePieceData decomposePieceData = evt.DecomposePieceData;
+            IReadOnlyCollection<InstantiatePieceEvent> instantiatePieceEventsDecompose = evt.InstantiatePieceEventsDecompose;
 
-            if (decomposePieceData is not null)
+            if (instantiatePieceEventsDecompose?.Count > 0)
             {
-                yield return GetDecomposePieceDataAction(decomposePieceData);
+                yield return GetInstantiatePieceEventsDecomposeAction(instantiatePieceEventsDecompose);
             }
         }
 
         [NotNull]
-        private IAction GetDecomposePieceDataAction([NotNull] DecomposePieceData decomposePieceData)
+        private IAction GetUpdateGoalEventAction(UpdateGoalEvent updateGoalEvent)
         {
-            ArgumentNullException.ThrowIfNull(decomposePieceData);
+            return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetUpdateGoalEventResolver(),
+                    updateGoalEvent
+                );
+        }
 
-            IEnumerable<IAction> actions = decomposePieceData.PiecePlacements.Select(GetInstantiatePieceAction);
+        [NotNull]
+        private IAction GetInstantiatePieceEventsDecomposeAction(
+            [NotNull] IEnumerable<InstantiatePieceEvent> instantiatePieceEventsDecompose)
+        {
+            ArgumentNullException.ThrowIfNull(instantiatePieceEventsDecompose);
 
-            return _actionFactory.GetParallelActionGroup(actions);
+            IEnumerable<IAction> instantiatePieceEventActions = instantiatePieceEventsDecompose.Select(GetInstantiatePieceEventAction);
+
+            return _actionFactory.GetParallelActionGroup(instantiatePieceEventActions);
 
             [NotNull]
-            IAction GetInstantiatePieceAction([NotNull] PiecePlacement piecePlacement)
+            IAction GetInstantiatePieceEventAction(InstantiatePieceEvent instantiatePieceEvent)
             {
-                ArgumentNullException.ThrowIfNull(piecePlacement);
-
                 return
-                    _actionFactory.GetInstantiatePieceAction(
-                        piecePlacement.Piece,
-                        InstantiatePieceReason.Decompose,
-                        piecePlacement.Coordinate
+                    _actionFactory.GetEventResolverAction(
+                        _eventResolverFactory.GetInstantiatePieceEventResolver(),
+                        instantiatePieceEvent
                     );
             }
         }

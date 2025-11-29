@@ -25,7 +25,7 @@ namespace Game.Gameplay.Events
         IEvent GetLockPlayerPieceEvent(
             InstantiatePieceEvent instantiatePieceEvent,
             Coordinate sourceCoordinate,
-            int movesAmount
+            int movesAmount // TODO: Event
         );
 
         [NotNull]
@@ -37,21 +37,21 @@ namespace Game.Gameplay.Events
         );
 
         [NotNull]
-        IEvent GetDamagePiecesByLineClearEvent(IEnumerable<IPiece> pieces);
+        IEvent GetDamagePiecesByLineClearEvent(IEnumerable<IPiece> pieces); // TODO: DamagePieceEvent
 
         [NotNull]
         DestroyPieceEvent GetDestroyPieceEvent(
             UpdateGoalEvent updateGoalEvent,
+            IReadOnlyCollection<InstantiatePieceEvent> instantiatePieceEventsDecompose,
             int pieceId,
-            DestroyPieceReason destroyPieceReason,
-            DecomposePieceData decomposePieceData
+            DestroyPieceReason destroyPieceReason
         );
 
         [NotNull]
         IEvent GetMovePieceEvent(int pieceId, int rowOffset, int columnOffset, MovePieceReason movePieceReason);
 
         [NotNull]
-        IEvent GetMovePiecesByGravityEvent(IEnumerable<KeyValuePair<int, int>> fallData);
+        IEvent GetMovePiecesByGravityEvent(IEnumerable<KeyValuePair<int, int>> fallData); // TODO: MovePieceEvent
 
         [NotNull]
         IEvent GetMoveCameraEvent(int rowOffset);

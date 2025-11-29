@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
@@ -81,14 +82,14 @@ namespace Game.Gameplay.Phases.Phases
 
             _board.RemovePiece(pieceId);
 
-            DecomposePieceData decomposePieceData = DecomposePiece(piece, sourceCoordinate);
+            IReadOnlyCollection<InstantiatePieceEvent> instantiatePieceEventsDecompose = DecomposePiece(piece, sourceCoordinate);
 
             DestroyPieceEvent destroyPieceEvent =
                 _eventFactory.GetDestroyPieceEvent(
                     updateGoalEvent,
+                    instantiatePieceEventsDecompose,
                     pieceId,
-                    DestroyPieceReason.NotAlive,
-                    decomposePieceData
+                    DestroyPieceReason.NotAlive
                 );
 
             _eventEnqueuer.Enqueue(destroyPieceEvent);
@@ -108,7 +109,7 @@ namespace Game.Gameplay.Phases.Phases
             return _eventFactory.GetUpdateGoalEvent(pieceType, goalCurrentAmount, sourceCoordinate); // TODO: Use center coordinate instead ¿?
         }
 
-        private DecomposePieceData DecomposePiece(
+        private IReadOnlyCollection<InstantiatePieceEvent> DecomposePiece(
             [NotNull] IPiece pieceToDecompose,
             Coordinate pieceToDecomposeSourceCoordinate)
         {
@@ -119,9 +120,9 @@ namespace Game.Gameplay.Phases.Phases
                 return null;
             }
 
-            DecomposePieceData decomposePieceData = new();
+            List<InstantiatePieceEvent> instantiatePieceEventsDecompose = new();
+
             PieceType decomposeType = pieceToDecompose.DecomposeType.Value;
-            bool anyAdded = false;
 
             foreach (Coordinate coordinate in pieceToDecompose.GetUndamagedCoordinates(pieceToDecomposeSourceCoordinate))
             {
@@ -129,12 +130,17 @@ namespace Game.Gameplay.Phases.Phases
 
                 _board.AddPiece(piece, coordinate);
 
-                decomposePieceData.Add(piece, coordinate);
+                InstantiatePieceEvent instantiatePieceEvent =
+                    _eventFactory.GetInstantiatePieceEvent(
+                        piece,
+                        coordinate,
+                        InstantiatePieceReason.Decompose
+                    );
 
-                anyAdded = true;
+                instantiatePieceEventsDecompose.Add(instantiatePieceEvent);
             }
 
-            return anyAdded ? decomposePieceData : null;
+            return instantiatePieceEventsDecompose;
         }
     }
 }

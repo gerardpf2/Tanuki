@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Gameplay.Events.Reasons;
 
 namespace Game.Gameplay.Events.Events
@@ -5,20 +6,20 @@ namespace Game.Gameplay.Events.Events
     public class DestroyPieceEvent : IEvent
     {
         public readonly UpdateGoalEvent UpdateGoalEvent;
+        public readonly IReadOnlyCollection<InstantiatePieceEvent> InstantiatePieceEventsDecompose;
         public readonly int PieceId;
         public readonly DestroyPieceReason DestroyPieceReason;
-        public readonly DecomposePieceData DecomposePieceData;
 
         public DestroyPieceEvent(
             UpdateGoalEvent updateGoalEvent,
+            IReadOnlyCollection<InstantiatePieceEvent> instantiatePieceEventsDecompose,
             int pieceId,
-            DestroyPieceReason destroyPieceReason,
-            DecomposePieceData decomposePieceData)
+            DestroyPieceReason destroyPieceReason)
         {
             UpdateGoalEvent = updateGoalEvent;
+            InstantiatePieceEventsDecompose = instantiatePieceEventsDecompose;
             PieceId = pieceId;
             DestroyPieceReason = destroyPieceReason;
-            DecomposePieceData = decomposePieceData;
         }
     }
 }
