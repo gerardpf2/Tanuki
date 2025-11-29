@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Game.Common;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -30,24 +32,27 @@ namespace Game.Gameplay.Phases.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            ISet<IPiece> damagedPieces = new HashSet<IPiece>();
+            IDictionary<int, DamagePieceEvent> damagePieceEventsByPieceId = new Dictionary<int, DamagePieceEvent>();
 
             int bottomRow = _camera.BottomRow;
             int topRow = Math.Min(_board.HighestNonEmptyRow, _camera.TopRow);
 
             for (int row = bottomRow; row <= topRow; ++row)
             {
-                IEnumerable<IPiece> rowDamagedPieces = TryDamageRow(row);
+                IEnumerable<DamagePieceEvent> damagePieceEvents = TryDamageRow(row);
 
-                damagedPieces.UnionWith(rowDamagedPieces);
+                foreach (DamagePieceEvent damagePieceEvent in damagePieceEvents)
+                {
+                    damagePieceEventsByPieceId[damagePieceEvent.PieceId] = damagePieceEvent;
+                }
             }
 
-            if (damagedPieces.Count <= 0)
+            if (damagePieceEventsByPieceId.Count <= 0)
             {
                 return ResolveResult.NotUpdated;
             }
 
-            DamagePiecesByLineClearEvent damagePiecesByLineClearEvent = new(damagedPieces);
+            DamagePiecesByLineClearEvent damagePiecesByLineClearEvent = new(damagePieceEventsByPieceId.Values);
 
             _eventEnqueuer.Enqueue(damagePiecesByLineClearEvent);
 
@@ -55,7 +60,7 @@ namespace Game.Gameplay.Phases.Phases
         }
 
         [NotNull, ItemNotNull]
-        private IEnumerable<IPiece> TryDamageRow(int row)
+        private IEnumerable<DamagePieceEvent> TryDamageRow(int row)
         {
             IReadOnlyCollection<KeyValuePair<int, int>> pieceIdsInRow = new List<KeyValuePair<int, int>>(_board.GetPieceIdsInRow(row));
 
@@ -72,7 +77,18 @@ namespace Game.Gameplay.Phases.Phases
 
                 piece.Damage(rowOffset, columnOffset);
 
-                yield return piece;
+                DestroyPieceEvent destroyPieceEvent = null; // TODO
+
+                DamagePieceEvent damagePieceEvent =
+                    new(
+                        destroyPieceEvent,
+                        pieceId,
+                        piece.State,
+                        DamagePieceReason.LineClear,
+                        Direction.Right
+                    );
+
+                yield return damagePieceEvent;
             }
         }
     }

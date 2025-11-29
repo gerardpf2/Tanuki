@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -7,31 +6,35 @@ namespace Game.Gameplay.Events.Events
 {
     public class DamagePiecesByLineClearEvent : IEvent
     {
-        [NotNull] private readonly IDictionary<int, IEnumerable<KeyValuePair<string, string>>> _pieceStatesById = new Dictionary<int, IEnumerable<KeyValuePair<string, string>>>();
+        [NotNull, ItemNotNull] public readonly IEnumerable<DamagePieceEvent> DamagePieceEvents;
 
-        [NotNull]
-        public IEnumerable<int> PieceIds => _pieceStatesById.Keys;
+        [NotNull] private readonly ICollection<int> _pieceIds = new HashSet<int>();
 
-        public DamagePiecesByLineClearEvent([NotNull, ItemNotNull] IEnumerable<IPiece> pieces)
+        public DamagePiecesByLineClearEvent([NotNull, ItemNotNull] IEnumerable<DamagePieceEvent> damagePieceEvents)
         {
-            ArgumentNullException.ThrowIfNull(pieces);
+            ArgumentNullException.ThrowIfNull(damagePieceEvents);
 
-            foreach (IPiece piece in pieces)
+            ICollection<DamagePieceEvent> damagePieceEventsCopy = new List<DamagePieceEvent>();
+
+            foreach (DamagePieceEvent damagePieceEvent in damagePieceEvents)
             {
-                ArgumentNullException.ThrowIfNull(piece);
+                ArgumentNullException.ThrowIfNull(damagePieceEvent);
 
-                _pieceStatesById[piece.Id] = piece.State;
+                int pieceId = damagePieceEvent.PieceId;
+
+                if (_pieceIds.Contains(pieceId))
+                {
+                    InvalidOperationException.Throw(); // TODO
+                }
+                else
+                {
+                    _pieceIds.Add(pieceId);
+                }
+
+                damagePieceEventsCopy.Add(damagePieceEvent);
             }
-        }
 
-        public IEnumerable<KeyValuePair<string, string>> GetState(int pieceId)
-        {
-            if (!_pieceStatesById.TryGetValue(pieceId, out IEnumerable<KeyValuePair<string, string>> pieceState))
-            {
-                InvalidOperationException.Throw($"State for piece with Id: {pieceId} cannot be found");
-            }
-
-            return pieceState;
+            DamagePieceEvents = damagePieceEventsCopy;
         }
     }
 }
