@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Common;
+using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
@@ -54,5 +55,8 @@ namespace Game.Gameplay.Events
 
         [NotNull]
         IEvent GetMoveCameraEvent(int rowOffset);
+
+        [NotNull]
+        UpdateGoalEvent GetUpdateGoalEvent(PieceType pieceType, int currentAmount, Coordinate coordinate);
     }
 }
