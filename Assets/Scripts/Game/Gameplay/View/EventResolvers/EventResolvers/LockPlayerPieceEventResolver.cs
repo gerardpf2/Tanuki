@@ -28,7 +28,6 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         protected override IEnumerable<IAction> GetActions([NotNull] LockPlayerPieceEvent evt)
         {
             ArgumentNullException.ThrowIfNull(evt);
-            ArgumentNullException.ThrowIfNull(evt.InstantiatePieceEvent);
 
             yield return _actionFactory.GetDestroyPlayerPieceGhostAction(DestroyPieceReason.Lock);
 

@@ -12,14 +12,16 @@ namespace Game.Gameplay.Events.Events
         [NotNull]
         public IEnumerable<int> PieceIds => _pieceStatesById.Keys;
 
-        public void Add([NotNull] IPiece piece)
+        public DamagePiecesByLineClearEvent([NotNull, ItemNotNull] IEnumerable<IPiece> pieces)
         {
-            ArgumentNullException.ThrowIfNull(piece);
+            ArgumentNullException.ThrowIfNull(pieces);
 
-            int pieceId = piece.Id;
-            IEnumerable<KeyValuePair<string, string>> pieceState = piece.State;
+            foreach (IPiece piece in pieces)
+            {
+                ArgumentNullException.ThrowIfNull(piece);
 
-            _pieceStatesById[pieceId] = pieceState;
+                _pieceStatesById[piece.Id] = piece.State;
+            }
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetState(int pieceId)

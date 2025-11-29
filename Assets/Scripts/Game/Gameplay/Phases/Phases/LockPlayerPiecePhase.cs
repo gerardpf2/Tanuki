@@ -15,7 +15,6 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly IBag _bag;
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
-        [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IMoves _moves;
 
         protected override int? MaxResolveTimesPerIteration => 1;
@@ -24,19 +23,16 @@ namespace Game.Gameplay.Phases.Phases
             [NotNull] IBag bag,
             [NotNull] IBoard board,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory,
             [NotNull] IMoves moves)
         {
             ArgumentNullException.ThrowIfNull(bag);
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
-            ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(moves);
 
             _bag = bag;
             _board = board;
             _eventEnqueuer = eventEnqueuer;
-            _eventFactory = eventFactory;
             _moves = moves;
         }
 
@@ -58,19 +54,8 @@ namespace Game.Gameplay.Phases.Phases
 
             int movesAmount = DecreaseMovesAmount();
 
-            InstantiatePieceEvent instantiatePieceEvent =
-                _eventFactory.GetInstantiatePieceEvent(
-                    piece,
-                    lockSourceCoordinate,
-                    InstantiatePieceReason.Lock
-                );
-
-            IEvent lockPlayerPieceEvent =
-                _eventFactory.GetLockPlayerPieceEvent(
-                    instantiatePieceEvent,
-                    sourceCoordinate,
-                    movesAmount
-                );
+            InstantiatePieceEvent instantiatePieceEvent = new(piece, lockSourceCoordinate, InstantiatePieceReason.Lock);
+            LockPlayerPieceEvent lockPlayerPieceEvent = new(instantiatePieceEvent, sourceCoordinate, movesAmount);
 
             _eventEnqueuer.Enqueue(lockPlayerPieceEvent);
 

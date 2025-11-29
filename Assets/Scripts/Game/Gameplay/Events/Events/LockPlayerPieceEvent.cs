@@ -1,18 +1,22 @@
 using Game.Gameplay.Board;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 
 namespace Game.Gameplay.Events.Events
 {
     public class LockPlayerPieceEvent : IEvent
     {
-        public readonly InstantiatePieceEvent InstantiatePieceEvent;
+        [NotNull] public readonly InstantiatePieceEvent InstantiatePieceEvent;
         public readonly Coordinate SourceCoordinate;
         public readonly int MovesAmount;
 
         public LockPlayerPieceEvent(
-            InstantiatePieceEvent instantiatePieceEvent,
+            [NotNull] InstantiatePieceEvent instantiatePieceEvent,
             Coordinate sourceCoordinate,
             int movesAmount)
         {
+            ArgumentNullException.ThrowIfNull(instantiatePieceEvent);
+
             InstantiatePieceEvent = instantiatePieceEvent;
             SourceCoordinate = sourceCoordinate;
             MovesAmount = movesAmount;

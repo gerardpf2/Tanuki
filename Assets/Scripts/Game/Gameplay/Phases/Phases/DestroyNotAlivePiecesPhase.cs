@@ -22,7 +22,6 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
-        [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IGoals _goals;
         [NotNull] private readonly IPieceGetter _pieceGetter;
 
@@ -30,21 +29,18 @@ namespace Game.Gameplay.Phases.Phases
             [NotNull] IBoard board,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory,
             [NotNull] IGoals goals,
             [NotNull] IPieceGetter pieceGetter)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
-            ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(goals);
             ArgumentNullException.ThrowIfNull(pieceGetter);
 
             _board = board;
             _camera = camera;
             _eventEnqueuer = eventEnqueuer;
-            _eventFactory = eventFactory;
             _goals = goals;
             _pieceGetter = pieceGetter;
         }
@@ -85,7 +81,7 @@ namespace Game.Gameplay.Phases.Phases
             IReadOnlyCollection<InstantiatePieceEvent> instantiatePieceEventsDecompose = DecomposePiece(piece, sourceCoordinate);
 
             DestroyPieceEvent destroyPieceEvent =
-                _eventFactory.GetDestroyPieceEvent(
+                new(
                     updateGoalEvent,
                     instantiatePieceEventsDecompose,
                     pieceId,
@@ -106,7 +102,9 @@ namespace Game.Gameplay.Phases.Phases
                 return null;
             }
 
-            return _eventFactory.GetUpdateGoalEvent(pieceType, goalCurrentAmount, sourceCoordinate); // TODO: Use center coordinate instead ¿?
+            UpdateGoalEvent updateGoalEvent = new(pieceType, goalCurrentAmount, sourceCoordinate); // TODO: Use center coordinate instead ¿?
+
+            return updateGoalEvent;
         }
 
         private IReadOnlyCollection<InstantiatePieceEvent> DecomposePiece(
@@ -131,7 +129,7 @@ namespace Game.Gameplay.Phases.Phases
                 _board.AddPiece(piece, coordinate);
 
                 InstantiatePieceEvent instantiatePieceEvent =
-                    _eventFactory.GetInstantiatePieceEvent(
+                    new(
                         piece,
                         coordinate,
                         InstantiatePieceReason.Decompose
