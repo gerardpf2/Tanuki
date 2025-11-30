@@ -44,9 +44,11 @@ namespace Game.Gameplay.Phases.Phases
             int bottomRow = _camera.BottomRow;
             int topRow = Math.Min(_board.HighestNonEmptyRow, _camera.TopRow);
 
-            for (int row = bottomRow; row <= topRow; ++row)
+            IReadOnlyCollection<int> fullRows = GetFullRows(bottomRow, topRow);
+
+            foreach (int row in fullRows)
             {
-                IEnumerable<DamagePieceEvent> damagePieceEvents = TryDamageRow(row);
+                IEnumerable<DamagePieceEvent> damagePieceEvents = DamageRow(row);
 
                 foreach (DamagePieceEvent damagePieceEvent in damagePieceEvents)
                 {
@@ -66,25 +68,33 @@ namespace Game.Gameplay.Phases.Phases
             return ResolveResult.Updated;
         }
 
-        [NotNull, ItemNotNull]
-        private IEnumerable<DamagePieceEvent> TryDamageRow(int row)
+        [NotNull]
+        private IReadOnlyCollection<int> GetFullRows(int bottomRow, int topRow)
         {
-            IReadOnlyCollection<KeyValuePair<int, int>> pieceIdsInRow =
-                new List<KeyValuePair<int, int>>(
-                    _board.GetPieceIdsInRow(row)
-                );
+            Queue<int> fullRows = new();
 
-            if (pieceIdsInRow.Count < _board.Columns)
+            for (int row = bottomRow; row <= topRow; ++row)
             {
-                yield break;
+                if (_board.IsRowFull(row))
+                {
+                    fullRows.Enqueue(row);
+                }
             }
 
-            foreach ((int pieceId, int column) in pieceIdsInRow)
+            return fullRows;
+        }
+
+        [NotNull, ItemNotNull]
+        private IEnumerable<DamagePieceEvent> DamageRow(int row)
+        {
+            IEnumerable<KeyValuePair<int, Coordinate>> pieceIdsInRow = _board.GetPieceIdsInRow(row);
+
+            foreach ((int pieceId, Coordinate coordinate) in pieceIdsInRow)
             {
                 DamagePieceEvent damagePieceEvent =
                     _damagePieceHelper.Damage(
                         pieceId,
-                        new Coordinate(row, column),
+                        coordinate,
                         DamagePieceReason.LineClear,
                         Direction.Right
                     );

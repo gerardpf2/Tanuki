@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.Pieces.Pieces.Utils;
 using JetBrains.Annotations;
@@ -30,37 +31,49 @@ namespace Game.Gameplay.Board.Utils
 
             ICollection<int> visitedPieceIds = new HashSet<int>();
 
-            int columns = board.Columns;
-
             for (int row = bottomRow; row <= topRow; ++row)
             {
-                for (int column = 0; column < columns; ++column)
+                foreach ((int pieceId, _) in board.GetPieceIdsInRow(row))
                 {
-                    Coordinate coordinate = new(row, column);
-
-                    int? pieceId = board.GetPieceId(coordinate);
-
-                    if (!pieceId.HasValue)
+                    if (visitedPieceIds.Contains(pieceId))
                     {
                         continue;
                     }
 
-                    int pieceIdValue = pieceId.Value;
+                    visitedPieceIds.Add(pieceId);
 
-                    if (visitedPieceIds.Contains(pieceIdValue))
-                    {
-                        continue;
-                    }
-
-                    visitedPieceIds.Add(pieceIdValue);
-
-                    yield return pieceIdValue;
+                    yield return pieceId;
                 }
             }
         }
 
+        public static bool IsRowFull([NotNull] this IBoard board, int row)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            return board.GetPieceIdsInRow(row).Count() == board.Columns;
+        }
+
         [NotNull]
-        public static IEnumerable<KeyValuePair<int, int>> GetPieceIdsInRow([NotNull] this IBoard board, int row)
+        public static IEnumerable<KeyValuePair<int, Coordinate>> GetPieceIdsInRow([NotNull] this IBoard board, int row)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            foreach (Coordinate coordinate in board.GetCoordinatesInRow(row))
+            {
+                int? pieceId = board.GetPieceId(coordinate);
+
+                if (!pieceId.HasValue)
+                {
+                    continue;
+                }
+
+                yield return new KeyValuePair<int, Coordinate>(pieceId.Value, coordinate);
+            }
+        }
+
+        [NotNull]
+        public static IEnumerable<Coordinate> GetCoordinatesInRow([NotNull] this IBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -70,14 +83,7 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinate = new(row, column);
 
-                int? pieceId = board.GetPieceId(coordinate);
-
-                if (!pieceId.HasValue)
-                {
-                    continue;
-                }
-
-                yield return new KeyValuePair<int, int>(pieceId.Value, column);
+                yield return coordinate;
             }
         }
 
