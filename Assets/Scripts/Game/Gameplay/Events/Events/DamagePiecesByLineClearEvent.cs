@@ -26,10 +26,8 @@ namespace Game.Gameplay.Events.Events
                 {
                     InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been added");
                 }
-                else
-                {
-                    _pieceIds.Add(pieceId);
-                }
+
+                _pieceIds.Add(pieceId);
 
                 damagePieceEventsCopy.Add(damagePieceEvent);
             }

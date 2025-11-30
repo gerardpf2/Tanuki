@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
 using Game.Gameplay.Events.Events;
-using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Actions;
 using Game.Gameplay.View.Actions.Actions;
@@ -13,59 +13,17 @@ using Infrastructure.Unity;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
-using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.EventResolvers.EventResolvers
 {
     public class MovePiecesByGravityEventResolver : IEventResolver<MovePiecesByGravityEvent>
     {
-        private sealed class FallDataComparer : IComparer<int>
-        {
-            // Sort by column, then by row
-
-            [NotNull] private readonly IBoard _board;
-
-            public FallDataComparer([NotNull] IBoard board)
-            {
-                ArgumentNullException.ThrowIfNull(board);
-
-                _board = board;
-            }
-
-            public int Compare(int pieceIdA, int pieceIdB)
-            {
-                Coordinate sourceCoordinateA = _board.GetSourceCoordinate(pieceIdA);
-                Coordinate sourceCoordinateB = _board.GetSourceCoordinate(pieceIdB);
-
-                int result = sourceCoordinateA.Column.CompareTo(sourceCoordinateB.Column);
-
-                if (result == 0)
-                {
-                    result = sourceCoordinateA.Row.CompareTo(sourceCoordinateB.Row);
-                }
-
-                if (result == 0)
-                {
-                    /*
-                     *
-                     * Some pieces with different ids may fall in here because of their rotations, since a source
-                     * coordinate doesn't necessarily need to be filled (maybe it does if rotation is 0, but it doesn't
-                     * if rotation is not 0)
-                     *
-                     */
-
-                    result = pieceIdA.CompareTo(pieceIdB);
-                }
-
-                return result;
-            }
-        }
-
         private const float SecondsBetweenActions = 0.05f;
         private const float SecondsBetweenActionBatches = SecondsBetweenActions - 0.001f;
 
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IActionFactory _actionFactory;
+        [NotNull] private readonly IEventResolverFactory _eventResolverFactory;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
 
         [NotNull] private readonly YieldInstruction _waitForSecondsBetweenActions = new WaitForSeconds(SecondsBetweenActions);
@@ -74,14 +32,17 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         public MovePiecesByGravityEventResolver(
             [NotNull] IBoard board,
             [NotNull] IActionFactory actionFactory,
+            [NotNull] IEventResolverFactory eventResolverFactory,
             [NotNull] ICoroutineRunner coroutineRunner)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(actionFactory);
+            ArgumentNullException.ThrowIfNull(eventResolverFactory);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
 
             _board = board;
             _actionFactory = actionFactory;
+            _eventResolverFactory = eventResolverFactory;
             _coroutineRunner = coroutineRunner;
         }
 
@@ -89,111 +50,115 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            IDictionary<int, int> fallData = GetFallData(evt);
+            IEnumerable<MovePieceEvent> movePieceEvents = GetMovePieceEventsSortedByColumnThenByRow(evt.MovePieceEvents);
+            IReadOnlyCollection<MovePieceEvent> movePieceEventsList = new List<MovePieceEvent>(movePieceEvents);
 
-            if (fallData.Count <= 0)
+            if (movePieceEventsList.Count <= 0)
             {
                 onComplete?.Invoke();
             }
             else
             {
-                _coroutineRunner.Run(ResolveImpl(fallData, onComplete));
+                _coroutineRunner.Run(ResolveImpl(movePieceEventsList, onComplete));
             }
         }
 
-        [NotNull]
-        private IDictionary<int, int> GetFallData([NotNull] MovePiecesByGravityEvent evt)
+        [NotNull, ItemNotNull]
+        private IEnumerable<MovePieceEvent> GetMovePieceEventsSortedByColumnThenByRow(
+            [NotNull, ItemNotNull] IEnumerable<MovePieceEvent> movePieceEvents)
         {
-            ArgumentNullException.ThrowIfNull(evt);
+            ArgumentNullException.ThrowIfNull(movePieceEvents);
 
-            IComparer<int> fallDataComparer = new FallDataComparer(_board);
-            IDictionary<int, int> fallData = new SortedDictionary<int, int>(fallDataComparer);
+            return movePieceEvents.OrderBy(GetPieceColumn).ThenBy(GetPieceRow);
 
-            foreach ((int pieceId, int fall) in evt.FallData)
+            int GetPieceRow([NotNull] MovePieceEvent movePieceEvent)
             {
-                if (!fallData.TryAdd(pieceId, fall))
-                {
-                    InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be added");
-                }
+                ArgumentNullException.ThrowIfNull(movePieceEvent);
+
+                return _board.GetSourceCoordinate(movePieceEvent.PieceId).Row;
             }
 
-            return fallData;
+            int GetPieceColumn([NotNull] MovePieceEvent movePieceEvent)
+            {
+                ArgumentNullException.ThrowIfNull(movePieceEvent);
+
+                return _board.GetSourceCoordinate(movePieceEvent.PieceId).Column;
+            }
         }
 
-        private IEnumerator ResolveImpl([NotNull] IDictionary<int, int> fallData, Action onComplete)
+        private IEnumerator ResolveImpl(
+            [NotNull, ItemNotNull] IReadOnlyCollection<MovePieceEvent> movePieceEvents,
+            Action onComplete)
         {
-            ArgumentNullException.ThrowIfNull(fallData);
+            ArgumentNullException.ThrowIfNull(movePieceEvents);
 
-            ActionGroupCompletionHandler actionGroupCompletionHandler = new(fallData.Count, onComplete);
-            List<int> pieceIds = new(); // Avoid modifying fallData while iterating it
+            int piecesToMove = movePieceEvents.Count;
+            ActionGroupCompletionHandler actionGroupCompletionHandler = new(piecesToMove, onComplete);
+            ICollection<int> movedPieceIds = new HashSet<int>();
 
-            while (true)
+            while (movedPieceIds.Count < piecesToMove)
             {
-                ICollection<IAction> fallActions = new List<IAction>();
+                ICollection<IAction> movePieceActions = new List<IAction>();
 
-                pieceIds.AddRange(fallData.Keys);
-
-                foreach (int pieceId in pieceIds)
+                foreach (MovePieceEvent movePieceEvent in movePieceEvents)
                 {
-                    int fall = fallData[pieceId];
+                    ArgumentNullException.ThrowIfNull(movePieceEvent);
 
-                    if (!CanFall(pieceId, fall))
+                    int pieceId = movePieceEvent.PieceId;
+
+                    if (movedPieceIds.Contains(pieceId) || !CanFall(movePieceEvent))
                     {
                         continue;
                     }
 
-                    fallData.Remove(pieceId);
+                    movedPieceIds.Add(pieceId);
 
-                    IAction fallAction = GetFallAction(pieceId, fall);
-
-                    fallActions.Add(fallAction);
+                    movePieceActions.Add(GetMovePieceAction(movePieceEvent));
                 }
 
-                pieceIds.Clear();
-
-                if (fallActions.Count > 0)
+                if (movePieceActions.Count > 0)
                 {
                     // Resolving it in a different coroutine allows the following ones to be resolved in a parallel way
 
-                    _coroutineRunner.Run(ResolveActionsBatch(fallActions, actionGroupCompletionHandler));
+                    _coroutineRunner.Run(ResolveActionsBatch(movePieceActions, actionGroupCompletionHandler));
                 }
 
-                if (fallData.Count > 0)
+                if (movedPieceIds.Count < piecesToMove)
                 {
                     yield return _waitForSecondsBetweenActionBatches;
                 }
-                else
-                {
-                    break;
-                }
             }
+        }
 
-            yield break;
+        private bool CanFall([NotNull] MovePieceEvent movePieceEvent)
+        {
+            /*
+             *
+             * All pieces are going to fall, but not at the same time. The ones that can fall directly to their
+             * end position (the one indicated by model) are going to be resolved, creating empty spaces for the
+             * following ones. Each piece falls just once
+             *
+             */
 
-            bool CanFall(int pieceId, int fall)
-            {
-                /*
-                 *
-                 * All pieces are going to fall, but not at the same time. The ones that can fall directly to their
-                 * end position (the one indicated by model) are going to be resolved, creating empty spaces for the
-                 * following ones. Each piece falls just once
-                 *
-                 */
+            ArgumentNullException.ThrowIfNull(movePieceEvent);
 
-                IPiece piece = _board.GetPiece(pieceId);
-                Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
+            int pieceId = movePieceEvent.PieceId;
+            int fall = -movePieceEvent.RowOffset;
 
-                return _board.ComputePieceFall(piece, sourceCoordinate) == fall;
-            }
+            IPiece piece = _board.GetPiece(pieceId);
+            Coordinate sourceCoordinate = _board.GetSourceCoordinate(pieceId);
 
-            [NotNull]
-            IAction GetFallAction(int pieceId, int fall)
-            {
-                const int columnOffset = 0;
-                int rowOffset = -fall;
+            return _board.ComputePieceFall(piece, sourceCoordinate) == fall;
+        }
 
-                return _actionFactory.GetMovePieceAction(pieceId, rowOffset, columnOffset, MovePieceReason.Gravity);
-            }
+        [NotNull]
+        private IAction GetMovePieceAction(MovePieceEvent movePieceEvent)
+        {
+            return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetMovePieceEventResolver(),
+                    movePieceEvent
+                );
         }
 
         private IEnumerator ResolveActionsBatch(

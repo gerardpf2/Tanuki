@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Gameplay.Events.Reasons;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -6,23 +7,38 @@ namespace Game.Gameplay.Events.Events
 {
     public class MovePiecesByGravityEvent : IEvent
     {
-        [NotNull] public readonly IEnumerable<KeyValuePair<int, int>> FallData;
+        [NotNull, ItemNotNull] public readonly IEnumerable<MovePieceEvent> MovePieceEvents;
+
+        [NotNull] private readonly ICollection<int> _pieceIds = new HashSet<int>();
 
         public MovePiecesByGravityEvent([NotNull] IEnumerable<KeyValuePair<int, int>> fallData)
         {
             ArgumentNullException.ThrowIfNull(fallData);
 
-            IDictionary<int, int> fallDataCopy = new Dictionary<int, int>();
+            ICollection<MovePieceEvent> movePieceEvents = new List<MovePieceEvent>();
 
             foreach ((int pieceId, int fall) in fallData)
             {
-                if (!fallDataCopy.TryAdd(pieceId, fall))
+                if (_pieceIds.Contains(pieceId))
                 {
-                    InvalidOperationException.Throw($"Piece with Id: {pieceId} cannot be added");
+                    InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been added");
                 }
+
+                _pieceIds.Add(pieceId);
+
+                movePieceEvents.Add(GetMovePieceEvent(pieceId, fall));
             }
 
-            FallData = fallDataCopy;
+            MovePieceEvents = movePieceEvents;
+        }
+
+        [NotNull]
+        private static MovePieceEvent GetMovePieceEvent(int pieceId, int fall)
+        {
+            int rowOffset = -fall;
+            const int columnOffset = 0;
+
+            return new MovePieceEvent(pieceId, rowOffset, columnOffset, MovePieceReason.Gravity);
         }
     }
 }

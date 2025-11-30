@@ -65,7 +65,7 @@ namespace Game.Gameplay.View.EventResolvers
 
         public IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver()
         {
-            return new MovePiecesByGravityEventResolver(_board, _actionFactory, _coroutineRunner);
+            return new MovePiecesByGravityEventResolver(_board, _actionFactory, this, _coroutineRunner);
         }
 
         public IEventResolver<MoveCameraEvent> GetMoveCameraEventResolver()
