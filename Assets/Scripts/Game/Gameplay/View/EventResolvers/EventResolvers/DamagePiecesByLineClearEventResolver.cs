@@ -39,17 +39,6 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             IEnumerable<IAction> damagePieceActions = damagePieceEvents.Select(GetDamagePieceAction);
 
             yield return _actionFactory.GetParallelActionGroup(damagePieceActions, SecondsBetweenActions);
-            yield break;
-
-            [NotNull]
-            IAction GetDamagePieceAction(DamagePieceEvent damagePieceEvent)
-            {
-                return
-                    _actionFactory.GetEventResolverAction(
-                        _eventResolverFactory.GetDamagePieceEventResolver(),
-                        damagePieceEvent
-                    );
-            }
         }
 
         [NotNull, ItemNotNull]
@@ -73,6 +62,16 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
                 return _board.GetSourceCoordinate(damagePieceEvent.PieceId).Column;
             }
+        }
+
+        [NotNull]
+        private IAction GetDamagePieceAction(DamagePieceEvent damagePieceEvent)
+        {
+            return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetDamagePieceEventResolver(),
+                    damagePieceEvent
+                );
         }
     }
 }

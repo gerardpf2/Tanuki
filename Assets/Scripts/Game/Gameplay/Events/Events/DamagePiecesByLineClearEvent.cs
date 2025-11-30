@@ -24,7 +24,7 @@ namespace Game.Gameplay.Events.Events
 
                 if (_pieceIds.Contains(pieceId))
                 {
-                    InvalidOperationException.Throw(); // TODO
+                    InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been added");
                 }
                 else
                 {

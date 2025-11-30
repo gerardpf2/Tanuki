@@ -28,20 +28,27 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
+            yield return _actionFactory.GetDestroyPieceAction(evt.PieceId, evt.DestroyPieceReason);
+
+            ICollection<IAction> actions = new List<IAction>();
+
             UpdateGoalEvent updateGoalEvent = evt.UpdateGoalEvent;
 
             if (updateGoalEvent is not null)
             {
-                yield return GetUpdateGoalEventAction(updateGoalEvent);
+                actions.Add(GetUpdateGoalEventAction(updateGoalEvent));
             }
-
-            yield return _actionFactory.GetDestroyPieceAction(evt.PieceId, evt.DestroyPieceReason);
 
             IReadOnlyCollection<InstantiatePieceEvent> instantiatePieceEventsDecompose = evt.InstantiatePieceEventsDecompose;
 
             if (instantiatePieceEventsDecompose?.Count > 0)
             {
-                yield return GetInstantiatePieceEventsDecomposeAction(instantiatePieceEventsDecompose);
+                actions.Add(GetInstantiatePieceEventsDecomposeAction(instantiatePieceEventsDecompose));
+            }
+
+            if (actions.Count > 0)
+            {
+                yield return _actionFactory.GetParallelActionGroup(actions);
             }
         }
 
@@ -64,16 +71,16 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             IEnumerable<IAction> instantiatePieceEventActions = instantiatePieceEventsDecompose.Select(GetInstantiatePieceEventAction);
 
             return _actionFactory.GetParallelActionGroup(instantiatePieceEventActions);
+        }
 
-            [NotNull]
-            IAction GetInstantiatePieceEventAction(InstantiatePieceEvent instantiatePieceEvent)
-            {
-                return
-                    _actionFactory.GetEventResolverAction(
-                        _eventResolverFactory.GetInstantiatePieceEventResolver(),
-                        instantiatePieceEvent
-                    );
-            }
+        [NotNull]
+        private IAction GetInstantiatePieceEventAction(InstantiatePieceEvent instantiatePieceEvent)
+        {
+            return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetInstantiatePieceEventResolver(),
+                    instantiatePieceEvent
+                );
         }
     }
 }
