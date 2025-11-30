@@ -91,7 +91,8 @@ namespace Game.Gameplay.Phases.Composition
                     new LineClearPhase(
                         r.Resolve<IBoard>(),
                         r.Resolve<ICamera>(),
-                        r.Resolve<IEventEnqueuer>()
+                        r.Resolve<IEventEnqueuer>(),
+                        r.Resolve<IDamagePieceHelper>()
                     )
                 ),
                 PhasesComposerKeys.Phase.LineClearPhase

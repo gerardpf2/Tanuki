@@ -7,7 +7,7 @@ using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
-using Game.Gameplay.Pieces.Pieces;
+using Game.Gameplay.Pieces;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
@@ -18,16 +18,23 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
+        [NotNull] private readonly IDamagePieceHelper _damagePieceHelper;
 
-        public LineClearPhase([NotNull] IBoard board, [NotNull] ICamera camera, [NotNull] IEventEnqueuer eventEnqueuer)
+        public LineClearPhase(
+            [NotNull] IBoard board,
+            [NotNull] ICamera camera,
+            [NotNull] IEventEnqueuer eventEnqueuer,
+            [NotNull] IDamagePieceHelper damagePieceHelper)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
+            ArgumentNullException.ThrowIfNull(damagePieceHelper);
 
             _board = board;
             _camera = camera;
             _eventEnqueuer = eventEnqueuer;
+            _damagePieceHelper = damagePieceHelper;
         }
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
@@ -62,7 +69,10 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull, ItemNotNull]
         private IEnumerable<DamagePieceEvent> TryDamageRow(int row)
         {
-            IReadOnlyCollection<KeyValuePair<int, int>> pieceIdsInRow = new List<KeyValuePair<int, int>>(_board.GetPieceIdsInRow(row));
+            IReadOnlyCollection<KeyValuePair<int, int>> pieceIdsInRow =
+                new List<KeyValuePair<int, int>>(
+                    _board.GetPieceIdsInRow(row)
+                );
 
             if (pieceIdsInRow.Count < _board.Columns)
             {
@@ -71,19 +81,10 @@ namespace Game.Gameplay.Phases.Phases
 
             foreach ((int pieceId, int column) in pieceIdsInRow)
             {
-                IPiece piece = _board.GetPiece(pieceId);
-
-                _board.GetPieceRowColumnOffset(pieceId, row, column, out int rowOffset, out int columnOffset);
-
-                piece.Damage(rowOffset, columnOffset);
-
-                DestroyPieceEvent destroyPieceEvent = null; // TODO
-
                 DamagePieceEvent damagePieceEvent =
-                    new(
-                        destroyPieceEvent,
+                    _damagePieceHelper.Damage(
                         pieceId,
-                        piece.State,
+                        new Coordinate(row, column),
                         DamagePieceReason.LineClear,
                         Direction.Right
                     );
