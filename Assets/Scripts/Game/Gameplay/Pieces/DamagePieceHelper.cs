@@ -56,6 +56,7 @@ namespace Game.Gameplay.Pieces
                     destroyPieceEvent,
                     pieceId,
                     piece.State,
+                    coordinate,
                     damagePieceReason,
                     direction
                 );
