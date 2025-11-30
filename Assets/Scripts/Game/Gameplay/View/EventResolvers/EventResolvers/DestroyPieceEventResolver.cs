@@ -32,11 +32,11 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             ICollection<IAction> actions = new List<IAction>();
 
-            UpdateGoalEvent updateGoalEvent = evt.UpdateGoalEvent;
+            SetGoalCurrentAmountEvent setGoalCurrentAmountEvent = evt.SetGoalCurrentAmountEvent;
 
-            if (updateGoalEvent is not null)
+            if (setGoalCurrentAmountEvent is not null)
             {
-                actions.Add(GetUpdateGoalEventAction(updateGoalEvent));
+                actions.Add(GetSetGoalCurrentAmountEventAction(setGoalCurrentAmountEvent));
             }
 
             IReadOnlyCollection<InstantiatePieceEvent> instantiatePieceEventsDecompose = evt.InstantiatePieceEventsDecompose;
@@ -53,12 +53,12 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         }
 
         [NotNull]
-        private IAction GetUpdateGoalEventAction(UpdateGoalEvent updateGoalEvent)
+        private IAction GetSetGoalCurrentAmountEventAction(SetGoalCurrentAmountEvent setGoalCurrentAmountEvent)
         {
             return
                 _actionFactory.GetEventResolverAction(
-                    _eventResolverFactory.GetUpdateGoalEventResolver(),
-                    updateGoalEvent
+                    _eventResolverFactory.GetSetGoalCurrentAmountEventResolver(),
+                    setGoalCurrentAmountEvent
                 );
         }
 

@@ -73,9 +73,9 @@ namespace Game.Gameplay.View.EventResolvers
             return new MoveCameraEventResolver(_actionFactory);
         }
 
-        public IEventResolver<UpdateGoalEvent> GetUpdateGoalEventResolver()
+        public IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver()
         {
-            return new UpdateGoalEventResolver(_actionFactory);
+            return new SetGoalCurrentAmountEventResolver(_actionFactory);
         }
     }
 }

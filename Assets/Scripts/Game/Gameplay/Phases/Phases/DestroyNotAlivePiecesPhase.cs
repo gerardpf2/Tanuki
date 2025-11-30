@@ -74,7 +74,7 @@ namespace Game.Gameplay.Phases.Phases
 
             Coordinate sourceCoordinate = _board.GetSourceCoordinate(piece.Id);
 
-            UpdateGoalEvent updateGoalEvent = IncreaseGoalCurrentAmount(piece.Type, sourceCoordinate);
+            SetGoalCurrentAmountEvent setGoalCurrentAmountEvent = IncreaseGoalCurrentAmount(piece.Type, sourceCoordinate);
 
             _board.RemovePiece(pieceId);
 
@@ -82,7 +82,7 @@ namespace Game.Gameplay.Phases.Phases
 
             DestroyPieceEvent destroyPieceEvent =
                 new(
-                    updateGoalEvent,
+                    setGoalCurrentAmountEvent,
                     instantiatePieceEventsDecompose,
                     pieceId,
                     DestroyPieceReason.NotAlive
@@ -93,7 +93,7 @@ namespace Game.Gameplay.Phases.Phases
             return true;
         }
 
-        private UpdateGoalEvent IncreaseGoalCurrentAmount(
+        private SetGoalCurrentAmountEvent IncreaseGoalCurrentAmount(
             PieceType pieceType,
             Coordinate sourceCoordinate)
         {
@@ -102,9 +102,9 @@ namespace Game.Gameplay.Phases.Phases
                 return null;
             }
 
-            UpdateGoalEvent updateGoalEvent = new(pieceType, goalCurrentAmount, sourceCoordinate); // TODO: Use center coordinate instead ¿?
+            SetGoalCurrentAmountEvent setGoalCurrentAmountEvent = new(pieceType, goalCurrentAmount, sourceCoordinate); // TODO: Use center coordinate instead ¿?
 
-            return updateGoalEvent;
+            return setGoalCurrentAmountEvent;
         }
 
         [NotNull, ItemNotNull]

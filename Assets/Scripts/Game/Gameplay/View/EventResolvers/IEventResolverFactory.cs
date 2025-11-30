@@ -34,6 +34,6 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<MoveCameraEvent> GetMoveCameraEventResolver();
 
         [NotNull]
-        IEventResolver<UpdateGoalEvent> GetUpdateGoalEventResolver();
+        IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver();
     }
 }

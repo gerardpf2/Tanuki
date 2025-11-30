@@ -7,18 +7,18 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.EventResolvers.EventResolvers
 {
-    public class UpdateGoalEventResolver : EventResolver<UpdateGoalEvent>
+    public class SetGoalCurrentAmountEventResolver : EventResolver<SetGoalCurrentAmountEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
 
-        public UpdateGoalEventResolver([NotNull] IActionFactory actionFactory)
+        public SetGoalCurrentAmountEventResolver([NotNull] IActionFactory actionFactory)
         {
             ArgumentNullException.ThrowIfNull(actionFactory);
 
             _actionFactory = actionFactory;
         }
 
-        protected override IEnumerable<IAction> GetActions([NotNull] UpdateGoalEvent evt)
+        protected override IEnumerable<IAction> GetActions([NotNull] SetGoalCurrentAmountEvent evt)
         {
             ArgumentNullException.ThrowIfNull(evt);
 

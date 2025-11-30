@@ -7,18 +7,18 @@ namespace Game.Gameplay.Events.Events
 {
     public class DestroyPieceEvent : IEvent
     {
-        public readonly UpdateGoalEvent UpdateGoalEvent;
+        public readonly SetGoalCurrentAmountEvent SetGoalCurrentAmountEvent;
         [ItemNotNull] public readonly IReadOnlyCollection<InstantiatePieceEvent> InstantiatePieceEventsDecompose;
         public readonly int PieceId;
         public readonly DestroyPieceReason DestroyPieceReason;
 
         public DestroyPieceEvent(
-            UpdateGoalEvent updateGoalEvent,
+            SetGoalCurrentAmountEvent setGoalCurrentAmountEvent,
             [ItemNotNull] IEnumerable<InstantiatePieceEvent> instantiatePieceEventsDecompose,
             int pieceId,
             DestroyPieceReason destroyPieceReason)
         {
-            UpdateGoalEvent = updateGoalEvent;
+            SetGoalCurrentAmountEvent = setGoalCurrentAmountEvent;
             PieceId = pieceId;
             DestroyPieceReason = destroyPieceReason;
 
