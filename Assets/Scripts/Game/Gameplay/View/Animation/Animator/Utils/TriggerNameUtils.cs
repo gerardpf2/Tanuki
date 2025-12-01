@@ -15,76 +15,76 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
 
         #region Destroy
 
-        public static string GetDestroyBase()
+        public static string GetDestroy()
         {
             return $"{Destroy}";
         }
 
-        public static string Get(DestroyPieceReason destroyPieceReason)
+        public static string GetDestroy(DestroyPieceReason destroyPieceReason)
         {
-            return $"{GetDestroyBase()}_{destroyPieceReason}";
+            return $"{GetDestroy()}_{destroyPieceReason}";
         }
 
         #endregion
 
         #region Damage
 
-        public static string GetDamageBase()
+        public static string GetDamage()
         {
             return $"{Damage}";
         }
 
-        public static string Get(DamagePieceReason damagePieceReason)
+        public static string GetDamage(DamagePieceReason damagePieceReason)
         {
-            return $"{GetDamageBase()}_{damagePieceReason}";
+            return $"{GetDamage()}_{damagePieceReason}";
         }
 
-        public static string Get(DamagePieceReason damagePieceReason, Direction direction)
+        public static string GetDamage(DamagePieceReason damagePieceReason, Direction direction)
         {
-            return $"{Get(damagePieceReason)}_{direction}";
+            return $"{GetDamage(damagePieceReason)}_{direction}";
         }
 
         #endregion
 
         #region Move
 
-        public static string GetMoveBase()
+        public static string GetMove()
         {
             return $"{Move}";
         }
 
-        public static string Get(MovePieceReason movePieceReason)
+        public static string GetMove(MovePieceReason movePieceReason)
         {
-            return $"{GetMoveBase()}_{movePieceReason}";
+            return $"{GetMove()}_{movePieceReason}";
         }
 
-        public static string GetStart(MovePieceReason movePieceReason)
+        public static string GetMoveStart(MovePieceReason movePieceReason)
         {
-            return $"{Get(movePieceReason)}_{Start}";
+            return $"{GetMove(movePieceReason)}_{Start}";
         }
 
         public static string GetMoveEnd()
         {
-            return $"{GetMoveBase()}_{End}";
+            return $"{GetMove()}_{End}";
         }
 
         #endregion
 
         #region Hit
 
-        public static string GetHitBase()
+        public static string GetHit()
         {
             return $"{Hit}";
         }
 
-        public static string Get(HitPieceReason hitPieceReason)
+        public static string GetHit(HitPieceReason hitPieceReason)
         {
-            return $"{GetHitBase()}_{hitPieceReason}";
+            return $"{GetHit()}_{hitPieceReason}";
         }
 
-        public static string Get(HitPieceReason hitPieceReason, Direction direction)
+        public static string GetHit(HitPieceReason hitPieceReason, Direction direction)
         {
-            return $"{Get(hitPieceReason)}_{direction}";
+            return $"{GetHit(hitPieceReason)}_{direction}";
         }
 
         #endregion
