@@ -260,7 +260,7 @@ namespace Game.Gameplay.Board.Utils
 
                 int otherPieceId = otherPiece.Id;
 
-                if (otherPieceId == piece.Id || visitedPieceIds.Contains(otherPieceId))
+                if (otherPiece == piece || visitedPieceIds.Contains(otherPieceId))
                 {
                     continue;
                 }

@@ -33,19 +33,53 @@ namespace Game.Gameplay.Pieces
 
         public DamagePieceEvent Damage(Coordinate coordinate, DamagePieceReason damagePieceReason, Direction direction)
         {
-            int? pieceId = _board.GetPieceId(coordinate);
-
-            if (!pieceId.HasValue)
+            if (!TryDamage(coordinate, out IPiece piece))
             {
                 return null;
             }
 
-            int pieceIdValue = pieceId.Value;
+            DamagePieceEvent damagePieceEvent = GetDamagePieceEvent(piece, damagePieceReason, direction);
 
-            IPiece piece = _board.GetPiece(pieceIdValue);
+            return damagePieceEvent;
+        }
+
+        public IEnumerable<DamagePieceEvent> Damage(
+            [NotNull] IEnumerable<Coordinate> coordinates,
+            DamagePieceReason damagePieceReason,
+            Direction direction)
+        {
+            ArgumentNullException.ThrowIfNull(coordinates);
+
+            ICollection<IPiece> damagedPieces = new HashSet<IPiece>();
+
+            foreach (Coordinate coordinate in coordinates)
+            {
+                if (!TryDamage(coordinate, out IPiece piece))
+                {
+                    continue;
+                }
+
+                damagedPieces.Add(piece);
+            }
+
+            foreach (IPiece piece in damagedPieces)
+            {
+                DamagePieceEvent damagePieceEvent = GetDamagePieceEvent(piece, damagePieceReason, direction);
+
+                yield return damagePieceEvent;
+            }
+        }
+
+        [ContractAnnotation("=> true, piece:notnull; => false, piece:null")]
+        private bool TryDamage(Coordinate coordinate, out IPiece piece)
+        {
+            if (!_board.TryGetPiece(coordinate, out piece))
+            {
+                return false;
+            }
 
             _board.GetPieceRowColumnOffset(
-                pieceIdValue,
+                piece.Id,
                 coordinate.Row,
                 coordinate.Column,
                 out int rowOffset,
@@ -54,12 +88,23 @@ namespace Game.Gameplay.Pieces
 
             piece.Damage(rowOffset, columnOffset);
 
+            return true;
+        }
+
+        [NotNull]
+        private DamagePieceEvent GetDamagePieceEvent(
+            [NotNull] IPiece piece,
+            DamagePieceReason damagePieceReason,
+            Direction direction)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
             DestroyPieceEvent destroyPieceEvent = DestroyIfNeeded(piece);
 
             DamagePieceEvent damagePieceEvent =
                 new(
                     destroyPieceEvent,
-                    pieceIdValue,
+                    piece.Id,
                     piece.State,
                     damagePieceReason,
                     direction
