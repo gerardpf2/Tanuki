@@ -48,14 +48,24 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
 
         #region Move
 
-        public static string GetStart(MovePieceReason movePieceReason)
+        public static string GetMoveBase()
         {
-            return $"{Move}_{movePieceReason}_{Start}";
+            return $"{Move}";
         }
 
-        public static string GetEnd(MovePieceReason movePieceReason)
+        public static string Get(MovePieceReason movePieceReason)
         {
-            return $"{Move}_{movePieceReason}_{End}";
+            return $"{GetMoveBase()}_{movePieceReason}";
+        }
+
+        public static string GetStart(MovePieceReason movePieceReason)
+        {
+            return $"{Get(movePieceReason)}_{Start}";
+        }
+
+        public static string GetMoveEnd()
+        {
+            return $"{GetMoveBase()}_{End}";
         }
 
         #endregion

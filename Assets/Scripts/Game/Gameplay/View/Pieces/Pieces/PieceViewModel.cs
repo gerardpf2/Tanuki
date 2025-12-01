@@ -78,12 +78,17 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
         {
-            PrepareMainAnimation(TriggerNameUtils.GetStart(movePieceReason), onComplete);
+            PrepareMainAnimation(
+                onComplete,
+                TriggerNameUtils.GetStart(movePieceReason),
+                TriggerNameUtils.Get(movePieceReason),
+                TriggerNameUtils.GetMoveBase()
+            );
         }
 
-        public void OnMovementEnded(MovePieceReason movePieceReason, Action onComplete)
+        public void OnMovementEnded(Action onComplete)
         {
-            PrepareMainAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
+            PrepareMainAnimation(TriggerNameUtils.GetMoveEnd(), onComplete);
         }
 
         public void OnHit(HitPieceReason hitPieceReason, Direction direction)
