@@ -31,16 +31,21 @@ namespace Game.Gameplay.Pieces
             _pieceGetter = pieceGetter;
         }
 
-        public DamagePieceEvent Damage(
-            int pieceId,
-            Coordinate coordinate,
-            DamagePieceReason damagePieceReason,
-            Direction direction)
+        public DamagePieceEvent Damage(Coordinate coordinate, DamagePieceReason damagePieceReason, Direction direction)
         {
-            IPiece piece = _board.GetPiece(pieceId);
+            int? pieceId = _board.GetPieceId(coordinate);
+
+            if (!pieceId.HasValue)
+            {
+                return null;
+            }
+
+            int pieceIdValue = pieceId.Value;
+
+            IPiece piece = _board.GetPiece(pieceIdValue);
 
             _board.GetPieceRowColumnOffset(
-                pieceId,
+                pieceIdValue,
                 coordinate.Row,
                 coordinate.Column,
                 out int rowOffset,
@@ -54,7 +59,7 @@ namespace Game.Gameplay.Pieces
             DamagePieceEvent damagePieceEvent =
                 new(
                     destroyPieceEvent,
-                    pieceId,
+                    pieceIdValue,
                     piece.State,
                     damagePieceReason,
                     direction

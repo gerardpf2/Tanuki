@@ -87,19 +87,21 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull, ItemNotNull]
         private IEnumerable<DamagePieceEvent> DamageRow(int row)
         {
-            IEnumerable<KeyValuePair<int, Coordinate>> pieceIdsInRow = _board.GetPieceIdsInRow(row);
+            IEnumerable<Coordinate> coordinatesInRow = _board.GetCoordinatesInRow(row);
 
-            foreach ((int pieceId, Coordinate coordinate) in pieceIdsInRow)
+            foreach (Coordinate coordinate in coordinatesInRow)
             {
                 DamagePieceEvent damagePieceEvent =
                     _damagePieceHelper.Damage(
-                        pieceId,
                         coordinate,
                         DamagePieceReason.LineClear,
                         Direction.Right
                     );
 
-                yield return damagePieceEvent;
+                if (damagePieceEvent is not null)
+                {
+                    yield return damagePieceEvent;
+                }
             }
         }
     }

@@ -33,7 +33,7 @@ namespace Game.Gameplay.Board.Utils
 
             for (int row = bottomRow; row <= topRow; ++row)
             {
-                foreach ((int pieceId, _) in board.GetPieceIdsInRow(row))
+                foreach (int pieceId in board.GetPieceIdsInRow(row))
                 {
                     if (visitedPieceIds.Contains(pieceId))
                     {
@@ -55,7 +55,7 @@ namespace Game.Gameplay.Board.Utils
         }
 
         [NotNull]
-        public static IEnumerable<KeyValuePair<int, Coordinate>> GetPieceIdsInRow([NotNull] this IBoard board, int row)
+        public static IEnumerable<int> GetPieceIdsInRow([NotNull] this IBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -68,7 +68,7 @@ namespace Game.Gameplay.Board.Utils
                     continue;
                 }
 
-                yield return new KeyValuePair<int, Coordinate>(pieceId.Value, coordinate);
+                yield return pieceId.Value;
             }
         }
 
