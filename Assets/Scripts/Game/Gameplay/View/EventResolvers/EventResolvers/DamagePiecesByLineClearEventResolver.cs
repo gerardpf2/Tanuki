@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.View.Actions;
 using Game.Gameplay.View.Actions.Actions;
@@ -12,16 +13,20 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
     {
         private const float SecondsBetweenActions = 0.05f;
 
+        [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IActionFactory _actionFactory;
         [NotNull] private readonly IEventResolverFactory _eventResolverFactory;
 
         public DamagePiecesByLineClearEventResolver(
+            [NotNull] IBoard board,
             [NotNull] IActionFactory actionFactory,
             [NotNull] IEventResolverFactory eventResolverFactory)
         {
+            ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(actionFactory);
             ArgumentNullException.ThrowIfNull(eventResolverFactory);
 
+            _board = board;
             _actionFactory = actionFactory;
             _eventResolverFactory = eventResolverFactory;
         }
@@ -37,7 +42,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         }
 
         [NotNull, ItemNotNull]
-        private static IEnumerable<DamagePieceEvent> GetDamagePieceEventsSortedByColumnThenByRow(
+        private IEnumerable<DamagePieceEvent> GetDamagePieceEventsSortedByColumnThenByRow(
             [NotNull, ItemNotNull] IEnumerable<DamagePieceEvent> damagePieceEvents)
         {
             ArgumentNullException.ThrowIfNull(damagePieceEvents);
@@ -48,14 +53,14 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             {
                 ArgumentNullException.ThrowIfNull(damagePieceEvent);
 
-                return damagePieceEvent.Coordinate.Row;
+                return _board.GetSourceCoordinate(damagePieceEvent.PieceId).Row;
             }
 
             int GetPieceColumn([NotNull] DamagePieceEvent damagePieceEvent)
             {
                 ArgumentNullException.ThrowIfNull(damagePieceEvent);
 
-                return damagePieceEvent.Coordinate.Column;
+                return _board.GetSourceCoordinate(damagePieceEvent.PieceId).Column;
             }
         }
 
