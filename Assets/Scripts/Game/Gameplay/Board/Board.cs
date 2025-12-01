@@ -100,9 +100,7 @@ namespace Game.Gameplay.Board
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                int? otherPieceId = GetPieceId(coordinate);
-
-                if (otherPieceId.HasValue)
+                if (this.TryGetPieceId(coordinate, out int otherPieceId))
                 {
                     InvalidOperationException.Throw($"Coordinate {coordinate} is not empty. It contains piece with Id: {otherPieceId}");
                 }
@@ -121,7 +119,10 @@ namespace Game.Gameplay.Board
 
             foreach (Coordinate coordinate in piece.GetCoordinates(sourceCoordinate))
             {
-                int? otherPieceId = GetPieceId(coordinate);
+                if (!this.TryGetPieceId(coordinate, out int otherPieceId))
+                {
+                    InvalidOperationException.Throw($"Coordinate {coordinate} does not contain the expected piece. It should contain piece with Id: {pieceId} but instead it does not contain any piece");
+                }
 
                 if (otherPieceId != pieceId)
                 {

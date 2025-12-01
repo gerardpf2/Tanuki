@@ -73,18 +73,16 @@ namespace Game.Gameplay.Pieces
         [ContractAnnotation("=> true, piece:notnull; => false, piece:null")]
         private bool TryDamage(Coordinate coordinate, out IPiece piece)
         {
-            if (!_board.TryGetPiece(coordinate, out piece))
+            if (!_board.TryGetPieceId(coordinate, out int pieceId))
             {
+                piece = null;
+
                 return false;
             }
 
-            _board.GetPieceRowColumnOffset(
-                piece.Id,
-                coordinate.Row,
-                coordinate.Column,
-                out int rowOffset,
-                out int columnOffset
-            );
+            piece = _board.GetPiece(pieceId);
+
+            _board.GetPieceRowColumnOffset(pieceId, coordinate, out int rowOffset, out int columnOffset);
 
             piece.Damage(rowOffset, columnOffset);
 
