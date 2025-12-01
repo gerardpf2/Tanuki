@@ -39,29 +39,19 @@ namespace Game.Gameplay.Phases.Phases
 
         protected override ResolveResult ResolveImpl(ResolveContext _)
         {
-            IDictionary<int, DamagePieceEvent> damagePieceEventsByPieceId = new Dictionary<int, DamagePieceEvent>();
-
             int bottomRow = _camera.BottomRow;
             int topRow = Math.Min(_board.HighestNonEmptyRow, _camera.TopRow);
 
-            IReadOnlyCollection<int> fullRows = GetFullRows(bottomRow, topRow);
+            IReadOnlyCollection<Coordinate> coordinatesToDamage = GetCoordinatesToDamage(bottomRow, topRow);
 
-            foreach (int row in fullRows)
-            {
-                IEnumerable<DamagePieceEvent> damagePieceEvents = DamageRow(row);
-
-                foreach (DamagePieceEvent damagePieceEvent in damagePieceEvents)
-                {
-                    damagePieceEventsByPieceId[damagePieceEvent.PieceId] = damagePieceEvent;
-                }
-            }
-
-            if (damagePieceEventsByPieceId.Count <= 0)
+            if (coordinatesToDamage.Count <= 0)
             {
                 return ResolveResult.NotUpdated;
             }
 
-            DamagePiecesByLineClearEvent damagePiecesByLineClearEvent = new(damagePieceEventsByPieceId.Values);
+            IEnumerable<DamagePieceEvent> damagePieceEvents = GetDamagePieceEvents(coordinatesToDamage);
+
+            DamagePiecesByLineClearEvent damagePiecesByLineClearEvent = new(damagePieceEvents);
 
             _eventEnqueuer.Enqueue(damagePiecesByLineClearEvent);
 
@@ -69,40 +59,38 @@ namespace Game.Gameplay.Phases.Phases
         }
 
         [NotNull]
-        private IReadOnlyCollection<int> GetFullRows(int bottomRow, int topRow)
+        private IReadOnlyCollection<Coordinate> GetCoordinatesToDamage(int bottomRow, int topRow)
         {
-            Queue<int> fullRows = new();
+            List<Coordinate> coordinatesToDamage = new();
 
             for (int row = bottomRow; row <= topRow; ++row)
             {
-                if (_board.IsRowFull(row))
+                if (!_board.IsRowFull(row))
                 {
-                    fullRows.Enqueue(row);
+                    continue;
                 }
+
+                IEnumerable<Coordinate> coordinatesInRow = _board.GetCoordinatesInRow(row);
+
+                coordinatesToDamage.AddRange(coordinatesInRow);
             }
 
-            return fullRows;
+            return coordinatesToDamage;
         }
 
         [NotNull, ItemNotNull]
-        private IEnumerable<DamagePieceEvent> DamageRow(int row)
+        private IEnumerable<DamagePieceEvent> GetDamagePieceEvents([NotNull] IEnumerable<Coordinate> coordinates)
         {
-            IEnumerable<Coordinate> coordinatesInRow = _board.GetCoordinatesInRow(row);
+            ArgumentNullException.ThrowIfNull(coordinates);
 
-            foreach (Coordinate coordinate in coordinatesInRow)
-            {
-                DamagePieceEvent damagePieceEvent =
-                    _damagePieceHelper.Damage(
-                        coordinate,
-                        DamagePieceReason.LineClear,
-                        Direction.Right
-                    );
+            IEnumerable<DamagePieceEvent> damagePieceEvents =
+                _damagePieceHelper.Damage(
+                    coordinates,
+                    DamagePieceReason.LineClear,
+                    Direction.Right
+                );
 
-                if (damagePieceEvent is not null)
-                {
-                    yield return damagePieceEvent;
-                }
-            }
+            return damagePieceEvents;
         }
     }
 }
