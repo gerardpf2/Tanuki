@@ -10,6 +10,25 @@ namespace Game.Gameplay.Board.Utils
 {
     public static class BoardUtils
     {
+        [ContractAnnotation("=> true, piece:notnull; => false, piece:null")]
+        public static bool TryGetPiece([NotNull] this IBoard board, Coordinate coordinate, out IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            int? pieceId = board.GetPieceId(coordinate);
+
+            if (!pieceId.HasValue)
+            {
+                piece = null;
+
+                return false;
+            }
+
+            piece = board.GetPiece(pieceId.Value);
+
+            return true;
+        }
+
         [NotNull]
         public static IEnumerable<int> GetDistinctPieceIdsSortedByRowThenByColumn([NotNull] this IBoard board)
         {
@@ -61,14 +80,12 @@ namespace Game.Gameplay.Board.Utils
 
             foreach (Coordinate coordinate in board.GetCoordinatesInRow(row))
             {
-                int? pieceId = board.GetPieceId(coordinate);
-
-                if (!pieceId.HasValue)
+                if (!board.TryGetPiece(coordinate, out IPiece piece))
                 {
                     continue;
                 }
 
-                yield return pieceId.Value;
+                yield return piece.Id;
             }
         }
 
@@ -203,9 +220,7 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinateBelow = new(row, coordinate.Column);
 
-                int? pieceId = board.GetPieceId(coordinateBelow);
-
-                if (pieceId.HasValue && pieceId != ignorePieceId)
+                if (board.TryGetPiece(coordinateBelow, out IPiece piece) && piece.Id != ignorePieceId)
                 {
                     break;
                 }
@@ -238,23 +253,21 @@ namespace Game.Gameplay.Board.Utils
                     continue;
                 }
 
-                int? otherPieceId = board.GetPieceId(otherCoordinate);
-
-                if (!otherPieceId.HasValue)
+                if (!board.TryGetPiece(otherCoordinate, out IPiece otherPiece))
                 {
                     continue;
                 }
 
-                int otherPieceIdValue = otherPieceId.Value;
+                int otherPieceId = otherPiece.Id;
 
-                if (otherPieceIdValue == piece.Id || visitedPieceIds.Contains(otherPieceIdValue))
+                if (otherPieceId == piece.Id || visitedPieceIds.Contains(otherPieceId))
                 {
                     continue;
                 }
 
-                visitedPieceIds.Add(otherPieceIdValue);
+                visitedPieceIds.Add(otherPieceId);
 
-                yield return otherPieceIdValue;
+                yield return otherPieceId;
             }
         }
     }
