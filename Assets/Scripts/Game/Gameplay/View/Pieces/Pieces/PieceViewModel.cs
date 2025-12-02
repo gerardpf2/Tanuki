@@ -10,14 +10,13 @@ using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Animator;
 using JetBrains.Annotations;
 using UnityEngine;
-using ArgumentException = Infrastructure.System.Exceptions.ArgumentException;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Gameplay.View.Pieces.Pieces
 {
     public class PieceViewModel : PieceViewModel<IPiece> { }
 
-    public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<IPiece>, IPieceViewInstantiateEventNotifier, IPieceViewRotateEventNotifier, IPieceViewDamageEventNotifier, IPieceViewMoveEventNotifier, IPieceViewHitEventNotifier, IAnimationEventNotifier where TPiece : IPiece
+    public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<PieceViewData>, IPieceViewInstantiateEventNotifier, IPieceViewRotateEventNotifier, IPieceViewDamageEventNotifier, IPieceViewMoveEventNotifier, IPieceViewHitEventNotifier, IAnimationEventNotifier where TPiece : IPiece
     {
         [SerializeField] private AnimatorTriggerNameContainer _animatorTriggerNameContainer;
 
@@ -25,20 +24,19 @@ namespace Game.Gameplay.View.Pieces.Pieces
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
         [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
 
-        protected TPiece Piece;
-
+        private PieceViewData _pieceViewData;
         private Action _animationOnComplete;
+
+        protected TPiece Piece => _pieceViewData?.Piece is TPiece tPiece ? tPiece : default;
 
         private void Awake()
         {
             AddBindings();
         }
 
-        public void SetData(IPiece data)
+        public void SetData(PieceViewData data)
         {
-            ArgumentException.ThrowIfTypeIsNot<TPiece>(data);
-
-            Piece = (TPiece)data;
+            _pieceViewData = data;
 
             SyncState();
         }
@@ -229,17 +227,21 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         private void SyncRotation()
         {
-            InvalidOperationException.ThrowIfNull(Piece);
+            TPiece piece = Piece;
 
-            _offsetPosition.Value = new Vector3(0.5f * (Piece.Width - 1), 0.5f * Piece.Height);
-            _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation); // Clockwise rotation
+            InvalidOperationException.ThrowIfNull(piece);
+
+            _offsetPosition.Value = new Vector3(0.5f * (piece.Width - 1), 0.5f * piece.Height);
+            _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * piece.Rotation); // Clockwise rotation
         }
 
         private Direction GetRotated(Direction direction)
         {
-            InvalidOperationException.ThrowIfNull(Piece);
+            TPiece piece = Piece;
 
-            return direction.GetRotated(Piece.Rotation);
+            InvalidOperationException.ThrowIfNull(piece);
+
+            return direction.GetRotated(piece.Rotation);
         }
     }
 }

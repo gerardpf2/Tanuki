@@ -2,9 +2,8 @@ using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces.EventNotifiers;
+using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.ModelViewViewModel;
-using Infrastructure.Unity;
-using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
@@ -29,29 +28,22 @@ namespace Game.Gameplay.View.Actions.Actions
         {
             GameObject pieceInstance = InstantiatePiece(_piece);
 
-            IDataSettable<IPiece> dataSettable = pieceInstance.GetComponent<IDataSettable<IPiece>>();
-            ICoroutineRunner coroutineRunner = pieceInstance.GetComponent<ICoroutineRunner>();
-            IPieceViewInstantiateEventNotifier pieceViewInstantiateEventNotifier = pieceInstance.GetComponent<IPieceViewInstantiateEventNotifier>();
+            IDataSettable<PieceViewData> dataSettable = pieceInstance.GetComponent<IDataSettable<PieceViewData>>();
 
             InvalidOperationException.ThrowIfNull(dataSettable);
-            InvalidOperationException.ThrowIfNull(coroutineRunner);
-            InvalidOperationException.ThrowIfNull(pieceViewInstantiateEventNotifier);
 
-            dataSettable.SetData(_piece);
+            PieceViewData pieceViewData = new(_piece, HandleReady);
 
-            /*
-             *
-             * Not ideal, but it is needed to wait for end of frame so all bindings, especially the ones related to the
-             * animator, are ready. Otherwise, on complete callback may not be called
-             *
-             */
-
-            coroutineRunner.Run(CoroutineUtils.GetWaitForEndOfFrame(NotifyInstantiated));
+            dataSettable.SetData(pieceViewData);
 
             return;
 
-            void NotifyInstantiated()
+            void HandleReady()
             {
+                IPieceViewInstantiateEventNotifier pieceViewInstantiateEventNotifier = pieceInstance.GetComponent<IPieceViewInstantiateEventNotifier>();
+
+                InvalidOperationException.ThrowIfNull(pieceViewInstantiateEventNotifier);
+
                 pieceViewInstantiateEventNotifier.OnInstantiated(_instantiatePieceReason, onComplete);
             }
         }
