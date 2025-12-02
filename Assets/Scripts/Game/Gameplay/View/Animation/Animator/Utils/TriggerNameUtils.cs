@@ -8,10 +8,25 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
         private const string Start = nameof(Start);
         private const string End = nameof(End);
 
+        private const string Instantiate = nameof(Instantiate);
         private const string Destroy = nameof(Destroy);
         private const string Damage = nameof(Damage);
         private const string Move = nameof(Move);
         private const string Hit = nameof(Hit);
+
+        #region Instantiate
+
+        public static string GetInstantiate()
+        {
+            return $"{Instantiate}";
+        }
+
+        public static string GetInstantiate(InstantiatePieceReason instantiatePieceReason)
+        {
+            return $"{GetInstantiate()}_{instantiatePieceReason}";
+        }
+
+        #endregion
 
         #region Destroy
 

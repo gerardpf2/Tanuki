@@ -45,9 +45,11 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnInstantiated(InstantiatePieceReason instantiatePieceReason, Action onComplete)
         {
-            // TODO
-
-            onComplete?.Invoke();
+            PrepareMainAnimation(
+                onComplete,
+                TriggerNameUtils.GetInstantiate(instantiatePieceReason),
+                TriggerNameUtils.GetInstantiate()
+            );
         }
 
         public void OnDestroyed(DestroyPieceReason destroyPieceReason, Action onComplete)
