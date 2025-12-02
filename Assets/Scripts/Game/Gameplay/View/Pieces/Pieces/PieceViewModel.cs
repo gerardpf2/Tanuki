@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Game.Common;
 using Game.Common.Utils;
 using Game.Gameplay.Events.Reasons;
@@ -8,6 +9,7 @@ using Game.Gameplay.View.Animation.Animator.Utils;
 using Game.Gameplay.View.Pieces.EventNotifiers;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Animator;
+using Infrastructure.Unity.Utils;
 using JetBrains.Annotations;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
@@ -26,6 +28,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         private PieceViewData _pieceViewData;
         private Action _animationOnComplete;
+        private bool _ready;
 
         protected TPiece Piece => _pieceViewData?.Piece is TPiece tPiece ? tPiece : default;
 
@@ -34,11 +37,25 @@ namespace Game.Gameplay.View.Pieces.Pieces
             AddBindings();
         }
 
+        private IEnumerator Start()
+        {
+            yield return CoroutineUtils.GetWaitForEndOfFrame(OnReady);
+        }
+
+        private void OnReady()
+        {
+            _ready = true;
+
+            CallViewDataOnReadyIfNeeded();
+        }
+
         public void SetData(PieceViewData data)
         {
             _pieceViewData = data;
 
             SyncState();
+
+            CallViewDataOnReadyIfNeeded();
         }
 
         public void OnInstantiated(InstantiatePieceReason instantiatePieceReason, Action onComplete)
@@ -222,6 +239,14 @@ namespace Game.Gameplay.View.Pieces.Pieces
             foreach (string triggerName in triggerNames)
             {
                 _animationTrigger.Trigger(triggerName);
+            }
+        }
+
+        private void CallViewDataOnReadyIfNeeded()
+        {
+            if (_ready)
+            {
+                _pieceViewData?.OnReady?.Invoke();
             }
         }
 
