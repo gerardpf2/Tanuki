@@ -24,8 +24,7 @@ namespace Game.Gameplay.Phases.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new CameraTargetHighestPlayerPieceLockRowPhase(
-                        r.Resolve<IBoard>(),
-                        r.Resolve<ICamera>(),
+                        r.Resolve<IMoveCameraHelper>(),
                         r.Resolve<IEventEnqueuer>()
                     )
                 ),
