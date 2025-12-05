@@ -39,14 +39,12 @@ namespace Game.Gameplay.View.Animation.Movement
 
         public void DoInitialCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)
         {
-            // TODO
-
             const int columnOffset = 0;
-            const float unitsPerSecond = 15.0f;
+            const float unitsPerSecond = 10.0f; // 1.0f divided by InstantiateInitialPiecesAndMoveCameraEventResolver::SecondsBetweenRows
 
             ArgumentNullException.ThrowIfNull(transform);
 
-            DoTweenMovement(transform, rowOffset, columnOffset, unitsPerSecond, EasingType.InOutQuad, onComplete);
+            DoTweenMovement(transform, rowOffset, columnOffset, unitsPerSecond, EasingType.Linear, onComplete);
         }
 
         public void DoRegularCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)

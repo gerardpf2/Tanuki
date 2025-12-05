@@ -46,7 +46,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
                 actions.Add(moveCameraAction);
             }
 
-            yield return _actionFactory.GetParallelActionGroup(actions);
+            yield return _actionFactory.GetParallelActionGroup(actions, SecondsBetweenRows);
         }
 
         [NotNull]
