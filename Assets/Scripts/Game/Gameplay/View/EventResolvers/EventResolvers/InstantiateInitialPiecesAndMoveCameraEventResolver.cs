@@ -10,6 +10,9 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 {
     public class InstantiateInitialPiecesAndMoveCameraEventResolver : EventResolver<InstantiateInitialPiecesAndMoveCameraEvent>
     {
+        private const float SecondsBetweenRowActions = 0.01f;
+        private const float SecondsBetweenRows = 0.1f;
+
         [NotNull] private readonly IActionFactory _actionFactory;
         [NotNull] private readonly IEventResolverFactory _eventResolverFactory;
 
@@ -30,7 +33,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             ICollection<IAction> actions = new List<IAction>();
 
-            IAction instantiateInitialPiecesAction = GetInstantiateInitialPiecesAction(evt.InstantiatePieceEvents);
+            IAction instantiateInitialPiecesAction = GetInstantiateInitialPiecesAction(evt);
 
             actions.Add(instantiateInitialPiecesAction);
 
@@ -43,18 +46,53 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
                 actions.Add(moveCameraAction);
             }
 
-            yield return _actionFactory.GetParallelActionGroup(actions); // TODO
+            yield return _actionFactory.GetParallelActionGroup(actions);
         }
 
         [NotNull]
         private IAction GetInstantiateInitialPiecesAction(
-            [NotNull] IEnumerable<InstantiatePieceEvent> instantiatePieceEvents)
+            [NotNull] InstantiateInitialPiecesAndMoveCameraEvent evt)
+        {
+            ArgumentNullException.ThrowIfNull(evt);
+
+            ICollection<IAction> actions = new List<IAction>();
+
+            IEnumerable<IEnumerable<InstantiatePieceEvent>> instantiatePieceEventsGroupedByRowAndSortedByColumn =
+                GetInstantiatePieceEventsGroupedByRowAndSortedByColumn(
+                    evt.InstantiatePieceEvents
+                );
+
+            foreach (IEnumerable<InstantiatePieceEvent> instantiatePieceEvents in instantiatePieceEventsGroupedByRowAndSortedByColumn)
+            {
+                IEnumerable<IAction> instantiatePieceActions = instantiatePieceEvents.Select(GetInstantiatePieceAction);
+
+                actions.Add(_actionFactory.GetParallelActionGroup(instantiatePieceActions, SecondsBetweenRowActions));
+            }
+
+            return _actionFactory.GetParallelActionGroup(actions, SecondsBetweenRows);
+        }
+
+        [NotNull, ItemNotNull] // ItemNotNull for InstantiatePieceEvent too
+        private static IEnumerable<IEnumerable<InstantiatePieceEvent>> GetInstantiatePieceEventsGroupedByRowAndSortedByColumn(
+            [NotNull, ItemNotNull] IEnumerable<InstantiatePieceEvent> instantiatePieceEvents)
         {
             ArgumentNullException.ThrowIfNull(instantiatePieceEvents);
 
-            IEnumerable<IAction> instantiatePieceActions = instantiatePieceEvents.Select(GetInstantiatePieceAction);
+            return instantiatePieceEvents.OrderBy(GetRow).ThenBy(GetColumn).GroupBy(GetRow);
 
-            return _actionFactory.GetParallelActionGroup(instantiatePieceActions); // TODO
+            int GetRow([NotNull] InstantiatePieceEvent instantiatePieceEvent)
+            {
+                ArgumentNullException.ThrowIfNull(instantiatePieceEvent);
+
+                return instantiatePieceEvent.SourceCoordinate.Row;
+            }
+
+            int GetColumn([NotNull] InstantiatePieceEvent instantiatePieceEvent)
+            {
+                ArgumentNullException.ThrowIfNull(instantiatePieceEvent);
+
+                return instantiatePieceEvent.SourceCoordinate.Column;
+            }
         }
 
         [NotNull]
