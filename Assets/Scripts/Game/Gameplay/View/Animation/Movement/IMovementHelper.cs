@@ -9,6 +9,8 @@ namespace Game.Gameplay.View.Animation.Movement
 
         void DoLockMovement(Transform transform, int rowOffset, int columnOffset, Action onComplete);
 
-        void DoCameraMovement(Transform transform, int rowOffset, Action onComplete);
+        void DoInitialCameraMovement(Transform transform, int rowOffset, Action onComplete);
+
+        void DoRegularCameraMovement(Transform transform, int rowOffset, Action onComplete);
     }
 }

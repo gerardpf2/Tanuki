@@ -37,7 +37,19 @@ namespace Game.Gameplay.View.Animation.Movement
             DoTweenMovement(transform, rowOffset, columnOffset, unitsPerSecond, EasingType.InQuad, onComplete);
         }
 
-        public void DoCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)
+        public void DoInitialCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)
+        {
+            // TODO
+
+            const int columnOffset = 0;
+            const float unitsPerSecond = 15.0f;
+
+            ArgumentNullException.ThrowIfNull(transform);
+
+            DoTweenMovement(transform, rowOffset, columnOffset, unitsPerSecond, EasingType.InOutQuad, onComplete);
+        }
+
+        public void DoRegularCameraMovement([NotNull] Transform transform, int rowOffset, Action onComplete)
         {
             const int columnOffset = 0;
             const float unitsPerSecond = 15.0f;

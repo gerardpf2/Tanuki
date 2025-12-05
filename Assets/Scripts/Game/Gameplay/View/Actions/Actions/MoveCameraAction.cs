@@ -5,6 +5,7 @@ using Game.Gameplay.View.Camera;
 using JetBrains.Annotations;
 using UnityEngine;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
+using ArgumentOutOfRangeException = Infrastructure.System.Exceptions.ArgumentOutOfRangeException;
 
 namespace Game.Gameplay.View.Actions.Actions
 {
@@ -32,11 +33,20 @@ namespace Game.Gameplay.View.Actions.Actions
 
         public void Resolve(Action onComplete)
         {
-            // TODO: Reason
-
             Transform transform = _cameraView.UnityCamera.transform;
 
-            _movementHelper.DoCameraMovement(transform, _rowOffset, onComplete);
+            switch (_moveCameraReason)
+            {
+                case MoveCameraReason.Initial:
+                    _movementHelper.DoInitialCameraMovement(transform, _rowOffset, onComplete);
+                    break;
+                case MoveCameraReason.Regular:
+                    _movementHelper.DoRegularCameraMovement(transform, _rowOffset, onComplete);
+                    break;
+                default:
+                    ArgumentOutOfRangeException.Throw(_moveCameraReason);
+                    return;
+            }
         }
     }
 }
