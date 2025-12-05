@@ -52,12 +52,13 @@ namespace Game.Gameplay.Phases.Composition
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhase>(r =>
-                    new InstantiateInitialPiecesPhase(
+                    new InstantiateInitialPiecesAndMoveCameraPhase(
                         r.Resolve<IBoard>(),
+                        r.Resolve<IMoveCameraHelper>(),
                         r.Resolve<IEventEnqueuer>()
                     )
                 ),
-                PhasesComposerKeys.Phase.InstantiateInitialPiecesPhase
+                PhasesComposerKeys.Phase.InstantiateInitialPiecesAndMoveCameraPhase
             );
 
             ruleAdder.Add(
@@ -120,9 +121,9 @@ namespace Game.Gameplay.Phases.Composition
                 ruleFactory.GetSingleton<IPhaseContainer>(r =>
                     new PhaseContainer(
                         r.Resolve<IPhaseResolver>(),
-                        r.Resolve<IPhase>(PhasesComposerKeys.Phase.InstantiateInitialPiecesPhase),
-                        r.Resolve<IPhase>(PhasesComposerKeys.Phase.InstantiatePlayerPiecePhase),
-                        r.Resolve<IPhase>(PhasesComposerKeys.Phase.CameraTargetHighestPlayerPieceLockRowPhase)
+                        r.Resolve<IPhase>(PhasesComposerKeys.Phase.SimulateInstantiatePlayerPiecePhase),
+                        r.Resolve<IPhase>(PhasesComposerKeys.Phase.InstantiateInitialPiecesAndMoveCameraPhase),
+                        r.Resolve<IPhase>(PhasesComposerKeys.Phase.InstantiatePlayerPiecePhase)
                     )
                 ),
                 PhasesComposerKeys.PhaseContainer.Initial
