@@ -144,9 +144,9 @@ namespace Game.Gameplay.View.Actions
                 );
         }
 
-        public IAction GetMoveCameraAction(int rowOffset)
+        public IAction GetMoveCameraAction(int rowOffset, MoveCameraReason moveCameraReason)
         {
-            return new MoveCameraAction(_movementHelper, _cameraView, rowOffset);
+            return new MoveCameraAction(_movementHelper, _cameraView, rowOffset, moveCameraReason);
         }
 
         public IAction GetSetGoalCurrentAmountAction(PieceType pieceType, int currentAmount, Coordinate coordinate)

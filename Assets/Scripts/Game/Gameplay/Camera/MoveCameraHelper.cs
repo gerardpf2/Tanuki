@@ -1,6 +1,7 @@
 using System;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
@@ -20,7 +21,9 @@ namespace Game.Gameplay.Camera
             _camera = camera;
         }
 
-        public MoveCameraEvent TargetHighestPlayerPieceLockRow(int pieceLockSourceCoordinateRow)
+        public MoveCameraEvent TargetHighestPlayerPieceLockRow(
+            int pieceLockSourceCoordinateRow,
+            MoveCameraReason moveCameraReason)
         {
             int prevCameraBottomRow = _camera.BottomRow;
 
@@ -30,7 +33,7 @@ namespace Game.Gameplay.Camera
             int newCameraBottomRow = _camera.BottomRow;
             int rowOffset = newCameraBottomRow - prevCameraBottomRow;
 
-            MoveCameraEvent moveCameraEvent = new(rowOffset);
+            MoveCameraEvent moveCameraEvent = new(rowOffset, moveCameraReason);
 
             return moveCameraEvent;
         }

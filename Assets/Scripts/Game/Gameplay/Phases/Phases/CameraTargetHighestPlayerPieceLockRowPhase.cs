@@ -2,6 +2,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -48,7 +49,8 @@ namespace Game.Gameplay.Phases.Phases
 
             MoveCameraEvent moveCameraEvent =
                 _moveCameraHelper.TargetHighestPlayerPieceLockRow(
-                    pieceLockSourceCoordinate.Row
+                    pieceLockSourceCoordinate.Row,
+                    MoveCameraReason.Regular
                 );
 
             if (moveCameraEvent.RowOffset == 0)

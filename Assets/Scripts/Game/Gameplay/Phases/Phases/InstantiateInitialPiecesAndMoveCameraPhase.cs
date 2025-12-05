@@ -80,7 +80,8 @@ namespace Game.Gameplay.Phases.Phases
         {
             MoveCameraEvent moveCameraEvent =
                 _moveCameraHelper.TargetHighestPlayerPieceLockRow(
-                    pieceLockSourceCoordinateRow
+                    pieceLockSourceCoordinateRow,
+                    MoveCameraReason.Initial
                 );
 
             return moveCameraEvent;
