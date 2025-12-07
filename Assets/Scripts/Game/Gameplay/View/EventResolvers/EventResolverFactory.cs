@@ -75,7 +75,7 @@ namespace Game.Gameplay.View.EventResolvers
 
         public IEventResolver<InstantiateInitialPiecesAndMoveCameraEvent> GetInstantiateInitialPiecesAndMoveCameraEventResolver()
         {
-            return new InstantiateInitialPiecesAndMoveCameraEventResolver(_actionFactory, this);
+            return new InstantiateInitialPiecesAndMoveCameraEventResolver(_actionFactory, this, _coroutineRunner);
         }
 
         public IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver()
