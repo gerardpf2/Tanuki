@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using Game.Common;
-using Game.Common.Utils;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Animator;
@@ -83,8 +82,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnDamaged(DamagePieceReason damagePieceReason, Direction direction, Action onComplete)
         {
-            direction = GetRotated(direction);
-
             PrepareMainAnimation(
                 onComplete,
                 TriggerNameUtils.GetDamage(damagePieceReason, direction),
@@ -110,8 +107,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnHit(HitPieceReason hitPieceReason, Direction direction)
         {
-            direction = GetRotated(direction);
-
             PrepareSecondaryAnimation(
                 TriggerNameUtils.GetHit(hitPieceReason, direction),
                 TriggerNameUtils.GetHit(hitPieceReason),
@@ -258,15 +253,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             _offsetPosition.Value = new Vector3(0.5f * (piece.Width - 1), 0.5f * piece.Height);
             _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * piece.Rotation); // Clockwise rotation
-        }
-
-        private Direction GetRotated(Direction direction)
-        {
-            TPiece piece = Piece;
-
-            InvalidOperationException.ThrowIfNull(piece);
-
-            return direction.GetRotated(piece.Rotation);
         }
     }
 }
