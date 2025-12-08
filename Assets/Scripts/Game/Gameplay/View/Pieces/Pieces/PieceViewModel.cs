@@ -1,7 +1,10 @@
 using System;
+using Game.Common;
+using Game.Common.Utils;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Animation.Animator;
+using Game.Gameplay.View.Animation.Animator.Utils;
 using Game.Gameplay.View.Pieces.EventNotifiers;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.Unity.Animator;
@@ -14,23 +17,24 @@ namespace Game.Gameplay.View.Pieces.Pieces
 {
     public class PieceViewModel : PieceViewModel<IPiece> { }
 
-    public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<IPiece>, IPieceViewInstantiateEventNotifier, IPieceViewRotateEventNotifier, IAnimationEventNotifier where TPiece : IPiece
+    public abstract class PieceViewModel<TPiece> : ViewModel, IDataSettable<IPiece>, IPieceViewInstantiateEventNotifier, IPieceViewRotateEventNotifier, IPieceViewDamageEventNotifier, IPieceViewMoveEventNotifier, IPieceViewHitEventNotifier, IAnimationEventNotifier where TPiece : IPiece
     {
         [SerializeField] private AnimatorTriggerNameContainer _animatorTriggerNameContainer;
 
+        // State
+        [NotNull] private readonly IBoundProperty<bool> _alive = new BoundProperty<bool>("Alive");
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
+        // Animation
         [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
 
         protected TPiece Piece;
 
         private Action _animationOnComplete;
 
-        protected virtual void Awake()
+        private void Awake()
         {
-            Add(_offsetPosition);
-            Add(_offsetRotation);
-            Add(_animationTrigger);
+            AddBindings();
         }
 
         public void SetData(IPiece data)
@@ -61,6 +65,48 @@ namespace Game.Gameplay.View.Pieces.Pieces
             SyncRotation();
         }
 
+        public void OnDamaged(DamagePieceReason damagePieceReason, Direction direction, Action onComplete)
+        {
+            direction = GetRotated(direction);
+
+            PrepareMainAnimation(
+                OnComplete,
+                TriggerNameUtils.Get(damagePieceReason, direction),
+                TriggerNameUtils.Get(damagePieceReason),
+                TriggerNameUtils.GetDamageBase()
+            );
+
+            return;
+
+            void OnComplete()
+            {
+                SyncAlive();
+
+                onComplete?.Invoke();
+            }
+        }
+
+        public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
+        {
+            PrepareMainAnimation(TriggerNameUtils.GetStart(movePieceReason), onComplete);
+        }
+
+        public void OnMovementEnded(MovePieceReason movePieceReason, Action onComplete)
+        {
+            PrepareMainAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
+        }
+
+        public void OnHit(HitPieceReason hitPieceReason, Direction direction)
+        {
+            direction = GetRotated(direction);
+
+            PrepareSecondaryAnimation(
+                TriggerNameUtils.Get(hitPieceReason, direction),
+                TriggerNameUtils.Get(hitPieceReason),
+                TriggerNameUtils.GetHitBase()
+            );
+        }
+
         public void OnAnimationEnd(string _)
         {
             /*
@@ -82,8 +128,17 @@ namespace Game.Gameplay.View.Pieces.Pieces
             _animationOnComplete = null;
         }
 
+        protected virtual void AddBindings()
+        {
+            Add(_alive);
+            Add(_offsetPosition);
+            Add(_offsetRotation);
+            Add(_animationTrigger);
+        }
+
         protected virtual void SyncState()
         {
+            SyncAlive();
             SyncRotation();
         }
 
@@ -174,12 +229,26 @@ namespace Game.Gameplay.View.Pieces.Pieces
             }
         }
 
+        private void SyncAlive()
+        {
+            InvalidOperationException.ThrowIfNull(Piece);
+
+            _alive.Value = Piece.Alive;
+        }
+
         private void SyncRotation()
         {
             InvalidOperationException.ThrowIfNull(Piece);
 
             _offsetPosition.Value = new Vector3(0.5f * (Piece.Width - 1), 0.5f * Piece.Height);
             _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * Piece.Rotation); // Clockwise rotation
+        }
+
+        private Direction GetRotated(Direction direction)
+        {
+            InvalidOperationException.ThrowIfNull(Piece);
+
+            return direction.GetRotated(Piece.Rotation);
         }
     }
 }
