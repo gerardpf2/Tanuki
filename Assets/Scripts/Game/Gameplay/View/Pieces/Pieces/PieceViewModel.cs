@@ -21,8 +21,11 @@ namespace Game.Gameplay.View.Pieces.Pieces
     {
         [SerializeField] private AnimatorTriggerNameContainer _animatorTriggerNameContainer;
 
+        // Rotation related
+        [NotNull] private readonly IBoundProperty<int> _rotation = new BoundProperty<int>("Rotation");
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
+        // Animation related
         [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
 
         private PieceViewData _pieceViewData;
@@ -140,6 +143,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         protected virtual void AddBindings()
         {
+            Add(_rotation);
             Add(_offsetPosition);
             Add(_offsetRotation);
             Add(_animationTrigger);
@@ -251,6 +255,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             InvalidOperationException.ThrowIfNull(piece);
 
+            _rotation.Value = piece.Rotation;
             _offsetPosition.Value = new Vector3(0.5f * (piece.Width - 1), 0.5f * piece.Height);
             _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * piece.Rotation); // Clockwise rotation
         }
