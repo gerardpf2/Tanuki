@@ -2,6 +2,7 @@ using System;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Pieces.EventNotifiers;
+using Game.Gameplay.View.Pieces.Pieces;
 using Infrastructure.ModelViewViewModel;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -27,14 +28,24 @@ namespace Game.Gameplay.View.Actions.Actions
         {
             GameObject pieceInstance = InstantiatePiece(_piece);
 
-            IDataSettable<IPiece> dataSettable = pieceInstance.GetComponent<IDataSettable<IPiece>>();
-            IPieceViewInstantiateEventNotifier pieceViewInstantiateEventNotifier = pieceInstance.GetComponent<IPieceViewInstantiateEventNotifier>();
+            IDataSettable<PieceViewData> dataSettable = pieceInstance.GetComponent<IDataSettable<PieceViewData>>();
 
             InvalidOperationException.ThrowIfNull(dataSettable);
-            InvalidOperationException.ThrowIfNull(pieceViewInstantiateEventNotifier);
 
-            dataSettable.SetData(_piece);
-            pieceViewInstantiateEventNotifier.OnInstantiated(_instantiatePieceReason, onComplete);
+            PieceViewData pieceViewData = new(_piece, HandleReady);
+
+            dataSettable.SetData(pieceViewData);
+
+            return;
+
+            void HandleReady()
+            {
+                IPieceViewInstantiateEventNotifier pieceViewInstantiateEventNotifier = pieceInstance.GetComponent<IPieceViewInstantiateEventNotifier>();
+
+                InvalidOperationException.ThrowIfNull(pieceViewInstantiateEventNotifier);
+
+                pieceViewInstantiateEventNotifier.OnInstantiated(_instantiatePieceReason, onComplete);
+            }
         }
 
         [NotNull]
