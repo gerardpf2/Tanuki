@@ -7,28 +7,22 @@ using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.EventResolvers.EventResolvers
 {
-    public class MovePieceEventResolver : EventResolver<MovePieceEvent>
+    public class SetGoalCurrentAmountEventResolver : EventResolver<SetGoalCurrentAmountEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
 
-        public MovePieceEventResolver([NotNull] IActionFactory actionFactory)
+        public SetGoalCurrentAmountEventResolver([NotNull] IActionFactory actionFactory)
         {
             ArgumentNullException.ThrowIfNull(actionFactory);
 
             _actionFactory = actionFactory;
         }
 
-        protected override IEnumerable<IAction> GetActions([NotNull] MovePieceEvent evt)
+        protected override IEnumerable<IAction> GetActions([NotNull] SetGoalCurrentAmountEvent evt)
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            yield return
-                _actionFactory.GetMovePieceAction(
-                    evt.PieceId,
-                    evt.RowOffset,
-                    evt.ColumnOffset,
-                    evt.MovePieceReason
-                );
+            yield return _actionFactory.GetSetGoalCurrentAmountAction(evt.PieceType, evt.CurrentAmount, evt.Coordinate);
         }
     }
 }

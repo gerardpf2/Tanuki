@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.View.Actions;
@@ -11,12 +12,17 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
     public class LockPlayerPieceEventResolver : EventResolver<LockPlayerPieceEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
+        [NotNull] private readonly IEventResolverFactory _eventResolverFactory;
 
-        public LockPlayerPieceEventResolver([NotNull] IActionFactory actionFactory)
+        public LockPlayerPieceEventResolver(
+            [NotNull] IActionFactory actionFactory,
+            [NotNull] IEventResolverFactory eventResolverFactory)
         {
             ArgumentNullException.ThrowIfNull(actionFactory);
+            ArgumentNullException.ThrowIfNull(eventResolverFactory);
 
             _actionFactory = actionFactory;
+            _eventResolverFactory = eventResolverFactory;
         }
 
         protected override IEnumerable<IAction> GetActions([NotNull] LockPlayerPieceEvent evt)
@@ -25,18 +31,20 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             yield return _actionFactory.GetDestroyPlayerPieceGhostAction(DestroyPieceReason.Lock);
 
-            int rowOffset = evt.LockSourceCoordinate.Row - evt.SourceCoordinate.Row;
-            int columnOffset = evt.LockSourceCoordinate.Column - evt.SourceCoordinate.Column;
+            Coordinate sourceCoordinate = evt.SourceCoordinate;
+            Coordinate lockSourceCoordinate = evt.InstantiatePieceEvent.SourceCoordinate;
+
+            int rowOffset = lockSourceCoordinate.Row - sourceCoordinate.Row;
+            int columnOffset = lockSourceCoordinate.Column - sourceCoordinate.Column;
 
             yield return _actionFactory.GetMovePlayerPieceAction(rowOffset, columnOffset, MovePieceReason.Lock);
 
             yield return _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.Lock);
 
             yield return
-                _actionFactory.GetInstantiatePieceAction(
-                    evt.Piece,
-                    InstantiatePieceReason.Lock,
-                    evt.LockSourceCoordinate
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetInstantiatePieceEventResolver(),
+                    evt.InstantiatePieceEvent
                 );
 
             yield return _actionFactory.GetSetMovesAmountAction(evt.MovesAmount);

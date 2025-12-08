@@ -14,8 +14,6 @@ namespace Game.Gameplay.Events.Composition
             base.AddRules(ruleAdder, ruleFactory);
 
             ruleAdder.Add(ruleFactory.GetSingleton<IEventEnqueuer>(_ => new EventEnqueuer()));
-
-            ruleAdder.Add(ruleFactory.GetSingleton<IEventFactory>(_ => new EventFactory()));
         }
     }
 }

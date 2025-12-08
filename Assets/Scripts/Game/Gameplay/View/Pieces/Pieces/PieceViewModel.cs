@@ -126,8 +126,11 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             InvalidOperationException.ThrowIfNull(_animationOnComplete);
 
-            _animationOnComplete();
+            Action animationOnCompleteCopy = _animationOnComplete;
+
             _animationOnComplete = null;
+
+            animationOnCompleteCopy();
         }
 
         protected virtual void AddBindings()

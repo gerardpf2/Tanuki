@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using Game.Common;
 using Game.Common.Pieces;
 using Game.Gameplay.Board;
+using Game.Gameplay.Events.Events;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Actions.Actions;
+using Game.Gameplay.View.EventResolvers.EventResolvers;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.Actions
@@ -62,5 +64,8 @@ namespace Game.Gameplay.View.Actions
 
         [NotNull]
         IAction GetParallelActionGroup(IEnumerable<IAction> actions, float secondsBetweenActions = 0.0f);
+
+        [NotNull]
+        IAction GetEventResolverAction<TEvent>(IEventResolver<TEvent> eventResolver, TEvent evt) where TEvent : IEvent;
     }
 }

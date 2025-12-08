@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -7,38 +6,33 @@ namespace Game.Gameplay.Events.Events
 {
     public class DamagePiecesByLineClearEvent : IEvent
     {
-        [NotNull] private readonly Queue<int> _pieceIds = new();
-        [NotNull] private readonly IDictionary<int, IEnumerable<KeyValuePair<string, string>>> _pieceStatesById = new Dictionary<int, IEnumerable<KeyValuePair<string, string>>>();
+        [NotNull, ItemNotNull] public readonly IEnumerable<DamagePieceEvent> DamagePieceEvents;
 
-        [NotNull]
-        public IEnumerable<int> PieceIds => _pieceIds;
+        [NotNull] private readonly ICollection<int> _pieceIds = new HashSet<int>();
 
-        public void Add([NotNull] IPiece piece)
+        public DamagePiecesByLineClearEvent([NotNull, ItemNotNull] IEnumerable<DamagePieceEvent> damagePieceEvents)
         {
-            ArgumentNullException.ThrowIfNull(piece);
+            ArgumentNullException.ThrowIfNull(damagePieceEvents);
 
-            int pieceId = piece.Id;
-            IEnumerable<KeyValuePair<string, string>> pieceState = piece.State;
+            ICollection<DamagePieceEvent> damagePieceEventsCopy = new List<DamagePieceEvent>();
 
-            if (_pieceStatesById.ContainsKey(pieceId))
+            foreach (DamagePieceEvent damagePieceEvent in damagePieceEvents)
             {
-                _pieceStatesById[pieceId] = pieceState;
-            }
-            else
-            {
-                _pieceIds.Enqueue(pieceId);
-                _pieceStatesById.Add(pieceId, pieceState);
-            }
-        }
+                ArgumentNullException.ThrowIfNull(damagePieceEvent);
 
-        public IEnumerable<KeyValuePair<string, string>> GetState(int pieceId)
-        {
-            if (!_pieceStatesById.TryGetValue(pieceId, out IEnumerable<KeyValuePair<string, string>> pieceState))
-            {
-                InvalidOperationException.Throw($"State for piece with Id: {pieceId} cannot be found");
+                int pieceId = damagePieceEvent.PieceId;
+
+                if (_pieceIds.Contains(pieceId))
+                {
+                    InvalidOperationException.Throw($"Piece with Id: {pieceId} has already been added");
+                }
+
+                _pieceIds.Add(pieceId);
+
+                damagePieceEventsCopy.Add(damagePieceEvent);
             }
 
-            return pieceState;
+            DamagePieceEvents = damagePieceEventsCopy;
         }
     }
 }

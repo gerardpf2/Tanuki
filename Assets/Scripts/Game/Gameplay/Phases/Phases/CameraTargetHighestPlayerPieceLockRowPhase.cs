@@ -2,6 +2,7 @@ using System;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
+using Game.Gameplay.Events.Events;
 using JetBrains.Annotations;
 using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
@@ -14,25 +15,21 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
-        [NotNull] private readonly IEventFactory _eventFactory;
 
         private Coordinate? _lastTargetedPieceLockSourceCoordinate;
 
         public CameraTargetHighestPlayerPieceLockRowPhase(
             [NotNull] IBoard board,
             [NotNull] ICamera camera,
-            [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory)
+            [NotNull] IEventEnqueuer eventEnqueuer)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
-            ArgumentNullException.ThrowIfNull(eventFactory);
 
             _board = board;
             _camera = camera;
             _eventEnqueuer = eventEnqueuer;
-            _eventFactory = eventFactory;
         }
 
         protected override ResolveResult ResolveImpl([NotNull] ResolveContext resolveContext)
@@ -68,7 +65,9 @@ namespace Game.Gameplay.Phases.Phases
                 return ResolveResult.NotUpdated;
             }
 
-            _eventEnqueuer.Enqueue(_eventFactory.GetMoveCameraEvent(rowOffset));
+            MoveCameraEvent moveCameraEvent = new(rowOffset);
+
+            _eventEnqueuer.Enqueue(moveCameraEvent);
 
             return ResolveResult.Updated;
         }

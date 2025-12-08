@@ -26,8 +26,7 @@ namespace Game.Gameplay.Phases.Composition
                     new CameraTargetHighestPlayerPieceLockRowPhase(
                         r.Resolve<IBoard>(),
                         r.Resolve<ICamera>(),
-                        r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>()
+                        r.Resolve<IEventEnqueuer>()
                     )
                 ),
                 PhasesComposerKeys.Phase.CameraTargetHighestPlayerPieceLockRowPhase
@@ -39,7 +38,6 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IBoard>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>(),
                         r.Resolve<IGoals>(),
                         r.Resolve<IPieceGetter>()
                     )
@@ -60,8 +58,7 @@ namespace Game.Gameplay.Phases.Composition
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new GravityPhase(
                         r.Resolve<IBoard>(),
-                        r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>()
+                        r.Resolve<IEventEnqueuer>()
                     )
                 ),
                 PhasesComposerKeys.Phase.GravityPhase
@@ -71,8 +68,7 @@ namespace Game.Gameplay.Phases.Composition
                 ruleFactory.GetSingleton<IPhase>(r =>
                     new InstantiateInitialPiecesPhase(
                         r.Resolve<IBoard>(),
-                        r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>()
+                        r.Resolve<IEventEnqueuer>()
                     )
                 ),
                 PhasesComposerKeys.Phase.InstantiateInitialPiecesPhase
@@ -84,8 +80,7 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IBag>(),
                         r.Resolve<IBoard>(),
                         r.Resolve<ICamera>(),
-                        r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>()
+                        r.Resolve<IEventEnqueuer>()
                     )
                 ),
                 PhasesComposerKeys.Phase.InstantiatePlayerPiecePhase
@@ -96,8 +91,7 @@ namespace Game.Gameplay.Phases.Composition
                     new LineClearPhase(
                         r.Resolve<IBoard>(),
                         r.Resolve<ICamera>(),
-                        r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>()
+                        r.Resolve<IEventEnqueuer>()
                     )
                 ),
                 PhasesComposerKeys.Phase.LineClearPhase
@@ -109,7 +103,6 @@ namespace Game.Gameplay.Phases.Composition
                         r.Resolve<IBag>(),
                         r.Resolve<IBoard>(),
                         r.Resolve<IEventEnqueuer>(),
-                        r.Resolve<IEventFactory>(),
                         r.Resolve<IMoves>()
                     )
                 ),

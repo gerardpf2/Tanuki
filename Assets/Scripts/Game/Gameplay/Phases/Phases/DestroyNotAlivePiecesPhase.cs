@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Board.Utils;
@@ -21,7 +22,6 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
-        [NotNull] private readonly IEventFactory _eventFactory;
         [NotNull] private readonly IGoals _goals;
         [NotNull] private readonly IPieceGetter _pieceGetter;
 
@@ -29,21 +29,18 @@ namespace Game.Gameplay.Phases.Phases
             [NotNull] IBoard board,
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer,
-            [NotNull] IEventFactory eventFactory,
             [NotNull] IGoals goals,
             [NotNull] IPieceGetter pieceGetter)
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
-            ArgumentNullException.ThrowIfNull(eventFactory);
             ArgumentNullException.ThrowIfNull(goals);
             ArgumentNullException.ThrowIfNull(pieceGetter);
 
             _board = board;
             _camera = camera;
             _eventEnqueuer = eventEnqueuer;
-            _eventFactory = eventFactory;
             _goals = goals;
             _pieceGetter = pieceGetter;
         }
@@ -77,29 +74,26 @@ namespace Game.Gameplay.Phases.Phases
 
             Coordinate sourceCoordinate = _board.GetSourceCoordinate(piece.Id);
 
-            DestroyPieceEvent.GoalCurrentAmountUpdatedData goalData =
-                IncreaseGoalCurrentAmount(
-                    piece.Type,
-                    sourceCoordinate
-                );
+            SetGoalCurrentAmountEvent setGoalCurrentAmountEvent = IncreaseGoalCurrentAmount(piece.Type, sourceCoordinate);
 
             _board.RemovePiece(pieceId);
 
-            DestroyPieceEvent.DecomposePieceData decomposeData = DecomposePiece(piece, sourceCoordinate);
+            IEnumerable<InstantiatePieceEvent> instantiatePieceEventsDecompose = DecomposePiece(piece, sourceCoordinate);
 
-            _eventEnqueuer.Enqueue(
-                _eventFactory.GetDestroyPieceEvent(
+            DestroyPieceEvent destroyPieceEvent =
+                new(
+                    setGoalCurrentAmountEvent,
+                    instantiatePieceEventsDecompose,
                     pieceId,
-                    DestroyPieceReason.NotAlive,
-                    goalData,
-                    decomposeData
-                )
-            );
+                    DestroyPieceReason.NotAlive
+                );
+
+            _eventEnqueuer.Enqueue(destroyPieceEvent);
 
             return true;
         }
 
-        private DestroyPieceEvent.GoalCurrentAmountUpdatedData IncreaseGoalCurrentAmount(
+        private SetGoalCurrentAmountEvent IncreaseGoalCurrentAmount(
             PieceType pieceType,
             Coordinate sourceCoordinate)
         {
@@ -108,15 +102,13 @@ namespace Game.Gameplay.Phases.Phases
                 return null;
             }
 
-            return
-                new DestroyPieceEvent.GoalCurrentAmountUpdatedData(
-                    pieceType,
-                    goalCurrentAmount,
-                    sourceCoordinate // TODO: Use center coordinate instead ¿?
-                );
+            SetGoalCurrentAmountEvent setGoalCurrentAmountEvent = new(pieceType, goalCurrentAmount, sourceCoordinate); // TODO: Use center coordinate instead ¿?
+
+            return setGoalCurrentAmountEvent;
         }
 
-        private DestroyPieceEvent.DecomposePieceData DecomposePiece(
+        [NotNull, ItemNotNull]
+        private IEnumerable<InstantiatePieceEvent> DecomposePiece(
             [NotNull] IPiece pieceToDecompose,
             Coordinate pieceToDecomposeSourceCoordinate)
         {
@@ -124,12 +116,10 @@ namespace Game.Gameplay.Phases.Phases
 
             if (!pieceToDecompose.DecomposeType.HasValue)
             {
-                return null;
+                yield break;
             }
 
-            DestroyPieceEvent.DecomposePieceData decomposeData = new();
             PieceType decomposeType = pieceToDecompose.DecomposeType.Value;
-            bool anyAdded = false;
 
             foreach (Coordinate coordinate in pieceToDecompose.GetUndamagedCoordinates(pieceToDecomposeSourceCoordinate))
             {
@@ -137,12 +127,15 @@ namespace Game.Gameplay.Phases.Phases
 
                 _board.AddPiece(piece, coordinate);
 
-                decomposeData.Add(piece, coordinate);
+                InstantiatePieceEvent instantiatePieceEvent =
+                    new(
+                        piece,
+                        coordinate,
+                        InstantiatePieceReason.Decompose
+                    );
 
-                anyAdded = true;
+                yield return instantiatePieceEvent;
             }
-
-            return anyAdded ? decomposeData : null;
         }
     }
 }
