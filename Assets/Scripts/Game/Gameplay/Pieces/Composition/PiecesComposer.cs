@@ -1,3 +1,5 @@
+using Game.Gameplay.Board;
+using Game.Gameplay.Goals;
 using Game.Gameplay.Pieces.Parsing;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System;
@@ -26,6 +28,16 @@ namespace Game.Gameplay.Pieces.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPieceSerializedDataConverter>(r =>
                     new PieceSerializedDataConverter(
+                        r.Resolve<IPieceGetter>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IDamagePieceHelper>(r =>
+                    new DamagePieceHelper(
+                        r.Resolve<IBoard>(),
+                        r.Resolve<IGoals>(),
                         r.Resolve<IPieceGetter>()
                     )
                 )

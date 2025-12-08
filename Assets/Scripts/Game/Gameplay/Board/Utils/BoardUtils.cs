@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.Pieces.Pieces.Utils;
 using JetBrains.Annotations;
@@ -9,6 +10,25 @@ namespace Game.Gameplay.Board.Utils
 {
     public static class BoardUtils
     {
+        [ContractAnnotation("=> true, piece:notnull; => false, piece:null")]
+        public static bool TryGetPiece([NotNull] this IBoard board, Coordinate coordinate, out IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            int? pieceId = board.GetPieceId(coordinate);
+
+            if (!pieceId.HasValue)
+            {
+                piece = null;
+
+                return false;
+            }
+
+            piece = board.GetPiece(pieceId.Value);
+
+            return true;
+        }
+
         [NotNull]
         public static IEnumerable<int> GetDistinctPieceIdsSortedByRowThenByColumn([NotNull] this IBoard board)
         {
@@ -30,37 +50,47 @@ namespace Game.Gameplay.Board.Utils
 
             ICollection<int> visitedPieceIds = new HashSet<int>();
 
-            int columns = board.Columns;
-
             for (int row = bottomRow; row <= topRow; ++row)
             {
-                for (int column = 0; column < columns; ++column)
+                foreach (int pieceId in board.GetPieceIdsInRow(row))
                 {
-                    Coordinate coordinate = new(row, column);
-
-                    int? pieceId = board.GetPieceId(coordinate);
-
-                    if (!pieceId.HasValue)
+                    if (visitedPieceIds.Contains(pieceId))
                     {
                         continue;
                     }
 
-                    int pieceIdValue = pieceId.Value;
+                    visitedPieceIds.Add(pieceId);
 
-                    if (visitedPieceIds.Contains(pieceIdValue))
-                    {
-                        continue;
-                    }
-
-                    visitedPieceIds.Add(pieceIdValue);
-
-                    yield return pieceIdValue;
+                    yield return pieceId;
                 }
             }
         }
 
+        public static bool IsRowFull([NotNull] this IBoard board, int row)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            return board.GetPieceIdsInRow(row).Count() == board.Columns;
+        }
+
         [NotNull]
-        public static IEnumerable<KeyValuePair<int, int>> GetPieceIdsInRow([NotNull] this IBoard board, int row)
+        public static IEnumerable<int> GetPieceIdsInRow([NotNull] this IBoard board, int row)
+        {
+            ArgumentNullException.ThrowIfNull(board);
+
+            foreach (Coordinate coordinate in board.GetCoordinatesInRow(row))
+            {
+                if (!board.TryGetPiece(coordinate, out IPiece piece))
+                {
+                    continue;
+                }
+
+                yield return piece.Id;
+            }
+        }
+
+        [NotNull]
+        public static IEnumerable<Coordinate> GetCoordinatesInRow([NotNull] this IBoard board, int row)
         {
             ArgumentNullException.ThrowIfNull(board);
 
@@ -70,14 +100,7 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinate = new(row, column);
 
-                int? pieceId = board.GetPieceId(coordinate);
-
-                if (!pieceId.HasValue)
-                {
-                    continue;
-                }
-
-                yield return new KeyValuePair<int, int>(pieceId.Value, column);
+                yield return coordinate;
             }
         }
 
@@ -197,9 +220,7 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinateBelow = new(row, coordinate.Column);
 
-                int? pieceId = board.GetPieceId(coordinateBelow);
-
-                if (pieceId.HasValue && pieceId != ignorePieceId)
+                if (board.TryGetPiece(coordinateBelow, out IPiece piece) && piece.Id != ignorePieceId)
                 {
                     break;
                 }
@@ -232,23 +253,21 @@ namespace Game.Gameplay.Board.Utils
                     continue;
                 }
 
-                int? otherPieceId = board.GetPieceId(otherCoordinate);
-
-                if (!otherPieceId.HasValue)
+                if (!board.TryGetPiece(otherCoordinate, out IPiece otherPiece))
                 {
                     continue;
                 }
 
-                int otherPieceIdValue = otherPieceId.Value;
+                int otherPieceId = otherPiece.Id;
 
-                if (otherPieceIdValue == piece.Id || visitedPieceIds.Contains(otherPieceIdValue))
+                if (otherPiece == piece || visitedPieceIds.Contains(otherPieceId))
                 {
                     continue;
                 }
 
-                visitedPieceIds.Add(otherPieceIdValue);
+                visitedPieceIds.Add(otherPieceId);
 
-                yield return otherPieceIdValue;
+                yield return otherPieceId;
             }
         }
     }

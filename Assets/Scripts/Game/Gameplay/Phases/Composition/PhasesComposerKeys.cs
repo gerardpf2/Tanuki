@@ -5,7 +5,6 @@ namespace Game.Gameplay.Phases.Composition
         public static class Phase
         {
             public const string CameraTargetHighestPlayerPieceLockRowPhase = nameof(CameraTargetHighestPlayerPieceLockRowPhase);
-            public const string DestroyNotAlivePiecesPhase = nameof(DestroyNotAlivePiecesPhase);
             public const string GoalsCompletedPhase = nameof(GoalsCompletedPhase);
             public const string GravityPhase = nameof(GravityPhase);
             public const string InstantiateInitialPiecesPhase = nameof(InstantiateInitialPiecesPhase);
