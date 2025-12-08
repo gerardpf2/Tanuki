@@ -54,8 +54,8 @@ namespace Game.Gameplay.View.Pieces.Pieces
         {
             PrepareMainAnimation(
                 onComplete,
-                TriggerNameUtils.Get(destroyPieceReason),
-                TriggerNameUtils.GetDestroyBase()
+                TriggerNameUtils.GetDestroy(destroyPieceReason),
+                TriggerNameUtils.GetDestroy()
             );
         }
 
@@ -70,20 +70,25 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
             PrepareMainAnimation(
                 onComplete,
-                TriggerNameUtils.Get(damagePieceReason, direction),
-                TriggerNameUtils.Get(damagePieceReason),
-                TriggerNameUtils.GetDamageBase()
+                TriggerNameUtils.GetDamage(damagePieceReason, direction),
+                TriggerNameUtils.GetDamage(damagePieceReason),
+                TriggerNameUtils.GetDamage()
             );
         }
 
         public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
         {
-            PrepareMainAnimation(TriggerNameUtils.GetStart(movePieceReason), onComplete);
+            PrepareMainAnimation(
+                onComplete,
+                TriggerNameUtils.GetMoveStart(movePieceReason),
+                TriggerNameUtils.GetMove(movePieceReason),
+                TriggerNameUtils.GetMove()
+            );
         }
 
-        public void OnMovementEnded(MovePieceReason movePieceReason, Action onComplete)
+        public void OnMovementEnded(Action onComplete)
         {
-            PrepareMainAnimation(TriggerNameUtils.GetEnd(movePieceReason), onComplete);
+            PrepareMainAnimation(TriggerNameUtils.GetMoveEnd(), onComplete);
         }
 
         public void OnHit(HitPieceReason hitPieceReason, Direction direction)
@@ -91,9 +96,9 @@ namespace Game.Gameplay.View.Pieces.Pieces
             direction = GetRotated(direction);
 
             PrepareSecondaryAnimation(
-                TriggerNameUtils.Get(hitPieceReason, direction),
-                TriggerNameUtils.Get(hitPieceReason),
-                TriggerNameUtils.GetHitBase()
+                TriggerNameUtils.GetHit(hitPieceReason, direction),
+                TriggerNameUtils.GetHit(hitPieceReason),
+                TriggerNameUtils.GetHit()
             );
         }
 

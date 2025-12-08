@@ -7,6 +7,6 @@ namespace Game.Gameplay.View.Pieces.EventNotifiers
     {
         void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete);
 
-        void OnMovementEnded(MovePieceReason movePieceReason, Action onComplete);
+        void OnMovementEnded(Action onComplete);
     }
 }

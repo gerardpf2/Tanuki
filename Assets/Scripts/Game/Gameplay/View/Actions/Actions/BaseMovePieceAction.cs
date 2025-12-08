@@ -71,7 +71,7 @@ namespace Game.Gameplay.View.Actions.Actions
             {
                 NotifyHit();
 
-                pieceViewMoveEventNotifier.OnMovementEnded(_movePieceReason, onComplete);
+                pieceViewMoveEventNotifier.OnMovementEnded(onComplete);
             }
         }
 
