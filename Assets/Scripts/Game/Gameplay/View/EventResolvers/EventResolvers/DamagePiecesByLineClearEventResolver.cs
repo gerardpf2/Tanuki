@@ -11,7 +11,8 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 {
     public class DamagePiecesByLineClearEventResolver : EventResolver<DamagePiecesByLineClearEvent>
     {
-        private const float SecondsBetweenActions = 0.05f;
+        private const float SecondsBetweenColumnActions = 0.01f;
+        private const float SecondsBetweenColumns = 0.1f;
 
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IActionFactory _actionFactory;
@@ -35,19 +36,30 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            IEnumerable<DamagePieceEvent> damagePieceEvents = GetDamagePieceEventsSortedByColumnThenByRow(evt.DamagePieceEvents);
-            IEnumerable<IAction> damagePieceActions = damagePieceEvents.Select(GetDamagePieceAction);
+            IEnumerable<IEnumerable<DamagePieceEvent>> damagePieceEventsGroupedByColumnAndSortedByRow =
+                GetDamagePieceEventsGroupedByColumnAndSortedByRow(
+                    evt.DamagePieceEvents
+                );
 
-            yield return _actionFactory.GetParallelActionGroup(damagePieceActions, SecondsBetweenActions);
+            Queue<IAction> actions = new();
+
+            foreach (IEnumerable<DamagePieceEvent> damagePieceEvents in damagePieceEventsGroupedByColumnAndSortedByRow)
+            {
+                IEnumerable<IAction> damagePieceActions = damagePieceEvents.Select(GetDamagePieceAction);
+
+                actions.Enqueue(_actionFactory.GetParallelActionGroup(damagePieceActions, SecondsBetweenColumnActions));
+            }
+
+            yield return _actionFactory.GetParallelActionGroup(actions, SecondsBetweenColumns);
         }
 
-        [NotNull, ItemNotNull]
-        private IEnumerable<DamagePieceEvent> GetDamagePieceEventsSortedByColumnThenByRow(
+        [NotNull, ItemNotNull] // ItemNotNull for DamagePieceEvent too
+        private IEnumerable<IEnumerable<DamagePieceEvent>> GetDamagePieceEventsGroupedByColumnAndSortedByRow(
             [NotNull, ItemNotNull] IEnumerable<DamagePieceEvent> damagePieceEvents)
         {
             ArgumentNullException.ThrowIfNull(damagePieceEvents);
 
-            return damagePieceEvents.OrderBy(GetPieceColumn).ThenBy(GetPieceRow);
+            return damagePieceEvents.OrderBy(GetPieceColumn).ThenBy(GetPieceRow).GroupBy(GetPieceColumn);
 
             int GetPieceRow([NotNull] DamagePieceEvent damagePieceEvent)
             {
