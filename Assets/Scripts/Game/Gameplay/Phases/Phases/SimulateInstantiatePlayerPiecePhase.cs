@@ -19,17 +19,16 @@ namespace Game.Gameplay.Phases.Phases
         {
             ArgumentNullException.ThrowIfNull(resolveContext);
 
-            if (!resolveContext.PieceSourceCoordinate.HasValue || !resolveContext.PieceLockSourceCoordinate.HasValue)
+            if (resolveContext.PieceSourceCoordinate.HasValue && resolveContext.PieceLockSourceCoordinate.HasValue)
             {
-                return ResolveResult.NotUpdated;
-            }
+                Coordinate prevSourceCoordinate = resolveContext.PieceSourceCoordinate.Value;
+                Coordinate prevLockSourceCoordinate = resolveContext.PieceLockSourceCoordinate.Value;
 
-            Coordinate prevSourceCoordinate = resolveContext.PieceSourceCoordinate.Value;
-            Coordinate prevLockSourceCoordinate = resolveContext.PieceLockSourceCoordinate.Value;
-
-            if (sourceCoordinate.Equals(prevSourceCoordinate) && lockSourceCoordinate.Equals(prevLockSourceCoordinate))
-            {
-                return ResolveResult.NotUpdated;
+                if (sourceCoordinate.Equals(prevSourceCoordinate) &&
+                    lockSourceCoordinate.Equals(prevLockSourceCoordinate))
+                {
+                    return ResolveResult.NotUpdated;
+                }
             }
 
             resolveContext.SetPieceSourceCoordinate(sourceCoordinate, lockSourceCoordinate);

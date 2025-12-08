@@ -1,10 +1,10 @@
-using System;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullException;
 
 namespace Game.Gameplay.Phases.Phases
 {
@@ -12,23 +12,19 @@ namespace Game.Gameplay.Phases.Phases
     {
         // Targets the highest board row that allows the player piece ghost to be fully visible
 
-        [NotNull] private readonly IBoard _board;
-        [NotNull] private readonly ICamera _camera;
+        [NotNull] private readonly IMoveCameraHelper _moveCameraHelper;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
 
         private Coordinate? _lastTargetedPieceLockSourceCoordinate;
 
         public CameraTargetHighestPlayerPieceLockRowPhase(
-            [NotNull] IBoard board,
-            [NotNull] ICamera camera,
+            [NotNull] IMoveCameraHelper moveCameraHelper,
             [NotNull] IEventEnqueuer eventEnqueuer)
         {
-            ArgumentNullException.ThrowIfNull(board);
-            ArgumentNullException.ThrowIfNull(camera);
+            ArgumentNullException.ThrowIfNull(moveCameraHelper);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
 
-            _board = board;
-            _camera = camera;
+            _moveCameraHelper = moveCameraHelper;
             _eventEnqueuer = eventEnqueuer;
         }
 
@@ -51,21 +47,16 @@ namespace Game.Gameplay.Phases.Phases
 
             _lastTargetedPieceLockSourceCoordinate = pieceLockSourceCoordinate;
 
-            int prevCameraBottomRow = _camera.BottomRow;
+            MoveCameraEvent moveCameraEvent =
+                _moveCameraHelper.TargetHighestPlayerPieceLockRow(
+                    pieceLockSourceCoordinate.Row,
+                    MoveCameraReason.Regular
+                );
 
-            TargetHighestNonEmptyRow();
-            TargetPieceLockRow(pieceLockSourceCoordinate.Row);
-
-            int newCameraBottomRow = _camera.BottomRow;
-
-            int rowOffset = newCameraBottomRow - prevCameraBottomRow;
-
-            if (rowOffset == 0)
+            if (moveCameraEvent.RowOffset == 0)
             {
                 return ResolveResult.NotUpdated;
             }
-
-            MoveCameraEvent moveCameraEvent = new(rowOffset);
 
             _eventEnqueuer.Enqueue(moveCameraEvent);
 
@@ -77,16 +68,6 @@ namespace Game.Gameplay.Phases.Phases
             base.OnEndIteration();
 
             _lastTargetedPieceLockSourceCoordinate = null;
-        }
-
-        private void TargetHighestNonEmptyRow()
-        {
-            _camera.TopRow = _board.HighestNonEmptyRow + _camera.ExtraRowsOnTop;
-        }
-
-        private void TargetPieceLockRow(int pieceLockSourceCoordinateRow)
-        {
-            _camera.BottomRow = Math.Min(_camera.BottomRow, pieceLockSourceCoordinateRow);
         }
     }
 }

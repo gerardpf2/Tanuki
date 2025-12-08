@@ -22,7 +22,7 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            yield return _actionFactory.GetMoveCameraAction(evt.RowOffset);
+            yield return _actionFactory.GetMoveCameraAction(evt.RowOffset, evt.MoveCameraReason);
         }
     }
 }

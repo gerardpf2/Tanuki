@@ -54,7 +54,7 @@ namespace Game.Gameplay.View.Actions
         IAction GetMovePlayerPieceAction(int rowOffset, int columnOffset, MovePieceReason movePieceReason);
 
         [NotNull]
-        IAction GetMoveCameraAction(int rowOffset);
+        IAction GetMoveCameraAction(int rowOffset, MoveCameraReason moveCameraReason);
 
         [NotNull]
         IAction GetSetGoalCurrentAmountAction(PieceType pieceType, int currentAmount, Coordinate coordinate);
