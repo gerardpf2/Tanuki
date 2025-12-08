@@ -21,11 +21,8 @@ namespace Game.Gameplay.View.Pieces.Pieces
     {
         [SerializeField] private AnimatorTriggerNameContainer _animatorTriggerNameContainer;
 
-        // State
-        [NotNull] private readonly IBoundProperty<bool> _alive = new BoundProperty<bool>("Alive");
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
-        // Animation
         [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
 
         protected TPiece Piece;
@@ -72,20 +69,11 @@ namespace Game.Gameplay.View.Pieces.Pieces
             direction = GetRotated(direction);
 
             PrepareMainAnimation(
-                OnComplete,
+                onComplete,
                 TriggerNameUtils.Get(damagePieceReason, direction),
                 TriggerNameUtils.Get(damagePieceReason),
                 TriggerNameUtils.GetDamageBase()
             );
-
-            return;
-
-            void OnComplete()
-            {
-                SyncAlive();
-
-                onComplete?.Invoke();
-            }
         }
 
         public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
@@ -135,7 +123,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         protected virtual void AddBindings()
         {
-            Add(_alive);
             Add(_offsetPosition);
             Add(_offsetRotation);
             Add(_animationTrigger);
@@ -143,7 +130,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         protected virtual void SyncState()
         {
-            SyncAlive();
             SyncRotation();
         }
 
@@ -232,13 +218,6 @@ namespace Game.Gameplay.View.Pieces.Pieces
             {
                 _animationTrigger.Trigger(triggerName);
             }
-        }
-
-        private void SyncAlive()
-        {
-            InvalidOperationException.ThrowIfNull(Piece);
-
-            _alive.Value = Piece.Alive;
         }
 
         private void SyncRotation()

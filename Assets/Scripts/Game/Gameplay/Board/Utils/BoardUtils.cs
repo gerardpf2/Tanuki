@@ -10,21 +10,20 @@ namespace Game.Gameplay.Board.Utils
 {
     public static class BoardUtils
     {
-        [ContractAnnotation("=> true, piece:notnull; => false, piece:null")]
-        public static bool TryGetPiece([NotNull] this IBoard board, Coordinate coordinate, out IPiece piece)
+        public static bool TryGetPieceId([NotNull] this IBoard board, Coordinate coordinate, out int pieceId)
         {
             ArgumentNullException.ThrowIfNull(board);
 
-            int? pieceId = board.GetPieceId(coordinate);
+            int? nullablePieceId = board.GetPieceId(coordinate);
 
-            if (!pieceId.HasValue)
+            if (!nullablePieceId.HasValue)
             {
-                piece = null;
+                pieceId = 0;
 
                 return false;
             }
 
-            piece = board.GetPiece(pieceId.Value);
+            pieceId = nullablePieceId.Value;
 
             return true;
         }
@@ -80,12 +79,12 @@ namespace Game.Gameplay.Board.Utils
 
             foreach (Coordinate coordinate in board.GetCoordinatesInRow(row))
             {
-                if (!board.TryGetPiece(coordinate, out IPiece piece))
+                if (!board.TryGetPieceId(coordinate, out int pieceId))
                 {
                     continue;
                 }
 
-                yield return piece.Id;
+                yield return pieceId;
             }
         }
 
@@ -107,8 +106,7 @@ namespace Game.Gameplay.Board.Utils
         public static void GetPieceRowColumnOffset(
             [NotNull] this IBoard board,
             int pieceId,
-            int row,
-            int column,
+            Coordinate coordinate,
             out int rowOffset,
             out int columnOffset)
         {
@@ -116,8 +114,8 @@ namespace Game.Gameplay.Board.Utils
 
             Coordinate sourceCoordinate = board.GetSourceCoordinate(pieceId);
 
-            rowOffset = row - sourceCoordinate.Row;
-            columnOffset = column - sourceCoordinate.Column;
+            rowOffset = coordinate.Row - sourceCoordinate.Row;
+            columnOffset = coordinate.Column - sourceCoordinate.Column;
         }
 
         public static Coordinate GetPieceLockSourceCoordinate(
@@ -220,7 +218,7 @@ namespace Game.Gameplay.Board.Utils
             {
                 Coordinate coordinateBelow = new(row, coordinate.Column);
 
-                if (board.TryGetPiece(coordinateBelow, out IPiece piece) && piece.Id != ignorePieceId)
+                if (board.TryGetPieceId(coordinateBelow, out int pieceId) && pieceId != ignorePieceId)
                 {
                     break;
                 }
@@ -253,14 +251,12 @@ namespace Game.Gameplay.Board.Utils
                     continue;
                 }
 
-                if (!board.TryGetPiece(otherCoordinate, out IPiece otherPiece))
+                if (!board.TryGetPieceId(otherCoordinate, out int otherPieceId))
                 {
                     continue;
                 }
 
-                int otherPieceId = otherPiece.Id;
-
-                if (otherPiece == piece || visitedPieceIds.Contains(otherPieceId))
+                if (otherPieceId == piece.Id || visitedPieceIds.Contains(otherPieceId))
                 {
                     continue;
                 }
