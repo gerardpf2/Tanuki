@@ -26,7 +26,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         private Action _animationOnComplete;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             Add(_offsetPosition);
             Add(_offsetRotation);
