@@ -58,7 +58,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: _triggerNames.Array.size
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: '_triggerNames.Array.data[0]'
@@ -67,6 +67,18 @@ PrefabInstance:
     - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: '_triggerNames.Array.data[1]'
       value: Instantiate_Initial
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
+      propertyPath: '_triggerNames.Array.data[2]'
+      value: Hit
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
+      propertyPath: '_triggerNames.Array.data[3]'
+      value: Hit_Lock
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817169342854382413, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
+      propertyPath: '_triggerNames.Array.data[4]'
+      value: Hit_Lock_Down
       objectReference: {fileID: 0}
     - target: {fileID: 7839989407518439827, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       propertyPath: m_Size.y
