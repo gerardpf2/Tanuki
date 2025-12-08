@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: I_HitStrongDownRotation3
+  m_Name: I_HitStrongDownRotation0Or2
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,7 +21,7 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: 19e06977e976b5e4f9b09337147ae22e, type: 3}
+      value: {fileID: 21300000, guid: 2253a3d60b6cc0f499be5f3e0e94b508, type: 3}
     - time: 0.1
       value: {fileID: 21300000, guid: e16cf8aabd6e00843826e9b3c7a7070d, type: 3}
     attribute: m_Sprite
@@ -46,7 +46,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 19e06977e976b5e4f9b09337147ae22e, type: 3}
+    - {fileID: 21300000, guid: 2253a3d60b6cc0f499be5f3e0e94b508, type: 3}
     - {fileID: 21300000, guid: e16cf8aabd6e00843826e9b3c7a7070d, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2

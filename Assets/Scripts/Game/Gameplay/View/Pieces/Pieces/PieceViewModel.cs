@@ -21,11 +21,14 @@ namespace Game.Gameplay.View.Pieces.Pieces
     {
         [SerializeField] private AnimatorTriggerNameContainer _animatorTriggerNameContainer;
 
-        // Rotation related
-        [NotNull] private readonly IBoundProperty<int> _rotation = new BoundProperty<int>("Rotation");
+        // Position
         [NotNull] private readonly IBoundProperty<Vector3> _offsetPosition = new BoundProperty<Vector3>("OffsetPosition");
+        // Rotation
+        [NotNull] private readonly IBoundProperty<int> _rotation = new BoundProperty<int>("Rotation");
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
-        // Animation related
+        [NotNull] private readonly IBoundProperty<bool> _flipX = new BoundProperty<bool>("FlipX");
+        [NotNull] private readonly IBoundProperty<bool> _flipY = new BoundProperty<bool>("FlipY");
+        // Animation
         [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
 
         private PieceViewData _pieceViewData;
@@ -80,6 +83,7 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnRotated()
         {
+            SyncPosition();
             SyncRotation();
         }
 
@@ -143,14 +147,17 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         protected virtual void AddBindings()
         {
-            Add(_rotation);
             Add(_offsetPosition);
+            Add(_rotation);
             Add(_offsetRotation);
             Add(_animationTrigger);
+            Add(_flipX);
+            Add(_flipY);
         }
 
         protected virtual void SyncState()
         {
+            SyncPosition();
             SyncRotation();
         }
 
@@ -249,15 +256,27 @@ namespace Game.Gameplay.View.Pieces.Pieces
             }
         }
 
+        private void SyncPosition()
+        {
+            TPiece piece = Piece;
+
+            InvalidOperationException.ThrowIfNull(piece);
+
+            _offsetPosition.Value = new Vector3(0.5f * (piece.Width - 1), 0.5f * piece.Height);
+        }
+
         private void SyncRotation()
         {
             TPiece piece = Piece;
 
             InvalidOperationException.ThrowIfNull(piece);
 
-            _rotation.Value = piece.Rotation;
-            _offsetPosition.Value = new Vector3(0.5f * (piece.Width - 1), 0.5f * piece.Height);
-            _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * piece.Rotation); // Clockwise rotation
+            int rotation = piece.Rotation;
+
+            _rotation.Value = rotation;
+            _offsetRotation.Value = Quaternion.Euler(0.0f, 0.0f, -90.0f * rotation); // Clockwise rotation
+            _flipX.Value = rotation == 3;
+            _flipY.Value = rotation == 2;
         }
     }
 }
