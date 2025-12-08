@@ -8,9 +8,24 @@ namespace Game.Gameplay.View.Animation.Animator.Utils
         private const string Start = nameof(Start);
         private const string End = nameof(End);
 
+        private const string Destroy = nameof(Destroy);
         private const string Damage = nameof(Damage);
         private const string Move = nameof(Move);
         private const string Hit = nameof(Hit);
+
+        #region Destroy
+
+        public static string GetDestroyBase()
+        {
+            return $"{Destroy}";
+        }
+
+        public static string Get(DestroyPieceReason destroyPieceReason)
+        {
+            return $"{GetDestroyBase()}_{destroyPieceReason}";
+        }
+
+        #endregion
 
         #region Damage
 
