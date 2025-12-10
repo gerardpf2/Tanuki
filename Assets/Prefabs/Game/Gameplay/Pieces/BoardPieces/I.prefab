@@ -99,53 +99,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2183247197674471762, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7095986876886691872}
-    - targetCorrespondingSourceObject: {fileID: 5751454936789118488, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2490137081607875708}
-    - targetCorrespondingSourceObject: {fileID: 5751454936789118488, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6092595669571271193}
   m_SourcePrefab: {fileID: 100100000, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
---- !u!212 &621429571573890711 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 7839989407518439827, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
-  m_PrefabInstance: {fileID: 7229119854922663684}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3135556466243070236 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5751454936789118488, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
-  m_PrefabInstance: {fileID: 7229119854922663684}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2490137081607875708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3135556466243070236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce68087d526145d8849b4758444cec0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _viewModel: {fileID: 6408747952130424260}
-  _key: FlipX
-  _spriteRenderer: {fileID: 621429571573890711}
---- !u!114 &6092595669571271193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3135556466243070236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 755640e248814036b1f9155eb1e04320, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _viewModel: {fileID: 6408747952130424260}
-  _key: FlipY
-  _spriteRenderer: {fileID: 621429571573890711}
 --- !u!114 &6408747952130424260 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4369209045909600960, guid: d82012f298962604e9822b8b8bc109d2, type: 3}
