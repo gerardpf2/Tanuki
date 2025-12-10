@@ -375,16 +375,16 @@ AnimatorStateMachine:
     m_Position: {x: 250, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7643123978250807899}
-    m_Position: {x: 130, y: -50, z: 0}
+    m_Position: {x: -110, y: -50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7727090879478506091}
-    m_Position: {x: 130, y: -130, z: 0}
+    m_Position: {x: 130, y: -50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6800914625857517064}
-    m_Position: {x: 370, y: -130, z: 0}
+    m_Position: {x: 370, y: -50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4008185235080971723}
-    m_Position: {x: 370, y: -50, z: 0}
+    m_Position: {x: 610, y: -50, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -393,7 +393,7 @@ AnimatorStateMachine:
   m_AnyStatePosition: {x: 50, y: 80, z: 0}
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 50, y: 160, z: 0}
-  m_ParentStateMachinePosition: {x: 250, y: -210, z: 0}
+  m_ParentStateMachinePosition: {x: 250, y: -130, z: 0}
   m_DefaultState: {fileID: -6046339322566077632}
 --- !u!114 &-3687863788295646764
 MonoBehaviour:
