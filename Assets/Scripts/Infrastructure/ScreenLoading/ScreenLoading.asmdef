@@ -1,0 +1,18 @@
+{
+    "name": "ScreenLoading",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8c16f2b01179be1428fcb282793de47d",
+        "GUID:835c81149e7e52b49bc807078b8ba1cb",
+        "GUID:f494683be324d2d40986fd190775fea9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

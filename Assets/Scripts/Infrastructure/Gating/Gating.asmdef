@@ -1,0 +1,17 @@
+{
+    "name": "Gating",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f494683be324d2d40986fd190775fea9",
+        "GUID:0e460e2cb9b9cae4baac78399e499134"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

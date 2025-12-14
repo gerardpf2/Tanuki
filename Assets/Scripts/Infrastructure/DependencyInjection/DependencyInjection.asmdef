@@ -1,0 +1,17 @@
+{
+    "name": "DependencyInjection",
+    "rootNamespace": "",
+    "references": [
+        "GUID:71efef2a866343241904bdd6eb70eefa",
+        "GUID:f494683be324d2d40986fd190775fea9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

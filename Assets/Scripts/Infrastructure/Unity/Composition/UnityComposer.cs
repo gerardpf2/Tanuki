@@ -1,0 +1,50 @@
+using Infrastructure.DependencyInjection;
+using Infrastructure.System.Exceptions;
+using Infrastructure.Unity.Pooling;
+using JetBrains.Annotations;
+using UnityEngine;
+using ILogger = Infrastructure.Logging.ILogger;
+
+namespace Infrastructure.Unity.Composition
+{
+    public class UnityComposer : ScopeComposer
+    {
+        [NotNull] private readonly ICoroutineRunner _coroutineRunner;
+
+        public UnityComposer([NotNull] ICoroutineRunner coroutineRunner)
+        {
+            ArgumentNullException.ThrowIfNull(coroutineRunner);
+
+            _coroutineRunner = coroutineRunner;
+        }
+
+        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IGameObjectPool>(_ => new GameObjectPool()));
+
+            ruleAdder.Add(ruleFactory.GetSingleton<ICameraGetter>(_ => new CameraGetter()));
+
+            ruleAdder.Add(ruleFactory.GetInstance(_coroutineRunner));
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IDeltaTimeGetter>(_ => new DeltaTimeGetter()));
+
+            ruleAdder.Add(ruleFactory.GetSingleton<IScreenPropertiesGetter>(_ => new ScreenPropertiesGetter()));
+
+            ruleAdder.Add(ruleFactory.GetSingleton(_ => new UnityLogHandler(Debug.unityLogger)));
+        }
+
+        protected override void Initialize([NotNull] IRuleResolver ruleResolver)
+        {
+            ArgumentNullException.ThrowIfNull(ruleResolver);
+
+            base.Initialize(ruleResolver);
+
+            ruleResolver.Resolve<ILogger>().Add(ruleResolver.Resolve<UnityLogHandler>());
+        }
+    }
+}
