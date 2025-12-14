@@ -15,8 +15,6 @@ namespace Game.Gameplay.Phases.Phases
         [NotNull] private readonly IMoveCameraHelper _moveCameraHelper;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
 
-        private Coordinate? _lastTargetedPieceLockSourceCoordinate;
-
         public CameraTargetHighestPlayerPieceLockRowPhase(
             [NotNull] IMoveCameraHelper moveCameraHelper,
             [NotNull] IEventEnqueuer eventEnqueuer)
@@ -39,14 +37,6 @@ namespace Game.Gameplay.Phases.Phases
 
             Coordinate pieceLockSourceCoordinate = resolveContext.PieceLockSourceCoordinate.Value;
 
-            if (_lastTargetedPieceLockSourceCoordinate.HasValue &&
-                _lastTargetedPieceLockSourceCoordinate.Value.Equals(pieceLockSourceCoordinate))
-            {
-                return ResolveResult.NotUpdated;
-            }
-
-            _lastTargetedPieceLockSourceCoordinate = pieceLockSourceCoordinate;
-
             MoveCameraEvent moveCameraEvent =
                 _moveCameraHelper.TargetHighestPlayerPieceLockRow(
                     pieceLockSourceCoordinate.Row,
@@ -61,13 +51,6 @@ namespace Game.Gameplay.Phases.Phases
             _eventEnqueuer.Enqueue(moveCameraEvent);
 
             return ResolveResult.Updated;
-        }
-
-        public override void OnEndIteration()
-        {
-            base.OnEndIteration();
-
-            _lastTargetedPieceLockSourceCoordinate = null;
         }
     }
 }
