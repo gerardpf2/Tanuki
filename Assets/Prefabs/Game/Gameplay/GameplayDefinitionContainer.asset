@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef3f3fa9f82462f9f0d755ec686fe54, type: 3}
+  m_Name: GameplayDefinitionContainer
+  m_EditorClassIdentifier: 
+  _gameplayDefinitions:
+  - _id: Test
+    _data: '{"BOARD":{"COLUMNS":9,"PIECES":[{"ROW":8,"COLUMN":3,"PIECE":{"TYPE":"Tato"}},{"ROW":5,"COLUMN":1,"PIECE":{"TYPE":"Tato"}},{"ROW":4,"COLUMN":1,"PIECE":{"TYPE":"Tato"}},{"ROW":3,"COLUMN":1,"PIECE":{"TYPE":"Tato"}},{"ROW":2,"COLUMN":1,"PIECE":{"TYPE":"BlockI"}},{"ROW":3,"COLUMN":6,"PIECE":{"TYPE":"StaticBlock"}},{"ROW":8,"COLUMN":6,"PIECE":{"TYPE":"BlockI"}},{"COLUMN":3,"PIECE":{"TYPE":"S"}},{"COLUMN":5,"PIECE":{"TYPE":"J"}},{"ROW":1,"COLUMN":3,"PIECE":{"TYPE":"I"}},{"ROW":5,"COLUMN":3,"PIECE":{"TYPE":"I","STATE":{"ROTATION":"1"}}},{"ROW":6,"COLUMN":3,"PIECE":{"TYPE":"Z"}},{"COLUMN":7,"PIECE":{"TYPE":"O"}},{"ROW":6,"COLUMN":6,"PIECE":{"TYPE":"L","STATE":{"ROTATION":"1"}}},{"ROW":8,"COLUMN":7,"PIECE":{"TYPE":"S","STATE":{"ROTATION":"1"}}},{"PIECE":{"TYPE":"O"}}]},"GOALS":{"GOALS":[{"TYPE":"Tato","INITIAL":1},{"TYPE":"Test","INITIAL":3,"CURRENT":2}]},"MOVES":{"AMOUNT":994},"BAG":{"ENTRIES":[{"TYPE":"I","AMOUNT":1},{"TYPE":"O","AMOUNT":1},{"TYPE":"T","AMOUNT":1},{"TYPE":"J","AMOUNT":1},{"TYPE":"L","AMOUNT":1},{"TYPE":"S","AMOUNT":1},{"TYPE":"Z","AMOUNT":1}],"INITIAL":["I","Z","O"]}}'
