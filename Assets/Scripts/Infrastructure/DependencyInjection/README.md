@@ -13,37 +13,12 @@ My own dependency injection framework! Inject dependencies to all infrastructure
   - <b>ToRule\<TInput, TOutput></b>: Resolves TOutput and returns its result
   - <b>GateKeyRule\<T></b>: Resolves T and returns its result only if the provided gate key is satisfied. Gating is usually managed at scope composer level, but it can also be managed at rule level
   - <b>TargetRule\<T></b>: Resolves T using the rule resolver of another scope. This means, with a different visibility over rules. This is used when adding shared rules (they target the shared rule resolver)
-  - <b>InjectRule\<T></b>: Resolves T in order to execute one of its methods. This is used when injecting services to classes with managed constructor
+  - <b>InjectRule\<T></b>: Resolves T in order to execute one of its methods. This is used when injecting dependencies to classes with managed constructor
 - <b>ScopeBuilder</b>: Uses a scope composer to build a scope (in a recursive way)
 - <b>Scope</b>: Represents a feature, game mode, etc and contains its rules. It can also have partial and child scopes
 - <b>ScopeInitializer</b>: Initializes the services of a scope (in a recursive way)
 
 Any feature, game mode, etc can be easily integrated to Tanuki composition by defining its scope composer
-
-### How does rule visibility work?
-
-When resolving T, the rule resolver is going to try to find a rule of T on its scope rules container. If it cannot be found, try it targeting the parent of that scope (in a recursive way)
-
-For example
-1) There are 3 scopes, SA, SB and SC
-2) SB is the child of SA, and SC is the child of SB
-3) SA can see SA rules
-4) SB can see SB and SA rules
-5) SC can see SC, SB and S rules
-
-### What is a partial scope?
-
-It can be seen as a scope that is split into multiple scopes, all them having the same visibility over rules
-
-For example
-1) Scope S contains rules that have to do with features FA and FB
-2) Then, scopes SA and SB can be created
-3) But FA services have FB services as dependencies, and vice versa
-4) This means that SA cannot be child of S or SB. The same happens for SB
-5) Then, the best option is to set SA and SB as partials of S
-6) Finally, 3 scope composers are going to be used instead of 1 to integrate this to Tanuki composition, and the scope builder is going to build the 3 scopes described in here
-
-Is using partial scopes a need? No, it is not. But it can be useful to keep scope composers small and organized when they behave like the ones described at point 3)
 
 ### Example
 Lets assume that these are the services of the feature, game mode, etc
@@ -93,7 +68,7 @@ public class MyComposer : ScopeComposer
 ```
 In here, it can be seen that
 1) It inherits from <b>ScopeComposer</b>
-2) <b>AddRules</b> method is overriden because there are services to add
+2) <b>AddRules</b> method is overriden because there are rules to add
 3) <b>Initialize</b> method is overriden because there are services to initialize
 
 Finally, it needs to be set as partial or child of another one
@@ -111,3 +86,34 @@ public class AnotherComposer : ScopeComposer
 ### More examples?
 
 Most infrastructure and game sections have a folder called <b>Composition</b> with a scope composer inside. Any of them can work as an example
+
+### How does rule visibility work?
+
+When resolving T, the rule resolver is going to try to find a rule of T on its scope rules container. If it cannot be found, try it targeting the parent of that scope (in a recursive way)
+
+For example
+1) There are 3 scopes, SA, SB and SC
+2) SB is the child of SA, and SC is the child of SB
+3) SA can see SA rules
+4) SB can see SB and SA rules
+5) SC can see SC, SB and S rules
+
+### What is the difference between scope composer AddRules and AddSharedRules?
+
+Rules added under <b>AddRules</b> are part of the scope rules container and their visibility works as usual
+
+Rules added under <b>AddSharedRules</b> are part of both the scope rules container and the shared rules container. Then, they can be seen from any place. Ideally, this should be used only if AddRules cannot be used, for example, when using InjectRule\<T> to inject dependencies to classes with managed constructor
+
+### What is a partial scope?
+
+It can be seen as a scope that is split into multiple scopes, all them having the same visibility over rules
+
+For example
+1) Scope S contains rules that have to do with features FA and FB
+2) Then, scopes SA and SB can be created
+3) But FA services have FB services as dependencies, and vice versa
+4) This means that SA cannot be child of S or SB. The same happens for SB
+5) Then, the best option is to set SA and SB as partials of S
+6) Finally, 3 scope composers are going to be used instead of 1 to integrate this to Tanuki composition, and the scope builder is going to build the 3 scopes described in here
+
+Is using partial scopes a need? No, it is not. But it can be useful to keep scope composers small and organized when they represent features that behave like the ones described at point 3)
