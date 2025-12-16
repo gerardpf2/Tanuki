@@ -10,7 +10,7 @@ Finally, most of its code is tested (around 550 tests)
 
 It contains
 - <b>Configuring</b>: Define configs for the game or even for infrastructure itself
-- <b>DependencyInjection</b>: My own dependency injection framework! Inject dependencies to all infrastructure and game services. Classes with managed constructor (like MonoBehaviour, etc) can use it too. Click [here](https://github.com/gerardpf2/Tanuki/tree/infrastructure-main/Assets/Scripts/Infrastructure/DependencyInjection) for more info
+- <b>DependencyInjection</b>: My own dependency injection framework! Inject dependencies to all infrastructure and game services. Classes with managed constructor (like MonoBehaviour, etc) can use it too. No reflection involved. Click [here](https://github.com/gerardpf2/Tanuki/tree/infrastructure-main/Assets/Scripts/Infrastructure/DependencyInjection) for more info
 - <b>Gating</b>: Gate features by config or by version
 - <b>Logging</b>: Log against multiple handlers (one of them being Unity's logger)
 - <b>ModelViewViewModel</b>: My own model-view-viewModel framework! Use view models, bound properties, methods and triggers, etc to connect model and view. No reflection involved. Click [here](https://github.com/gerardpf2/Tanuki/tree/infrastructure-main/Assets/Scripts/Infrastructure/ModelViewViewModel) for more info
