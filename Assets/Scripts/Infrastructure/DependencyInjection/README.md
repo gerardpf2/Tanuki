@@ -12,8 +12,8 @@ My own dependency injection framework! Inject dependencies to all infrastructure
   - <b>SingletonRule\<T></b>: Constructs and returns the same instance of type T
   - <b>ToRule\<TInput, TOutput></b>: Resolves TOutput and returns its result
   - <b>GateKeyRule\<T></b>: Resolves T and returns its result only if the provided gate key is satisfied. Gating is usually managed at scope composer level, but it can also be managed at rule level
-  - <b>TargetRule\<T></b>: Resolves T using the rule resolver of another scope. This means, with a different visibility over rules. This is used when adding shared rules (they target the shared rule resolver)
-  - <b>InjectRule\<T></b>: Resolves T in order to execute one of its methods. This is used when injecting dependencies to classes with managed constructor
+  - <b>TargetRule\<T></b>: Resolves T using the rule resolver of another scope
+  - <b>InjectRule\<T></b>: Resolves T in order to execute one of its methods
 - <b>ScopeBuilder</b>: Uses a scope composer to build a scope (in a recursive way)
 - <b>Scope</b>: Represents a feature, game mode, etc and contains its rules. It can also have partial and child scopes
 - <b>ScopeInitializer</b>: Initializes the services of a scope (in a recursive way)
@@ -97,6 +97,10 @@ For example
 3) SA can see SA rules
 4) SB can see SB and SA rules
 5) SC can see SC, SB and S rules
+
+### How does scope composer GetGateKey work?
+
+If <b>GetGateKey</b> gets overriden, the scope builder is going to check it before building the scope, and the scope is going to be built only if this gating is satisfied
 
 ### What is the difference between scope composer AddRules and AddSharedRules?
 
