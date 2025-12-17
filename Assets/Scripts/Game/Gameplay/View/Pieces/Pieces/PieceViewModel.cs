@@ -97,10 +97,10 @@ namespace Game.Gameplay.View.Pieces.Pieces
             );
         }
 
-        public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
+        public void OnMovementStarted(int rowOffset, int columnOffset, MovePieceReason movePieceReason, Action onComplete)
         {
-            _movementRowOffsetAbs.Value = 1; // TODO
-            _movementColumnOffsetAbs.Value = 1; // TODO
+            _movementRowOffsetAbs.Value = Math.Abs(rowOffset);
+            _movementColumnOffsetAbs.Value = Math.Abs(columnOffset);
 
             PrepareMainAnimation(
                 onComplete,

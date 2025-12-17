@@ -56,7 +56,13 @@ namespace Game.Gameplay.View.Actions.Actions
 
             InvalidOperationException.ThrowIfNull(pieceViewMoveEventNotifier);
 
-            pieceViewMoveEventNotifier.OnMovementStarted(_movePieceReason, OnMovementStartedComplete);
+            pieceViewMoveEventNotifier
+                .OnMovementStarted(
+                    _rowOffset,
+                    _columnOffset,
+                    _movePieceReason,
+                    OnMovementStartedComplete
+                );
 
             return;
 
