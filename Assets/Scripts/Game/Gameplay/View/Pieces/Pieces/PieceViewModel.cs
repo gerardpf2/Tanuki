@@ -28,6 +28,8 @@ namespace Game.Gameplay.View.Pieces.Pieces
         [NotNull] private readonly IBoundProperty<Quaternion> _offsetRotation = new BoundProperty<Quaternion>("OffsetRotation");
         // Animation
         [NotNull] private readonly IBoundTrigger<string> _animationTrigger = new BoundTrigger<string>("AnimationTrigger");
+        [NotNull] private readonly IBoundProperty<int> _movementRowOffsetAbs = new BoundProperty<int>("MovementRowOffsetAbs");
+        [NotNull] private readonly IBoundProperty<int> _movementColumnOffsetAbs = new BoundProperty<int>("MovementColumnOffsetAbs");
 
         private PieceViewData _pieceViewData;
         private Action _animationOnComplete;
@@ -97,6 +99,9 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnMovementStarted(MovePieceReason movePieceReason, Action onComplete)
         {
+            _movementRowOffsetAbs.Value = 1; // TODO
+            _movementColumnOffsetAbs.Value = 1; // TODO
+
             PrepareMainAnimation(
                 onComplete,
                 TriggerNameUtils.GetMoveStart(movePieceReason),
@@ -107,7 +112,17 @@ namespace Game.Gameplay.View.Pieces.Pieces
 
         public void OnMovementEnded(Action onComplete)
         {
-            PrepareMainAnimation(TriggerNameUtils.GetMoveEnd(), onComplete);
+            PrepareMainAnimation(TriggerNameUtils.GetMoveEnd(), OnComplete);
+
+            return;
+
+            void OnComplete()
+            {
+                _movementRowOffsetAbs.Value = 0;
+                _movementColumnOffsetAbs.Value = 0;
+
+                onComplete?.Invoke();
+            }
         }
 
         public void OnHit(HitPieceReason hitPieceReason, Direction direction)
@@ -149,6 +164,8 @@ namespace Game.Gameplay.View.Pieces.Pieces
             Add(_offsetPosition);
             Add(_offsetRotation);
             Add(_animationTrigger);
+            Add(_movementRowOffsetAbs);
+            Add(_movementColumnOffsetAbs);
         }
 
         protected virtual void SyncState()
