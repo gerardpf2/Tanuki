@@ -6,7 +6,7 @@ namespace Game.Gameplay.Phases
 {
     public interface IPhaseResolver
     {
-        event Action OnBeginIteration;
+        event Action<ResolveContext> OnBeginIteration;
         event Action OnEndIteration;
 
         void Resolve(IReadOnlyList<IPhase> phases, ResolveContext resolveContext);

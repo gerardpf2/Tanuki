@@ -55,8 +55,15 @@ namespace Game.Gameplay.REMOVE
             _phaseResolver.OnBeginIteration -= HandleBeginIteration;
         }
 
-        private void HandleBeginIteration()
+        private void HandleBeginIteration([NotNull] ResolveContext resolveContext)
         {
+            ArgumentNullException.ThrowIfNull(resolveContext);
+
+            if (resolveContext.ResolveReason is not ResolveReason.Lock)
+            {
+                return;
+            }
+
             string serializedGameplay = _gameplayParser.Serialize();
 
             _logger.Info(serializedGameplay);

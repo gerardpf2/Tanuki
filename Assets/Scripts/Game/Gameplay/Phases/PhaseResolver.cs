@@ -9,7 +9,7 @@ namespace Game.Gameplay.Phases
 {
     public class PhaseResolver : IPhaseResolver
     {
-        public event Action OnBeginIteration;
+        public event Action<ResolveContext> OnBeginIteration;
         public event Action OnEndIteration;
 
         public void Resolve([NotNull, ItemNotNull] IReadOnlyList<IPhase> phases, ResolveContext resolveContext)
@@ -21,7 +21,7 @@ namespace Game.Gameplay.Phases
                 ArgumentNullException.ThrowIfNull(phase);
             }
 
-            NotifyBeginIteration(phases);
+            NotifyBeginIteration(phases, resolveContext);
 
             int index = 0;
 
@@ -58,7 +58,9 @@ namespace Game.Gameplay.Phases
             }
         }
 
-        private void NotifyBeginIteration([NotNull, ItemNotNull] IEnumerable<IPhase> phases)
+        private void NotifyBeginIteration(
+            [NotNull, ItemNotNull] IEnumerable<IPhase> phases,
+            ResolveContext resolveContext)
         {
             ArgumentNullException.ThrowIfNull(phases);
 
@@ -69,7 +71,7 @@ namespace Game.Gameplay.Phases
                 phase.OnBeginIteration();
             }
 
-            OnBeginIteration?.Invoke();
+            OnBeginIteration?.Invoke(resolveContext);
         }
 
         private void NotifyEndIteration([NotNull, ItemNotNull] IEnumerable<IPhase> phases)
