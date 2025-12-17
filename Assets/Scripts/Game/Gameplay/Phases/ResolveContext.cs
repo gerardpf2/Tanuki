@@ -4,12 +4,19 @@ namespace Game.Gameplay.Phases
 {
     public class ResolveContext
     {
+        public readonly ResolveReason ResolveReason;
+
         public Coordinate? PieceSourceCoordinate { get; private set; }
 
         public Coordinate? PieceLockSourceCoordinate { get; private set; }
 
-        public ResolveContext(Coordinate? pieceSourceCoordinate, Coordinate? pieceLockSourceCoordinate)
+        public ResolveContext(
+            ResolveReason resolveReason,
+            Coordinate? pieceSourceCoordinate,
+            Coordinate? pieceLockSourceCoordinate)
         {
+            ResolveReason = resolveReason;
+
             SetPieceSourceCoordinate(pieceSourceCoordinate, pieceLockSourceCoordinate);
         }
 

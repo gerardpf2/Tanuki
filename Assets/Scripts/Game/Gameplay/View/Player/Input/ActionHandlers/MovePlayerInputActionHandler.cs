@@ -15,7 +15,8 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView,
-            int columnOffset) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView)
+            ResolveReason resolveReason,
+            int columnOffset) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView, resolveReason)
         {
             ArgumentNullException.ThrowIfNull(playerPieceView);
 

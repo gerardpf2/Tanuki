@@ -10,6 +10,6 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
             [NotNull] IPhaseContainer phaseContainer,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
-            [NotNull] IPlayerPieceView playerPieceView) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView, 1) { }
+            [NotNull] IPlayerPieceView playerPieceView) : base(phaseContainer, eventsResolver, playerPieceGhostView, playerPieceView, ResolveReason.MoveRight, 1) { }
     }
 }

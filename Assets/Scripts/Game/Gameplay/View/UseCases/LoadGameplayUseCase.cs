@@ -146,7 +146,7 @@ namespace Game.Gameplay.View.UseCases
 
         private void OnReady()
         {
-            _phaseContainerInitial.Resolve(new ResolveContext(null, null));
+            _phaseContainerInitial.Resolve(new ResolveContext(ResolveReason.Load, null, null));
         }
     }
 }

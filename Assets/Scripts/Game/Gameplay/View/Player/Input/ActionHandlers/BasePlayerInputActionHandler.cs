@@ -14,6 +14,7 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
         [NotNull] private readonly IEventsResolver _eventsResolver;
         [NotNull] private readonly IPlayerPieceGhostView _playerPieceGhostView;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
+        private readonly ResolveReason _resolveReason;
 
         private InitializedLabel _initializedLabel;
 
@@ -41,7 +42,8 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
             [NotNull] IPhaseContainer phaseContainer,
             [NotNull] IEventsResolver eventsResolver,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
-            [NotNull] IPlayerPieceView playerPieceView)
+            [NotNull] IPlayerPieceView playerPieceView,
+            ResolveReason resolveReason)
         {
             ArgumentNullException.ThrowIfNull(phaseContainer);
             ArgumentNullException.ThrowIfNull(eventsResolver);
@@ -52,6 +54,7 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
             _eventsResolver = eventsResolver;
             _playerPieceGhostView = playerPieceGhostView;
             _playerPieceView = playerPieceView;
+            _resolveReason = resolveReason;
         }
 
         public void Initialize()
@@ -126,7 +129,7 @@ namespace Game.Gameplay.View.Player.Input.ActionHandlers
         [NotNull]
         private ResolveContext GetResolveContext()
         {
-            return new ResolveContext(_playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
+            return new ResolveContext(_resolveReason, _playerPieceView.Coordinate, _playerPieceGhostView.Coordinate);
         }
     }
 }
