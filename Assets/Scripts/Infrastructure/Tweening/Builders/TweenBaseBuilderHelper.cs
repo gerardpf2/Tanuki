@@ -26,6 +26,8 @@ namespace Infrastructure.Tweening.Builders
 
         public Action OnStartPlay { get; private set; }
 
+        public Action OnPlaying { get; private set; }
+
         public Action OnEndPlay { get; private set; }
 
         public Action OnEndIteration { get; private set; }
@@ -100,6 +102,13 @@ namespace Infrastructure.Tweening.Builders
         public TBuilder WithOnStartPlay(Action onStartPlay)
         {
             OnStartPlay = onStartPlay;
+
+            return This;
+        }
+
+        public TBuilder WithOnPlaying(Action onPlaying)
+        {
+            OnPlaying = onPlaying;
 
             return This;
         }

@@ -33,6 +33,9 @@ namespace Infrastructure.Tweening.Builders
         TBuilder WithOnStartPlay(Action onStartPlay);
 
         [NotNull]
+        TBuilder WithOnPlaying(Action onPlaying);
+
+        [NotNull]
         TBuilder WithOnEndPlay(Action onEndPlay);
 
         [NotNull]

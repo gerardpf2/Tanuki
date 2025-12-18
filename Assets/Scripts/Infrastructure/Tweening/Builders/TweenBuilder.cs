@@ -90,6 +90,7 @@ namespace Infrastructure.Tweening.Builders
                     DelayManagementRestart,
                     OnStartIteration,
                     OnStartPlay,
+                    OnPlaying,
                     OnEndPlay,
                     OnEndIteration,
                     OnPause,

@@ -19,13 +19,14 @@ namespace Infrastructure.Tweening
             DelayManagement delayManagementRestart,
             Action onStartIteration,
             Action onStartPlay,
+            Action onPlaying,
             Action onEndPlay,
             Action onEndIteration,
             Action onPause,
             Action onResume,
             Action onRestart,
             Action onComplete,
-            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
+            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlaying, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
