@@ -315,6 +315,37 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void OnPlaying_NotSet_ReturnsDefault()
+        {
+            const Action expectedResult = null;
+
+            Action result = _tweenBuilder.OnPlaying;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void OnPlaying_Set_ReturnsExpected()
+        {
+            Action expectedResult = Substitute.For<Action>();
+            _tweenBuilder.WithOnPlaying(expectedResult);
+
+            Action result = _tweenBuilder.OnPlaying;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithOnPlaying_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnPlaying(null);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void OnEndPlay_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
@@ -672,6 +703,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             const DelayManagement delayManagementRestart = DelayManagement.After;
             Action onStartIteration = Substitute.For<Action>();
             Action onStartPlay = Substitute.For<Action>();
+            Action onPlaying = Substitute.For<Action>();
             Action onEndPlay = Substitute.For<Action>();
             Action onEndIteration = Substitute.For<Action>();
             Action onPause = Substitute.For<Action>();
@@ -697,6 +729,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     delayManagementRestart,
                     onStartIteration,
                     onStartPlay,
+                    onPlaying,
                     onEndPlay,
                     onEndIteration,
                     onPause,
@@ -721,6 +754,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithDelayManagementRestart(delayManagementRestart)
                 .WithOnStartIteration(onStartIteration)
                 .WithOnStartPlay(onStartPlay)
+                .WithOnPlaying(onPlaying)
                 .WithOnEndPlay(onEndPlay)
                 .WithOnEndIteration(onEndIteration)
                 .WithOnPause(onPause)

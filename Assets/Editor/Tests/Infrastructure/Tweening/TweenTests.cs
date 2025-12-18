@@ -103,7 +103,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         public void Equals_OtherWrongType_ReturnsFalse()
         {
             Tween<object> tween = Build();
-            Tween<string> other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null, 1.0f, Substitute.For<Action<string>>(), Substitute.For<IEasingFunction>(), Substitute.For<IEasingFunction>(), Substitute.For<Func<string, string, float, string>>());
+            Tween<string> other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null, null, 1.0f, Substitute.For<Action<string>>(), Substitute.For<IEasingFunction>(), Substitute.For<IEasingFunction>(), Substitute.For<Func<string, string, float, string>>());
 
             Assert.AreNotEqual(tween, other);
         }
@@ -286,6 +286,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                     RepetitionType.Restart,
                     DelayManagement.BeforeAndAfter,
                     DelayManagement.BeforeAndAfter,
+                    null,
                     null,
                     null,
                     null,

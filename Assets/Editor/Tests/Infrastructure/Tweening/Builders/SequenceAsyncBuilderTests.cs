@@ -28,6 +28,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             const DelayManagement delayManagementRestart = DelayManagement.After;
             Action onStartIteration = Substitute.For<Action>();
             Action onStartPlay = Substitute.For<Action>();
+            Action onPlaying = Substitute.For<Action>();
             Action onEndPlay = Substitute.For<Action>();
             Action onEndIteration = Substitute.For<Action>();
             Action onPause = Substitute.For<Action>();
@@ -45,6 +46,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     delayManagementRestart,
                     onStartIteration,
                     onStartPlay,
+                    onPlaying,
                     onEndPlay,
                     onEndIteration,
                     onPause,
@@ -63,6 +65,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithDelayManagementRestart(delayManagementRestart)
                 .WithOnStartIteration(onStartIteration)
                 .WithOnStartPlay(onStartPlay)
+                .WithOnPlaying(onPlaying)
                 .WithOnEndPlay(onEndPlay)
                 .WithOnEndIteration(onEndIteration)
                 .WithOnPause(onPause)

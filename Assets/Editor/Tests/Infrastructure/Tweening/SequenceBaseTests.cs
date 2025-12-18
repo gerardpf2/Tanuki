@@ -172,6 +172,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                     null,
                     null,
                     null,
+                    null,
                     tweens ?? _tweens,
                     play
                 );
@@ -195,6 +196,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                 DelayManagement delayManagementRestart,
                 Action onStartIteration,
                 Action onStartPlay,
+                Action onPlaying,
                 Action onEndPlay,
                 Action onEndIteration,
                 Action onPause,
@@ -202,7 +204,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                 Action onRestart,
                 Action onComplete,
                 IEnumerable<ITween> tweens,
-                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete, tweens)
+                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlaying, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete, tweens)
             {
                 _play = play;
             }
@@ -215,7 +217,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
         private sealed class NotASequenceBase : TweenBase
         {
-            public NotASequenceBase() : base(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null) { }
+            public NotASequenceBase() : base(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null) { }
 
             protected override float Play(float deltaTimeS, bool backwards)
             {
