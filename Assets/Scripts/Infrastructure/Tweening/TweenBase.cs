@@ -21,10 +21,10 @@ namespace Infrastructure.Tweening
         private readonly Action _onPlaying;
         private readonly Action _onEndPlay;
         private readonly Action _onEndIteration;
+        private readonly Action _onComplete;
         private readonly Action _onPause;
         private readonly Action _onResume;
         private readonly Action _onRestart;
-        private readonly Action _onComplete;
 
         private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
         private TweenState _state = TweenState.SetUp;
@@ -86,10 +86,10 @@ namespace Infrastructure.Tweening
             Action onPlaying,
             Action onEndPlay,
             Action onEndIteration,
+            Action onComplete,
             Action onPause,
             Action onResume,
-            Action onRestart,
-            Action onComplete)
+            Action onRestart)
         {
             _autoPlay = autoPlay;
             _delayBeforeS = delayBeforeS;
@@ -103,10 +103,10 @@ namespace Infrastructure.Tweening
             _onPlaying = onPlaying;
             _onEndPlay = onEndPlay;
             _onEndIteration = onEndIteration;
+            _onComplete = onComplete;
             _onPause = onPause;
             _onResume = onResume;
             _onRestart = onRestart;
-            _onComplete = onComplete;
         }
 
         public float Step(float deltaTimeS, bool backwards = false)
@@ -363,10 +363,10 @@ namespace Infrastructure.Tweening
             hashCode.Add(_onPlaying);
             hashCode.Add(_onEndPlay);
             hashCode.Add(_onEndIteration);
+            hashCode.Add(_onComplete);
             hashCode.Add(_onPause);
             hashCode.Add(_onResume);
             hashCode.Add(_onRestart);
-            hashCode.Add(_onComplete);
 
             return hashCode.ToHashCode();
         }
@@ -388,10 +388,10 @@ namespace Infrastructure.Tweening
                 Equals(_onPlaying, other._onPlaying) &&
                 Equals(_onEndPlay, other._onEndPlay) &&
                 Equals(_onEndIteration, other._onEndIteration) &&
+                Equals(_onComplete, other._onComplete) &&
                 Equals(_onPause, other._onPause) &&
                 Equals(_onResume, other._onResume) &&
-                Equals(_onRestart, other._onRestart) &&
-                Equals(_onComplete, other._onComplete);
+                Equals(_onRestart, other._onRestart);
         }
     }
 }

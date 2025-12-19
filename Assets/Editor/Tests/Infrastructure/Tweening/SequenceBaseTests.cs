@@ -199,12 +199,12 @@ namespace Editor.Tests.Infrastructure.Tweening
                 Action onPlaying,
                 Action onEndPlay,
                 Action onEndIteration,
+                Action onComplete,
                 Action onPause,
                 Action onResume,
                 Action onRestart,
-                Action onComplete,
                 IEnumerable<ITween> tweens,
-                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlaying, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete, tweens)
+                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlaying, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart, tweens)
             {
                 _play = play;
             }

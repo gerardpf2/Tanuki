@@ -22,10 +22,10 @@ namespace Infrastructure.Tweening.Builders
                     OnPlaying,
                     OnEndPlay,
                     OnEndIteration,
+                    OnComplete,
                     OnPause,
                     OnResume,
                     OnRestart,
-                    OnComplete,
                     Tweens
                 );
         }

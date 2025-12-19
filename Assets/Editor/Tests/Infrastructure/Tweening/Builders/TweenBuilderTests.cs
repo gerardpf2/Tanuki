@@ -408,6 +408,37 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void OnComplete_NotSet_ReturnsDefault()
+        {
+            const Action expectedResult = null;
+
+            Action result = _tweenBuilder.OnComplete;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void OnComplete_Set_ReturnsExpected()
+        {
+            Action expectedResult = Substitute.For<Action>();
+            _tweenBuilder.WithOnComplete(expectedResult);
+
+            Action result = _tweenBuilder.OnComplete;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithOnComplete_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnComplete(null);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void OnPause_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
@@ -496,37 +527,6 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             ITweenBuilder<object> expectedResult = _tweenBuilder;
 
             ITweenBuilder<object> result = _tweenBuilder.WithOnRestart(null);
-
-            Assert.AreSame(expectedResult, result);
-        }
-
-        [Test]
-        public void OnComplete_NotSet_ReturnsDefault()
-        {
-            const Action expectedResult = null;
-
-            Action result = _tweenBuilder.OnComplete;
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [Test]
-        public void OnComplete_Set_ReturnsExpected()
-        {
-            Action expectedResult = Substitute.For<Action>();
-            _tweenBuilder.WithOnComplete(expectedResult);
-
-            Action result = _tweenBuilder.OnComplete;
-
-            Assert.AreEqual(expectedResult, result);
-        }
-
-        [Test]
-        public void WithOnComplete_ReturnsThis()
-        {
-            ITweenBuilder<object> expectedResult = _tweenBuilder;
-
-            ITweenBuilder<object> result = _tweenBuilder.WithOnComplete(null);
 
             Assert.AreSame(expectedResult, result);
         }
@@ -706,10 +706,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action onPlaying = Substitute.For<Action>();
             Action onEndPlay = Substitute.For<Action>();
             Action onEndIteration = Substitute.For<Action>();
+            Action onComplete = Substitute.For<Action>();
             Action onPause = Substitute.For<Action>();
             Action onResume = Substitute.For<Action>();
             Action onRestart = Substitute.For<Action>();
-            Action onComplete = Substitute.For<Action>();
             object start = new();
             object end = new();
             const float durationS = 1.0f;
@@ -732,10 +732,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     onPlaying,
                     onEndPlay,
                     onEndIteration,
+                    onComplete,
                     onPause,
                     onResume,
                     onRestart,
-                    onComplete,
                     start,
                     end,
                     durationS,
@@ -757,10 +757,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithOnPlaying(onPlaying)
                 .WithOnEndPlay(onEndPlay)
                 .WithOnEndIteration(onEndIteration)
+                .WithOnComplete(onComplete)
                 .WithOnPause(onPause)
                 .WithOnResume(onResume)
                 .WithOnRestart(onRestart)
-                .WithOnComplete(onComplete)
                 .WithStart(start)
                 .WithEnd(end)
                 .WithDurationS(durationS)

@@ -42,6 +42,9 @@ namespace Infrastructure.Tweening.Builders
         TBuilder WithOnEndIteration(Action onEndIteration);
 
         [NotNull]
+        TBuilder WithOnComplete(Action onComplete);
+
+        [NotNull]
         TBuilder WithOnPause(Action onPause);
 
         [NotNull]
@@ -49,9 +52,6 @@ namespace Infrastructure.Tweening.Builders
 
         [NotNull]
         TBuilder WithOnRestart(Action onRestart);
-
-        [NotNull]
-        TBuilder WithOnComplete(Action onComplete);
 
         [NotNull]
         ITween Build();

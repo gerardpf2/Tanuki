@@ -12,10 +12,10 @@ namespace Editor.Tests.Infrastructure.Tweening
         private Action _onPlaying;
         private Action _onEndPlay;
         private Action _onEndIteration;
+        private Action _onComplete;
         private Action _onPause;
         private Action _onResume;
         private Action _onRestart;
-        private Action _onComplete;
 
         [SetUp]
         public void SetUp()
@@ -25,10 +25,10 @@ namespace Editor.Tests.Infrastructure.Tweening
             _onPlaying = Substitute.For<Action>();
             _onEndPlay = Substitute.For<Action>();
             _onEndIteration = Substitute.For<Action>();
+            _onComplete = Substitute.For<Action>();
             _onPause = Substitute.For<Action>();
             _onResume = Substitute.For<Action>();
             _onRestart = Substitute.For<Action>();
-            _onComplete = Substitute.For<Action>();
         }
 
         [Test]
@@ -646,6 +646,16 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_OtherDifferentParams13_ReturnsFalse()
         {
+            Action otherOnComplete = Substitute.For<Action>();
+            TweenBase tweenBase = Build();
+            TweenBase other = Build(onComplete: otherOnComplete);
+
+            Assert.AreNotEqual(tweenBase, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentParams14_ReturnsFalse()
+        {
             Action otherOnPause = Substitute.For<Action>();
             TweenBase tweenBase = Build();
             TweenBase other = Build(onPause: otherOnPause);
@@ -654,7 +664,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams14_ReturnsFalse()
+        public void Equals_OtherDifferentParams15_ReturnsFalse()
         {
             Action otherOnResume = Substitute.For<Action>();
             TweenBase tweenBase = Build();
@@ -664,21 +674,11 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams15_ReturnsFalse()
+        public void Equals_OtherDifferentParams16_ReturnsFalse()
         {
             Action otherOnRestart = Substitute.For<Action>();
             TweenBase tweenBase = Build();
             TweenBase other = Build(onRestart: otherOnRestart);
-
-            Assert.AreNotEqual(tweenBase, other);
-        }
-
-        [Test]
-        public void Equals_OtherDifferentParams16_ReturnsFalse()
-        {
-            Action otherOnComplete = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onComplete: otherOnComplete);
 
             Assert.AreNotEqual(tweenBase, other);
         }
@@ -822,6 +822,16 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void GetHashCode_OtherDifferentParams13_DifferentReturnedValue()
         {
+            Action otherOnComplete = Substitute.For<Action>();
+            TweenBase tweenBase = Build();
+            TweenBase other = Build(onComplete: otherOnComplete);
+
+            Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentParams14_DifferentReturnedValue()
+        {
             Action otherOnPause = Substitute.For<Action>();
             TweenBase tweenBase = Build();
             TweenBase other = Build(onPause: otherOnPause);
@@ -830,7 +840,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams14_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams15_DifferentReturnedValue()
         {
             Action otherOnResume = Substitute.For<Action>();
             TweenBase tweenBase = Build();
@@ -840,21 +850,11 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams15_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentParams16_DifferentReturnedValue()
         {
             Action otherOnRestart = Substitute.For<Action>();
             TweenBase tweenBase = Build();
             TweenBase other = Build(onRestart: otherOnRestart);
-
-            Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
-        }
-
-        [Test]
-        public void GetHashCode_OtherDifferentParams16_DifferentReturnedValue()
-        {
-            Action otherOnComplete = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onComplete: otherOnComplete);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
@@ -872,10 +872,10 @@ namespace Editor.Tests.Infrastructure.Tweening
             Action onPlaying = null,
             Action onEndPlay = null,
             Action onEndIteration = null,
+            Action onComplete = null,
             Action onPause = null,
             Action onResume = null,
             Action onRestart = null,
-            Action onComplete = null,
             float playRemainingDeltaTimeS = 0.0f)
         {
             Func<float> play = Substitute.For<Func<float>>();
@@ -895,10 +895,10 @@ namespace Editor.Tests.Infrastructure.Tweening
                     onPlaying ?? _onPlaying,
                     onEndPlay ?? _onEndPlay,
                     onEndIteration ?? _onEndIteration,
+                    onComplete ?? _onComplete,
                     onPause ?? _onPause,
                     onResume ?? _onResume,
                     onRestart ?? _onRestart,
-                    onComplete ?? _onComplete,
                     play
                 );
         }
@@ -924,11 +924,11 @@ namespace Editor.Tests.Infrastructure.Tweening
                 Action onPlaying,
                 Action onEndPlay,
                 Action onEndIteration,
+                Action onComplete,
                 Action onPause,
                 Action onResume,
                 Action onRestart,
-                Action onComplete,
-                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlaying, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
+                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlaying, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
             {
                 _play = play;
             }

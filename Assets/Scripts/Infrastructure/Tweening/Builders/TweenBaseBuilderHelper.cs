@@ -32,13 +32,13 @@ namespace Infrastructure.Tweening.Builders
 
         public Action OnEndIteration { get; private set; }
 
+        public Action OnComplete { get; private set; }
+
         public Action OnPause { get; private set; }
 
         public Action OnResume { get; private set; }
 
         public Action OnRestart { get; private set; }
-
-        public Action OnComplete { get; private set; }
 
         [NotNull]
         protected abstract TBuilder This { get; }
@@ -127,6 +127,13 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
+        public TBuilder WithOnComplete(Action onComplete)
+        {
+            OnComplete = onComplete;
+
+            return This;
+        }
+
         public TBuilder WithOnPause(Action onPause)
         {
             OnPause = onPause;
@@ -144,13 +151,6 @@ namespace Infrastructure.Tweening.Builders
         public TBuilder WithOnRestart(Action onRestart)
         {
             OnRestart = onRestart;
-
-            return This;
-        }
-
-        public TBuilder WithOnComplete(Action onComplete)
-        {
-            OnComplete = onComplete;
 
             return This;
         }

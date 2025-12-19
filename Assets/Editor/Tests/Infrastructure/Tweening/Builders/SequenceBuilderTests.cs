@@ -75,10 +75,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action onPlaying = Substitute.For<Action>();
             Action onEndPlay = Substitute.For<Action>();
             Action onEndIteration = Substitute.For<Action>();
+            Action onComplete = Substitute.For<Action>();
             Action onPause = Substitute.For<Action>();
             Action onResume = Substitute.For<Action>();
             Action onRestart = Substitute.For<Action>();
-            Action onComplete = Substitute.For<Action>();
             ITween expectedResult =
                 new Sequence(
                     autoPlay,
@@ -93,10 +93,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     onPlaying,
                     onEndPlay,
                     onEndIteration,
+                    onComplete,
                     onPause,
                     onResume,
                     onRestart,
-                    onComplete,
                     _sequenceBuilder.Tweens
                 );
             _sequenceBuilder
@@ -112,10 +112,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithOnPlaying(onPlaying)
                 .WithOnEndPlay(onEndPlay)
                 .WithOnEndIteration(onEndIteration)
+                .WithOnComplete(onComplete)
                 .WithOnPause(onPause)
                 .WithOnResume(onResume)
-                .WithOnRestart(onRestart)
-                .WithOnComplete(onComplete);
+                .WithOnRestart(onRestart);
 
             ITween result = _sequenceBuilder.Build();
 
