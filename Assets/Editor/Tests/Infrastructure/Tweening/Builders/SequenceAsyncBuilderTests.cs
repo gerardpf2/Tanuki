@@ -36,7 +36,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action onPause = Substitute.For<Action>();
             Action onResume = Substitute.For<Action>();
             Action onRestart = Substitute.For<Action>();
-            ITween expectedResult =
+            ITweenBase expectedResult =
                 new SequenceAsync(
                     autoPlay,
                     delayBeforeS,
@@ -76,7 +76,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithOnResume(onResume)
                 .WithOnRestart(onRestart);
 
-            ITween result = _sequenceAsyncBuilder.Build();
+            ITweenBase result = _sequenceAsyncBuilder.Build();
 
             Assert.AreEqual(expectedResult, result);
         }

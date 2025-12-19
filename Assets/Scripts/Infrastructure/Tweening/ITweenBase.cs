@@ -1,6 +1,6 @@
 namespace Infrastructure.Tweening
 {
-    public interface ITween
+    public interface ITweenBase
     {
         TweenState State { get; }
 

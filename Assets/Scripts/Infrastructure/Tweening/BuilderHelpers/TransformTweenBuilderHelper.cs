@@ -42,25 +42,25 @@ namespace Infrastructure.Tweening.BuilderHelpers
             Vector3 start = transform.position;
             Vector3 middle = (0.5f * (start + end)).WithY(Mathf.Max(start.y, end.y) + height);
 
-            ITween moveXZ =
+            ITweenBase moveXZ =
                 Move(transform, end, durationS, Axis.X | Axis.Z)
                     .WithEasingType(EasingType.Linear)
                     .Build();
 
-            ITween moveYStartToMiddle =
+            ITweenBase moveYStartToMiddle =
                 Move(transform, middle, 0.5f * durationS, Axis.Y)
                     .WithEasingType(EasingType.OutQuad)
                     .WithComplementaryEasingTypeBackwards(true)
                     .Build();
 
-            ITween moveYMiddleToEnd =
+            ITweenBase moveYMiddleToEnd =
                 Move(transform, end, 0.5f * durationS, Axis.Y)
                     .WithStart(middle)
                     .WithEasingType(EasingType.InQuad)
                     .WithComplementaryEasingTypeBackwards(true)
                     .Build();
 
-            ITween moveY =
+            ITweenBase moveY =
                 _tweenBuilderFactory
                     .GetSequenceBuilder()
                     .AddTween(moveYStartToMiddle)

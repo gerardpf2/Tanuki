@@ -8,16 +8,16 @@ namespace Editor.Tests.Infrastructure.Tweening
 {
     public class SequenceAsyncTests
     {
-        private IReadOnlyList<ITween> _tweens;
+        private IReadOnlyList<ITweenBase> _tweens;
 
         [SetUp]
         public void SetUp()
         {
-            _tweens = new List<ITween>
+            _tweens = new List<ITweenBase>
             {
-                Substitute.For<ITween>(),
-                Substitute.For<ITween>(),
-                Substitute.For<ITween>()
+                Substitute.For<ITweenBase>(),
+                Substitute.For<ITweenBase>(),
+                Substitute.For<ITweenBase>()
             };
         }
 

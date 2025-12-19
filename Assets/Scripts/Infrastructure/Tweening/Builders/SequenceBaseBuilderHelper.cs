@@ -6,11 +6,11 @@ namespace Infrastructure.Tweening.Builders
 {
     public abstract class SequenceBaseBuilderHelper<TBuilder> : TweenBaseBuilderHelper<TBuilder>, ISequenceBaseBuilderHelper<TBuilder>
     {
-        [NotNull, ItemNotNull] private readonly ICollection<ITween> _tweens = new List<ITween>(); // ItemNotNull as long as all Add check for null
+        [NotNull, ItemNotNull] private readonly ICollection<ITweenBase> _tweens = new List<ITweenBase>(); // ItemNotNull as long as all Add check for null
 
-        [NotNull, ItemNotNull] public IEnumerable<ITween> Tweens => _tweens;
+        [NotNull, ItemNotNull] public IEnumerable<ITweenBase> Tweens => _tweens;
 
-        public TBuilder AddTween([NotNull] ITween tween)
+        public TBuilder AddTween([NotNull] ITweenBase tween)
         {
             ArgumentNullException.ThrowIfNull(tween);
 

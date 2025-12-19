@@ -4,6 +4,6 @@ namespace Infrastructure.Tweening
 {
     public interface ITweenRunner
     {
-        void Run(ITween tween, Action onRemove = null, Func<bool> keepAliveAfterComplete = null);
+        void Run(ITweenBase tween, Action onRemove = null, Func<bool> keepAliveAfterComplete = null);
     }
 }

@@ -72,7 +72,7 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        protected override ITween BuildTween()
+        protected override ITweenBase BuildTween()
         {
             IEasingFunction easingFunction = _easingFunctionGetter.Get(EasingType);
             IEasingFunction easingFunctionBackwards = ComplementaryEasingTypeBackwards ?

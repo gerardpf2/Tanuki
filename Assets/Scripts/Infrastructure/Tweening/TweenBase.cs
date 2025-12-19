@@ -7,7 +7,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
-    public abstract class TweenBase : ITween
+    public abstract class TweenBase : ITweenBase
     {
         private readonly bool _autoPlay;
         private readonly float _delayBeforeS;

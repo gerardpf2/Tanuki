@@ -750,7 +750,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             IEasingFunction easingFunctionBackwards = Substitute.For<IEasingFunction>();
             _easingFunctionGetter.Get(easingType).Returns(easingFunction);
             _easingFunctionGetter.GetComplementary(easingType).Returns(easingFunctionBackwards);
-            ITween expectedResult =
+            ITweenBase expectedResult =
                 new Tween<object>(
                     autoPlay,
                     delayBeforeS,
@@ -801,7 +801,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithEasingType(easingType)
                 .WithComplementaryEasingTypeBackwards(complementaryEasingTypeBackwards);
 
-            ITween result = _tweenBuilder.Build();
+            ITweenBase result = _tweenBuilder.Build();
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -809,9 +809,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void Build_AlreadyBuilt_ThrowsException()
         {
-            ITween _ = _tweenBuilder.Build();
+            ITweenBase _ = _tweenBuilder.Build();
 
-            InvalidOperationException invalidOperationException = Assert.Throws<InvalidOperationException>(() => { ITween __ = _tweenBuilder.Build(); });
+            InvalidOperationException invalidOperationException = Assert.Throws<InvalidOperationException>(() => { ITweenBase __ = _tweenBuilder.Build(); });
             Assert.AreEqual("Tween has already been built. Tween builders are not expected to be reused", invalidOperationException.Message);
         }
 

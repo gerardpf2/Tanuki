@@ -25,7 +25,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void Tweens_NotSet_ReturnsNotNullAndEmpty()
         {
-            IEnumerable<ITween> result = _sequenceBuilder.Tweens;
+            IEnumerable<ITweenBase> result = _sequenceBuilder.Tweens;
 
             Assert.IsNotNull(result);
             Assert.IsEmpty(result);
@@ -34,14 +34,14 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void Tweens_AddTween_ReturnsNotNullAndTweenIsAdded()
         {
-            ITween tween = Substitute.For<ITween>();
+            ITweenBase tween = Substitute.For<ITweenBase>();
             _sequenceBuilder.AddTween(tween);
 
-            IEnumerable<ITween> result = _sequenceBuilder.Tweens;
+            IEnumerable<ITweenBase> result = _sequenceBuilder.Tweens;
 
             Assert.IsNotNull(result);
 
-            List<ITween> resultList = result.ToList();
+            List<ITweenBase> resultList = result.ToList();
 
             Assert.IsTrue(resultList.Count == 1);
             Assert.IsTrue(resultList.Contains(tween));
@@ -51,7 +51,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         public void AddTween_ReturnsThis()
         {
             ISequenceBuilder expectedResult = _sequenceBuilder;
-            ITween tween = Substitute.For<ITween>();
+            ITweenBase tween = Substitute.For<ITweenBase>();
 
             ISequenceBuilder result = _sequenceBuilder.AddTween(tween);
 
@@ -80,7 +80,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             Action onPause = Substitute.For<Action>();
             Action onResume = Substitute.For<Action>();
             Action onRestart = Substitute.For<Action>();
-            ITween expectedResult =
+            ITweenBase expectedResult =
                 new Sequence(
                     autoPlay,
                     delayBeforeS,
@@ -120,7 +120,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithOnResume(onResume)
                 .WithOnRestart(onRestart);
 
-            ITween result = _sequenceBuilder.Build();
+            ITweenBase result = _sequenceBuilder.Build();
 
             Assert.AreEqual(expectedResult, result);
         }

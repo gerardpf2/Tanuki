@@ -7,7 +7,7 @@ namespace Infrastructure.Tweening
 {
     public abstract class SequenceBase : TweenBase
     {
-        [NotNull, ItemNotNull] private readonly IReadOnlyList<ITween> _tweens;
+        [NotNull, ItemNotNull] private readonly IReadOnlyList<ITweenBase> _tweens;
 
         protected SequenceBase(
             bool autoPlay,
@@ -27,13 +27,13 @@ namespace Infrastructure.Tweening
             Action onPause,
             Action onResume,
             Action onRestart,
-            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
+            [NotNull, ItemNotNull] IEnumerable<ITweenBase> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
-            List<ITween> tweensCopy = new();
+            List<ITweenBase> tweensCopy = new();
 
-            foreach (ITween tween in tweens)
+            foreach (ITweenBase tween in tweens)
             {
                 ArgumentNullException.ThrowIfNull(tween);
 
@@ -65,12 +65,12 @@ namespace Infrastructure.Tweening
         protected abstract float Play(
             float deltaTimeS,
             bool backwards,
-            [NotNull, ItemNotNull] IReadOnlyList<ITween> tweens
+            [NotNull, ItemNotNull] IReadOnlyList<ITweenBase> tweens
         );
 
         private void RestartTweens()
         {
-            foreach (ITween tween in _tweens)
+            foreach (ITweenBase tween in _tweens)
             {
                 tween.Restart();
             }
@@ -97,7 +97,7 @@ namespace Infrastructure.Tweening
 
             hashCode.Add(base.GetHashCode());
 
-            foreach (ITween tween in _tweens)
+            foreach (ITweenBase tween in _tweens)
             {
                 hashCode.Add(tween.GetHashCode());
             }

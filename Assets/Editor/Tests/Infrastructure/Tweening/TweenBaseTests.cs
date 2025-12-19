@@ -994,7 +994,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             }
         }
 
-        private sealed class NotATweenBase : ITween
+        private sealed class NotATweenBase : ITweenBase
         {
             public TweenState State => TweenState.SetUp;
 
