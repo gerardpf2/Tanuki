@@ -253,6 +253,37 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
+        public void OnStep_NotSet_ReturnsDefault()
+        {
+            const Action expectedResult = null;
+
+            Action result = _tweenBuilder.OnStep;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void OnStep_Set_ReturnsExpected()
+        {
+            Action expectedResult = Substitute.For<Action>();
+            _tweenBuilder.WithOnStep(expectedResult);
+
+            Action result = _tweenBuilder.OnStep;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void WithOnStep_ReturnsThis()
+        {
+            ITweenBuilder<object> expectedResult = _tweenBuilder;
+
+            ITweenBuilder<object> result = _tweenBuilder.WithOnStep(null);
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
         public void OnStartIteration_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
