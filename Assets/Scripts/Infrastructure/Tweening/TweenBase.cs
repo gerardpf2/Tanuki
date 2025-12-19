@@ -244,15 +244,13 @@ namespace Infrastructure.Tweening
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
         {
+            _onPlaying?.Invoke();
+
             deltaTimeS = Play(deltaTimeS, backwards);
 
             if (deltaTimeS > 0.0f)
             {
                 State = TweenState.EndPlay;
-            }
-            else
-            {
-                _onPlaying?.Invoke();
             }
 
             return deltaTimeS;
