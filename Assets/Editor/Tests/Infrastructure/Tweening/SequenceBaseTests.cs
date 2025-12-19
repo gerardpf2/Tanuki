@@ -173,6 +173,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                     null,
                     null,
                     null,
+                    null,
                     tweens ?? _tweens,
                     play
                 );
@@ -194,6 +195,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                 RepetitionType repetitionType,
                 DelayManagement delayManagementRepetition,
                 DelayManagement delayManagementRestart,
+                Action onStep,
                 Action onStartIteration,
                 Action onStartPlay,
                 Action onPlay,
@@ -204,7 +206,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                 Action onResume,
                 Action onRestart,
                 IEnumerable<ITween> tweens,
-                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart, tweens)
+                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart, tweens)
             {
                 _play = play;
             }
@@ -217,7 +219,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
         private sealed class NotASequenceBase : TweenBase
         {
-            public NotASequenceBase() : base(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null) { }
+            public NotASequenceBase() : base(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null) { }
 
             protected override float Play(float deltaTimeS, bool backwards)
             {

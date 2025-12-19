@@ -27,6 +27,9 @@ namespace Infrastructure.Tweening.Builders
         TBuilder WithDelayManagementRestart(DelayManagement delayManagementRestart);
 
         [NotNull]
+        TBuilder WithOnStep(Action onStep);
+
+        [NotNull]
         TBuilder WithOnStartIteration(Action onStartIteration);
 
         [NotNull]

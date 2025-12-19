@@ -7,6 +7,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 {
     public class TweenBaseTests
     {
+        private Action _onStep;
         private Action _onStartIteration;
         private Action _onStartPlay;
         private Action _onPlay;
@@ -20,6 +21,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         [SetUp]
         public void SetUp()
         {
+            _onStep = Substitute.For<Action>();
             _onStartIteration = Substitute.For<Action>();
             _onStartPlay = Substitute.For<Action>();
             _onPlay = Substitute.For<Action>();
@@ -867,6 +869,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             RepetitionType repetitionType = RepetitionType.Restart,
             DelayManagement delayManagementRepetition = DelayManagement.BeforeAndAfter,
             DelayManagement delayManagementRestart = DelayManagement.BeforeAndAfter,
+            Action onStep = null,
             Action onStartIteration = null,
             Action onStartPlay = null,
             Action onPlay = null,
@@ -890,6 +893,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                     repetitionType,
                     delayManagementRepetition,
                     delayManagementRestart,
+                    onStep ?? _onStep,
                     onStartIteration ?? _onStartIteration,
                     onStartPlay ?? _onStartPlay,
                     onPlay ?? _onPlay,
@@ -919,6 +923,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                 RepetitionType repetitionType,
                 DelayManagement delayManagementRepetition,
                 DelayManagement delayManagementRestart,
+                Action onStep,
                 Action onStartIteration,
                 Action onStartPlay,
                 Action onPlay,
@@ -928,7 +933,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                 Action onPause,
                 Action onResume,
                 Action onRestart,
-                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
+                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
             {
                 _play = play;
             }

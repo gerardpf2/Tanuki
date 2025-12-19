@@ -26,6 +26,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             const RepetitionType repetitionType = RepetitionType.Yoyo;
             const DelayManagement delayManagementRepetition = DelayManagement.Before;
             const DelayManagement delayManagementRestart = DelayManagement.After;
+            Action onStep = Substitute.For<Action>();
             Action onStartIteration = Substitute.For<Action>();
             Action onStartPlay = Substitute.For<Action>();
             Action onPlay = Substitute.For<Action>();
@@ -44,6 +45,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     repetitionType,
                     delayManagementRepetition,
                     delayManagementRestart,
+                    onStep,
                     onStartIteration,
                     onStartPlay,
                     onPlay,
@@ -63,6 +65,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithRepetitionType(repetitionType)
                 .WithDelayManagementRepetition(delayManagementRepetition)
                 .WithDelayManagementRestart(delayManagementRestart)
+                .WithOnStep(onStep)
                 .WithOnStartIteration(onStartIteration)
                 .WithOnStartPlay(onStartPlay)
                 .WithOnPlay(onPlay)

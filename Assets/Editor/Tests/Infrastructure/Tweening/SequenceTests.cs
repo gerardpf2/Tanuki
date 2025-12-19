@@ -105,7 +105,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         public void Equals_OtherWrongTypeAndSameParams_ReturnsFalse()
         {
             Sequence sequence = Build();
-            SequenceAsync other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, _tweens);
+            SequenceAsync other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null, _tweens);
 
             Assert.AreNotEqual(sequence, other);
         }
@@ -114,7 +114,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         public void GetHashCode_OtherWrongTypeAndSameParams_DifferentReturnedValue()
         {
             Sequence sequence = Build();
-            SequenceAsync other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, _tweens);
+            SequenceAsync other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null, _tweens);
 
             Assert.AreNotEqual(sequence.GetHashCode(), other.GetHashCode());
         }
@@ -135,6 +135,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                     RepetitionType.Restart,
                     DelayManagement.BeforeAndAfter,
                     DelayManagement.BeforeAndAfter,
+                    null,
                     null,
                     null,
                     null,
