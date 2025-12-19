@@ -255,9 +255,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnStep_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnStep;
+            Action<ITween<object>> result = _tweenBuilder.OnStep;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -265,10 +265,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnStep_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnStep(expectedResult);
 
-            Action result = _tweenBuilder.OnStep;
+            Action<ITween<object>> result = _tweenBuilder.OnStep;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -286,9 +286,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnStartIteration_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnStartIteration;
+            Action<ITween<object>> result = _tweenBuilder.OnStartIteration;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -296,10 +296,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnStartIteration_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnStartIteration(expectedResult);
 
-            Action result = _tweenBuilder.OnStartIteration;
+            Action<ITween<object>> result = _tweenBuilder.OnStartIteration;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -317,9 +317,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnStartPlay_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnStartPlay;
+            Action<ITween<object>> result = _tweenBuilder.OnStartPlay;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -327,10 +327,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnStartPlay_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnStartPlay(expectedResult);
 
-            Action result = _tweenBuilder.OnStartPlay;
+            Action<ITween<object>> result = _tweenBuilder.OnStartPlay;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -348,9 +348,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnPlay_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnPlay;
+            Action<ITween<object>> result = _tweenBuilder.OnPlay;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -358,10 +358,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnPlay_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnPlay(expectedResult);
 
-            Action result = _tweenBuilder.OnPlay;
+            Action<ITween<object>> result = _tweenBuilder.OnPlay;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -379,9 +379,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnEndPlay_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnEndPlay;
+            Action<ITween<object>> result = _tweenBuilder.OnEndPlay;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -389,10 +389,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnEndPlay_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnEndPlay(expectedResult);
 
-            Action result = _tweenBuilder.OnEndPlay;
+            Action<ITween<object>> result = _tweenBuilder.OnEndPlay;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -410,9 +410,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnEndIteration_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnEndIteration;
+            Action<ITween<object>> result = _tweenBuilder.OnEndIteration;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -420,10 +420,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnEndIteration_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnEndIteration(expectedResult);
 
-            Action result = _tweenBuilder.OnEndIteration;
+            Action<ITween<object>> result = _tweenBuilder.OnEndIteration;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -441,9 +441,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnComplete_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnComplete;
+            Action<ITween<object>> result = _tweenBuilder.OnComplete;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -451,10 +451,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnComplete_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnComplete(expectedResult);
 
-            Action result = _tweenBuilder.OnComplete;
+            Action<ITween<object>> result = _tweenBuilder.OnComplete;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -472,9 +472,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnPause_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnPause;
+            Action<ITween<object>> result = _tweenBuilder.OnPause;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -482,10 +482,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnPause_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnPause(expectedResult);
 
-            Action result = _tweenBuilder.OnPause;
+            Action<ITween<object>> result = _tweenBuilder.OnPause;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -503,9 +503,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnResume_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnResume;
+            Action<ITween<object>> result = _tweenBuilder.OnResume;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -513,10 +513,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnResume_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnResume(expectedResult);
 
-            Action result = _tweenBuilder.OnResume;
+            Action<ITween<object>> result = _tweenBuilder.OnResume;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -534,9 +534,9 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnRestart_NotSet_ReturnsDefault()
         {
-            const Action expectedResult = null;
+            const Action<ITween<object>> expectedResult = null;
 
-            Action result = _tweenBuilder.OnRestart;
+            Action<ITween<object>> result = _tweenBuilder.OnRestart;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -544,10 +544,10 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         [Test]
         public void OnRestart_Set_ReturnsExpected()
         {
-            Action expectedResult = Substitute.For<Action>();
+            Action<ITween<object>> expectedResult = Substitute.For<Action<ITween<object>>>();
             _tweenBuilder.WithOnRestart(expectedResult);
 
-            Action result = _tweenBuilder.OnRestart;
+            Action<ITween<object>> result = _tweenBuilder.OnRestart;
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -732,16 +732,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             const RepetitionType repetitionType = RepetitionType.Yoyo;
             const DelayManagement delayManagementRepetition = DelayManagement.Before;
             const DelayManagement delayManagementRestart = DelayManagement.After;
-            Action onStep = Substitute.For<Action>();
-            Action onStartIteration = Substitute.For<Action>();
-            Action onStartPlay = Substitute.For<Action>();
-            Action onPlay = Substitute.For<Action>();
-            Action onEndPlay = Substitute.For<Action>();
-            Action onEndIteration = Substitute.For<Action>();
-            Action onComplete = Substitute.For<Action>();
-            Action onPause = Substitute.For<Action>();
-            Action onResume = Substitute.For<Action>();
-            Action onRestart = Substitute.For<Action>();
+            Action<ITween<object>> onStep = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onStartIteration = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onStartPlay = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onPlay = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onEndPlay = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onEndIteration = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onComplete = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onPause = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onResume = Substitute.For<Action<ITween<object>>>();
+            Action<ITween<object>> onRestart = Substitute.For<Action<ITween<object>>>();
             object start = new();
             object end = new();
             const float durationS = 1.0f;

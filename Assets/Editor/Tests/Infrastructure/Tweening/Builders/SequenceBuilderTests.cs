@@ -70,16 +70,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             const RepetitionType repetitionType = RepetitionType.Yoyo;
             const DelayManagement delayManagementRepetition = DelayManagement.Before;
             const DelayManagement delayManagementRestart = DelayManagement.After;
-            Action onStep = Substitute.For<Action>();
-            Action onStartIteration = Substitute.For<Action>();
-            Action onStartPlay = Substitute.For<Action>();
-            Action onPlay = Substitute.For<Action>();
-            Action onEndPlay = Substitute.For<Action>();
-            Action onEndIteration = Substitute.For<Action>();
-            Action onComplete = Substitute.For<Action>();
-            Action onPause = Substitute.For<Action>();
-            Action onResume = Substitute.For<Action>();
-            Action onRestart = Substitute.For<Action>();
+            Action<ISequence> onStep = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onStartIteration = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onStartPlay = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onPlay = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onEndPlay = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onEndIteration = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onComplete = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onPause = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onResume = Substitute.For<Action<ISequence>>();
+            Action<ISequence> onRestart = Substitute.For<Action<ISequence>>();
             ITweenBase expectedResult =
                 new Sequence(
                     autoPlay,
