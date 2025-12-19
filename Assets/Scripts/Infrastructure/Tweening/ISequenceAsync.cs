@@ -1,4 +1,7 @@
 namespace Infrastructure.Tweening
 {
-    public interface ISequenceAsync : ISequenceBase { }
+    public interface ISequenceAsync : ISequenceBase
+    {
+        // TODO
+    }
 }
