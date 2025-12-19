@@ -18,7 +18,7 @@ namespace Infrastructure.Tweening
         private readonly DelayManagement _delayManagementRestart;
         private readonly Action _onStartIteration;
         private readonly Action _onStartPlay;
-        private readonly Action _onPlaying;
+        private readonly Action _onPlay;
         private readonly Action _onEndPlay;
         private readonly Action _onEndIteration;
         private readonly Action _onComplete;
@@ -83,7 +83,7 @@ namespace Infrastructure.Tweening
             DelayManagement delayManagementRestart,
             Action onStartIteration,
             Action onStartPlay,
-            Action onPlaying,
+            Action onPlay,
             Action onEndPlay,
             Action onEndIteration,
             Action onComplete,
@@ -100,7 +100,7 @@ namespace Infrastructure.Tweening
             _delayManagementRestart = delayManagementRestart;
             _onStartIteration = onStartIteration;
             _onStartPlay = onStartPlay;
-            _onPlaying = onPlaying;
+            _onPlay = onPlay;
             _onEndPlay = onEndPlay;
             _onEndIteration = onEndIteration;
             _onComplete = onComplete;
@@ -244,7 +244,7 @@ namespace Infrastructure.Tweening
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
         {
-            _onPlaying?.Invoke();
+            _onPlay?.Invoke();
 
             deltaTimeS = Play(deltaTimeS, backwards);
 
@@ -358,7 +358,7 @@ namespace Infrastructure.Tweening
             hashCode.Add(_delayManagementRestart);
             hashCode.Add(_onStartIteration);
             hashCode.Add(_onStartPlay);
-            hashCode.Add(_onPlaying);
+            hashCode.Add(_onPlay);
             hashCode.Add(_onEndPlay);
             hashCode.Add(_onEndIteration);
             hashCode.Add(_onComplete);
@@ -383,7 +383,7 @@ namespace Infrastructure.Tweening
                 EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRestart, other._delayManagementRestart) &&
                 Equals(_onStartIteration, other._onStartIteration) &&
                 Equals(_onStartPlay, other._onStartPlay) &&
-                Equals(_onPlaying, other._onPlaying) &&
+                Equals(_onPlay, other._onPlay) &&
                 Equals(_onEndPlay, other._onEndPlay) &&
                 Equals(_onEndIteration, other._onEndIteration) &&
                 Equals(_onComplete, other._onComplete) &&

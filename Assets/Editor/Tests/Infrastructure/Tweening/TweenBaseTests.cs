@@ -9,7 +9,7 @@ namespace Editor.Tests.Infrastructure.Tweening
     {
         private Action _onStartIteration;
         private Action _onStartPlay;
-        private Action _onPlaying;
+        private Action _onPlay;
         private Action _onEndPlay;
         private Action _onEndIteration;
         private Action _onComplete;
@@ -22,7 +22,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         {
             _onStartIteration = Substitute.For<Action>();
             _onStartPlay = Substitute.For<Action>();
-            _onPlaying = Substitute.For<Action>();
+            _onPlay = Substitute.For<Action>();
             _onEndPlay = Substitute.For<Action>();
             _onEndIteration = Substitute.For<Action>();
             _onComplete = Substitute.For<Action>();
@@ -169,7 +169,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Step_PlayAndPlayRemainingDeltaTimeZero_PlayAndPlayingCallback()
+        public void Step_PlayAndPlayRemainingDeltaTimeZero_PlayAndNoEndPlayCallback()
         {
             const bool autoPlay = true;
             const float delayBeforeS = 0.0f;
@@ -188,7 +188,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onPlaying.Received(1).Invoke();
+            _onPlay.Received(1).Invoke();
             _onEndPlay.DidNotReceive().Invoke();
         }
 
@@ -212,8 +212,8 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
+            _onPlay.Received(1).Invoke();
             _onEndPlay.Received(1).Invoke();
-            _onPlaying.DidNotReceive().Invoke();
         }
 
         [TestCase(DelayManagement.BeforeAndAfter, TweenState.WaitAfter, false)]
@@ -616,9 +616,9 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_OtherDifferentParams10_ReturnsFalse()
         {
-            Action otherOnPlaying = Substitute.For<Action>();
+            Action otherOnPlay = Substitute.For<Action>();
             TweenBase tweenBase = Build();
-            TweenBase other = Build(onPlaying: otherOnPlaying);
+            TweenBase other = Build(onPlay: otherOnPlay);
 
             Assert.AreNotEqual(tweenBase, other);
         }
@@ -792,9 +792,9 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void GetHashCode_OtherDifferentParams10_DifferentReturnedValue()
         {
-            Action otherOnPlaying = Substitute.For<Action>();
+            Action otherOnPlay = Substitute.For<Action>();
             TweenBase tweenBase = Build();
-            TweenBase other = Build(onPlaying: otherOnPlaying);
+            TweenBase other = Build(onPlay: otherOnPlay);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
@@ -869,7 +869,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             DelayManagement delayManagementRestart = DelayManagement.BeforeAndAfter,
             Action onStartIteration = null,
             Action onStartPlay = null,
-            Action onPlaying = null,
+            Action onPlay = null,
             Action onEndPlay = null,
             Action onEndIteration = null,
             Action onComplete = null,
@@ -892,7 +892,7 @@ namespace Editor.Tests.Infrastructure.Tweening
                     delayManagementRestart,
                     onStartIteration ?? _onStartIteration,
                     onStartPlay ?? _onStartPlay,
-                    onPlaying ?? _onPlaying,
+                    onPlay ?? _onPlay,
                     onEndPlay ?? _onEndPlay,
                     onEndIteration ?? _onEndIteration,
                     onComplete ?? _onComplete,
@@ -921,14 +921,14 @@ namespace Editor.Tests.Infrastructure.Tweening
                 DelayManagement delayManagementRestart,
                 Action onStartIteration,
                 Action onStartPlay,
-                Action onPlaying,
+                Action onPlay,
                 Action onEndPlay,
                 Action onEndIteration,
                 Action onComplete,
                 Action onPause,
                 Action onResume,
                 Action onRestart,
-                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlaying, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
+                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
             {
                 _play = play;
             }

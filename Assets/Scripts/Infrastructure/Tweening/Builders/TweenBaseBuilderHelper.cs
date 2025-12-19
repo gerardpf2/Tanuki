@@ -26,7 +26,7 @@ namespace Infrastructure.Tweening.Builders
 
         public Action OnStartPlay { get; private set; }
 
-        public Action OnPlaying { get; private set; }
+        public Action OnPlay { get; private set; }
 
         public Action OnEndPlay { get; private set; }
 
@@ -106,9 +106,9 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public TBuilder WithOnPlaying(Action onPlaying)
+        public TBuilder WithOnPlay(Action onPlay)
         {
-            OnPlaying = onPlaying;
+            OnPlay = onPlay;
 
             return This;
         }

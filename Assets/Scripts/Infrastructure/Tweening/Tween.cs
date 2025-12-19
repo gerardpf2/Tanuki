@@ -29,7 +29,7 @@ namespace Infrastructure.Tweening
             DelayManagement delayManagementRestart,
             Action onStartIteration,
             Action onStartPlay,
-            Action onPlaying,
+            Action onPlay,
             Action onEndPlay,
             Action onEndIteration,
             Action onComplete,
@@ -42,7 +42,7 @@ namespace Infrastructure.Tweening
             [NotNull] Action<T> setter,
             [NotNull] IEasingFunction easingFunction,
             [NotNull] IEasingFunction easingFunctionBackwards,
-            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlaying, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
+            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
         {
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(easingFunction);

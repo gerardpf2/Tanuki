@@ -315,32 +315,32 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
         }
 
         [Test]
-        public void OnPlaying_NotSet_ReturnsDefault()
+        public void OnPlay_NotSet_ReturnsDefault()
         {
             const Action expectedResult = null;
 
-            Action result = _tweenBuilder.OnPlaying;
+            Action result = _tweenBuilder.OnPlay;
 
             Assert.AreEqual(expectedResult, result);
         }
 
         [Test]
-        public void OnPlaying_Set_ReturnsExpected()
+        public void OnPlay_Set_ReturnsExpected()
         {
             Action expectedResult = Substitute.For<Action>();
-            _tweenBuilder.WithOnPlaying(expectedResult);
+            _tweenBuilder.WithOnPlay(expectedResult);
 
-            Action result = _tweenBuilder.OnPlaying;
+            Action result = _tweenBuilder.OnPlay;
 
             Assert.AreEqual(expectedResult, result);
         }
 
         [Test]
-        public void WithOnPlaying_ReturnsThis()
+        public void WithOnPlay_ReturnsThis()
         {
             ITweenBuilder<object> expectedResult = _tweenBuilder;
 
-            ITweenBuilder<object> result = _tweenBuilder.WithOnPlaying(null);
+            ITweenBuilder<object> result = _tweenBuilder.WithOnPlay(null);
 
             Assert.AreSame(expectedResult, result);
         }
@@ -703,7 +703,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             const DelayManagement delayManagementRestart = DelayManagement.After;
             Action onStartIteration = Substitute.For<Action>();
             Action onStartPlay = Substitute.For<Action>();
-            Action onPlaying = Substitute.For<Action>();
+            Action onPlay = Substitute.For<Action>();
             Action onEndPlay = Substitute.For<Action>();
             Action onEndIteration = Substitute.For<Action>();
             Action onComplete = Substitute.For<Action>();
@@ -729,7 +729,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     delayManagementRestart,
                     onStartIteration,
                     onStartPlay,
-                    onPlaying,
+                    onPlay,
                     onEndPlay,
                     onEndIteration,
                     onComplete,
@@ -754,7 +754,7 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithDelayManagementRestart(delayManagementRestart)
                 .WithOnStartIteration(onStartIteration)
                 .WithOnStartPlay(onStartPlay)
-                .WithOnPlaying(onPlaying)
+                .WithOnPlay(onPlay)
                 .WithOnEndPlay(onEndPlay)
                 .WithOnEndIteration(onEndIteration)
                 .WithOnComplete(onComplete)
