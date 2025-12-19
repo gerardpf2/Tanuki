@@ -1,4 +1,4 @@
 namespace Infrastructure.Tweening.Builders
 {
-    public interface ISequenceAsyncBuilder : ISequenceBaseBuilderHelper<ISequenceAsyncBuilder> { }
+    public interface ISequenceAsyncBuilder : ISequenceBaseBuilderHelper<ISequenceAsyncBuilder, ISequenceAsync> { }
 }

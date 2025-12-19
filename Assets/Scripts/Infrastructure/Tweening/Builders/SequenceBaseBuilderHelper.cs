@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.Tweening.Builders
 {
-    public abstract class SequenceBaseBuilderHelper<TBuilder> : TweenBaseBuilderHelper<TBuilder>, ISequenceBaseBuilderHelper<TBuilder>
+    public abstract class SequenceBaseBuilderHelper<TBuilder, TTween> : TweenBaseBuilderHelper<TBuilder, TTween>, ISequenceBaseBuilderHelper<TBuilder, TTween>
     {
         [NotNull, ItemNotNull] private readonly ICollection<ITweenBase> _tweens = new List<ITweenBase>(); // ItemNotNull as long as all Add check for null
 

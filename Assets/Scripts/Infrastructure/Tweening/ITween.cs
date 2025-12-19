@@ -1,4 +1,4 @@
 namespace Infrastructure.Tweening
 {
-    public interface ITween : ITweenBase { }
+    public interface ITween<T> : ITweenBase { }
 }

@@ -5,8 +5,10 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening
 {
-    public class SequenceAsync : SequenceBase, ISequenceAsync
+    public class SequenceAsync : SequenceBase<ISequenceAsync>, ISequenceAsync
     {
+        protected override ISequenceAsync This => this;
+
         public SequenceAsync(
             bool autoPlay,
             float delayBeforeS,
@@ -15,16 +17,16 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action onStep,
-            Action onStartIteration,
-            Action onStartPlay,
-            Action onPlay,
-            Action onEndPlay,
-            Action onEndIteration,
-            Action onComplete,
-            Action onPause,
-            Action onResume,
-            Action onRestart,
+            Action<ISequenceAsync> onStep,
+            Action<ISequenceAsync> onStartIteration,
+            Action<ISequenceAsync> onStartPlay,
+            Action<ISequenceAsync> onPlay,
+            Action<ISequenceAsync> onEndPlay,
+            Action<ISequenceAsync> onEndIteration,
+            Action<ISequenceAsync> onComplete,
+            Action<ISequenceAsync> onPause,
+            Action<ISequenceAsync> onResume,
+            Action<ISequenceAsync> onRestart,
             [NotNull, ItemNotNull] IEnumerable<ITweenBase> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart, tweens) { }
 
         protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITweenBase> tweens)

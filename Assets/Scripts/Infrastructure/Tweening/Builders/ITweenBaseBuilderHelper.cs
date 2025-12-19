@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.Tweening.Builders
 {
-    public interface ITweenBaseBuilderHelper<out TBuilder>
+    public interface ITweenBaseBuilderHelper<out TBuilder, out TTween>
     {
         [NotNull]
         TBuilder WithAutoPlay(bool autoPlay);
@@ -27,34 +27,34 @@ namespace Infrastructure.Tweening.Builders
         TBuilder WithDelayManagementRestart(DelayManagement delayManagementRestart);
 
         [NotNull]
-        TBuilder WithOnStep(Action onStep);
+        TBuilder WithOnStep(Action<TTween> onStep);
 
         [NotNull]
-        TBuilder WithOnStartIteration(Action onStartIteration);
+        TBuilder WithOnStartIteration(Action<TTween> onStartIteration);
 
         [NotNull]
-        TBuilder WithOnStartPlay(Action onStartPlay);
+        TBuilder WithOnStartPlay(Action<TTween> onStartPlay);
 
         [NotNull]
-        TBuilder WithOnPlay(Action onPlay);
+        TBuilder WithOnPlay(Action<TTween> onPlay);
 
         [NotNull]
-        TBuilder WithOnEndPlay(Action onEndPlay);
+        TBuilder WithOnEndPlay(Action<TTween> onEndPlay);
 
         [NotNull]
-        TBuilder WithOnEndIteration(Action onEndIteration);
+        TBuilder WithOnEndIteration(Action<TTween> onEndIteration);
 
         [NotNull]
-        TBuilder WithOnComplete(Action onComplete);
+        TBuilder WithOnComplete(Action<TTween> onComplete);
 
         [NotNull]
-        TBuilder WithOnPause(Action onPause);
+        TBuilder WithOnPause(Action<TTween> onPause);
 
         [NotNull]
-        TBuilder WithOnResume(Action onResume);
+        TBuilder WithOnResume(Action<TTween> onResume);
 
         [NotNull]
-        TBuilder WithOnRestart(Action onRestart);
+        TBuilder WithOnRestart(Action<TTween> onRestart);
 
         [NotNull]
         ITweenBase Build();

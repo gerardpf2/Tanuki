@@ -4,7 +4,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening.Builders
 {
-    public abstract class TweenBaseBuilderHelper<TBuilder> : ITweenBaseBuilderHelper<TBuilder>
+    public abstract class TweenBaseBuilderHelper<TBuilder, TTween> : ITweenBaseBuilderHelper<TBuilder, TTween>
     {
         private bool _built;
 
@@ -22,25 +22,25 @@ namespace Infrastructure.Tweening.Builders
 
         public DelayManagement DelayManagementRestart { get; private set; } = TweenBaseBuilderConstants.DelayManagementRestart;
 
-        public Action OnStep { get; private set; }
+        public Action<TTween> OnStep { get; private set; }
 
-        public Action OnStartIteration { get; private set; }
+        public Action<TTween> OnStartIteration { get; private set; }
 
-        public Action OnStartPlay { get; private set; }
+        public Action<TTween> OnStartPlay { get; private set; }
 
-        public Action OnPlay { get; private set; }
+        public Action<TTween> OnPlay { get; private set; }
 
-        public Action OnEndPlay { get; private set; }
+        public Action<TTween> OnEndPlay { get; private set; }
 
-        public Action OnEndIteration { get; private set; }
+        public Action<TTween> OnEndIteration { get; private set; }
 
-        public Action OnComplete { get; private set; }
+        public Action<TTween> OnComplete { get; private set; }
 
-        public Action OnPause { get; private set; }
+        public Action<TTween> OnPause { get; private set; }
 
-        public Action OnResume { get; private set; }
+        public Action<TTween> OnResume { get; private set; }
 
-        public Action OnRestart { get; private set; }
+        public Action<TTween> OnRestart { get; private set; }
 
         [NotNull]
         protected abstract TBuilder This { get; }
@@ -94,70 +94,70 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public TBuilder WithOnStep(Action onStep)
+        public TBuilder WithOnStep(Action<TTween> onStep)
         {
             OnStep = onStep;
 
             return This;
         }
 
-        public TBuilder WithOnStartIteration(Action onStartIteration)
+        public TBuilder WithOnStartIteration(Action<TTween> onStartIteration)
         {
             OnStartIteration = onStartIteration;
 
             return This;
         }
 
-        public TBuilder WithOnStartPlay(Action onStartPlay)
+        public TBuilder WithOnStartPlay(Action<TTween> onStartPlay)
         {
             OnStartPlay = onStartPlay;
 
             return This;
         }
 
-        public TBuilder WithOnPlay(Action onPlay)
+        public TBuilder WithOnPlay(Action<TTween> onPlay)
         {
             OnPlay = onPlay;
 
             return This;
         }
 
-        public TBuilder WithOnEndPlay(Action onEndPlay)
+        public TBuilder WithOnEndPlay(Action<TTween> onEndPlay)
         {
             OnEndPlay = onEndPlay;
 
             return This;
         }
 
-        public TBuilder WithOnEndIteration(Action onEndIteration)
+        public TBuilder WithOnEndIteration(Action<TTween> onEndIteration)
         {
             OnEndIteration = onEndIteration;
 
             return This;
         }
 
-        public TBuilder WithOnComplete(Action onComplete)
+        public TBuilder WithOnComplete(Action<TTween> onComplete)
         {
             OnComplete = onComplete;
 
             return This;
         }
 
-        public TBuilder WithOnPause(Action onPause)
+        public TBuilder WithOnPause(Action<TTween> onPause)
         {
             OnPause = onPause;
 
             return This;
         }
 
-        public TBuilder WithOnResume(Action onResume)
+        public TBuilder WithOnResume(Action<TTween> onResume)
         {
             OnResume = onResume;
 
             return This;
         }
 
-        public TBuilder WithOnRestart(Action onRestart)
+        public TBuilder WithOnRestart(Action<TTween> onRestart)
         {
             OnRestart = onRestart;
 

@@ -7,7 +7,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
-    public abstract class TweenBase : ITweenBase
+    public abstract class TweenBase<TTween> : ITweenBase
     {
         private readonly bool _autoPlay;
         private readonly float _delayBeforeS;
@@ -16,16 +16,16 @@ namespace Infrastructure.Tweening
         private readonly RepetitionType _repetitionType;
         private readonly DelayManagement _delayManagementRepetition;
         private readonly DelayManagement _delayManagementRestart;
-        private readonly Action _onStep;
-        private readonly Action _onStartIteration;
-        private readonly Action _onStartPlay;
-        private readonly Action _onPlay;
-        private readonly Action _onEndPlay;
-        private readonly Action _onEndIteration;
-        private readonly Action _onComplete;
-        private readonly Action _onPause;
-        private readonly Action _onResume;
-        private readonly Action _onRestart;
+        private readonly Action<TTween> _onStep;
+        private readonly Action<TTween> _onStartIteration;
+        private readonly Action<TTween> _onStartPlay;
+        private readonly Action<TTween> _onPlay;
+        private readonly Action<TTween> _onEndPlay;
+        private readonly Action<TTween> _onEndIteration;
+        private readonly Action<TTween> _onComplete;
+        private readonly Action<TTween> _onPause;
+        private readonly Action<TTween> _onResume;
+        private readonly Action<TTween> _onRestart;
 
         private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
         private TweenState _state = TweenState.SetUp;
@@ -63,16 +63,18 @@ namespace Infrastructure.Tweening
 
                 if (Paused)
                 {
-                    _onPause?.Invoke();
+                    _onPause?.Invoke(This);
                 }
                 else
                 {
-                    _onResume?.Invoke();
+                    _onResume?.Invoke(This);
                 }
             }
         }
 
         protected bool Backwards { get; private set; }
+
+        protected abstract TTween This { get; }
 
         protected TweenBase(
             bool autoPlay,
@@ -82,16 +84,16 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action onStep,
-            Action onStartIteration,
-            Action onStartPlay,
-            Action onPlay,
-            Action onEndPlay,
-            Action onEndIteration,
-            Action onComplete,
-            Action onPause,
-            Action onResume,
-            Action onRestart)
+            Action<TTween> onStep,
+            Action<TTween> onStartIteration,
+            Action<TTween> onStartPlay,
+            Action<TTween> onPlay,
+            Action<TTween> onEndPlay,
+            Action<TTween> onEndIteration,
+            Action<TTween> onComplete,
+            Action<TTween> onPause,
+            Action<TTween> onResume,
+            Action<TTween> onRestart)
         {
             _autoPlay = autoPlay;
             _delayBeforeS = delayBeforeS;
@@ -119,7 +121,7 @@ namespace Infrastructure.Tweening
                 return 0.0f;
             }
 
-            _onStep?.Invoke();
+            _onStep?.Invoke(This);
 
             switch (State)
             {
@@ -180,7 +182,7 @@ namespace Infrastructure.Tweening
             _waitTimeS = 0.0f;
             _iteration = 0;
 
-            _onRestart?.Invoke();
+            _onRestart?.Invoke(This);
 
             OnRestart();
         }
@@ -192,27 +194,27 @@ namespace Infrastructure.Tweening
                 case TweenState.SetUp:
                     break;
                 case TweenState.StartIteration:
-                    _onStartIteration?.Invoke();
+                    _onStartIteration?.Invoke(This);
                     break;
                 case TweenState.WaitBefore:
                     break;
                 case TweenState.StartPlay:
-                    _onStartPlay?.Invoke();
+                    _onStartPlay?.Invoke(This);
                     break;
                 case TweenState.Play:
                     break;
                 case TweenState.EndPlay:
-                    _onEndPlay?.Invoke();
+                    _onEndPlay?.Invoke(This);
                     break;
                 case TweenState.WaitAfter:
                     break;
                 case TweenState.EndIteration:
-                    _onEndIteration?.Invoke();
+                    _onEndIteration?.Invoke(This);
                     break;
                 case TweenState.PrepareRepetition:
                     break;
                 case TweenState.Complete:
-                    _onComplete?.Invoke();
+                    _onComplete?.Invoke(This);
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(State);
@@ -249,7 +251,7 @@ namespace Infrastructure.Tweening
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
         {
-            _onPlay?.Invoke();
+            _onPlay?.Invoke(This);
 
             deltaTimeS = Play(deltaTimeS, backwards);
 
@@ -342,7 +344,7 @@ namespace Infrastructure.Tweening
                 return true;
             }
 
-            if (obj is not TweenBase other)
+            if (obj is not TweenBase<TTween> other)
             {
                 return false;
             }
@@ -375,7 +377,7 @@ namespace Infrastructure.Tweening
             return hashCode.ToHashCode();
         }
 
-        private bool Equals([NotNull] TweenBase other)
+        private bool Equals([NotNull] TweenBase<TTween> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

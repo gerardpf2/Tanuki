@@ -7,7 +7,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
-    public class Tween<T> : TweenBase, ITween
+    public class Tween<T> : TweenBase<ITween<T>>, ITween<T>
     {
         private readonly T _start;
         private readonly T _end;
@@ -19,6 +19,8 @@ namespace Infrastructure.Tweening
 
         private float _playTimeS;
 
+        protected override ITween<T> This => this;
+
         public Tween(
             bool autoPlay,
             float delayBeforeS,
@@ -27,16 +29,16 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action onStep,
-            Action onStartIteration,
-            Action onStartPlay,
-            Action onPlay,
-            Action onEndPlay,
-            Action onEndIteration,
-            Action onComplete,
-            Action onPause,
-            Action onResume,
-            Action onRestart,
+            Action<ITween<T>> onStep,
+            Action<ITween<T>> onStartIteration,
+            Action<ITween<T>> onStartPlay,
+            Action<ITween<T>> onPlay,
+            Action<ITween<T>> onEndPlay,
+            Action<ITween<T>> onEndIteration,
+            Action<ITween<T>> onComplete,
+            Action<ITween<T>> onPause,
+            Action<ITween<T>> onResume,
+            Action<ITween<T>> onRestart,
             T start,
             T end,
             float durationS,

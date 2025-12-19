@@ -5,7 +5,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening.Builders
 {
-    public class TweenBuilder<T> : TweenBaseBuilderHelper<ITweenBuilder<T>>, ITweenBuilder<T>
+    public class TweenBuilder<T> : TweenBaseBuilderHelper<ITweenBuilder<T>, ITween<T>>, ITweenBuilder<T>
     {
         [NotNull] private readonly Action<T> _setter;
         [NotNull] private readonly IEasingFunctionGetter _easingFunctionGetter;

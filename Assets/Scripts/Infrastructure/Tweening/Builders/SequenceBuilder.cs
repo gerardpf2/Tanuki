@@ -2,7 +2,7 @@ using System;
 
 namespace Infrastructure.Tweening.Builders
 {
-    public class SequenceBuilder : SequenceBaseBuilderHelper<ISequenceBuilder>, ISequenceBuilder
+    public class SequenceBuilder : SequenceBaseBuilderHelper<ISequenceBuilder, ISequence>, ISequenceBuilder
     {
         protected override ISequenceBuilder This => this;
 

@@ -5,7 +5,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening
 {
-    public abstract class SequenceBase : TweenBase, ISequenceBase
+    public abstract class SequenceBase<TTween> : TweenBase<TTween>, ISequenceBase
     {
         [NotNull, ItemNotNull] private readonly IReadOnlyList<ITweenBase> _tweens;
 
@@ -17,16 +17,16 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action onStep,
-            Action onStartIteration,
-            Action onStartPlay,
-            Action onPlay,
-            Action onEndPlay,
-            Action onEndIteration,
-            Action onComplete,
-            Action onPause,
-            Action onResume,
-            Action onRestart,
+            Action<TTween> onStep,
+            Action<TTween> onStartIteration,
+            Action<TTween> onStartPlay,
+            Action<TTween> onPlay,
+            Action<TTween> onEndPlay,
+            Action<TTween> onEndIteration,
+            Action<TTween> onComplete,
+            Action<TTween> onPause,
+            Action<TTween> onResume,
+            Action<TTween> onRestart,
             [NotNull, ItemNotNull] IEnumerable<ITweenBase> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
         {
             ArgumentNullException.ThrowIfNull(tweens);
@@ -83,7 +83,7 @@ namespace Infrastructure.Tweening
                 return false;
             }
 
-            if (obj is not SequenceBase other)
+            if (obj is not SequenceBase<TTween> other)
             {
                 return false;
             }
@@ -105,7 +105,7 @@ namespace Infrastructure.Tweening
             return hashCode.ToHashCode();
         }
 
-        private bool Equals([NotNull] SequenceBase other)
+        private bool Equals([NotNull] SequenceBase<TTween> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
