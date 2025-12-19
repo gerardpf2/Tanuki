@@ -7,7 +7,7 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
-    public class Tween<T> : TweenBase
+    public class Tween<T> : TweenBase, ITween
     {
         private readonly T _start;
         private readonly T _end;

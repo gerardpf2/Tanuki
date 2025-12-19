@@ -5,7 +5,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening
 {
-    public class Sequence : SequenceBase
+    public class Sequence : SequenceBase, ISequence
     {
         public Sequence(
             bool autoPlay,

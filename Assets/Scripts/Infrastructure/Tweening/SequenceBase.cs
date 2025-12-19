@@ -5,7 +5,7 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening
 {
-    public abstract class SequenceBase : TweenBase
+    public abstract class SequenceBase : TweenBase, ISequenceBase
     {
         [NotNull, ItemNotNull] private readonly IReadOnlyList<ITweenBase> _tweens;
 
