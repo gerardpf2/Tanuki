@@ -16,6 +16,7 @@ namespace Infrastructure.Tweening
         private readonly RepetitionType _repetitionType;
         private readonly DelayManagement _delayManagementRepetition;
         private readonly DelayManagement _delayManagementRestart;
+        private readonly Action _onStep;
         private readonly Action _onStartIteration;
         private readonly Action _onStartPlay;
         private readonly Action _onPlay;
@@ -81,6 +82,7 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
+            Action onStep,
             Action onStartIteration,
             Action onStartPlay,
             Action onPlay,
@@ -98,6 +100,7 @@ namespace Infrastructure.Tweening
             _repetitionType = repetitionType;
             _delayManagementRepetition = delayManagementRepetition;
             _delayManagementRestart = delayManagementRestart;
+            _onStep = onStep;
             _onStartIteration = onStartIteration;
             _onStartPlay = onStartPlay;
             _onPlay = onPlay;
@@ -115,6 +118,8 @@ namespace Infrastructure.Tweening
             {
                 return 0.0f;
             }
+
+            _onStep?.Invoke();
 
             switch (State)
             {
@@ -356,6 +361,7 @@ namespace Infrastructure.Tweening
             hashCode.Add(_repetitionType);
             hashCode.Add(_delayManagementRepetition);
             hashCode.Add(_delayManagementRestart);
+            hashCode.Add(_onStep);
             hashCode.Add(_onStartIteration);
             hashCode.Add(_onStartPlay);
             hashCode.Add(_onPlay);
@@ -381,6 +387,7 @@ namespace Infrastructure.Tweening
                 EqualityComparer<RepetitionType>.Default.Equals(_repetitionType, other._repetitionType) &&
                 EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRepetition, other._delayManagementRepetition) &&
                 EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRestart, other._delayManagementRestart) &&
+                Equals(_onStep, other._onStep) &&
                 Equals(_onStartIteration, other._onStartIteration) &&
                 Equals(_onStartPlay, other._onStartPlay) &&
                 Equals(_onPlay, other._onPlay) &&

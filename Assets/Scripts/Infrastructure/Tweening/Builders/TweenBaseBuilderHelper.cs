@@ -22,6 +22,8 @@ namespace Infrastructure.Tweening.Builders
 
         public DelayManagement DelayManagementRestart { get; private set; } = TweenBaseBuilderConstants.DelayManagementRestart;
 
+        public Action OnStep { get; private set; }
+
         public Action OnStartIteration { get; private set; }
 
         public Action OnStartPlay { get; private set; }
@@ -88,6 +90,13 @@ namespace Infrastructure.Tweening.Builders
         public TBuilder WithDelayManagementRestart(DelayManagement delayManagementRestart)
         {
             DelayManagementRestart = delayManagementRestart;
+
+            return This;
+        }
+
+        public TBuilder WithOnStep(Action onStep)
+        {
+            OnStep = onStep;
 
             return This;
         }

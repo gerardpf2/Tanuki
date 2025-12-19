@@ -88,6 +88,7 @@ namespace Infrastructure.Tweening.Builders
                     RepetitionType,
                     DelayManagementRepetition,
                     DelayManagementRestart,
+                    OnStep,
                     OnStartIteration,
                     OnStartPlay,
                     OnPlay,
