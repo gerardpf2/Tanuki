@@ -1,6 +1,6 @@
 namespace Infrastructure.Tweening
 {
-    public interface ITween<T> : ITweenBase
+    public interface ITween<TTarget, T> : ITweenBase
     {
         // TODO
     }

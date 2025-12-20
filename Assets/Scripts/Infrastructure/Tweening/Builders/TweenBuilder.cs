@@ -5,11 +5,13 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening.Builders
 {
-    public class TweenBuilder<T> : TweenBaseBuilderHelper<ITweenBuilder<T>, ITween<T>>, ITweenBuilder<T>
+    public class TweenBuilder<TTarget, T> : TweenBaseBuilderHelper<ITweenBuilder<TTarget, T>, ITween<TTarget, T>>, ITweenBuilder<TTarget, T>
     {
-        [NotNull] private readonly Action<T> _setter;
+        [NotNull] private readonly Action<TTarget, T> _setter;
         [NotNull] private readonly IEasingFunctionGetter _easingFunctionGetter;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
+
+        public TTarget Target { get; private set; }
 
         public T Start { get; private set; }
 
@@ -21,10 +23,10 @@ namespace Infrastructure.Tweening.Builders
 
         public bool ComplementaryEasingTypeBackwards { get; private set; }
 
-        protected override ITweenBuilder<T> This => this;
+        protected override ITweenBuilder<TTarget, T> This => this;
 
         public TweenBuilder(
-            [NotNull] Action<T> setter,
+            [NotNull] Action<TTarget, T> setter,
             [NotNull] IEasingFunctionGetter easingFunctionGetter,
             [NotNull] Func<T, T, float, T> lerp)
         {
@@ -37,35 +39,42 @@ namespace Infrastructure.Tweening.Builders
             _lerp = lerp;
         }
 
-        public ITweenBuilder<T> WithStart(T start)
+        public ITweenBuilder<TTarget, T> WithTarget(TTarget target)
+        {
+            Target = target;
+
+            return This;
+        }
+
+        public ITweenBuilder<TTarget, T> WithStart(T start)
         {
             Start = start;
 
             return This;
         }
 
-        public ITweenBuilder<T> WithEnd(T end)
+        public ITweenBuilder<TTarget, T> WithEnd(T end)
         {
             End = end;
 
             return This;
         }
 
-        public ITweenBuilder<T> WithDurationS(float durationS)
+        public ITweenBuilder<TTarget, T> WithDurationS(float durationS)
         {
             DurationS = durationS;
 
             return This;
         }
 
-        public ITweenBuilder<T> WithEasingType(EasingType easingType)
+        public ITweenBuilder<TTarget, T> WithEasingType(EasingType easingType)
         {
             EasingType = easingType;
 
             return This;
         }
 
-        public ITweenBuilder<T> WithComplementaryEasingTypeBackwards(bool complementaryEasingTypeBackwards)
+        public ITweenBuilder<TTarget, T> WithComplementaryEasingTypeBackwards(bool complementaryEasingTypeBackwards)
         {
             ComplementaryEasingTypeBackwards = complementaryEasingTypeBackwards;
 
@@ -80,7 +89,7 @@ namespace Infrastructure.Tweening.Builders
                 easingFunction;
 
             return
-                new Tween<T>(
+                new Tween<TTarget, T>(
                     AutoPlay,
                     DelayBeforeS,
                     DelayAfterS,
@@ -98,6 +107,7 @@ namespace Infrastructure.Tweening.Builders
                     OnPause,
                     OnResume,
                     OnRestart,
+                    Target,
                     Start,
                     End,
                     DurationS,
@@ -120,7 +130,7 @@ namespace Infrastructure.Tweening.Builders
                 return true;
             }
 
-            if (obj is not TweenBuilder<T> other)
+            if (obj is not TweenBuilder<TTarget, T> other)
             {
                 return false;
             }
@@ -133,7 +143,7 @@ namespace Infrastructure.Tweening.Builders
             return HashCode.Combine(_setter, _easingFunctionGetter, _lerp);
         }
 
-        private bool Equals([NotNull] TweenBuilder<T> other)
+        private bool Equals([NotNull] TweenBuilder<TTarget, T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

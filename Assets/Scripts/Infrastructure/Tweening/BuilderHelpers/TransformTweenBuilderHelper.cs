@@ -19,7 +19,9 @@ namespace Infrastructure.Tweening.BuilderHelpers
             _tweenBuilderFactory = tweenBuilderFactory;
         }
 
-        public ITweenBuilder<Vector3> Move(
+        #region Move
+
+        public ITweenBuilder<Transform, Vector3> Move(
             [NotNull] Transform transform,
             Vector3 end,
             float durationS,
@@ -29,7 +31,8 @@ namespace Infrastructure.Tweening.BuilderHelpers
 
             return
                 _tweenBuilderFactory
-                    .GetTweenBuilderVector3(value => transform.position = transform.position.With(value, axis))
+                    .GetTweenBuilderVector3<Transform>((target, value) => MoveSetter(target, value, axis))
+                    .WithTarget(transform)
                     .WithStart(transform.position)
                     .WithEnd(end)
                     .WithDurationS(durationS);
@@ -74,7 +77,18 @@ namespace Infrastructure.Tweening.BuilderHelpers
                     .AddTween(moveY);
         }
 
-        public ITweenBuilder<Vector3> Rotate(
+        private static void MoveSetter([NotNull] Transform transform, Vector3 value, Axis axis)
+        {
+            ArgumentNullException.ThrowIfNull(transform);
+
+            transform.position = transform.position.With(value, axis);
+        }
+
+        #endregion
+
+        #region Rotate
+
+        public ITweenBuilder<Transform, Vector3> Rotate(
             [NotNull] Transform transform,
             Vector3 end,
             float durationS,
@@ -89,24 +103,9 @@ namespace Infrastructure.Tweening.BuilderHelpers
 
             return
                 _tweenBuilderFactory
-                    .GetTweenBuilderVector3(value => transform.eulerAngles = transform.eulerAngles.With(value, axis))
+                    .GetTweenBuilderVector3<Transform>((target, value) => RotateSetter(target, value, axis))
+                    .WithTarget(transform)
                     .WithStart(start)
-                    .WithEnd(end)
-                    .WithDurationS(durationS);
-        }
-
-        public ITweenBuilder<Vector3> Scale(
-            [NotNull] Transform transform,
-            Vector3 end,
-            float durationS,
-            Axis axis = Axis.All)
-        {
-            ArgumentNullException.ThrowIfNull(transform);
-
-            return
-                _tweenBuilderFactory
-                    .GetTweenBuilderVector3(value => transform.localScale = transform.localScale.With(value, axis))
-                    .WithStart(transform.localScale)
                     .WithEnd(end)
                     .WithDurationS(durationS);
         }
@@ -129,5 +128,42 @@ namespace Infrastructure.Tweening.BuilderHelpers
                     return Vector3.zero;
             }
         }
+
+        private static void RotateSetter([NotNull] Transform transform, Vector3 value, Axis axis)
+        {
+            ArgumentNullException.ThrowIfNull(transform);
+
+            transform.eulerAngles = transform.eulerAngles.With(value, axis);
+        }
+
+        #endregion
+
+        #region Scale
+
+        public ITweenBuilder<Transform, Vector3> Scale(
+            [NotNull] Transform transform,
+            Vector3 end,
+            float durationS,
+            Axis axis = Axis.All)
+        {
+            ArgumentNullException.ThrowIfNull(transform);
+
+            return
+                _tweenBuilderFactory
+                    .GetTweenBuilderVector3<Transform>((target, value) => ScaleSetter(target, value, axis))
+                    .WithTarget(transform)
+                    .WithStart(transform.localScale)
+                    .WithEnd(end)
+                    .WithDurationS(durationS);
+        }
+
+        private static void ScaleSetter([NotNull] Transform transform, Vector3 value, Axis axis)
+        {
+            ArgumentNullException.ThrowIfNull(transform);
+
+            transform.localScale = transform.localScale.With(value, axis);
+        }
+
+        #endregion
     }
 }

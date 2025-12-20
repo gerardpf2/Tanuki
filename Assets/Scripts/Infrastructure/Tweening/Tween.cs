@@ -7,19 +7,20 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
-    public class Tween<T> : TweenBase<ITween<T>>, ITween<T>
+    public class Tween<TTarget, T> : TweenBase<ITween<TTarget, T>>, ITween<TTarget, T>
     {
+        private readonly TTarget _target;
         private readonly T _start;
         private readonly T _end;
         private readonly float _durationS;
-        [NotNull] private readonly Action<T> _setter;
+        [NotNull] private readonly Action<TTarget, T> _setter;
         [NotNull] private readonly IEasingFunction _easingFunction;
         [NotNull] private readonly IEasingFunction _easingFunctionBackwards;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
         private float _playTimeS;
 
-        protected override ITween<T> This => this;
+        protected override ITween<TTarget, T> This => this;
 
         public Tween(
             bool autoPlay,
@@ -29,20 +30,21 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action<ITween<T>> onStep,
-            Action<ITween<T>> onStartIteration,
-            Action<ITween<T>> onStartPlay,
-            Action<ITween<T>> onPlay,
-            Action<ITween<T>> onEndPlay,
-            Action<ITween<T>> onEndIteration,
-            Action<ITween<T>> onComplete,
-            Action<ITween<T>> onPause,
-            Action<ITween<T>> onResume,
-            Action<ITween<T>> onRestart,
+            Action<ITween<TTarget, T>> onStep,
+            Action<ITween<TTarget, T>> onStartIteration,
+            Action<ITween<TTarget, T>> onStartPlay,
+            Action<ITween<TTarget, T>> onPlay,
+            Action<ITween<TTarget, T>> onEndPlay,
+            Action<ITween<TTarget, T>> onEndIteration,
+            Action<ITween<TTarget, T>> onComplete,
+            Action<ITween<TTarget, T>> onPause,
+            Action<ITween<TTarget, T>> onResume,
+            Action<ITween<TTarget, T>> onRestart,
+            TTarget target,
             T start,
             T end,
             float durationS,
-            [NotNull] Action<T> setter,
+            [NotNull] Action<TTarget, T> setter,
             [NotNull] IEasingFunction easingFunction,
             [NotNull] IEasingFunction easingFunctionBackwards,
             [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
@@ -52,6 +54,7 @@ namespace Infrastructure.Tweening
             ArgumentNullException.ThrowIfNull(easingFunctionBackwards);
             ArgumentNullException.ThrowIfNull(lerp);
 
+            _target = target;
             _start = start;
             _end = end;
             _durationS = durationS;
@@ -72,6 +75,7 @@ namespace Infrastructure.Tweening
                 float normalizedTime = _playTimeS / _durationS;
 
                 _setter(
+                    _target,
                     _lerp(
                         GetStart(backwards),
                         GetEnd(backwards),
@@ -84,7 +88,7 @@ namespace Infrastructure.Tweening
                 return 0.0f;
             }
 
-            _setter(GetEnd(backwards));
+            _setter(_target, GetEnd(backwards));
 
             float remainingDeltaTimeS = _playTimeS - _durationS;
 
@@ -127,7 +131,7 @@ namespace Infrastructure.Tweening
                 return false;
             }
 
-            if (obj is not Tween<T> other)
+            if (obj is not Tween<TTarget, T> other)
             {
                 return false;
             }
@@ -137,24 +141,27 @@ namespace Infrastructure.Tweening
 
         public override int GetHashCode()
         {
-            return
-                HashCode.Combine(
-                    base.GetHashCode(),
-                    _start,
-                    _end,
-                    _durationS,
-                    _setter,
-                    _easingFunction,
-                    _easingFunctionBackwards,
-                    _lerp
-                );
+            HashCode hashCode = new();
+
+            hashCode.Add(base.GetHashCode());
+            hashCode.Add(_target);
+            hashCode.Add(_start);
+            hashCode.Add(_end);
+            hashCode.Add(_durationS);
+            hashCode.Add(_setter);
+            hashCode.Add(_easingFunction);
+            hashCode.Add(_easingFunctionBackwards);
+            hashCode.Add(_lerp);
+
+            return hashCode.ToHashCode();
         }
 
-        private bool Equals([NotNull] Tween<T> other)
+        private bool Equals([NotNull] Tween<TTarget, T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
             return
+                EqualityComparer<TTarget>.Default.Equals(_target, other._target) &&
                 EqualityComparer<T>.Default.Equals(_start, other._start) &&
                 EqualityComparer<T>.Default.Equals(_end, other._end) &&
                 _durationS.Equals(other._durationS) &&
