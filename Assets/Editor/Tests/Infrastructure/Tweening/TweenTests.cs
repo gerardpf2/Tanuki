@@ -120,7 +120,17 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams1_ReturnsFalse()
+        public void Equals_OtherDifferentTarget_ReturnsFalse()
+        {
+            object otherTarget = new();
+            Tween<object, object> tween = Build();
+            Tween<object, object> other = Build(target: otherTarget);
+
+            Assert.AreNotEqual(tween, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentStart_ReturnsFalse()
         {
             object otherStart = new();
             Tween<object, object> tween = Build();
@@ -130,7 +140,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams2_ReturnsFalse()
+        public void Equals_OtherDifferentEnd_ReturnsFalse()
         {
             object otherEnd = new();
             Tween<object, object> tween = Build();
@@ -140,7 +150,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams3_ReturnsFalse()
+        public void Equals_OtherDifferentDurationS_ReturnsFalse()
         {
             const float durationS = 1.0f;
             const float otherDurationS = 2.0f;
@@ -151,7 +161,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams4_ReturnsFalse()
+        public void Equals_OtherDifferentSetter_ReturnsFalse()
         {
             Action<object, object> otherSetter = Substitute.For<Action<object, object>>();
             Tween<object, object> tween = Build();
@@ -161,7 +171,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams5_ReturnsFalse()
+        public void Equals_OtherDifferentEasingFunction_ReturnsFalse()
         {
             IEasingFunction otherEasingFunction = Substitute.For<IEasingFunction>();
             Tween<object, object> tween = Build();
@@ -171,7 +181,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams6_ReturnsFalse()
+        public void Equals_OtherDifferentEasingFunctionBackwards_ReturnsFalse()
         {
             IEasingFunction otherEasingFunctionBackwards = Substitute.For<IEasingFunction>();
             Tween<object, object> tween = Build();
@@ -181,7 +191,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams7_ReturnsFalse()
+        public void Equals_OtherDifferentLerp_ReturnsFalse()
         {
             Func<object, object, float, object> otherLerp = Substitute.For<Func<object, object, float, object>>();
             Tween<object, object> tween = Build();
@@ -200,7 +210,17 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams1_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentTarget_DifferentReturnedValue()
+        {
+            object otherTarget = new();
+            Tween<object, object> tween = Build();
+            Tween<object, object> other = Build(target: otherTarget);
+
+            Assert.AreNotEqual(tween.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentStart_DifferentReturnedValue()
         {
             object otherStart = new();
             Tween<object, object> tween = Build();
@@ -210,7 +230,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams2_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentEnd_DifferentReturnedValue()
         {
             object otherEnd = new();
             Tween<object, object> tween = Build();
@@ -220,7 +240,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams3_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDurationS_DifferentReturnedValue()
         {
             const float durationS = 1.0f;
             const float otherDurationS = 2.0f;
@@ -231,7 +251,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams4_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentSetter_DifferentReturnedValue()
         {
             Action<object, object> otherSetter = Substitute.For<Action<object, object>>();
             Tween<object, object> tween = Build();
@@ -241,7 +261,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams5_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentEasingFunction_DifferentReturnedValue()
         {
             IEasingFunction otherEasingFunction = Substitute.For<IEasingFunction>();
             Tween<object, object> tween = Build();
@@ -251,7 +271,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams6_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentEasingFunctionBackwards_DifferentReturnedValue()
         {
             IEasingFunction otherEasingFunctionBackwards = Substitute.For<IEasingFunction>();
             Tween<object, object> tween = Build();
@@ -261,7 +281,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams7_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentLerp_DifferentReturnedValue()
         {
             Func<object, object, float, object> otherLerp = Substitute.For<Func<object, object, float, object>>();
             Tween<object, object> tween = Build();

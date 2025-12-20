@@ -549,7 +549,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams1_ReturnsFalse()
+        public void Equals_OtherDifferentAutoPlay_ReturnsFalse()
         {
             const bool autoPlay = true;
             const bool otherAutoPlay = false;
@@ -560,7 +560,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams2_ReturnsFalse()
+        public void Equals_OtherDifferentDelayBeforeS_ReturnsFalse()
         {
             const float delayBeforeS = 1.0f;
             const float otherDelayBeforeS = 2.0f;
@@ -571,7 +571,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams3_ReturnsFalse()
+        public void Equals_OtherDifferentDelayAfterS_ReturnsFalse()
         {
             const float delayAfterS = 1.0f;
             const float otherDelayAfterS = 2.0f;
@@ -582,7 +582,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams4_ReturnsFalse()
+        public void Equals_OtherDifferentRepetitions_ReturnsFalse()
         {
             const int repetitions = 1;
             const int otherRepetitions = 2;
@@ -593,7 +593,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams5_ReturnsFalse()
+        public void Equals_OtherDifferentRepetitionType_ReturnsFalse()
         {
             const RepetitionType repetitionType = RepetitionType.Restart;
             const RepetitionType otherRepetitionType = RepetitionType.Yoyo;
@@ -604,7 +604,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams6_ReturnsFalse()
+        public void Equals_OtherDifferentDelayManagementRepetition_ReturnsFalse()
         {
             const DelayManagement delayManagementRepetition = DelayManagement.Before;
             const DelayManagement otherDelayManagementRepetition = DelayManagement.After;
@@ -615,7 +615,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams7_ReturnsFalse()
+        public void Equals_OtherDifferentDelayManagementRestart_ReturnsFalse()
         {
             const DelayManagement delayManagementRestart = DelayManagement.Before;
             const DelayManagement otherDelayManagementRestart = DelayManagement.After;
@@ -626,7 +626,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams8_ReturnsFalse()
+        public void Equals_OtherDifferentOnStep_ReturnsFalse()
         {
             Action<ITweenBase> otherOnStep = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -636,7 +636,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams9_ReturnsFalse()
+        public void Equals_OtherDifferentOnStartIteration_ReturnsFalse()
         {
             Action<ITweenBase> otherOnStartIteration = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -646,7 +646,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams10_ReturnsFalse()
+        public void Equals_OtherDifferentOnStartPlay_ReturnsFalse()
         {
             Action<ITweenBase> otherOnStartPlay = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -656,7 +656,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams11_ReturnsFalse()
+        public void Equals_OtherDifferentOnPlay_ReturnsFalse()
         {
             Action<ITweenBase> otherOnPlay = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -666,7 +666,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams12_ReturnsFalse()
+        public void Equals_OtherDifferentOnEndPlay_ReturnsFalse()
         {
             Action<ITweenBase> otherOnEndPlay = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -676,7 +676,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams13_ReturnsFalse()
+        public void Equals_OtherDifferentOnEndIteration_ReturnsFalse()
         {
             Action<ITweenBase> otherOnEndIteration = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -686,7 +686,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams14_ReturnsFalse()
+        public void Equals_OtherDifferentOnComplete_ReturnsFalse()
         {
             Action<ITweenBase> otherOnComplete = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -696,7 +696,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams15_ReturnsFalse()
+        public void Equals_OtherDifferentOnPause_ReturnsFalse()
         {
             Action<ITweenBase> otherOnPause = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -706,7 +706,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams16_ReturnsFalse()
+        public void Equals_OtherDifferentOnResume_ReturnsFalse()
         {
             Action<ITweenBase> otherOnResume = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -716,7 +716,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParams17_ReturnsFalse()
+        public void Equals_OtherDifferentOnRestart_ReturnsFalse()
         {
             Action<ITweenBase> otherOnRestart = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -735,7 +735,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams1_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentAutoPlay_DifferentReturnedValue()
         {
             const bool autoPlay = true;
             const bool otherAutoPlay = false;
@@ -746,7 +746,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams2_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDelayBeforeS_DifferentReturnedValue()
         {
             const float delayBeforeS = 1.0f;
             const float otherDelayBeforeS = 2.0f;
@@ -757,7 +757,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams3_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDelayAfterS_DifferentReturnedValue()
         {
             const float delayAfterS = 1.0f;
             const float otherDelayAfterS = 2.0f;
@@ -768,7 +768,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams4_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentRepetitions_DifferentReturnedValue()
         {
             const int repetitions = 1;
             const int otherRepetitions = 2;
@@ -779,7 +779,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams5_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentRepetitionType_DifferentReturnedValue()
         {
             const RepetitionType repetitionType = RepetitionType.Restart;
             const RepetitionType otherRepetitionType = RepetitionType.Yoyo;
@@ -790,7 +790,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams6_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDelayManagementRepetition_DifferentReturnedValue()
         {
             const DelayManagement delayManagementRepetition = DelayManagement.Before;
             const DelayManagement otherDelayManagementRepetition = DelayManagement.After;
@@ -801,7 +801,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams7_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDelayManagementRestart_DifferentReturnedValue()
         {
             const DelayManagement delayManagementRestart = DelayManagement.Before;
             const DelayManagement otherDelayManagementRestart = DelayManagement.After;
@@ -812,7 +812,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams8_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnStep_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnStep = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -822,7 +822,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams9_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnStartIteration_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnStartIteration = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -832,7 +832,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams10_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnStartPlay_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnStartPlay = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -842,7 +842,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams11_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnPlay_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnPlay = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -852,7 +852,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams12_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnEndPlay_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnEndPlay = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -862,7 +862,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams13_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnEndIteration_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnEndIteration = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -872,7 +872,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams14_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnComplete_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnComplete = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -882,7 +882,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams15_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnPause_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnPause = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -892,7 +892,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams16_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnResume_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnResume = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();
@@ -902,7 +902,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams17_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnRestart_DifferentReturnedValue()
         {
             Action<ITweenBase> otherOnRestart = Substitute.For<Action<ITweenBase>>();
             TweenBaseTesting tweenBase = Build();

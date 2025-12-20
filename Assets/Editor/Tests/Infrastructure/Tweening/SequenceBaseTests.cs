@@ -83,7 +83,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParamsCount_ReturnsFalse()
+        public void Equals_OtherDifferentTweensCount_ReturnsFalse()
         {
             ITweenBase tweenA = Substitute.For<ITweenBase>();
             ITweenBase tweenB = Substitute.For<ITweenBase>();
@@ -96,7 +96,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Equals_OtherDifferentParamsOrder_ReturnsFalse()
+        public void Equals_OtherDifferentTweensOrder_ReturnsFalse()
         {
             ITweenBase tweenA = Substitute.For<ITweenBase>();
             ITweenBase tweenB = Substitute.For<ITweenBase>();
@@ -122,7 +122,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParamsCount_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentTweensCount_DifferentReturnedValue()
         {
             ITweenBase tweenA = Substitute.For<ITweenBase>();
             ITweenBase tweenB = Substitute.For<ITweenBase>();
@@ -135,7 +135,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParamsOrder_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentTweensOrder_DifferentReturnedValue()
         {
             ITweenBase tweenA = Substitute.For<ITweenBase>();
             ITweenBase tweenB = Substitute.For<ITweenBase>();
