@@ -2,11 +2,11 @@ namespace Infrastructure.Tweening
 {
     public interface ITween : ITweenBase
     {
-        // TODO
+        // TODO: object Target { get; }
     }
 
     public interface ITween<TTarget, T> : ITween
     {
-        // TODO
+        // TODO: new TTarget Target { get; }
     }
 }
