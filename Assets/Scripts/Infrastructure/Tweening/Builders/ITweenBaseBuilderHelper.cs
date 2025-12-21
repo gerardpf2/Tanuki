@@ -57,6 +57,6 @@ namespace Infrastructure.Tweening.Builders
         TBuilder WithOnRestart(Action<TTween> onRestart);
 
         [NotNull]
-        ITweenBase Build();
+        TTween Build();
     }
 }

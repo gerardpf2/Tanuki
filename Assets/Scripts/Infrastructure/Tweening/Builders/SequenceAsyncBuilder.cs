@@ -6,7 +6,7 @@ namespace Infrastructure.Tweening.Builders
     {
         protected override ISequenceAsyncBuilder This => this;
 
-        protected override ITweenBase BuildTween()
+        protected override ISequenceAsync BuildTween()
         {
             return
                 new SequenceAsync(

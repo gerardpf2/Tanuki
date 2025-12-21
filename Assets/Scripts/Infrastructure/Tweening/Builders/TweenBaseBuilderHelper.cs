@@ -164,20 +164,21 @@ namespace Infrastructure.Tweening.Builders
             return This;
         }
 
-        public ITweenBase Build()
+        public TTween Build()
         {
             if (_built)
             {
                 InvalidOperationException.Throw("Tween has already been built. Tween builders are not expected to be reused");
             }
 
-            ITweenBase tween = BuildTween();
+            TTween tween = BuildTween();
 
             _built = true;
 
             return tween;
         }
 
-        protected abstract ITweenBase BuildTween();
+        [NotNull]
+        protected abstract TTween BuildTween();
     }
 }
