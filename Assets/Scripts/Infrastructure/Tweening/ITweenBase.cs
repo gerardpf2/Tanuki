@@ -2,6 +2,20 @@ namespace Infrastructure.Tweening
 {
     public interface ITweenBase
     {
+        bool AutoPlay { get; }
+
+        float DelayBeforeS { get; }
+
+        float DelayAfterS { get; }
+
+        int Repetitions { get; }
+
+        RepetitionType RepetitionType { get; }
+
+        DelayManagement DelayManagementRepetition { get; }
+
+        DelayManagement DelayManagementRestart { get; }
+
         TweenState State { get; }
 
         bool Paused { get; }

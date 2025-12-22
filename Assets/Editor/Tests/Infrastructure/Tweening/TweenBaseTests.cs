@@ -534,7 +534,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         public void Equals_OtherWrongType_ReturnsFalse()
         {
             TweenBaseTesting tweenBase = Build();
-            NotATweenBase other = new();
+            object other = new();
 
             Assert.AreNotEqual(tweenBase, other);
         }
@@ -994,24 +994,6 @@ namespace Editor.Tests.Infrastructure.Tweening
             {
                 return _play();
             }
-        }
-
-        private sealed class NotATweenBase : ITweenBase
-        {
-            public TweenState State => TweenState.SetUp;
-
-            public bool Paused => false;
-
-            public float Step(float deltaTimeS, bool backwards = false)
-            {
-                return 0.0f;
-            }
-
-            public void Pause() { }
-
-            public void Resume() { }
-
-            public void Restart() { }
         }
 
         #endregion

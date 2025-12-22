@@ -9,13 +9,6 @@ namespace Infrastructure.Tweening
 {
     public abstract class TweenBase<TTween> : ITweenBase
     {
-        private readonly bool _autoPlay;
-        private readonly float _delayBeforeS;
-        private readonly float _delayAfterS;
-        private readonly int _repetitions;
-        private readonly RepetitionType _repetitionType;
-        private readonly DelayManagement _delayManagementRepetition;
-        private readonly DelayManagement _delayManagementRestart;
         private readonly Action<TTween> _onStep;
         private readonly Action<TTween> _onStartIteration;
         private readonly Action<TTween> _onStartPlay;
@@ -32,6 +25,20 @@ namespace Infrastructure.Tweening
         private float _waitTimeS;
         private int _iteration;
         private bool _paused;
+
+        public bool AutoPlay { get; }
+
+        public float DelayBeforeS { get; }
+
+        public float DelayAfterS { get; }
+
+        public int Repetitions { get; }
+
+        public RepetitionType RepetitionType { get; }
+
+        public DelayManagement DelayManagementRepetition { get; }
+
+        public DelayManagement DelayManagementRestart { get; }
 
         public TweenState State
         {
@@ -95,13 +102,13 @@ namespace Infrastructure.Tweening
             Action<TTween> onResume,
             Action<TTween> onRestart)
         {
-            _autoPlay = autoPlay;
-            _delayBeforeS = delayBeforeS;
-            _delayAfterS = delayAfterS;
-            _repetitions = repetitions;
-            _repetitionType = repetitionType;
-            _delayManagementRepetition = delayManagementRepetition;
-            _delayManagementRestart = delayManagementRestart;
+            AutoPlay = autoPlay;
+            DelayBeforeS = delayBeforeS;
+            DelayAfterS = delayAfterS;
+            Repetitions = repetitions;
+            RepetitionType = repetitionType;
+            DelayManagementRepetition = delayManagementRepetition;
+            DelayManagementRestart = delayManagementRestart;
             _onStep = onStep;
             _onStartIteration = onStartIteration;
             _onStartPlay = onStartPlay;
@@ -178,7 +185,7 @@ namespace Infrastructure.Tweening
 
             Backwards = false;
 
-            _delayManagement = _delayManagementRestart;
+            _delayManagement = DelayManagementRestart;
             _waitTimeS = 0.0f;
             _iteration = 0;
 
@@ -226,7 +233,7 @@ namespace Infrastructure.Tweening
         {
             State = TweenState.StartIteration;
 
-            if (!_autoPlay)
+            if (!AutoPlay)
             {
                 Pause();
             }
@@ -241,7 +248,7 @@ namespace Infrastructure.Tweening
 
         private float ProcessWaitBefore(float deltaTimeS)
         {
-            return ProcessWait(deltaTimeS, _delayBeforeS, TweenState.StartPlay);
+            return ProcessWait(deltaTimeS, DelayBeforeS, TweenState.StartPlay);
         }
 
         private void ProcessStartPlay()
@@ -272,14 +279,14 @@ namespace Infrastructure.Tweening
 
         private float ProcessWaitAfter(float deltaTimeS)
         {
-            return ProcessWait(deltaTimeS, _delayAfterS, TweenState.EndIteration);
+            return ProcessWait(deltaTimeS, DelayAfterS, TweenState.EndIteration);
         }
 
         private void ProcessEndIteration()
         {
             ++_iteration;
 
-            if (_repetitions < 0 || _iteration <= _repetitions)
+            if (Repetitions < 0 || _iteration <= Repetitions)
             {
                 State = TweenState.PrepareRepetition;
             }
@@ -293,12 +300,12 @@ namespace Infrastructure.Tweening
         {
             State = TweenState.StartIteration;
 
-            if (_repetitionType is RepetitionType.Yoyo)
+            if (RepetitionType is RepetitionType.Yoyo)
             {
                 Backwards = !Backwards;
             }
 
-            _delayManagement = _delayManagementRepetition;
+            _delayManagement = DelayManagementRepetition;
 
             OnPrepareRepetition();
         }
@@ -356,13 +363,13 @@ namespace Infrastructure.Tweening
         {
             HashCode hashCode = new();
 
-            hashCode.Add(_autoPlay);
-            hashCode.Add(_delayBeforeS);
-            hashCode.Add(_delayAfterS);
-            hashCode.Add(_repetitions);
-            hashCode.Add(_repetitionType);
-            hashCode.Add(_delayManagementRepetition);
-            hashCode.Add(_delayManagementRestart);
+            hashCode.Add(AutoPlay);
+            hashCode.Add(DelayBeforeS);
+            hashCode.Add(DelayAfterS);
+            hashCode.Add(Repetitions);
+            hashCode.Add(RepetitionType);
+            hashCode.Add(DelayManagementRepetition);
+            hashCode.Add(DelayManagementRestart);
             hashCode.Add(_onStep);
             hashCode.Add(_onStartIteration);
             hashCode.Add(_onStartPlay);
@@ -382,13 +389,13 @@ namespace Infrastructure.Tweening
             ArgumentNullException.ThrowIfNull(other);
 
             return
-                _autoPlay.Equals(other._autoPlay) &&
-                _delayBeforeS.Equals(other._delayBeforeS) &&
-                _delayAfterS.Equals(other._delayAfterS) &&
-                _repetitions.Equals(other._repetitions) &&
-                EqualityComparer<RepetitionType>.Default.Equals(_repetitionType, other._repetitionType) &&
-                EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRepetition, other._delayManagementRepetition) &&
-                EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRestart, other._delayManagementRestart) &&
+                AutoPlay.Equals(other.AutoPlay) &&
+                DelayBeforeS.Equals(other.DelayBeforeS) &&
+                DelayAfterS.Equals(other.DelayAfterS) &&
+                Repetitions.Equals(other.Repetitions) &&
+                EqualityComparer<RepetitionType>.Default.Equals(RepetitionType, other.RepetitionType) &&
+                EqualityComparer<DelayManagement>.Default.Equals(DelayManagementRepetition, other.DelayManagementRepetition) &&
+                EqualityComparer<DelayManagement>.Default.Equals(DelayManagementRestart, other.DelayManagementRestart) &&
                 Equals(_onStep, other._onStep) &&
                 Equals(_onStartIteration, other._onStartIteration) &&
                 Equals(_onStartPlay, other._onStartPlay) &&
