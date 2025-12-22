@@ -33,6 +33,89 @@ namespace Editor.Tests.Infrastructure.Tweening
             _onRestart = Substitute.For<Action<ITweenBase>>();
         }
 
+        [TestCase(false)]
+        [TestCase(true)]
+        public void AutoPlay_ReturnsExpected(bool expectedResult)
+        {
+            TweenBaseTesting tweenBase = Build(autoPlay: expectedResult);
+
+            bool result = tweenBase.AutoPlay;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void DelayBeforeS_ReturnsExpected()
+        {
+            const float expectedResult = 1.0f;
+            TweenBaseTesting tweenBase = Build(delayBeforeS: expectedResult);
+
+            float result = tweenBase.DelayBeforeS;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void DelayAfterS_ReturnsExpected()
+        {
+            const float expectedResult = 1.0f;
+            TweenBaseTesting tweenBase = Build(delayAfterS: expectedResult);
+
+            float result = tweenBase.DelayAfterS;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void Repetitions_ReturnsExpected()
+        {
+            const int expectedResult = 1;
+            TweenBaseTesting tweenBase = Build(repetitions: expectedResult);
+
+            int result = tweenBase.Repetitions;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void RepetitionType_ReturnsExpected()
+        {
+            foreach (RepetitionType expectedResult in Enum.GetValues(typeof(RepetitionType)))
+            {
+                TweenBaseTesting tweenBase = Build(repetitionType: expectedResult);
+
+                RepetitionType result = tweenBase.RepetitionType;
+
+                Assert.AreEqual(expectedResult, result);
+            }
+        }
+
+        [Test]
+        public void DelayManagementRepetition_ReturnsExpected()
+        {
+            foreach (DelayManagement expectedResult in Enum.GetValues(typeof(DelayManagement)))
+            {
+                TweenBaseTesting tweenBase = Build(delayManagementRepetition: expectedResult);
+
+                DelayManagement result = tweenBase.DelayManagementRepetition;
+
+                Assert.AreEqual(expectedResult, result);
+            }
+        }
+
+        [Test]
+        public void DelayManagementRestart_ReturnsExpected()
+        {
+            foreach (DelayManagement expectedResult in Enum.GetValues(typeof(DelayManagement)))
+            {
+                TweenBaseTesting tweenBase = Build(delayManagementRestart: expectedResult);
+
+                DelayManagement result = tweenBase.DelayManagementRestart;
+
+                Assert.AreEqual(expectedResult, result);
+            }
+        }
+
         [Test]
         public void Step_Paused_ReturnsZero()
         {

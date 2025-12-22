@@ -22,6 +22,17 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
+        public void Tweens_ReturnsExpected()
+        {
+            IEnumerable<ITweenBase> expectedResult = new List<ITweenBase>(_tweens);
+            SequenceBaseTesting sequenceBase = Build(tweens: expectedResult);
+
+            IEnumerable<ITweenBase> result = sequenceBase.Tweens;
+
+            CollectionAssert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
         public void Step_PrepareRepetition_TweensRestartCalled()
         {
             const int repetitions = -1;

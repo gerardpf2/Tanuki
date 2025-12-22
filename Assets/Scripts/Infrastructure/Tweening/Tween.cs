@@ -7,7 +7,6 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
-    // TODO: Test properties
     public class Tween<TTarget, T> : TweenBase<ITween<TTarget, T>>, ITween<TTarget, T>
     {
         [NotNull] private readonly Action<TTarget, T> _setter;

@@ -28,6 +28,61 @@ namespace Editor.Tests.Infrastructure.Tweening
             _lerp = Substitute.For<Func<object, object, float, object>>();
         }
 
+        [Test]
+        public void Target_ITween_ReturnsExpected()
+        {
+            object expectedResult = new();
+            ITween tween = Build(target: expectedResult);
+
+            object result = tween.Target;
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
+        public void DurationS_ReturnsExpected()
+        {
+            const float expectedResult = 1.5f;
+            Tween<object, object> tween = Build(durationS: expectedResult);
+
+            float result = tween.DurationS;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void Target_ReturnsExpected()
+        {
+            object expectedResult = new();
+            Tween<object, object> tween = Build(target: expectedResult);
+
+            object result = tween.Target;
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
+        public void Start_ReturnsExpected()
+        {
+            object expectedResult = new();
+            Tween<object, object> tween = Build(start: expectedResult);
+
+            object result = tween.Start;
+
+            Assert.AreSame(expectedResult, result);
+        }
+
+        [Test]
+        public void End_ReturnsExpected()
+        {
+            object expectedResult = new();
+            Tween<object, object> tween = Build(end: expectedResult);
+
+            object result = tween.End;
+
+            Assert.AreSame(expectedResult, result);
+        }
+
         [TestCase(true)]
         [TestCase(false)]
         public void Step_PlayAndPlayTimeLessThanDuration_ReturnsExpectedAndSetterCalledWithValidParams(bool backwards)
