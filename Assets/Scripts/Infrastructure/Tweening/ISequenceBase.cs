@@ -1,7 +1,11 @@
+using System.Collections.Generic;
+using JetBrains.Annotations;
+
 namespace Infrastructure.Tweening
 {
     public interface ISequenceBase : ITweenBase
     {
-        // TODO
+        [NotNull, ItemNotNull]
+        IEnumerable<ITweenBase> Tweens { get; }
     }
 }

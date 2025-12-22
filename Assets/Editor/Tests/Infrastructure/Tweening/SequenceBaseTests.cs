@@ -64,7 +64,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         public void Equals_OtherWrongType_ReturnsFalse()
         {
             SequenceBaseTesting sequenceBase = Build();
-            NotASequenceBase other = new();
+            object other = new();
 
             Assert.AreNotEqual(sequenceBase, other);
         }
@@ -216,18 +216,6 @@ namespace Editor.Tests.Infrastructure.Tweening
             protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITweenBase> tweens)
             {
                 return _play();
-            }
-        }
-
-        private sealed class NotASequenceBase : TweenBase<ITweenBase>
-        {
-            protected override ITweenBase This => this;
-
-            public NotASequenceBase() : base(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null) { }
-
-            protected override float Play(float deltaTimeS, bool backwards)
-            {
-                return 0.0f;
             }
         }
 
