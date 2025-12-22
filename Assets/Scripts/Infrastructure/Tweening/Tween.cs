@@ -7,18 +7,25 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
+    // TODO: Test properties
     public class Tween<TTarget, T> : TweenBase<ITween<TTarget, T>>, ITween<TTarget, T>
     {
-        private readonly TTarget _target;
-        private readonly T _start;
-        private readonly T _end;
-        private readonly float _durationS;
         [NotNull] private readonly Action<TTarget, T> _setter;
         [NotNull] private readonly IEasingFunction _easingFunction;
         [NotNull] private readonly IEasingFunction _easingFunctionBackwards;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
         private float _playTimeS;
+
+        object ITween.Target => Target;
+
+        public float DurationS { get; }
+
+        public TTarget Target { get; }
+
+        public T Start { get; }
+
+        public T End { get; }
 
         protected override ITween<TTarget, T> This => this;
 
@@ -54,10 +61,10 @@ namespace Infrastructure.Tweening
             ArgumentNullException.ThrowIfNull(easingFunctionBackwards);
             ArgumentNullException.ThrowIfNull(lerp);
 
-            _target = target;
-            _start = start;
-            _end = end;
-            _durationS = durationS;
+            Target = target;
+            Start = start;
+            End = end;
+            DurationS = durationS;
             _setter = setter;
             _easingFunction = easingFunction;
             _easingFunctionBackwards = easingFunctionBackwards;
@@ -70,12 +77,12 @@ namespace Infrastructure.Tweening
 
             _playTimeS += deltaTimeS;
 
-            if (_playTimeS < _durationS)
+            if (_playTimeS < DurationS)
             {
-                float normalizedTime = _playTimeS / _durationS;
+                float normalizedTime = _playTimeS / DurationS;
 
                 _setter(
-                    _target,
+                    Target,
                     _lerp(
                         GetStart(backwards),
                         GetEnd(backwards),
@@ -88,9 +95,9 @@ namespace Infrastructure.Tweening
                 return 0.0f;
             }
 
-            _setter(_target, GetEnd(backwards));
+            _setter(Target, GetEnd(backwards));
 
-            float remainingDeltaTimeS = _playTimeS - _durationS;
+            float remainingDeltaTimeS = _playTimeS - DurationS;
 
             if (remainingDeltaTimeS > deltaTimeS)
             {
@@ -116,12 +123,12 @@ namespace Infrastructure.Tweening
 
         private T GetStart(bool backwards)
         {
-            return backwards ? _end : _start;
+            return backwards ? End : Start;
         }
 
         private T GetEnd(bool backwards)
         {
-            return backwards ? _start : _end;
+            return backwards ? Start : End;
         }
 
         public override bool Equals(object obj)
@@ -144,10 +151,10 @@ namespace Infrastructure.Tweening
             HashCode hashCode = new();
 
             hashCode.Add(base.GetHashCode());
-            hashCode.Add(_target);
-            hashCode.Add(_start);
-            hashCode.Add(_end);
-            hashCode.Add(_durationS);
+            hashCode.Add(Target);
+            hashCode.Add(Start);
+            hashCode.Add(End);
+            hashCode.Add(DurationS);
             hashCode.Add(_setter);
             hashCode.Add(_easingFunction);
             hashCode.Add(_easingFunctionBackwards);
@@ -161,10 +168,10 @@ namespace Infrastructure.Tweening
             ArgumentNullException.ThrowIfNull(other);
 
             return
-                EqualityComparer<TTarget>.Default.Equals(_target, other._target) &&
-                EqualityComparer<T>.Default.Equals(_start, other._start) &&
-                EqualityComparer<T>.Default.Equals(_end, other._end) &&
-                _durationS.Equals(other._durationS) &&
+                EqualityComparer<TTarget>.Default.Equals(Target, other.Target) &&
+                EqualityComparer<T>.Default.Equals(Start, other.Start) &&
+                EqualityComparer<T>.Default.Equals(End, other.End) &&
+                DurationS.Equals(other.DurationS) &&
                 Equals(_setter, other._setter) &&
                 Equals(_easingFunction, other._easingFunction) &&
                 Equals(_easingFunctionBackwards, other._easingFunctionBackwards) &&
