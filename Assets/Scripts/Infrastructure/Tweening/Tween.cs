@@ -7,17 +7,26 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
-    public class Tween<T> : TweenBase
+    public class Tween<TTarget, T> : TweenBase<ITween<TTarget, T>>, ITween<TTarget, T>
     {
-        private readonly T _start;
-        private readonly T _end;
-        private readonly float _durationS;
-        [NotNull] private readonly Action<T> _setter;
+        [NotNull] private readonly Action<TTarget, T> _setter;
         [NotNull] private readonly IEasingFunction _easingFunction;
         [NotNull] private readonly IEasingFunction _easingFunctionBackwards;
         [NotNull] private readonly Func<T, T, float, T> _lerp;
 
         private float _playTimeS;
+
+        object ITween.Target => Target;
+
+        public float DurationS { get; }
+
+        public TTarget Target { get; }
+
+        public T Start { get; }
+
+        public T End { get; }
+
+        protected override ITween<TTarget, T> This => this;
 
         public Tween(
             bool autoPlay,
@@ -27,30 +36,34 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action onStartIteration,
-            Action onStartPlay,
-            Action onEndPlay,
-            Action onEndIteration,
-            Action onPause,
-            Action onResume,
-            Action onRestart,
-            Action onComplete,
+            Action<ITween<TTarget, T>> onStep,
+            Action<ITween<TTarget, T>> onStartIteration,
+            Action<ITween<TTarget, T>> onStartPlay,
+            Action<ITween<TTarget, T>> onPlay,
+            Action<ITween<TTarget, T>> onEndPlay,
+            Action<ITween<TTarget, T>> onEndIteration,
+            Action<ITween<TTarget, T>> onComplete,
+            Action<ITween<TTarget, T>> onPause,
+            Action<ITween<TTarget, T>> onResume,
+            Action<ITween<TTarget, T>> onRestart,
+            TTarget target,
             T start,
             T end,
             float durationS,
-            [NotNull] Action<T> setter,
+            [NotNull] Action<TTarget, T> setter,
             [NotNull] IEasingFunction easingFunction,
             [NotNull] IEasingFunction easingFunctionBackwards,
-            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
+            [NotNull] Func<T, T, float, T> lerp) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
         {
             ArgumentNullException.ThrowIfNull(setter);
             ArgumentNullException.ThrowIfNull(easingFunction);
             ArgumentNullException.ThrowIfNull(easingFunctionBackwards);
             ArgumentNullException.ThrowIfNull(lerp);
 
-            _start = start;
-            _end = end;
-            _durationS = durationS;
+            Target = target;
+            Start = start;
+            End = end;
+            DurationS = durationS;
             _setter = setter;
             _easingFunction = easingFunction;
             _easingFunctionBackwards = easingFunctionBackwards;
@@ -63,11 +76,12 @@ namespace Infrastructure.Tweening
 
             _playTimeS += deltaTimeS;
 
-            if (_playTimeS < _durationS)
+            if (_playTimeS < DurationS)
             {
-                float normalizedTime = _playTimeS / _durationS;
+                float normalizedTime = _playTimeS / DurationS;
 
                 _setter(
+                    Target,
                     _lerp(
                         GetStart(backwards),
                         GetEnd(backwards),
@@ -80,9 +94,9 @@ namespace Infrastructure.Tweening
                 return 0.0f;
             }
 
-            _setter(GetEnd(backwards));
+            _setter(Target, GetEnd(backwards));
 
-            float remainingDeltaTimeS = _playTimeS - _durationS;
+            float remainingDeltaTimeS = _playTimeS - DurationS;
 
             if (remainingDeltaTimeS > deltaTimeS)
             {
@@ -108,12 +122,12 @@ namespace Infrastructure.Tweening
 
         private T GetStart(bool backwards)
         {
-            return backwards ? _end : _start;
+            return backwards ? End : Start;
         }
 
         private T GetEnd(bool backwards)
         {
-            return backwards ? _start : _end;
+            return backwards ? Start : End;
         }
 
         public override bool Equals(object obj)
@@ -123,7 +137,7 @@ namespace Infrastructure.Tweening
                 return false;
             }
 
-            if (obj is not Tween<T> other)
+            if (obj is not Tween<TTarget, T> other)
             {
                 return false;
             }
@@ -133,27 +147,30 @@ namespace Infrastructure.Tweening
 
         public override int GetHashCode()
         {
-            return
-                HashCode.Combine(
-                    base.GetHashCode(),
-                    _start,
-                    _end,
-                    _durationS,
-                    _setter,
-                    _easingFunction,
-                    _easingFunctionBackwards,
-                    _lerp
-                );
+            HashCode hashCode = new();
+
+            hashCode.Add(base.GetHashCode());
+            hashCode.Add(Target);
+            hashCode.Add(Start);
+            hashCode.Add(End);
+            hashCode.Add(DurationS);
+            hashCode.Add(_setter);
+            hashCode.Add(_easingFunction);
+            hashCode.Add(_easingFunctionBackwards);
+            hashCode.Add(_lerp);
+
+            return hashCode.ToHashCode();
         }
 
-        private bool Equals([NotNull] Tween<T> other)
+        private bool Equals([NotNull] Tween<TTarget, T> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
             return
-                EqualityComparer<T>.Default.Equals(_start, other._start) &&
-                EqualityComparer<T>.Default.Equals(_end, other._end) &&
-                _durationS.Equals(other._durationS) &&
+                EqualityComparer<TTarget>.Default.Equals(Target, other.Target) &&
+                EqualityComparer<T>.Default.Equals(Start, other.Start) &&
+                EqualityComparer<T>.Default.Equals(End, other.End) &&
+                DurationS.Equals(other.DurationS) &&
                 Equals(_setter, other._setter) &&
                 Equals(_easingFunction, other._easingFunction) &&
                 Equals(_easingFunctionBackwards, other._easingFunctionBackwards) &&

@@ -12,11 +12,11 @@ namespace Infrastructure.Tweening
     {
         private sealed class TweenWrapper
         {
-            [NotNull] public readonly ITween Tween;
+            [NotNull] public readonly ITweenBase Tween;
             public readonly Action OnRemove;
             public readonly Func<bool> KeepAliveAfterComplete;
 
-            public TweenWrapper([NotNull] ITween tween, Action onRemove, Func<bool> keepAliveAfterComplete)
+            public TweenWrapper([NotNull] ITweenBase tween, Action onRemove, Func<bool> keepAliveAfterComplete)
             {
                 ArgumentNullException.ThrowIfNull(tween);
 
@@ -44,7 +44,7 @@ namespace Infrastructure.Tweening
             _deltaTimeGetter = deltaTimeGetter;
         }
 
-        public void Run([NotNull] ITween tween, Action onRemove = null, Func<bool> keepAliveAfterComplete = null)
+        public void Run([NotNull] ITweenBase tween, Action onRemove = null, Func<bool> keepAliveAfterComplete = null)
         {
             ArgumentNullException.ThrowIfNull(tween);
 

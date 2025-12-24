@@ -27,18 +27,18 @@ namespace Infrastructure.Tweening
             return new SequenceBuilder();
         }
 
-        public ITweenBuilder<float> GetTweenBuilderFloat([NotNull] Action<float> setter)
+        public ITweenBuilder<TTarget, float> GetTweenBuilderFloat<TTarget>([NotNull] Action<TTarget, float> setter)
         {
             ArgumentNullException.ThrowIfNull(setter);
 
-            return new TweenBuilderFloat(setter, _easingFunctionGetter);
+            return new TweenBuilderFloat<TTarget>(setter, _easingFunctionGetter);
         }
 
-        public ITweenBuilder<Vector3> GetTweenBuilderVector3([NotNull] Action<Vector3> setter)
+        public ITweenBuilder<TTarget, Vector3> GetTweenBuilderVector3<TTarget>([NotNull] Action<TTarget, Vector3> setter)
         {
             ArgumentNullException.ThrowIfNull(setter);
 
-            return new TweenBuilderVector3(setter, _easingFunctionGetter);
+            return new TweenBuilderVector3<TTarget>(setter, _easingFunctionGetter);
         }
     }
 }

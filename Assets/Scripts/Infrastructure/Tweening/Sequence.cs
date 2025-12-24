@@ -5,8 +5,10 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening
 {
-    public class Sequence : SequenceBase
+    public class Sequence : SequenceBase<ISequence>, ISequence
     {
+        protected override ISequence This => this;
+
         public Sequence(
             bool autoPlay,
             float delayBeforeS,
@@ -15,17 +17,19 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action onStartIteration,
-            Action onStartPlay,
-            Action onEndPlay,
-            Action onEndIteration,
-            Action onPause,
-            Action onResume,
-            Action onRestart,
-            Action onComplete,
-            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete, tweens) { }
+            Action<ISequence> onStep,
+            Action<ISequence> onStartIteration,
+            Action<ISequence> onStartPlay,
+            Action<ISequence> onPlay,
+            Action<ISequence> onEndPlay,
+            Action<ISequence> onEndIteration,
+            Action<ISequence> onComplete,
+            Action<ISequence> onPause,
+            Action<ISequence> onResume,
+            Action<ISequence> onRestart,
+            [NotNull, ItemNotNull] IEnumerable<ITweenBase> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart, tweens) { }
 
-        protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITween> tweens)
+        protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITweenBase> tweens)
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
@@ -35,7 +39,7 @@ namespace Infrastructure.Tweening
             {
                 int index = backwards ? tweens.Count - 1 - i : i;
 
-                ITween tween = tweens[index];
+                ITweenBase tween = tweens[index];
 
                 ArgumentNullException.ThrowIfNull(tween);
 

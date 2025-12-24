@@ -2,11 +2,11 @@ using System;
 
 namespace Infrastructure.Tweening.Builders
 {
-    public class SequenceBuilder : SequenceBaseBuilderHelper<ISequenceBuilder>, ISequenceBuilder
+    public class SequenceBuilder : SequenceBaseBuilderHelper<ISequenceBuilder, ISequence>, ISequenceBuilder
     {
         protected override ISequenceBuilder This => this;
 
-        protected override ITween BuildTween()
+        protected override ISequence BuildTween()
         {
             return
                 new Sequence(
@@ -17,14 +17,16 @@ namespace Infrastructure.Tweening.Builders
                     RepetitionType,
                     DelayManagementRepetition,
                     DelayManagementRestart,
+                    OnStep,
                     OnStartIteration,
                     OnStartPlay,
+                    OnPlay,
                     OnEndPlay,
                     OnEndIteration,
+                    OnComplete,
                     OnPause,
                     OnResume,
                     OnRestart,
-                    OnComplete,
                     Tweens
                 );
         }

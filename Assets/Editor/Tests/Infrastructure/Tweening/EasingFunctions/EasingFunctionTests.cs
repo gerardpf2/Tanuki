@@ -64,7 +64,7 @@ namespace Editor.Tests.Infrastructure.Tweening.EasingFunctions
         }
 
         [Test]
-        public void Equals_OtherDifferentParams_ReturnsFalse()
+        public void Equals_OtherDifferentGetter_ReturnsFalse()
         {
             Func<float, float> otherGetter = Substitute.For<Func<float, float>>();
             EasingFunction other = new(otherGetter);
@@ -81,7 +81,7 @@ namespace Editor.Tests.Infrastructure.Tweening.EasingFunctions
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentGetter_DifferentReturnedValue()
         {
             Func<float, float> otherGetter = Substitute.For<Func<float, float>>();
             EasingFunction other = new(otherGetter);

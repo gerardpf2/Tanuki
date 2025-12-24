@@ -1,29 +1,18 @@
 namespace Infrastructure.Tweening
 {
-    public interface ITween
+    public interface ITween : ITweenBase
     {
-        TweenState State { get; }
+        object Target { get; }
 
-        bool Paused { get; }
+        float DurationS { get; }
+    }
 
-        // Returns remaining deltaTimeS
-        float Step(float deltaTimeS, bool backwards = false);
+    public interface ITween<out TTarget, out T> : ITween
+    {
+        new TTarget Target { get; }
 
-        void Pause();
+        T Start { get; }
 
-        void Resume();
-
-        void Restart();
-
-        // Returns remaining deltaTimeS
-        public float Update(float deltaTimeS, bool backwards = false)
-        {
-            while (deltaTimeS > 0.0f && State is not TweenState.Complete)
-            {
-                deltaTimeS = Step(deltaTimeS, backwards);
-            }
-
-            return deltaTimeS;
-        }
+        T End { get; }
     }
 }

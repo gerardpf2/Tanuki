@@ -14,9 +14,9 @@ namespace Infrastructure.Tweening
         ISequenceBuilder GetSequenceBuilder();
 
         [NotNull]
-        ITweenBuilder<float> GetTweenBuilderFloat(Action<float> setter);
+        ITweenBuilder<TTarget, float> GetTweenBuilderFloat<TTarget>(Action<TTarget, float> setter);
 
         [NotNull]
-        ITweenBuilder<Vector3> GetTweenBuilderVector3(Action<Vector3> setter);
+        ITweenBuilder<TTarget, Vector3> GetTweenBuilderVector3<TTarget>(Action<TTarget, Vector3> setter);
     }
 }

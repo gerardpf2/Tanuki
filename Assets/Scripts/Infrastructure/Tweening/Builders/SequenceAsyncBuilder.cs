@@ -2,11 +2,11 @@ using System;
 
 namespace Infrastructure.Tweening.Builders
 {
-    public class SequenceAsyncBuilder : SequenceBaseBuilderHelper<ISequenceAsyncBuilder>, ISequenceAsyncBuilder
+    public class SequenceAsyncBuilder : SequenceBaseBuilderHelper<ISequenceAsyncBuilder, ISequenceAsync>, ISequenceAsyncBuilder
     {
         protected override ISequenceAsyncBuilder This => this;
 
-        protected override ITween BuildTween()
+        protected override ISequenceAsync BuildTween()
         {
             return
                 new SequenceAsync(
@@ -17,14 +17,16 @@ namespace Infrastructure.Tweening.Builders
                     RepetitionType,
                     DelayManagementRepetition,
                     DelayManagementRestart,
+                    OnStep,
                     OnStartIteration,
                     OnStartPlay,
+                    OnPlay,
                     OnEndPlay,
                     OnEndIteration,
+                    OnComplete,
                     OnPause,
                     OnResume,
                     OnRestart,
-                    OnComplete,
                     Tweens
                 );
         }

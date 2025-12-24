@@ -5,9 +5,11 @@ using ArgumentNullException = Infrastructure.System.Exceptions.ArgumentNullExcep
 
 namespace Infrastructure.Tweening
 {
-    public abstract class SequenceBase : TweenBase
+    public abstract class SequenceBase<TTween> : TweenBase<TTween>, ISequenceBase
     {
-        [NotNull, ItemNotNull] private readonly IReadOnlyList<ITween> _tweens;
+        [NotNull, ItemNotNull] private readonly IReadOnlyList<ITweenBase> _tweens;
+
+        public IEnumerable<ITweenBase> Tweens => _tweens;
 
         protected SequenceBase(
             bool autoPlay,
@@ -17,21 +19,23 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action onStartIteration,
-            Action onStartPlay,
-            Action onEndPlay,
-            Action onEndIteration,
-            Action onPause,
-            Action onResume,
-            Action onRestart,
-            Action onComplete,
-            [NotNull, ItemNotNull] IEnumerable<ITween> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
+            Action<TTween> onStep,
+            Action<TTween> onStartIteration,
+            Action<TTween> onStartPlay,
+            Action<TTween> onPlay,
+            Action<TTween> onEndPlay,
+            Action<TTween> onEndIteration,
+            Action<TTween> onComplete,
+            Action<TTween> onPause,
+            Action<TTween> onResume,
+            Action<TTween> onRestart,
+            [NotNull, ItemNotNull] IEnumerable<ITweenBase> tweens) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
         {
             ArgumentNullException.ThrowIfNull(tweens);
 
-            List<ITween> tweensCopy = new();
+            List<ITweenBase> tweensCopy = new();
 
-            foreach (ITween tween in tweens)
+            foreach (ITweenBase tween in tweens)
             {
                 ArgumentNullException.ThrowIfNull(tween);
 
@@ -63,12 +67,12 @@ namespace Infrastructure.Tweening
         protected abstract float Play(
             float deltaTimeS,
             bool backwards,
-            [NotNull, ItemNotNull] IReadOnlyList<ITween> tweens
+            [NotNull, ItemNotNull] IReadOnlyList<ITweenBase> tweens
         );
 
         private void RestartTweens()
         {
-            foreach (ITween tween in _tweens)
+            foreach (ITweenBase tween in _tweens)
             {
                 tween.Restart();
             }
@@ -81,7 +85,7 @@ namespace Infrastructure.Tweening
                 return false;
             }
 
-            if (obj is not SequenceBase other)
+            if (obj is not SequenceBase<TTween> other)
             {
                 return false;
             }
@@ -95,7 +99,7 @@ namespace Infrastructure.Tweening
 
             hashCode.Add(base.GetHashCode());
 
-            foreach (ITween tween in _tweens)
+            foreach (ITweenBase tween in _tweens)
             {
                 hashCode.Add(tween.GetHashCode());
             }
@@ -103,7 +107,7 @@ namespace Infrastructure.Tweening
             return hashCode.ToHashCode();
         }
 
-        private bool Equals([NotNull] SequenceBase other)
+        private bool Equals([NotNull] SequenceBase<TTween> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 

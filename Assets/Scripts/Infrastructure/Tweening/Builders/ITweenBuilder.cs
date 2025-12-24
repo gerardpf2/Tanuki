@@ -2,21 +2,24 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.Tweening.Builders
 {
-    public interface ITweenBuilder<in T> : ITweenBaseBuilderHelper<ITweenBuilder<T>>
+    public interface ITweenBuilder<TTarget, T> : ITweenBaseBuilderHelper<ITweenBuilder<TTarget, T>, ITween<TTarget, T>>
     {
         [NotNull]
-        ITweenBuilder<T> WithStart(T start);
+        ITweenBuilder<TTarget, T> WithTarget(TTarget target);
 
         [NotNull]
-        ITweenBuilder<T> WithEnd(T end);
+        ITweenBuilder<TTarget, T> WithStart(T start);
 
         [NotNull]
-        ITweenBuilder<T> WithDurationS(float durationS);
+        ITweenBuilder<TTarget, T> WithEnd(T end);
 
         [NotNull]
-        ITweenBuilder<T> WithEasingType(EasingType easingType);
+        ITweenBuilder<TTarget, T> WithDurationS(float durationS);
 
         [NotNull]
-        ITweenBuilder<T> WithComplementaryEasingTypeBackwards(bool complementaryEasingTypeBackwards);
+        ITweenBuilder<TTarget, T> WithEasingType(EasingType easingType);
+
+        [NotNull]
+        ITweenBuilder<TTarget, T> WithComplementaryEasingTypeBackwards(bool complementaryEasingTypeBackwards);
     }
 }

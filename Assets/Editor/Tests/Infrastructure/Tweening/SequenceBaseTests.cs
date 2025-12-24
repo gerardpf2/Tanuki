@@ -8,17 +8,28 @@ namespace Editor.Tests.Infrastructure.Tweening
 {
     public class SequenceBaseTests
     {
-        private ICollection<ITween> _tweens;
+        private ICollection<ITweenBase> _tweens;
 
         [SetUp]
         public void SetUp()
         {
-            _tweens = new List<ITween>
+            _tweens = new List<ITweenBase>
             {
-                Substitute.For<ITween>(),
-                Substitute.For<ITween>(),
-                Substitute.For<ITween>()
+                Substitute.For<ITweenBase>(),
+                Substitute.For<ITweenBase>(),
+                Substitute.For<ITweenBase>()
             };
+        }
+
+        [Test]
+        public void Tweens_ReturnsExpected()
+        {
+            IEnumerable<ITweenBase> expectedResult = new List<ITweenBase>(_tweens);
+            SequenceBaseTesting sequenceBase = Build(tweens: expectedResult);
+
+            IEnumerable<ITweenBase> result = sequenceBase.Tweens;
+
+            CollectionAssert.AreEqual(expectedResult, result);
         }
 
         [Test]
@@ -27,7 +38,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const int repetitions = -1;
             const float playRemainingDeltaTimeS = 0.1f;
             const float deltaTimeS = 1.0f;
-            SequenceBase sequenceBase = Build(repetitions: repetitions, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            SequenceBaseTesting sequenceBase = Build(repetitions: repetitions, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             sequenceBase.Step(deltaTimeS); // SetUp
             sequenceBase.Step(deltaTimeS); // StartIteration
             sequenceBase.Step(deltaTimeS); // WaitBefore
@@ -39,7 +50,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             sequenceBase.Step(deltaTimeS);
 
-            foreach (ITween tween in _tweens)
+            foreach (ITweenBase tween in _tweens)
             {
                 tween.Received(1).Restart();
             }
@@ -48,11 +59,11 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Restart_TweensRestartCalled()
         {
-            SequenceBase sequenceBase = Build();
+            SequenceBaseTesting sequenceBase = Build();
 
             sequenceBase.Restart();
 
-            foreach (ITween tween in _tweens)
+            foreach (ITweenBase tween in _tweens)
             {
                 tween.Received(1).Restart();
             }
@@ -63,8 +74,8 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_OtherWrongType_ReturnsFalse()
         {
-            SequenceBase sequenceBase = Build();
-            NotASequenceBase other = new();
+            SequenceBaseTesting sequenceBase = Build();
+            object other = new();
 
             Assert.AreNotEqual(sequenceBase, other);
         }
@@ -72,38 +83,38 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_OtherSameParams_ReturnsTrue()
         {
-            ITween tweenA = Substitute.For<ITween>();
-            ITween tweenB = Substitute.For<ITween>();
-            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
-            IEnumerable<ITween> otherTweens = new List<ITween> { tweenA, tweenB };
-            SequenceBase sequenceBase = Build(tweens);
-            SequenceBase other = Build(otherTweens);
+            ITweenBase tweenA = Substitute.For<ITweenBase>();
+            ITweenBase tweenB = Substitute.For<ITweenBase>();
+            IEnumerable<ITweenBase> tweens = new List<ITweenBase> { tweenA, tweenB };
+            IEnumerable<ITweenBase> otherTweens = new List<ITweenBase> { tweenA, tweenB };
+            SequenceBaseTesting sequenceBase = Build(tweens);
+            SequenceBaseTesting other = Build(otherTweens);
 
             Assert.AreEqual(sequenceBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParamsCount_ReturnsFalse()
+        public void Equals_OtherDifferentTweensCount_ReturnsFalse()
         {
-            ITween tweenA = Substitute.For<ITween>();
-            ITween tweenB = Substitute.For<ITween>();
-            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
-            IEnumerable<ITween> otherTweens = new List<ITween> { tweenA };
-            SequenceBase sequenceBase = Build(tweens);
-            SequenceBase other = Build(otherTweens);
+            ITweenBase tweenA = Substitute.For<ITweenBase>();
+            ITweenBase tweenB = Substitute.For<ITweenBase>();
+            IEnumerable<ITweenBase> tweens = new List<ITweenBase> { tweenA, tweenB };
+            IEnumerable<ITweenBase> otherTweens = new List<ITweenBase> { tweenA };
+            SequenceBaseTesting sequenceBase = Build(tweens);
+            SequenceBaseTesting other = Build(otherTweens);
 
             Assert.AreNotEqual(sequenceBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParamsOrder_ReturnsFalse()
+        public void Equals_OtherDifferentTweensOrder_ReturnsFalse()
         {
-            ITween tweenA = Substitute.For<ITween>();
-            ITween tweenB = Substitute.For<ITween>();
-            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
-            IEnumerable<ITween> otherTweens = new List<ITween> { tweenB, tweenA };
-            SequenceBase sequenceBase = Build(tweens);
-            SequenceBase other = Build(otherTweens);
+            ITweenBase tweenA = Substitute.For<ITweenBase>();
+            ITweenBase tweenB = Substitute.For<ITweenBase>();
+            IEnumerable<ITweenBase> tweens = new List<ITweenBase> { tweenA, tweenB };
+            IEnumerable<ITweenBase> otherTweens = new List<ITweenBase> { tweenB, tweenA };
+            SequenceBaseTesting sequenceBase = Build(tweens);
+            SequenceBaseTesting other = Build(otherTweens);
 
             Assert.AreNotEqual(sequenceBase, other);
         }
@@ -111,44 +122,44 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void GetHashCode_OtherSameParams_SameReturnedValue()
         {
-            ITween tweenA = Substitute.For<ITween>();
-            ITween tweenB = Substitute.For<ITween>();
-            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
-            IEnumerable<ITween> otherTweens = new List<ITween> { tweenA, tweenB };
-            SequenceBase sequenceBase = Build(tweens);
-            SequenceBase other = Build(otherTweens);
+            ITweenBase tweenA = Substitute.For<ITweenBase>();
+            ITweenBase tweenB = Substitute.For<ITweenBase>();
+            IEnumerable<ITweenBase> tweens = new List<ITweenBase> { tweenA, tweenB };
+            IEnumerable<ITweenBase> otherTweens = new List<ITweenBase> { tweenA, tweenB };
+            SequenceBaseTesting sequenceBase = Build(tweens);
+            SequenceBaseTesting other = Build(otherTweens);
 
             Assert.AreEqual(sequenceBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParamsCount_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentTweensCount_DifferentReturnedValue()
         {
-            ITween tweenA = Substitute.For<ITween>();
-            ITween tweenB = Substitute.For<ITween>();
-            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
-            IEnumerable<ITween> otherTweens = new List<ITween> { tweenA };
-            SequenceBase sequenceBase = Build(tweens);
-            SequenceBase other = Build(otherTweens);
+            ITweenBase tweenA = Substitute.For<ITweenBase>();
+            ITweenBase tweenB = Substitute.For<ITweenBase>();
+            IEnumerable<ITweenBase> tweens = new List<ITweenBase> { tweenA, tweenB };
+            IEnumerable<ITweenBase> otherTweens = new List<ITweenBase> { tweenA };
+            SequenceBaseTesting sequenceBase = Build(tweens);
+            SequenceBaseTesting other = Build(otherTweens);
 
             Assert.AreNotEqual(sequenceBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParamsOrder_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentTweensOrder_DifferentReturnedValue()
         {
-            ITween tweenA = Substitute.For<ITween>();
-            ITween tweenB = Substitute.For<ITween>();
-            IEnumerable<ITween> tweens = new List<ITween> { tweenA, tweenB };
-            IEnumerable<ITween> otherTweens = new List<ITween> { tweenB, tweenA };
-            SequenceBase sequenceBase = Build(tweens);
-            SequenceBase other = Build(otherTweens);
+            ITweenBase tweenA = Substitute.For<ITweenBase>();
+            ITweenBase tweenB = Substitute.For<ITweenBase>();
+            IEnumerable<ITweenBase> tweens = new List<ITweenBase> { tweenA, tweenB };
+            IEnumerable<ITweenBase> otherTweens = new List<ITweenBase> { tweenB, tweenA };
+            SequenceBaseTesting sequenceBase = Build(tweens);
+            SequenceBaseTesting other = Build(otherTweens);
 
             Assert.AreNotEqual(sequenceBase.GetHashCode(), other.GetHashCode());
         }
 
-        private SequenceBase Build(
-            IEnumerable<ITween> tweens = null,
+        private SequenceBaseTesting Build(
+            IEnumerable<ITweenBase> tweens = null,
             int repetitions = 0,
             float playRemainingDeltaTimeS = 0.0f)
         {
@@ -172,6 +183,8 @@ namespace Editor.Tests.Infrastructure.Tweening
                     null,
                     null,
                     null,
+                    null,
+                    null,
                     tweens ?? _tweens,
                     play
                 );
@@ -181,9 +194,11 @@ namespace Editor.Tests.Infrastructure.Tweening
 
         // Since SequenceBase is abstract, SequenceBaseTesting (inherits from SequenceBase and has no logic) needs to be used
 
-        private sealed class SequenceBaseTesting : SequenceBase
+        private sealed class SequenceBaseTesting : SequenceBase<ITweenBase>
         {
             private readonly Func<float> _play;
+
+            protected override ITweenBase This => this;
 
             public SequenceBaseTesting(
                 bool autoPlay,
@@ -193,33 +208,25 @@ namespace Editor.Tests.Infrastructure.Tweening
                 RepetitionType repetitionType,
                 DelayManagement delayManagementRepetition,
                 DelayManagement delayManagementRestart,
-                Action onStartIteration,
-                Action onStartPlay,
-                Action onEndPlay,
-                Action onEndIteration,
-                Action onPause,
-                Action onResume,
-                Action onRestart,
-                Action onComplete,
-                IEnumerable<ITween> tweens,
-                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete, tweens)
+                Action<ITweenBase> onStep,
+                Action<ITweenBase> onStartIteration,
+                Action<ITweenBase> onStartPlay,
+                Action<ITweenBase> onPlay,
+                Action<ITweenBase> onEndPlay,
+                Action<ITweenBase> onEndIteration,
+                Action<ITweenBase> onComplete,
+                Action<ITweenBase> onPause,
+                Action<ITweenBase> onResume,
+                Action<ITweenBase> onRestart,
+                IEnumerable<ITweenBase> tweens,
+                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart, tweens)
             {
                 _play = play;
             }
 
-            protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITween> tweens)
+            protected override float Play(float deltaTimeS, bool backwards, IReadOnlyList<ITweenBase> tweens)
             {
                 return _play();
-            }
-        }
-
-        private sealed class NotASequenceBase : TweenBase
-        {
-            public NotASequenceBase() : base(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null) { }
-
-            protected override float Play(float deltaTimeS, bool backwards)
-            {
-                return 0.0f;
             }
         }
 

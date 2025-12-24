@@ -7,29 +7,38 @@ using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperat
 
 namespace Infrastructure.Tweening
 {
-    public abstract class TweenBase : ITween
+    public abstract class TweenBase<TTween> : ITweenBase
     {
-        private readonly bool _autoPlay;
-        private readonly float _delayBeforeS;
-        private readonly float _delayAfterS;
-        private readonly int _repetitions;
-        private readonly RepetitionType _repetitionType;
-        private readonly DelayManagement _delayManagementRepetition;
-        private readonly DelayManagement _delayManagementRestart;
-        private readonly Action _onStartIteration;
-        private readonly Action _onStartPlay;
-        private readonly Action _onEndPlay;
-        private readonly Action _onEndIteration;
-        private readonly Action _onPause;
-        private readonly Action _onResume;
-        private readonly Action _onRestart;
-        private readonly Action _onComplete;
+        private readonly Action<TTween> _onStep;
+        private readonly Action<TTween> _onStartIteration;
+        private readonly Action<TTween> _onStartPlay;
+        private readonly Action<TTween> _onPlay;
+        private readonly Action<TTween> _onEndPlay;
+        private readonly Action<TTween> _onEndIteration;
+        private readonly Action<TTween> _onComplete;
+        private readonly Action<TTween> _onPause;
+        private readonly Action<TTween> _onResume;
+        private readonly Action<TTween> _onRestart;
 
         private DelayManagement _delayManagement = DelayManagement.BeforeAndAfter;
         private TweenState _state = TweenState.SetUp;
         private float _waitTimeS;
         private int _iteration;
         private bool _paused;
+
+        public bool AutoPlay { get; }
+
+        public float DelayBeforeS { get; }
+
+        public float DelayAfterS { get; }
+
+        public int Repetitions { get; }
+
+        public RepetitionType RepetitionType { get; }
+
+        public DelayManagement DelayManagementRepetition { get; }
+
+        public DelayManagement DelayManagementRestart { get; }
 
         public TweenState State
         {
@@ -61,16 +70,18 @@ namespace Infrastructure.Tweening
 
                 if (Paused)
                 {
-                    _onPause?.Invoke();
+                    _onPause?.Invoke(This);
                 }
                 else
                 {
-                    _onResume?.Invoke();
+                    _onResume?.Invoke(This);
                 }
             }
         }
 
         protected bool Backwards { get; private set; }
+
+        protected abstract TTween This { get; }
 
         protected TweenBase(
             bool autoPlay,
@@ -80,30 +91,34 @@ namespace Infrastructure.Tweening
             RepetitionType repetitionType,
             DelayManagement delayManagementRepetition,
             DelayManagement delayManagementRestart,
-            Action onStartIteration,
-            Action onStartPlay,
-            Action onEndPlay,
-            Action onEndIteration,
-            Action onPause,
-            Action onResume,
-            Action onRestart,
-            Action onComplete)
+            Action<TTween> onStep,
+            Action<TTween> onStartIteration,
+            Action<TTween> onStartPlay,
+            Action<TTween> onPlay,
+            Action<TTween> onEndPlay,
+            Action<TTween> onEndIteration,
+            Action<TTween> onComplete,
+            Action<TTween> onPause,
+            Action<TTween> onResume,
+            Action<TTween> onRestart)
         {
-            _autoPlay = autoPlay;
-            _delayBeforeS = delayBeforeS;
-            _delayAfterS = delayAfterS;
-            _repetitions = repetitions;
-            _repetitionType = repetitionType;
-            _delayManagementRepetition = delayManagementRepetition;
-            _delayManagementRestart = delayManagementRestart;
+            AutoPlay = autoPlay;
+            DelayBeforeS = delayBeforeS;
+            DelayAfterS = delayAfterS;
+            Repetitions = repetitions;
+            RepetitionType = repetitionType;
+            DelayManagementRepetition = delayManagementRepetition;
+            DelayManagementRestart = delayManagementRestart;
+            _onStep = onStep;
             _onStartIteration = onStartIteration;
             _onStartPlay = onStartPlay;
+            _onPlay = onPlay;
             _onEndPlay = onEndPlay;
             _onEndIteration = onEndIteration;
+            _onComplete = onComplete;
             _onPause = onPause;
             _onResume = onResume;
             _onRestart = onRestart;
-            _onComplete = onComplete;
         }
 
         public float Step(float deltaTimeS, bool backwards = false)
@@ -112,6 +127,8 @@ namespace Infrastructure.Tweening
             {
                 return 0.0f;
             }
+
+            _onStep?.Invoke(This);
 
             switch (State)
             {
@@ -168,11 +185,11 @@ namespace Infrastructure.Tweening
 
             Backwards = false;
 
-            _delayManagement = _delayManagementRestart;
+            _delayManagement = DelayManagementRestart;
             _waitTimeS = 0.0f;
             _iteration = 0;
 
-            _onRestart?.Invoke();
+            _onRestart?.Invoke(This);
 
             OnRestart();
         }
@@ -184,27 +201,27 @@ namespace Infrastructure.Tweening
                 case TweenState.SetUp:
                     break;
                 case TweenState.StartIteration:
-                    _onStartIteration?.Invoke();
+                    _onStartIteration?.Invoke(This);
                     break;
                 case TweenState.WaitBefore:
                     break;
                 case TweenState.StartPlay:
-                    _onStartPlay?.Invoke();
+                    _onStartPlay?.Invoke(This);
                     break;
                 case TweenState.Play:
                     break;
                 case TweenState.EndPlay:
-                    _onEndPlay?.Invoke();
+                    _onEndPlay?.Invoke(This);
                     break;
                 case TweenState.WaitAfter:
                     break;
                 case TweenState.EndIteration:
-                    _onEndIteration?.Invoke();
+                    _onEndIteration?.Invoke(This);
                     break;
                 case TweenState.PrepareRepetition:
                     break;
                 case TweenState.Complete:
-                    _onComplete?.Invoke();
+                    _onComplete?.Invoke(This);
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(State);
@@ -216,7 +233,7 @@ namespace Infrastructure.Tweening
         {
             State = TweenState.StartIteration;
 
-            if (!_autoPlay)
+            if (!AutoPlay)
             {
                 Pause();
             }
@@ -231,7 +248,7 @@ namespace Infrastructure.Tweening
 
         private float ProcessWaitBefore(float deltaTimeS)
         {
-            return ProcessWait(deltaTimeS, _delayBeforeS, TweenState.StartPlay);
+            return ProcessWait(deltaTimeS, DelayBeforeS, TweenState.StartPlay);
         }
 
         private void ProcessStartPlay()
@@ -241,6 +258,8 @@ namespace Infrastructure.Tweening
 
         private float ProcessPlay(float deltaTimeS, bool backwards)
         {
+            _onPlay?.Invoke(This);
+
             deltaTimeS = Play(deltaTimeS, backwards);
 
             if (deltaTimeS > 0.0f)
@@ -260,14 +279,14 @@ namespace Infrastructure.Tweening
 
         private float ProcessWaitAfter(float deltaTimeS)
         {
-            return ProcessWait(deltaTimeS, _delayAfterS, TweenState.EndIteration);
+            return ProcessWait(deltaTimeS, DelayAfterS, TweenState.EndIteration);
         }
 
         private void ProcessEndIteration()
         {
             ++_iteration;
 
-            if (_repetitions < 0 || _iteration <= _repetitions)
+            if (Repetitions < 0 || _iteration <= Repetitions)
             {
                 State = TweenState.PrepareRepetition;
             }
@@ -281,12 +300,12 @@ namespace Infrastructure.Tweening
         {
             State = TweenState.StartIteration;
 
-            if (_repetitionType is RepetitionType.Yoyo)
+            if (RepetitionType is RepetitionType.Yoyo)
             {
                 Backwards = !Backwards;
             }
 
-            _delayManagement = _delayManagementRepetition;
+            _delayManagement = DelayManagementRepetition;
 
             OnPrepareRepetition();
         }
@@ -332,7 +351,7 @@ namespace Infrastructure.Tweening
                 return true;
             }
 
-            if (obj is not TweenBase other)
+            if (obj is not TweenBase<TTween> other)
             {
                 return false;
             }
@@ -344,45 +363,49 @@ namespace Infrastructure.Tweening
         {
             HashCode hashCode = new();
 
-            hashCode.Add(_autoPlay);
-            hashCode.Add(_delayBeforeS);
-            hashCode.Add(_delayAfterS);
-            hashCode.Add(_repetitions);
-            hashCode.Add(_repetitionType);
-            hashCode.Add(_delayManagementRepetition);
-            hashCode.Add(_delayManagementRestart);
+            hashCode.Add(AutoPlay);
+            hashCode.Add(DelayBeforeS);
+            hashCode.Add(DelayAfterS);
+            hashCode.Add(Repetitions);
+            hashCode.Add(RepetitionType);
+            hashCode.Add(DelayManagementRepetition);
+            hashCode.Add(DelayManagementRestart);
+            hashCode.Add(_onStep);
             hashCode.Add(_onStartIteration);
             hashCode.Add(_onStartPlay);
+            hashCode.Add(_onPlay);
             hashCode.Add(_onEndPlay);
             hashCode.Add(_onEndIteration);
+            hashCode.Add(_onComplete);
             hashCode.Add(_onPause);
             hashCode.Add(_onResume);
             hashCode.Add(_onRestart);
-            hashCode.Add(_onComplete);
 
             return hashCode.ToHashCode();
         }
 
-        private bool Equals([NotNull] TweenBase other)
+        private bool Equals([NotNull] TweenBase<TTween> other)
         {
             ArgumentNullException.ThrowIfNull(other);
 
             return
-                _autoPlay.Equals(other._autoPlay) &&
-                _delayBeforeS.Equals(other._delayBeforeS) &&
-                _delayAfterS.Equals(other._delayAfterS) &&
-                _repetitions.Equals(other._repetitions) &&
-                EqualityComparer<RepetitionType>.Default.Equals(_repetitionType, other._repetitionType) &&
-                EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRepetition, other._delayManagementRepetition) &&
-                EqualityComparer<DelayManagement>.Default.Equals(_delayManagementRestart, other._delayManagementRestart) &&
+                AutoPlay.Equals(other.AutoPlay) &&
+                DelayBeforeS.Equals(other.DelayBeforeS) &&
+                DelayAfterS.Equals(other.DelayAfterS) &&
+                Repetitions.Equals(other.Repetitions) &&
+                EqualityComparer<RepetitionType>.Default.Equals(RepetitionType, other.RepetitionType) &&
+                EqualityComparer<DelayManagement>.Default.Equals(DelayManagementRepetition, other.DelayManagementRepetition) &&
+                EqualityComparer<DelayManagement>.Default.Equals(DelayManagementRestart, other.DelayManagementRestart) &&
+                Equals(_onStep, other._onStep) &&
                 Equals(_onStartIteration, other._onStartIteration) &&
                 Equals(_onStartPlay, other._onStartPlay) &&
+                Equals(_onPlay, other._onPlay) &&
                 Equals(_onEndPlay, other._onEndPlay) &&
                 Equals(_onEndIteration, other._onEndIteration) &&
+                Equals(_onComplete, other._onComplete) &&
                 Equals(_onPause, other._onPause) &&
                 Equals(_onResume, other._onResume) &&
-                Equals(_onRestart, other._onRestart) &&
-                Equals(_onComplete, other._onComplete);
+                Equals(_onRestart, other._onRestart);
         }
     }
 }

@@ -7,26 +7,113 @@ namespace Editor.Tests.Infrastructure.Tweening
 {
     public class TweenBaseTests
     {
-        private Action _onStartIteration;
-        private Action _onStartPlay;
-        private Action _onEndPlay;
-        private Action _onEndIteration;
-        private Action _onPause;
-        private Action _onResume;
-        private Action _onRestart;
-        private Action _onComplete;
+        private Action<ITweenBase> _onStep;
+        private Action<ITweenBase> _onStartIteration;
+        private Action<ITweenBase> _onStartPlay;
+        private Action<ITweenBase> _onPlay;
+        private Action<ITweenBase> _onEndPlay;
+        private Action<ITweenBase> _onEndIteration;
+        private Action<ITweenBase> _onComplete;
+        private Action<ITweenBase> _onPause;
+        private Action<ITweenBase> _onResume;
+        private Action<ITweenBase> _onRestart;
 
         [SetUp]
         public void SetUp()
         {
-            _onStartIteration = Substitute.For<Action>();
-            _onStartPlay = Substitute.For<Action>();
-            _onEndPlay = Substitute.For<Action>();
-            _onEndIteration = Substitute.For<Action>();
-            _onPause = Substitute.For<Action>();
-            _onResume = Substitute.For<Action>();
-            _onRestart = Substitute.For<Action>();
-            _onComplete = Substitute.For<Action>();
+            _onStep = Substitute.For<Action<ITweenBase>>();
+            _onStartIteration = Substitute.For<Action<ITweenBase>>();
+            _onStartPlay = Substitute.For<Action<ITweenBase>>();
+            _onPlay = Substitute.For<Action<ITweenBase>>();
+            _onEndPlay = Substitute.For<Action<ITweenBase>>();
+            _onEndIteration = Substitute.For<Action<ITweenBase>>();
+            _onComplete = Substitute.For<Action<ITweenBase>>();
+            _onPause = Substitute.For<Action<ITweenBase>>();
+            _onResume = Substitute.For<Action<ITweenBase>>();
+            _onRestart = Substitute.For<Action<ITweenBase>>();
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void AutoPlay_ReturnsExpected(bool expectedResult)
+        {
+            TweenBaseTesting tweenBase = Build(autoPlay: expectedResult);
+
+            bool result = tweenBase.AutoPlay;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void DelayBeforeS_ReturnsExpected()
+        {
+            const float expectedResult = 1.0f;
+            TweenBaseTesting tweenBase = Build(delayBeforeS: expectedResult);
+
+            float result = tweenBase.DelayBeforeS;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void DelayAfterS_ReturnsExpected()
+        {
+            const float expectedResult = 1.0f;
+            TweenBaseTesting tweenBase = Build(delayAfterS: expectedResult);
+
+            float result = tweenBase.DelayAfterS;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void Repetitions_ReturnsExpected()
+        {
+            const int expectedResult = 1;
+            TweenBaseTesting tweenBase = Build(repetitions: expectedResult);
+
+            int result = tweenBase.Repetitions;
+
+            Assert.AreEqual(expectedResult, result);
+        }
+
+        [Test]
+        public void RepetitionType_ReturnsExpected()
+        {
+            foreach (RepetitionType expectedResult in Enum.GetValues(typeof(RepetitionType)))
+            {
+                TweenBaseTesting tweenBase = Build(repetitionType: expectedResult);
+
+                RepetitionType result = tweenBase.RepetitionType;
+
+                Assert.AreEqual(expectedResult, result);
+            }
+        }
+
+        [Test]
+        public void DelayManagementRepetition_ReturnsExpected()
+        {
+            foreach (DelayManagement expectedResult in Enum.GetValues(typeof(DelayManagement)))
+            {
+                TweenBaseTesting tweenBase = Build(delayManagementRepetition: expectedResult);
+
+                DelayManagement result = tweenBase.DelayManagementRepetition;
+
+                Assert.AreEqual(expectedResult, result);
+            }
+        }
+
+        [Test]
+        public void DelayManagementRestart_ReturnsExpected()
+        {
+            foreach (DelayManagement expectedResult in Enum.GetValues(typeof(DelayManagement)))
+            {
+                TweenBaseTesting tweenBase = Build(delayManagementRestart: expectedResult);
+
+                DelayManagement result = tweenBase.DelayManagementRestart;
+
+                Assert.AreEqual(expectedResult, result);
+            }
         }
 
         [Test]
@@ -35,12 +122,42 @@ namespace Editor.Tests.Infrastructure.Tweening
             const bool autoPlay = false;
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = 0.0f;
-            TweenBase tweenBase = Build(autoPlay: autoPlay);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay);
             tweenBase.Step(deltaTimeS); // SetUp
 
             float remainingDeltaTimeS = tweenBase.Step(deltaTimeS);
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
+        }
+
+        [Test]
+        public void Step_Paused_NoOnStepCallback()
+        {
+            const bool autoPlay = false;
+            const float deltaTimeS = 1.0f;
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay);
+            tweenBase.Step(deltaTimeS); // SetUp, tween gets paused and onStep gets called
+
+            _onStep.Received(1).Invoke(tweenBase);
+
+            tweenBase.Step(deltaTimeS); // Paused
+
+            _onStep.Received(1).Invoke(tweenBase);
+        }
+
+        [Test]
+        public void Step_NotPaused_OnStepCallback()
+        {
+            const bool autoPlay = true;
+            const float deltaTimeS = 1.0f;
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay);
+            tweenBase.Step(deltaTimeS); // SetUp, tween gets paused and onStep gets called
+
+            _onStep.Received(1).Invoke(tweenBase);
+
+            tweenBase.Step(deltaTimeS); // Not paused
+
+            _onStep.Received(2).Invoke(tweenBase);
         }
 
         [Test]
@@ -50,14 +167,14 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = deltaTimeS;
             const TweenState expectedState = TweenState.StartIteration;
-            TweenBase tweenBase = Build(autoPlay: autoPlay);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay);
 
             float remainingDeltaTimeS = tweenBase.Step(deltaTimeS);
             TweenState state = tweenBase.State;
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onStartIteration.Received(1).Invoke();
+            _onStartIteration.Received(1).Invoke(tweenBase);
             Assert.IsFalse(tweenBase.Paused);
         }
 
@@ -68,14 +185,14 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = deltaTimeS;
             const TweenState expectedState = TweenState.StartIteration;
-            TweenBase tweenBase = Build(autoPlay: autoPlay);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay);
 
             float remainingDeltaTimeS = tweenBase.Step(deltaTimeS);
             TweenState state = tweenBase.State;
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onStartIteration.Received(1).Invoke();
+            _onStartIteration.Received(1).Invoke(tweenBase);
             Assert.IsTrue(tweenBase.Paused);
         }
 
@@ -88,7 +205,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const bool autoPlay = false;
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = deltaTimeS;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayManagementRestart: delayManagement);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayManagementRestart: delayManagement);
             tweenBase.Restart(); // Apply delayManagement and move to StartIteration
 
             float remainingDeltaTimeS = tweenBase.Step(deltaTimeS);
@@ -98,11 +215,11 @@ namespace Editor.Tests.Infrastructure.Tweening
             Assert.AreEqual(expectedState, state);
             if (onStartPlayCalled)
             {
-                _onStartPlay.Received(1).Invoke();
+                _onStartPlay.Received(1).Invoke(tweenBase);
             }
             else
             {
-                _onStartPlay.DidNotReceive().Invoke();
+                _onStartPlay.DidNotReceive().Invoke(Arg.Any<ITweenBase>());
             }
         }
 
@@ -114,7 +231,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = 0.0f;
             const TweenState expectedState = TweenState.WaitBefore;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
 
@@ -123,7 +240,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onStartPlay.DidNotReceive().Invoke();
+            _onStartPlay.DidNotReceive().Invoke(Arg.Any<ITweenBase>());
         }
 
         [Test]
@@ -134,7 +251,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = 0.25f;
             const TweenState expectedState = TweenState.StartPlay;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
 
@@ -143,7 +260,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onStartPlay.Received(1).Invoke();
+            _onStartPlay.Received(1).Invoke(tweenBase);
         }
 
         [Test]
@@ -154,7 +271,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = deltaTimeS;
             const TweenState expectedState = TweenState.Play;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
             tweenBase.Step(deltaTimeS); // WaitBefore
@@ -167,7 +284,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         }
 
         [Test]
-        public void Step_PlayAndPlayRemainingDeltaTimeZero_PlayAndNoCallback()
+        public void Step_PlayAndPlayRemainingDeltaTimeZero_PlayAndNoEndPlayCallback()
         {
             const bool autoPlay = true;
             const float delayBeforeS = 0.0f;
@@ -175,7 +292,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = playRemainingDeltaTimeS;
             const TweenState expectedState = TweenState.Play;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
             tweenBase.Step(deltaTimeS); // WaitBefore
@@ -186,11 +303,12 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onEndPlay.DidNotReceive().Invoke();
+            _onPlay.Received(1).Invoke(tweenBase);
+            _onEndPlay.DidNotReceive().Invoke(Arg.Any<ITweenBase>());
         }
 
         [Test]
-        public void Step_PlayAndPlayRemainingDeltaTimeBiggerThanZero_EndPlayAndCallback()
+        public void Step_PlayAndPlayRemainingDeltaTimeBiggerThanZero_EndPlayAndEndPlayCallback()
         {
             const bool autoPlay = true;
             const float delayBeforeS = 0.0f;
@@ -198,7 +316,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = playRemainingDeltaTimeS;
             const TweenState expectedState = TweenState.EndPlay;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
             tweenBase.Step(deltaTimeS); // WaitBefore
@@ -209,7 +327,8 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onEndPlay.Received(1).Invoke();
+            _onPlay.Received(1).Invoke(tweenBase);
+            _onEndPlay.Received(1).Invoke(tweenBase);
         }
 
         [TestCase(DelayManagement.BeforeAndAfter, TweenState.WaitAfter, false)]
@@ -223,7 +342,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float playRemainingDeltaTimeS = 0.1f;
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = deltaTimeS;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayManagementRestart: delayManagement, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayManagementRestart: delayManagement, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             tweenBase.Restart(); // Apply delayManagement and move to StartIteration
             tweenBase.Step(deltaTimeS); // StartIteration
             if (delayManagement is DelayManagement.BeforeAndAfter or DelayManagement.Before)
@@ -240,11 +359,11 @@ namespace Editor.Tests.Infrastructure.Tweening
             Assert.AreEqual(expectedState, state);
             if (onEndIterationCalled)
             {
-                _onEndIteration.Received(1).Invoke();
+                _onEndIteration.Received(1).Invoke(tweenBase);
             }
             else
             {
-                _onEndIteration.DidNotReceive().Invoke();
+                _onEndIteration.DidNotReceive().Invoke(Arg.Any<ITweenBase>());
             }
         }
 
@@ -258,7 +377,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = 0.0f;
             const TweenState expectedState = TweenState.WaitAfter;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
             tweenBase.Step(deltaTimeS); // WaitBefore
@@ -271,7 +390,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onEndIteration.DidNotReceive().Invoke();
+            _onEndIteration.DidNotReceive().Invoke(Arg.Any<ITweenBase>());
         }
 
         [Test]
@@ -284,7 +403,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = 0.25f;
             const TweenState expectedState = TweenState.EndIteration;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
             tweenBase.Step(deltaTimeS); // WaitBefore
@@ -297,7 +416,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onEndIteration.Received(1).Invoke();
+            _onEndIteration.Received(1).Invoke(tweenBase);
         }
 
         [TestCase(-1, TweenState.PrepareRepetition, false)]
@@ -312,7 +431,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float playRemainingDeltaTimeS = 0.1f;
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = deltaTimeS;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, repetitions: repetitions, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, repetitions: repetitions, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
             tweenBase.Step(deltaTimeS); // WaitBefore
@@ -328,11 +447,11 @@ namespace Editor.Tests.Infrastructure.Tweening
             Assert.AreEqual(expectedState, state);
             if (onCompleteCalled)
             {
-                _onComplete.Received(1).Invoke();
+                _onComplete.Received(1).Invoke(tweenBase);
             }
             else
             {
-                _onComplete.DidNotReceive().Invoke();
+                _onComplete.DidNotReceive().Invoke(Arg.Any<ITweenBase>());
             }
         }
 
@@ -347,11 +466,11 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = deltaTimeS;
             const TweenState expectedState = TweenState.StartIteration;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, repetitions: repetitions, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, repetitions: repetitions, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
 
-            _onStartIteration.Received(1).Invoke();
+            _onStartIteration.Received(1).Invoke(tweenBase);
 
             tweenBase.Step(deltaTimeS); // WaitBefore
             tweenBase.Step(deltaTimeS); // StartPlay
@@ -365,7 +484,7 @@ namespace Editor.Tests.Infrastructure.Tweening
 
             Assert.AreEqual(expectedRemainingDeltaTimeS, remainingDeltaTimeS);
             Assert.AreEqual(expectedState, state);
-            _onStartIteration.Received(2).Invoke();
+            _onStartIteration.Received(2).Invoke(tweenBase);
         }
 
         [Test]
@@ -379,7 +498,7 @@ namespace Editor.Tests.Infrastructure.Tweening
             const float deltaTimeS = 1.0f;
             const float expectedRemainingDeltaTimeS = deltaTimeS;
             const TweenState expectedState = TweenState.Complete;
-            TweenBase tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, repetitions: repetitions, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay, delayBeforeS: delayBeforeS, delayAfterS: delayAfterS, repetitions: repetitions, playRemainingDeltaTimeS: playRemainingDeltaTimeS);
             tweenBase.Step(deltaTimeS); // SetUp
             tweenBase.Step(deltaTimeS); // StartIteration
             tweenBase.Step(deltaTimeS); // WaitBefore
@@ -399,66 +518,66 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Pause_NotPaused_PausedAndCallback()
         {
-            TweenBase tweenBase = Build();
+            TweenBaseTesting tweenBase = Build();
 
             tweenBase.Pause();
 
             Assert.IsTrue(tweenBase.Paused);
-            _onPause.Received(1).Invoke();
+            _onPause.Received(1).Invoke(tweenBase);
         }
 
         [Test]
         public void Pause_Paused_NoCallback()
         {
-            TweenBase tweenBase = Build();
+            TweenBaseTesting tweenBase = Build();
             tweenBase.Pause();
 
-            _onPause.Received(1).Invoke();
+            _onPause.Received(1).Invoke(tweenBase);
 
             tweenBase.Pause();
 
-            _onPause.Received(1).Invoke();
+            _onPause.Received(1).Invoke(tweenBase);
         }
 
         [Test]
         public void Resume_Paused_NotPausedAndCallback()
         {
-            TweenBase tweenBase = Build();
+            TweenBaseTesting tweenBase = Build();
             tweenBase.Pause();
 
             tweenBase.Resume();
 
             Assert.IsFalse(tweenBase.Paused);
-            _onResume.Received(1).Invoke();
+            _onResume.Received(1).Invoke(tweenBase);
         }
 
         [Test]
         public void Resume_NotPaused_NoCallback()
         {
-            TweenBase tweenBase = Build();
+            TweenBaseTesting tweenBase = Build();
 
             tweenBase.Resume();
 
-            _onResume.DidNotReceive().Invoke();
+            _onResume.DidNotReceive().Invoke(Arg.Any<ITweenBase>());
         }
 
         [Test]
         public void Restart_StartIterationAndCallback()
         {
             const TweenState expectedState = TweenState.StartIteration;
-            TweenBase tweenBase = Build();
+            TweenBaseTesting tweenBase = Build();
 
             tweenBase.Restart();
             TweenState state = tweenBase.State;
 
             Assert.AreEqual(expectedState, state);
-            _onRestart.Received(1).Invoke();
+            _onRestart.Received(1).Invoke(tweenBase);
         }
 
         [Test]
         public void Restart_NotPaused_NotPaused()
         {
-            TweenBase tweenBase = Build();
+            TweenBaseTesting tweenBase = Build();
 
             tweenBase.Restart();
 
@@ -468,7 +587,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Restart_Paused_Paused()
         {
-            TweenBase tweenBase = Build();
+            TweenBaseTesting tweenBase = Build();
             tweenBase.Pause();
 
             tweenBase.Restart();
@@ -479,8 +598,8 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_OtherNull_ReturnsFalse()
         {
-            TweenBase tweenBase = Build();
-            const TweenBase other = null;
+            TweenBaseTesting tweenBase = Build();
+            const TweenBaseTesting other = null;
 
             Assert.IsFalse(tweenBase.Equals(other)); // Assert.AreNotEqual cannot be used in here
         }
@@ -488,8 +607,8 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_SameRef_ReturnsTrue()
         {
-            TweenBase tweenBase = Build();
-            TweenBase other = tweenBase;
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = tweenBase;
 
             Assert.IsTrue(tweenBase.Equals(other)); // Assert.AreEqual cannot be used in here
         }
@@ -497,8 +616,8 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_OtherWrongType_ReturnsFalse()
         {
-            TweenBase tweenBase = Build();
-            NotATweenBase other = new();
+            TweenBaseTesting tweenBase = Build();
+            object other = new();
 
             Assert.AreNotEqual(tweenBase, other);
         }
@@ -506,165 +625,185 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Equals_OtherSameParams_ReturnsTrue()
         {
-            TweenBase tweenBase = Build();
-            TweenBase other = Build();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build();
 
             Assert.AreEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams1_ReturnsFalse()
+        public void Equals_OtherDifferentAutoPlay_ReturnsFalse()
         {
             const bool autoPlay = true;
             const bool otherAutoPlay = false;
-            TweenBase tweenBase = Build(autoPlay: autoPlay);
-            TweenBase other = Build(autoPlay: otherAutoPlay);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay);
+            TweenBaseTesting other = Build(autoPlay: otherAutoPlay);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams2_ReturnsFalse()
+        public void Equals_OtherDifferentDelayBeforeS_ReturnsFalse()
         {
             const float delayBeforeS = 1.0f;
             const float otherDelayBeforeS = 2.0f;
-            TweenBase tweenBase = Build(delayBeforeS: delayBeforeS);
-            TweenBase other = Build(delayBeforeS: otherDelayBeforeS);
+            TweenBaseTesting tweenBase = Build(delayBeforeS: delayBeforeS);
+            TweenBaseTesting other = Build(delayBeforeS: otherDelayBeforeS);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams3_ReturnsFalse()
+        public void Equals_OtherDifferentDelayAfterS_ReturnsFalse()
         {
             const float delayAfterS = 1.0f;
             const float otherDelayAfterS = 2.0f;
-            TweenBase tweenBase = Build(delayAfterS: delayAfterS);
-            TweenBase other = Build(delayAfterS: otherDelayAfterS);
+            TweenBaseTesting tweenBase = Build(delayAfterS: delayAfterS);
+            TweenBaseTesting other = Build(delayAfterS: otherDelayAfterS);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams4_ReturnsFalse()
+        public void Equals_OtherDifferentRepetitions_ReturnsFalse()
         {
             const int repetitions = 1;
             const int otherRepetitions = 2;
-            TweenBase tweenBase = Build(repetitions: repetitions);
-            TweenBase other = Build(repetitions: otherRepetitions);
+            TweenBaseTesting tweenBase = Build(repetitions: repetitions);
+            TweenBaseTesting other = Build(repetitions: otherRepetitions);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams5_ReturnsFalse()
+        public void Equals_OtherDifferentRepetitionType_ReturnsFalse()
         {
             const RepetitionType repetitionType = RepetitionType.Restart;
             const RepetitionType otherRepetitionType = RepetitionType.Yoyo;
-            TweenBase tweenBase = Build(repetitionType: repetitionType);
-            TweenBase other = Build(repetitionType: otherRepetitionType);
+            TweenBaseTesting tweenBase = Build(repetitionType: repetitionType);
+            TweenBaseTesting other = Build(repetitionType: otherRepetitionType);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams6_ReturnsFalse()
+        public void Equals_OtherDifferentDelayManagementRepetition_ReturnsFalse()
         {
             const DelayManagement delayManagementRepetition = DelayManagement.Before;
             const DelayManagement otherDelayManagementRepetition = DelayManagement.After;
-            TweenBase tweenBase = Build(delayManagementRepetition: delayManagementRepetition);
-            TweenBase other = Build(delayManagementRepetition: otherDelayManagementRepetition);
+            TweenBaseTesting tweenBase = Build(delayManagementRepetition: delayManagementRepetition);
+            TweenBaseTesting other = Build(delayManagementRepetition: otherDelayManagementRepetition);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams7_ReturnsFalse()
+        public void Equals_OtherDifferentDelayManagementRestart_ReturnsFalse()
         {
             const DelayManagement delayManagementRestart = DelayManagement.Before;
             const DelayManagement otherDelayManagementRestart = DelayManagement.After;
-            TweenBase tweenBase = Build(delayManagementRestart: delayManagementRestart);
-            TweenBase other = Build(delayManagementRestart: otherDelayManagementRestart);
+            TweenBaseTesting tweenBase = Build(delayManagementRestart: delayManagementRestart);
+            TweenBaseTesting other = Build(delayManagementRestart: otherDelayManagementRestart);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams8_ReturnsFalse()
+        public void Equals_OtherDifferentOnStep_ReturnsFalse()
         {
-            Action otherOnStartIteration = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onStartIteration: otherOnStartIteration);
+            Action<ITweenBase> otherOnStep = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onStep: otherOnStep);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams9_ReturnsFalse()
+        public void Equals_OtherDifferentOnStartIteration_ReturnsFalse()
         {
-            Action otherOnStartPlay = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onStartPlay: otherOnStartPlay);
+            Action<ITweenBase> otherOnStartIteration = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onStartIteration: otherOnStartIteration);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams10_ReturnsFalse()
+        public void Equals_OtherDifferentOnStartPlay_ReturnsFalse()
         {
-            Action otherOnEndPlay = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onEndPlay: otherOnEndPlay);
+            Action<ITweenBase> otherOnStartPlay = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onStartPlay: otherOnStartPlay);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams11_ReturnsFalse()
+        public void Equals_OtherDifferentOnPlay_ReturnsFalse()
         {
-            Action otherOnEndIteration = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onEndIteration: otherOnEndIteration);
+            Action<ITweenBase> otherOnPlay = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onPlay: otherOnPlay);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams12_ReturnsFalse()
+        public void Equals_OtherDifferentOnEndPlay_ReturnsFalse()
         {
-            Action otherOnPause = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onPause: otherOnPause);
+            Action<ITweenBase> otherOnEndPlay = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onEndPlay: otherOnEndPlay);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams13_ReturnsFalse()
+        public void Equals_OtherDifferentOnEndIteration_ReturnsFalse()
         {
-            Action otherOnResume = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onResume: otherOnResume);
+            Action<ITweenBase> otherOnEndIteration = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onEndIteration: otherOnEndIteration);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams14_ReturnsFalse()
+        public void Equals_OtherDifferentOnComplete_ReturnsFalse()
         {
-            Action otherOnRestart = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onRestart: otherOnRestart);
+            Action<ITweenBase> otherOnComplete = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onComplete: otherOnComplete);
 
             Assert.AreNotEqual(tweenBase, other);
         }
 
         [Test]
-        public void Equals_OtherDifferentParams15_ReturnsFalse()
+        public void Equals_OtherDifferentOnPause_ReturnsFalse()
         {
-            Action otherOnComplete = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onComplete: otherOnComplete);
+            Action<ITweenBase> otherOnPause = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onPause: otherOnPause);
+
+            Assert.AreNotEqual(tweenBase, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentOnResume_ReturnsFalse()
+        {
+            Action<ITweenBase> otherOnResume = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onResume: otherOnResume);
+
+            Assert.AreNotEqual(tweenBase, other);
+        }
+
+        [Test]
+        public void Equals_OtherDifferentOnRestart_ReturnsFalse()
+        {
+            Action<ITweenBase> otherOnRestart = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onRestart: otherOnRestart);
 
             Assert.AreNotEqual(tweenBase, other);
         }
@@ -672,170 +811,190 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void GetHashCode_OtherSameParams_SameReturnedValue()
         {
-            TweenBase tweenBase = Build();
-            TweenBase other = Build();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build();
 
             Assert.AreEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams1_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentAutoPlay_DifferentReturnedValue()
         {
             const bool autoPlay = true;
             const bool otherAutoPlay = false;
-            TweenBase tweenBase = Build(autoPlay: autoPlay);
-            TweenBase other = Build(autoPlay: otherAutoPlay);
+            TweenBaseTesting tweenBase = Build(autoPlay: autoPlay);
+            TweenBaseTesting other = Build(autoPlay: otherAutoPlay);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams2_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDelayBeforeS_DifferentReturnedValue()
         {
             const float delayBeforeS = 1.0f;
             const float otherDelayBeforeS = 2.0f;
-            TweenBase tweenBase = Build(delayBeforeS: delayBeforeS);
-            TweenBase other = Build(delayBeforeS: otherDelayBeforeS);
+            TweenBaseTesting tweenBase = Build(delayBeforeS: delayBeforeS);
+            TweenBaseTesting other = Build(delayBeforeS: otherDelayBeforeS);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams3_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDelayAfterS_DifferentReturnedValue()
         {
             const float delayAfterS = 1.0f;
             const float otherDelayAfterS = 2.0f;
-            TweenBase tweenBase = Build(delayAfterS: delayAfterS);
-            TweenBase other = Build(delayAfterS: otherDelayAfterS);
+            TweenBaseTesting tweenBase = Build(delayAfterS: delayAfterS);
+            TweenBaseTesting other = Build(delayAfterS: otherDelayAfterS);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams4_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentRepetitions_DifferentReturnedValue()
         {
             const int repetitions = 1;
             const int otherRepetitions = 2;
-            TweenBase tweenBase = Build(repetitions: repetitions);
-            TweenBase other = Build(repetitions: otherRepetitions);
+            TweenBaseTesting tweenBase = Build(repetitions: repetitions);
+            TweenBaseTesting other = Build(repetitions: otherRepetitions);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams5_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentRepetitionType_DifferentReturnedValue()
         {
             const RepetitionType repetitionType = RepetitionType.Restart;
             const RepetitionType otherRepetitionType = RepetitionType.Yoyo;
-            TweenBase tweenBase = Build(repetitionType: repetitionType);
-            TweenBase other = Build(repetitionType: otherRepetitionType);
+            TweenBaseTesting tweenBase = Build(repetitionType: repetitionType);
+            TweenBaseTesting other = Build(repetitionType: otherRepetitionType);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams6_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDelayManagementRepetition_DifferentReturnedValue()
         {
             const DelayManagement delayManagementRepetition = DelayManagement.Before;
             const DelayManagement otherDelayManagementRepetition = DelayManagement.After;
-            TweenBase tweenBase = Build(delayManagementRepetition: delayManagementRepetition);
-            TweenBase other = Build(delayManagementRepetition: otherDelayManagementRepetition);
+            TweenBaseTesting tweenBase = Build(delayManagementRepetition: delayManagementRepetition);
+            TweenBaseTesting other = Build(delayManagementRepetition: otherDelayManagementRepetition);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams7_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentDelayManagementRestart_DifferentReturnedValue()
         {
             const DelayManagement delayManagementRestart = DelayManagement.Before;
             const DelayManagement otherDelayManagementRestart = DelayManagement.After;
-            TweenBase tweenBase = Build(delayManagementRestart: delayManagementRestart);
-            TweenBase other = Build(delayManagementRestart: otherDelayManagementRestart);
+            TweenBaseTesting tweenBase = Build(delayManagementRestart: delayManagementRestart);
+            TweenBaseTesting other = Build(delayManagementRestart: otherDelayManagementRestart);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams8_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnStep_DifferentReturnedValue()
         {
-            Action otherOnStartIteration = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onStartIteration: otherOnStartIteration);
+            Action<ITweenBase> otherOnStep = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onStep: otherOnStep);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams9_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnStartIteration_DifferentReturnedValue()
         {
-            Action otherOnStartPlay = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onStartPlay: otherOnStartPlay);
+            Action<ITweenBase> otherOnStartIteration = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onStartIteration: otherOnStartIteration);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams10_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnStartPlay_DifferentReturnedValue()
         {
-            Action otherOnEndPlay = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onEndPlay: otherOnEndPlay);
+            Action<ITweenBase> otherOnStartPlay = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onStartPlay: otherOnStartPlay);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams11_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnPlay_DifferentReturnedValue()
         {
-            Action otherOnEndIteration = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onEndIteration: otherOnEndIteration);
+            Action<ITweenBase> otherOnPlay = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onPlay: otherOnPlay);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams12_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnEndPlay_DifferentReturnedValue()
         {
-            Action otherOnPause = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onPause: otherOnPause);
+            Action<ITweenBase> otherOnEndPlay = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onEndPlay: otherOnEndPlay);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams13_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnEndIteration_DifferentReturnedValue()
         {
-            Action otherOnResume = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onResume: otherOnResume);
+            Action<ITweenBase> otherOnEndIteration = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onEndIteration: otherOnEndIteration);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams14_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnComplete_DifferentReturnedValue()
         {
-            Action otherOnRestart = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onRestart: otherOnRestart);
+            Action<ITweenBase> otherOnComplete = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onComplete: otherOnComplete);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
-        public void GetHashCode_OtherDifferentParams15_DifferentReturnedValue()
+        public void GetHashCode_OtherDifferentOnPause_DifferentReturnedValue()
         {
-            Action otherOnComplete = Substitute.For<Action>();
-            TweenBase tweenBase = Build();
-            TweenBase other = Build(onComplete: otherOnComplete);
+            Action<ITweenBase> otherOnPause = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onPause: otherOnPause);
 
             Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
         }
 
-        private TweenBase Build(
+        [Test]
+        public void GetHashCode_OtherDifferentOnResume_DifferentReturnedValue()
+        {
+            Action<ITweenBase> otherOnResume = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onResume: otherOnResume);
+
+            Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
+        }
+
+        [Test]
+        public void GetHashCode_OtherDifferentOnRestart_DifferentReturnedValue()
+        {
+            Action<ITweenBase> otherOnRestart = Substitute.For<Action<ITweenBase>>();
+            TweenBaseTesting tweenBase = Build();
+            TweenBaseTesting other = Build(onRestart: otherOnRestart);
+
+            Assert.AreNotEqual(tweenBase.GetHashCode(), other.GetHashCode());
+        }
+
+        private TweenBaseTesting Build(
             bool autoPlay = true,
             float delayBeforeS = 0.0f,
             float delayAfterS = 0.0f,
@@ -843,14 +1002,16 @@ namespace Editor.Tests.Infrastructure.Tweening
             RepetitionType repetitionType = RepetitionType.Restart,
             DelayManagement delayManagementRepetition = DelayManagement.BeforeAndAfter,
             DelayManagement delayManagementRestart = DelayManagement.BeforeAndAfter,
-            Action onStartIteration = null,
-            Action onStartPlay = null,
-            Action onEndPlay = null,
-            Action onEndIteration = null,
-            Action onPause = null,
-            Action onResume = null,
-            Action onRestart = null,
-            Action onComplete = null,
+            Action<ITweenBase> onStep = null,
+            Action<ITweenBase> onStartIteration = null,
+            Action<ITweenBase> onStartPlay = null,
+            Action<ITweenBase> onPlay = null,
+            Action<ITweenBase> onEndPlay = null,
+            Action<ITweenBase> onEndIteration = null,
+            Action<ITweenBase> onComplete = null,
+            Action<ITweenBase> onPause = null,
+            Action<ITweenBase> onResume = null,
+            Action<ITweenBase> onRestart = null,
             float playRemainingDeltaTimeS = 0.0f)
         {
             Func<float> play = Substitute.For<Func<float>>();
@@ -865,14 +1026,16 @@ namespace Editor.Tests.Infrastructure.Tweening
                     repetitionType,
                     delayManagementRepetition,
                     delayManagementRestart,
+                    onStep ?? _onStep,
                     onStartIteration ?? _onStartIteration,
                     onStartPlay ?? _onStartPlay,
+                    onPlay ?? _onPlay,
                     onEndPlay ?? _onEndPlay,
                     onEndIteration ?? _onEndIteration,
+                    onComplete ?? _onComplete,
                     onPause ?? _onPause,
                     onResume ?? _onResume,
                     onRestart ?? _onRestart,
-                    onComplete ?? _onComplete,
                     play
                 );
         }
@@ -881,9 +1044,11 @@ namespace Editor.Tests.Infrastructure.Tweening
 
         // Since TweenBase is abstract, TweenBaseTesting (inherits from TweenBase and has no logic) needs to be used
 
-        private sealed class TweenBaseTesting : TweenBase
+        private sealed class TweenBaseTesting : TweenBase<ITweenBase>
         {
             private readonly Func<float> _play;
+
+            protected override ITweenBase This => this;
 
             public TweenBaseTesting(
                 bool autoPlay,
@@ -893,15 +1058,17 @@ namespace Editor.Tests.Infrastructure.Tweening
                 RepetitionType repetitionType,
                 DelayManagement delayManagementRepetition,
                 DelayManagement delayManagementRestart,
-                Action onStartIteration,
-                Action onStartPlay,
-                Action onEndPlay,
-                Action onEndIteration,
-                Action onPause,
-                Action onResume,
-                Action onRestart,
-                Action onComplete,
-                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStartIteration, onStartPlay, onEndPlay, onEndIteration, onPause, onResume, onRestart, onComplete)
+                Action<ITweenBase> onStep,
+                Action<ITweenBase> onStartIteration,
+                Action<ITweenBase> onStartPlay,
+                Action<ITweenBase> onPlay,
+                Action<ITweenBase> onEndPlay,
+                Action<ITweenBase> onEndIteration,
+                Action<ITweenBase> onComplete,
+                Action<ITweenBase> onPause,
+                Action<ITweenBase> onResume,
+                Action<ITweenBase> onRestart,
+                Func<float> play) : base(autoPlay, delayBeforeS, delayAfterS, repetitions, repetitionType, delayManagementRepetition, delayManagementRestart, onStep, onStartIteration, onStartPlay, onPlay, onEndPlay, onEndIteration, onComplete, onPause, onResume, onRestart)
             {
                 _play = play;
             }
@@ -910,24 +1077,6 @@ namespace Editor.Tests.Infrastructure.Tweening
             {
                 return _play();
             }
-        }
-
-        private sealed class NotATweenBase : ITween
-        {
-            public TweenState State => TweenState.SetUp;
-
-            public bool Paused => false;
-
-            public float Step(float deltaTimeS, bool backwards = false)
-            {
-                return 0.0f;
-            }
-
-            public void Pause() { }
-
-            public void Resume() { }
-
-            public void Restart() { }
         }
 
         #endregion

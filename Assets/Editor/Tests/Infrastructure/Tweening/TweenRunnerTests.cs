@@ -12,7 +12,7 @@ namespace Editor.Tests.Infrastructure.Tweening
     {
         private ICoroutineRunner _coroutineRunner;
         private IDeltaTimeGetter _deltaTimeGetter;
-        private ITween _tween;
+        private ITweenBase _tween;
 
         private TweenRunner _tweenRunner;
 
@@ -21,7 +21,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         {
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
             _deltaTimeGetter = Substitute.For<IDeltaTimeGetter>();
-            _tween = Substitute.For<ITween>();
+            _tween = Substitute.For<ITweenBase>();
 
             _tweenRunner = new TweenRunner(_coroutineRunner, _deltaTimeGetter);
         }
@@ -37,7 +37,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         [Test]
         public void Run_CoroutineRunning_RunCoroutineNotCalled()
         {
-            ITween otherTween = Substitute.For<ITween>();
+            ITweenBase otherTween = Substitute.For<ITweenBase>();
             _tweenRunner.Run(otherTween);
 
             _coroutineRunner.Received(1).Run(Arg.Any<IEnumerator>());

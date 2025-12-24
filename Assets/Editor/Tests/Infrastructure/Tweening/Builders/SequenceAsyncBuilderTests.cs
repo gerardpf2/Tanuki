@@ -26,15 +26,17 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
             const RepetitionType repetitionType = RepetitionType.Yoyo;
             const DelayManagement delayManagementRepetition = DelayManagement.Before;
             const DelayManagement delayManagementRestart = DelayManagement.After;
-            Action onStartIteration = Substitute.For<Action>();
-            Action onStartPlay = Substitute.For<Action>();
-            Action onEndPlay = Substitute.For<Action>();
-            Action onEndIteration = Substitute.For<Action>();
-            Action onPause = Substitute.For<Action>();
-            Action onResume = Substitute.For<Action>();
-            Action onRestart = Substitute.For<Action>();
-            Action onComplete = Substitute.For<Action>();
-            ITween expectedResult =
+            Action<ISequenceAsync> onStep = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onStartIteration = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onStartPlay = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onPlay = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onEndPlay = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onEndIteration = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onComplete = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onPause = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onResume = Substitute.For<Action<ISequenceAsync>>();
+            Action<ISequenceAsync> onRestart = Substitute.For<Action<ISequenceAsync>>();
+            ITweenBase expectedResult =
                 new SequenceAsync(
                     autoPlay,
                     delayBeforeS,
@@ -43,14 +45,16 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                     repetitionType,
                     delayManagementRepetition,
                     delayManagementRestart,
+                    onStep,
                     onStartIteration,
                     onStartPlay,
+                    onPlay,
                     onEndPlay,
                     onEndIteration,
+                    onComplete,
                     onPause,
                     onResume,
                     onRestart,
-                    onComplete,
                     _sequenceAsyncBuilder.Tweens
                 );
             _sequenceAsyncBuilder
@@ -61,16 +65,18 @@ namespace Editor.Tests.Infrastructure.Tweening.Builders
                 .WithRepetitionType(repetitionType)
                 .WithDelayManagementRepetition(delayManagementRepetition)
                 .WithDelayManagementRestart(delayManagementRestart)
+                .WithOnStep(onStep)
                 .WithOnStartIteration(onStartIteration)
                 .WithOnStartPlay(onStartPlay)
+                .WithOnPlay(onPlay)
                 .WithOnEndPlay(onEndPlay)
                 .WithOnEndIteration(onEndIteration)
+                .WithOnComplete(onComplete)
                 .WithOnPause(onPause)
                 .WithOnResume(onResume)
-                .WithOnRestart(onRestart)
-                .WithOnComplete(onComplete);
+                .WithOnRestart(onRestart);
 
-            ITween result = _sequenceAsyncBuilder.Build();
+            ITweenBase result = _sequenceAsyncBuilder.Build();
 
             Assert.AreEqual(expectedResult, result);
         }

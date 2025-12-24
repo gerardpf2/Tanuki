@@ -8,16 +8,16 @@ namespace Editor.Tests.Infrastructure.Tweening
 {
     public class SequenceAsyncTests
     {
-        private IReadOnlyList<ITween> _tweens;
+        private IReadOnlyList<ITweenBase> _tweens;
 
         [SetUp]
         public void SetUp()
         {
-            _tweens = new List<ITween>
+            _tweens = new List<ITweenBase>
             {
-                Substitute.For<ITween>(),
-                Substitute.For<ITween>(),
-                Substitute.For<ITween>()
+                Substitute.For<ITweenBase>(),
+                Substitute.For<ITweenBase>(),
+                Substitute.For<ITweenBase>()
             };
         }
 
@@ -53,7 +53,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         public void Equals_OtherWrongTypeAndSameParams_ReturnsFalse()
         {
             SequenceAsync sequenceAsync = Build();
-            Sequence other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, _tweens);
+            Sequence other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null, _tweens);
 
             Assert.AreNotEqual(sequenceAsync, other);
         }
@@ -62,7 +62,7 @@ namespace Editor.Tests.Infrastructure.Tweening
         public void GetHashCode_OtherWrongTypeAndSameParams_DifferentReturnedValue()
         {
             SequenceAsync sequenceAsync = Build();
-            Sequence other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, _tweens);
+            Sequence other = new(true, 0.0f, 0.0f, 0, RepetitionType.Restart, DelayManagement.BeforeAndAfter, DelayManagement.BeforeAndAfter, null, null, null, null, null, null, null, null, null, null, _tweens);
 
             Assert.AreNotEqual(sequenceAsync.GetHashCode(), other.GetHashCode());
         }
@@ -78,6 +78,8 @@ namespace Editor.Tests.Infrastructure.Tweening
                     RepetitionType.Restart,
                     DelayManagement.BeforeAndAfter,
                     DelayManagement.BeforeAndAfter,
+                    null,
+                    null,
                     null,
                     null,
                     null,
