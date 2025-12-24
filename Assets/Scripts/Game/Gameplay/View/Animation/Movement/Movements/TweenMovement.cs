@@ -12,7 +12,7 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
     {
         [NotNull] private readonly ITweenRunner _tweenRunner;
 
-        public ITweenBuilder<Vector3> TweenBuilder { get; }
+        public ITweenBuilder<Transform, Vector3> TweenBuilder { get; }
 
         public TweenMovement(
             [NotNull] ITransformTweenBuilderHelper transformTweenBuilderHelper,
@@ -30,7 +30,14 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
 
             float durationS = GetDurationS(transform.position, end, unitsPerSecond);
 
-            TweenBuilder = transformTweenBuilderHelper.Move(transform, end, durationS).WithOnComplete(onComplete);
+            TweenBuilder = transformTweenBuilderHelper.Move(transform, end, durationS).WithOnComplete(OnComplete);
+
+            return;
+
+            void OnComplete(ITween<Transform, Vector3> _)
+            {
+                onComplete?.Invoke();
+            }
         }
 
         public void Do()

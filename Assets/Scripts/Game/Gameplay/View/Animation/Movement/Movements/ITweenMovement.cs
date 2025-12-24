@@ -7,6 +7,6 @@ namespace Game.Gameplay.View.Animation.Movement.Movements
     public interface ITweenMovement : IMovement
     {
         [NotNull]
-        ITweenBuilder<Vector3> TweenBuilder { get; }
+        ITweenBuilder<Transform, Vector3> TweenBuilder { get; }
     }
 }
