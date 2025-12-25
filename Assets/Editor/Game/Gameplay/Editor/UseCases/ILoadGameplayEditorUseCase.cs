@@ -1,4 +1,4 @@
-namespace Editor.Game.Gameplay.Editor.View.UseCases
+namespace Editor.Game.Gameplay.Editor.UseCases
 {
     public interface ILoadGameplayEditorUseCase
     {
