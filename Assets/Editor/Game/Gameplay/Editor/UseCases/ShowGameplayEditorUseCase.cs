@@ -6,12 +6,12 @@ using UnityEditor;
 
 namespace Editor.Game.Gameplay.Editor.UseCases
 {
-    public class LoadGameplayEditorUseCase : ILoadGameplayEditorUseCase
+    public class ShowGameplayEditorUseCase : IShowGameplayEditorUseCase
     {
         [NotNull] private readonly IGameplayEditorTopMenu _gameplayEditorTopMenu;
         [NotNull] private readonly PieceSpriteContainer _pieceSpriteContainer;
 
-        public LoadGameplayEditorUseCase(
+        public ShowGameplayEditorUseCase(
             [NotNull] IGameplayEditorTopMenu gameplayEditorTopMenu,
             [NotNull] PieceSpriteContainer pieceSpriteContainer)
         {

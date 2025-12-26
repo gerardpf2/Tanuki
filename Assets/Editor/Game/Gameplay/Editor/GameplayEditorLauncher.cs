@@ -23,13 +23,13 @@ namespace Editor.Game.Gameplay.Editor
 
             IGameplayEditorTopMenu gameplayEditorTopMenu = new GameplayEditorTopMenu(newGameplayUseCase);
 
-            ILoadGameplayEditorUseCase loadGameplayEditorUseCase =
-                new LoadGameplayEditorUseCase(
+            IShowGameplayEditorUseCase showGameplayEditorUseCase =
+                new ShowGameplayEditorUseCase(
                     gameplayEditorTopMenu,
                     _pieceSpriteContainer
                 );
 
-            loadGameplayEditorUseCase.Resolve();
+            showGameplayEditorUseCase.Resolve();
         }
 
         [MenuItem("Window/Tanuki/Editor/Game/Gameplay/" + nameof(GameplayEditorLauncher))]
