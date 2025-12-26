@@ -17,7 +17,9 @@ namespace Editor.Game.Gameplay.Editor
         {
             InvalidOperationException.ThrowIfNull(_pieceSpriteContainer);
 
-            INewGameplayUseCase newGameplayUseCase = new NewGameplayUseCase();
+            IShowNewGameplayPopupUseCase showNewGameplayPopupUseCase = new ShowNewGameplayPopupUseCase();
+
+            INewGameplayUseCase newGameplayUseCase = new NewGameplayUseCase(showNewGameplayPopupUseCase);
 
             IGameplayEditorTopMenu gameplayEditorTopMenu = new GameplayEditorTopMenu(newGameplayUseCase);
 

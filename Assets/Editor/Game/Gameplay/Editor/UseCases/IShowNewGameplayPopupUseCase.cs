@@ -1,7 +1,6 @@
 namespace Editor.Game.Gameplay.Editor.UseCases
 {
-    // TODO: Rename
-    public interface ILoadGameplayEditorUseCase
+    public interface IShowNewGameplayPopupUseCase
     {
         void Resolve();
     }
