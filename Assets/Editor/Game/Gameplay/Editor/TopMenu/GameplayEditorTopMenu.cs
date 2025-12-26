@@ -1,3 +1,6 @@
+using Editor.Game.Gameplay.Editor.UseCases;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,6 +8,15 @@ namespace Editor.Game.Gameplay.Editor.TopMenu
 {
     public class GameplayEditorTopMenu : IGameplayEditorTopMenu
     {
+        [NotNull] private readonly INewGameplayUseCase _newGameplayUseCase;
+
+        public GameplayEditorTopMenu([NotNull] INewGameplayUseCase newGameplayUseCase)
+        {
+            ArgumentNullException.ThrowIfNull(newGameplayUseCase);
+
+            _newGameplayUseCase = newGameplayUseCase;
+        }
+
         public void Draw()
         {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
@@ -16,13 +28,13 @@ namespace Editor.Game.Gameplay.Editor.TopMenu
             GUILayout.EndHorizontal();
         }
 
-        private static void DrawNewButton()
+        private void DrawNewButton()
         {
             const string text = "New";
 
             if (GUILayout.Button(text, EditorStyles.toolbarButton))
             {
-                // TODO
+                _newGameplayUseCase.Resolve();
             }
         }
     }
