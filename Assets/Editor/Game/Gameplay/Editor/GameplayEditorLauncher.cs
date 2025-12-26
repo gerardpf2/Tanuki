@@ -1,3 +1,4 @@
+using Editor.Game.Gameplay.Editor.TopMenu;
 using Editor.Game.Gameplay.Editor.UseCases;
 using Game.Common.View.Pieces;
 using Infrastructure.System.Exceptions;
@@ -16,7 +17,13 @@ namespace Editor.Game.Gameplay.Editor
         {
             InvalidOperationException.ThrowIfNull(_pieceSpriteContainer);
 
-            ILoadGameplayEditorUseCase loadGameplayEditorUseCase = new LoadGameplayEditorUseCase(_pieceSpriteContainer);
+            IGameplayEditorTopMenu gameplayEditorTopMenu = new GameplayEditorTopMenu();
+
+            ILoadGameplayEditorUseCase loadGameplayEditorUseCase =
+                new LoadGameplayEditorUseCase(
+                    gameplayEditorTopMenu,
+                    _pieceSpriteContainer
+                );
 
             loadGameplayEditorUseCase.Resolve();
         }

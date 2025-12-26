@@ -10,13 +10,16 @@ namespace Editor.Game.Gameplay.Editor
     {
         private IGameplayEditorTopMenu _gameplayEditorTopMenu;
 
-        public void Initialize([NotNull] PieceSpriteContainer pieceSpriteContainer)
+        public void Initialize(
+            [NotNull] IGameplayEditorTopMenu gameplayEditorTopMenu,
+            [NotNull] PieceSpriteContainer pieceSpriteContainer)
         {
-            ArgumentNullException.ThrowIfNull(pieceSpriteContainer);
-
             // TODO
 
-            _gameplayEditorTopMenu = new GameplayEditorTopMenu();
+            ArgumentNullException.ThrowIfNull(gameplayEditorTopMenu);
+            ArgumentNullException.ThrowIfNull(pieceSpriteContainer);
+
+            _gameplayEditorTopMenu = gameplayEditorTopMenu;
         }
 
         private void OnGUI()
