@@ -16,7 +16,7 @@ namespace Editor.Game.Gameplay.Editor.UseCases
 
         public void Resolve()
         {
-            _showNewGameplayPopupUseCase.Resolve();
+            _showNewGameplayPopupUseCase.Resolve(null); // TODO
         }
     }
 }
