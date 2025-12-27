@@ -25,9 +25,9 @@ namespace Editor.Game.Gameplay.Editor.UseCases
              *
              */
 
-            INewGameplayUseCase newGameplayUseCase = new NewGameplayUseCase();
+            IClearGameplayUseCase clearGameplayUseCase = new ClearGameplayUseCase();
 
-            IGameplayEditorTopMenu gameplayEditorTopMenu = new GameplayEditorTopMenu(newGameplayUseCase);
+            IGameplayEditorTopMenu gameplayEditorTopMenu = new GameplayEditorTopMenu(clearGameplayUseCase);
 
             IShowGameplayEditorUseCase showGameplayEditorUseCase =
                 new ShowGameplayEditorUseCase(

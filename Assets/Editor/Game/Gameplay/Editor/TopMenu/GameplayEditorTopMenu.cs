@@ -8,33 +8,33 @@ namespace Editor.Game.Gameplay.Editor.TopMenu
 {
     public class GameplayEditorTopMenu : IGameplayEditorTopMenu
     {
-        [NotNull] private readonly INewGameplayUseCase _newGameplayUseCase;
+        [NotNull] private readonly IClearGameplayUseCase _clearGameplayUseCase;
 
-        public GameplayEditorTopMenu([NotNull] INewGameplayUseCase newGameplayUseCase)
+        public GameplayEditorTopMenu([NotNull] IClearGameplayUseCase clearGameplayUseCase)
         {
-            ArgumentNullException.ThrowIfNull(newGameplayUseCase);
+            ArgumentNullException.ThrowIfNull(clearGameplayUseCase);
 
-            _newGameplayUseCase = newGameplayUseCase;
+            _clearGameplayUseCase = clearGameplayUseCase;
         }
 
         public void Draw()
         {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
 
-            DrawNewButton();
+            DrawClearButton();
 
             GUILayout.FlexibleSpace();
 
             GUILayout.EndHorizontal();
         }
 
-        private void DrawNewButton()
+        private void DrawClearButton()
         {
-            const string text = "New";
+            const string text = "Clear";
 
             if (GUILayout.Button(text, EditorStyles.toolbarButton))
             {
-                _newGameplayUseCase.Resolve();
+                _clearGameplayUseCase.Resolve();
             }
         }
     }

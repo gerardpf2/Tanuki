@@ -1,6 +1,6 @@
 namespace Editor.Game.Gameplay.Editor.UseCases
 {
-    public interface INewGameplayUseCase
+    public interface IClearGameplayUseCase
     {
         void Resolve();
     }
