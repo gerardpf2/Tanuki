@@ -9,17 +9,25 @@ namespace Editor.Game.Gameplay.Editor
     public class GameplayEditorWindow : EditorWindow
     {
         private IGameplayEditorTopMenu _gameplayEditorTopMenu;
+        private PieceSpriteContainer _pieceSpriteContainer; // TODO
 
         public void Initialize(
             [NotNull] IGameplayEditorTopMenu gameplayEditorTopMenu,
             [NotNull] PieceSpriteContainer pieceSpriteContainer)
         {
-            // TODO
-
             ArgumentNullException.ThrowIfNull(gameplayEditorTopMenu);
             ArgumentNullException.ThrowIfNull(pieceSpriteContainer);
 
+            Uninitialize();
+
             _gameplayEditorTopMenu = gameplayEditorTopMenu;
+            _pieceSpriteContainer = pieceSpriteContainer;
+        }
+
+        private void Uninitialize()
+        {
+            _gameplayEditorTopMenu = null;
+            _pieceSpriteContainer = null;
         }
 
         private void OnGUI()

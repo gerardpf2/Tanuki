@@ -24,11 +24,6 @@ namespace Editor.Game.Gameplay.Editor.UseCases
 
         public void Resolve()
         {
-            if (EditorWindow.HasOpenInstances<GameplayEditorWindow>())
-            {
-                return;
-            }
-
             GameplayEditorWindow gameplayEditorWindow = EditorWindow.GetWindow<GameplayEditorWindow>();
 
             InvalidOperationException.ThrowIfNull(gameplayEditorWindow);
