@@ -1,4 +1,3 @@
-using Editor.Game.Gameplay.Editor.TopMenu;
 using Editor.Game.Gameplay.Editor.UseCases;
 using Game.Common.View.Pieces;
 using Infrastructure.System.Exceptions;
@@ -17,17 +16,12 @@ namespace Editor.Game.Gameplay.Editor
         {
             InvalidOperationException.ThrowIfNull(_pieceSpriteContainer);
 
-            INewGameplayUseCase newGameplayUseCase = new NewGameplayUseCase();
-
-            IGameplayEditorTopMenu gameplayEditorTopMenu = new GameplayEditorTopMenu(newGameplayUseCase);
-
-            IShowGameplayEditorUseCase showGameplayEditorUseCase =
-                new ShowGameplayEditorUseCase(
-                    gameplayEditorTopMenu,
+            ILaunchGameplayEditorUseCase launchGameplayEditorUseCase =
+                new LaunchGameplayEditorUseCase(
                     _pieceSpriteContainer
                 );
 
-            showGameplayEditorUseCase.Resolve();
+            launchGameplayEditorUseCase.Resolve();
         }
 
         [MenuItem("Window/Tanuki/Editor/Game/Gameplay/" + nameof(GameplayEditorLauncher))]
