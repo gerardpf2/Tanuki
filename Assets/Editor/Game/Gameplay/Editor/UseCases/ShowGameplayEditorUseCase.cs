@@ -1,5 +1,4 @@
 using Editor.Game.Gameplay.Editor.TopMenu;
-using Game.Common.View.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEditor;
@@ -9,17 +8,12 @@ namespace Editor.Game.Gameplay.Editor.UseCases
     public class ShowGameplayEditorUseCase : IShowGameplayEditorUseCase
     {
         [NotNull] private readonly IGameplayEditorTopMenu _gameplayEditorTopMenu;
-        [NotNull] private readonly PieceSpriteContainer _pieceSpriteContainer;
 
-        public ShowGameplayEditorUseCase(
-            [NotNull] IGameplayEditorTopMenu gameplayEditorTopMenu,
-            [NotNull] PieceSpriteContainer pieceSpriteContainer)
+        public ShowGameplayEditorUseCase([NotNull] IGameplayEditorTopMenu gameplayEditorTopMenu)
         {
             ArgumentNullException.ThrowIfNull(gameplayEditorTopMenu);
-            ArgumentNullException.ThrowIfNull(pieceSpriteContainer);
 
             _gameplayEditorTopMenu = gameplayEditorTopMenu;
-            _pieceSpriteContainer = pieceSpriteContainer;
         }
 
         public void Resolve()
@@ -28,7 +22,7 @@ namespace Editor.Game.Gameplay.Editor.UseCases
 
             InvalidOperationException.ThrowIfNull(gameplayEditorWindow);
 
-            gameplayEditorWindow.Initialize(_gameplayEditorTopMenu, _pieceSpriteContainer);
+            gameplayEditorWindow.Initialize(_gameplayEditorTopMenu);
         }
     }
 }

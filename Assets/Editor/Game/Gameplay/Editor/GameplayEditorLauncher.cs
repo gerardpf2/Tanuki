@@ -9,15 +9,18 @@ namespace Editor.Game.Gameplay.Editor
     [CreateAssetMenu(fileName = nameof(GameplayEditorLauncher), menuName = "Tanuki/Editor/Game/Gameplay/" + nameof(GameplayEditorLauncher))]
     public class GameplayEditorLauncher : ScriptableObject
     {
+        [SerializeField] private GameplayEditorParametersContainer _gameplayEditorParametersContainer;
         [SerializeField] private PieceSpriteContainer _pieceSpriteContainer;
 
         [ContextMenu(nameof(Launch))]
         public void Launch()
         {
+            InvalidOperationException.ThrowIfNull(_gameplayEditorParametersContainer);
             InvalidOperationException.ThrowIfNull(_pieceSpriteContainer);
 
             ILaunchGameplayEditorUseCase launchGameplayEditorUseCase =
                 new LaunchGameplayEditorUseCase(
+                    _gameplayEditorParametersContainer,
                     _pieceSpriteContainer
                 );
 

@@ -7,12 +7,17 @@ namespace Editor.Game.Gameplay.Editor.UseCases
 {
     public class LaunchGameplayEditorUseCase : ILaunchGameplayEditorUseCase
     {
-        [NotNull] private readonly PieceSpriteContainer _pieceSpriteContainer;
+        [NotNull] private readonly IGameplayEditorParametersGetter _gameplayEditorParametersGetter; // TODO
+        [NotNull] private readonly PieceSpriteContainer _pieceSpriteContainer; // TODO
 
-        public LaunchGameplayEditorUseCase([NotNull] PieceSpriteContainer pieceSpriteContainer)
+        public LaunchGameplayEditorUseCase(
+            [NotNull] IGameplayEditorParametersGetter gameplayEditorParametersGetter,
+            [NotNull] PieceSpriteContainer pieceSpriteContainer)
         {
+            ArgumentNullException.ThrowIfNull(gameplayEditorParametersGetter);
             ArgumentNullException.ThrowIfNull(pieceSpriteContainer);
 
+            _gameplayEditorParametersGetter = gameplayEditorParametersGetter;
             _pieceSpriteContainer = pieceSpriteContainer;
         }
 
@@ -29,11 +34,7 @@ namespace Editor.Game.Gameplay.Editor.UseCases
 
             IGameplayEditorTopMenu gameplayEditorTopMenu = new GameplayEditorTopMenu(clearGameplayUseCase);
 
-            IShowGameplayEditorUseCase showGameplayEditorUseCase =
-                new ShowGameplayEditorUseCase(
-                    gameplayEditorTopMenu,
-                    _pieceSpriteContainer
-                );
+            IShowGameplayEditorUseCase showGameplayEditorUseCase = new ShowGameplayEditorUseCase(gameplayEditorTopMenu);
 
             showGameplayEditorUseCase.Resolve();
         }
