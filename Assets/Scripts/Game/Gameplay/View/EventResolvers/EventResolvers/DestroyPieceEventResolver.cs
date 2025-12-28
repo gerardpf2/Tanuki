@@ -10,6 +10,8 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 {
     public class DestroyPieceEventResolver : EventResolver<DestroyPieceEvent>
     {
+        private const float SecondsBetweenInstantiateDecomposeActions = 0.05f;
+
         [NotNull] private readonly IActionFactory _actionFactory;
         [NotNull] private readonly IEventResolverFactory _eventResolverFactory;
 
@@ -70,7 +72,11 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             IEnumerable<IAction> instantiatePieceEventActions = instantiatePieceEventsDecompose.Select(GetInstantiatePieceEventAction);
 
-            return _actionFactory.GetParallelActionGroup(instantiatePieceEventActions);
+            return
+                _actionFactory.GetParallelActionGroup(
+                    instantiatePieceEventActions,
+                    SecondsBetweenInstantiateDecomposeActions
+                );
         }
 
         [NotNull]
