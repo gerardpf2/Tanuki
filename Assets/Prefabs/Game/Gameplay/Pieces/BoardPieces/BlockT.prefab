@@ -48,9 +48,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4004130617415279772, guid: 07c3415e024819c4c91a83d3c31d7177, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4976698063326977117, guid: 07c3415e024819c4c91a83d3c31d7177, type: 3}
       propertyPath: m_Name
-      value: Block
+      value: BlockT
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
