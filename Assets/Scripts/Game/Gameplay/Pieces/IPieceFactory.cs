@@ -54,6 +54,12 @@ namespace Game.Gameplay.Pieces
         IPiece GetTato();
 
         [NotNull]
+        IPiece GetTata();
+
+        [NotNull]
+        IPiece GetTete();
+
+        [NotNull]
         IPiece GetTest();
     }
 }

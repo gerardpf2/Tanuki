@@ -99,6 +99,16 @@ namespace Game.Gameplay.Pieces
             return new Tato(_converter, GetNewPieceId());
         }
 
+        public IPiece GetTata()
+        {
+            return new Tata(_converter, GetNewPieceId());
+        }
+
+        public IPiece GetTete()
+        {
+            return new Tete(_converter, GetNewPieceId());
+        }
+
         public IPiece GetTest()
         {
             return new Test(_converter, GetNewPieceId());

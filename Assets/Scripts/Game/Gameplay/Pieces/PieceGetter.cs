@@ -76,6 +76,12 @@ namespace Game.Gameplay.Pieces
                 case PieceType.Tato:
                     piece = _pieceFactory.GetTato();
                     break;
+                case PieceType.Tata:
+                    piece = _pieceFactory.GetTata();
+                    break;
+                case PieceType.Tete:
+                    piece = _pieceFactory.GetTete();
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(pieceType);
                     return null;
