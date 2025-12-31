@@ -117,7 +117,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 201213735923379914, guid: c65d1f20fa9143742812acf55056587b, type: 3}
       propertyPath: _key
-      value: BoardEditorViewData
+      value: BoardViewData
       objectReference: {fileID: 0}
     - target: {fileID: 201213735923379914, guid: c65d1f20fa9143742812acf55056587b, type: 3}
       propertyPath: _viewModel
