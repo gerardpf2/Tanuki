@@ -6,7 +6,6 @@ using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Phases;
-using Game.Gameplay.Phases.Composition;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
@@ -16,6 +15,7 @@ using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Player;
 using Game.Gameplay.View.Player.Composition;
 using Game.Gameplay.View.Player.Input.ActionHandlers;
+using Game.GameplayEditor.Phases.Composition;
 using Game.GameplayEditor.View.REMOVE;
 using Game.GameplayEditor.View.UseCases;
 using Infrastructure.DependencyInjection;
@@ -84,7 +84,7 @@ namespace Game.GameplayEditor.View.Composition
                         r.Resolve<IPieceIdGetter>(),
                         r.Resolve<ICamera>(),
                         r.Resolve<IGameplayParser>(),
-                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Initial),
+                        r.Resolve<IPhaseContainer>(PhasesEditorComposerKeys.PhaseContainer.InitialEditor),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
