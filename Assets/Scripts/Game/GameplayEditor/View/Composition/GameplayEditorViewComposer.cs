@@ -1,3 +1,21 @@
+using Game.Gameplay;
+using Game.Gameplay.Bag;
+using Game.Gameplay.Board;
+using Game.Gameplay.Camera;
+using Game.Gameplay.Goals;
+using Game.Gameplay.Moves;
+using Game.Gameplay.Parsing;
+using Game.Gameplay.Phases;
+using Game.Gameplay.Phases.Composition;
+using Game.Gameplay.Pieces;
+using Game.Gameplay.View.Board;
+using Game.Gameplay.View.Camera;
+using Game.Gameplay.View.EventResolvers;
+using Game.Gameplay.View.Goals;
+using Game.Gameplay.View.Moves;
+using Game.Gameplay.View.Player;
+using Game.Gameplay.View.Player.Composition;
+using Game.Gameplay.View.Player.Input.ActionHandlers;
 using Game.GameplayEditor.View.REMOVE;
 using Game.GameplayEditor.View.UseCases;
 using Infrastructure.DependencyInjection;
@@ -20,6 +38,23 @@ namespace Game.GameplayEditor.View.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayEditorUseCase>(r =>
                     new UnloadGameplayEditorUseCase(
+                        r.Resolve<IBag>(),
+                        r.Resolve<IBoard>(),
+                        r.Resolve<IPieceIdGetter>(),
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IGoals>(),
+                        r.Resolve<IMoves>(),
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraView>(),
+                        r.Resolve<IGoalsView>(),
+                        r.Resolve<IMovesView>(),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Lock),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveLeft),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>(),
+                        r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
                 )
@@ -45,6 +80,22 @@ namespace Game.GameplayEditor.View.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadGameplayEditorUseCase>(r =>
                     new LoadGameplayEditorUseCase(
+                        r.Resolve<IGameplayDefinitionGetter>(),
+                        r.Resolve<IPieceIdGetter>(),
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IGameplayParser>(),
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Initial),
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraView>(),
+                        r.Resolve<IGoalsView>(),
+                        r.Resolve<IMovesView>(),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Lock),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveLeft),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>(),
+                        r.Resolve<IEventsResolver>(),
                         r.Resolve<IScreenLoader>()
                     )
                 )
