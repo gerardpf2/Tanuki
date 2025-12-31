@@ -30,6 +30,7 @@ using Game.Gameplay.View.Player.Composition;
 using Game.Gameplay.View.Player.Input.ActionHandlers;
 using Game.Gameplay.View.REMOVE;
 using Game.Gameplay.View.UseCases;
+using Game.GameplayEditor.Composition;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -138,7 +139,8 @@ namespace Game.Gameplay.View.Composition
                 .Append(new GoalsComposer())
                 .Append(new MovesComposer())
                 .Append(new PiecesComposer(_pieceViewDefinitionGetter))
-                .Append(new PlayerComposer());
+                .Append(new PlayerComposer())
+                .Append(new GameplayEditorComposer());
         }
     }
 }
