@@ -7,18 +7,18 @@ namespace Game.GameplayEditor.View
 {
     public class GameplayEditorViewModel : ViewModel, IDataSettable<GameplayEditorViewData>
     {
-        [NotNull] private readonly IBoundProperty<BoardViewData> _boardViewData = new BoundProperty<BoardViewData>("BoardViewData");
+        [NotNull] private readonly IBoundProperty<BoardViewData> _boardEditorViewData = new BoundProperty<BoardViewData>("BoardEditorViewData");
 
         private void Awake()
         {
-            Add(_boardViewData);
+            Add(_boardEditorViewData);
         }
 
         public void SetData([NotNull] GameplayEditorViewData data)
         {
             ArgumentNullException.ThrowIfNull(data);
 
-            _boardViewData.Value = new BoardViewData(data.OnReady);
+            _boardEditorViewData.Value = new BoardViewData(data.OnReady);
         }
     }
 }
