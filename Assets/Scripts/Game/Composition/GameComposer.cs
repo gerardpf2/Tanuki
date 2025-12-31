@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Gameplay.View.UseCases;
+using Game.GameplayEditor.View.UseCases;
 using Game.REMOVE;
 using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
@@ -38,7 +39,8 @@ namespace Game.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<Load>((r, s) =>
                     s.Inject(
-                        r.Resolve<ILoadGameplayUseCase>()
+                        r.Resolve<ILoadGameplayUseCase>(),
+                        r.Resolve<ILoadGameplayEditorUseCase>()
                     )
                 )
             );

@@ -16,3 +16,6 @@ MonoBehaviour:
   - _key: Gameplay
     _prefab: {fileID: 3684324466126848570, guid: c65d1f20fa9143742812acf55056587b, type: 3}
     _placementKey: Root
+  - _key: GameplayEditor
+    _prefab: {fileID: 8872905435122912901, guid: 61da663b2504d2d45bf0f3ee5357b6c0, type: 3}
+    _placementKey: Root
