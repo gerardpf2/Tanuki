@@ -1,3 +1,4 @@
+using Game.GameplayEditor.View.REMOVE;
 using Game.GameplayEditor.View.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
@@ -31,6 +32,14 @@ namespace Game.GameplayEditor.View.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddSharedRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<UnloadGameplayEditor>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IUnloadGameplayEditorUseCase>()
+                    )
+                )
+            );
 
             // Shared so it can be loaded from anywhere
             ruleAdder.Add(
