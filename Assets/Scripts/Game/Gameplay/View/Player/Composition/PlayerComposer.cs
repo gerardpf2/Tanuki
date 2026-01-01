@@ -117,7 +117,8 @@ namespace Game.Gameplay.View.Player.Composition
                         r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Lock),
                         r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveLeft),
                         r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
-                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate)
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.SwapCurrentNext)
                     )
                 )
             );

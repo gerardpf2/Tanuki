@@ -13,11 +13,13 @@ namespace Game.Gameplay.View.Player.Input
         private IPlayerInputActionHandler _moveLeftPlayerInputActionHandler;
         private IPlayerInputActionHandler _moveRightPlayerInputActionHandler;
         private IPlayerInputActionHandler _rotatePlayerInputActionHandler;
+        private IPlayerInputActionHandler _swapCurrentNextPlayerInputActionHandler;
 
         [NotNull] private readonly IBoundProperty<ButtonViewData> _lock = new BoundProperty<ButtonViewData>("LockButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _moveLeft = new BoundProperty<ButtonViewData>("MoveLeftButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _moveRight = new BoundProperty<ButtonViewData>("MoveRightButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _rotate = new BoundProperty<ButtonViewData>("RotateButtonViewData");
+        [NotNull] private readonly IBoundProperty<ButtonViewData> _swapCurrentNext = new BoundProperty<ButtonViewData>("SwapCurrentNextButtonViewData");
 
         private void Awake()
         {
@@ -31,6 +33,7 @@ namespace Game.Gameplay.View.Player.Input
             UpdateMoveLeftEnabled();
             UpdateMoveRightEnabled();
             UpdateRotateEnabled();
+            UpdateSwapCurrentNextEnabled();
         }
 
         private void OnDestroy()
@@ -42,17 +45,20 @@ namespace Game.Gameplay.View.Player.Input
             [NotNull] IPlayerInputActionHandler lockPlayerInputActionHandler,
             [NotNull] IPlayerInputActionHandler moveLeftPlayerInputActionHandler,
             [NotNull] IPlayerInputActionHandler moveRightPlayerInputActionHandler,
-            [NotNull] IPlayerInputActionHandler rotatePlayerInputActionHandler)
+            [NotNull] IPlayerInputActionHandler rotatePlayerInputActionHandler,
+            [NotNull] IPlayerInputActionHandler swapCurrentNextPlayerInputActionHandler)
         {
             ArgumentNullException.ThrowIfNull(lockPlayerInputActionHandler);
             ArgumentNullException.ThrowIfNull(moveLeftPlayerInputActionHandler);
             ArgumentNullException.ThrowIfNull(moveRightPlayerInputActionHandler);
             ArgumentNullException.ThrowIfNull(rotatePlayerInputActionHandler);
+            ArgumentNullException.ThrowIfNull(swapCurrentNextPlayerInputActionHandler);
 
             _lockPlayerInputActionHandler = lockPlayerInputActionHandler;
             _moveLeftPlayerInputActionHandler = moveLeftPlayerInputActionHandler;
             _moveRightPlayerInputActionHandler = moveRightPlayerInputActionHandler;
             _rotatePlayerInputActionHandler = rotatePlayerInputActionHandler;
+            _swapCurrentNextPlayerInputActionHandler = swapCurrentNextPlayerInputActionHandler;
         }
 
         private void InitializeBindings()
@@ -61,6 +67,7 @@ namespace Game.Gameplay.View.Player.Input
             _moveLeft.Value = new ButtonViewData(HandleMoveLeftClick);
             _moveRight.Value = new ButtonViewData(HandleMoveRightClick);
             _rotate.Value = new ButtonViewData(HandleRotateClick);
+            _swapCurrentNext.Value = new ButtonViewData(HandleSwapCurrentNextClick);
         }
 
         private void AddBindings()
@@ -69,6 +76,7 @@ namespace Game.Gameplay.View.Player.Input
             Add(_moveLeft);
             Add(_moveRight);
             Add(_rotate);
+            Add(_swapCurrentNext);
         }
 
         private void SubscribeToEvents()
@@ -77,6 +85,7 @@ namespace Game.Gameplay.View.Player.Input
             InvalidOperationException.ThrowIfNull(_moveLeftPlayerInputActionHandler);
             InvalidOperationException.ThrowIfNull(_moveRightPlayerInputActionHandler);
             InvalidOperationException.ThrowIfNull(_rotatePlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_swapCurrentNextPlayerInputActionHandler);
 
             UnsubscribeFromEvents();
 
@@ -84,6 +93,7 @@ namespace Game.Gameplay.View.Player.Input
             _moveLeftPlayerInputActionHandler.OnAvailableUpdated += HandleMoveLeftActionAvailableUpdated;
             _moveRightPlayerInputActionHandler.OnAvailableUpdated += HandleMoveRightActionAvailableUpdated;
             _rotatePlayerInputActionHandler.OnAvailableUpdated += HandleRotateActionAvailableUpdated;
+            _swapCurrentNextPlayerInputActionHandler.OnAvailableUpdated += HandleSwapCurrentNextActionAvailableUpdated;
         }
 
         private void UnsubscribeFromEvents()
@@ -92,11 +102,13 @@ namespace Game.Gameplay.View.Player.Input
             InvalidOperationException.ThrowIfNull(_moveLeftPlayerInputActionHandler);
             InvalidOperationException.ThrowIfNull(_moveRightPlayerInputActionHandler);
             InvalidOperationException.ThrowIfNull(_rotatePlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_swapCurrentNextPlayerInputActionHandler);
 
             _lockPlayerInputActionHandler.OnAvailableUpdated -= HandleLockActionAvailableUpdated;
             _moveLeftPlayerInputActionHandler.OnAvailableUpdated -= HandleMoveLeftActionAvailableUpdated;
             _moveRightPlayerInputActionHandler.OnAvailableUpdated -= HandleMoveRightActionAvailableUpdated;
             _rotatePlayerInputActionHandler.OnAvailableUpdated -= HandleRotateActionAvailableUpdated;
+            _swapCurrentNextPlayerInputActionHandler.OnAvailableUpdated -= HandleSwapCurrentNextActionAvailableUpdated;
         }
 
         private void HandleLockClick()
@@ -127,6 +139,13 @@ namespace Game.Gameplay.View.Player.Input
             _rotatePlayerInputActionHandler.Resolve();
         }
 
+        private void HandleSwapCurrentNextClick()
+        {
+            InvalidOperationException.ThrowIfNull(_swapCurrentNextPlayerInputActionHandler);
+
+            _swapCurrentNextPlayerInputActionHandler.Resolve();
+        }
+
         private void HandleLockActionAvailableUpdated()
         {
             UpdateLockEnabled();
@@ -145,6 +164,11 @@ namespace Game.Gameplay.View.Player.Input
         private void HandleRotateActionAvailableUpdated()
         {
             UpdateRotateEnabled();
+        }
+
+        private void HandleSwapCurrentNextActionAvailableUpdated()
+        {
+            UpdateSwapCurrentNextEnabled();
         }
 
         private void UpdateLockEnabled()
@@ -177,6 +201,14 @@ namespace Game.Gameplay.View.Player.Input
             InvalidOperationException.ThrowIfNull(_rotate.Value);
 
             UpdateButtonEnabled(_rotate.Value, _rotatePlayerInputActionHandler);
+        }
+
+        private void UpdateSwapCurrentNextEnabled()
+        {
+            InvalidOperationException.ThrowIfNull(_swapCurrentNextPlayerInputActionHandler);
+            InvalidOperationException.ThrowIfNull(_swapCurrentNext.Value);
+
+            UpdateButtonEnabled(_swapCurrentNext.Value, _swapCurrentNextPlayerInputActionHandler);
         }
 
         private static void UpdateButtonEnabled(

@@ -35,6 +35,7 @@ namespace Game.Gameplay.View.UseCases
         [NotNull] private readonly IPlayerInputActionHandler _moveLeftPlayerInputActionHandler;
         [NotNull] private readonly IPlayerInputActionHandler _moveRightPlayerInputActionHandler;
         [NotNull] private readonly IPlayerInputActionHandler _rotatePlayerInputActionHandler;
+        [NotNull] private readonly IPlayerInputActionHandler _swapCurrentNextPlayerInputActionHandler;
         [NotNull] private readonly IPlayerPieceGhostView _playerPieceGhostView;
         [NotNull] private readonly IPlayerPieceView _playerPieceView;
         [NotNull] private readonly IEventsResolver _eventsResolver;
@@ -56,6 +57,7 @@ namespace Game.Gameplay.View.UseCases
             [NotNull] IPlayerInputActionHandler moveLeftPlayerInputActionHandler,
             [NotNull] IPlayerInputActionHandler moveRightPlayerInputActionHandler,
             [NotNull] IPlayerInputActionHandler rotatePlayerInputActionHandler,
+            [NotNull] IPlayerInputActionHandler swapCurrentNextPlayerInputActionHandler,
             [NotNull] IPlayerPieceGhostView playerPieceGhostView,
             [NotNull] IPlayerPieceView playerPieceView,
             [NotNull] IEventsResolver eventsResolver,
@@ -76,6 +78,7 @@ namespace Game.Gameplay.View.UseCases
             ArgumentNullException.ThrowIfNull(moveLeftPlayerInputActionHandler);
             ArgumentNullException.ThrowIfNull(moveRightPlayerInputActionHandler);
             ArgumentNullException.ThrowIfNull(rotatePlayerInputActionHandler);
+            ArgumentNullException.ThrowIfNull(swapCurrentNextPlayerInputActionHandler);
             ArgumentNullException.ThrowIfNull(playerPieceGhostView);
             ArgumentNullException.ThrowIfNull(playerPieceView);
             ArgumentNullException.ThrowIfNull(eventsResolver);
@@ -96,6 +99,7 @@ namespace Game.Gameplay.View.UseCases
             _moveLeftPlayerInputActionHandler = moveLeftPlayerInputActionHandler;
             _moveRightPlayerInputActionHandler = moveRightPlayerInputActionHandler;
             _rotatePlayerInputActionHandler = rotatePlayerInputActionHandler;
+            _swapCurrentNextPlayerInputActionHandler = swapCurrentNextPlayerInputActionHandler;
             _playerPieceGhostView = playerPieceGhostView;
             _playerPieceView = playerPieceView;
             _eventsResolver = eventsResolver;
@@ -131,6 +135,7 @@ namespace Game.Gameplay.View.UseCases
             _moveLeftPlayerInputActionHandler.Uninitialize();
             _moveRightPlayerInputActionHandler.Uninitialize();
             _rotatePlayerInputActionHandler.Uninitialize();
+            _swapCurrentNextPlayerInputActionHandler.Uninitialize();
             _playerPieceGhostView.Uninitialize();
             _playerPieceView.Uninitialize();
             _eventsResolver.Uninitialize();
