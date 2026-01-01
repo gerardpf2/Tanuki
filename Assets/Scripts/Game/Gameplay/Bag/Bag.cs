@@ -17,14 +17,7 @@ namespace Game.Gameplay.Bag
 
         [NotNull, ItemNotNull] private readonly ICollection<BagPieceEntry> _bagPieceEntries = new List<BagPieceEntry>(); // ItemNotNull as long as all Add check for null
         [NotNull] private readonly List<PieceType> _initialPieceTypes = new();
-
-        /*
-         *
-         * ItemNotNull as long as added items come from piece getter
-         * Reverse order because add / remove last should be more efficient than first
-         *
-         */
-        [NotNull, ItemNotNull] private readonly IList<IPiece> _pieces = new List<IPiece>();
+        [NotNull, ItemNotNull] private readonly LinkedList<IPiece> _pieces = new(); // ItemNotNull as long as added items come from piece getter
 
         public IEnumerable<BagPieceEntry> BagPieceEntries => _bagPieceEntries;
 
@@ -34,12 +27,43 @@ namespace Game.Gameplay.Bag
         {
             get
             {
-                if (_pieces.Count == 0)
-                {
-                    InvalidOperationException.Throw("Cannot be empty");
-                }
+                LinkedListNode<IPiece> first = _pieces.First;
 
-                return _pieces[^1];
+                InvalidOperationException.ThrowIfNull(first);
+
+                return first.Value;
+            }
+            private set
+            {
+                ArgumentNullException.ThrowIfNull(value);
+
+                LinkedListNode<IPiece> first = _pieces.First;
+
+                InvalidOperationException.ThrowIfNull(first);
+
+                first.Value = value;
+            }
+        }
+
+        public IPiece Next
+        {
+            get
+            {
+                LinkedListNode<IPiece> second = _pieces.First?.Next;
+
+                InvalidOperationException.ThrowIfNull(second);
+
+                return second.Value;
+            }
+            private set
+            {
+                ArgumentNullException.ThrowIfNull(value);
+
+                LinkedListNode<IPiece> second = _pieces.First?.Next;
+
+                InvalidOperationException.ThrowIfNull(second);
+
+                second.Value = value;
             }
         }
 
@@ -51,7 +75,7 @@ namespace Game.Gameplay.Bag
         }
 
         public void Build(
-            [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries,
+            [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries, // TODO: Not empty
             [NotNull] IEnumerable<PieceType> initialPieceTypes)
         {
             ArgumentNullException.ThrowIfNull(bagPieceEntries);
@@ -66,31 +90,28 @@ namespace Game.Gameplay.Bag
                 _bagPieceEntries.Add(bagPieceEntry);
             }
 
-            Refill();
-
             _initialPieceTypes.AddRange(initialPieceTypes);
 
-            for (int i = _initialPieceTypes.Count - 1; i >= 0; --i)
+            foreach (PieceType initialPieceType in _initialPieceTypes)
             {
-                IPiece piece = GetPiece(_initialPieceTypes[i]);
+                IPiece piece = GetPiece(initialPieceType);
 
-                _pieces.Add(piece);
+                _pieces.AddLast(piece);
             }
+
+            RefillIfNeeded();
         }
 
         public void ConsumeCurrent()
         {
-            if (_pieces.Count == 0)
-            {
-                InvalidOperationException.Throw("Cannot be empty");
-            }
+            _pieces.RemoveFirst();
 
-            _pieces.RemoveAt(_pieces.Count - 1);
+            RefillIfNeeded();
+        }
 
-            if (_pieces.Count == 0)
-            {
-                Refill();
-            }
+        public void SwapCurrentNext()
+        {
+            (Current, Next) = (Next, Current);
         }
 
         public void Clear()
@@ -100,24 +121,38 @@ namespace Game.Gameplay.Bag
             _pieces.Clear();
         }
 
-        private void Refill()
+        private void RefillIfNeeded()
         {
-            foreach (BagPieceEntry bagPieceEntry in _bagPieceEntries)
-            {
-                for (int i = 0; i < bagPieceEntry.Amount; ++i)
-                {
-                    IPiece piece = GetPiece(bagPieceEntry.PieceType);
+            const int minCount = 2; // Current, Next
 
-                    _pieces.Add(piece);
-                }
+            while (_pieces.Count < minCount)
+            {
+                Refill();
             }
 
-            Shuffle();
-        }
+            return;
 
-        private void Shuffle()
-        {
-            _pieces.Shuffle(_random);
+            void Refill()
+            {
+                IList<IPiece> newPieces = new List<IPiece>();
+
+                foreach (BagPieceEntry bagPieceEntry in _bagPieceEntries)
+                {
+                    for (int i = 0; i < bagPieceEntry.Amount; ++i)
+                    {
+                        IPiece piece = GetPiece(bagPieceEntry.PieceType);
+
+                        newPieces.Add(piece);
+                    }
+                }
+
+                newPieces.Shuffle(_random);
+
+                foreach (IPiece piece in newPieces)
+                {
+                    _pieces.AddLast(piece);
+                }
+            }
         }
 
         [NotNull]
