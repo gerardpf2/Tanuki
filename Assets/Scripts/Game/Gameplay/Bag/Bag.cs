@@ -75,7 +75,7 @@ namespace Game.Gameplay.Bag
         }
 
         public void Build(
-            [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries, // TODO: Not empty
+            [NotNull, ItemNotNull] IEnumerable<BagPieceEntry> bagPieceEntries,
             [NotNull] IEnumerable<PieceType> initialPieceTypes)
         {
             ArgumentNullException.ThrowIfNull(bagPieceEntries);
@@ -88,6 +88,11 @@ namespace Game.Gameplay.Bag
                 ArgumentNullException.ThrowIfNull(bagPieceEntry);
 
                 _bagPieceEntries.Add(bagPieceEntry);
+            }
+
+            if (_bagPieceEntries.Count <= 0)
+            {
+                InvalidOperationException.Throw("Bag piece entries cannot be empty");
             }
 
             _initialPieceTypes.AddRange(initialPieceTypes);
@@ -127,12 +132,12 @@ namespace Game.Gameplay.Bag
 
             while (_pieces.Count < minCount)
             {
-                Refill();
+                RefillStep();
             }
 
             return;
 
-            void Refill()
+            void RefillStep()
             {
                 IList<IPiece> newPieces = new List<IPiece>();
 
