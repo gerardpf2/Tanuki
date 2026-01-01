@@ -71,6 +71,18 @@ namespace Game.Gameplay.View.Player.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
+                    new SwapCurrentNextPlayerInputActionHandler(
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.SwapCurrentNext),
+                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>()
+                    )
+                ),
+                PlayerComposerKeys.PlayerInputActionHandler.SwapCurrentNext
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerPieceGhostView>(r =>
                     new PlayerPieceGhostView(
                         r.Resolve<IPieceViewDefinitionGetter>(),

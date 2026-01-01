@@ -6,6 +6,7 @@ namespace Game.Gameplay.Phases
         Lock,
         MoveLeft,
         MoveRight,
-        Rotate
+        Rotate,
+        SwapCurrentNext
     }
 }

@@ -156,6 +156,16 @@ namespace Game.Gameplay.Phases.Composition
                 PhasesComposerKeys.PhaseContainer.Move
             );
 
+            // TODO
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhaseContainer>(r =>
+                    new PhaseContainer(
+                        r.Resolve<IPhaseResolver>()
+                    )
+                ),
+                PhasesComposerKeys.PhaseContainer.SwapCurrentNext
+            );
+
             ruleAdder.Add(ruleFactory.GetSingleton<IPhaseResolver>(_ => new PhaseResolver()));
         }
     }

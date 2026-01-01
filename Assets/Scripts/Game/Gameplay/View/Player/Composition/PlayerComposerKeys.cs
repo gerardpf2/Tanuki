@@ -8,6 +8,7 @@ namespace Game.Gameplay.View.Player.Composition
             public const string MoveLeft = nameof(MoveLeft);
             public const string MoveRight = nameof(MoveRight);
             public const string Rotate = nameof(Rotate);
+            public const string SwapCurrentNext = nameof(SwapCurrentNext);
         }
     }
 }
