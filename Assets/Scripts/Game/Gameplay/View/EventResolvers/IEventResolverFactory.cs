@@ -28,6 +28,12 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<DestroyPieceEvent> GetDestroyPieceEventResolver();
 
         [NotNull]
+        IEventResolver<DestroyPlayerPieceEvent> GetDestroyPlayerPieceEventResolver();
+
+        [NotNull]
+        IEventResolver<DestroyPlayerPieceGhostEvent> GetDestroyPlayerPieceGhostEventResolver();
+
+        [NotNull]
         IEventResolver<MovePieceEvent> GetMovePieceEventResolver();
 
         [NotNull]

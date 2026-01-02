@@ -44,6 +44,12 @@ namespace Game.Gameplay.View.EventResolvers
                 case DestroyPieceEvent destroyPieceEvent:
                     _eventResolverFactory.GetDestroyPieceEventResolver().Resolve(destroyPieceEvent, onComplete);
                     break;
+                case DestroyPlayerPieceEvent destroyPlayerPieceEvent:
+                    _eventResolverFactory.GetDestroyPlayerPieceEventResolver().Resolve(destroyPlayerPieceEvent, onComplete);
+                    break;
+                case DestroyPlayerPieceGhostEvent destroyPlayerPieceGhostEventEvent:
+                    _eventResolverFactory.GetDestroyPlayerPieceGhostEventResolver().Resolve(destroyPlayerPieceGhostEventEvent, onComplete);
+                    break;
                 case MovePieceEvent movePieceEvent:
                     _eventResolverFactory.GetMovePieceEventResolver().Resolve(movePieceEvent, onComplete);
                     break;
