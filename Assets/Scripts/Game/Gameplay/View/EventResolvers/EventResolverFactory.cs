@@ -65,7 +65,7 @@ namespace Game.Gameplay.View.EventResolvers
 
         public IEventResolver<DestroyPlayerPieceEvent> GetDestroyPlayerPieceEventResolver()
         {
-            return new DestroyPlayerPieceEventResolver(_actionFactory);
+            return new DestroyPlayerPieceEventResolver(_actionFactory, this);
         }
 
         public IEventResolver<DestroyPlayerPieceGhostEvent> GetDestroyPlayerPieceGhostEventResolver()
