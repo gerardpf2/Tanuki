@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Game.Gameplay.Events.Events;
-using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.View.Actions;
 using Game.Gameplay.View.Actions.Actions;
 using Infrastructure.System.Exceptions;
@@ -26,11 +25,11 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
             yield return
                 _actionFactory.GetInstantiatePlayerPieceAction(
                     evt.Piece,
-                    InstantiatePieceReason.Player,
+                    evt.InstantiatePieceReason,
                     evt.SourceCoordinate
                 );
 
-            yield return _actionFactory.GetInstantiatePlayerPieceGhostAction(evt.Piece, InstantiatePieceReason.Player);
+            yield return _actionFactory.GetInstantiatePlayerPieceGhostAction(evt.Piece, evt.InstantiatePieceReason);
         }
     }
 }

@@ -28,9 +28,9 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         {
             // TODO: Check if destroy player piece and piece ghost need their own resolver
 
-            yield return _actionFactory.GetDestroyPlayerPieceGhostAction(DestroyPieceReason.Lock);
+            yield return _actionFactory.GetDestroyPlayerPieceGhostAction(DestroyPieceReason.SwapCurrentNext);
 
-            yield return _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.Lock);
+            yield return _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.SwapCurrentNext);
 
             yield return
                 _actionFactory.GetEventResolverAction(

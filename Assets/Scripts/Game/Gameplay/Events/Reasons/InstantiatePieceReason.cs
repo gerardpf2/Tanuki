@@ -2,9 +2,13 @@ namespace Game.Gameplay.Events.Reasons
 {
     public enum InstantiatePieceReason
     {
+        // Board
         Initial,
-        Player,
         Lock,
-        Decompose
+        Decompose,
+
+        // Player
+        Regular,
+        SwapCurrentNext
     }
 }

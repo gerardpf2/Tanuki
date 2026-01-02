@@ -3,6 +3,7 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
+using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
@@ -36,7 +37,12 @@ namespace Game.Gameplay.Phases.Phases
 
             resolveContext.SetPieceSourceCoordinate(sourceCoordinate, lockSourceCoordinate);
 
-            InstantiatePlayerPieceEvent instantiatePlayerPieceEvent = new(piece, sourceCoordinate);
+            InstantiatePlayerPieceEvent instantiatePlayerPieceEvent =
+                new(
+                    piece,
+                    sourceCoordinate,
+                    InstantiatePieceReason.Regular
+                );
 
             _eventEnqueuer.Enqueue(instantiatePlayerPieceEvent);
 
