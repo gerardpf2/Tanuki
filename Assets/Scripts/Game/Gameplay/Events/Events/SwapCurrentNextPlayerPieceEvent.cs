@@ -1,3 +1,6 @@
+using Game.Gameplay.Board;
+using Game.Gameplay.Events.Reasons;
+using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
@@ -7,11 +10,16 @@ namespace Game.Gameplay.Events.Events
     {
         [NotNull] public readonly InstantiatePlayerPieceEvent InstantiatePlayerPieceEvent;
 
-        public SwapCurrentNextPlayerPieceEvent([NotNull] InstantiatePlayerPieceEvent instantiatePlayerPieceEvent)
+        public SwapCurrentNextPlayerPieceEvent([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
-            ArgumentNullException.ThrowIfNull(instantiatePlayerPieceEvent);
+            ArgumentNullException.ThrowIfNull(piece);
 
-            InstantiatePlayerPieceEvent = instantiatePlayerPieceEvent;
+            InstantiatePlayerPieceEvent =
+                new InstantiatePlayerPieceEvent(
+                    piece,
+                    sourceCoordinate,
+                    InstantiatePieceReason.SwapCurrentNext
+                );
         }
     }
 }

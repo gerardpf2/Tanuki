@@ -3,7 +3,6 @@ using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
-using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.Pieces.Pieces.Utils;
 using Infrastructure.System.Exceptions;
@@ -50,14 +49,7 @@ namespace Game.Gameplay.Phases.Phases
 
             resolveContext.SetPieceSourceCoordinate(sourceCoordinate, lockSourceCoordinate);
 
-            InstantiatePlayerPieceEvent instantiatePlayerPieceEvent =
-                new(
-                    piece,
-                    sourceCoordinate,
-                    InstantiatePieceReason.SwapCurrentNext
-                );
-
-            SwapCurrentNextPlayerPieceEvent swapCurrentNextPlayerPieceEvent = new(instantiatePlayerPieceEvent);
+            SwapCurrentNextPlayerPieceEvent swapCurrentNextPlayerPieceEvent = new(piece, sourceCoordinate);
 
             _eventEnqueuer.Enqueue(swapCurrentNextPlayerPieceEvent);
 
