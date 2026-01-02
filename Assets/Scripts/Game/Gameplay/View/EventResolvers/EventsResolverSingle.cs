@@ -32,15 +32,6 @@ namespace Game.Gameplay.View.EventResolvers
                 case InstantiatePlayerPieceGhostEvent instantiatePlayerPieceGhostEvent:
                     _eventResolverFactory.GetInstantiatePlayerPieceGhostEventResolver().Resolve(instantiatePlayerPieceGhostEvent, onComplete);
                     break;
-                case LockPlayerPieceEvent lockPlayerPieceEvent:
-                    _eventResolverFactory.GetLockPlayerPieceEventResolver().Resolve(lockPlayerPieceEvent, onComplete);
-                    break;
-                case DamagePieceEvent damagePieceEvent:
-                    _eventResolverFactory.GetDamagePieceEventResolver().Resolve(damagePieceEvent, onComplete);
-                    break;
-                case DamagePiecesByLineClearEvent damagePiecesByLineClearEvent:
-                    _eventResolverFactory.GetDamagePiecesByLineClearEventResolver().Resolve(damagePiecesByLineClearEvent, onComplete);
-                    break;
                 case DestroyPieceEvent destroyPieceEvent:
                     _eventResolverFactory.GetDestroyPieceEventResolver().Resolve(destroyPieceEvent, onComplete);
                     break;
@@ -50,20 +41,17 @@ namespace Game.Gameplay.View.EventResolvers
                 case DestroyPlayerPieceGhostEvent destroyPlayerPieceGhostEventEvent:
                     _eventResolverFactory.GetDestroyPlayerPieceGhostEventResolver().Resolve(destroyPlayerPieceGhostEventEvent, onComplete);
                     break;
+                case DamagePieceEvent damagePieceEvent:
+                    _eventResolverFactory.GetDamagePieceEventResolver().Resolve(damagePieceEvent, onComplete);
+                    break;
                 case MovePieceEvent movePieceEvent:
                     _eventResolverFactory.GetMovePieceEventResolver().Resolve(movePieceEvent, onComplete);
                     break;
                 case MovePlayerPieceEvent movePlayerPieceEvent:
                     _eventResolverFactory.GetMovePlayerPieceEventResolver().Resolve(movePlayerPieceEvent, onComplete);
                     break;
-                case MovePiecesByGravityEvent movePiecesByGravityEvent:
-                    _eventResolverFactory.GetMovePiecesByGravityEventResolver().Resolve(movePiecesByGravityEvent, onComplete);
-                    break;
                 case MoveCameraEvent moveCameraEvent:
                     _eventResolverFactory.GetMoveCameraEventResolver().Resolve(moveCameraEvent, onComplete);
-                    break;
-                case InstantiateInitialPiecesAndMoveCameraEvent instantiateInitialPiecesAndMoveCameraEvent:
-                    _eventResolverFactory.GetInstantiateInitialPiecesAndMoveCameraEventResolver().Resolve(instantiateInitialPiecesAndMoveCameraEvent, onComplete);
                     break;
                 case SetGoalCurrentAmountEvent setGoalCurrentAmountEvent:
                     _eventResolverFactory.GetSetGoalCurrentAmountEventResolver().Resolve(setGoalCurrentAmountEvent, onComplete);
@@ -71,8 +59,20 @@ namespace Game.Gameplay.View.EventResolvers
                 case SetMovesAmountEvent setMovesAmountEvent:
                     _eventResolverFactory.GetSetMovesAmountEventResolver().Resolve(setMovesAmountEvent, onComplete);
                     break;
+                case InstantiateInitialPiecesAndMoveCameraEvent instantiateInitialPiecesAndMoveCameraEvent:
+                    _eventResolverFactory.GetInstantiateInitialPiecesAndMoveCameraEventResolver().Resolve(instantiateInitialPiecesAndMoveCameraEvent, onComplete);
+                    break;
+                case LockPlayerPieceEvent lockPlayerPieceEvent:
+                    _eventResolverFactory.GetLockPlayerPieceEventResolver().Resolve(lockPlayerPieceEvent, onComplete);
+                    break;
                 case SwapCurrentNextPlayerPieceEvent swapCurrentNextPlayerPieceEvent:
                     _eventResolverFactory.GetSwapCurrentNextPlayerPieceEventResolver().Resolve(swapCurrentNextPlayerPieceEvent, onComplete);
+                    break;
+                case DamagePiecesByLineClearEvent damagePiecesByLineClearEvent:
+                    _eventResolverFactory.GetDamagePiecesByLineClearEventResolver().Resolve(damagePiecesByLineClearEvent, onComplete);
+                    break;
+                case MovePiecesByGravityEvent movePiecesByGravityEvent:
+                    _eventResolverFactory.GetMovePiecesByGravityEventResolver().Resolve(movePiecesByGravityEvent, onComplete);
                     break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);

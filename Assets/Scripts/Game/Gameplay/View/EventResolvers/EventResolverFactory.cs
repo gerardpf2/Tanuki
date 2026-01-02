@@ -43,21 +43,6 @@ namespace Game.Gameplay.View.EventResolvers
             return new InstantiatePlayerPieceGhostEventResolver(_actionFactory);
         }
 
-        public IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver()
-        {
-            return new LockPlayerPieceEventResolver(_actionFactory, this);
-        }
-
-        public IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver()
-        {
-            return new DamagePieceEventResolver(_actionFactory, this);
-        }
-
-        public IEventResolver<DamagePiecesByLineClearEvent> GetDamagePiecesByLineClearEventResolver()
-        {
-            return new DamagePiecesByLineClearEventResolver(_board, _actionFactory, this);
-        }
-
         public IEventResolver<DestroyPieceEvent> GetDestroyPieceEventResolver()
         {
             return new DestroyPieceEventResolver(_actionFactory, this);
@@ -73,6 +58,11 @@ namespace Game.Gameplay.View.EventResolvers
             return new DestroyPlayerPieceGhostEventResolver(_actionFactory);
         }
 
+        public IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver()
+        {
+            return new DamagePieceEventResolver(_actionFactory, this);
+        }
+
         public IEventResolver<MovePieceEvent> GetMovePieceEventResolver()
         {
             return new MovePieceEventResolver(_actionFactory);
@@ -83,19 +73,9 @@ namespace Game.Gameplay.View.EventResolvers
             return new MovePlayerPieceEventResolver(_actionFactory);
         }
 
-        public IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver()
-        {
-            return new MovePiecesByGravityEventResolver(_board, _actionFactory, this, _coroutineRunner);
-        }
-
         public IEventResolver<MoveCameraEvent> GetMoveCameraEventResolver()
         {
             return new MoveCameraEventResolver(_actionFactory);
-        }
-
-        public IEventResolver<InstantiateInitialPiecesAndMoveCameraEvent> GetInstantiateInitialPiecesAndMoveCameraEventResolver()
-        {
-            return new InstantiateInitialPiecesAndMoveCameraEventResolver(_actionFactory, this, _coroutineRunner);
         }
 
         public IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver()
@@ -108,9 +88,29 @@ namespace Game.Gameplay.View.EventResolvers
             return new SetMovesAmountEventResolver(_actionFactory);
         }
 
+        public IEventResolver<InstantiateInitialPiecesAndMoveCameraEvent> GetInstantiateInitialPiecesAndMoveCameraEventResolver()
+        {
+            return new InstantiateInitialPiecesAndMoveCameraEventResolver(_actionFactory, this, _coroutineRunner);
+        }
+
+        public IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver()
+        {
+            return new LockPlayerPieceEventResolver(_actionFactory, this);
+        }
+
         public IEventResolver<SwapCurrentNextPlayerPieceEvent> GetSwapCurrentNextPlayerPieceEventResolver()
         {
             return new SwapCurrentNextPlayerPieceEventResolver(_actionFactory, this);
+        }
+
+        public IEventResolver<DamagePiecesByLineClearEvent> GetDamagePiecesByLineClearEventResolver()
+        {
+            return new DamagePiecesByLineClearEventResolver(_board, _actionFactory, this);
+        }
+
+        public IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver()
+        {
+            return new MovePiecesByGravityEventResolver(_board, _actionFactory, this, _coroutineRunner);
         }
     }
 }

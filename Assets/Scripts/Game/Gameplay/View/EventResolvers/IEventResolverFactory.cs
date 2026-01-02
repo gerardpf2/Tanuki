@@ -16,15 +16,6 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<InstantiatePlayerPieceGhostEvent> GetInstantiatePlayerPieceGhostEventResolver();
 
         [NotNull]
-        IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver();
-
-        [NotNull]
-        IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver();
-
-        [NotNull]
-        IEventResolver<DamagePiecesByLineClearEvent> GetDamagePiecesByLineClearEventResolver();
-
-        [NotNull]
         IEventResolver<DestroyPieceEvent> GetDestroyPieceEventResolver();
 
         [NotNull]
@@ -34,19 +25,16 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<DestroyPlayerPieceGhostEvent> GetDestroyPlayerPieceGhostEventResolver();
 
         [NotNull]
+        IEventResolver<DamagePieceEvent> GetDamagePieceEventResolver();
+
+        [NotNull]
         IEventResolver<MovePieceEvent> GetMovePieceEventResolver();
 
         [NotNull]
         IEventResolver<MovePlayerPieceEvent> GetMovePlayerPieceEventResolver();
 
         [NotNull]
-        IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver();
-
-        [NotNull]
         IEventResolver<MoveCameraEvent> GetMoveCameraEventResolver();
-
-        [NotNull]
-        IEventResolver<InstantiateInitialPiecesAndMoveCameraEvent> GetInstantiateInitialPiecesAndMoveCameraEventResolver();
 
         [NotNull]
         IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver();
@@ -55,6 +43,18 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<SetMovesAmountEvent> GetSetMovesAmountEventResolver();
 
         [NotNull]
+        IEventResolver<InstantiateInitialPiecesAndMoveCameraEvent> GetInstantiateInitialPiecesAndMoveCameraEventResolver();
+
+        [NotNull]
+        IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver();
+
+        [NotNull]
         IEventResolver<SwapCurrentNextPlayerPieceEvent> GetSwapCurrentNextPlayerPieceEventResolver();
+
+        [NotNull]
+        IEventResolver<DamagePiecesByLineClearEvent> GetDamagePiecesByLineClearEventResolver();
+
+        [NotNull]
+        IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver();
     }
 }
