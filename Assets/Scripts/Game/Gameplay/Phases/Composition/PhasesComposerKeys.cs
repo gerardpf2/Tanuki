@@ -13,6 +13,7 @@ namespace Game.Gameplay.Phases.Composition
             public const string LockPlayerPiecePhase = nameof(LockPlayerPiecePhase);
             public const string NoMovesLeftPhase = nameof(NoMovesLeftPhase);
             public const string SimulateInstantiatePlayerPiecePhase = nameof(SimulateInstantiatePlayerPiecePhase);
+            public const string SwapCurrentNextPlayerPiecePhase = nameof(SwapCurrentNextPlayerPiecePhase);
         }
 
         public static class PhaseContainer

@@ -34,8 +34,8 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             yield return
                 _actionFactory.GetEventResolverAction(
-                    _eventResolverFactory.GetInstantiatePieceEventResolver(),
-                    evt.InstantiatePieceEvent
+                    _eventResolverFactory.GetInstantiatePlayerPieceEventResolver(),
+                    evt.InstantiatePlayerPieceEvent
                 );
         }
     }

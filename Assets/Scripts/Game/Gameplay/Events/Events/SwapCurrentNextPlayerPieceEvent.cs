@@ -5,13 +5,13 @@ namespace Game.Gameplay.Events.Events
 {
     public class SwapCurrentNextPlayerPieceEvent : IEvent
     {
-        [NotNull] public readonly InstantiatePieceEvent InstantiatePieceEvent;
+        [NotNull] public readonly InstantiatePlayerPieceEvent InstantiatePlayerPieceEvent;
 
-        public SwapCurrentNextPlayerPieceEvent([NotNull] InstantiatePieceEvent instantiatePieceEvent)
+        public SwapCurrentNextPlayerPieceEvent([NotNull] InstantiatePlayerPieceEvent instantiatePlayerPieceEvent)
         {
-            ArgumentNullException.ThrowIfNull(instantiatePieceEvent);
+            ArgumentNullException.ThrowIfNull(instantiatePlayerPieceEvent);
 
-            InstantiatePieceEvent = instantiatePieceEvent;
+            InstantiatePlayerPieceEvent = instantiatePlayerPieceEvent;
         }
     }
 }

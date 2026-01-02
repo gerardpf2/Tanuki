@@ -118,6 +118,18 @@ namespace Game.Gameplay.Phases.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IPhase>(r =>
+                    new SwapCurrentNextPlayerPiecePhase(
+                        r.Resolve<IBag>(),
+                        r.Resolve<IBoard>(),
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IEventEnqueuer>()
+                    )
+                ),
+                PhasesComposerKeys.Phase.SwapCurrentNextPlayerPiecePhase
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseContainer>(r =>
                     new PhaseContainer(
                         r.Resolve<IPhaseResolver>(),
@@ -156,11 +168,12 @@ namespace Game.Gameplay.Phases.Composition
                 PhasesComposerKeys.PhaseContainer.Move
             );
 
-            // TODO
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseContainer>(r =>
                     new PhaseContainer(
-                        r.Resolve<IPhaseResolver>()
+                        r.Resolve<IPhaseResolver>(),
+                        r.Resolve<IPhase>(PhasesComposerKeys.Phase.SwapCurrentNextPlayerPiecePhase),
+                        r.Resolve<IPhase>(PhasesComposerKeys.Phase.CameraTargetHighestPlayerPieceLockRowPhase)
                     )
                 ),
                 PhasesComposerKeys.PhaseContainer.SwapCurrentNext

@@ -45,6 +45,16 @@ namespace Game.Gameplay.Pieces.Pieces.Utils
             return piece;
         }
 
+        public static void ResetRotation([NotNull] this IPiece piece)
+        {
+            ArgumentNullException.ThrowIfNull(piece);
+
+            if (piece.CanRotate)
+            {
+                piece.Rotation = 0;
+            }
+        }
+
         [NotNull]
         private static IEnumerable<(int, int)> GetFilledOffsets([NotNull] this IPiece piece)
         {
