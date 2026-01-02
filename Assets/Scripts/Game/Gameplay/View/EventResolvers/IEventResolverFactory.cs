@@ -13,6 +13,9 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPieceEventResolver();
 
         [NotNull]
+        IEventResolver<InstantiatePlayerPieceGhostEvent> GetInstantiatePlayerPieceGhostEventResolver();
+
+        [NotNull]
         IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver();
 
         [NotNull]

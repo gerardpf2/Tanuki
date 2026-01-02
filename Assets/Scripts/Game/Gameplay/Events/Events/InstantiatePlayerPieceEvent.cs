@@ -11,6 +11,7 @@ namespace Game.Gameplay.Events.Events
         [NotNull] public readonly IPiece Piece;
         public readonly Coordinate SourceCoordinate;
         public readonly InstantiatePieceReason InstantiatePieceReason;
+        [NotNull] public readonly InstantiatePlayerPieceGhostEvent InstantiatePlayerPieceGhostEvent;
 
         public InstantiatePlayerPieceEvent(
             [NotNull] IPiece piece,
@@ -22,6 +23,7 @@ namespace Game.Gameplay.Events.Events
             Piece = piece;
             SourceCoordinate = sourceCoordinate;
             InstantiatePieceReason = instantiatePieceReason;
+            InstantiatePlayerPieceGhostEvent = new InstantiatePlayerPieceGhostEvent(piece, instantiatePieceReason);
         }
     }
 }

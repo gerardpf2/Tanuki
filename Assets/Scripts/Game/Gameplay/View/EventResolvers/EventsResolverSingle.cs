@@ -29,6 +29,9 @@ namespace Game.Gameplay.View.EventResolvers
                 case InstantiatePlayerPieceEvent instantiatePlayerPieceEvent:
                     _eventResolverFactory.GetInstantiatePlayerPieceEventResolver().Resolve(instantiatePlayerPieceEvent, onComplete);
                     break;
+                case InstantiatePlayerPieceGhostEvent instantiatePlayerPieceGhostEvent:
+                    _eventResolverFactory.GetInstantiatePlayerPieceGhostEventResolver().Resolve(instantiatePlayerPieceGhostEvent, onComplete);
+                    break;
                 case LockPlayerPieceEvent lockPlayerPieceEvent:
                     _eventResolverFactory.GetLockPlayerPieceEventResolver().Resolve(lockPlayerPieceEvent, onComplete);
                     break;

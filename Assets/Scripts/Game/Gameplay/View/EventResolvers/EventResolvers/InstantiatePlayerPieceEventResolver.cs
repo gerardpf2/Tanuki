@@ -10,12 +10,17 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
     public class InstantiatePlayerPieceEventResolver : EventResolver<InstantiatePlayerPieceEvent>
     {
         [NotNull] private readonly IActionFactory _actionFactory;
+        [NotNull] private readonly IEventResolverFactory _eventResolverFactory;
 
-        public InstantiatePlayerPieceEventResolver([NotNull] IActionFactory actionFactory)
+        public InstantiatePlayerPieceEventResolver(
+            [NotNull] IActionFactory actionFactory,
+            [NotNull] IEventResolverFactory eventResolverFactory)
         {
             ArgumentNullException.ThrowIfNull(actionFactory);
+            ArgumentNullException.ThrowIfNull(eventResolverFactory);
 
             _actionFactory = actionFactory;
+            _eventResolverFactory = eventResolverFactory;
         }
 
         protected override IEnumerable<IAction> GetActions([NotNull] InstantiatePlayerPieceEvent evt)
@@ -29,7 +34,11 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
                     evt.SourceCoordinate
                 );
 
-            yield return _actionFactory.GetInstantiatePlayerPieceGhostAction(evt.Piece, evt.InstantiatePieceReason);
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetInstantiatePlayerPieceGhostEventResolver(),
+                    evt.InstantiatePlayerPieceGhostEvent
+                );
         }
     }
 }

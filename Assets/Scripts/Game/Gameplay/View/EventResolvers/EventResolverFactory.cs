@@ -35,7 +35,12 @@ namespace Game.Gameplay.View.EventResolvers
 
         public IEventResolver<InstantiatePlayerPieceEvent> GetInstantiatePlayerPieceEventResolver()
         {
-            return new InstantiatePlayerPieceEventResolver(_actionFactory);
+            return new InstantiatePlayerPieceEventResolver(_actionFactory, this);
+        }
+
+        public IEventResolver<InstantiatePlayerPieceGhostEvent> GetInstantiatePlayerPieceGhostEventResolver()
+        {
+            return new InstantiatePlayerPieceGhostEventResolver(_actionFactory);
         }
 
         public IEventResolver<LockPlayerPieceEvent> GetLockPlayerPieceEventResolver()
