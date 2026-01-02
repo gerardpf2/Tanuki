@@ -98,6 +98,11 @@ namespace Game.Gameplay.View.EventResolvers
             return new SetGoalCurrentAmountEventResolver(_actionFactory);
         }
 
+        public IEventResolver<SetMovesAmountEvent> GetSetMovesAmountEventResolver()
+        {
+            return new SetMovesAmountEventResolver(_actionFactory);
+        }
+
         public IEventResolver<SwapCurrentNextPlayerPieceEvent> GetSwapCurrentNextPlayerPieceEventResolver()
         {
             return new SwapCurrentNextPlayerPieceEventResolver(_actionFactory, this);

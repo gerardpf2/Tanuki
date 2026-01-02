@@ -9,8 +9,8 @@ namespace Game.Gameplay.Events.Events
     {
         [NotNull] public readonly InstantiatePieceEvent InstantiatePieceEvent;
         public readonly Coordinate SourceCoordinate;
-        public readonly int MovesAmount;
         [NotNull] public readonly DestroyPlayerPieceEvent DestroyPlayerPieceEvent;
+        [NotNull] public readonly SetMovesAmountEvent SetMovesAmountEvent;
 
         public LockPlayerPieceEvent(
             [NotNull] InstantiatePieceEvent instantiatePieceEvent,
@@ -21,8 +21,8 @@ namespace Game.Gameplay.Events.Events
 
             InstantiatePieceEvent = instantiatePieceEvent;
             SourceCoordinate = sourceCoordinate;
-            MovesAmount = movesAmount;
             DestroyPlayerPieceEvent = new DestroyPlayerPieceEvent(DestroyPieceReason.Lock);
+            SetMovesAmountEvent = new SetMovesAmountEvent(movesAmount);
         }
     }
 }

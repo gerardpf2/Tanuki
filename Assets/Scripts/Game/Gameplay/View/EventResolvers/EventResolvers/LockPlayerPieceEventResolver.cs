@@ -76,7 +76,11 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
                     evt.InstantiatePieceEvent
                 );
 
-            yield return _actionFactory.GetSetMovesAmountAction(evt.MovesAmount);
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetSetMovesAmountEventResolver(),
+                    evt.SetMovesAmountEvent
+                );
         }
     }
 }
