@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Game.Gameplay.Board;
 using Game.Gameplay.Events.Events;
-using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.View.Actions;
 using Game.Gameplay.View.Actions.Actions;
 using Infrastructure.System.Exceptions;
@@ -50,13 +48,11 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
                     );
             }
 
-            Coordinate sourceCoordinate = evt.SourceCoordinate;
-            Coordinate lockSourceCoordinate = evt.InstantiatePieceEvent.SourceCoordinate;
-
-            int rowOffset = lockSourceCoordinate.Row - sourceCoordinate.Row;
-            int columnOffset = lockSourceCoordinate.Column - sourceCoordinate.Column;
-
-            yield return _actionFactory.GetMovePlayerPieceAction(rowOffset, columnOffset, MovePieceReason.Lock);
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetMovePlayerPieceEventResolver(),
+                    evt.MovePlayerPieceEvent
+                );
 
             DestroyPlayerPieceEvent destroyPlayerPieceWithNullGhostEvent =
                 new(

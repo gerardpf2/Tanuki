@@ -2,7 +2,6 @@ using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events;
 using Game.Gameplay.Events.Events;
-using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Pieces.Pieces;
 using Infrastructure.System.Exceptions;
@@ -54,8 +53,7 @@ namespace Game.Gameplay.Phases.Phases
 
             int movesAmount = DecreaseMovesAmount();
 
-            InstantiatePieceEvent instantiatePieceEvent = new(piece, lockSourceCoordinate, InstantiatePieceReason.Lock);
-            LockPlayerPieceEvent lockPlayerPieceEvent = new(instantiatePieceEvent, sourceCoordinate, movesAmount);
+            LockPlayerPieceEvent lockPlayerPieceEvent = new(piece, sourceCoordinate, lockSourceCoordinate, movesAmount);
 
             _eventEnqueuer.Enqueue(lockPlayerPieceEvent);
 

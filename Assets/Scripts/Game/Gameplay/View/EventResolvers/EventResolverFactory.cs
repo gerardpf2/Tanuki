@@ -78,6 +78,11 @@ namespace Game.Gameplay.View.EventResolvers
             return new MovePieceEventResolver(_actionFactory);
         }
 
+        public IEventResolver<MovePlayerPieceEvent> GetMovePlayerPieceEventResolver()
+        {
+            return new MovePlayerPieceEventResolver(_actionFactory);
+        }
+
         public IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver()
         {
             return new MovePiecesByGravityEventResolver(_board, _actionFactory, this, _coroutineRunner);

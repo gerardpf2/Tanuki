@@ -37,6 +37,9 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<MovePieceEvent> GetMovePieceEventResolver();
 
         [NotNull]
+        IEventResolver<MovePlayerPieceEvent> GetMovePlayerPieceEventResolver();
+
+        [NotNull]
         IEventResolver<MovePiecesByGravityEvent> GetMovePiecesByGravityEventResolver();
 
         [NotNull]

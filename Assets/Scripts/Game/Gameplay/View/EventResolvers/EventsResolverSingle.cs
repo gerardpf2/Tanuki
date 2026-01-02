@@ -53,6 +53,9 @@ namespace Game.Gameplay.View.EventResolvers
                 case MovePieceEvent movePieceEvent:
                     _eventResolverFactory.GetMovePieceEventResolver().Resolve(movePieceEvent, onComplete);
                     break;
+                case MovePlayerPieceEvent movePlayerPieceEvent:
+                    _eventResolverFactory.GetMovePlayerPieceEventResolver().Resolve(movePlayerPieceEvent, onComplete);
+                    break;
                 case MovePiecesByGravityEvent movePiecesByGravityEvent:
                     _eventResolverFactory.GetMovePiecesByGravityEventResolver().Resolve(movePiecesByGravityEvent, onComplete);
                     break;
