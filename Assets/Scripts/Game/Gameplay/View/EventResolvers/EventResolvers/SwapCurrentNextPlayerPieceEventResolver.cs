@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Game.Gameplay.Events.Events;
-using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.View.Actions;
 using Game.Gameplay.View.Actions.Actions;
 using Infrastructure.System.Exceptions;
@@ -26,11 +25,11 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
         protected override IEnumerable<IAction> GetActions([NotNull] SwapCurrentNextPlayerPieceEvent evt)
         {
-            // TODO: Check if destroy player piece and piece ghost need their own resolver
-
-            yield return _actionFactory.GetDestroyPlayerPieceGhostAction(DestroyPieceReason.SwapCurrentNext);
-
-            yield return _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.SwapCurrentNext);
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetDestroyPlayerPieceEventResolver(),
+                    evt.DestroyPlayerPieceEvent
+                );
 
             yield return
                 _actionFactory.GetEventResolverAction(

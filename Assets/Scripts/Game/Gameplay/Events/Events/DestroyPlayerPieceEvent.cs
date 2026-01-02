@@ -4,15 +4,17 @@ namespace Game.Gameplay.Events.Events
 {
     public class DestroyPlayerPieceEvent : IEvent
     {
-        public readonly DestroyPlayerPieceGhostEvent DestroyPlayerPieceGhostEvent;
         public readonly DestroyPieceReason DestroyPieceReason;
+        public readonly DestroyPlayerPieceGhostEvent DestroyPlayerPieceGhostEvent;
 
-        public DestroyPlayerPieceEvent(
-            DestroyPlayerPieceGhostEvent destroyPlayerPieceGhostEvent,
-            DestroyPieceReason destroyPieceReason)
+        public DestroyPlayerPieceEvent(DestroyPieceReason destroyPieceReason, bool destroyGhost = true)
         {
-            DestroyPlayerPieceGhostEvent = destroyPlayerPieceGhostEvent;
             DestroyPieceReason = destroyPieceReason;
+
+            if (destroyGhost)
+            {
+                DestroyPlayerPieceGhostEvent = new DestroyPlayerPieceGhostEvent(destroyPieceReason);
+            }
         }
     }
 }

@@ -29,7 +29,26 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
         {
             ArgumentNullException.ThrowIfNull(evt);
 
-            yield return _actionFactory.GetDestroyPlayerPieceGhostAction(DestroyPieceReason.Lock);
+            /*
+             *
+             * Destroy player piece also destroys its ghost, but in here it is needed to split this behaviour in 2
+             *
+             * Destroy player piece ghost only before movement
+             * Destroy player piece only after movement
+             *
+             */
+
+            DestroyPlayerPieceEvent destroyPlayerPieceEvent = evt.DestroyPlayerPieceEvent;
+            DestroyPlayerPieceGhostEvent destroyPlayerPieceGhostEvent = destroyPlayerPieceEvent.DestroyPlayerPieceGhostEvent;
+
+            if (destroyPlayerPieceGhostEvent is not null)
+            {
+                yield return
+                    _actionFactory.GetEventResolverAction(
+                        _eventResolverFactory.GetDestroyPlayerPieceGhostEventResolver(),
+                        destroyPlayerPieceGhostEvent
+                    );
+            }
 
             Coordinate sourceCoordinate = evt.SourceCoordinate;
             Coordinate lockSourceCoordinate = evt.InstantiatePieceEvent.SourceCoordinate;
@@ -39,7 +58,17 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
 
             yield return _actionFactory.GetMovePlayerPieceAction(rowOffset, columnOffset, MovePieceReason.Lock);
 
-            yield return _actionFactory.GetDestroyPlayerPieceAction(DestroyPieceReason.Lock);
+            DestroyPlayerPieceEvent destroyPlayerPieceWithNullGhostEvent =
+                new(
+                    destroyPlayerPieceEvent.DestroyPieceReason,
+                    false
+                );
+
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetDestroyPlayerPieceEventResolver(),
+                    destroyPlayerPieceWithNullGhostEvent
+                );
 
             yield return
                 _actionFactory.GetEventResolverAction(

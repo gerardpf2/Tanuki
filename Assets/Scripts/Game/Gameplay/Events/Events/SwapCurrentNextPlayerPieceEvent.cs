@@ -8,11 +8,14 @@ namespace Game.Gameplay.Events.Events
 {
     public class SwapCurrentNextPlayerPieceEvent : IEvent
     {
+        [NotNull] public readonly DestroyPlayerPieceEvent DestroyPlayerPieceEvent;
         [NotNull] public readonly InstantiatePlayerPieceEvent InstantiatePlayerPieceEvent;
 
         public SwapCurrentNextPlayerPieceEvent([NotNull] IPiece piece, Coordinate sourceCoordinate)
         {
             ArgumentNullException.ThrowIfNull(piece);
+
+            DestroyPlayerPieceEvent = new DestroyPlayerPieceEvent(DestroyPieceReason.SwapCurrentNext);
 
             InstantiatePlayerPieceEvent =
                 new InstantiatePlayerPieceEvent(
