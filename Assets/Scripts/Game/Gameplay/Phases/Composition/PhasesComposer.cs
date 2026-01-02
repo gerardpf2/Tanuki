@@ -169,6 +169,13 @@ namespace Game.Gameplay.Phases.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetTo<IPhaseContainer, IPhaseContainer>(
+                    PhasesComposerKeys.PhaseContainer.Move
+                ),
+                PhasesComposerKeys.PhaseContainer.Rotate
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IPhaseContainer>(r =>
                     new PhaseContainer(
                         r.Resolve<IPhaseResolver>(),

@@ -61,7 +61,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IPlayerInputActionHandler>(r =>
                     new RotatePlayerInputActionHandler(
-                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Move),
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Rotate),
                         r.Resolve<IEventsResolver>(),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>()
