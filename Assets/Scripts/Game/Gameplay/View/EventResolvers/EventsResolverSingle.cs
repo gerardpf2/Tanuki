@@ -56,6 +56,9 @@ namespace Game.Gameplay.View.EventResolvers
                 case SetGoalCurrentAmountEvent setGoalCurrentAmountEvent:
                     _eventResolverFactory.GetSetGoalCurrentAmountEventResolver().Resolve(setGoalCurrentAmountEvent, onComplete);
                     break;
+                case SwapCurrentNextPlayerPieceEvent swapCurrentNextPlayerPieceEvent:
+                    _eventResolverFactory.GetSwapCurrentNextPlayerPieceEventResolver().Resolve(swapCurrentNextPlayerPieceEvent, onComplete);
+                    break;
                 default:
                     ArgumentOutOfRangeException.Throw(evt);
                     return;

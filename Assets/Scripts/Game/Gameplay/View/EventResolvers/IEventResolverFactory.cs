@@ -38,5 +38,8 @@ namespace Game.Gameplay.View.EventResolvers
 
         [NotNull]
         IEventResolver<SetGoalCurrentAmountEvent> GetSetGoalCurrentAmountEventResolver();
+
+        [NotNull]
+        IEventResolver<SwapCurrentNextPlayerPieceEvent> GetSwapCurrentNextPlayerPieceEventResolver();
     }
 }
