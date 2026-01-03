@@ -1,13 +1,12 @@
 using System;
 using Game.Common.Pieces;
-using JetBrains.Annotations;
 using UnityEngine;
 using InvalidOperationException = Infrastructure.System.Exceptions.InvalidOperationException;
 
 namespace Game.Common.View.Pieces
 {
     [CreateAssetMenu(fileName = nameof(PieceSpriteContainer), menuName = "Tanuki/Game/Common/Pieces/" + nameof(PieceSpriteContainer))]
-    public class PieceSpriteContainer : ScriptableObject
+    public class PieceSpriteContainer : ScriptableObject, IPieceSpriteGetter
     {
         [Serializable]
         private class PieceTypeSpritePair
@@ -22,7 +21,6 @@ namespace Game.Common.View.Pieces
 
         [SerializeField] private PieceTypeSpritePair[] _pieceTypeSpritePairs;
 
-        [NotNull]
         public Sprite Get(PieceType pieceType)
         {
             InvalidOperationException.ThrowIfNull(_pieceTypeSpritePairs);
