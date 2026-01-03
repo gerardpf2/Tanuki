@@ -15,7 +15,7 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
         private ButtonViewData _buttonViewData;
         private bool _pressed;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             Add(_sprite);
 
@@ -23,7 +23,7 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
             Add(new BoundMethod("OnPointerUp", HandlePointerUp));
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             UnsubscribeFromEvents();
         }
