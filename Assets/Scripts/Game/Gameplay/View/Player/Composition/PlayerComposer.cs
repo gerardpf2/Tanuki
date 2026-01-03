@@ -1,3 +1,4 @@
+using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Phases;
 using Game.Gameplay.Phases.Composition;
@@ -119,6 +120,15 @@ namespace Game.Gameplay.View.Player.Composition
                         r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
                         r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate),
                         r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.SwapCurrentNext)
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<SwapCurrentNextButtonViewModel>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IBag>(),
+                        r.Resolve<IEventsResolver>()
                     )
                 )
             );
