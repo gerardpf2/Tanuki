@@ -17,10 +17,7 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
 
         private void Awake()
         {
-            Add(_sprite);
-
-            Add(new BoundMethod("OnPointerDown", HandlePointerDown));
-            Add(new BoundMethod("OnPointerUp", HandlePointerUp));
+            AddBindings();
         }
 
         private void OnDestroy()
@@ -40,7 +37,15 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
             RefreshSprite();
         }
 
-        private void SubscribeToEvents()
+        protected virtual void AddBindings()
+        {
+            Add(_sprite);
+
+            Add(new BoundMethod("OnPointerDown", HandlePointerDown));
+            Add(new BoundMethod("OnPointerUp", HandlePointerUp));
+        }
+
+        protected virtual void SubscribeToEvents()
         {
             InvalidOperationException.ThrowIfNull(_buttonViewData);
 
@@ -49,7 +54,7 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
             _buttonViewData.OnEnabledUpdated += HandleEnabledUpdated;
         }
 
-        private void UnsubscribeFromEvents()
+        protected virtual void UnsubscribeFromEvents()
         {
             if (_buttonViewData is not null)
             {
