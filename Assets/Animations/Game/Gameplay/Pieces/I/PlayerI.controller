@@ -149,7 +149,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MoveLock
+  m_Name: Lock
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -177,7 +177,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MoveEnd
+  m_Name: LockEnd
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -407,7 +407,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MoveStart
+  m_Name: LockStart
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -434,7 +434,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MoveEndRotation2
+  m_Name: LockUp
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -475,7 +475,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MoveEndRotation3
+  m_Name: LockLeft
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -503,7 +503,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MoveEndRotation0
+  m_Name: LockDown
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -655,7 +655,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MoveEndRotation1
+  m_Name: LockRight
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
