@@ -6,17 +6,17 @@ namespace Infrastructure.ScreenLoading.Composition
 {
     public class ScreenLoadingComposer : ScopeComposer
     {
-        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenGetter _screenGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
 
         public ScreenLoadingComposer(
-            [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
+            [NotNull] IScreenGetter screenGetter,
             [NotNull] IScreenPlacement rootScreenPlacement)
         {
-            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(screenGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
 
-            _screenDefinitionGetter = screenDefinitionGetter;
+            _screenGetter = screenGetter;
             _rootScreenPlacement = rootScreenPlacement;
         }
 
@@ -27,7 +27,7 @@ namespace Infrastructure.ScreenLoading.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            ruleAdder.Add(ruleFactory.GetInstance(_screenDefinitionGetter));
+            ruleAdder.Add(ruleFactory.GetInstance(_screenGetter));
 
             ruleAdder.Add(ruleFactory.GetInstance(_rootScreenPlacement));
 
@@ -40,7 +40,7 @@ namespace Infrastructure.ScreenLoading.Composition
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IScreenLoader>(r =>
                     new ScreenLoader(
-                        r.Resolve<IScreenDefinitionGetter>(),
+                        r.Resolve<IScreenGetter>(),
                         r.Resolve<IScreenPlacementGetter>(),
                         r.Resolve<IScreenStack>()
                     )

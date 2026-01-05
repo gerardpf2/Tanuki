@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Infrastructure.ScreenLoading
 {
-    [CreateAssetMenu(fileName = nameof(ScreenDefinitionContainer), menuName = "Tanuki/Infrastructure/ScreenLoading/" + nameof(ScreenDefinitionContainer))]
-    public class ScreenDefinitionContainer : ScriptableObject, IScreenDefinitionGetter
+    [CreateAssetMenu(fileName = nameof(ScreenContainer), menuName = "Tanuki/Infrastructure/ScreenLoading/" + nameof(ScreenContainer))]
+    public class ScreenContainer : ScriptableObject, IScreenGetter
     {
         [SerializeField] private Screen[] _screens;
 

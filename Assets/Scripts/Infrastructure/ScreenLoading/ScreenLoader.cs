@@ -9,22 +9,22 @@ namespace Infrastructure.ScreenLoading
     // TODO: Test
     public class ScreenLoader : IScreenLoader
     {
-        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenGetter _screenGetter;
         [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
         [NotNull] private readonly IScreenStack _screenStack;
 
         [NotNull] private readonly IDictionary<string, IScreen> _screens = new Dictionary<string, IScreen>();
 
         public ScreenLoader(
-            [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
+            [NotNull] IScreenGetter screenGetter,
             [NotNull] IScreenPlacementGetter screenPlacementGetter,
             [NotNull] IScreenStack screenStack)
         {
-            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(screenGetter);
             ArgumentNullException.ThrowIfNull(screenPlacementGetter);
             ArgumentNullException.ThrowIfNull(screenStack);
 
-            _screenDefinitionGetter = screenDefinitionGetter;
+            _screenGetter = screenGetter;
             _screenPlacementGetter = screenPlacementGetter;
             _screenStack = screenStack;
         }
@@ -63,7 +63,7 @@ namespace Infrastructure.ScreenLoading
             }
             else
             {
-                IScreen screenSource = _screenDefinitionGetter.Get(key);
+                IScreen screenSource = _screenGetter.Get(key);
 
                 screen = Instantiate(screenSource);
 

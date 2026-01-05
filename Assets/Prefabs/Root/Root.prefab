@@ -52,9 +52,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gateDefinitionContainer: {fileID: 11400000, guid: 1641c998d96f1de479771e1c2c79cc9a, type: 2}
   _configDefinitionContainer: {fileID: 11400000, guid: 852f1568813aa5541a1331f16d8f6ce0, type: 2}
-  _screenDefinitionContainer: {fileID: 11400000, guid: 9a91396219a24d247a832a793b766d13, type: 2}
+  _screenContainer: {fileID: 11400000, guid: 9a91396219a24d247a832a793b766d13, type: 2}
   _rootScreenPlacement: {fileID: -4565911797714831056}
   _coroutineRunner: {fileID: 2018374216475206802}
+  _gameScopeComposerBuilder: {fileID: 0}
 --- !u!114 &-4565911797714831056
 MonoBehaviour:
   m_ObjectHideFlags: 0
