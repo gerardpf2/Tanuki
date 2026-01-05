@@ -9,5 +9,10 @@ namespace Infrastructure.ScreenLoading
         public string PlacementKey => _placementKey;
 
         public GameObject GameObject => gameObject;
+
+        public void OnFocus(bool focused)
+        {
+            GameObject.SetActive(focused);
+        }
     }
 }

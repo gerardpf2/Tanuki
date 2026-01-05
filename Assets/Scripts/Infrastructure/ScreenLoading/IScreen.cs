@@ -9,5 +9,7 @@ namespace Infrastructure.ScreenLoading
 
         [NotNull]
         GameObject GameObject { get; }
+
+        void OnFocus(bool focused);
     }
 }
