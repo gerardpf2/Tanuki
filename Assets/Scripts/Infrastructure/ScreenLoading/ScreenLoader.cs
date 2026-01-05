@@ -12,7 +12,7 @@ namespace Infrastructure.ScreenLoading
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
 
-        [NotNull] private readonly IDictionary<string, GameObject> _loaded = new Dictionary<string, GameObject>();
+        [NotNull] private readonly IDictionary<string, IScreen> _screens = new Dictionary<string, IScreen>();
 
         public ScreenLoader(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
@@ -36,9 +36,9 @@ namespace Infrastructure.ScreenLoading
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            GameObject instance = LoadAndAddRef(key);
+            IScreen screen = LoadAndAddRef(key);
 
-            SetData(instance, data, key);
+            SetData(screen, data, key);
         }
 
         public void Unload([NotNull] string key)
@@ -49,44 +49,44 @@ namespace Infrastructure.ScreenLoading
         }
 
         [NotNull]
-        private GameObject LoadAndAddRef([NotNull] string key)
+        private IScreen LoadAndAddRef([NotNull] string key)
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            if (_loaded.TryGetValue(key, out GameObject instance))
+            if (_screens.TryGetValue(key, out IScreen screen))
             {
-                InvalidOperationException.ThrowIfNull(instance);
+                InvalidOperationException.ThrowIfNull(screen);
             }
             else
             {
                 IScreenDefinition screenDefinition = _screenDefinitionGetter.Get(key);
 
-                instance = Instantiate(screenDefinition);
+                screen = Instantiate(screenDefinition);
 
-                _loaded.Add(key, instance);
+                _screens.Add(key, screen);
             }
 
-            return instance;
+            return screen;
         }
 
         private void UnloadAndRemoveRef([NotNull] string key)
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            if (!_loaded.TryGetValue(key, out GameObject instance))
+            if (!_screens.TryGetValue(key, out IScreen screen))
             {
-                return;
+                InvalidOperationException.Throw($"Cannot find screen with Key: {key}");
             }
 
-            InvalidOperationException.ThrowIfNull(instance);
+            InvalidOperationException.ThrowIfNull(screen);
 
-            Object.Destroy(instance);
+            Object.Destroy(screen.GameObject);
 
-            _loaded.Remove(key);
+            _screens.Remove(key);
         }
 
         [NotNull]
-        private GameObject Instantiate([NotNull] IScreenDefinition screenDefinition)
+        private IScreen Instantiate([NotNull] IScreenDefinition screenDefinition)
         {
             ArgumentNullException.ThrowIfNull(screenDefinition);
 
@@ -100,14 +100,19 @@ namespace Infrastructure.ScreenLoading
                 $"Cannot instantiate screen with Key: {screenDefinition.Key}"
             );
 
-            return instance;
+            IScreen newScreen = instance.GetComponent<IScreen>();
+
+            InvalidOperationException.ThrowIfNull(newScreen);
+
+            return newScreen;
         }
 
-        private static void SetData<T>([NotNull] GameObject instance, T data, string key)
+        private static void SetData<T>([NotNull] IScreen screen, T data, string key)
         {
-            ArgumentNullException.ThrowIfNull(instance);
+            ArgumentNullException.ThrowIfNull(screen);
 
-            IDataSettable<T> dataSettable = instance.GetComponent<IDataSettable<T>>();
+            GameObject gameObject = screen.GameObject;
+            IDataSettable<T> dataSettable = gameObject.GetComponent<IDataSettable<T>>();
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 dataSettable,
