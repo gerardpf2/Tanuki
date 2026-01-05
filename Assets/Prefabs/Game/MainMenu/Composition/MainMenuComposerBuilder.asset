@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21dd442a61674a9b95a84f793bbbd370, type: 3}
-  m_Name: GameComposerBuilder
+  m_Script: {fileID: 11500000, guid: 8ca2f688cd7241c9a6f56ef3a0872d95, type: 3}
+  m_Name: MainMenuComposerBuilder
   m_EditorClassIdentifier: 
-  _childScopeComposerBuilders:
-  - {fileID: 11400000, guid: 95d6aaecf1d14e3408708bbcf7c611d5, type: 2}
-  - {fileID: 11400000, guid: 0e0a2515d922b804183eb12377ef1ea4, type: 2}
