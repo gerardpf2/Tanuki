@@ -5,6 +5,8 @@ namespace Infrastructure.ScreenLoading
 {
     public interface IScreen
     {
+        string Key { get; }
+
         string PlacementKey { get; }
 
         [NotNull]

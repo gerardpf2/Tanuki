@@ -7,10 +7,9 @@ namespace Infrastructure.ScreenLoading
     [Serializable]
     public class ScreenDefinition : IScreenDefinition
     {
-        [SerializeField] private string _key;
         [SerializeField] private Screen _screen;
 
-        public string Key => _key;
+        public string Key => Screen.Key;
 
         public IScreen Screen
         {

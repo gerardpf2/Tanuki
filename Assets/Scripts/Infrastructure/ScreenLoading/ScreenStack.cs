@@ -42,7 +42,7 @@ namespace Infrastructure.ScreenLoading
             }
             else if (!TryRemove(screen))
             {
-                InvalidOperationException.Throw("Cannot remove screen"); // TODO: Add screen name, etc
+                InvalidOperationException.Throw($"Cannot remove screen with Key: {screen.Key}");
             }
 
             IScreen newFocusedScreen = FocusedScreen;
