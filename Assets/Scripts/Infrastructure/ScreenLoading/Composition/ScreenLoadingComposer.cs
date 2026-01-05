@@ -35,11 +35,14 @@ namespace Infrastructure.ScreenLoading.Composition
             ruleAdder.Add(ruleFactory.GetTo<IScreenPlacementAdder, ScreenPlacementContainer>());
             ruleAdder.Add(ruleFactory.GetTo<IScreenPlacementGetter, ScreenPlacementContainer>());
 
+            ruleAdder.Add(ruleFactory.GetSingleton<IScreenStack>(_ => new ScreenStack()));
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IScreenLoader>(r =>
                     new ScreenLoader(
                         r.Resolve<IScreenDefinitionGetter>(),
-                        r.Resolve<IScreenPlacementGetter>()
+                        r.Resolve<IScreenPlacementGetter>(),
+                        r.Resolve<IScreenStack>()
                     )
                 )
             );

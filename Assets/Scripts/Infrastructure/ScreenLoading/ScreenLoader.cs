@@ -11,18 +11,22 @@ namespace Infrastructure.ScreenLoading
     {
         [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
         [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
+        [NotNull] private readonly IScreenStack _screenStack;
 
         [NotNull] private readonly IDictionary<string, IScreen> _screens = new Dictionary<string, IScreen>();
 
         public ScreenLoader(
             [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
-            [NotNull] IScreenPlacementGetter screenPlacementGetter)
+            [NotNull] IScreenPlacementGetter screenPlacementGetter,
+            [NotNull] IScreenStack screenStack)
         {
             ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
             ArgumentNullException.ThrowIfNull(screenPlacementGetter);
+            ArgumentNullException.ThrowIfNull(screenStack);
 
             _screenDefinitionGetter = screenDefinitionGetter;
             _screenPlacementGetter = screenPlacementGetter;
+            _screenStack = screenStack;
         }
 
         public void Load([NotNull] string key)
@@ -66,6 +70,8 @@ namespace Infrastructure.ScreenLoading
                 _screens.Add(key, screen);
             }
 
+            _screenStack.Push(screen);
+
             return screen;
         }
 
@@ -79,6 +85,8 @@ namespace Infrastructure.ScreenLoading
             }
 
             InvalidOperationException.ThrowIfNull(screen);
+
+            _screenStack.Remove(screen);
 
             Object.Destroy(screen.GameObject);
 
