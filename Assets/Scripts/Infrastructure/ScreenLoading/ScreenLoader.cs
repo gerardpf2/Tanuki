@@ -63,9 +63,9 @@ namespace Infrastructure.ScreenLoading
             }
             else
             {
-                IScreenDefinition screenDefinition = _screenDefinitionGetter.Get(key);
+                IScreen screenSource = _screenDefinitionGetter.Get(key);
 
-                screen = Instantiate(screenDefinition);
+                screen = Instantiate(screenSource);
 
                 _screens.Add(key, screen);
             }
@@ -94,25 +94,24 @@ namespace Infrastructure.ScreenLoading
         }
 
         [NotNull]
-        private IScreen Instantiate([NotNull] IScreenDefinition screenDefinition)
+        private IScreen Instantiate([NotNull] IScreen screenSource)
         {
-            ArgumentNullException.ThrowIfNull(screenDefinition);
+            ArgumentNullException.ThrowIfNull(screenSource);
 
-            IScreen screen = screenDefinition.Screen;
-            GameObject prefab = screen.GameObject;
-            Transform placement = _screenPlacementGetter.Get(screen.PlacementKey).Transform;
+            GameObject prefab = screenSource.GameObject;
+            Transform placement = _screenPlacementGetter.Get(screenSource.PlacementKey).Transform;
             GameObject instance = Object.Instantiate(prefab, placement);
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 instance,
-                $"Cannot instantiate screen with Key: {screenDefinition.Key}"
+                $"Cannot instantiate screen with Key: {screenSource.Key}"
             );
 
-            IScreen newScreen = instance.GetComponent<IScreen>();
+            IScreen screen = instance.GetComponent<IScreen>();
 
-            InvalidOperationException.ThrowIfNull(newScreen);
+            InvalidOperationException.ThrowIfNull(screen);
 
-            return newScreen;
+            return screen;
         }
 
         private static void SetData<T>([NotNull] IScreen screen, T data, string key)

@@ -6,34 +6,34 @@ namespace Infrastructure.ScreenLoading
     [CreateAssetMenu(fileName = nameof(ScreenDefinitionContainer), menuName = "Tanuki/Infrastructure/ScreenLoading/" + nameof(ScreenDefinitionContainer))]
     public class ScreenDefinitionContainer : ScriptableObject, IScreenDefinitionGetter
     {
-        [SerializeField] private ScreenDefinition[] _screenDefinitions;
+        [SerializeField] private Screen[] _screens;
 
-        public IScreenDefinition Get(string key)
+        public IScreen Get(string key)
         {
-            InvalidOperationException.ThrowIfNull(_screenDefinitions);
+            InvalidOperationException.ThrowIfNull(_screens);
 
-            IScreenDefinition screenDefinition = null;
+            IScreen screen = null;
 
-            foreach (ScreenDefinition screenDefinitionCandidate in _screenDefinitions)
+            foreach (IScreen screenCandidate in _screens)
             {
-                InvalidOperationException.ThrowIfNull(screenDefinitionCandidate);
+                InvalidOperationException.ThrowIfNull(screenCandidate);
 
-                if (screenDefinitionCandidate.Key != key)
+                if (screenCandidate.Key != key)
                 {
                     continue;
                 }
 
-                screenDefinition = screenDefinitionCandidate;
+                screen = screenCandidate;
 
                 break;
             }
 
             InvalidOperationException.ThrowIfNullWithMessage(
-                screenDefinition,
-                $"Cannot get screen definition with Key: {key}"
+                screen,
+                $"Cannot get screen with Key: {key}"
             );
 
-            return screenDefinition;
+            return screen;
         }
     }
 }
