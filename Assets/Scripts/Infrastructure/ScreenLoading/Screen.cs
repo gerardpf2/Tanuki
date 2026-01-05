@@ -7,5 +7,7 @@ namespace Infrastructure.ScreenLoading
         [SerializeField] private string _placementKey;
 
         public string PlacementKey => _placementKey;
+
+        public GameObject GameObject => gameObject;
     }
 }

@@ -1,5 +1,4 @@
 using JetBrains.Annotations;
-using UnityEngine;
 
 namespace Infrastructure.ScreenLoading
 {
@@ -8,8 +7,6 @@ namespace Infrastructure.ScreenLoading
         string Key { get; }
 
         [NotNull]
-        GameObject Prefab { get; }
-
-        string PlacementKey { get; }
+        IScreen Screen { get; }
     }
 }

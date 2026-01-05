@@ -90,8 +90,9 @@ namespace Infrastructure.ScreenLoading
         {
             ArgumentNullException.ThrowIfNull(screenDefinition);
 
-            GameObject prefab = screenDefinition.Prefab;
-            Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
+            IScreen screen = screenDefinition.Screen;
+            GameObject prefab = screen.GameObject;
+            Transform placement = _screenPlacementGetter.Get(screen.PlacementKey).Transform;
             GameObject instance = Object.Instantiate(prefab, placement);
 
             InvalidOperationException.ThrowIfNullWithMessage(

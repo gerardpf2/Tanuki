@@ -8,21 +8,18 @@ namespace Infrastructure.ScreenLoading
     public class ScreenDefinition : IScreenDefinition
     {
         [SerializeField] private string _key;
-        [SerializeField] private GameObject _prefab;
-        [SerializeField] private string _placementKey;
+        [SerializeField] private Screen _screen;
 
         public string Key => _key;
 
-        public GameObject Prefab
+        public IScreen Screen
         {
             get
             {
-                InvalidOperationException.ThrowIfNull(_prefab);
+                InvalidOperationException.ThrowIfNull(_screen);
 
-                return _prefab;
+                return _screen;
             }
         }
-
-        public string PlacementKey => _placementKey;
     }
 }
