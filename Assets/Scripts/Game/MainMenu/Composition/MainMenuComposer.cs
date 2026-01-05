@@ -1,3 +1,4 @@
+using Game.Gameplay.View.UseCases;
 using Game.MainMenu.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
@@ -19,6 +20,22 @@ namespace Game.MainMenu.Composition
                 ruleFactory.GetSingleton<ILoadMainMenuUseCase>(r =>
                     new LoadMainMenuUseCase(
                         r.Resolve<IScreenLoader>()
+                    )
+                )
+            );
+        }
+
+        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddSharedRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<MainMenuViewModel>((r, s) =>
+                    s.Inject(
+                        r.Resolve<ILoadGameplayUseCase>()
                     )
                 )
             );
