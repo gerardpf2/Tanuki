@@ -12,7 +12,7 @@ namespace Editor.Tests.Infrastructure.ScreenLoading.Composition
     {
         // Tested behaviours that differ from ScopeComposer
 
-        private IScreenDefinitionGetter _screenDefinitionGetter;
+        private IScreenGetter _screenGetter;
         private ScopeBuildingContext _scopeBuildingContext;
         private IScreenPlacement _screenPlacement;
         private IRuleResolver _ruleResolver;
@@ -24,26 +24,26 @@ namespace Editor.Tests.Infrastructure.ScreenLoading.Composition
         [SetUp]
         public void SetUp()
         {
-            _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
+            _screenGetter = Substitute.For<IScreenGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _scopeBuildingContext = new ScopeBuildingContext();
             _ruleResolver = Substitute.For<IRuleResolver>();
             _ruleFactory = Substitute.For<IRuleFactory>();
             _ruleAdder = Substitute.For<IRuleAdder>();
 
-            _screenLoadingComposer = new ScreenLoadingComposer(_screenDefinitionGetter, _screenPlacement);
+            _screenLoadingComposer = new ScreenLoadingComposer(_screenGetter, _screenPlacement);
         }
 
         [Test]
         public void AddRules_AddExpected()
         {
-            IRule<IScreenDefinitionGetter> screenDefinitionGetterRule = Substitute.For<IRule<IScreenDefinitionGetter>>();
+            IRule<IScreenGetter> screenGetterRule = Substitute.For<IRule<IScreenGetter>>();
             IRule<IScreenPlacement> screenPlacementRule = Substitute.For<IRule<IScreenPlacement>>();
             IRule<ScreenPlacementContainer> screenPlacementContainerRule = Substitute.For<IRule<ScreenPlacementContainer>>();
             IRule<IScreenPlacementAdder> screenPlacementAdderRule = Substitute.For<IRule<IScreenPlacementAdder>>();
             IRule<IScreenPlacementGetter> screenPlacementGetterRule = Substitute.For<IRule<IScreenPlacementGetter>>();
             IRule<IScreenLoader> screenLoaderRule = Substitute.For<IRule<IScreenLoader>>();
-            _ruleFactory.GetInstance(_screenDefinitionGetter).Returns(screenDefinitionGetterRule);
+            _ruleFactory.GetInstance(_screenGetter).Returns(screenGetterRule);
             _ruleFactory.GetInstance(_screenPlacement).Returns(screenPlacementRule);
             _ruleFactory.GetSingleton(Arg.Any<Func<IRuleResolver, ScreenPlacementContainer>>()).Returns(screenPlacementContainerRule);
             _ruleFactory.GetTo<IScreenPlacementAdder, ScreenPlacementContainer>().Returns(screenPlacementAdderRule);
@@ -53,7 +53,7 @@ namespace Editor.Tests.Infrastructure.ScreenLoading.Composition
 
             _scopeBuildingContext.AddRules(_ruleAdder, _ruleFactory);
 
-            _ruleAdder.Received(1).Add(screenDefinitionGetterRule);
+            _ruleAdder.Received(1).Add(screenGetterRule);
             _ruleAdder.Received(1).Add(screenPlacementRule);
             _ruleAdder.Received(1).Add(screenPlacementContainerRule);
             _ruleAdder.Received(1).Add(screenPlacementAdderRule);

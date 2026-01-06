@@ -9,20 +9,24 @@ namespace Infrastructure.ScreenLoading
     // TODO: Test
     public class ScreenLoader : IScreenLoader
     {
-        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenGetter _screenGetter;
         [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
+        [NotNull] private readonly IScreenStack _screenStack;
 
-        [NotNull] private readonly IDictionary<string, GameObject> _loaded = new Dictionary<string, GameObject>();
+        [NotNull] private readonly IDictionary<string, IScreen> _screens = new Dictionary<string, IScreen>();
 
         public ScreenLoader(
-            [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
-            [NotNull] IScreenPlacementGetter screenPlacementGetter)
+            [NotNull] IScreenGetter screenGetter,
+            [NotNull] IScreenPlacementGetter screenPlacementGetter,
+            [NotNull] IScreenStack screenStack)
         {
-            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(screenGetter);
             ArgumentNullException.ThrowIfNull(screenPlacementGetter);
+            ArgumentNullException.ThrowIfNull(screenStack);
 
-            _screenDefinitionGetter = screenDefinitionGetter;
+            _screenGetter = screenGetter;
             _screenPlacementGetter = screenPlacementGetter;
+            _screenStack = screenStack;
         }
 
         public void Load([NotNull] string key)
@@ -36,9 +40,9 @@ namespace Infrastructure.ScreenLoading
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            GameObject instance = LoadAndAddRef(key);
+            IScreen screen = LoadAndAddRef(key);
 
-            SetData(instance, data, key);
+            SetData(screen, data, key);
         }
 
         public void Unload([NotNull] string key)
@@ -49,64 +53,73 @@ namespace Infrastructure.ScreenLoading
         }
 
         [NotNull]
-        private GameObject LoadAndAddRef([NotNull] string key)
+        private IScreen LoadAndAddRef([NotNull] string key)
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            if (_loaded.TryGetValue(key, out GameObject instance))
+            if (_screens.TryGetValue(key, out IScreen screen))
             {
-                InvalidOperationException.ThrowIfNull(instance);
+                InvalidOperationException.ThrowIfNull(screen);
             }
             else
             {
-                IScreenDefinition screenDefinition = _screenDefinitionGetter.Get(key);
+                IScreen screenSource = _screenGetter.Get(key);
 
-                instance = Instantiate(screenDefinition);
+                screen = Instantiate(screenSource);
 
-                _loaded.Add(key, instance);
+                _screens.Add(key, screen);
             }
 
-            return instance;
+            _screenStack.Push(screen);
+
+            return screen;
         }
 
         private void UnloadAndRemoveRef([NotNull] string key)
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            if (!_loaded.TryGetValue(key, out GameObject instance))
+            if (!_screens.TryGetValue(key, out IScreen screen))
             {
-                return;
+                InvalidOperationException.Throw($"Cannot find screen with Key: {key}");
             }
 
-            InvalidOperationException.ThrowIfNull(instance);
+            InvalidOperationException.ThrowIfNull(screen);
 
-            Object.Destroy(instance);
+            _screenStack.Remove(screen);
 
-            _loaded.Remove(key);
+            Object.Destroy(screen.GameObject);
+
+            _screens.Remove(key);
         }
 
         [NotNull]
-        private GameObject Instantiate([NotNull] IScreenDefinition screenDefinition)
+        private IScreen Instantiate([NotNull] IScreen screenSource)
         {
-            ArgumentNullException.ThrowIfNull(screenDefinition);
+            ArgumentNullException.ThrowIfNull(screenSource);
 
-            GameObject prefab = screenDefinition.Prefab;
-            Transform placement = _screenPlacementGetter.Get(screenDefinition.PlacementKey).Transform;
+            GameObject prefab = screenSource.GameObject;
+            Transform placement = _screenPlacementGetter.Get(screenSource.PlacementKey).Transform;
             GameObject instance = Object.Instantiate(prefab, placement);
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 instance,
-                $"Cannot instantiate screen with Key: {screenDefinition.Key}"
+                $"Cannot instantiate screen with Key: {screenSource.Key}"
             );
 
-            return instance;
+            IScreen screen = instance.GetComponent<IScreen>();
+
+            InvalidOperationException.ThrowIfNull(screen);
+
+            return screen;
         }
 
-        private static void SetData<T>([NotNull] GameObject instance, T data, string key)
+        private static void SetData<T>([NotNull] IScreen screen, T data, string key)
         {
-            ArgumentNullException.ThrowIfNull(instance);
+            ArgumentNullException.ThrowIfNull(screen);
 
-            IDataSettable<T> dataSettable = instance.GetComponent<IDataSettable<T>>();
+            GameObject gameObject = screen.GameObject;
+            IDataSettable<T> dataSettable = gameObject.GetComponent<IDataSettable<T>>();
 
             InvalidOperationException.ThrowIfNullWithMessage(
                 dataSettable,

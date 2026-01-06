@@ -23,7 +23,7 @@ namespace Editor.Tests.Root.Composition
         // Tested behaviours that differ from ScopeComposer
 
         private IGameScopeComposerBuilder _gameScopeComposerBuilder;
-        private IScreenDefinitionGetter _screenDefinitionGetter;
+        private IScreenGetter _screenGetter;
         private ScopeBuildingContext _scopeBuildingContext;
         private IConfigValueGetter _configValueGetter;
         private IScreenPlacement _screenPlacement;
@@ -37,7 +37,7 @@ namespace Editor.Tests.Root.Composition
         public void SetUp()
         {
             _gameScopeComposerBuilder = Substitute.For<IGameScopeComposerBuilder>();
-            _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
+            _screenGetter = Substitute.For<IScreenGetter>();
             _configValueGetter = Substitute.For<IConfigValueGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
             _coroutineRunner = Substitute.For<ICoroutineRunner>();
@@ -47,7 +47,7 @@ namespace Editor.Tests.Root.Composition
 
             _rootComposer =
                 new RootComposer(
-                    _screenDefinitionGetter,
+                    _screenGetter,
                     _screenPlacement,
                     _configValueGetter,
                     _coroutineRunner,

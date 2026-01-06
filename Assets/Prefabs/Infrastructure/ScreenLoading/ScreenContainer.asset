@@ -10,12 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d856366ade314c0d8f8bdb33c86812f9, type: 3}
-  m_Name: ScreenDefinitionContainer
+  m_Name: ScreenContainer
   m_EditorClassIdentifier: 
-  _screenDefinitions:
-  - _key: MainMenu
-    _prefab: {fileID: 843378209077227572, guid: 4e252011de352224dba765db4b5e3716, type: 3}
-    _placementKey: Root
-  - _key: Gameplay
-    _prefab: {fileID: 3684324466126848570, guid: c65d1f20fa9143742812acf55056587b, type: 3}
-    _placementKey: Root
+  _screens:
+  - {fileID: 4023100036525243260, guid: c65d1f20fa9143742812acf55056587b, type: 3}

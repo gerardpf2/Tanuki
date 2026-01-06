@@ -3,13 +3,15 @@ using UnityEngine;
 
 namespace Infrastructure.ScreenLoading
 {
-    public interface IScreenDefinition
+    public interface IScreen
     {
         string Key { get; }
 
-        [NotNull]
-        GameObject Prefab { get; }
-
         string PlacementKey { get; }
+
+        [NotNull]
+        GameObject GameObject { get; }
+
+        void OnFocus(bool focused);
     }
 }
