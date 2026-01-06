@@ -16,7 +16,7 @@ namespace Root.UseCases
     {
         [NotNull] private readonly IGateDefinitionGetter _gateDefinitionGetter;
         [NotNull] private readonly IConfigDefinitionGetter _configDefinitionGetter;
-        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenGetter _screenGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
         [NotNull] private readonly IGameScopeComposerBuilder _gameScopeComposerBuilder;
@@ -24,21 +24,21 @@ namespace Root.UseCases
         public BuildAndInitializeRootScopeUseCase(
             [NotNull] IGateDefinitionGetter gateDefinitionGetter,
             [NotNull] IConfigDefinitionGetter configDefinitionGetter,
-            [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
+            [NotNull] IScreenGetter screenGetter,
             [NotNull] IScreenPlacement rootScreenPlacement,
             [NotNull] ICoroutineRunner coroutineRunner,
             [NotNull] IGameScopeComposerBuilder gameScopeComposerBuilder)
         {
             ArgumentNullException.ThrowIfNull(gateDefinitionGetter);
             ArgumentNullException.ThrowIfNull(configDefinitionGetter);
-            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(screenGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
             ArgumentNullException.ThrowIfNull(gameScopeComposerBuilder);
 
             _gateDefinitionGetter = gateDefinitionGetter;
             _configDefinitionGetter = configDefinitionGetter;
-            _screenDefinitionGetter = screenDefinitionGetter;
+            _screenGetter = screenGetter;
             _rootScreenPlacement = rootScreenPlacement;
             _coroutineRunner = coroutineRunner;
             _gameScopeComposerBuilder = gameScopeComposerBuilder;
@@ -64,7 +64,7 @@ namespace Root.UseCases
 
             ruleAdder.Add(new InstanceRule<IConfigDefinitionGetter>(_configDefinitionGetter));
 
-            ruleAdder.Add(new InstanceRule<IScreenDefinitionGetter>(_screenDefinitionGetter));
+            ruleAdder.Add(new InstanceRule<IScreenGetter>(_screenGetter));
 
             ruleAdder.Add(new InstanceRule<IScreenPlacement>(_rootScreenPlacement));
 
@@ -124,7 +124,7 @@ namespace Root.UseCases
             ruleAdder.Add(
                 new SingletonRule<IScopeComposer>(r =>
                     new RootComposer(
-                        r.Resolve<IScreenDefinitionGetter>(),
+                        r.Resolve<IScreenGetter>(),
                         r.Resolve<IScreenPlacement>(),
                         r.Resolve<IConfigValueGetter>(),
                         r.Resolve<ICoroutineRunner>(),
