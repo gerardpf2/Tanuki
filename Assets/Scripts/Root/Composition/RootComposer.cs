@@ -19,7 +19,7 @@ namespace Root.Composition
 {
     public class RootComposer : ScopeComposer
     {
-        [NotNull] private readonly IScreenDefinitionGetter _screenDefinitionGetter;
+        [NotNull] private readonly IScreenGetter _screenGetter;
         [NotNull] private readonly IScreenPlacement _rootScreenPlacement;
         [NotNull] private readonly IConfigValueGetter _configValueGetter;
         [NotNull] private readonly ICoroutineRunner _coroutineRunner;
@@ -27,21 +27,21 @@ namespace Root.Composition
         [NotNull] private readonly IGameScopeComposerBuilder _gameScopeComposerBuilder;
 
         public RootComposer(
-            [NotNull] IScreenDefinitionGetter screenDefinitionGetter,
+            [NotNull] IScreenGetter screenGetter,
             [NotNull] IScreenPlacement rootScreenPlacement,
             [NotNull] IConfigValueGetter configValueGetter,
             [NotNull] ICoroutineRunner coroutineRunner,
             [NotNull] IConverter converter,
             [NotNull] IGameScopeComposerBuilder gameScopeComposerBuilder)
         {
-            ArgumentNullException.ThrowIfNull(screenDefinitionGetter);
+            ArgumentNullException.ThrowIfNull(screenGetter);
             ArgumentNullException.ThrowIfNull(rootScreenPlacement);
             ArgumentNullException.ThrowIfNull(configValueGetter);
             ArgumentNullException.ThrowIfNull(coroutineRunner);
             ArgumentNullException.ThrowIfNull(converter);
             ArgumentNullException.ThrowIfNull(gameScopeComposerBuilder);
 
-            _screenDefinitionGetter = screenDefinitionGetter;
+            _screenGetter = screenGetter;
             _rootScreenPlacement = rootScreenPlacement;
             _configValueGetter = configValueGetter;
             _coroutineRunner = coroutineRunner;
@@ -54,7 +54,7 @@ namespace Root.Composition
             return base
                 .GetPartialScopeComposers()
                 .Append(new LoggingComposer())
-                .Append(new ScreenLoadingComposer(_screenDefinitionGetter, _rootScreenPlacement))
+                .Append(new ScreenLoadingComposer(_screenGetter, _rootScreenPlacement))
                 .Append(new ConfiguringComposer(_configValueGetter))
                 .Append(new TweeningComposer())
                 .Append(new UnityComposer(_coroutineRunner))

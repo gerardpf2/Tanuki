@@ -2,9 +2,9 @@ using JetBrains.Annotations;
 
 namespace Infrastructure.ScreenLoading
 {
-    public interface IScreenDefinitionGetter
+    public interface IScreenGetter
     {
         [NotNull]
-        IScreenDefinition Get(string key);
+        IScreen Get(string key);
     }
 }

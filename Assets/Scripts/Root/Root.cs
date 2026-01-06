@@ -14,7 +14,7 @@ namespace Root
     {
         [SerializeField] private GateDefinitionContainer _gateDefinitionContainer;
         [SerializeField] private ConfigDefinitionContainer _configDefinitionContainer;
-        [SerializeField] private ScreenDefinitionContainer _screenDefinitionContainer;
+        [SerializeField] private ScreenContainer _screenContainer;
         [SerializeField] private RootScreenPlacement _rootScreenPlacement;
         [SerializeField] private CoroutineRunner _coroutineRunner;
         [SerializeField] private GameScopeComposerBuilder _gameScopeComposerBuilder;
@@ -25,7 +25,7 @@ namespace Root
         {
             InvalidOperationException.ThrowIfNull(_gateDefinitionContainer);
             InvalidOperationException.ThrowIfNull(_configDefinitionContainer);
-            InvalidOperationException.ThrowIfNull(_screenDefinitionContainer);
+            InvalidOperationException.ThrowIfNull(_screenContainer);
             InvalidOperationException.ThrowIfNull(_rootScreenPlacement);
             InvalidOperationException.ThrowIfNull(_coroutineRunner);
             InvalidOperationException.ThrowIfNull(_gameScopeComposerBuilder);
@@ -34,7 +34,7 @@ namespace Root
                 new BuildAndInitializeRootScopeUseCase(
                     _gateDefinitionContainer,
                     _configDefinitionContainer,
-                    _screenDefinitionContainer,
+                    _screenContainer,
                     _rootScreenPlacement,
                     _coroutineRunner,
                     _gameScopeComposerBuilder
