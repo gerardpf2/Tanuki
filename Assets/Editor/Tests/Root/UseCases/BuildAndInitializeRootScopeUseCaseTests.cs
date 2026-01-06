@@ -13,7 +13,7 @@ namespace Editor.Tests.Root.UseCases
     public class BuildAndInitializeRootScopeUseCaseTests
     {
         private IGameScopeComposerBuilder _gameScopeComposerBuilder;
-        private IScreenDefinitionGetter _screenDefinitionGetter;
+        private IScreenGetter _screenGetter;
         private IConfigDefinitionGetter _configDefinitionGetter;
         private IGateDefinitionGetter _gateDefinitionGetter;
         private IScreenPlacement _screenPlacement;
@@ -25,7 +25,7 @@ namespace Editor.Tests.Root.UseCases
         public void SetUp()
         {
             _gameScopeComposerBuilder = Substitute.For<IGameScopeComposerBuilder>();
-            _screenDefinitionGetter = Substitute.For<IScreenDefinitionGetter>();
+            _screenGetter = Substitute.For<IScreenGetter>();
             _configDefinitionGetter = Substitute.For<IConfigDefinitionGetter>();
             _gateDefinitionGetter = Substitute.For<IGateDefinitionGetter>();
             _screenPlacement = Substitute.For<IScreenPlacement>();
@@ -35,7 +35,7 @@ namespace Editor.Tests.Root.UseCases
                 new BuildAndInitializeRootScopeUseCase(
                     _gateDefinitionGetter,
                     _configDefinitionGetter,
-                    _screenDefinitionGetter,
+                    _screenGetter,
                     _screenPlacement,
                     _coroutineRunner,
                     _gameScopeComposerBuilder
