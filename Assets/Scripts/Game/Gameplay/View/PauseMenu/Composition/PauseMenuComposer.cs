@@ -22,6 +22,14 @@ namespace Game.Gameplay.View.PauseMenu.Composition
                     )
                 )
             );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IUnloadPauseMenuUseCase>(r =>
+                    new UnloadPauseMenuUseCase(
+                        r.Resolve<IScreenLoader>()
+                    )
+                )
+            );
         }
     }
 }
