@@ -2,13 +2,13 @@ using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.Menu.UseCases
+namespace Game.Gameplay.View.PauseMenu.UseCases
 {
-    public class LoadGameplayMenuUseCase : ILoadGameplayMenuUseCase
+    public class LoadPauseMenuUseCase : ILoadPauseMenuUseCase
     {
         [NotNull] private readonly IScreenLoader _screenLoader;
 
-        public LoadGameplayMenuUseCase([NotNull] IScreenLoader screenLoader)
+        public LoadPauseMenuUseCase([NotNull] IScreenLoader screenLoader)
         {
             ArgumentNullException.ThrowIfNull(screenLoader);
 
@@ -17,7 +17,7 @@ namespace Game.Gameplay.View.Menu.UseCases
 
         public void Resolve()
         {
-            _screenLoader.Load("GameplayMenu"); // TODO
+            _screenLoader.Load(PauseMenuConstants.ScreenKey);
         }
     }
 }

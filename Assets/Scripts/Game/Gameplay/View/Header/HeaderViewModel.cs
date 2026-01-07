@@ -13,7 +13,7 @@ namespace Game.Gameplay.View.Header
     {
         private IEventsResolver _eventsResolver;
 
-        [NotNull] private readonly IBoundProperty<ButtonViewData> _menuButtonViewData = new BoundProperty<ButtonViewData>("MenuButtonViewData");
+        [NotNull] private readonly IBoundProperty<ButtonViewData> _pauseMenuButtonViewData = new BoundProperty<ButtonViewData>("PauseMenuButtonViewData");
         [NotNull] private readonly IBoundProperty<GoalsViewData> _goalsViewData = new BoundProperty<GoalsViewData>("GoalsViewData");
         [NotNull] private readonly IBoundProperty<MovesViewData> _movesViewData = new BoundProperty<MovesViewData>("MovesViewData");
 
@@ -45,14 +45,14 @@ namespace Game.Gameplay.View.Header
 
         private void InitializeBindings()
         {
-            _menuButtonViewData.Value = new ButtonViewData(null, false); // TODO
+            _pauseMenuButtonViewData.Value = new ButtonViewData(null, false); // TODO
             _goalsViewData.Value = new GoalsViewData();
             _movesViewData.Value = new MovesViewData();
         }
 
         private void AddBindings()
         {
-            Add(_menuButtonViewData);
+            Add(_pauseMenuButtonViewData);
             Add(_goalsViewData);
             Add(_movesViewData);
         }
@@ -77,16 +77,16 @@ namespace Game.Gameplay.View.Header
 
         private void HandleResolveBegin()
         {
-            InvalidOperationException.ThrowIfNull(_menuButtonViewData.Value);
+            InvalidOperationException.ThrowIfNull(_pauseMenuButtonViewData.Value);
 
-            _menuButtonViewData.Value.SetEnabled(false);
+            _pauseMenuButtonViewData.Value.SetEnabled(false);
         }
 
         private void HandleResolveEnd()
         {
-            InvalidOperationException.ThrowIfNull(_menuButtonViewData.Value);
+            InvalidOperationException.ThrowIfNull(_pauseMenuButtonViewData.Value);
 
-            _menuButtonViewData.Value.SetEnabled(true);
+            _pauseMenuButtonViewData.Value.SetEnabled(true);
         }
     }
 }
