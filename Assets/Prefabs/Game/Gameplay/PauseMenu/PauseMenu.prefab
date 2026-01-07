@@ -57,6 +57,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab5bb43a6bfd4427bfb021e85539f7bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _key: GameplayMenu
+  _key: PauseMenu
   _placementKey: Root
   _isolated: 1

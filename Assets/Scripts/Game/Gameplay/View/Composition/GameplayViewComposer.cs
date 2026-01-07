@@ -23,6 +23,7 @@ using Game.Gameplay.View.Goals.Composition;
 using Game.Gameplay.View.Header.Composition;
 using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Moves.Composition;
+using Game.Gameplay.View.PauseMenu.Composition;
 using Game.Gameplay.View.Pieces;
 using Game.Gameplay.View.Pieces.Composition;
 using Game.Gameplay.View.Pieces.Preloader;
@@ -141,6 +142,7 @@ namespace Game.Gameplay.View.Composition
                 .Append(new GoalsComposer())
                 .Append(new HeaderComposer())
                 .Append(new MovesComposer())
+                .Append(new PauseMenuComposer())
                 .Append(new PiecesComposer(_pieceViewDefinitionGetter))
                 .Append(new PlayerComposer());
         }

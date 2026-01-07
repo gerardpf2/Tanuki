@@ -1,0 +1,27 @@
+using Game.Gameplay.View.PauseMenu.UseCases;
+using Infrastructure.DependencyInjection;
+using Infrastructure.ScreenLoading;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
+
+namespace Game.Gameplay.View.PauseMenu.Composition
+{
+    public class PauseMenuComposer : ScopeComposer
+    {
+        protected override void AddRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ILoadPauseMenuUseCase>(r =>
+                    new LoadPauseMenuUseCase(
+                        r.Resolve<IScreenLoader>()
+                    )
+                )
+            );
+        }
+    }
+}

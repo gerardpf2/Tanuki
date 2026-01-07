@@ -1,6 +1,7 @@
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Moves;
+using Game.Gameplay.View.PauseMenu.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.ModelViewViewModel.Examples.Button;
@@ -12,6 +13,7 @@ namespace Game.Gameplay.View.Header
     public class HeaderViewModel : ViewModel, IDataSettable<HeaderViewData>
     {
         private IEventsResolver _eventsResolver;
+        private ILoadPauseMenuUseCase _loadPauseMenuUseCase;
 
         [NotNull] private readonly IBoundProperty<ButtonViewData> _pauseMenuButtonViewData = new BoundProperty<ButtonViewData>("PauseMenuButtonViewData");
         [NotNull] private readonly IBoundProperty<GoalsViewData> _goalsViewData = new BoundProperty<GoalsViewData>("GoalsViewData");
@@ -31,11 +33,15 @@ namespace Game.Gameplay.View.Header
             UnsubscribeFromEvents();
         }
 
-        public void Inject([NotNull] IEventsResolver eventsResolver)
+        public void Inject(
+            [NotNull] IEventsResolver eventsResolver,
+            [NotNull] ILoadPauseMenuUseCase loadPauseMenuUseCase)
         {
             ArgumentNullException.ThrowIfNull(eventsResolver);
+            ArgumentNullException.ThrowIfNull(loadPauseMenuUseCase);
 
             _eventsResolver = eventsResolver;
+            _loadPauseMenuUseCase = loadPauseMenuUseCase;
         }
 
         public void SetData(HeaderViewData _)
@@ -45,7 +51,7 @@ namespace Game.Gameplay.View.Header
 
         private void InitializeBindings()
         {
-            _pauseMenuButtonViewData.Value = new ButtonViewData(null, false); // TODO
+            _pauseMenuButtonViewData.Value = new ButtonViewData(HandlePauseMenuButtonClick, false);
             _goalsViewData.Value = new GoalsViewData();
             _movesViewData.Value = new MovesViewData();
         }
@@ -87,6 +93,13 @@ namespace Game.Gameplay.View.Header
             InvalidOperationException.ThrowIfNull(_pauseMenuButtonViewData.Value);
 
             _pauseMenuButtonViewData.Value.SetEnabled(true);
+        }
+
+        private void HandlePauseMenuButtonClick()
+        {
+            InvalidOperationException.ThrowIfNull(_loadPauseMenuUseCase);
+
+            _loadPauseMenuUseCase.Resolve();
         }
     }
 }
