@@ -20,6 +20,7 @@ using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.EventResolvers.Composition;
 using Game.Gameplay.View.Goals;
 using Game.Gameplay.View.Goals.Composition;
+using Game.Gameplay.View.Header.Composition;
 using Game.Gameplay.View.Moves;
 using Game.Gameplay.View.Moves.Composition;
 using Game.Gameplay.View.Pieces;
@@ -138,6 +139,7 @@ namespace Game.Gameplay.View.Composition
                 .Append(new CameraComposer())
                 .Append(new EventResolversComposer())
                 .Append(new GoalsComposer())
+                .Append(new HeaderComposer())
                 .Append(new MovesComposer())
                 .Append(new PiecesComposer(_pieceViewDefinitionGetter))
                 .Append(new PlayerComposer());
