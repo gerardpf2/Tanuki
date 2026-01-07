@@ -12,9 +12,9 @@ namespace Game.Gameplay.View.PauseMenu
         private IResumeGameplayUseCase _resumeGameplayUseCase;
         private IGoToMainMenuUseCase _goToMainMenuUseCase;
 
-        [NotNull] private readonly IBoundProperty<ButtonViewData> _resumeButtonViewData = new BoundProperty<ButtonViewData>("ResumeButtonViewData");
-        [NotNull] private readonly IBoundProperty<ButtonViewData> _restartButtonViewData = new BoundProperty<ButtonViewData>("RestartButtonViewData");
-        [NotNull] private readonly IBoundProperty<ButtonViewData> _mainMenuButtonViewData = new BoundProperty<ButtonViewData>("MainMenuButtonViewData");
+        [NotNull] private readonly IBoundProperty<ButtonViewData> _resumeGameplayButtonViewData = new BoundProperty<ButtonViewData>("ResumeGameplayButtonViewData");
+        [NotNull] private readonly IBoundProperty<ButtonViewData> _restartGameplayButtonViewData = new BoundProperty<ButtonViewData>("RestartGameplayButtonViewData");
+        [NotNull] private readonly IBoundProperty<ButtonViewData> _goToMainMenuButtonViewData = new BoundProperty<ButtonViewData>("GoToMainMenuButtonViewData");
 
         private void Awake()
         {
@@ -37,31 +37,31 @@ namespace Game.Gameplay.View.PauseMenu
 
         private void InitializeBindings()
         {
-            _resumeButtonViewData.Value = new ButtonViewData(HandleResumeButtonClick);
-            _restartButtonViewData.Value = new ButtonViewData(HandleRestartButtonClick);
-            _mainMenuButtonViewData.Value = new ButtonViewData(HandleMainMenuButtonClick);
+            _resumeGameplayButtonViewData.Value = new ButtonViewData(HandleResumeGameplayButtonClick);
+            _restartGameplayButtonViewData.Value = new ButtonViewData(HandleRestartGameplayButtonClick);
+            _goToMainMenuButtonViewData.Value = new ButtonViewData(HandleGoToMainMenuButtonClick);
         }
 
         private void AddBindings()
         {
-            Add(_resumeButtonViewData);
-            Add(_restartButtonViewData);
-            Add(_mainMenuButtonViewData);
+            Add(_resumeGameplayButtonViewData);
+            Add(_restartGameplayButtonViewData);
+            Add(_goToMainMenuButtonViewData);
         }
 
-        private void HandleResumeButtonClick()
+        private void HandleResumeGameplayButtonClick()
         {
             InvalidOperationException.ThrowIfNull(_resumeGameplayUseCase);
 
             _resumeGameplayUseCase.Resolve();
         }
 
-        private static void HandleRestartButtonClick()
+        private static void HandleRestartGameplayButtonClick()
         {
             // TODO
         }
 
-        private void HandleMainMenuButtonClick()
+        private void HandleGoToMainMenuButtonClick()
         {
             InvalidOperationException.ThrowIfNull(_goToMainMenuUseCase);
 
