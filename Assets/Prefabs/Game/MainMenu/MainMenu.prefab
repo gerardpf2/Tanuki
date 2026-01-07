@@ -65,6 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _key: MainMenu
   _placementKey: Root
+  _isolated: 0
 --- !u!1 &3875052556058780016
 GameObject:
   m_ObjectHideFlags: 0
