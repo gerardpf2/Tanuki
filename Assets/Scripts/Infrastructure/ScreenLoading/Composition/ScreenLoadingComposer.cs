@@ -38,11 +38,19 @@ namespace Infrastructure.ScreenLoading.Composition
             ruleAdder.Add(ruleFactory.GetSingleton<IScreenStack>(_ => new ScreenStack()));
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IScreenStack>(_ =>
+                    new ScreenStack()
+                ),
+                ScreenLoadingComposerKeys.ScreenStack.Isolated
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IScreenLoader>(r =>
                     new ScreenLoader(
                         r.Resolve<IScreenGetter>(),
                         r.Resolve<IScreenPlacementGetter>(),
-                        r.Resolve<IScreenStack>()
+                        r.Resolve<IScreenStack>(),
+                        r.Resolve<IScreenStack>(ScreenLoadingComposerKeys.ScreenStack.Isolated)
                     )
                 )
             );
