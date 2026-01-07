@@ -61,6 +61,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2159507326199960343}
+  - component: {fileID: 4546361872688405156}
   m_Layer: 0
   m_Name: MenuButtonHolder
   m_TagString: Untagged
@@ -88,6 +89,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 150, y: 0}
   m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &4546361872688405156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3166860539829936878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d371f9498a14420e8f640acea7db8ca7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _viewModel: {fileID: 3741067798309236772}
+  _key: MenuButtonViewData
+  _gameObject: {fileID: 5111597697425948217}
 --- !u!1 &5549565147677149767
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,6 +598,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea286da4751fffc489f5c1e600e34103, type: 3}
+--- !u!1 &5111597697425948217 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2067900287230021953, guid: ea286da4751fffc489f5c1e600e34103, type: 3}
+  m_PrefabInstance: {fileID: 6503940440805420920}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6158224571778028763 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1095724642660285347, guid: ea286da4751fffc489f5c1e600e34103, type: 3}
