@@ -12,6 +12,8 @@ namespace Infrastructure.ScreenLoading
         [NotNull]
         GameObject GameObject { get; }
 
+        bool Isolated { get; }
+
         void OnFocus(bool focused);
     }
 }
