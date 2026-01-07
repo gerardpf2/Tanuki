@@ -10,6 +10,7 @@ namespace Game.Gameplay.View.PauseMenu
     public class PauseMenuViewModel : ViewModel
     {
         private IResumeGameplayUseCase _resumeGameplayUseCase;
+        private IGoToMainMenuUseCase _goToMainMenuUseCase;
 
         [NotNull] private readonly IBoundProperty<ButtonViewData> _resumeButtonViewData = new BoundProperty<ButtonViewData>("ResumeButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _restartButtonViewData = new BoundProperty<ButtonViewData>("RestartButtonViewData");
@@ -23,11 +24,15 @@ namespace Game.Gameplay.View.PauseMenu
             AddBindings();
         }
 
-        public void Inject([NotNull] IResumeGameplayUseCase resumeGameplayUseCase)
+        public void Inject(
+            [NotNull] IResumeGameplayUseCase resumeGameplayUseCase,
+            [NotNull] IGoToMainMenuUseCase goToMainMenuUseCase)
         {
+            ArgumentNullException.ThrowIfNull(resumeGameplayUseCase);
             ArgumentNullException.ThrowIfNull(resumeGameplayUseCase);
 
             _resumeGameplayUseCase = resumeGameplayUseCase;
+            _goToMainMenuUseCase = goToMainMenuUseCase;
         }
 
         private void InitializeBindings()
@@ -56,9 +61,11 @@ namespace Game.Gameplay.View.PauseMenu
             // TODO
         }
 
-        private static void HandleMainMenuButtonClick()
+        private void HandleMainMenuButtonClick()
         {
-            // TODO
+            InvalidOperationException.ThrowIfNull(_goToMainMenuUseCase);
+
+            _goToMainMenuUseCase.Resolve();
         }
     }
 }

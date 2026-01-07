@@ -1,4 +1,5 @@
 using Game.Gameplay.View.PauseMenu.UseCases;
+using Game.Gameplay.View.UseCases;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
@@ -14,6 +15,15 @@ namespace Game.Gameplay.View.PauseMenu.Composition
             ArgumentNullException.ThrowIfNull(ruleFactory);
 
             base.AddRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IGoToMainMenuUseCase>(r =>
+                    new GoToMainMenuUseCase(
+                        r.Resolve<IUnloadPauseMenuUseCase>(),
+                        r.Resolve<IUnloadGameplayUseCase>()
+                    )
+                )
+            );
 
             ruleAdder.Add(
                 ruleFactory.GetSingleton<ILoadPauseMenuUseCase>(r =>
@@ -50,7 +60,8 @@ namespace Game.Gameplay.View.PauseMenu.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<PauseMenuViewModel>((r, s) =>
                     s.Inject(
-                        r.Resolve<IResumeGameplayUseCase>()
+                        r.Resolve<IResumeGameplayUseCase>(),
+                        r.Resolve<IGoToMainMenuUseCase>()
                     )
                 )
             );
