@@ -24,9 +24,33 @@ namespace Game.Gameplay.View.PauseMenu.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IResumeGameplayUseCase>(r =>
+                    new ResumeGameplayUseCase(
+                        r.Resolve<IUnloadPauseMenuUseCase>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadPauseMenuUseCase>(r =>
                     new UnloadPauseMenuUseCase(
                         r.Resolve<IScreenLoader>()
+                    )
+                )
+            );
+        }
+
+        protected override void AddSharedRules([NotNull] IRuleAdder ruleAdder, [NotNull] IRuleFactory ruleFactory)
+        {
+            ArgumentNullException.ThrowIfNull(ruleAdder);
+            ArgumentNullException.ThrowIfNull(ruleFactory);
+
+            base.AddSharedRules(ruleAdder, ruleFactory);
+
+            ruleAdder.Add(
+                ruleFactory.GetInject<PauseMenuViewModel>((r, s) =>
+                    s.Inject(
+                        r.Resolve<IResumeGameplayUseCase>()
                     )
                 )
             );

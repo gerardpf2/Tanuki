@@ -1,19 +1,33 @@
+using Game.Gameplay.View.PauseMenu.UseCases;
+using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.ModelViewViewModel.Examples.Button;
+using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
 namespace Game.Gameplay.View.PauseMenu
 {
     public class PauseMenuViewModel : ViewModel
     {
+        private IResumeGameplayUseCase _resumeGameplayUseCase;
+
         [NotNull] private readonly IBoundProperty<ButtonViewData> _resumeButtonViewData = new BoundProperty<ButtonViewData>("ResumeButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _restartButtonViewData = new BoundProperty<ButtonViewData>("RestartButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _mainMenuButtonViewData = new BoundProperty<ButtonViewData>("MainMenuButtonViewData");
 
         private void Awake()
         {
+            InjectResolver.Resolve(this);
+
             InitializeBindings();
             AddBindings();
+        }
+
+        public void Inject([NotNull] IResumeGameplayUseCase resumeGameplayUseCase)
+        {
+            ArgumentNullException.ThrowIfNull(resumeGameplayUseCase);
+
+            _resumeGameplayUseCase = resumeGameplayUseCase;
         }
 
         private void InitializeBindings()
@@ -30,9 +44,11 @@ namespace Game.Gameplay.View.PauseMenu
             Add(_mainMenuButtonViewData);
         }
 
-        private static void HandleResumeButtonClick()
+        private void HandleResumeButtonClick()
         {
-            // TODO
+            InvalidOperationException.ThrowIfNull(_resumeGameplayUseCase);
+
+            _resumeGameplayUseCase.Resolve();
         }
 
         private static void HandleRestartButtonClick()
