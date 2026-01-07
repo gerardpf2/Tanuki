@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _key: Gameplay
   _placementKey: Root
+  _isolated: 0
 --- !u!1 &4564328060588623767
 GameObject:
   m_ObjectHideFlags: 0
