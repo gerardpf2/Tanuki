@@ -74,7 +74,14 @@ namespace Infrastructure.ScreenLoading
                 _screens.Add(key, screen);
             }
 
-            _screenStack.Push(screen);
+            if (screen.Isolated)
+            {
+                _isolatedScreenStack.Push(screen);
+            }
+            else
+            {
+                _screenStack.Push(screen);
+            }
 
             return screen;
         }
@@ -90,7 +97,14 @@ namespace Infrastructure.ScreenLoading
 
             InvalidOperationException.ThrowIfNull(screen);
 
-            _screenStack.Remove(screen);
+            if (screen.Isolated)
+            {
+                _isolatedScreenStack.Remove(screen);
+            }
+            else
+            {
+                _screenStack.Remove(screen);
+            }
 
             Object.Destroy(screen.GameObject);
 
