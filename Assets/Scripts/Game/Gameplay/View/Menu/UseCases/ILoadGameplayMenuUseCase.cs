@@ -1,4 +1,4 @@
-namespace Game.Gameplay.View.Header.UseCases
+namespace Game.Gameplay.View.Menu.UseCases
 {
     public interface ILoadGameplayMenuUseCase
     {

@@ -2,7 +2,7 @@ using Infrastructure.ScreenLoading;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 
-namespace Game.Gameplay.View.Header.UseCases
+namespace Game.Gameplay.View.Menu.UseCases
 {
     public class LoadGameplayMenuUseCase : ILoadGameplayMenuUseCase
     {
