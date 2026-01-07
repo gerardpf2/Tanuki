@@ -12,21 +12,25 @@ namespace Infrastructure.ScreenLoading
         [NotNull] private readonly IScreenGetter _screenGetter;
         [NotNull] private readonly IScreenPlacementGetter _screenPlacementGetter;
         [NotNull] private readonly IScreenStack _screenStack;
+        [NotNull] private readonly IScreenStack _isolatedScreenStack;
 
         [NotNull] private readonly IDictionary<string, IScreen> _screens = new Dictionary<string, IScreen>();
 
         public ScreenLoader(
             [NotNull] IScreenGetter screenGetter,
             [NotNull] IScreenPlacementGetter screenPlacementGetter,
-            [NotNull] IScreenStack screenStack)
+            [NotNull] IScreenStack screenStack,
+            [NotNull] IScreenStack isolatedScreenStack)
         {
             ArgumentNullException.ThrowIfNull(screenGetter);
             ArgumentNullException.ThrowIfNull(screenPlacementGetter);
             ArgumentNullException.ThrowIfNull(screenStack);
+            ArgumentNullException.ThrowIfNull(isolatedScreenStack);
 
             _screenGetter = screenGetter;
             _screenPlacementGetter = screenPlacementGetter;
             _screenStack = screenStack;
+            _isolatedScreenStack = isolatedScreenStack;
         }
 
         public void Load([NotNull] string key)
