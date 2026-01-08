@@ -99,8 +99,17 @@ namespace Game.Gameplay.View.Composition
             );
 
             ruleAdder.Add(
-                ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
-                    new UnloadGameplayUseCase(
+                ruleFactory.GetSingleton<IUninitializeAndUnloadGameplayUseCase>(r =>
+                    new UninitializeAndUnloadGameplayUseCase(
+                        r.Resolve<IUninitializeGameplayUseCase>(),
+                        r.Resolve<IUnloadGameplayUseCase>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IUninitializeGameplayUseCase>(r =>
+                    new UninitializeGameplayUseCase(
                         r.Resolve<IBag>(),
                         r.Resolve<IBoard>(),
                         r.Resolve<IPieceIdGetter>(),
@@ -119,7 +128,14 @@ namespace Game.Gameplay.View.Composition
                         r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.SwapCurrentNext),
                         r.Resolve<IPlayerPieceGhostView>(),
                         r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<IEventsResolver>(),
+                        r.Resolve<IEventsResolver>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
+                    new UnloadGameplayUseCase(
                         r.Resolve<IScreenLoader>()
                     )
                 )
@@ -136,7 +152,7 @@ namespace Game.Gameplay.View.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<UnloadGameplay>((r, s) =>
                     s.Inject(
-                        r.Resolve<IUnloadGameplayUseCase>()
+                        r.Resolve<IUninitializeAndUnloadGameplayUseCase>()
                     )
                 )
             );
@@ -154,6 +170,8 @@ namespace Game.Gameplay.View.Composition
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
+            // TODO: Child instead of partial ¿?
+
             return base
                 .GetPartialScopeComposers()
                 .Append(new ActionsComposer())

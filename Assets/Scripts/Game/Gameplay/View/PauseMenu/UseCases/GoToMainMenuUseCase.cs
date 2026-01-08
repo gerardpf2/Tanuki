@@ -7,23 +7,23 @@ namespace Game.Gameplay.View.PauseMenu.UseCases
     public class GoToMainMenuUseCase : IGoToMainMenuUseCase
     {
         [NotNull] private readonly IUnloadPauseMenuUseCase _unloadPauseMenuUseCase;
-        [NotNull] private readonly IUnloadGameplayUseCase _unloadGameplayUseCase;
+        [NotNull] private readonly IUninitializeAndUnloadGameplayUseCase _uninitializeAndUnloadGameplayUseCase;
 
         public GoToMainMenuUseCase(
             [NotNull] IUnloadPauseMenuUseCase unloadPauseMenuUseCase,
-            [NotNull] IUnloadGameplayUseCase unloadGameplayUseCase)
+            [NotNull] IUninitializeAndUnloadGameplayUseCase uninitializeAndUnloadGameplayUseCase)
         {
             ArgumentNullException.ThrowIfNull(unloadPauseMenuUseCase);
-            ArgumentNullException.ThrowIfNull(unloadGameplayUseCase);
+            ArgumentNullException.ThrowIfNull(uninitializeAndUnloadGameplayUseCase);
 
             _unloadPauseMenuUseCase = unloadPauseMenuUseCase;
-            _unloadGameplayUseCase = unloadGameplayUseCase;
+            _uninitializeAndUnloadGameplayUseCase = uninitializeAndUnloadGameplayUseCase;
         }
 
         public void Resolve()
         {
             _unloadPauseMenuUseCase.Resolve();
-            _unloadGameplayUseCase.Resolve();
+            _uninitializeAndUnloadGameplayUseCase.Resolve();
         }
     }
 }

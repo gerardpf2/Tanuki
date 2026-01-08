@@ -8,18 +8,18 @@ namespace Game.Gameplay.View.REMOVE
 {
     public class UnloadGameplay : MonoBehaviour
     {
-        private IUnloadGameplayUseCase _unloadGameplayUseCase;
+        private IUninitializeAndUnloadGameplayUseCase _uninitializeAndUnloadGameplayUseCase;
 
         private void Awake()
         {
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] IUnloadGameplayUseCase unloadGameplayUseCase)
+        public void Inject([NotNull] IUninitializeAndUnloadGameplayUseCase uninitializeAndUnloadGameplayUseCase)
         {
-            ArgumentNullException.ThrowIfNull(unloadGameplayUseCase);
+            ArgumentNullException.ThrowIfNull(uninitializeAndUnloadGameplayUseCase);
 
-            _unloadGameplayUseCase = unloadGameplayUseCase;
+            _uninitializeAndUnloadGameplayUseCase = uninitializeAndUnloadGameplayUseCase;
         }
 
         private void Update()
@@ -32,9 +32,9 @@ namespace Game.Gameplay.View.REMOVE
 
         private void Unload()
         {
-            InvalidOperationException.ThrowIfNull(_unloadGameplayUseCase);
+            InvalidOperationException.ThrowIfNull(_uninitializeAndUnloadGameplayUseCase);
 
-            _unloadGameplayUseCase.Resolve();
+            _uninitializeAndUnloadGameplayUseCase.Resolve();
         }
     }
 }

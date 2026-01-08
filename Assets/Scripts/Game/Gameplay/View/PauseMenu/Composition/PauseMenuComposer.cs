@@ -20,7 +20,7 @@ namespace Game.Gameplay.View.PauseMenu.Composition
                 ruleFactory.GetSingleton<IGoToMainMenuUseCase>(r =>
                     new GoToMainMenuUseCase(
                         r.Resolve<IUnloadPauseMenuUseCase>(),
-                        r.Resolve<IUnloadGameplayUseCase>()
+                        r.Resolve<IUninitializeAndUnloadGameplayUseCase>()
                     )
                 )
             );
