@@ -9,12 +9,13 @@ namespace Game.Gameplay.View.PauseMenu
 {
     public class PauseMenuViewModel : ViewModel
     {
-        private IResumeGameplayUseCase _resumeGameplayUseCase;
         private IGoToMainMenuUseCase _goToMainMenuUseCase;
+        private IRestartGameplayUseCase _restartGameplayUseCase;
+        private IResumeGameplayUseCase _resumeGameplayUseCase;
 
-        [NotNull] private readonly IBoundProperty<ButtonViewData> _resumeGameplayButtonViewData = new BoundProperty<ButtonViewData>("ResumeGameplayButtonViewData");
-        [NotNull] private readonly IBoundProperty<ButtonViewData> _restartGameplayButtonViewData = new BoundProperty<ButtonViewData>("RestartGameplayButtonViewData");
         [NotNull] private readonly IBoundProperty<ButtonViewData> _goToMainMenuButtonViewData = new BoundProperty<ButtonViewData>("GoToMainMenuButtonViewData");
+        [NotNull] private readonly IBoundProperty<ButtonViewData> _restartGameplayButtonViewData = new BoundProperty<ButtonViewData>("RestartGameplayButtonViewData");
+        [NotNull] private readonly IBoundProperty<ButtonViewData> _resumeGameplayButtonViewData = new BoundProperty<ButtonViewData>("ResumeGameplayButtonViewData");
 
         private void Awake()
         {
@@ -25,40 +26,31 @@ namespace Game.Gameplay.View.PauseMenu
         }
 
         public void Inject(
-            [NotNull] IResumeGameplayUseCase resumeGameplayUseCase,
-            [NotNull] IGoToMainMenuUseCase goToMainMenuUseCase)
+            [NotNull] IGoToMainMenuUseCase goToMainMenuUseCase,
+            [NotNull] IRestartGameplayUseCase restartGameplayUseCase,
+            [NotNull] IResumeGameplayUseCase resumeGameplayUseCase)
         {
-            ArgumentNullException.ThrowIfNull(resumeGameplayUseCase);
+            ArgumentNullException.ThrowIfNull(goToMainMenuUseCase);
+            ArgumentNullException.ThrowIfNull(restartGameplayUseCase);
             ArgumentNullException.ThrowIfNull(resumeGameplayUseCase);
 
-            _resumeGameplayUseCase = resumeGameplayUseCase;
             _goToMainMenuUseCase = goToMainMenuUseCase;
+            _restartGameplayUseCase = restartGameplayUseCase;
+            _resumeGameplayUseCase = resumeGameplayUseCase;
         }
 
         private void InitializeBindings()
         {
-            _resumeGameplayButtonViewData.Value = new ButtonViewData(HandleResumeGameplayButtonClick);
-            _restartGameplayButtonViewData.Value = new ButtonViewData(HandleRestartGameplayButtonClick);
             _goToMainMenuButtonViewData.Value = new ButtonViewData(HandleGoToMainMenuButtonClick);
+            _restartGameplayButtonViewData.Value = new ButtonViewData(HandleRestartGameplayButtonClick);
+            _resumeGameplayButtonViewData.Value = new ButtonViewData(HandleResumeGameplayButtonClick);
         }
 
         private void AddBindings()
         {
-            Add(_resumeGameplayButtonViewData);
-            Add(_restartGameplayButtonViewData);
             Add(_goToMainMenuButtonViewData);
-        }
-
-        private void HandleResumeGameplayButtonClick()
-        {
-            InvalidOperationException.ThrowIfNull(_resumeGameplayUseCase);
-
-            _resumeGameplayUseCase.Resolve();
-        }
-
-        private static void HandleRestartGameplayButtonClick()
-        {
-            // TODO
+            Add(_restartGameplayButtonViewData);
+            Add(_resumeGameplayButtonViewData);
         }
 
         private void HandleGoToMainMenuButtonClick()
@@ -66,6 +58,20 @@ namespace Game.Gameplay.View.PauseMenu
             InvalidOperationException.ThrowIfNull(_goToMainMenuUseCase);
 
             _goToMainMenuUseCase.Resolve();
+        }
+
+        private void HandleRestartGameplayButtonClick()
+        {
+            InvalidOperationException.ThrowIfNull(_restartGameplayUseCase);
+
+            _restartGameplayUseCase.Resolve("Test"); // TODO
+        }
+
+        private void HandleResumeGameplayButtonClick()
+        {
+            InvalidOperationException.ThrowIfNull(_resumeGameplayUseCase);
+
+            _resumeGameplayUseCase.Resolve();
         }
     }
 }

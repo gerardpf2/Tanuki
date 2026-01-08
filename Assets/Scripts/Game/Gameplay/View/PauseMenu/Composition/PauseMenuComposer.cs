@@ -69,8 +69,9 @@ namespace Game.Gameplay.View.PauseMenu.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<PauseMenuViewModel>((r, s) =>
                     s.Inject(
-                        r.Resolve<IResumeGameplayUseCase>(),
-                        r.Resolve<IGoToMainMenuUseCase>()
+                        r.Resolve<IGoToMainMenuUseCase>(),
+                        r.Resolve<IRestartGameplayUseCase>(),
+                        r.Resolve<IResumeGameplayUseCase>()
                     )
                 )
             );
