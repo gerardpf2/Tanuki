@@ -91,6 +91,15 @@ namespace Game.Gameplay.View.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IReloadGameplayUseCase>(r =>
+                    new ReloadGameplayUseCase(
+                        r.Resolve<IInitializeAndLoadAndRunGameplayUseCase>(),
+                        r.Resolve<IUninitializeGameplayUseCase>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IRunGameplayUseCase>(r =>
                     new RunGameplayUseCase(
                         r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Initial)
@@ -170,8 +179,6 @@ namespace Game.Gameplay.View.Composition
 
         protected override IEnumerable<IScopeComposer> GetPartialScopeComposers()
         {
-            // TODO: Child instead of partial ¿?
-
             return base
                 .GetPartialScopeComposers()
                 .Append(new ActionsComposer())
