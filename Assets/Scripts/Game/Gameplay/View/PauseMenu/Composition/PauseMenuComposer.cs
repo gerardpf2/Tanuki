@@ -34,6 +34,15 @@ namespace Game.Gameplay.View.PauseMenu.Composition
             );
 
             ruleAdder.Add(
+                ruleFactory.GetSingleton<IRestartGameplayUseCase>(r =>
+                    new RestartGameplayUseCase(
+                        r.Resolve<IUnloadPauseMenuUseCase>(),
+                        r.Resolve<IReloadGameplayUseCase>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
                 ruleFactory.GetSingleton<IResumeGameplayUseCase>(r =>
                     new ResumeGameplayUseCase(
                         r.Resolve<IUnloadPauseMenuUseCase>()
