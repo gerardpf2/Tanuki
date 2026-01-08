@@ -9,7 +9,7 @@ namespace Game.MainMenu
 {
     public class MainMenuViewModel : ViewModel
     {
-        private ILoadGameplayUseCase _loadGameplayUseCase;
+        private IInitializeAndLoadAndRunGameplayUseCase _initializeAndLoadAndRunGameplayUseCase;
 
         [NotNull] private readonly IBoundProperty<ButtonViewData> _loadGameplay = new BoundProperty<ButtonViewData>("LoadGameplayButtonViewData");
 
@@ -21,11 +21,11 @@ namespace Game.MainMenu
             AddBindings();
         }
 
-        public void Inject([NotNull] ILoadGameplayUseCase loadGameplayUseCase)
+        public void Inject([NotNull] IInitializeAndLoadAndRunGameplayUseCase initializeAndLoadAndRunGameplayUseCase)
         {
-            ArgumentNullException.ThrowIfNull(loadGameplayUseCase);
+            ArgumentNullException.ThrowIfNull(initializeAndLoadAndRunGameplayUseCase);
 
-            _loadGameplayUseCase = loadGameplayUseCase;
+            _initializeAndLoadAndRunGameplayUseCase = initializeAndLoadAndRunGameplayUseCase;
         }
 
         private void InitializeBindings()
@@ -40,9 +40,9 @@ namespace Game.MainMenu
 
         private void HandleLoadGameplayClick()
         {
-            InvalidOperationException.ThrowIfNull(_loadGameplayUseCase);
+            InvalidOperationException.ThrowIfNull(_initializeAndLoadAndRunGameplayUseCase);
 
-            _loadGameplayUseCase.Resolve("Test");
+            _initializeAndLoadAndRunGameplayUseCase.Resolve("Test"); // TODO
         }
     }
 }

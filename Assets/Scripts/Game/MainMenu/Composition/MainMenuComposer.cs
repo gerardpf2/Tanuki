@@ -35,7 +35,7 @@ namespace Game.MainMenu.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<MainMenuViewModel>((r, s) =>
                     s.Inject(
-                        r.Resolve<ILoadGameplayUseCase>()
+                        r.Resolve<IInitializeAndLoadAndRunGameplayUseCase>()
                     )
                 )
             );

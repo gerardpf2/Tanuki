@@ -8,18 +8,18 @@ namespace Game.REMOVE
 {
     public class Load : MonoBehaviour
     {
-        private ILoadGameplayUseCase _loadGameplayUseCase;
+        private IInitializeAndLoadAndRunGameplayUseCase _initializeAndLoadAndRunGameplayUseCase;
 
         private void Start()
         {
             InjectResolver.Resolve(this);
         }
 
-        public void Inject([NotNull] ILoadGameplayUseCase loadGameplayUseCase)
+        public void Inject([NotNull] IInitializeAndLoadAndRunGameplayUseCase initializeAndLoadAndRunGameplayUseCase)
         {
-            ArgumentNullException.ThrowIfNull(loadGameplayUseCase);
+            ArgumentNullException.ThrowIfNull(initializeAndLoadAndRunGameplayUseCase);
 
-            _loadGameplayUseCase = loadGameplayUseCase;
+            _initializeAndLoadAndRunGameplayUseCase = initializeAndLoadAndRunGameplayUseCase;
         }
 
         private void Update()
@@ -32,9 +32,9 @@ namespace Game.REMOVE
 
         private void LoadGameplay()
         {
-            InvalidOperationException.ThrowIfNull(_loadGameplayUseCase);
+            InvalidOperationException.ThrowIfNull(_initializeAndLoadAndRunGameplayUseCase);
 
-            _loadGameplayUseCase.Resolve("Test");
+            _initializeAndLoadAndRunGameplayUseCase.Resolve("Test");
         }
     }
 }

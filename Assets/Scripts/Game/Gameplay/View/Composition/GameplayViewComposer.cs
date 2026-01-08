@@ -57,7 +57,47 @@ namespace Game.Gameplay.View.Composition
 
             base.AddRules(ruleAdder, ruleFactory);
 
-            // Not shared so it can only be unloaded from here
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IInitializeGameplayUseCase>(r =>
+                    new InitializeGameplayUseCase(
+                        r.Resolve<IGameplayDefinitionGetter>(),
+                        r.Resolve<IPieceIdGetter>(),
+                        r.Resolve<ICamera>(),
+                        r.Resolve<IGameplayParser>(),
+                        r.Resolve<IGameplaySerializerOnBeginIteration>(),
+                        r.Resolve<IBoardView>(),
+                        r.Resolve<ICameraView>(),
+                        r.Resolve<IGoalsView>(),
+                        r.Resolve<IMovesView>(),
+                        r.Resolve<IPieceGameObjectPreloader>(),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Lock),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveLeft),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate),
+                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.SwapCurrentNext),
+                        r.Resolve<IPlayerPieceGhostView>(),
+                        r.Resolve<IPlayerPieceView>(),
+                        r.Resolve<IEventsResolver>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
+                    new LoadGameplayUseCase(
+                        r.Resolve<IScreenLoader>()
+                    )
+                )
+            );
+
+            ruleAdder.Add(
+                ruleFactory.GetSingleton<IRunGameplayUseCase>(r =>
+                    new RunGameplayUseCase(
+                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Initial)
+                    )
+                )
+            );
+
             ruleAdder.Add(
                 ruleFactory.GetSingleton<IUnloadGameplayUseCase>(r =>
                     new UnloadGameplayUseCase(
@@ -101,30 +141,12 @@ namespace Game.Gameplay.View.Composition
                 )
             );
 
-            // Shared so it can be loaded from anywhere
             ruleAdder.Add(
-                ruleFactory.GetSingleton<ILoadGameplayUseCase>(r =>
-                    new LoadGameplayUseCase(
-                        r.Resolve<IGameplayDefinitionGetter>(),
-                        r.Resolve<IPieceIdGetter>(),
-                        r.Resolve<ICamera>(),
-                        r.Resolve<IGameplayParser>(),
-                        r.Resolve<IPhaseContainer>(PhasesComposerKeys.PhaseContainer.Initial),
-                        r.Resolve<IGameplaySerializerOnBeginIteration>(),
-                        r.Resolve<IBoardView>(),
-                        r.Resolve<ICameraView>(),
-                        r.Resolve<IGoalsView>(),
-                        r.Resolve<IMovesView>(),
-                        r.Resolve<IPieceGameObjectPreloader>(),
-                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Lock),
-                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveLeft),
-                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.MoveRight),
-                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.Rotate),
-                        r.Resolve<IPlayerInputActionHandler>(PlayerComposerKeys.PlayerInputActionHandler.SwapCurrentNext),
-                        r.Resolve<IPlayerPieceGhostView>(),
-                        r.Resolve<IPlayerPieceView>(),
-                        r.Resolve<IEventsResolver>(),
-                        r.Resolve<IScreenLoader>()
+                ruleFactory.GetSingleton<IInitializeAndLoadAndRunGameplayUseCase>(r =>
+                    new InitializeAndLoadAndRunGameplayUseCase(
+                        r.Resolve<IInitializeGameplayUseCase>(),
+                        r.Resolve<ILoadGameplayUseCase>(),
+                        r.Resolve<IRunGameplayUseCase>()
                     )
                 )
             );
