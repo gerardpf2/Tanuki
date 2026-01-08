@@ -35,6 +35,8 @@ namespace Game.Gameplay.View.Goals
             _initializedLabel.SetInitialized();
 
             _viewGoals.Add(_modelGoals.Entries.Select(goal => goal.Clone()));
+
+            OnUpdated?.Invoke();
         }
 
         public void Uninitialize()

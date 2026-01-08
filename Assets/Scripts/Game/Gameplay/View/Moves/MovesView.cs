@@ -44,7 +44,7 @@ namespace Game.Gameplay.View.Moves
         {
             _initializedLabel.SetInitialized();
 
-            _viewMoves.Amount = _modelMoves.Amount;
+            Amount = _modelMoves.Amount;
         }
 
         public void Uninitialize()

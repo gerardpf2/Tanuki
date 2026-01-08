@@ -54,17 +54,17 @@ namespace Game.Gameplay.View.Player.Input
 
             UnsubscribeFromEvents();
 
-            _eventsResolver.OnResolveEnd += HandleResolveEnd;
+            _eventsResolver.OnResolveBegin += HandleResolveBegin;
         }
 
         private void UnsubscribeFromEvents()
         {
             InvalidOperationException.ThrowIfNull(_eventsResolver);
 
-            _eventsResolver.OnResolveEnd -= HandleResolveEnd;
+            _eventsResolver.OnResolveBegin -= HandleResolveBegin;
         }
 
-        private void HandleResolveEnd()
+        private void HandleResolveBegin()
         {
             InvalidOperationException.ThrowIfNull(_pieceSpriteContainer);
             InvalidOperationException.ThrowIfNull(_bag);
