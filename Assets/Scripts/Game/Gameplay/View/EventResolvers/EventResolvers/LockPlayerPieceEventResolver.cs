@@ -1,0 +1,82 @@
+using System.Collections.Generic;
+using Game.Gameplay.Events.Events;
+using Game.Gameplay.View.Actions;
+using Game.Gameplay.View.Actions.Actions;
+using Infrastructure.System.Exceptions;
+using JetBrains.Annotations;
+
+namespace Game.Gameplay.View.EventResolvers.EventResolvers
+{
+    public class LockPlayerPieceEventResolver : EventResolver<LockPlayerPieceEvent>
+    {
+        [NotNull] private readonly IActionFactory _actionFactory;
+        [NotNull] private readonly IEventResolverFactory _eventResolverFactory;
+
+        public LockPlayerPieceEventResolver(
+            [NotNull] IActionFactory actionFactory,
+            [NotNull] IEventResolverFactory eventResolverFactory)
+        {
+            ArgumentNullException.ThrowIfNull(actionFactory);
+            ArgumentNullException.ThrowIfNull(eventResolverFactory);
+
+            _actionFactory = actionFactory;
+            _eventResolverFactory = eventResolverFactory;
+        }
+
+        protected override IEnumerable<IAction> GetActions([NotNull] LockPlayerPieceEvent evt)
+        {
+            ArgumentNullException.ThrowIfNull(evt);
+
+            /*
+             *
+             * Destroy player piece also destroys its ghost, but in here it is needed to split this behaviour in 2
+             *
+             * Destroy player piece ghost only before movement
+             * Destroy player piece only after movement
+             *
+             */
+
+            DestroyPlayerPieceEvent destroyPlayerPieceEvent = evt.DestroyPlayerPieceEvent;
+            DestroyPlayerPieceGhostEvent destroyPlayerPieceGhostEvent = destroyPlayerPieceEvent.DestroyPlayerPieceGhostEvent;
+
+            if (destroyPlayerPieceGhostEvent is not null)
+            {
+                yield return
+                    _actionFactory.GetEventResolverAction(
+                        _eventResolverFactory.GetDestroyPlayerPieceGhostEventResolver(),
+                        destroyPlayerPieceGhostEvent
+                    );
+            }
+
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetMovePlayerPieceEventResolver(),
+                    evt.MovePlayerPieceEvent
+                );
+
+            DestroyPlayerPieceEvent destroyPlayerPieceWithNullGhostEvent =
+                new(
+                    destroyPlayerPieceEvent.DestroyPieceReason,
+                    false
+                );
+
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetDestroyPlayerPieceEventResolver(),
+                    destroyPlayerPieceWithNullGhostEvent
+                );
+
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetInstantiatePieceEventResolver(),
+                    evt.InstantiatePieceEvent
+                );
+
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetSetMovesAmountEventResolver(),
+                    evt.SetMovesAmountEvent
+                );
+        }
+    }
+}

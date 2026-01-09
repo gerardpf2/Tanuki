@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eff6c83b27744bd2b0172f8fc3e83cc2, type: 3}
+  m_Name: PieceSpriteContainer
+  m_EditorClassIdentifier: 
+  _pieceTypeSpritePairs:
+  - _pieceType: 10
+    _sprite: {fileID: 21300000, guid: 52ea1f149394104418fb08d113df14fd, type: 3}
+  - _pieceType: 11
+    _sprite: {fileID: 21300000, guid: 25cbac2cae12eec44ab446c0f0e16357, type: 3}
+  - _pieceType: 12
+    _sprite: {fileID: 21300000, guid: 9ab3f2356440404498b4334fa75da2ce, type: 3}
+  - _pieceType: 13
+    _sprite: {fileID: 21300000, guid: 800dda4b18732f242a13516d97c14af2, type: 3}
+  - _pieceType: 14
+    _sprite: {fileID: 21300000, guid: 55a131b71e0a56a4b99f50d6e11b92e4, type: 3}
+  - _pieceType: 15
+    _sprite: {fileID: 21300000, guid: 4f36734e01468db42a91ae949d6e952a, type: 3}
+  - _pieceType: 16
+    _sprite: {fileID: 21300000, guid: f8742de8234b0c44cbea575a255c62a1, type: 3}
+  - _pieceType: 20
+    _sprite: {fileID: 21300000, guid: 3fd99a74771b8024780aa3066f6537bf, type: 3}
+  - _pieceType: 21
+    _sprite: {fileID: 21300000, guid: 2b73f7e6df6491b4db1a7bacb4985a57, type: 3}
+  - _pieceType: 22
+    _sprite: {fileID: 21300000, guid: 746f392d2ece18542bcf23463ea86327, type: 3}
+  - _pieceType: 23
+    _sprite: {fileID: 21300000, guid: 2906db20559ad4643a31be59a463db64, type: 3}
+  - _pieceType: 24
+    _sprite: {fileID: 21300000, guid: 410339d4bcfd52c4695e8e7027de39d8, type: 3}
+  - _pieceType: 25
+    _sprite: {fileID: 21300000, guid: db2d7124aca89a245a5d39e6901662c2, type: 3}
+  - _pieceType: 26
+    _sprite: {fileID: 21300000, guid: 0175ed8b7cea6a5458d196f9da150f29, type: 3}
+  - _pieceType: 30
+    _sprite: {fileID: 21300000, guid: aa55d26e48c1f744c9062f16d4495a07, type: 3}
+  - _pieceType: 50
+    _sprite: {fileID: 21300000, guid: cbbf5338ef9d0e44faf7cdc7e5605ec9, type: 3}
+  - _pieceType: 51
+    _sprite: {fileID: 21300000, guid: 2cced6b66e5df4141966b31f6ed8f7a9, type: 3}
+  - _pieceType: 52
+    _sprite: {fileID: 21300000, guid: da8dd5c3e5a01874ab1982eb824f8cc6, type: 3}
+  - _pieceType: 100
+    _sprite: {fileID: 21300000, guid: f16bbcdce81691544b5e4bdfe3267de3, type: 3}
