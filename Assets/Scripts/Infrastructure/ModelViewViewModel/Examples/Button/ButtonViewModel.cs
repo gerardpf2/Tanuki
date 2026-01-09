@@ -77,6 +77,10 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
             {
                 _buttonViewData.OnClick?.Invoke();
             }
+            else
+            {
+                _buttonViewData.OnClickDisabled?.Invoke();
+            }
         }
     }
 }
