@@ -3,6 +3,7 @@ using Infrastructure.DependencyInjection;
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Game.Gameplay.View.REMOVE
 {
@@ -24,7 +25,7 @@ namespace Game.Gameplay.View.REMOVE
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.U))
+            if (Keyboard.current?.uKey.wasPressedThisFrame ?? false)
             {
                 Unload();
             }
