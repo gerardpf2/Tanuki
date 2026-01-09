@@ -73,7 +73,10 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
         {
             InvalidOperationException.ThrowIfNull(_buttonViewData);
 
-            _buttonViewData.OnClick?.Invoke();
+            if (_buttonViewData.Enabled)
+            {
+                _buttonViewData.OnClick?.Invoke();
+            }
         }
     }
 }
