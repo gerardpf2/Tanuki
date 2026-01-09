@@ -1,26 +1,21 @@
 using Infrastructure.System.Exceptions;
 using JetBrains.Annotations;
-using UnityEngine;
 
 namespace Infrastructure.ModelViewViewModel.Examples.Button
 {
     public class ButtonViewModel : ViewModel, IDataSettable<ButtonViewData>
     {
-        [SerializeField] private Sprite _normalSprite;
-        [SerializeField] private Sprite _pressedSprite;
-        [SerializeField] private Sprite _disabledSprite;
-
-        [NotNull] private readonly IBoundProperty<Sprite> _sprite = new BoundProperty<Sprite>("Sprite");
+        [NotNull] private readonly IBoundProperty<bool> _enabled = new BoundProperty<bool>("Enabled");
 
         private ButtonViewData _buttonViewData;
-        private bool _pressed;
 
         protected virtual void Awake()
         {
-            Add(_sprite);
+            Add(_enabled);
 
             Add(new BoundMethod("OnPointerDown", HandlePointerDown));
             Add(new BoundMethod("OnPointerUp", HandlePointerUp));
+            Add(new BoundMethod("OnClick", HandleClick));
         }
 
         protected virtual void OnDestroy()
@@ -37,7 +32,7 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
             _buttonViewData = data;
 
             SubscribeToEvents();
-            RefreshSprite();
+            RefreshEnabled();
         }
 
         private void SubscribeToEvents()
@@ -46,55 +41,39 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
 
             UnsubscribeFromEvents();
 
-            _buttonViewData.OnEnabledUpdated += HandleEnabledUpdated;
+            _buttonViewData.OnEnabledUpdated += RefreshEnabled;
         }
 
         private void UnsubscribeFromEvents()
         {
             if (_buttonViewData is not null)
             {
-                _buttonViewData.OnEnabledUpdated -= HandleEnabledUpdated;
+                _buttonViewData.OnEnabledUpdated -= RefreshEnabled;
             }
         }
 
-        private void HandlePointerDown()
-        {
-            _pressed = true;
-
-            RefreshSprite();
-        }
-
-        private void HandlePointerUp()
+        private void RefreshEnabled()
         {
             InvalidOperationException.ThrowIfNull(_buttonViewData);
 
-            if (_buttonViewData.Enabled)
-            {
-                _buttonViewData.OnClick?.Invoke();
-            }
-
-            _pressed = false;
-
-            RefreshSprite();
+            _enabled.Value = _buttonViewData.Enabled;
         }
 
-        private void HandleEnabledUpdated()
+        private static void HandlePointerDown()
         {
-            RefreshSprite();
+            // TODO
         }
 
-        private void RefreshSprite()
+        private static void HandlePointerUp()
+        {
+            // TODO
+        }
+
+        private void HandleClick()
         {
             InvalidOperationException.ThrowIfNull(_buttonViewData);
 
-            if (!_buttonViewData.Enabled)
-            {
-                _sprite.Value = _disabledSprite;
-            }
-            else
-            {
-                _sprite.Value = _pressed ? _pressedSprite : _normalSprite;
-            }
+            _buttonViewData.OnClick?.Invoke();
         }
     }
 }
