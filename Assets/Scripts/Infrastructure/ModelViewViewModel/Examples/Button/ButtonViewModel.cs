@@ -1,17 +1,27 @@
 using Infrastructure.System.Exceptions;
+using Infrastructure.UnityUtils;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Infrastructure.ModelViewViewModel.Examples.Button
 {
     public class ButtonViewModel : ViewModel, IDataSettable<ButtonViewData>
     {
+        private static readonly Vector3 DefaultScale = Vector3.one;
+
+        [SerializeField] private bool _scaleOnClick = true;
+        [SerializeField, ShowInInspectorIf(nameof(_scaleOnClick))] private float _scaleXOnClick = 1.1f;
+        [SerializeField, ShowInInspectorIf(nameof(_scaleOnClick))] private float _scaleYOnClick = 0.9f;
+
         [NotNull] private readonly IBoundProperty<bool> _enabled = new BoundProperty<bool>("Enabled");
+        [NotNull] private readonly IBoundProperty<Vector3> _scale = new BoundProperty<Vector3>("Scale", DefaultScale);
 
         private ButtonViewData _buttonViewData;
 
         protected virtual void Awake()
         {
             Add(_enabled);
+            Add(_scale);
 
             Add(new BoundMethod("OnPointerDown", HandlePointerDown));
             Add(new BoundMethod("OnPointerUp", HandlePointerUp));
@@ -59,14 +69,19 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
             _enabled.Value = _buttonViewData.Enabled;
         }
 
-        private static void HandlePointerDown()
+        private void HandlePointerDown()
         {
-            // TODO
+            if (!_scaleOnClick)
+            {
+                return;
+            }
+
+            _scale.Value = new Vector3(_scaleXOnClick, _scaleYOnClick, DefaultScale.z);
         }
 
-        private static void HandlePointerUp()
+        private void HandlePointerUp()
         {
-            // TODO
+            _scale.Value = DefaultScale;
         }
 
         private void HandleClick()
