@@ -1,8 +1,6 @@
 using Game.Common.Pieces;
 using Game.Common.View.Pieces;
-using Game.Gameplay.Bag;
-using Game.Gameplay.Pieces.Pieces;
-using Game.Gameplay.View.EventResolvers;
+using Game.Gameplay.View.Bag;
 using Infrastructure.DependencyInjection;
 using Infrastructure.ModelViewViewModel;
 using Infrastructure.ModelViewViewModel.Examples.Button;
@@ -16,8 +14,7 @@ namespace Game.Gameplay.View.Player.Input
     {
         [SerializeField] private PieceSpriteContainer _pieceSpriteContainer;
 
-        private IBag _bag;
-        private IEventsResolver _eventsResolver;
+        private IBagView _bagView;
 
         [NotNull] private readonly IBoundProperty<Sprite> _pieceSprite = new BoundProperty<Sprite>("PieceSprite");
 
@@ -30,6 +27,7 @@ namespace Game.Gameplay.View.Player.Input
             Add(_pieceSprite);
 
             SubscribeToEvents();
+            RefreshNextPieceSprite();
         }
 
         protected override void OnDestroy()
@@ -39,39 +37,36 @@ namespace Game.Gameplay.View.Player.Input
             UnsubscribeFromEvents();
         }
 
-        public void Inject([NotNull] IBag bag, [NotNull] IEventsResolver eventsResolver)
+        public void Inject([NotNull] IBagView bagView)
         {
-            ArgumentNullException.ThrowIfNull(bag);
-            ArgumentNullException.ThrowIfNull(eventsResolver);
+            ArgumentNullException.ThrowIfNull(bagView);
 
-            _bag = bag;
-            _eventsResolver = eventsResolver;
+            _bagView = bagView;
         }
 
         private void SubscribeToEvents()
         {
-            InvalidOperationException.ThrowIfNull(_eventsResolver);
+            InvalidOperationException.ThrowIfNull(_bagView);
 
             UnsubscribeFromEvents();
 
-            _eventsResolver.OnResolveBegin += HandleResolveBegin;
+            _bagView.OnUpdated += RefreshNextPieceSprite;
         }
 
         private void UnsubscribeFromEvents()
         {
-            InvalidOperationException.ThrowIfNull(_eventsResolver);
+            InvalidOperationException.ThrowIfNull(_bagView);
 
-            _eventsResolver.OnResolveBegin -= HandleResolveBegin;
+            _bagView.OnUpdated -= RefreshNextPieceSprite;
         }
 
-        private void HandleResolveBegin()
+        private void RefreshNextPieceSprite()
         {
             InvalidOperationException.ThrowIfNull(_pieceSpriteContainer);
-            InvalidOperationException.ThrowIfNull(_bag);
+            InvalidOperationException.ThrowIfNull(_bagView);
 
-            IPiece next = _bag.Next;
-            PieceType nextType = next.Type;
-            Sprite nextSprite = _pieceSpriteContainer.Get(nextType);
+            PieceType? next = _bagView.Next;
+            Sprite nextSprite = next.HasValue ? _pieceSpriteContainer.Get(next.Value) : null;
 
             _pieceSprite.Value = nextSprite;
         }

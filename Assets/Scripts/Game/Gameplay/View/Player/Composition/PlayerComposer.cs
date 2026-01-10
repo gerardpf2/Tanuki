@@ -1,7 +1,7 @@
-using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Phases;
 using Game.Gameplay.Phases.Composition;
+using Game.Gameplay.View.Bag;
 using Game.Gameplay.View.Board.Composition;
 using Game.Gameplay.View.EventResolvers;
 using Game.Gameplay.View.Pieces;
@@ -127,8 +127,7 @@ namespace Game.Gameplay.View.Player.Composition
             ruleAdder.Add(
                 ruleFactory.GetInject<SwapCurrentNextButtonViewModel>((r, s) =>
                     s.Inject(
-                        r.Resolve<IBag>(),
-                        r.Resolve<IEventsResolver>()
+                        r.Resolve<IBagView>()
                     )
                 )
             );
