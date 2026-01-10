@@ -51,7 +51,7 @@ namespace Game.Gameplay.View.Header
 
         private void InitializeBindings()
         {
-            _pauseMenuButtonViewData.Value = new ButtonViewData(HandlePauseMenuButtonClick, false);
+            _pauseMenuButtonViewData.Value = new ButtonViewData(HandlePauseMenuButtonClick, enabled: false);
             _goalsViewData.Value = new GoalsViewData();
             _movesViewData.Value = new MovesViewData();
         }

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 177693890657529402, guid: 383ba42d15caa8c4e903a4f945255331, type: 3}
       propertyPath: m_Name
-      value: LockButton
+      value: PauseMenuButton
       objectReference: {fileID: 0}
     - target: {fileID: 1292858814202660056, guid: 383ba42d15caa8c4e903a4f945255331, type: 3}
       propertyPath: m_Pivot.x
@@ -92,14 +92,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4513751152430818361, guid: 383ba42d15caa8c4e903a4f945255331, type: 3}
-      propertyPath: _normalSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: c9533d203c5abf6458097b7eaf53a371, type: 3}
-    - target: {fileID: 4513751152430818361, guid: 383ba42d15caa8c4e903a4f945255331, type: 3}
-      propertyPath: _pressedSprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 3ab3811c63bfd7c4ca9d648135f047d9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
