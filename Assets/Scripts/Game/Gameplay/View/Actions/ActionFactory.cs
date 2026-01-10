@@ -7,6 +7,7 @@ using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
 using Game.Gameplay.View.Actions.Actions;
 using Game.Gameplay.View.Animation.Movement;
+using Game.Gameplay.View.Bag;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers.EventResolvers;
@@ -23,6 +24,7 @@ namespace Game.Gameplay.View.Actions
     {
         [NotNull] private readonly IBoard _board;
         [NotNull] private readonly IMovementHelper _movementHelper;
+        [NotNull] private readonly IBagView _bagView;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
@@ -34,6 +36,7 @@ namespace Game.Gameplay.View.Actions
         public ActionFactory(
             [NotNull] IBoard board,
             [NotNull] IMovementHelper movementHelper,
+            [NotNull] IBagView bagView,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
@@ -44,6 +47,7 @@ namespace Game.Gameplay.View.Actions
         {
             ArgumentNullException.ThrowIfNull(board);
             ArgumentNullException.ThrowIfNull(movementHelper);
+            ArgumentNullException.ThrowIfNull(bagView);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
@@ -54,6 +58,7 @@ namespace Game.Gameplay.View.Actions
 
             _board = board;
             _movementHelper = movementHelper;
+            _bagView = bagView;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
@@ -157,6 +162,11 @@ namespace Game.Gameplay.View.Actions
         public IAction GetSetMovesAmountAction(int amount)
         {
             return new SetMovesAmountAction(_movesView, amount);
+        }
+
+        public IAction GetSetBagNextPieceAction(PieceType pieceType)
+        {
+            return new SetBagNextAction(_bagView, pieceType);
         }
 
         public IAction GetParallelActionGroup(

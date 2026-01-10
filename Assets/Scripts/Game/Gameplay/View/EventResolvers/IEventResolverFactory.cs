@@ -43,6 +43,9 @@ namespace Game.Gameplay.View.EventResolvers
         IEventResolver<SetMovesAmountEvent> GetSetMovesAmountEventResolver();
 
         [NotNull]
+        IEventResolver<SetBagNextPieceEvent> GetSetBagNextPieceEventResolver();
+
+        [NotNull]
         IEventResolver<InstantiateInitialPiecesAndMoveCameraEvent> GetInstantiateInitialPiecesAndMoveCameraEventResolver();
 
         [NotNull]

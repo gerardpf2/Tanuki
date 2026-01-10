@@ -88,6 +88,11 @@ namespace Game.Gameplay.View.EventResolvers
             return new SetMovesAmountEventResolver(_actionFactory);
         }
 
+        public IEventResolver<SetBagNextPieceEvent> GetSetBagNextPieceEventResolver()
+        {
+            return new SetBagNextPieceEventResolver(_actionFactory);
+        }
+
         public IEventResolver<InstantiateInitialPiecesAndMoveCameraEvent> GetInstantiateInitialPiecesAndMoveCameraEventResolver()
         {
             return new InstantiateInitialPiecesAndMoveCameraEventResolver(_actionFactory, this, _coroutineRunner);

@@ -59,6 +59,9 @@ namespace Game.Gameplay.View.EventResolvers
                 case SetMovesAmountEvent setMovesAmountEvent:
                     _eventResolverFactory.GetSetMovesAmountEventResolver().Resolve(setMovesAmountEvent, onComplete);
                     break;
+                case SetBagNextPieceEvent setBagNextPieceEvent:
+                    _eventResolverFactory.GetSetBagNextPieceEventResolver().Resolve(setBagNextPieceEvent, onComplete);
+                    break;
                 case InstantiateInitialPiecesAndMoveCameraEvent instantiateInitialPiecesAndMoveCameraEvent:
                     _eventResolverFactory.GetInstantiateInitialPiecesAndMoveCameraEventResolver().Resolve(instantiateInitialPiecesAndMoveCameraEvent, onComplete);
                     break;

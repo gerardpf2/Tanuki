@@ -63,6 +63,9 @@ namespace Game.Gameplay.View.Actions
         IAction GetSetMovesAmountAction(int amount);
 
         [NotNull]
+        IAction GetSetBagNextPieceAction(PieceType pieceType);
+
+        [NotNull]
         IAction GetParallelActionGroup(IEnumerable<IAction> actions, float secondsBetweenActions = 0.0f);
 
         [NotNull]

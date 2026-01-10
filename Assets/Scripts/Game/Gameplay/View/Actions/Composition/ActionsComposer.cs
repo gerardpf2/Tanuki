@@ -1,5 +1,6 @@
 using Game.Gameplay.Board;
 using Game.Gameplay.View.Animation.Movement;
+using Game.Gameplay.View.Bag;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Board.Composition;
 using Game.Gameplay.View.Camera;
@@ -27,6 +28,7 @@ namespace Game.Gameplay.View.Actions.Composition
                     new ActionFactory(
                         r.Resolve<IBoard>(BoardComposerKeys.Board.View),
                         r.Resolve<IMovementHelper>(),
+                        r.Resolve<IBagView>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
