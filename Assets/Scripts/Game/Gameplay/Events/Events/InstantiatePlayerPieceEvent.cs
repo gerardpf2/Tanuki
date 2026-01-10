@@ -1,3 +1,4 @@
+using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
@@ -12,10 +13,12 @@ namespace Game.Gameplay.Events.Events
         public readonly Coordinate SourceCoordinate;
         public readonly InstantiatePieceReason InstantiatePieceReason;
         [NotNull] public readonly InstantiatePlayerPieceGhostEvent InstantiatePlayerPieceGhostEvent;
+        [NotNull] public readonly SetBagNextPieceEvent SetBagNextPieceEvent;
 
         public InstantiatePlayerPieceEvent(
             [NotNull] IPiece piece,
             Coordinate sourceCoordinate,
+            PieceType nextPieceType,
             InstantiatePieceReason instantiatePieceReason)
         {
             ArgumentNullException.ThrowIfNull(piece);
@@ -24,6 +27,7 @@ namespace Game.Gameplay.Events.Events
             SourceCoordinate = sourceCoordinate;
             InstantiatePieceReason = instantiatePieceReason;
             InstantiatePlayerPieceGhostEvent = new InstantiatePlayerPieceGhostEvent(piece, instantiatePieceReason);
+            SetBagNextPieceEvent = new SetBagNextPieceEvent(nextPieceType);
         }
     }
 }

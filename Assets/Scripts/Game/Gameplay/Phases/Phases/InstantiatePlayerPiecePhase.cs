@@ -1,3 +1,4 @@
+using Game.Common.Pieces;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
@@ -12,6 +13,7 @@ namespace Game.Gameplay.Phases.Phases
 {
     public class InstantiatePlayerPiecePhase : BaseInstantiatePlayerPiecePhase
     {
+        [NotNull] private readonly IBag _bag;
         [NotNull] private readonly IEventEnqueuer _eventEnqueuer;
 
         protected override int? MaxResolveTimesPerIteration => 1;
@@ -22,8 +24,10 @@ namespace Game.Gameplay.Phases.Phases
             [NotNull] ICamera camera,
             [NotNull] IEventEnqueuer eventEnqueuer) : base(bag, board, camera)
         {
+            ArgumentNullException.ThrowIfNull(bag);
             ArgumentNullException.ThrowIfNull(eventEnqueuer);
 
+            _bag = bag;
             _eventEnqueuer = eventEnqueuer;
         }
 
@@ -37,10 +41,13 @@ namespace Game.Gameplay.Phases.Phases
 
             resolveContext.SetPieceSourceCoordinate(sourceCoordinate, lockSourceCoordinate);
 
+            PieceType nextPieceType = _bag.Next.Type;
+
             InstantiatePlayerPieceEvent instantiatePlayerPieceEvent =
                 new(
                     piece,
                     sourceCoordinate,
+                    nextPieceType,
                     InstantiatePieceReason.Regular
                 );
 

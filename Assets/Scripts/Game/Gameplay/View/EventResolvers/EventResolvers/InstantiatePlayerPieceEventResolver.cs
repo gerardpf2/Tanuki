@@ -39,6 +39,12 @@ namespace Game.Gameplay.View.EventResolvers.EventResolvers
                     _eventResolverFactory.GetInstantiatePlayerPieceGhostEventResolver(),
                     evt.InstantiatePlayerPieceGhostEvent
                 );
+
+            yield return
+                _actionFactory.GetEventResolverAction(
+                    _eventResolverFactory.GetSetBagNextPieceEventResolver(),
+                    evt.SetBagNextPieceEvent
+                );
         }
     }
 }

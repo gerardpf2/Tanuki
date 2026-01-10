@@ -1,3 +1,4 @@
+using Game.Common.Pieces;
 using Game.Gameplay.Board;
 using Game.Gameplay.Events.Reasons;
 using Game.Gameplay.Pieces.Pieces;
@@ -11,7 +12,10 @@ namespace Game.Gameplay.Events.Events
         [NotNull] public readonly DestroyPlayerPieceEvent DestroyPlayerPieceEvent;
         [NotNull] public readonly InstantiatePlayerPieceEvent InstantiatePlayerPieceEvent;
 
-        public SwapCurrentNextPlayerPieceEvent([NotNull] IPiece piece, Coordinate sourceCoordinate)
+        public SwapCurrentNextPlayerPieceEvent(
+            [NotNull] IPiece piece,
+            Coordinate sourceCoordinate,
+            PieceType nextPieceType)
         {
             ArgumentNullException.ThrowIfNull(piece);
 
@@ -21,6 +25,7 @@ namespace Game.Gameplay.Events.Events
                 new InstantiatePlayerPieceEvent(
                     piece,
                     sourceCoordinate,
+                    nextPieceType,
                     InstantiatePieceReason.SwapCurrentNext
                 );
         }

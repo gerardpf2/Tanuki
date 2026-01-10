@@ -1,3 +1,4 @@
+using Game.Common.Pieces;
 using Game.Gameplay.Bag;
 using Game.Gameplay.Board;
 using Game.Gameplay.Camera;
@@ -49,7 +50,9 @@ namespace Game.Gameplay.Phases.Phases
 
             resolveContext.SetPieceSourceCoordinate(sourceCoordinate, lockSourceCoordinate);
 
-            SwapCurrentNextPlayerPieceEvent swapCurrentNextPlayerPieceEvent = new(piece, sourceCoordinate);
+            PieceType nextPieceType = _bag.Next.Type;
+
+            SwapCurrentNextPlayerPieceEvent swapCurrentNextPlayerPieceEvent = new(piece, sourceCoordinate, nextPieceType);
 
             _eventEnqueuer.Enqueue(swapCurrentNextPlayerPieceEvent);
 
