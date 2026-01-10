@@ -12,6 +12,7 @@ using Game.Gameplay.Pieces;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.View.Actions.Composition;
 using Game.Gameplay.View.Animation.Composition;
+using Game.Gameplay.View.Bag.Composition;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Board.Composition;
 using Game.Gameplay.View.Camera;
@@ -183,6 +184,7 @@ namespace Game.Gameplay.View.Composition
                 .GetPartialScopeComposers()
                 .Append(new ActionsComposer())
                 .Append(new AnimationComposer())
+                .Append(new BagComposer())
                 .Append(new BoardComposer())
                 .Append(new CameraComposer())
                 .Append(new EventResolversComposer())
