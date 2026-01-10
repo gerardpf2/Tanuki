@@ -1,4 +1,5 @@
 using Infrastructure.System.Exceptions;
+using Infrastructure.UnityUtils;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -6,21 +7,25 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
 {
     public class ButtonViewModel : ViewModel, IDataSettable<ButtonViewData>
     {
-        [SerializeField] private Sprite _normalSprite;
-        [SerializeField] private Sprite _pressedSprite;
-        [SerializeField] private Sprite _disabledSprite;
+        private static readonly Vector3 DefaultScale = Vector3.one;
 
-        [NotNull] private readonly IBoundProperty<Sprite> _sprite = new BoundProperty<Sprite>("Sprite");
+        [SerializeField] private bool _scaleOnClick = true;
+        [SerializeField, ShowInInspectorIf(nameof(_scaleOnClick))] private float _scaleXOnClick = 1.1f;
+        [SerializeField, ShowInInspectorIf(nameof(_scaleOnClick))] private float _scaleYOnClick = 0.9f;
+
+        [NotNull] private readonly IBoundProperty<bool> _enabled = new BoundProperty<bool>("Enabled");
+        [NotNull] private readonly IBoundProperty<Vector3> _scale = new BoundProperty<Vector3>("Scale", DefaultScale);
 
         private ButtonViewData _buttonViewData;
-        private bool _pressed;
 
         protected virtual void Awake()
         {
-            Add(_sprite);
+            Add(_enabled);
+            Add(_scale);
 
             Add(new BoundMethod("OnPointerDown", HandlePointerDown));
             Add(new BoundMethod("OnPointerUp", HandlePointerUp));
+            Add(new BoundMethod("OnClick", HandleClick));
         }
 
         protected virtual void OnDestroy()
@@ -37,7 +42,7 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
             _buttonViewData = data;
 
             SubscribeToEvents();
-            RefreshSprite();
+            RefreshEnabled();
         }
 
         private void SubscribeToEvents()
@@ -46,25 +51,40 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
 
             UnsubscribeFromEvents();
 
-            _buttonViewData.OnEnabledUpdated += HandleEnabledUpdated;
+            _buttonViewData.OnEnabledUpdated += RefreshEnabled;
         }
 
         private void UnsubscribeFromEvents()
         {
             if (_buttonViewData is not null)
             {
-                _buttonViewData.OnEnabledUpdated -= HandleEnabledUpdated;
+                _buttonViewData.OnEnabledUpdated -= RefreshEnabled;
             }
+        }
+
+        private void RefreshEnabled()
+        {
+            InvalidOperationException.ThrowIfNull(_buttonViewData);
+
+            _enabled.Value = _buttonViewData.Enabled;
         }
 
         private void HandlePointerDown()
         {
-            _pressed = true;
+            if (!_scaleOnClick)
+            {
+                return;
+            }
 
-            RefreshSprite();
+            _scale.Value = new Vector3(_scaleXOnClick, _scaleYOnClick, DefaultScale.z);
         }
 
         private void HandlePointerUp()
+        {
+            _scale.Value = DefaultScale;
+        }
+
+        private void HandleClick()
         {
             InvalidOperationException.ThrowIfNull(_buttonViewData);
 
@@ -72,28 +92,9 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
             {
                 _buttonViewData.OnClick?.Invoke();
             }
-
-            _pressed = false;
-
-            RefreshSprite();
-        }
-
-        private void HandleEnabledUpdated()
-        {
-            RefreshSprite();
-        }
-
-        private void RefreshSprite()
-        {
-            InvalidOperationException.ThrowIfNull(_buttonViewData);
-
-            if (!_buttonViewData.Enabled)
-            {
-                _sprite.Value = _disabledSprite;
-            }
             else
             {
-                _sprite.Value = _pressed ? _pressedSprite : _normalSprite;
+                _buttonViewData.OnClickDisabled?.Invoke();
             }
         }
     }

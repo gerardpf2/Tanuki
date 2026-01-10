@@ -7,12 +7,15 @@ namespace Infrastructure.ModelViewViewModel.Examples.Button
         public event Action OnEnabledUpdated;
 
         public readonly Action OnClick;
+        public readonly Action OnClickDisabled;
 
         public bool Enabled { get; private set; }
 
-        public ButtonViewData(Action onClick, bool enabled = true)
+        public ButtonViewData(Action onClick, Action onClickDisabled = null, bool enabled = true)
         {
             OnClick = onClick;
+            OnClickDisabled = onClickDisabled;
+
             Enabled = enabled;
         }
 
