@@ -481,6 +481,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LockButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2483956198303921848, guid: 6beb7caf7d10eec4f949fe27aaa2b626, type: 3}
+      propertyPath: m_fontSize
+      value: 44.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -587,6 +591,10 @@ PrefabInstance:
     - target: {fileID: 2067900287230021953, guid: e32b52e0b344e09468b890c3bbf68745, type: 3}
       propertyPath: m_Name
       value: MoveRightButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 2483956198303921848, guid: e32b52e0b344e09468b890c3bbf68745, type: 3}
+      propertyPath: m_fontSize
+      value: 38.65
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -695,6 +703,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SwapCurrentNextButton
       objectReference: {fileID: 0}
+    - target: {fileID: 4991339980132048904, guid: c3fb7b83c233a2642bc73b229a274a29, type: 3}
+      propertyPath: m_fontSize
+      value: 38.85
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -802,6 +814,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoveLeftButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2483956198303921848, guid: 8c471b1d665a6a442ad7d2fc6a900a78, type: 3}
+      propertyPath: m_fontSize
+      value: 49.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -908,6 +924,10 @@ PrefabInstance:
     - target: {fileID: 2067900287230021953, guid: bc1eb18445731684b8ac44c92e3d8373, type: 3}
       propertyPath: m_Name
       value: RotateButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 2483956198303921848, guid: bc1eb18445731684b8ac44c92e3d8373, type: 3}
+      propertyPath: m_fontSize
+      value: 30.85
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

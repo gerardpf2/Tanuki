@@ -482,6 +482,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PauseMenuButton
       objectReference: {fileID: 0}
+    - target: {fileID: 2483956198303921848, guid: ea286da4751fffc489f5c1e600e34103, type: 3}
+      propertyPath: m_fontSize
+      value: 36.35
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
