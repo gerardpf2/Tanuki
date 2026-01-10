@@ -2,6 +2,7 @@ using Game.Gameplay.Camera;
 using Game.Gameplay.Parsing;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.REMOVE;
+using Game.Gameplay.View.Bag;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
@@ -22,6 +23,7 @@ namespace Game.Gameplay.View.UseCases
         [NotNull] private readonly ICamera _camera;
         [NotNull] private readonly IGameplayParser _gameplayParser;
         [NotNull] private readonly IGameplaySerializerOnBeginIteration _gameplaySerializerOnBeginIteration;
+        [NotNull] private readonly IBagView _bagView;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
@@ -42,6 +44,7 @@ namespace Game.Gameplay.View.UseCases
             [NotNull] ICamera camera,
             [NotNull] IGameplayParser gameplayParser,
             [NotNull] IGameplaySerializerOnBeginIteration gameplaySerializerOnBeginIteration,
+            [NotNull] IBagView bagView,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
@@ -61,6 +64,7 @@ namespace Game.Gameplay.View.UseCases
             ArgumentNullException.ThrowIfNull(camera);
             ArgumentNullException.ThrowIfNull(gameplayParser);
             ArgumentNullException.ThrowIfNull(gameplaySerializerOnBeginIteration);
+            ArgumentNullException.ThrowIfNull(bagView);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
@@ -80,6 +84,7 @@ namespace Game.Gameplay.View.UseCases
             _camera = camera;
             _gameplayParser = gameplayParser;
             _gameplaySerializerOnBeginIteration = gameplaySerializerOnBeginIteration;
+            _bagView = bagView;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
@@ -115,6 +120,7 @@ namespace Game.Gameplay.View.UseCases
 
         private void InitializeView()
         {
+            _bagView.Initialize();
             _boardView.Initialize();
             _cameraView.Initialize();
             _eventsResolver.Initialize();

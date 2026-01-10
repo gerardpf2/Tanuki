@@ -5,6 +5,7 @@ using Game.Gameplay.Goals;
 using Game.Gameplay.Moves;
 using Game.Gameplay.Pieces;
 using Game.Gameplay.REMOVE;
+using Game.Gameplay.View.Bag;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Camera;
 using Game.Gameplay.View.EventResolvers;
@@ -26,6 +27,7 @@ namespace Game.Gameplay.View.UseCases
         [NotNull] private readonly IGoals _goals;
         [NotNull] private readonly IMoves _moves;
         [NotNull] private readonly IGameplaySerializerOnBeginIteration _gameplaySerializerOnBeginIteration;
+        [NotNull] private readonly IBagView _bagView;
         [NotNull] private readonly IBoardView _boardView;
         [NotNull] private readonly ICameraView _cameraView;
         [NotNull] private readonly IGoalsView _goalsView;
@@ -47,6 +49,7 @@ namespace Game.Gameplay.View.UseCases
             [NotNull] IGoals goals,
             [NotNull] IMoves moves,
             [NotNull] IGameplaySerializerOnBeginIteration gameplaySerializerOnBeginIteration,
+            [NotNull] IBagView bagView,
             [NotNull] IBoardView boardView,
             [NotNull] ICameraView cameraView,
             [NotNull] IGoalsView goalsView,
@@ -67,6 +70,7 @@ namespace Game.Gameplay.View.UseCases
             ArgumentNullException.ThrowIfNull(goals);
             ArgumentNullException.ThrowIfNull(moves);
             ArgumentNullException.ThrowIfNull(gameplaySerializerOnBeginIteration);
+            ArgumentNullException.ThrowIfNull(bagView);
             ArgumentNullException.ThrowIfNull(boardView);
             ArgumentNullException.ThrowIfNull(cameraView);
             ArgumentNullException.ThrowIfNull(goalsView);
@@ -87,6 +91,7 @@ namespace Game.Gameplay.View.UseCases
             _goals = goals;
             _moves = moves;
             _gameplaySerializerOnBeginIteration = gameplaySerializerOnBeginIteration;
+            _bagView = bagView;
             _boardView = boardView;
             _cameraView = cameraView;
             _goalsView = goalsView;
@@ -121,6 +126,7 @@ namespace Game.Gameplay.View.UseCases
 
         private void UninitializeView()
         {
+            _bagView.Uninitialize();
             _boardView.Uninitialize();
             _cameraView.Uninitialize();
             _goalsView.Uninitialize();

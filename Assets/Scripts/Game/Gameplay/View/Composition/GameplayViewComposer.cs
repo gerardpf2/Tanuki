@@ -12,6 +12,7 @@ using Game.Gameplay.Pieces;
 using Game.Gameplay.REMOVE;
 using Game.Gameplay.View.Actions.Composition;
 using Game.Gameplay.View.Animation.Composition;
+using Game.Gameplay.View.Bag;
 using Game.Gameplay.View.Bag.Composition;
 using Game.Gameplay.View.Board;
 using Game.Gameplay.View.Board.Composition;
@@ -66,6 +67,7 @@ namespace Game.Gameplay.View.Composition
                         r.Resolve<ICamera>(),
                         r.Resolve<IGameplayParser>(),
                         r.Resolve<IGameplaySerializerOnBeginIteration>(),
+                        r.Resolve<IBagView>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
@@ -127,6 +129,7 @@ namespace Game.Gameplay.View.Composition
                         r.Resolve<IGoals>(),
                         r.Resolve<IMoves>(),
                         r.Resolve<IGameplaySerializerOnBeginIteration>(),
+                        r.Resolve<IBagView>(),
                         r.Resolve<IBoardView>(),
                         r.Resolve<ICameraView>(),
                         r.Resolve<IGoalsView>(),
